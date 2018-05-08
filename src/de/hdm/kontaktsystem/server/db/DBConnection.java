@@ -1,4 +1,4 @@
-package de.hdm.team09.itProject.server.db;
+package de.hdm.kontaktsystem.server.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,7 @@ public class DBConnection {
 		
 	private static String url = "";
 	
-	/*
+	
 	public static Connection connection() {
 		// falls noch keine Verbindung zur DB hergestellt wurde
 		if ( con == null ) {
@@ -30,6 +30,5 @@ public class DBConnection {
 		
 		return con;
 	}
-*/
 
 }

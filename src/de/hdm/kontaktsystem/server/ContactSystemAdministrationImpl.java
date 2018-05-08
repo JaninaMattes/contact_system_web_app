@@ -1,35 +1,31 @@
-package de.hdm.team09.itProject.server;
-
-import java.util.Vector;
+package de.hdm.kontaktsystem.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.hdm.team09.itProject.server.db.BusinessObjectMapper;
-import de.hdm.team09.itProject.server.db.ContactListMapper;
-import de.hdm.team09.itProject.server.db.ContactMapper;
-import de.hdm.team09.itProject.server.db.ParticipationMapper;
-import de.hdm.team09.itProject.server.db.PropertyMapper;
-import de.hdm.team09.itProject.server.db.PropertyValueMapper;
-import de.hdm.team09.itProject.server.db.UserMapper;
-import de.hdm.team09.itProject.shared.ContactSystemAdministration;
-import de.hdm.team09.itProject.shared.bo.Contact;
-import de.hdm.team09.itProject.shared.bo.ContactList;
-import de.hdm.team09.itProject.shared.bo.Property;
-import de.hdm.team09.itProject.shared.bo.User;
+import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
+import de.hdm.kontaktsystem.server.db.ContactListMapper;
+import de.hdm.kontaktsystem.server.db.ContactMapper;
+import de.hdm.kontaktsystem.server.db.ParticipationMapper;
+import de.hdm.kontaktsystem.server.db.PropertyMapper;
+import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
+import de.hdm.kontaktsystem.server.db.UserMapper;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
+import de.hdm.kontaktsystem.shared.bo.Contact;
+
+
 
 public class ContactSystemAdministrationImpl extends RemoteServiceServlet implements ContactSystemAdministration{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	
-	//Zu Beginn ist der User & der dazugehörige Kontakt null, da noch keine neue Instanz im System angelegt wurde
-	// vgl. ContactSystem im Klassendiagramm 
-	private User user = null;
+	private static final long serialVersionUID = 1L;
+			
 	private Contact contact = null;
 	
-	private BusinessObjectMapper boMapper = null;
+	//Referenzen auf die zugehörigen DatenbankMapper
+	private BusinessObjectMapper boMapper = null;	
 	private ContactListMapper clMapper = null;
 	private ContactMapper cMapper = null;
 	private ParticipationMapper partMapper = null;
@@ -37,34 +33,37 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	private PropertyValueMapper propValMapper = null;
 	private UserMapper uMapper = null;
 	
+	
+	/*
+	* ***************************************************************************
+	* ABSCHNITT, Beginn: Initialisierung
+	* ***************************************************************************
+	*/
+	
 	public ContactSystemAdministrationImpl() throws IllegalArgumentException {
 		
 	}
+	
 	
 	//TODO: Ausformulieren der Mapper Klassen
 	
 	public void init() throws IllegalArgumentException{
 		
 		this.boMapper = BusinessObjectMapper.businessObjectMapper();
-		//this.clMapper = ContactListMapper.contactListMapper();
-		//this.cMapper = ContactMapper.contactMapper();
-		//this.partMapper = ParticipationMapper.participationMapper();
+		this.clMapper = ContactListMapper.contactListMapper();
+		this.cMapper = ContactMapper.contactMapper();
+		this.partMapper = ParticipationMapper.participationMapper();
 		this.propMapper = PropertyMapper.propertyMapper(); 
-		//this.propValMapper = PropertyValueMapper.propertyValueMapper();
-		//this.uMapper = UserMapper.userMapper();
+		this.propValMapper = PropertyValueMapper.propertyValueMapper();
+		this.uMapper = UserMapper.userMapper();
 		
 	}
 	
-	
-
-	
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
+	/*
+	* ***************************************************************************
+	* ABSCHNITT, Beginn: Methoden 
+	* ***************************************************************************
+	*/
 
 	public Contact getContact() {
 		return contact;
@@ -74,17 +73,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		this.contact = contact;
 	}
 	
-	
-	
-
 	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * // Methoden für User Objekte
-	
-	
 	public User createUser() {
 		return user;
 		
@@ -141,9 +130,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	
 	
-	
-	
-	
 	public void shareContactWith(Contact contact, User user) {
 		
 	}
@@ -160,7 +146,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
-	public <T> PropertyValue getPropertyValueOfContact(Contact contact) {
+	public PropertyValue getPropertyValueOfContact(Contact contact) {
 		
 	}
 	
@@ -184,7 +170,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
-	public <T> PropertyValue createPropertyValue() {
+	public PropertyValue createPropertyValue() {
 		return null;
 	}
 	
@@ -209,7 +195,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
-	public <T> PropertyValue editPropertyValue() {
+	public PropertyValue editPropertyValue() {
 		return null;
 	}
 	

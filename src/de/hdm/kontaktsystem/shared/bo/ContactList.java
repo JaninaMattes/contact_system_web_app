@@ -1,4 +1,4 @@
-package de.hdm.team09.itProject.shared.bo;
+package de.hdm.kontaktsystem.shared.bo;
 
 public class ContactList extends BusinessObject {
 

@@ -1,4 +1,4 @@
-package de.hdm.team09.itProject.shared;
+package de.hdm.kontaktsystem.shared;
 
 public interface ContactSystemAdministrationAsync {
 

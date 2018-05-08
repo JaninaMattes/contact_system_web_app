@@ -1,10 +1,15 @@
-package de.hdm.team09.itProject.server.db;
+package de.hdm.kontaktsystem.server.db;
 
-public class BusinessObjectMapper {
+import java.io.Serializable;
+
+public class BusinessObjectMapper implements Serializable {
 	
-	  /**
-	   * Singleton Pattern
-	   */
+
+	private static final long serialVersionUID = 1L;
+	
+	/*
+	 * Singleton Pattern
+	 */
 	
 	  private static BusinessObjectMapper businessObjectMapper = null;
 
