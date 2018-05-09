@@ -10,7 +10,12 @@ package de.hdm.kontaktsystem.shared.bo;
  *
  */
 
-public class User extends Contact{
+public class User extends BusinessObject{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private String googleToken;
 	
