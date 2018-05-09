@@ -8,6 +8,7 @@ import com.google.appengine.api.rdbms.AppEngineDriver;
 
 public class DBConnection {
 	
+	
 	private static Connection con = null;
 	
 	//private static String databaseTyp = "google";
