@@ -19,9 +19,9 @@ public class PropertyValue extends BusinessObject{
 		
 		this.value = value;		
 		prop = new Property(value);
-		
-	}
 
+	}
+	
 	/*
 	 * Auslesen des Ausprägungswertes
 	 */

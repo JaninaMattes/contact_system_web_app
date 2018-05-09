@@ -17,9 +17,7 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  *
  */
 
-
 public class Property extends BusinessObject{
-	
 
 	private static final long serialVersionUID = 1L;
 	
