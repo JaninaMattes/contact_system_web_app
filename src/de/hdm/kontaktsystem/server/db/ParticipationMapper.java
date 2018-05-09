@@ -28,6 +28,8 @@ public class ParticipationMapper {
 	 */	
 	private static ParticipationMapper INSTANCE = new ParticipationMapper();
 	
+	private static ParticipationMapper participationMapper = null;
+	
 	/**
 	 * Der Konstruktor ist <code>privat</code>, um einen Zugriff von außerhalb der Klasse zu verhindern.
 	 */
@@ -43,7 +45,20 @@ public class ParticipationMapper {
 		return INSTANCE;
 	}
 	
-	
+	 /**
+	 * Hier findet die Anwendung des <code> Singleton Pattern </code> statt
+	 * Diese Methode gibt das einzige Objekt dieser Klasse zurück.
+	 * @return Instanz des PropertyMapper 
+	 */			
+
+	public static ParticipationMapper participationMapper() {
+    if (participationMapper == null) {
+      participationMapper = new ParticipationMapper();
+    }
+
+    return participationMapper;
+	}
+  
 	
 	public Vector<Participation> getAllParticipations(){
 		//TODO Implement Method

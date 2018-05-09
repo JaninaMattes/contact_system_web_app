@@ -14,7 +14,9 @@ public class UserMapper {
 	/**
 	 * Create an UserMapper object 
 	 */
-	private static final UserMapper um = new UserMapper();
+	private static UserMapper INSTANCE = new UserMapper();
+	
+	private static UserMapper userMapper = null;
 	
 	
 	private UserMapper(){
@@ -22,11 +24,25 @@ public class UserMapper {
 	}
 	
 	/**
+	 * Hier findet die Anwendung des <code> Singleton Pattern </code> statt
+	 * Diese Methode gibt das einzige Objekt dieser Klasse zurück.
+	 * @return Instanz des PropertyMapper 
+	 */			
+
+  public static UserMapper userMapper() {
+    if (userMapper == null) {
+      userMapper = new UserMapper();
+    }
+
+    return userMapper;
+  }
+
+	/**
 	 * Returns an Instance of the UserMapper 
 	 * @return Instance of the UserMapper
 	 */
 	public static UserMapper getInstance(){
-		return um;
+		return INSTANCE;
 	}
 	
 	/**
