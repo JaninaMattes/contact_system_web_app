@@ -14,9 +14,9 @@ public class DBTest {
 		
 		Connection con = DBConnection.connection();
 		try {
-			ResultSet rs = con.createStatement().executeQuery("Select * from User1");
+			ResultSet rs = con.createStatement().executeQuery("Select * from Test");
 			while(rs.next()){
-				System.out.println("Name: "+rs.getString("name")+" E-Mail: "+rs.getString("email"));
+				System.out.println("Name: "+rs.getString("Name")+" E-Mail: "+rs.getString("Email"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
