@@ -1,7 +1,5 @@
 package de.hdm.kontaktsystem.shared.bo;
 
-import java.util.Date;
-
 
 /**
  * Die Klasse Contact stellt die Kontakte dar, die von einem User erstellt werden bzw. auf welche ein User zugreifen kann, 
@@ -46,6 +44,7 @@ public class Contact extends BusinessObject {
 		this.name = name;
 		this.status = status;
 	}
+	
 	
 	/**
 	 * Getter und Setter
