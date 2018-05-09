@@ -23,6 +23,7 @@ public class Participation extends BusinessObject {
 	/**
 	 * Verweis auf den User, der die Teilhaberschaft besitzt
 	 */
+	//TODO: Logik klären Soll hier auf UserID verwiesen werden?
 	private User owner = null;
 	
 	/**

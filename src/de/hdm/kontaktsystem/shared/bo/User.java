@@ -10,17 +10,17 @@ package de.hdm.kontaktsystem.shared.bo;
  *
  */
 
-public class User extends BusinessObject{
+// TODO: Mit Datenbank Modell abgleichen!
+
+public class User {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String googleToken;
+	private String g_Mail = null;
+	private Contact user_Contact = null;
 	
-	public User(String name, String status) {
-		super(name, status, null); 
+	public User() {
+		user_Contact = new Contact();
 		// TODO Create an Contructor in Contact withput an User 
 	}
 	
