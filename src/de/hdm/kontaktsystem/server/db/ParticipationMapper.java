@@ -27,7 +27,6 @@ public class ParticipationMapper {
 	 * Die statische Variable <code>INSTANCE</code> speichert die einzige Instanz der Klasse. Durch den 
 	 * Bezeichner <code>static</code> ist diese Variable nur einmal für alle Instanzen der Klasse vorhanden.
 	 */	
-	private static ParticipationMapper INSTANCE = new ParticipationMapper();
 	
 	private static ParticipationMapper participationMapper = null;
 	
@@ -35,15 +34,6 @@ public class ParticipationMapper {
 	 * Der Konstruktor ist <code>privat</code>, um einen Zugriff von außerhalb der Klasse zu verhindern.
 	 */
 	private ParticipationMapper() {
-	}
-	
-	
-	/**
-	 * Diese Methode gibt das einzige Objekt dieser Klasse zurück.
-	 * @return Instanz des ParticipationMapper
-	 */
-	public static ParticipationMapper getInstance(){
-		return INSTANCE;
 	}
 	
 	 /**

@@ -16,7 +16,7 @@ public class User {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String g_Mail = null;
+	private String googleToken = null;
 	private Contact user_Contact = null;
 	
 	public User() {
