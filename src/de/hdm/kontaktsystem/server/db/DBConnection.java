@@ -17,7 +17,7 @@ public class DBConnection {
 	//TODO: URL mit deren Hilfe die DB angesprochen wird
 		
 	// private static String url = ""; Google URL
-	private static String url = "jdbc:mysql://vweb12.nitrado.net?user=ni249339_1sql9&password=ITProjekt";
+	private static String url = "jdbc:mysql://vweb12.nitrado.net/ni249339_1sql9?user=ni249339_1sql9&password=ITProjekt";
 	
 	
 	public static Connection connection() {
@@ -38,7 +38,7 @@ public class DBConnection {
 				e1.printStackTrace();
 			}catch (ClassNotFoundException e) {
 				e.printStackTrace();
-			}
+			} 
 		}
 		
 		return con;
