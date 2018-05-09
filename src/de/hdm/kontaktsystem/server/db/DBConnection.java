@@ -17,7 +17,8 @@ public class DBConnection {
 	//TODO: URL mit deren Hilfe die DB angesprochen wird
 		
 	// private static String url = ""; Google URL
-	private static String url = "jdbc:mysql://vweb12.nitrado.net/ni249339_1sql9?user=ni249339_1sql9&password=ITProjekt";
+	
+	private static String url = "jdbc:mysql://85.183.140.53:8170/ITProjekt?user=ITProjekt&password=ITProjekt";
 	
 	
 	public static Connection connection() {
