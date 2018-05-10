@@ -9,6 +9,10 @@ import java.util.Vector;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
+import de.hdm.thies.bankProjekt.server.db.CustomerMapper;
+import de.hdm.thies.bankProjekt.server.db.DBConnection;
+import de.hdm.thies.bankProjekt.shared.bo.Account;
+import de.hdm.thies.bankProjekt.shared.bo.Customer;
 
 public class PropertyValueMapper {
 	
@@ -31,7 +35,7 @@ public class PropertyValueMapper {
 	  }
 	  
 	  /*
-	   * Einfügen einer neu angelegten Eigenschaftsausprägung in die DB
+	   * Einfï¿½gen einer neu angelegten Eigenschaftsausprï¿½gung in die DB
 	   */
 	  
 	  public void insert(PropertyValue propertyValue) {
@@ -61,7 +65,7 @@ public class PropertyValueMapper {
 	  }
 	  
 	  /*
-	   *  Aktualisierung der Daten für PropertyValue Tabelle in DB
+	   *  Aktualisierung der Daten fï¿½r PropertyValue Tabelle in DB
 	   */
 	  
 	  public PropertyValue updatePropertyValue(PropertyValue propertyValue){
@@ -83,7 +87,7 @@ public class PropertyValueMapper {
 		  }
 	  
 	  /*
-	   * Löschen der Eigenschaftsauspraegung in DB anhand des PropertyValue Objekts
+	   * Lï¿½schen der Eigenschaftsauspraegung in DB anhand des PropertyValue Objekts
 	   * Aufruf der deletePropertyValue(int id)
 	   */
 	  
@@ -94,7 +98,7 @@ public class PropertyValueMapper {
 	  }
 	  
 	  /*
-	   * Löschen der Eigenschaftsauspraegung in DB anhand der PropertyValue ID
+	   * Lï¿½schen der Eigenschaftsauspraegung in DB anhand der PropertyValue ID
 	   */
 	  
 	  public void deletePropertyValue(int id) {
@@ -113,7 +117,28 @@ public class PropertyValueMapper {
 	  }
 	  
 	  /*
-	   * Anhand der als Parameter übergegebenen ID wird das zugehörige PropertyValue eindeutig identifiziert und zurückgegeben
+	   * Lï¿½schen der Eigenschaftsauspraegung in DB anhand des Kontaktnamens
+	   */
+	  
+	  public void deletePropertyValueOf(Contact c) {
+
+		  Connection con = DBConnection.connection();
+
+		    try {
+		      Statement stmt = con.createStatement();
+
+		      stmt.executeUpdate("DELETE FROM propertyvalue " + "WHERE contact=" + c.getId());
+		      
+		    
+		    }
+		    catch (SQLException e2) {
+		      e2.printStackTrace();
+		    }
+		  
+	  }
+	  
+	  /*
+	   * Anhand der als Parameter ï¿½bergegebenen ID wird das zugehï¿½rige PropertyValue eindeutig identifiziert und zurï¿½ckgegeben
 	   */
 	  
 	  public PropertyValue findPropertyValueByKey(int id) {
@@ -126,14 +151,13 @@ public class PropertyValueMapper {
 					  // Leeres SQL Statement anlegen	
 					  stmt = con.createStatement();
 					  // Statement ausfÃ¼llen und als Query an die DB schicken
-				      ResultSet rs = stmt.executeQuery("SELECT id FROM propertyvalue "
+				      ResultSet rs = stmt.executeQuery("SELECT id, value FROM propertyvalue "
 				    		  + "WHERE id = " + id + " ORDER BY id");
 				      
 				      if (rs.next()) {
 				    	  propertyValue.setId(rs.getInt("id"));
 				    	  propertyValue.setValue(rs.getString("value"));
-				    	  propertyValue.setCreationDate(rs.getTimestamp("creationDate"));
-				    	  propertyValue.setModifyDate(rs.getTimestamp("modificationDate"));
+
 				          
 				  }
 				  } catch (SQLException e) {
@@ -143,9 +167,48 @@ public class PropertyValueMapper {
 				  return propertyValue;
 		}
 	  
+	  /*
+	   * Alle fï¿½r den Benutzer zugï¿½nglichen PropertyValues werden gesucht, in einen Vector gespeichert und zurï¿½ckgegeben
+	   */
+
+	  public Vector<PropertyValue> findByContact(Contact c){
+				  
+				  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
+				  
+				  Connection con = DBConnection.connection();
+				  Statement stmt = null;
+				  
+				  try {
+					  // Leeres SQL Statement anlegen	
+					  stmt = con.createStatement();
+					  // Statement ausfÃ¼llen und als Query an die DB schicken
+				      ResultSet rs = stmt.executeQuery("SELECT id, value FROM propertyvalue "
+				          + " ORDER BY id");
+				      
+				      /***********************************************************************
+				       * INNER Join in Statements!!!
+				       ***********************************************************************/
+				      
+				      while (rs.next()) {
+				          PropertyValue propValue = new PropertyValue();
+				          propValue.setId(rs.getInt("id"));
+				          propValue.setValue(rs.getString("value"));
+				         
+				          		          
+		
+				          // HinzufÃ¼gen des neuen Objekts zum Ergebnisvektor
+				          propValueResult.addElement(propValue);
+				          
+				      	}
+				  } catch (SQLException e) {
+					  e.printStackTrace();
+				  } 
+				  
+				  return propValueResult;
+		}
 	  
 	  /*
-	   * Alle für den Benutzer zugänglichen PropertyValues werden gesucht, in einen Vector gespeichert und zurückgegeben
+	   * Alle fÃ¼r Benutzer zugï¿½nglichen PropertyValues werden gesucht, in einen Vector gespeichert und zurï¿½ckgegeben
 	   */
 
 	  public Vector<PropertyValue> findAllPropertyValues(){
@@ -159,7 +222,7 @@ public class PropertyValueMapper {
 					  // Leeres SQL Statement anlegen	
 					  stmt = con.createStatement();
 					  // Statement ausfÃ¼llen und als Query an die DB schicken
-				      ResultSet rs = stmt.executeQuery("SELECT* FROM propertyvalue "
+				      ResultSet rs = stmt.executeQuery("SELECT id, value FROM propertyvalue "
 				          + " ORDER BY id");
 				      
 				      while (rs.next()) {
@@ -183,8 +246,8 @@ public class PropertyValueMapper {
 	  
 	  
 	  	/*
-	  	 * Alle für den Benutzer in der Applikation zugänglichen Auspraegungen werden anhand ihrer Auspraegungswerte 
-	  	 * gesucht und zurückgegeben
+	  	 * Alle fï¿½r den Benutzer in der Applikation zugï¿½nglichen Auspraegungen werden anhand ihrer Auspraegungswerte 
+	  	 * gesucht und zurï¿½ckgegeben
 	  	 */
 	  
 		public PropertyValue findPropertyValueByValue(String value) {
@@ -216,8 +279,8 @@ public class PropertyValueMapper {
 			  }
 		
 		/*
-		 * Alle für den Benutzer in der Applikation zugänglichen Auspraegungen werden anhand ihrer zugehörigen Eigenschaften 
-	  	 * gesucht und zurückgegeben
+		 * Alle fï¿½r den Benutzer in der Applikation zugï¿½nglichen Auspraegungen werden anhand ihrer zugehï¿½rigen Eigenschaften 
+	  	 * gesucht und zurï¿½ckgegeben
 		 */
 	  
 		public PropertyValue findPropertyValueByProp(Property prop) {
@@ -227,8 +290,8 @@ public class PropertyValueMapper {
 		  }
 		
 		/*
-		 * Alle für den Benutzer in der Applikation zugänglichen Auspraegungen werden anhand ihres Status 
-	  	 * gesucht und zurückgegeben
+		 * Alle fï¿½r den Benutzer in der Applikation zugï¿½nglichen Auspraegungen werden anhand ihres Status 
+	  	 * gesucht und zurï¿½ckgegeben
 		 */
 	  
 		public PropertyValue findPropertyValueByStatus(Property prop) {
@@ -237,6 +300,15 @@ public class PropertyValueMapper {
 			  
 		  }
 		
+		public PropertyValue getContact(PropertyValue propertyValue) {
+		    /*
+		     * Wir bedienen uns hier einfach des CustomerMapper. Diesem geben wir
+		     * einfach den in dem Account-Objekt enthaltenen FremdschlÃ¼ssel fÃ¼r den
+		     * Kontoinhaber. Der CustomerMapper lÃ¤sst uns dann diese ID in ein Objekt
+		     * auf.
+		     */
+		    return ContactMapper.contactMapper().getId();
+		  }
 		
 		
 }
