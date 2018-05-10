@@ -5,7 +5,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
 import de.hdm.kontaktsystem.server.db.DBConnection;
+import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.Property;
 
 public class DBTest {
 	
@@ -22,6 +25,10 @@ public class DBTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		// Test insert method from BusinessObjectMapper 
+		
+		BusinessObjectMapper.businessObjectMapper().insert(new Property());
 		
 		
 	}

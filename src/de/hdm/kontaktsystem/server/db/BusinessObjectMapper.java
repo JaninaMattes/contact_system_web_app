@@ -32,14 +32,20 @@ public class BusinessObjectMapper implements Serializable {
 	    return businessObjectMapper;
 	  }
 	  
-	  private void insert(BusinessObject bo){
+	  
+	  /*
+	   * Creates an new row in the BusinessObject table that generates a ID for the BusinessObject 
+	   * and set a Timestamp for the creationDate
+	   */
+	  public void insert(BusinessObject bo){
 		  Connection con = DBConnection.connection();
 
 			try {
 				PreparedStatement statement = con.prepareStatement(
 						"INSERT INTO BusinessObject (user_ID) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-				//statement.setInt(1, bo.getOwner);
-				statement.setInt(1, 0); // Placeholder, because its not clear why the BO needs a user_ID
+				
+				statement.setInt(1, bo.getUserId());
+				
 				
 				// Execute the prepared SQL Statement
 				statement.executeUpdate();
@@ -54,6 +60,7 @@ public class BusinessObjectMapper implements Serializable {
 					 * So there is only one automatically generated primary key for all BusinessObjects
 					 */
 					bo.setId(rs.getInt(1));
+					System.out.println("ID: "+bo.getId());
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
