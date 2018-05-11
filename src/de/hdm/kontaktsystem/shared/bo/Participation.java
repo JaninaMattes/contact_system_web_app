@@ -17,13 +17,19 @@ import java.io.Serializable;
  *
  */
 
-//TODO: geeigneten Konstruktor erstellen
 
 public class Participation extends BusinessObject {
+	
+	/**
+	 * Serial Number
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Verweis auf den User, der die Teilhaberschaft besitzt
 	 */
 	//TODO: Logik klären Soll hier auf UserID verwiesen werden?
+	// Warum?
 	private User owner = null;
 	
 	/**
@@ -36,6 +42,23 @@ public class Participation extends BusinessObject {
 	 */
 	private BusinessObject reference = null;
 
+	
+	/**
+	 * Leerer Konstruktor
+	 */
+	public Participation() {
+		
+	}
+	
+	/**
+	 * Konstruktor, der alle Attribute mit Werten belegt
+	 */
+	public Participation(User owner, User participant, BusinessObject reference) {
+		this.owner = owner;
+		this.participant = participant;
+		this.reference = reference;
+	}
+	
 	
 	/**
 	* Zurückgeben des Eigentümers.
