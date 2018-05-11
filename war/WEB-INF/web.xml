@@ -6,6 +6,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
 <!-- Servlets -->
+ 
  <!--  TODO: Ausformulieren der Servlets -->
  
   <servlet>
@@ -14,28 +15,28 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>bankVerwaltungServlet</servlet-name>
-    <url-pattern>/bankprojekt_2_0/bankadministration</url-pattern>
+    <servlet-name><!-- Servletname --></servlet-name>
+    <url-pattern><!--/ContactSystem/administration--></url-pattern>
   </servlet-mapping>
   
   <servlet>
     <servlet-name>reportGeneratorServlet</servlet-name>
-    <servlet-class>de.hdm.kontaktsystem.server.report.ReportGeneratorImpl</servlet-class>
+    <servlet-class><!-- Servlet Klassenpfad --></servlet-class>
   </servlet>
   
   <servlet-mapping>
     <servlet-name>reportGeneratorServlet</servlet-name>
-    <url-pattern>/bankprojekt_2_0/reportgenerator</url-pattern>
+    <url-pattern><!--/ContactSystem/reportgenerator--></url-pattern>
   </servlet-mapping> 
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>ContactSystem.html</welcome-file>
+    <welcome-file>Editor.html</welcome-file>
   </welcome-file-list>
 
   <servlet>
     <servlet-name>SystemServiceServlet</servlet-name>
-    <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+    <servlet-class><!-- Servlet Klassenpfad --></servlet-class>
     <init-param>
       <param-name>services</param-name>
       <param-value/>
