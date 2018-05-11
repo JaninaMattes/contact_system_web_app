@@ -17,7 +17,6 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  *
  */
 
-
 public class Property extends BusinessObject{
 	
 
@@ -30,33 +29,40 @@ public class Property extends BusinessObject{
 	private String description = null;
 	
 	/*
+	 * Beschreibung des Status, dieser ist entweder geteilt 
+	 * (shared) oder nicht geteilt (unshared)
+	 * Per default gilt ein neu erstelltes Property Objekt
+	 * nicht geteilt, daher wird dieser zuerst als false angegeben
+	 * 
+	 */
+	
+	private boolean shared_Status = false;	
+	
+	/*
 	 * Jeder Eigenschaftinstanz ist einer oder mehrerer Eigenschaftsausprägungen
 	 * zugeordnet. Diese werden durch eine Vector Liste repräsentiert
 	 * 
 	 * */
-	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
+	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
 	/*
 	 * Bei der Erzeugung einer neuen Eigenschaftinstanz muss ebenso eine neue
 	 * Eigenschaftsausprägung dieser erzeugt und zugeordnet werden
 	 */
-	
-	// TODO: Überprüfen der Sinnvolligkeit dieser Lösung --> Achtung Mapper
-	
+		
 	public Property () {
 		
 	}
 	
-	public Property(String value) {
-		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
-		PropertyValue propertyValue = new PropertyValue(value);
-		propertyValues.addElement(propertyValue);
-	
+	public Property(String description) {
+		this.description = description;
+		
 	}
 	
 	public Property(String value, String description) {
-		this.description = description;
+		this.description = description;				
+		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
 		PropertyValue propertyValue = new PropertyValue(value);
 		propertyValues.addElement(propertyValue);
 		
@@ -77,10 +83,49 @@ public class Property extends BusinessObject{
 	
 	public void setDescription(String description) {
 		this.description = description;
-	}	
+	}		
+		
+	/*
+	 * Abrufen des Teilhaber Status 
+	 * dieser gibt Informationen darüber ob 
+	 * eine Eigenschaft geteilt oder nicht geteilt wurde
+	 * @return shared_Status ist boolean
+	 */
 	
+	public boolean getShared_Status() {
+		return shared_Status;
+	}
 	
+	/*
+	 * Wurde eine Property Instanz mit einem anderen Nutzer
+	 * im Kontaktsystem geteilt wird der isShared Status auf true gesetzt.
+	 * Dieser kann später über die Oberfläche im Client dem Nutzer dargestellt
+	 * werden, um so zusätzliche Informationen zu bieten. 
+	 * 
+	 */
+
+	public void setShared_Status(boolean shared_Status) {
+		this.shared_Status = shared_Status;
+	}
 	
+	/*
+	 * Auslesen des PropertyValue Vectors
+	 *  
+	 */
+	
+	public Vector<PropertyValue> getPropertyValues() {
+		return propertyValues;
+	}
+
+	/*
+	 * Setzen des PropertyValue Vectors für eine neue Liste
+	 * an PropertyValues, welche einer Property zugeordnet werden
+	 */
+	
+	public void setPropertyValues(Vector<PropertyValue> propertyValues) {
+		this.propertyValues = propertyValues;
+	}
+
 	/**
 	   * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
 	   */
@@ -90,15 +135,13 @@ public class Property extends BusinessObject{
 		return "Property [description=" + description + ", propertyValues=" + propertyValues + "]";
 	}
 	
-	
 	/*
 	 * <p>
 	 * Feststellen der <em>inhaltlichen</em> Gleichheit zweier PropertyValue-Objekte.
 	 * Die Gleichheit wird in diesem Beispiel auf eine gleiche Identität
 	 * beschränkt.
 	 * </p>
-	 * 
-	 * 
+	 *  
 	 */
 	
 	 public boolean equals(Object o) {

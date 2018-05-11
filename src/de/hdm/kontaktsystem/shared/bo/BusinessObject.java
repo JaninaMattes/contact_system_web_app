@@ -43,6 +43,7 @@ public abstract class BusinessObject implements Serializable{
 	 */
 	private Date creationDate = null;
 	private Date modifyDate = null;
+	private int user_ID = 0;
 	
 	
 
@@ -58,6 +59,20 @@ public abstract class BusinessObject implements Serializable{
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	/**
+	* Zurückgeben der ID.
+	*/
+	public int getUserId() {
+		return this.id;
+	}
+
+	/**
+	 * Setzen der ID
+	 */
+	public void setUserId(int userId) {
+		this.user_ID = userId;
 	}
 	
 	

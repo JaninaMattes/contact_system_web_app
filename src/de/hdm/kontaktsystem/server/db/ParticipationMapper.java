@@ -2,10 +2,11 @@ package de.hdm.kontaktsystem.server.db;
 
 import java.util.Vector;
 
+
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.User;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+
 
 /**
  * Die Mapper-Klasse <code>ParticipationMapper</code> bildet <code>Participation</code>-Objekte 
@@ -26,7 +27,6 @@ public class ParticipationMapper {
 	 * Die statische Variable <code>INSTANCE</code> speichert die einzige Instanz der Klasse. Durch den 
 	 * Bezeichner <code>static</code> ist diese Variable nur einmal für alle Instanzen der Klasse vorhanden.
 	 */	
-	private static ParticipationMapper INSTANCE = new ParticipationMapper();
 	
 	private static ParticipationMapper participationMapper = null;
 	
@@ -34,15 +34,6 @@ public class ParticipationMapper {
 	 * Der Konstruktor ist <code>privat</code>, um einen Zugriff von außerhalb der Klasse zu verhindern.
 	 */
 	private ParticipationMapper() {
-	}
-	
-	
-	/**
-	 * Diese Methode gibt das einzige Objekt dieser Klasse zurück.
-	 * @return Instanz des ParticipationMapper
-	 */
-	public static ParticipationMapper getInstance(){
-		return INSTANCE;
 	}
 	
 	 /**
