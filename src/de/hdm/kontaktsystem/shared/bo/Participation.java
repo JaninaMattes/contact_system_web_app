@@ -9,8 +9,8 @@ import java.io.Serializable;
  * </p>
  * <p>
  * Jede Teilhaberschaft, und damit jede Instanz der Klasse <code>Participation</code> bezieht 
- * sich auf einen User, der Besitzer (owner) der Teilhaberschaft ist, einen User, der Teilhaber 
- * (participant) ist und das geteilte BusinessObject (reference).
+ * sich auf einen User, der Teilhaber (participant) ist und das geteilte BusinessObject (reference). 
+ * Die Verweise auf die Objekte finden durch die eindeutige ID der Objekte statt.
  * </p>
  * 
  * @author Sandra
@@ -18,29 +18,24 @@ import java.io.Serializable;
  */
 
 
-public class Participation extends BusinessObject {
+public class Participation implements Serializable {
 	
 	/**
-	 * Serial Number
+	 * Seriennummer, vorgegeben durch das Interface {@link Serializable}
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * Verweis auf den User, der die Teilhaberschaft besitzt
-	 */
-	//TODO: Logik klären Soll hier auf UserID verwiesen werden?
-	// Warum?
-	private User owner = null;
+// Owner = Owner des BusinessObjects, das geteilt wird
 	
 	/**
-	 * Verweis auf den User, der an der Teilhaberschaft teilnimmt
+	 * Verweis auf die ID des Users, der an der Teilhaberschaft teilnimmt
 	 */
-	private User participant = null;
+	private int participantID = 0;
 	
 	/**
-	 * Verweis auf das geteilte BusinessObject
+	 * Verweis auf die ID des geteilten BusinessObjects
 	 */
-	private BusinessObject reference = null;
+	private int referenceID = 0;
 
 	
 	/**
@@ -53,55 +48,40 @@ public class Participation extends BusinessObject {
 	/**
 	 * Konstruktor, der alle Attribute mit Werten belegt
 	 */
-	public Participation(User owner, User participant, BusinessObject reference) {
-		this.owner = owner;
-		this.participant = participant;
-		this.reference = reference;
+	public Participation(int participantID, int referenceID) {
+		this.participantID = participantID;
+		this.referenceID = referenceID;
 	}
 	
+
 	
 	/**
-	* Zurückgeben des Eigentümers.
+	* Zurückgeben der TeilhaberID
 	*/
-	public User getOwner() {
-		return owner;
+	public int getParticipantID() {
+		return participantID;
 	}
 
 	/**
-	 * Setzen des Eigentümers
+	 * Setzen der TeilhaberID
 	 */
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public void setParticipantID(int participantID) {
+		this.participantID = participantID;
 	}
 
 	
 	/**
-	* Zurückgeben des Teilhabers
+	* Zurückgeben der ID des geteilten BusinessObjects
 	*/
-	public User getParticipant() {
-		return participant;
+	public int getReferenceID() {
+		return referenceID;
 	}
 
 	/**
-	 * Setzen des Teilhabers
+	 * Setzen der ID des geteilten BusinessObjects
 	 */
-	public void setParticipant(User participant) {
-		this.participant = participant;
-	}
-
-	
-	/**
-	* Zurückgeben des geteilten BusinessObjects
-	*/
-	public BusinessObject getReference() {
-		return reference;
-	}
-
-	/**
-	 * Setzen des geteilten BusinessObjects
-	 */
-	public void setReference(BusinessObject reference) {
-		this.reference = reference;
+	public void setReferenceID(int referenceID) {
+		this.referenceID = referenceID;
 	}
 	
 	
