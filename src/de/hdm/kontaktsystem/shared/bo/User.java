@@ -21,7 +21,10 @@ public class User {
 	private Contact userContact = null;
 	
 	public User() {
-		
+
+		// user_Contact = new Contact();
+		// TODO: Create a Contructor in Contact with an User 
+
 	}
 	
 	/**
