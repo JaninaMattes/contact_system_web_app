@@ -294,6 +294,12 @@ public class PropertyMapper {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		public PropertyValue getProperty(Property prop) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
 	  
 }
 

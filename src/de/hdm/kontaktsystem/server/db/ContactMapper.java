@@ -31,5 +31,10 @@ public class ContactMapper {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public PropertyValue getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	  
 }
