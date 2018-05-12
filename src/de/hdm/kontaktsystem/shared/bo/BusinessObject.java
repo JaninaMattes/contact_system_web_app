@@ -36,47 +36,51 @@ public class BusinessObject implements Serializable{
 	/**
 	 * Eindeutige Identifikationsnummer einer Instanz dieser Klasse.
 	 */
-	private int id = 0;
+	private int bo_id = 0;
 	
 	/**
 	 * Datum des Erstellens und der letzten Änderung einer Instanz dieser Klasse.
 	 */
 	private Date creationDate = null;
 	private Date modifyDate = null;
-	private int user_ID = 0;
-	private boolean shared_status = false;
+	private int user_id = 0;
+
+	private boolean shared_status = false; 
+	
+	/*
+	 * Default Konstruktor
+	 */
 	
 	public BusinessObject() {
 		
 	}
 	
-
 	/**
 	* Zurückgeben der ID.
 	*/
-	public int getId() {
-		return this.id;
+	public int getBo_Id() {
+		return this.bo_id;
 	}
 
 	/**
 	 * Setzen der ID
 	 */
-	public void setId(int id) {
-		this.id = id;
+	public void setBo_Id(int id) {
+		this.bo_id = id;
 	}
 	
 	/**
 	* Zurückgeben der UserID.
 	*/
 	public int getUserId() {
-		return this.user_ID;
+		return this.user_id;
 	}
 
 	/**
 	 * Setzen der ID
 	 */
 	public void setUserId(int userId) {
-		this.user_ID = userId;
+		this.user_id = userId;
 	}
 	
 	
@@ -114,7 +118,7 @@ public class BusinessObject implements Serializable{
 	 */
 
 	public int getUser_ID() {
-		return user_ID;
+		return user_id;
 	}
 
 	/*
@@ -122,7 +126,7 @@ public class BusinessObject implements Serializable{
 	 */
 
 	public void setUser_ID(int user_ID) {
-		this.user_ID = user_ID;
+		this.user_id = user_ID;
 	}
 	
 	/*
@@ -151,7 +155,7 @@ public class BusinessObject implements Serializable{
 		/*
 		 * Zurückgeben des Klassennamens + der ID der Instanz
 	     */
-		return this.getClass().getName() + " #" + this.id;
+		return this.getClass().getName() + " #" + this.user_id;
 	}
 	  
 	
@@ -163,7 +167,7 @@ public class BusinessObject implements Serializable{
 	 */
 	@Override
 	public int hashCode(){
-		return this.getId();
+		return this.getBo_Id();
 	}
 	
 	/**

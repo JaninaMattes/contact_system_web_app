@@ -97,7 +97,7 @@ public class PropertyMapper {
 		    	  // TODO: Klären ob Business Objekt noch extra generiert werden muss
 		          Property property = new Property();
 		          //Property 
-		          property.setId(rs.getInt("id"));
+		          property.setID(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
 		          // Superklasse Business Object Attribute befüllen
 		          property.setCreationDate(rs.getTimestamp("creationDate"));
@@ -152,7 +152,7 @@ public class PropertyMapper {
 		    	  BusinessObject businessObject = new BusinessObject();		    	  
 		          Property property = new Property();
 		          
-		          property.setId(rs.getInt("id"));
+		          property.setID(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
 		          
 		          // Superklasse Business Object Attribute befüllen
@@ -209,7 +209,7 @@ public class PropertyMapper {
 		    	  BusinessObject businessObject = new BusinessObject();		    	  
 		          Property property = new Property();
 		          
-		          property.setId(rs.getInt("id"));
+		          property.setID(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
 		          
 		          // Superklasse Business Object Attribute befüllen
@@ -247,7 +247,7 @@ public class PropertyMapper {
 		    		  + "WHERE id = " + id + " ORDER BY id");
 		      
 		      if (rs.next()) {
-		          property.setId(rs.getInt("id"));
+		          property.setID(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
 		          property.setCreationDate(rs.getTimestamp("creationDate"));
 		          property.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -279,7 +279,7 @@ public class PropertyMapper {
 		    	  Property property = new Property();		    	  
 		    	  BusinessObject businessObject = new BusinessObject();		    	  
 		         		          
-		          property.setId(rs.getInt("id"));
+		          property.setID(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
 		          
 		          // Superklasse Business Object Attribute befüllen
@@ -313,7 +313,7 @@ public class PropertyMapper {
 		      stmt.executeUpdate("UPDATE property " + "SET description" + property.getDescription()
 		          + "\" " + "SET modificationDate=\"" + property.getModifyDate()
 		          + "\" " + "SET status=\"" + property.getShared_Status()		    
-		          + "\" "+ "WHERE id=" + property.getId());
+		          + "\" "+ "WHERE id=" + property.getID());
 		      
 		    } 
 		  	  catch (SQLException e) {
@@ -340,10 +340,10 @@ public class PropertyMapper {
 			  propertyValueResult = property.getPropertyValues();
 			  
 			  for (PropertyValue pV : propertyValueResult){
-				  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getId());
+				  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV);
 			  } 
 			  
-		      stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getId());
+		      stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getID());
 		    }
 		    catch (SQLException e2) {
 		      e2.printStackTrace();
@@ -371,7 +371,7 @@ public class PropertyMapper {
 		    		  + "WHERE id = " + id + " ORDER BY id");
 		      
 		      if (rs.next()) {
-		          property.setId(rs.getInt("id"));
+		          property.setID(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
 		          property.setCreationDate(rs.getTimestamp("creationDate"));
 		          property.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -389,10 +389,10 @@ public class PropertyMapper {
 			  propertyValueResult = property.getPropertyValues();
 			  
 			  for (PropertyValue pV : propertyValueResult){
-				  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getId());
+				  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV);
 			  } 
 			  
-		      stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getId());
+		      stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getID());
 		    }
 		    catch (SQLException e2) {
 		      e2.printStackTrace();
@@ -409,7 +409,7 @@ public class PropertyMapper {
 		  try {
 		      stmt = con.createStatement();
 		      // TODO: PropertyValueMapper.propertyValueMapper().deletePropertyValueByProperty(property);
-		      stmt.executeUpdate("DELETE FROM property " + "WHERE owner=" + contact.getId());
+		      stmt.executeUpdate("DELETE FROM property " + "WHERE owner=" + contact.getBo_Id());
 
 		    }
 		    catch (SQLException e2) {
@@ -424,7 +424,7 @@ public class PropertyMapper {
 		 propertyResult = PropertyMapper.propertyMapper().getAllPropertiesByUser(user_id);
 		
 		 for (Property pV : propertyResult){				 
-			  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getId());
+			  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getID());
 			  PropertyMapper.propertyMapper().deleteProperty(pV);
 		  }		 
 	  }
@@ -452,7 +452,7 @@ public class PropertyMapper {
 		  
 		  if (rs.next()) {
 			 
-			  property.setId(rs.getInt("id"));
+			  property.setID(rs.getInt("id"));
 		      property.setDescription(rs.getString("description"));
 		      property.setCreationDate(rs.getDate("creationDate"));
 		      property.setShared_Status(rs.getBoolean("status"));
@@ -462,7 +462,7 @@ public class PropertyMapper {
 
 		        // die Einfügeoperation erfolgt
 		        stmt.executeUpdate("INSERT INTO property (id, description, status, creationDate) "
-		            + "VALUES (" + property.getId() + ",'" + property.getDescription() + "','"
+		            + "VALUES (" + property.getID() + ",'" + property.getDescription() + "','"
 		            + property.getShared_Status() + "," + property.getCreationDate() + "')");
 		  	}
 		  } catch(SQLException e) {

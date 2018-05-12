@@ -232,7 +232,7 @@ public class Property extends BusinessObject{
 	 
 		@Override
 		public int hashCode(){
-			return this.getId();
+			return this.getID();
 		}
 	 
 

@@ -174,7 +174,7 @@ public class ParticipationMapper {
 			
 			// Get all Participations from database and store in a ResultSet-Object
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User_BusinessObject WHERE BusinessObject_ID = ?");
-			stmt.setInt(1, businessObject.getId());
+			stmt.setInt(1, businessObject.getBo_Id());
 			ResultSet rs = stmt.executeQuery();
 			
 			//Transfer all Participations from database to Participation-Objects
@@ -291,7 +291,7 @@ public class ParticipationMapper {
 		
 		try {
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE BusinessObject_ID = ?");
-			stmt.setInt(1, businessObject.getId());
+			stmt.setInt(1, businessObject.getBo_Id());
 			stmt.execute();
 			
 		} catch(SQLException e){
