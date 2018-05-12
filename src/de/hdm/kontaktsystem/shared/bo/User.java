@@ -16,27 +16,60 @@ public class User {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String googleToken = null;
-	private Contact user_Contact = null;
+	private int googleID = 0;
+	private String gMail = null;
+	private Contact userContact = null;
 	
 	public User() {
+
 		// user_Contact = new Contact();
-		// TODO Create an Contructor in Contact withput an User 
+		// TODO: Create a Contructor in Contact with an User 
+
 	}
 	
 	/**
-	 * Return the Google Account Token
-	 * @return googleToken
+	 * Return the Google-Account ID
+	 * @return googleID
 	 */
-	public String getGoogleToken(){
-		return googleToken;
+	public int getGoogleID(){
+		return googleID;
 	}
 	
 	/**
-	 * Set the Token to link the Google Account to an User
+	 * Set the unique UserID from the Google-Account
 	 */
-	public void setGoogleToken(String token){
-		this.googleToken = token;
+	public void setGoogleID(int id){
+		this.googleID = id;
+	}
+	
+	/**
+	 * Return the Google-Mail address from the User
+	 * @return gMail address
+	 */
+	public String getGMail(){
+		return gMail;
+	}
+	
+	/**
+	 * Set the Google-Mail address to an User
+	 */
+	public void setGMail(String mail){
+		this.gMail = mail;
+	}
+	
+	/**
+	 * Returns the <code>Contact</code> that is linked to the User
+	 * @return contact
+	 */
+	public Contact getContact(){
+		return userContact;
+	}
+	
+	/**
+	 * Set the <code>Contact</code> that is linked to the User
+	 */
+	public void setContact(Contact contact){
+		this.userContact = contact;
 	}
 
 }

@@ -16,7 +16,8 @@ import java.util.Date;
  * transportiert werden. Bei GWT RPC ist diese textuelle Notation in JSON 
  * (siehe http://www.json.org/) kodiert.
  * Weiterhin enthält jedes Geschäftsobjekt Attribute, die auf das Erstellungs- und 
- * Modifikationsdatum der jeweiligen Instanz verweisen.
+ * Modifikationsdatum der jeweiligen Instanz verweisen sowie eine user_ID, die der 
+ * eindeutigen ID eines User-Objekts entspricht.
  * 
  * (vgl. Vorlesung Software Projekt, BankProjekt 2.0, Klasse BusinessObject)
  * </p>
@@ -43,6 +44,7 @@ public abstract class BusinessObject implements Serializable{
 	 */
 	private Date creationDate = null;
 	private Date modifyDate = null;
+	private int user_ID = 0;
 	
 	
 
@@ -58,6 +60,20 @@ public abstract class BusinessObject implements Serializable{
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	/**
+	* Zurückgeben der UserID.
+	*/
+	public int getUserId() {
+		return this.user_ID;
+	}
+
+	/**
+	 * Setzen der ID
+	 */
+	public void setUserId(int userId) {
+		this.user_ID = userId;
 	}
 	
 	

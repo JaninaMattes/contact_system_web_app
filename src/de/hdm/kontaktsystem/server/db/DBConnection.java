@@ -8,16 +8,16 @@ import com.google.appengine.api.rdbms.AppEngineDriver;
 
 public class DBConnection {
 	
+	
 	private static Connection con = null;
 	
+	// Auswahl der verwendeten Datenbank
 	//private static String databaseTyp = "google";
 	private static String databaseTyp = "mySQL";
 	
 	
 	//TODO: URL mit deren Hilfe die DB angesprochen wird
-		
 	// private static String url = ""; Google URL
-	
 	private static String url = "jdbc:mysql://85.183.140.53:8170/ITProjekt?user=ITProjekt&password=ITProjekt";
 	
 	
