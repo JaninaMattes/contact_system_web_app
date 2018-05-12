@@ -37,7 +37,7 @@ public class BusinessObject implements Serializable{
 	/**
 	 * Eindeutige Identifikationsnummer einer Instanz dieser Klasse.
 	 */
-	private int id = 0;
+	private int bo_id = 0;
 	
 	/**
 	 * Datum des Erstellens und der letzten Änderung einer Instanz dieser Klasse.
@@ -56,15 +56,15 @@ public class BusinessObject implements Serializable{
 	/**
 	* Zurückgeben der ID.
 	*/
-	public int getId() {
-		return this.id;
+	public int getBo_Id() {
+		return this.bo_id;
 	}
 
 	/**
 	 * Setzen der ID
 	 */
-	public void setId(int id) {
-		this.id = id;
+	public void setBo_Id(int id) {
+		this.bo_id = id;
 	}
 	
 	/**
