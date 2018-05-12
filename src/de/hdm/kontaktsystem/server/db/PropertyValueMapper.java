@@ -37,27 +37,49 @@ public class PropertyValueMapper {
 	  
 	  public void insert(PropertyValue propertyValue) {
 		  Connection con = DBConnection.connection();
-		  Statement stmt = null;
+		  Statement stmt1 = null;
+		  Statement stmt2 = null;
+		  
+		  
+		  /*
+		   * INSERT INTO MULTIPLE TABLES??? 
+		   * creationDate & modificationDate attributes in propertyvalue table?
+		   */
 		  
 		  try {
-		  stmt = con.createStatement();		  
-		  ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
+		  stmt1 = con.createStatement();		  
+		  ResultSet rs1 = stmt1.executeQuery("SELECT MAX(id) AS maxid "
 		          + "FROM businessobject");
-		  if (rs.next()) {
+		  if (rs1.next()) {
 			 
-			  propertyValue.setId(rs.getInt("maxid") + 1);
+			  propertyValue.setId(rs1.getInt("maxid") + 1);
 
-		        stmt = con.createStatement();
+		        stmt1 = con.createStatement();
 
 		        // Einfügeoperation erfolgt
-		        stmt.executeUpdate
-		        ("INSERT INTO propertyvalue (id, value, creationDate) "
-		            + "VALUES (" + propertyValue.getId() + ",'" + propertyValue.getValue() + "','"
-		            + propertyValue.getCreationDate() + "')"
-		          
-		        		);
-		        
+		        stmt1.executeUpdate
+		        ("INSERT INTO propertyvalue (id, value) "
+		            + "VALUES (" + propertyValue.getId() + ",'" 
+		        		+ propertyValue.getValue() + "','" + "')");
 		  	}
+		  
+		  stmt2 = con.createStatement();		  
+		  ResultSet rs2 = stmt2.executeQuery("SELECT MAX(id) AS maxid "
+		          + "FROM businessobject");
+		  if (rs2.next()) {
+			 
+			  propertyValue.setId(rs2.getInt("maxid") + 1);
+
+			  stmt2 = con.createStatement();
+
+		        // Einfügeoperation erfolgt
+			  stmt2.executeUpdate
+		        ("INSERT INTO businessobject (id, creationdate) "
+		            + "VALUES (" + propertyValue.getId() + ",'" 
+		             + propertyValue.getCreationDate() + "','"
+		             + "')");
+		  	}
+		  
 		  } catch(SQLException e) {
 			  e.printStackTrace();
 		  }
@@ -75,7 +97,8 @@ public class PropertyValueMapper {
 		  try {
 		      stmt = con.createStatement();
 
-		      stmt.executeUpdate("UPDATE property " + "SET description=\"" + propertyValue.getValue()
+		      stmt.executeUpdate("UPDATE propertyvalue " + "SET value=\"" 
+		    	  + propertyValue.getValue()
 		          + "\" " + "SET modificationDate=\"" + propertyValue.getModifyDate()
 		          + "\" "+ "WHERE id=" + propertyValue.getId());
 
@@ -108,6 +131,25 @@ public class PropertyValueMapper {
 		  try {
 		      stmt = con.createStatement();
 		      stmt.executeUpdate("DELETE FROM propertyvalue " + "WHERE id=" + id);
+
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+		  
+	  }
+	  
+	  public void deleteByContact(Contact c, PropertyValue pv) {
+		  Connection con = DBConnection.connection();
+		  Statement stmt = null;
+		  
+		  try {
+		      stmt = con.createStatement();
+		      stmt.executeUpdate
+		      ("DELETE value "
+		      + "FROM propertyvalue INNER JOIN Contact" 
+		      + "WHERE PropertyValue.id=" + pv.getPropertyValueID()
+		      + "AND" + "Contact.id=" + c.getId());
 
 		    }
 		    catch (SQLException e) {
@@ -157,8 +199,7 @@ public class PropertyValueMapper {
 				      if (rs.next()) {
 				    	  propertyValue.setId(rs.getInt("id"));
 				    	  propertyValue.setValue(rs.getString("value"));
-
-				          
+      
 				  }
 				  } catch (SQLException e) {
 					  e.printStackTrace();
