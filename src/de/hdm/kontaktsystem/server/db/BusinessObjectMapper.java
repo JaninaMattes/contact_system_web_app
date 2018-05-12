@@ -14,6 +14,7 @@ public class BusinessObjectMapper implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	
 	/*
 	 * Singleton Pattern
 	 */

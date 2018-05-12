@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -139,6 +140,10 @@ public class PropertyValueMapper {
 		  
 	  }
 	  
+	  /*
+	   * Anhand des zugehörigen Kontakts wird eine Auspraegung gelöscht
+	   */
+	  
 	  public void deleteByContact(Contact c, PropertyValue pv) {
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
@@ -159,31 +164,34 @@ public class PropertyValueMapper {
 	  }
 	  
 	  /*
-	   * L�schen der Eigenschaftsauspraegung in DB anhand des Kontaktnamens
+	   * Anhand der zugehörigen Eigenschaft wird eine Auspraegung gelöscht  
 	   */
 	  
-	  public void deletePropertyValueOf(Contact c) {
-
+	  public void deleteByProperty(Property prop, PropertyValue pv) {
 		  Connection con = DBConnection.connection();
+		  Statement stmt = null;
+		  
+		  try {
+		      stmt = con.createStatement();
+		      stmt.executeUpdate
+		      ("DELETE value "
+		      + "FROM propertyvalue INNER JOIN property" 
+		      + "WHERE propertyvalue.id=" + pv.getPropertyValueID()
+		      + "AND" + "property.id=" + prop.getId());
 
-		    try {
-		      Statement stmt = con.createStatement();
-
-		      stmt.executeUpdate("DELETE FROM propertyvalue " + "WHERE contact=" + c.getId());
-		      
-		    
 		    }
-		    catch (SQLException e2) {
-		      e2.printStackTrace();
+		    catch (SQLException e) {
+		      e.printStackTrace();
 		    }
 		  
-	  }
+	  }	  
+
 	  
 	  /*
 	   * Anhand der als Parameter �bergegebenen ID wird das zugeh�rige PropertyValue eindeutig identifiziert und zur�ckgegeben
 	   */
 	  
-	  public PropertyValue findPropertyValueByKey(int id) {
+	  public PropertyValue findByKey(int id) {
 				  
 		  		  PropertyValue propertyValue = new PropertyValue();	  
 				  Connection con = DBConnection.connection();
@@ -287,7 +295,7 @@ public class PropertyValueMapper {
 	  	 * gesucht und zur�ckgegeben
 	  	 */
 	  
-		public PropertyValue findPropertyValueByValue(String value) {
+		public PropertyValue findByValue(String value, PropertyValue pv) {
 				  
 				  PropertyValue propertyValue = new PropertyValue();	  
 				  Connection con = DBConnection.connection();
@@ -298,13 +306,12 @@ public class PropertyValueMapper {
 					  stmt = con.createStatement();
 					  // Statement ausfüllen und als Query an die DB schicken
 				      ResultSet rs = stmt.executeQuery("SELECT id, value FROM propertyvalue "
-				    		  + "WHERE value = " + value + " ORDER BY id");
+				    		  + "WHERE value = " + value + 
+				    		  "AND id =" + pv.getPropertyValueID() + "ORDER BY id");
 				      
 				      if (rs.next()) {
 				    	  propertyValue.setId(rs.getInt("id"));
 				    	  propertyValue.setValue(rs.getString("value"));
-				    	  propertyValue.setCreationDate(rs.getTimestamp("creationDate"));
-				    	  propertyValue.setModifyDate(rs.getTimestamp("modificationDate"));
 				          
 				  }
 				  } catch (SQLException e) {
@@ -322,7 +329,7 @@ public class PropertyValueMapper {
 	  
 		public PropertyValue findPropertyValueByProp(Property prop) {
 			  			  
-			  return PropertyMapper.propertyMapper().getProperty(prop);
+			  return prop.getPropertyID(prop);
 			  
 		  }
 		
@@ -332,9 +339,10 @@ public class PropertyValueMapper {
 		 * ihres Status gesucht und Ergebnisse zurückgegeben
 		 */
 	  
-		public Vector<PropertyValue> findByStatus(Boolean shared_status){
+		public Vector<PropertyValue> findByStatus (PropertyValue pv,Boolean shared_status){
 			  
 			  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
+			  Vector <Business>
 			  
 			  Connection con = DBConnection.connection();
 			  Statement stmt = null;
@@ -343,17 +351,21 @@ public class PropertyValueMapper {
 				  // Leeres SQL Statement anlegen	
 				  stmt = con.createStatement();
 				  // Statement ausfüllen und als Query an die DB schicken
-			      ResultSet rs = stmt.executeQuery("SELECT id, status FROM propertyvalue "
+			      ResultSet rs = stmt.executeQuery
+			    		  ("SELECT propertyvalue.id, businessobject.status"
 			          + " ORDER BY id");
 			      
 			      while (rs.next()) {
-			          PropertyValue propValue = new PropertyValue();
+			          PropertyValue propValue = new PropertyValue();		          
 			          propValue.setId(rs.getInt("id"));
 			          propValue.setShared_Status(rs.getBoolean("status"));
+			          
 			          // Hinzufügen des neuen Objekts zum Ergebnisvektor
 			          propValueResult.addElement(propValue);
 			          
 			      	}
+			      
+			      
 			  } catch (SQLException e) {
 				  e.printStackTrace();
 			  } 

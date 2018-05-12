@@ -45,6 +45,7 @@ public abstract class BusinessObject implements Serializable{
 	private Date creationDate = null;
 	private Date modifyDate = null;
 	private int user_ID = 0;
+	private boolean shared_status = false; 
 	
 	
 
