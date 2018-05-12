@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+
 /**<p>
  * An User is a special <code>Contact</code> an inherits all Attributes from <code>Contact</code>. 
  * </p><p>
