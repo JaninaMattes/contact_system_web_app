@@ -23,7 +23,7 @@ public class ContactList extends BusinessObject {
 	}
 
 	/**
-	 * Beim erstellen einer Liste wird ein contact hinzugefügt.
+	 * Beim erstellen einer Liste wird ein contact hinzugefï¿½gt.
 	 * 
 	 */
 
@@ -72,8 +72,6 @@ public class ContactList extends BusinessObject {
 		this.contacts = contacts;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+	
 
 }

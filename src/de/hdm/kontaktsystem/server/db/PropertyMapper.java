@@ -1,6 +1,5 @@
 package de.hdm.kontaktsystem.server.db;
 
-
 import java.sql.Connection;
 
 import java.sql.ResultSet;
@@ -8,9 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 /**
  * Die Mapper-Klasse <code>PropertyMapper</code> bildet <code>Property</code>-Objekte 
@@ -21,8 +22,6 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  * @author Janina Mattes
  *
  */
-
-// TODO: Logik der Methoden absprechen und überprüfen
 
 public class PropertyMapper {
 	
@@ -59,10 +58,26 @@ public class PropertyMapper {
 	    return propertyMapper;
 	  }
 
+	  /*
+	   * Abruf aller geteilter (participation) und eigener (ownership) Eigenschaften 
+	   * der Kontakte eines Users im KontaktSystem
+	   * 
+	   */
 	  
-	  public Vector<Property> getAllProperties(){
+	  // TODO: Logik prüfen --> entweder id oder user übergeben?
+	  
+	  public Vector <Property> getAllPropertiesByUser(int id){
 		  
-		  Vector <Property> propResult = new Vector<Property>();
+		 // User und Business Objekte erzeugen
+		  
+		  User user = null;
+		  
+		  if (id != 0) {
+			  user = new User();
+			  user = UserMapper.userMapper().getUserById(id);
+		  }		  	  
+		  
+		  Vector <Property> propertyResult = new Vector<Property>();
 		  
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
@@ -71,28 +86,43 @@ public class PropertyMapper {
 			  // Leeres SQL Statement anlegen	
 			  stmt = con.createStatement();
 			  // Statement ausfüllen und als Query an die DB schicken
-		      ResultSet rs = stmt.executeQuery("SELECT* FROM property "
-		          + " ORDER BY id");
+		      ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.CreationDate, "
+		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
+		      		+ "Property.ID, Property.description\r\n" + 
+		      		"FROM BusinessObject\r\n" + 
+		      		"INNER JOIN Property ON BusinessObject.ID = Property.ID\r\n" + 
+		      		"WHERE BusinessObject.OwnerID =" + user.getGoogleID());
 		      
 		      while (rs.next()) {
+		    	  
+		    	  BusinessObject businessObject = new BusinessObject();		    	  
 		          Property property = new Property();
 		          property.setId(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
-		          property.setCreationDate(rs.getTimestamp("creationDate"));
-		          property.setModifyDate(rs.getTimestamp("modificationDate"));
-		          		          
+		          businessObject.setCreationDate(rs.getTimestamp("creationDate"));
+		          businessObject.setModifyDate(rs.getTimestamp("modificationDate"));
+		          
+		          System.out.println(property.toString());
+		          System.out.println(businessObject.toString());
 
 		          // Hinzufügen des neuen Objekts zum Ergebnisvektor
-		          propResult.addElement(property);
+		          propertyResult.addElement(property);
 		          
 		      	}
 		  } catch (SQLException e) {
 			  e.printStackTrace();
 		  } 
 		  
-		  return propResult;
+		  return propertyResult;
 	  }
 	  
+	/*  public Vector<Property> getAllSharedProperties(){
+		  
+	  }
+	  
+	  public Vector<Property> getAllOwnedProperties(){
+		  
+	  } */
 	  
 	  public Property getPropertyByID(int id) {
 		  
@@ -266,6 +296,22 @@ public class PropertyMapper {
 			    
 			    return ContactMapper.contactMapper().findByOwner(contact);
 			  }
+
+		public PropertyValue findByProperty(Property prop) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public PropertyValue findByStatus(Property prop) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public PropertyValue getProperty(Property prop) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
 	  
 }
 

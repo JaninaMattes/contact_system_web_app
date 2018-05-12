@@ -8,6 +8,7 @@ import java.util.Random;
 
 import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
 import de.hdm.kontaktsystem.server.db.DBConnection;
+import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
@@ -42,5 +43,10 @@ public class DBTest {
 		//UserMapper.userMapper().insertUser(u);
 		
 		
+		
+		
+		// **** TESTS *****
+		
+		PropertyMapper.propertyMapper().getAllPropertiesByUser(u.getGoogleID());
 	}
 }

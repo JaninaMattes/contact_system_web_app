@@ -23,9 +23,12 @@ public class Participation implements Serializable {
 	/**
 	 * Seriennummer, vorgegeben durch das Interface {@link Serializable}
 	 */
+	
+	//TODO: Logik klären Soll hier auf UserID verwiesen werden?
+	private User owner = null;
 	private static final long serialVersionUID = 1L;
 	
-// Owner = Owner des BusinessObjects, das geteilt wird
+	// Owner = Owner des BusinessObjects, das geteilt wird
 	
 	/**
 	 * Verweis auf die ID des Users, der an der Teilhaberschaft teilnimmt
