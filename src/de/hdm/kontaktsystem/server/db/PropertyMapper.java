@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -63,10 +64,18 @@ public class PropertyMapper {
 	   * 
 	   */
 	  
-	  public Vector<Property> getAllPropertiesByUser(int id){
+	  // TODO: Logik prüfen --> entweder id oder user übergeben?
+	  
+	  public Vector <Property> getAllPropertiesByUser(int id){
 		  
-		  User user = new User();
-		  user = UserMapper.userMapper().getUserById(id);		  	  
+		 // User und Business Objekte erzeugen
+		  
+		  User user = null;
+		  
+		  if (id != 0) {
+			  user = new User();
+			  user = UserMapper.userMapper().getUserById(id);
+		  }		  	  
 		  
 		  Vector <Property> propertyResult = new Vector<Property>();
 		  
@@ -85,13 +94,16 @@ public class PropertyMapper {
 		      		"WHERE BusinessObject.OwnerID =" + user.getGoogleID());
 		      
 		      while (rs.next()) {
+		    	  
+		    	  BusinessObject businessObject = new BusinessObject();		    	  
 		          Property property = new Property();
 		          property.setId(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
-		          property.setCreationDate(rs.getTimestamp("creationDate"));
-		          property.setModifyDate(rs.getTimestamp("modificationDate"));
+		          businessObject.setCreationDate(rs.getTimestamp("creationDate"));
+		          businessObject.setModifyDate(rs.getTimestamp("modificationDate"));
 		          
 		          System.out.println(property.toString());
+		          System.out.println(businessObject.toString());
 
 		          // Hinzufügen des neuen Objekts zum Ergebnisvektor
 		          propertyResult.addElement(property);

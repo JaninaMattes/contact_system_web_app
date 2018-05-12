@@ -29,6 +29,12 @@ public class Property extends BusinessObject{
 	private static final long serialVersionUID = 1L;
 	
 	/*
+	 *  ID der Eigenschaft
+	 */
+	
+	private int ID = 0;
+	
+	/*
 	 * Beschreibung der Eigenschaft
 	 */
 	
@@ -62,7 +68,7 @@ public class Property extends BusinessObject{
 	 * Default Konstruktor
 	 */
 		
-	public Property () {
+	public Property() {
 		
 	}
 	
@@ -90,12 +96,28 @@ public class Property extends BusinessObject{
 		
 	}	
 
+	
 	/*
 	* ***************************************************************************
 	* ABSCHNITT 2: Getter und Setter
 	* ***************************************************************************
 	*/
 	
+	
+	/*
+	 * Abruf der ID 
+	 */
+	public int getID() {
+		return ID;
+	}
+	
+	/*
+	 * Setzen der ID
+	 */
+	
+	public void setID(int iD) {
+		ID = iD;
+	}
 	
 	/*
 	 * Auslesen der Beschreibung eines Eigenschafts Objektes
@@ -144,8 +166,7 @@ public class Property extends BusinessObject{
 	
 	public Vector<PropertyValue> getPropertyValues() {
 		return propertyValues;
-	}
-	
+	}	
 
 	/*
 	 * Setzen des PropertyValue Vectors für eine neue Liste
@@ -159,26 +180,22 @@ public class Property extends BusinessObject{
 		this.propertyValues = propertyValues;
 	}
 	
+	/*
+	 * Möglichkeit nur eine einzelnee Eigenschaftsausprägung (PropertyValue) Instanz
+	 * für eine Eigenschaft zu setzen
+	 */
+	
 	public void addPropertyValue(PropertyValue value) {
 		this.propertyValues.addElement(value);
 	}
 	
 	/*
 	* ***************************************************************************
-	* ABSCHNITT 3: toString und equals
+	* ABSCHNITT 3: toString und equals Methode
 	* ***************************************************************************
 	*/
 	
 
-	/**
-	   * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
-	   */
-	
-	@Override
-	public String toString() {
-		return "Property [description=" + description + ", propertyValues=" + propertyValues + "]";
-	}
-	
 	/*
 	 * <p>
 	 * Feststellen der <em>inhaltlichen</em> Gleichheit zweier PropertyValue-Objekte.
@@ -206,6 +223,29 @@ public class Property extends BusinessObject{
 		}
 	 
 	 
+	 /**
+		 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
+		 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
+		 * der ID des Objekts.
+		 * Dies überschreibt die Methode hashCode() der Klasse Object.
+		 */
+	 
+		@Override
+		public int hashCode(){
+			return this.getId();
+		}
+	 
+
+		/**
+		   * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
+		   * Dies überschreibt die Methode toString() der Klasse Object
+		   */
+		
+		@Override
+		public String toString() {
+			return "Property [description=" + description + ", propertyValues=" + propertyValues + "]";
+		}
+		
 	
 
 }

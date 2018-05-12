@@ -27,7 +27,7 @@ import java.util.Date;
 
 //TODO: geeigneten Konstruktor erstellen
 
-public abstract class BusinessObject implements Serializable{
+public class BusinessObject implements Serializable{
 	
 	/**
 	 * Seriennummer, vorgegeben durch das Interface {@link Serializable}
@@ -46,6 +46,10 @@ public abstract class BusinessObject implements Serializable{
 	private Date modifyDate = null;
 	private int user_ID = 0;
 	
+	
+	public BusinessObject() {
+		
+	}
 	
 
 	/**

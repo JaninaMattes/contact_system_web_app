@@ -43,6 +43,10 @@ public class DBTest {
 		//UserMapper.userMapper().insertUser(u);
 		
 		
+		
+		
+		// **** TESTS *****
+		
 		PropertyMapper.propertyMapper().getAllPropertiesByUser(u.getGoogleID());
 	}
 }
