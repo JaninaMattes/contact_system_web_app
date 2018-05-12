@@ -51,8 +51,11 @@ public class PropertyValueMapper {
 		  
 		  try {
 		  stmt1 = con.createStatement();		  
-		  ResultSet rs1 = stmt1.executeQuery("SELECT MAX(id) AS maxid "
-		          + "FROM businessobject");
+		  ResultSet rs1 = stmt1.executeQuery(
+				  "SELECT MAX(id) AS maxid "
+		          + "FROM businessobject"
+				  );
+		  
 		  if (rs1.next()) {
 			 
 			  pv.setBo_Id(rs1.getInt("maxid") + 1);
@@ -68,8 +71,11 @@ public class PropertyValueMapper {
 		  	}
 		  
 		  stmt2 = con.createStatement();		  
-		  ResultSet rs2 = stmt2.executeQuery("SELECT MAX(id) AS maxid "
-		          + "FROM businessobject");
+		  ResultSet rs2 = stmt2.executeQuery(
+				  "SELECT MAX(id) AS maxid "
+		          + "FROM businessobject"
+				  );
+		  
 		  if (rs2.next()) {
 			 
 			  pv.setBo_Id(rs2.getInt("maxid") + 1);
@@ -78,7 +84,7 @@ public class PropertyValueMapper {
 
 		        // Einfügeoperation erfolgt
 			  stmt2.executeUpdate
-		        ("INSERT INTO businessobject (id, creationdate) "
+		        ("INSERT INTO businessobject (bo_id, creationdate) "
 		            + "VALUES (" + pv.getBo_Id() + ",'" 
 		             + pv.getCreationDate() 
 		             + "')");
