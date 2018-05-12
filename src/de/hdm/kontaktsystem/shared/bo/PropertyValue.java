@@ -26,6 +26,8 @@ public class PropertyValue extends BusinessObject{
 	
 	// TODO: Überprüfen ob die Verbindung von Property/PropertyValue so sinnvoll ist
 	
+	
+
 	public PropertyValue() {
 		
 	}
@@ -62,6 +64,23 @@ public class PropertyValue extends BusinessObject{
 		this.value = value;
 	}
 	
+	
+	public Property getProp() {
+		return prop;
+	}
+
+	public void setProp(Property prop) {
+		this.prop = prop;
+	}
+	
+	public boolean getShared_Status() {
+		return shared_Status;
+	}
+
+	public void setShared_Status(boolean shared_Status) {
+		this.shared_Status = shared_Status;
+	}
+
 	/*
 	 * <p>
 	 * Feststellen der <em>inhaltlichen</em> Gleichheit zweier PropertyValue-Objekte.

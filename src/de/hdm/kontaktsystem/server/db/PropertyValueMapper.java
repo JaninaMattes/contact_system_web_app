@@ -9,10 +9,7 @@ import java.util.Vector;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
-import de.hdm.thies.bankProjekt.server.db.CustomerMapper;
-import de.hdm.thies.bankProjekt.server.db.DBConnection;
-import de.hdm.thies.bankProjekt.shared.bo.Account;
-import de.hdm.thies.bankProjekt.shared.bo.Customer;
+
 
 public class PropertyValueMapper {
 	
@@ -45,18 +42,21 @@ public class PropertyValueMapper {
 		  try {
 		  stmt = con.createStatement();		  
 		  ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
-		          + "FROM propertyvalue ");
+		          + "FROM businessobject");
 		  if (rs.next()) {
 			 
-			  //TODO: Ersetzung durch Generated Keys
 			  propertyValue.setId(rs.getInt("maxid") + 1);
 
 		        stmt = con.createStatement();
 
-		        // die Einfügeoperation erfolgt
-		        stmt.executeUpdate("INSERT INTO propertyvalue (id, value, creationDate) "
+		        // Einfügeoperation erfolgt
+		        stmt.executeUpdate
+		        ("INSERT INTO propertyvalue (id, value, creationDate) "
 		            + "VALUES (" + propertyValue.getId() + ",'" + propertyValue.getValue() + "','"
-		            + propertyValue.getCreationDate() + "')");
+		            + propertyValue.getCreationDate() + "')"
+		          
+		        		);
+		        
 		  	}
 		  } catch(SQLException e) {
 			  e.printStackTrace();
@@ -211,7 +211,7 @@ public class PropertyValueMapper {
 	   * Alle für Benutzer zug�nglichen PropertyValues werden gesucht, in einen Vector gespeichert und zur�ckgegeben
 	   */
 
-	  public Vector<PropertyValue> findAllPropertyValues(){
+	  public Vector<PropertyValue> findAll(){
 				  
 				  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
 				  
@@ -229,10 +229,6 @@ public class PropertyValueMapper {
 				          PropertyValue propValue = new PropertyValue();
 				          propValue.setId(rs.getInt("id"));
 				          propValue.setValue(rs.getString("value"));
-				          propValue.setCreationDate(rs.getTimestamp("creationDate"));
-				          propValue.setModifyDate(rs.getTimestamp("modificationDate"));
-				          		          
-		
 				          // Hinzufügen des neuen Objekts zum Ergebnisvektor
 				          propValueResult.addElement(propValue);
 				          
@@ -285,22 +281,47 @@ public class PropertyValueMapper {
 	  
 		public PropertyValue findPropertyValueByProp(Property prop) {
 			  			  
-			  return PropertyMapper.propertyMapper().findByProperty(prop);
+			  return PropertyMapper.propertyMapper().getProperty(prop);
 			  
 		  }
 		
 		/*
-		 * Alle f�r den Benutzer in der Applikation zug�nglichen Auspraegungen werden anhand ihres Status 
-	  	 * gesucht und zur�ckgegeben
+		 * Alle für den Benutzer in der Applikation zugaenglichen Auspraegungen (selbst erstellt 
+		 * oder Teilhaberschaft freigegeben) werden anhand 
+		 * ihres Status gesucht und Ergebnisse zurückgegeben
 		 */
 	  
-		public PropertyValue findPropertyValueByStatus(Property prop) {
-			  			  
-			  return PropertyMapper.propertyMapper().findByStatus(prop);
+		public Vector<PropertyValue> findByStatus(Boolean shared_status){
 			  
-		  }
+			  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
+			  
+			  Connection con = DBConnection.connection();
+			  Statement stmt = null;
+			  
+			  try {
+				  // Leeres SQL Statement anlegen	
+				  stmt = con.createStatement();
+				  // Statement ausfüllen und als Query an die DB schicken
+			      ResultSet rs = stmt.executeQuery("SELECT id, status FROM propertyvalue "
+			          + " ORDER BY id");
+			      
+			      while (rs.next()) {
+			          PropertyValue propValue = new PropertyValue();
+			          propValue.setId(rs.getInt("id"));
+			          propValue.setShared_Status(rs.getBoolean("status"));
+			          // Hinzufügen des neuen Objekts zum Ergebnisvektor
+			          propValueResult.addElement(propValue);
+			          
+			      	}
+			  } catch (SQLException e) {
+				  e.printStackTrace();
+			  } 
+			  
+			  return propValueResult;
+	}
 		
-		public PropertyValue getContact(PropertyValue propertyValue) {
+		
+		public PropertyValue findByContact(PropertyValue propertyValue) {
 		    /*
 		     * Wir bedienen uns hier einfach des CustomerMapper. Diesem geben wir
 		     * einfach den in dem Account-Objekt enthaltenen Fremdschlüssel für den
