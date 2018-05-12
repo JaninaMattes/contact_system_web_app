@@ -66,15 +66,15 @@ public class PropertyMapper {
 	  
 	  // TODO: Logik prüfen --> entweder id oder user übergeben?
 	  
-	  public Vector <Property> getAllPropertiesByUser(int id){
+	  public Vector <Property> getAllPropertiesByUser(int user_id){
 		  
 		 // User und Business Objekte erzeugen
 		  
 		  User user = null;
 		  
-		  if (id != 0) {
+		  if (user_id != 0) {
 			  user = new User();
-			  user = UserMapper.userMapper().getUserById(id);
+			  user = UserMapper.userMapper().getUserById(user_id);
 		  }		  	  
 		  
 		  Vector <Property> propertyResult = new Vector<Property>();
@@ -88,19 +88,134 @@ public class PropertyMapper {
 			  // Statement ausfüllen und als Query an die DB schicken
 		      ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.CreationDate, "
 		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
-		      		+ "Property.ID, Property.description\r\n" + 
-		      		"FROM BusinessObject\r\n" + 
-		      		"INNER JOIN Property ON BusinessObject.ID = Property.ID\r\n" + 
+		      		+ "Property.ID, Property.description" + 
+		      		"FROM BusinessObject" + 
+		      		"INNER JOIN Property ON BusinessObject.ID = Property.ID" + 
 		      		"WHERE BusinessObject.OwnerID =" + user.getGoogleID());
+		      
+		      while (rs.next()) {
+		    	  // TODO: Klären ob Business Objekt noch extra generiert werden muss
+		          Property property = new Property();
+		          //Property 
+		          property.setId(rs.getInt("id"));
+		          property.setDescription(rs.getString("description"));
+		          // Superklasse Business Object Attribute befüllen
+		          property.setCreationDate(rs.getTimestamp("creationDate"));
+		          property.setModifyDate(rs.getTimestamp("modificationDate"));
+		          property.setShared_status(rs.getBoolean("status"));
+		          
+		          System.out.println(property.toString());
+
+		          // Hinzufügen des neuen Objekts zum Ergebnisvektor
+		          propertyResult.addElement(property);
+		          
+		      	}
+		  } catch (SQLException e) {
+			  e.printStackTrace();
+		  } 
+		  
+		  return propertyResult;
+	  }
+	  
+	public Vector <Property> getAllSharedPropertiesByUser(int user_id){
+	  
+	 // User Objekte erzeugen
+		  
+		  User user = null;
+		  
+		  if (user_id != 0) {
+			  user = new User();
+			  user = UserMapper.userMapper().getUserById(user_id);
+		  }		  	  
+		  
+		  Vector <Property> propertyResult = new Vector<Property>();
+		  
+		  Connection con = DBConnection.connection();
+		  Statement stmt = null;
+		  
+		  try {
+			  // Leeres SQL Statement anlegen	
+			  stmt = con.createStatement();
+			  // Statement ausfüllen und als Query an die DB schicken
+		      ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.CreationDate, "
+		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
+		      		+ "Property.ID, Property.description" + 
+		      		"FROM BusinessObject" + 
+		      		"INNER JOIN Property ON BusinessObject.ID =" + user.getGoogleID() +
+		      		"INNER JOIN Property ON BusinessObject.ID = Property.ID" +
+		      		"WHERE BusinessObject.Status =" + 1);
+		      		// TODO: Klären Business Object Status = TinyInt in der DB
+		      		// Bedeutet --> True = 1, False = 0
 		      
 		      while (rs.next()) {
 		    	  
 		    	  BusinessObject businessObject = new BusinessObject();		    	  
 		          Property property = new Property();
+		          
 		          property.setId(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
-		          businessObject.setCreationDate(rs.getTimestamp("creationDate"));
-		          businessObject.setModifyDate(rs.getTimestamp("modificationDate"));
+		          
+		          // Superklasse Business Object Attribute befüllen
+		          property.setCreationDate(rs.getTimestamp("creationDate"));
+		          property.setModifyDate(rs.getTimestamp("modificationDate"));
+		          property.setShared_status(rs.getBoolean("status"));
+		          
+		          System.out.println(property.toString());
+		          System.out.println(businessObject.toString());
+
+		          // Hinzufügen des neuen Objekts zum Ergebnisvektor
+		          propertyResult.addElement(property);
+		          
+		      	}
+		  } catch (SQLException e) {
+			  e.printStackTrace();
+		  } 
+		  
+		  return propertyResult;	  
+	  }
+	
+	  
+	  public Vector<Property> getAllOwnedProperties(int user_id){
+		  
+		  // User Objekte erzeugen
+		  User user = null;
+		  
+		  if (user_id != 0) {
+			  user = new User();
+			  user = UserMapper.userMapper().getUserById(user_id);
+		  }		  	  
+		  
+		  Vector <Property> propertyResult = new Vector<Property>();
+		  
+		  Connection con = DBConnection.connection();
+		  Statement stmt = null;
+		  
+		  try {
+			  // Leeres SQL Statement anlegen	
+			  stmt = con.createStatement();
+			  // Statement ausfüllen und als Query an die DB schicken
+		      ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.CreationDate, "
+		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
+		      		+ "Property.ID, Property.description" + 
+		      		"FROM BusinessObject" + 
+		      		"INNER JOIN Property ON BusinessObject.ID =" + user.getGoogleID() +
+		      		"INNER JOIN Property ON BusinessObject.ID = Property.ID" +
+		      		"WHERE BusinessObject.Status =" + 0);
+		      		// TODO: Klären Business Object Status = TinyInt in der DB
+		      		// Bedeutet --> True = 1, False = 0
+		      
+		      while (rs.next()) {
+		    	  
+		    	  BusinessObject businessObject = new BusinessObject();		    	  
+		          Property property = new Property();
+		          
+		          property.setId(rs.getInt("id"));
+		          property.setDescription(rs.getString("description"));
+		          
+		          // Superklasse Business Object Attribute befüllen
+		          property.setCreationDate(rs.getTimestamp("creationDate"));
+		          property.setModifyDate(rs.getTimestamp("modificationDate"));
+		          property.setShared_status(rs.getBoolean("status"));
 		          
 		          System.out.println(property.toString());
 		          System.out.println(businessObject.toString());
@@ -114,15 +229,9 @@ public class PropertyMapper {
 		  } 
 		  
 		  return propertyResult;
-	  }
-	  
-	/*  public Vector<Property> getAllSharedProperties(){
 		  
-	  }
-	  
-	  public Vector<Property> getAllOwnedProperties(){
 		  
-	  } */
+	  } 
 	  
 	  public Property getPropertyByID(int id) {
 		  
@@ -152,9 +261,9 @@ public class PropertyMapper {
 	  }
 	  
 	  
-	  public Property getPropertyByDescription(String description) {
+	  public Vector <Property> getPropertyByDescription(String description) {
 		  
-		  Property property = new Property();	  
+		  Vector <Property> propertyResult = new Vector();	  
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
@@ -165,33 +274,47 @@ public class PropertyMapper {
 		      ResultSet rs = stmt.executeQuery("SELECT id, description FROM property "
 		    		  + "WHERE description = " + description + " ORDER BY id");
 		      
-		      if (rs.next()) {
+		      while (rs.next()) {
+		    	  
+		    	  Property property = new Property();		    	  
+		    	  BusinessObject businessObject = new BusinessObject();		    	  
+		         		          
 		          property.setId(rs.getInt("id"));
 		          property.setDescription(rs.getString("description"));
+		          
+		          // Superklasse Business Object Attribute befüllen
 		          property.setCreationDate(rs.getTimestamp("creationDate"));
 		          property.setModifyDate(rs.getTimestamp("modificationDate"));
+		          property.setShared_status(rs.getBoolean("status"));
 		          
-		  }
+		          System.out.println(property.toString());
+		          System.out.println(businessObject.toString());
+
+		          // Hinzufügen des neuen Objekts zum Ergebnisvektor
+		          propertyResult.addElement(property);
+		          
+		      	}
+		     
 		  } catch (SQLException e) {
 			  e.printStackTrace();
 		  } 
 		  
-		  return property;
+		  return propertyResult;
 		  
 	  }
 	  
-	  
+		  
 	  public Property updateProperty(Property property){
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
 		  try {
 		      stmt = con.createStatement();
-
-		      stmt.executeUpdate("UPDATE property " + "SET description=\"" + property.getDescription()
+		      stmt.executeUpdate("UPDATE property " + "SET description" + property.getDescription()
 		          + "\" " + "SET modificationDate=\"" + property.getModifyDate()
+		          + "\" " + "SET status=\"" + property.getShared_Status()		    
 		          + "\" "+ "WHERE id=" + property.getId());
-
+		      
 		    } 
 		  	  catch (SQLException e) {
 		      e.printStackTrace();
@@ -202,14 +325,25 @@ public class PropertyMapper {
 	  
 	  
 	  public void deleteProperty(Property property) {
+		  
+		  PropertyValue propertyValue = null;
+		  Vector <PropertyValue> propertyValueResult = new Vector();
+		  
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
 		  try {
-		      stmt = con.createStatement();
-		      // TODO: PropertyValueMapper.propertyValueMapper().deletePropertyValueByProperty(property);
+			  
+			  stmt = con.createStatement();
+			  
+			  propertyValue = new PropertyValue();			  
+			  propertyValueResult = property.getPropertyValues();
+			  
+			  for (PropertyValue pV : propertyValueResult){
+				  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getId());
+			  } 
+			  
 		      stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getId());
-
 		    }
 		    catch (SQLException e2) {
 		      e2.printStackTrace();
@@ -217,21 +351,56 @@ public class PropertyMapper {
 		  
 	  }
 	  
+	  
 	  public void deletePropertyByID(int id) {
+		  
+		  Property property = null;
+		  PropertyValue propertyValue = null;
+		  Vector <PropertyValue> propertyValueResult = new Vector();
+		  
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
 		  try {
-		      stmt = con.createStatement();
-		   // TODO: PropertyValueMapper.propertyValueMapper().deletePropertyValueByPropertyID(id);
-		      stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + id);
-
+			  
+			  property = new Property();
+			  // Leeres SQL Statement anlegen	
+			  stmt = con.createStatement();
+			  // Statement ausfüllen und als Query an die DB schicken
+		      ResultSet rs = stmt.executeQuery("SELECT id FROM property "
+		    		  + "WHERE id = " + id + " ORDER BY id");
+		      
+		      if (rs.next()) {
+		          property.setId(rs.getInt("id"));
+		          property.setDescription(rs.getString("description"));
+		          property.setCreationDate(rs.getTimestamp("creationDate"));
+		          property.setModifyDate(rs.getTimestamp("modificationDate"));
+		          
+		  }
+		  } catch (SQLException e) {
+			  e.printStackTrace();
+		  } 		  
+		  
+		  try {
+			  
+			  stmt = con.createStatement();
+			  
+			  propertyValue = new PropertyValue();			  
+			  propertyValueResult = property.getPropertyValues();
+			  
+			  for (PropertyValue pV : propertyValueResult){
+				  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getId());
+			  } 
+			  
+		      stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getId());
 		    }
 		    catch (SQLException e2) {
 		      e2.printStackTrace();
 		    }
 		  
 	  }
+	  
+	  // TODO: Klären ob diese Methode so sinnvoll ist
 	  
 	  public void deletePropertyOfContact(Contact contact) {
 		  Connection con = DBConnection.connection();
@@ -249,41 +418,52 @@ public class PropertyMapper {
 		  
 	  }
 	  
-	  public void deleteAllProperties() {
-		  Connection con = DBConnection.connection();
-		  Statement stmt = null;		  
-
-		  try {
-		      stmt = con.createStatement();
-		      // TODO: PropertyValueMapper.propertyValueMapper().deletePropertyValueByProperty(property);
-		      // stmt.executeUpdate("DELETE FROM property " + "WHERE owner=" + contact.getId());
-
-		    }
-		    catch (SQLException e2) {
-		      e2.printStackTrace();
-		    }
+	  public void deleteAllPropertiesFromUser(int user_id) {
 		  
+		 Vector <Property> propertyResult = new Vector(); 
+		 propertyResult = PropertyMapper.propertyMapper().getAllPropertiesByUser(user_id);
+		
+		 for (Property pV : propertyResult){				 
+			  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getId());
+			  PropertyMapper.propertyMapper().deleteProperty(pV);
+		  }		 
 	  }
 	  
+	  
+	  
 	  public void insert(Property property) {
+		  
+		  Vector <PropertyValue> propertyValues = new Vector();
+		  
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
+		  //TODO: Logik überprüfen
+		  BusinessObjectMapper.businessObjectMapper().insert(property);
+		  	  
 		  try {
+			  
+		  propertyValues = property.getPropertyValues();
+		
 		  stmt = con.createStatement();		  
-		  ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
-		          + "FROM property ");
+		  ResultSet rs = stmt.executeQuery("SELECT id"
+		          + "FROM businessObject"
+				  + "WHERE businessObject.bo_id = property.id");
+		  
 		  if (rs.next()) {
 			 
-			  //TODO: Ersetzung durch Generated Keys
-			  property.setId(rs.getInt("maxid") + 1);
-
-		        stmt = con.createStatement();
+			  property.setId(rs.getInt("id"));
+		      property.setDescription(rs.getString("description"));
+		      property.setCreationDate(rs.getDate("creationDate"));
+		      property.setShared_Status(rs.getBoolean("status"));
+		      property.setPropertyValues(propertyValues);
+		      
+			  stmt = con.createStatement();
 
 		        // die Einfügeoperation erfolgt
-		        stmt.executeUpdate("INSERT INTO property (id, description, creationDate) "
+		        stmt.executeUpdate("INSERT INTO property (id, description, status, creationDate) "
 		            + "VALUES (" + property.getId() + ",'" + property.getDescription() + "','"
-		            + property.getCreationDate() + "')");
+		            + property.getShared_Status() + "," + property.getCreationDate() + "')");
 		  	}
 		  } catch(SQLException e) {
 			  e.printStackTrace();

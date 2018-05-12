@@ -22,7 +22,6 @@ import java.util.Date;
  * (vgl. Vorlesung Software Projekt, BankProjekt 2.0, Klasse BusinessObject)
  * </p>
  * 
- * @author Sandra
  */
 
 //TODO: geeigneten Konstruktor erstellen
@@ -45,7 +44,7 @@ public class BusinessObject implements Serializable{
 	private Date creationDate = null;
 	private Date modifyDate = null;
 	private int user_ID = 0;
-	
+	private boolean shared_status = false;
 	
 	public BusinessObject() {
 		
@@ -110,7 +109,38 @@ public class BusinessObject implements Serializable{
 		this.modifyDate = modifyDate;
 	}
 	
+	/*
+	 * Abrufen der User ID
+	 */
+
+	public int getUser_ID() {
+		return user_ID;
+	}
+
+	/*
+	 * Setzen der User ID
+	 */
+
+	public void setUser_ID(int user_ID) {
+		this.user_ID = user_ID;
+	}
 	
+	/*
+	 * Status abrufen ob ein BO geteilt wurde 
+	 */
+
+	public boolean isShared_status() {
+		return shared_status;
+	}
+
+	/*
+	 * Setzen des Status
+	 */
+
+	public void setShared_status(boolean shared_status) {
+		this.shared_status = shared_status;
+	}
+
 
 	/**
 	 * Erzeugen einer Darstellung der jeweiligen Instanz als String (Text).
