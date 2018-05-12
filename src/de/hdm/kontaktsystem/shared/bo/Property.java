@@ -31,17 +31,12 @@ public class Property extends BusinessObject{
 	/*
 	 * Beschreibung des Status, dieser ist entweder geteilt 
 	 * (shared) oder nicht geteilt (unshared)
+	 * Per default gilt ein neu erstelltes Property Objekt
+	 * nicht geteilt, daher wird dieser zuerst als false angegeben
+	 * 
 	 */
 	
-	private String status = null;
-	
-	/*
-	 * Anwendung eines ENUM als Variable um ein Set an 
-	 * vordefinierten Konstanten geteilt (shared) oder 
-	 * nicht geteilt (unshared) bietet
-	 */
-	
-	private Status state = null;
+	private boolean shared_Status = false;	
 	
 	/*
 	 * Jeder Eigenschaftinstanz ist einer oder mehrerer Eigenschaftsausprägungen
@@ -60,17 +55,13 @@ public class Property extends BusinessObject{
 		
 	}
 	
-	public Property(String description, Status state) {
+	public Property(String description) {
 		this.description = description;
-		this.state = state;	
-		
 		
 	}
 	
-	public Property(String value, String description, Status state) {
-		this.description = description;
-		this.state = state;
-		
+	public Property(String value, String description) {
+		this.description = description;				
 		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
 		PropertyValue propertyValue = new PropertyValue(value);
 		propertyValues.addElement(propertyValue);
@@ -94,39 +85,43 @@ public class Property extends BusinessObject{
 		this.description = description;
 	}		
 		
-	 /**
-		 * Hier findet die Anwendung eines <code> ENUM </code> statt
-		 * Dies ermöglicht ein Set an vordefinierten Konstanten auszugeben
-		 * in diesem Fall wäre dies für den Status geteilt oder nicht geteilt
-		 * @return Status der Property
-		 */	
+	/*
+	 * Abrufen des Teilhaber Status 
+	 * dieser gibt Informationen darüber ob 
+	 * eine Eigenschaft geteilt oder nicht geteilt wurde
+	 * @return shared_Status ist boolean
+	 */
 	
-	public String getStatus() {
-		
-		switch (state) {
-        case SHARED: this.status = "shared";
-        	break;
-        case NOTSHARED: this.status = "not shared";
-        	break;
-        default:
-            break;
-        }
-		return status;
+	public boolean getShared_Status() {
+		return shared_Status;
 	}
+	
+	/*
+	 * Wurde eine Property Instanz mit einem anderen Nutzer
+	 * im Kontaktsystem geteilt wird der isShared Status auf true gesetzt.
+	 * Dieser kann später über die Oberfläche im Client dem Nutzer dargestellt
+	 * werden, um so zusätzliche Informationen zu bieten. 
+	 * 
+	 */
 
-
-	public Status getState() {
-		return state;
+	public void setShared_Status(boolean shared_Status) {
+		this.shared_Status = shared_Status;
 	}
-
-	public void setState(Status state) {
-		this.state = state;
-	}
-
+	
+	/*
+	 * Auslesen des PropertyValue Vectors
+	 *  
+	 */
+	
 	public Vector<PropertyValue> getPropertyValues() {
 		return propertyValues;
 	}
 
+	/*
+	 * Setzen des PropertyValue Vectors für eine neue Liste
+	 * an PropertyValues, welche einer Property zugeordnet werden
+	 */
+	
 	public void setPropertyValues(Vector<PropertyValue> propertyValues) {
 		this.propertyValues = propertyValues;
 	}
@@ -146,8 +141,7 @@ public class Property extends BusinessObject{
 	 * Die Gleichheit wird in diesem Beispiel auf eine gleiche Identität
 	 * beschränkt.
 	 * </p>
-	 * 
-	 * 
+	 *  
 	 */
 	
 	 public boolean equals(Object o) {

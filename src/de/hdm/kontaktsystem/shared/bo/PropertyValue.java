@@ -9,11 +9,26 @@ public class PropertyValue extends BusinessObject{
 	 */
 	private static final long serialVersionUID = 1L;
 			
+	private int propertyValueID;
 	private String value = null;
 	private Property prop = null;
 	
+	/*
+	 * Beschreibung des Status, dieser ist entweder geteilt 
+	 * (shared) oder nicht geteilt (unshared)
+	 * Per default gilt ein neu erstelltes Property Objekt
+	 * nicht geteilt, daher wird dieser zuerst als false angegeben
+	 * 
+	 */
+	
+	private boolean shared_Status = false;	
+	
 	
 	// TODO: Überprüfen ob die Verbindung von Property/PropertyValue so sinnvoll ist
+	
+	public PropertyValue() {
+		
+	}
 	
 	public PropertyValue(String value) {
 		
@@ -22,6 +37,14 @@ public class PropertyValue extends BusinessObject{
 
 	}
 	
+	public int getPropertyValueID() {
+		return propertyValueID;
+	}
+
+	public void setPropertyValueID(int propertyValueID) {
+		this.propertyValueID = propertyValueID;
+	}
+
 	/*
 	 * Auslesen des Ausprägungswertes
 	 */
