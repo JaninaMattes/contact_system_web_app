@@ -163,7 +163,6 @@ public abstract class BusinessObject implements Serializable{
 	     */
 	    return false;
 	  }
-	  
-
-	
+	 
+	  	
 }

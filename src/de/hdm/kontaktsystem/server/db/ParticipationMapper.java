@@ -24,7 +24,8 @@ import de.hdm.kontaktsystem.shared.bo.User;
  *
  */
 
-//TODO: Implement Methods
+//TODO: Implement Methods, create descriptions for methods
+
 
 public class ParticipationMapper {
 	

@@ -1,6 +1,5 @@
 package de.hdm.kontaktsystem.server.db;
 
-
 import java.sql.Connection;
 
 import java.sql.ResultSet;
@@ -22,8 +21,6 @@ import de.hdm.kontaktsystem.shared.bo.User;
  * @author Janina Mattes
  *
  */
-
-// TODO: Logik der Methoden absprechen und überprüfen
 
 public class PropertyMapper {
 	

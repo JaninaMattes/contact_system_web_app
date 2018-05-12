@@ -19,6 +19,12 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 public class Property extends BusinessObject{
 	
+	/*
+	 * Die default Serial Version UID vergibt jeder serialisierbaren Java Klasse
+	 * eine einzigartige ID. Diese wird bei der <em> desirialisation </em> verwendet
+	 * um sicherzustellen, dass Sender und Empfänger die Klassen für das empfangene
+	 * Objekt geladen haben. 
+	 */
 
 	private static final long serialVersionUID = 1L;
 	
@@ -47,27 +53,50 @@ public class Property extends BusinessObject{
 	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
 	/*
-	 * Bei der Erzeugung einer neuen Eigenschaftinstanz muss ebenso eine neue
-	 * Eigenschaftsausprägung dieser erzeugt und zugeordnet werden
+	* ***************************************************************************
+	* ABSCHNITT 1: Konstruktoren
+	* ***************************************************************************
+	*/
+	
+	/*
+	 * Default Konstruktor
 	 */
 		
 	public Property () {
 		
 	}
 	
+	/*
+	 * Bei der Erzeugung einer neuen Eigenschaftsinstanz muss nicht zwingend
+	 * eine Eigenschaftsausprägung (PropertyValue Instanz) erzeugt werden
+	 */
+	
 	public Property(String description) {
 		this.description = description;
 		
 	}
 	
+	/*
+	 * Bei der Erzeugung einer neuen Eigenschaftinstanz muss ebenso eine neue
+	 * Eigenschaftsausprägung dieser erzeugt und zugeordnet werden
+	 */
+	
 	public Property(String value, String description) {
-		this.description = description;				
+		this.description = description;		
+		
 		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
 		PropertyValue propertyValue = new PropertyValue(value);
 		propertyValues.addElement(propertyValue);
 		
 	}	
 
+	/*
+	* ***************************************************************************
+	* ABSCHNITT 2: Getter und Setter
+	* ***************************************************************************
+	*/
+	
+	
 	/*
 	 * Auslesen der Beschreibung eines Eigenschafts Objektes
 	 */
@@ -116,15 +145,30 @@ public class Property extends BusinessObject{
 	public Vector<PropertyValue> getPropertyValues() {
 		return propertyValues;
 	}
+	
 
 	/*
 	 * Setzen des PropertyValue Vectors für eine neue Liste
-	 * an PropertyValues, welche einer Property zugeordnet werden
+	 * an PropertyValues, welche einer Property zugeordnet werden.
+	 * Möglichkeit auch nur eine PropertyValue Instanz dem Vector
+	 * beizufügen, wenn nur ein einziges Objekt zugeordnet werden soll.
+	 *  
 	 */
 	
 	public void setPropertyValues(Vector<PropertyValue> propertyValues) {
 		this.propertyValues = propertyValues;
 	}
+	
+	public void addPropertyValue(PropertyValue value) {
+		this.propertyValues.addElement(value);
+	}
+	
+	/*
+	* ***************************************************************************
+	* ABSCHNITT 3: toString und equals
+	* ***************************************************************************
+	*/
+	
 
 	/**
 	   * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
@@ -160,6 +204,8 @@ public class Property extends BusinessObject{
 		    }
 		    return false;
 		}
+	 
+	 
 	
 
 }
