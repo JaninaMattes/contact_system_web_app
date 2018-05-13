@@ -18,8 +18,13 @@ public class User {
 	private static final long serialVersionUID = 1L;
 	
 	private int googleID = 0;
+	
 	private String gMail = null;
+	
+	private boolean shared_status = false; 
+	
 	private Contact userContact = null;
+	
 	
 	public User() {
 
@@ -58,6 +63,22 @@ public class User {
 		this.gMail = mail;
 	}
 	
+	/*
+	 * Abfragen des Status
+	 */
+	
+	public boolean isShared_status() {
+		return shared_status;
+	}
+
+	/*
+	 * SEtzen des Status
+	 */
+	
+	public void setShared_status(boolean shared_status) {
+		this.shared_status = shared_status;
+	}
+
 	/**
 	 * Returns the <code>Contact</code> that is linked to the User
 	 * @return contact

@@ -65,8 +65,15 @@ public class PropertyMapper {
 	  
 	  public Vector<Property> getAllPropertiesByUser(int id){
 		  
+		  /*
+		   * User aus DB abrufen anhand dessen User ID
+		   *
+		   */
 		  User user = new User();
-		  user = UserMapper.userMapper().getUserById(id);		  	  
+		  
+		  if(id != 0) {
+		  user = UserMapper.userMapper().getUserById(id);		
+		  }
 		  
 		  Vector <Property> propertyResult = new Vector<Property>();
 		  
@@ -77,12 +84,12 @@ public class PropertyMapper {
 			  // Leeres SQL Statement anlegen	
 			  stmt = con.createStatement();
 			  // Statement ausfüllen und als Query an die DB schicken
-		      ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.CreationDate, "
-		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
-		      		+ "Property.ID, Property.description\r\n" + 
-		      		"FROM BusinessObject\r\n" + 
-		      		"INNER JOIN Property ON BusinessObject.ID = Property.ID\r\n" + 
-		      		"WHERE BusinessObject.OwnerID =" + user.getGoogleID());
+		      ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.creationDate, "
+		      		+ "BusinessObject.modificationDate, BusinessObject.status, "
+		      		+ "Property.ID, Property.description" 
+		      		+ "FROM BusinessObjec" 
+		      		+ "INNER JOIN Property ON BusinessObject.ID = Property.ID" 
+		      		+ "WHERE BusinessObject.owner_ID =" + user.getGoogleID());
 		      
 		      while (rs.next()) {
 		          Property property = new Property();
@@ -90,6 +97,7 @@ public class PropertyMapper {
 		          property.setDescription(rs.getString("description"));
 		          property.setCreationDate(rs.getTimestamp("creationDate"));
 		          property.setModifyDate(rs.getTimestamp("modificationDate"));
+		          property.setShared_Status(rs.getBoolean("status"));
 		          
 		          System.out.println(property.toString());
 
