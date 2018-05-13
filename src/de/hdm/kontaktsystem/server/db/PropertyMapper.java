@@ -72,6 +72,11 @@ public class PropertyMapper {
        */
      
       // TODO: Logik prüfen --> entweder user_id oder User als Parameter übergeben?
+      
+      public Vector <Property> getAllPropertiesByUser(User user){
+    	 return this.getAllOwnedProperties(user.getGoogleID());
+      }
+      
      
       public Vector <Property> getAllPropertiesByUser(int user_id){
          
@@ -207,52 +212,7 @@ public class PropertyMapper {
      * zugeordnet werden können. Dies entspricht null bei einem nicht vorhandenem DB-Tupel.
      *
      */
-    
-   
-    public Vector <Property> findByStatus(boolean shared_status) {
        
-    	Vector <PropertyValue> propertyValue = new Vector <PropertyValue>();
-    	Vector <Property> propertiesByStautsResult = new Vector <Property>();
-        Property property = null;
-            
-        Connection con = DBConnection.connection();
-        Statement stmt = null;
-         
-         try {
-              // Leeres SQL Statement anlegen  
-              stmt = con.createStatement();
-              // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.creationDate, "
-                    + "BusinessObject.modificationDate, BusinessObject.status, "
-                    + "Property.ID, Property.description"
-                    + "PropertyValue.ID, PropertyValue.value"
-                    + "FROM BusinessObject"
-                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
-                    + "WHERE BusinessObject.status =" + shared_status);
-             
-              while (rs.next()) {
-                 
-                  property = new Property();
-                  
-                  property.setID(rs.getInt("id"));
-                  property.setDescription(rs.getString("property"));
-                  property.setCreationDate(rs.getDate("creationDate"));
-                  property.setModifyDate(rs.getDate("modificationDate"));
-                  property.setShared_Status(rs.getBoolean("status"));
-                  
-                  propertyValue = PropertyValueMapper.propertyValueMapper().findAllPropertyValuesByProperty(property);
-                  property.setPropertyValues(propertyValue);
-                  
-                  propertiesByStautsResult.add(property);
-             }
-             
-         } catch (SQLException e) {
-                 e.printStackTrace();
-             }
-       
-        return propertiesByStautsResult;
-    }
-   
    
     //TODO: Methode anpassen und mit Kim-ly überprüfen
    
@@ -377,6 +337,15 @@ public class PropertyMapper {
          
       }
      
+      /*
+       * Abruf aller PropertyValue Objekte, welche zu einem Property Objekt zugeordnet 
+       * werden können. 
+       *
+       * @param Property Objekt, dessen PropertyValue Einträge ausgelesen werden sollen
+       * @return einen Vector mit PropertyValue Objekten, welche dem übergebenen Property Objekt,
+       * zugeordnet werden können. Dies entspricht null bei einem nicht vorhandenem DB-Tupel.
+       *
+       */  
      
       public Vector <PropertyValue> findPropertyValuesByProperty(Property property){
          
@@ -427,6 +396,19 @@ public class PropertyMapper {
           }
          
           return propertyValueResult;    
+      }
+      
+      /*
+       * Auslesen eines Vectors mit PropertyValues anhand des Primärschlüssels 
+       * eines Property Objektes in der DB
+       */
+      
+      public Vector <PropertyValue> findPropertyValuesByPropertyID(int property_id){
+    	  
+    	  Property property = new Property();
+    	  property = this.findPropertyByID(property_id);
+    	  
+    	  return this.findPropertyValuesByProperty(property);
       }
      
      
