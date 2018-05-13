@@ -10,9 +10,9 @@ public class ContactList extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 
 	private String name = null;
-	private String status = null;
 	private User owner = null;
-	private Vector<Contact> contacts = null;
+	
+	private Vector <Contact> contacts = new Vector <Contact>();
 
 	/**
 	 * Konstruktoren
@@ -27,9 +27,8 @@ public class ContactList extends BusinessObject {
 	 * 
 	 */
 
-	public ContactList(String name, String status, User owner, Contact contact) {
+	public ContactList(String name, User owner, Contact contact) {
 		this.name = name;
-		this.status = status;
 		this.owner = owner;
 		this.contacts = new Vector<Contact>();
 		contacts.add(contact);
@@ -48,14 +47,7 @@ public class ContactList extends BusinessObject {
 		this.name = name;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
+	
 	public User getOwner() {
 		return owner;
 	}
@@ -70,6 +62,10 @@ public class ContactList extends BusinessObject {
 
 	public void setContacts(Vector<Contact> contacts) {
 		this.contacts = contacts;
+	}
+	
+	public void setContact(Contact contact) {
+		this.contacts.addElement(contact);
 	}
 
 	

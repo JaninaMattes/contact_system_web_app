@@ -109,7 +109,7 @@ public class PropertyMapper {
                   // TODO: Klären ob Business Objekt noch extra generiert werden muss
                   Property property = new Property();
                   //Property
-                  property.setID(rs.getInt("id"));
+                  property.setBo_Id(rs.getInt("id"));
                   property.setDescription(rs.getString("description"));
                   // Superklasse Business Object Attribute befüllen
                   property.setCreationDate(rs.getTimestamp("creationDate"));
@@ -177,7 +177,7 @@ public class PropertyMapper {
                   BusinessObject businessObject = new BusinessObject();              
                   Property property = new Property();
                  
-                  property.setID(rs.getInt("id"));
+                  property.setBo_Id(rs.getInt("id"));
                   property.setDescription(rs.getString("description"));
                  
                   // Superklasse Business Object Attribute befüllen
@@ -242,7 +242,7 @@ public class PropertyMapper {
               BusinessObject businessObject = new BusinessObject();              
               Property property = new Property();
              
-              property.setID(rs.getInt("id"));
+              property.setBo_Id(rs.getInt("id"));
               property.setDescription(rs.getString("description"));
              
               // Superklasse Business Object Attribute befüllen
@@ -314,7 +314,7 @@ public class PropertyMapper {
                  
                   Property property = new Property();
                  
-                  property.setID(rs.getInt("id"));
+                  property.setBo_Id(rs.getInt("id"));
                   property.setDescription(rs.getString("description"));
                  
                   // Superklasse Business Object Attribute befüllen
@@ -365,7 +365,7 @@ public class PropertyMapper {
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = PropertyValue.ID"
-                    + "WHERE BusinessObject.user_ID =" + property.getUser_ID());
+                    + "WHERE BusinessObject.user_ID =" + property.getUserId());
              
                     // TODO: Klären wie wird hier die ID - Google Token (g_token) aus der DB in die
                     // Business Object Tabelle übergeben? Diese sollte gleich sein
@@ -438,7 +438,7 @@ public class PropertyMapper {
                       + "WHERE id = " + id);
              
               if (rs.next()) {
-                  property.setID(rs.getInt("id"));
+                  property.setBo_Id(rs.getInt("id"));
                   property.setDescription(rs.getString("description"));
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   property.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -487,7 +487,7 @@ public class PropertyMapper {
                  
                   Property property = new Property();                        
                                  
-                  property.setID(rs.getInt("id"));
+                  property.setBo_Id(rs.getInt("id"));
                   property.setDescription(rs.getString("description"));
                  
                   // Superklasse Business Object Attribute befüllen
@@ -530,8 +530,8 @@ public class PropertyMapper {
               stmt = con.createStatement();
               stmt.executeUpdate("UPDATE property " + "SET description" + property.getDescription()
                   + "\" " + "SET modificationDate=\"" + property.getModifyDate()
-                  + "\" " + "SET status=\"" + property.getShared_Status()          
-                  + "\" "+ "WHERE id=" + property.getID());
+                  + "\" " + "SET status=\"" + property.getShared_status()         
+                  + "\" "+ "WHERE id=" + property.getBo_Id());
              
             }
               catch (SQLException e) {
@@ -565,7 +565,7 @@ public class PropertyMapper {
               for (PropertyValue pV : propertyValueResult){
                   PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV);
               }              
-              stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getID());
+              stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
             }
             catch (SQLException e2) {
               e2.printStackTrace();
@@ -597,7 +597,7 @@ public class PropertyMapper {
                       + "WHERE id = " + id + " ORDER BY id");
              
               if (rs.next()) {
-                  property.setID(rs.getInt("id"));
+                  property.setBo_Id(rs.getInt("id"));
                   property.setDescription(rs.getString("description"));
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   property.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -620,7 +620,7 @@ public class PropertyMapper {
                   PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV);
               }
               }          
-              stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getID());
+              stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
             }
             catch (SQLException e2) {
               e2.printStackTrace();
@@ -654,7 +654,7 @@ public class PropertyMapper {
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = PropertyValue.ID"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Contact.ID"               
-                    + "WHERE Contact.user_ID =" + contact.getUser_ID());
+                    + "WHERE Contact.user_ID =" + contact.getUserId());
              
                     // TODO: Klären wie wird hier die ID - Google Token (g_token) aus der DB in die
                     // Business Object Tabelle übergeben? Diese sollte gleich sein
@@ -693,7 +693,7 @@ public class PropertyMapper {
          propertyResult = PropertyMapper.propertyMapper().getAllPropertiesByUser(user_id);
        
          for (Property pV : propertyResult){                 
-              PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getID());
+              PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getBo_Id());
               PropertyMapper.propertyMapper().deleteProperty(pV);
           }      
       }
@@ -729,18 +729,18 @@ public class PropertyMapper {
          
           if (rs.next()) {
              
-              property.setID(rs.getInt("id"));
+              property.setBo_Id(rs.getInt("id"));
               property.setDescription(rs.getString("description"));
               property.setCreationDate(rs.getDate("creationDate"));
-              property.setShared_Status(rs.getBoolean("status"));
+              property.setShared_status(rs.getBoolean("status"));
               property.setPropertyValues(propertyValues);
              
               stmt = con.createStatement();
  
                 // die Einfügeoperation erfolgt
                 stmt.executeUpdate("INSERT INTO property (id, description, status, creationDate) "
-                    + "VALUES (" + property.getID() + ",'" + property.getDescription() + "','"
-                    + property.getShared_Status() + "," + property.getCreationDate() + "')");
+                    + "VALUES (" + property.getBo_Id() + ",'" + property.getDescription() + "','"
+                    + property.getShared_status() + "," + property.getCreationDate() + "')");
             }
           } catch(SQLException e) {
               e.printStackTrace();
