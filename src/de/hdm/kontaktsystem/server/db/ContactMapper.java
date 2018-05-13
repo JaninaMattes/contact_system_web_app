@@ -36,5 +36,15 @@ public class ContactMapper {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Vector <PropertyValue> findAllPropertyValues() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public PropertyValue findPropertyValueByValue(String value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	  
 }
