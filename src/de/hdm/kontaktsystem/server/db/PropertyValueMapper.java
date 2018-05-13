@@ -438,6 +438,13 @@ public class PropertyValueMapper {
 			  
 			  return propValueResult;
 	}
+
+		
+		
+		public void deletePropertyValue(int property_id) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 		
 }

@@ -90,8 +90,8 @@ public class PropertyMapper {
 		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
 		      		+ "Property.ID, Property.description" + 
 		      		"FROM BusinessObject" + 
-		      		"INNER JOIN Property ON BusinessObject.ID = Property.ID" + 
-		      		"WHERE BusinessObject.OwnerID =" + user.getGoogleID());
+		      		"INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" + 
+		      		"WHERE BusinessObject.user_ID =" + user.getGoogleID());
 		      
 		      while (rs.next()) {
 		    	  // TODO: Klären ob Business Objekt noch extra generiert werden muss
@@ -141,8 +141,8 @@ public class PropertyMapper {
 		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
 		      		+ "Property.ID, Property.description" + 
 		      		"FROM BusinessObject" + 
-		      		"INNER JOIN Property ON BusinessObject.ID =" + user.getGoogleID() +
-		      		"INNER JOIN Property ON BusinessObject.ID = Property.ID" +
+		      		"INNER JOIN Property ON BusinessObject.user_ID =" + user.getGoogleID() +
+		      		"INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" +
 		      		"WHERE BusinessObject.Status =" + 1);
 		      		// TODO: Klären Business Object Status = TinyInt in der DB
 		      		// Bedeutet --> True = 1, False = 0
@@ -174,6 +174,91 @@ public class PropertyMapper {
 		  return propertyResult;	  
 	  }
 	
+	// TODO: Kim-ly Rückfragen bei diesem Mapper 
+	
+	public PropertyValue findByStatus(Property property) {
+		
+		PropertyValue propertyValue = null;
+		boolean shared_status = false;
+		  
+		Connection con = DBConnection.connection();
+		Statement stmt = null;
+		  
+		 try {
+			  // Leeres SQL Statement anlegen	
+			  stmt = con.createStatement();
+			  // Statement ausfüllen und als Query an die DB schicken
+		      ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.CreationDate, "
+		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
+		      		+ "Property.ID, Property.description" 
+		      		+ "PropertyValue.ID, PropertyValue.value" 
+		      		+ "FROM BusinessObject" 
+		      		+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" 
+		      		+ "WHERE BusinessObject.status =" + property.getShared_Status());
+			 
+		      if (rs.next()) {
+		    	  
+		    	  propertyValue = new PropertyValue();
+		    	  
+			 }
+		      
+		 } catch (SQLException e) {
+				 e.printStackTrace();
+			 }
+		
+		return propertyValue;
+	}
+	
+	
+	//TODO: Methode anpassen und überprüfen
+	
+	public Vector <Property> findPropertyByStatus(boolean shared_status) {
+		
+		Vector <Property> propertyResult = null;
+				  
+		Connection con = DBConnection.connection();
+		Statement stmt = null;
+		  
+		 try {
+			  // Leeres SQL Statement anlegen	
+			  stmt = con.createStatement();
+			  // Statement ausfüllen und als Query an die DB schicken
+		      ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.CreationDate, "
+		      		+ "BusinessObject.ModificationDate, BusinessObject.Status, "
+		      		+ "Property.ID, Property.description" 
+		      		+ "PropertyValue.ID, PropertyValue.value" 
+		      		+ "FROM BusinessObject" 
+		      		+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" 
+		      		+ "WHERE BusinessObject.status =" + shared_status );
+			 		     
+		 while (rs.next()) {
+	    	  
+	    	  BusinessObject businessObject = new BusinessObject();		    	  
+	          Property property = new Property();
+	          
+	          property.setID(rs.getInt("id"));
+	          property.setDescription(rs.getString("description"));
+	          
+	          // Superklasse Business Object Attribute befüllen
+	          property.setCreationDate(rs.getTimestamp("creationDate"));
+	          property.setModifyDate(rs.getTimestamp("modificationDate"));
+	          property.setShared_status(rs.getBoolean("status"));
+	          
+	          System.out.println(property.toString());
+	          System.out.println(businessObject.toString());
+
+	          // Hinzufügen des neuen Objekts zum Ergebnisvektor
+	          propertyResult.addElement(property);
+	          
+	      	}
+	  } catch (SQLException e) {
+		  e.printStackTrace();
+	  } 
+	  
+	  return propertyResult;
+	 
+	}
+		      
 	  
 	  public Vector<Property> getAllOwnedProperties(int user_id){
 		  
@@ -233,7 +318,7 @@ public class PropertyMapper {
 		  
 	  } 
 	  
-	  public Property getPropertyByID(int id) {
+	  public Property findPropertyByID(int id) {
 		  
 		  Property property = new Property();	  
 		  Connection con = DBConnection.connection();
@@ -261,7 +346,7 @@ public class PropertyMapper {
 	  }
 	  
 	  
-	  public Vector <Property> getPropertyByDescription(String description) {
+	  public Vector <Property> findPropertyByDescription(String description) {
 		  
 		  Vector <Property> propertyResult = new Vector();	  
 		  Connection con = DBConnection.connection();
@@ -302,6 +387,7 @@ public class PropertyMapper {
 		  return propertyResult;
 		  
 	  }
+	  
 	  
 		  
 	  public Property updateProperty(Property property){
@@ -467,28 +553,21 @@ public class PropertyMapper {
 		  	}
 		  } catch(SQLException e) {
 			  e.printStackTrace();
-		  }
-		  
-	  }
-		  
-	  //TODO: Entscheiden ob innere Klasse oder nicht?
-		  public Vector<PropertyValue> getPropertyValueOf(Contact contact) {
-			    
-			    return ContactMapper.contactMapper().findByOwner(contact);
-			  }
+		  }		  
+	  } 
+		
 
 		public PropertyValue findByProperty(Property prop) {
-			// TODO Auto-generated method stub
+			
+			prop.getPropertyValues();
+			//TODO: Methode ausformulieren
 			return null;
 		}
 
-		public PropertyValue findByStatus(Property prop) {
-			// TODO Auto-generated method stub
-			return null;
-		}
+		
 
 		public PropertyValue getProperty(Property prop) {
-			// TODO Auto-generated method stub
+			// TODO: Logik?
 			return null;
 		}
 		

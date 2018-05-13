@@ -107,6 +107,7 @@ public class Property extends BusinessObject{
 	/*
 	 * Abruf der ID 
 	 */
+	
 	public int getID() {
 		return ID;
 	}
@@ -141,6 +142,7 @@ public class Property extends BusinessObject{
 	 * dieser gibt Informationen darüber ob 
 	 * eine Eigenschaft geteilt oder nicht geteilt wurde
 	 * @return shared_Status ist boolean
+	 * 
 	 */
 	
 	public boolean getShared_Status() {
@@ -228,6 +230,7 @@ public class Property extends BusinessObject{
 		 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
 		 * der ID des Objekts.
 		 * Dies überschreibt die Methode hashCode() der Klasse Object.
+		 * 
 		 */
 	 
 		@Override
@@ -239,6 +242,7 @@ public class Property extends BusinessObject{
 		/**
 		   * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
 		   * Dies überschreibt die Methode toString() der Klasse Object
+		   * 
 		   */
 		
 		@Override
