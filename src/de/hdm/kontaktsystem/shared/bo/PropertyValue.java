@@ -9,9 +9,9 @@ public class PropertyValue extends BusinessObject{
 	 */
 	private static final long serialVersionUID = 1L;
 			
-	private int propertyValueID;
 	private String value = null;
 	private Property prop = null;
+	private Contact contact = null;
 	
 	/*
 	 * Beschreibung des Status, dieser ist entweder geteilt 
@@ -21,6 +21,8 @@ public class PropertyValue extends BusinessObject{
 	 * 
 	 */
 	
+	
+
 	private boolean shared_Status = false;	
 	
 	
@@ -39,13 +41,6 @@ public class PropertyValue extends BusinessObject{
 
 	}
 	
-	public int getPropertyValueID() {
-		return propertyValueID;
-	}
-
-	public void setPropertyValueID(int propertyValueID) {
-		this.propertyValueID = propertyValueID;
-	}
 
 	/*
 	 * Auslesen des Ausprägungswertes
@@ -79,6 +74,14 @@ public class PropertyValue extends BusinessObject{
 
 	public void setShared_Status(boolean shared_Status) {
 		this.shared_Status = shared_Status;
+	}
+	
+	public Contact getContact() {
+		return contact;
+	}
+
+	public void setContact(Contact c) {
+		this.contact = contact;
 	}
 
 	/*

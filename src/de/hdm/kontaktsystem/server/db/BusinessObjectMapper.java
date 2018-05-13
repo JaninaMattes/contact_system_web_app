@@ -14,6 +14,7 @@ public class BusinessObjectMapper implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	
 	/*
 	 * Singleton Pattern
 	 */
@@ -59,13 +60,17 @@ public class BusinessObjectMapper implements Serializable {
 					 * this allows the inherited classes to use the ID as their ID (primaryKey).
 					 * So there is only one automatically generated primary key for all BusinessObjects
 					 */
-					bo.setId(rs.getInt(1));
-					System.out.println("ID: "+bo.getId());
+					
+					bo.setBo_Id(rs.getInt(1));
+					bo.setShared_status(rs.getBoolean("status"));
+					System.out.println("ID: "+ bo.getBo_Id());
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 	  }
 	
+	  
+	  
 
 }

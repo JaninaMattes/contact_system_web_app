@@ -2,6 +2,7 @@ package test;
 
 import java.sql.Connection;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
@@ -42,6 +43,10 @@ public class DBTest {
 		u.setGoogleID(rng.nextInt(1000)+1);
 		//UserMapper.userMapper().insertUser(u);
 		
+		
+		
+		
+		// **** TESTS *****
 		
 		PropertyMapper.propertyMapper().getAllPropertiesByUser(u.getGoogleID());
 	}

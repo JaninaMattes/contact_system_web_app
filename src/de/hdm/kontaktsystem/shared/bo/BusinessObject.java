@@ -22,12 +22,11 @@ import java.util.Date;
  * (vgl. Vorlesung Software Projekt, BankProjekt 2.0, Klasse BusinessObject)
  * </p>
  * 
- * @author Sandra
  */
 
 //TODO: geeigneten Konstruktor erstellen
 
-public abstract class BusinessObject implements Serializable{
+public class BusinessObject implements Serializable{
 	
 	/**
 	 * Seriennummer, vorgegeben durch das Interface {@link Serializable}
@@ -37,43 +36,51 @@ public abstract class BusinessObject implements Serializable{
 	/**
 	 * Eindeutige Identifikationsnummer einer Instanz dieser Klasse.
 	 */
-	private int id = 0;
+	private int bo_id = 0;
 	
 	/**
 	 * Datum des Erstellens und der letzten Änderung einer Instanz dieser Klasse.
 	 */
 	private Date creationDate = null;
 	private Date modifyDate = null;
-	private int user_ID = 0;
-	
-	
+	private int user_id = 0;
 
+	private boolean shared_status = false; 
+	
+	/*
+	 * Default Konstruktor
+	 */
+	
+	public BusinessObject() {
+		
+	}
+	
 	/**
 	* Zurückgeben der ID.
 	*/
-	public int getId() {
-		return this.id;
+	public int getBo_Id() {
+		return this.bo_id;
 	}
 
 	/**
 	 * Setzen der ID
 	 */
-	public void setId(int id) {
-		this.id = id;
+	public void setBo_Id(int id) {
+		this.bo_id = id;
 	}
 	
 	/**
 	* Zurückgeben der UserID.
 	*/
 	public int getUserId() {
-		return this.user_ID;
+		return this.user_id;
 	}
 
 	/**
 	 * Setzen der ID
 	 */
 	public void setUserId(int userId) {
-		this.user_ID = userId;
+		this.user_id = userId;
 	}
 	
 	
@@ -106,7 +113,38 @@ public abstract class BusinessObject implements Serializable{
 		this.modifyDate = modifyDate;
 	}
 	
+	/*
+	 * Abrufen der User ID
+	 */
+
+	public int getUser_ID() {
+		return user_id;
+	}
+
+	/*
+	 * Setzen der User ID
+	 */
+
+	public void setUser_ID(int user_ID) {
+		this.user_id = user_ID;
+	}
 	
+	/*
+	 * Status abrufen ob ein BO geteilt wurde 
+	 */
+
+	public boolean isShared_status() {
+		return shared_status;
+	}
+
+	/*
+	 * Setzen des Status
+	 */
+
+	public void setShared_status(boolean shared_status) {
+		this.shared_status = shared_status;
+	}
+
 
 	/**
 	 * Erzeugen einer Darstellung der jeweiligen Instanz als String (Text).
@@ -117,7 +155,7 @@ public abstract class BusinessObject implements Serializable{
 		/*
 		 * Zurückgeben des Klassennamens + der ID der Instanz
 	     */
-		return this.getClass().getName() + " #" + this.id;
+		return this.getClass().getName() + " #" + this.user_id;
 	}
 	  
 	
@@ -129,7 +167,7 @@ public abstract class BusinessObject implements Serializable{
 	 */
 	@Override
 	public int hashCode(){
-		return this.getId();
+		return this.getBo_Id();
 	}
 	
 	/**

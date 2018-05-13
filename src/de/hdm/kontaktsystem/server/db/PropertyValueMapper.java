@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import com.google.appengine.api.users.User;
+
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -32,51 +35,58 @@ public class PropertyValueMapper {
 	  }
 	  
 	  /*
-	   * Einf�gen einer neu angelegten Eigenschaftsauspr�gung in die DB
+	   * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
 	   */
 	  
-	  public void insert(PropertyValue propertyValue) {
+	  public void insert(PropertyValue pv) {
 		  Connection con = DBConnection.connection();
 		  Statement stmt1 = null;
 		  Statement stmt2 = null;
 		  
 		  
-		  /*
+		  /**********************************************************************
 		   * INSERT INTO MULTIPLE TABLES??? 
-		   * creationDate & modificationDate attributes in propertyvalue table?
-		   */
+		   * Brauche ich hier 2 Statements die separat ueber executeQuery() abgerufen werden?
+		   ***********************************************************************/
 		  
 		  try {
 		  stmt1 = con.createStatement();		  
-		  ResultSet rs1 = stmt1.executeQuery("SELECT MAX(id) AS maxid "
-		          + "FROM businessobject");
+		  ResultSet rs1 = stmt1.executeQuery(
+				  "SELECT MAX(id) AS maxid "
+		          + "FROM businessobject"
+				  );
+		  
 		  if (rs1.next()) {
 			 
-			  propertyValue.setId(rs1.getInt("maxid") + 1);
+			  pv.setBo_Id(rs1.getInt("maxid") + 1);
 
 		        stmt1 = con.createStatement();
 
 		        // Einfügeoperation erfolgt
 		        stmt1.executeUpdate
 		        ("INSERT INTO propertyvalue (id, value) "
-		            + "VALUES (" + propertyValue.getId() + ",'" 
-		        		+ propertyValue.getValue() + "','" + "')");
+		            + "VALUES (" + pv.getBo_Id() + ",'" 
+		        		+ pv.getValue() 
+		            + "')");
 		  	}
 		  
 		  stmt2 = con.createStatement();		  
-		  ResultSet rs2 = stmt2.executeQuery("SELECT MAX(id) AS maxid "
-		          + "FROM businessobject");
+		  ResultSet rs2 = stmt2.executeQuery(
+				  "SELECT MAX(id) AS maxid "
+		          + "FROM businessobject"
+				  );
+		  
 		  if (rs2.next()) {
 			 
-			  propertyValue.setId(rs2.getInt("maxid") + 1);
+			  pv.setBo_Id(rs2.getInt("maxid") + 1);
 
 			  stmt2 = con.createStatement();
 
 		        // Einfügeoperation erfolgt
 			  stmt2.executeUpdate
-		        ("INSERT INTO businessobject (id, creationdate) "
-		            + "VALUES (" + propertyValue.getId() + ",'" 
-		             + propertyValue.getCreationDate() + "','"
+		        ("INSERT INTO businessobject (bo_id, creationdate) "
+		            + "VALUES (" + pv.getBo_Id() + ",'" 
+		             + pv.getCreationDate() 
 		             + "')");
 		  	}
 		  
@@ -87,10 +97,10 @@ public class PropertyValueMapper {
 	  }
 	  
 	  /*
-	   *  Aktualisierung der Daten f�r PropertyValue Tabelle in DB
+	   *  Aktualisierung der Daten fuer PropertyValue Tabelle in DB
 	   */
 	  
-	  public PropertyValue updatePropertyValue(PropertyValue propertyValue){
+	  public PropertyValue updatePropertyValue(PropertyValue pv){
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
@@ -98,33 +108,35 @@ public class PropertyValueMapper {
 		      stmt = con.createStatement();
 
 		      stmt.executeUpdate("UPDATE propertyvalue " + "SET value=\"" 
-		    	  + propertyValue.getValue()
-		          + "\" " + "SET modificationDate=\"" + propertyValue.getModifyDate()
-		          + "\" "+ "WHERE id=" + propertyValue.getId());
+		    	  + pv.getValue()
+		          + "\"" 
+		          + "WHERE id=" + pv.getBo_Id()
+		          + "ORDER BY id"
+		          );
 
 		    } 
 		  	  catch (SQLException e) {
 		      e.printStackTrace();
 		    } 
-		    return propertyValue;
+		    return pv;
 		  }
 	  
 	  /*
-	   * L�schen der Eigenschaftsauspraegung in DB anhand des PropertyValue Objekts
-	   * Aufruf der deletePropertyValue(int id)
+	   * Loeschen der Eigenschaftsauspraegung in DB anhand des PropertyValue Objekts,
+	   * Weitergabe an deletePropertyValue(int id)
 	   */
 	  
-	  public void deletePropertyValue(PropertyValue propertyValue) {
+	  public void deletePropertyValue(PropertyValue pv) {
 		  
-		  deletePropertyValue(propertyValue.getPropertyValueID());
+		  deleteById(pv.getBo_Id());
 		  
 	  }
 	  
 	  /*
-	   * L�schen der Eigenschaftsauspraegung in DB anhand der PropertyValue ID
+	   * Loeschen der Eigenschaftsauspraegung in DB anhand der PropertyValue ID
 	   */
 	  
-	  public void deletePropertyValue(int id) {
+	  public void deleteById(int id) {
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
@@ -139,17 +151,20 @@ public class PropertyValueMapper {
 		  
 	  }
 	  
-	  public void deleteByContact(Contact c, PropertyValue pv) {
+	  /*
+	   * Anhand des zugehörigen Kontakts wird eine Auspraegung gelöscht
+	   */
+	  
+	  public void deleteByContact(PropertyValue pv, Contact c) {
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
 		  try {
 		      stmt = con.createStatement();
 		      stmt.executeUpdate
-		      ("DELETE value "
-		      + "FROM propertyvalue INNER JOIN Contact" 
-		      + "WHERE PropertyValue.id=" + pv.getPropertyValueID()
-		      + "AND" + "Contact.id=" + c.getId());
+		      ("DELETE FROM propertyvalue INNER JOIN Contact" 
+		      + "WHERE PropertyValue.id=" + pv.getBo_Id()
+		      + "AND" + "Contact.id=" + c.getBo_Id());
 
 		    }
 		    catch (SQLException e) {
@@ -159,31 +174,35 @@ public class PropertyValueMapper {
 	  }
 	  
 	  /*
-	   * L�schen der Eigenschaftsauspraegung in DB anhand des Kontaktnamens
+	   * Anhand der zugehörigen Eigenschaft wird eine Auspraegung gelöscht  
 	   */
 	  
-	  public void deletePropertyValueOf(Contact c) {
-
+	  public void deleteByProperty(PropertyValue pv, Property prop) {
 		  Connection con = DBConnection.connection();
+		  Statement stmt = null;
+		  
+		  try {
+		      stmt = con.createStatement();
+		      stmt.executeUpdate
+		      ("DELETE FROM propertyvalue INNER JOIN property" 
+		      + "WHERE propertyvalue.id=" + pv.getBo_Id()
+		      + "AND" + "property.id=" + prop.getBo_Id()
+		      );
 
-		    try {
-		      Statement stmt = con.createStatement();
-
-		      stmt.executeUpdate("DELETE FROM propertyvalue " + "WHERE contact=" + c.getId());
-		      
-		    
 		    }
-		    catch (SQLException e2) {
-		      e2.printStackTrace();
+		    catch (SQLException e) {
+		      e.printStackTrace();
 		    }
 		  
-	  }
+	  }	  
+
 	  
 	  /*
-	   * Anhand der als Parameter �bergegebenen ID wird das zugeh�rige PropertyValue eindeutig identifiziert und zur�ckgegeben
+	   * Anhand der uebergegebenen ID wird das 
+	   * zugehoerige PropertyValue eindeutig identifiziert und zurueckgegeben
 	   */
 	  
-	  public PropertyValue findPropertyValueByKey(int id) {
+	  public PropertyValue findByKey(int id) {
 				  
 		  		  PropertyValue propertyValue = new PropertyValue();	  
 				  Connection con = DBConnection.connection();
@@ -193,66 +212,40 @@ public class PropertyValueMapper {
 					  // Leeres SQL Statement anlegen	
 					  stmt = con.createStatement();
 					  // Statement ausfüllen und als Query an die DB schicken
-				      ResultSet rs = stmt.executeQuery("SELECT id, value FROM propertyvalue "
-				    		  + "WHERE id = " + id + " ORDER BY id");
+				      ResultSet rs = stmt.executeQuery(
+				      "SELECT id, value FROM propertyvalue "
+				    		+ "WHERE id = " + id 
+				    		+ " ORDER BY id");
 				      
 				      if (rs.next()) {
-				    	  propertyValue.setId(rs.getInt("id"));
+				    	  propertyValue.setBo_Id(rs.getInt("id"));
 				    	  propertyValue.setValue(rs.getString("value"));
-      
-				  }
+				      }
+				      
 				  } catch (SQLException e) {
 					  e.printStackTrace();
-				  } 
+					  
+				  	} 
 				  
 				  return propertyValue;
 		}
 	  
-	  /*
-	   * Alle f�r den Benutzer zug�nglichen PropertyValues werden gesucht, in einen Vector gespeichert und zur�ckgegeben
-	   */
-
-	  public Vector<PropertyValue> findByContact(Contact c){
-				  
-				  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
-				  
-				  Connection con = DBConnection.connection();
-				  Statement stmt = null;
-				  
-				  try {
-					  // Leeres SQL Statement anlegen	
-					  stmt = con.createStatement();
-					  // Statement ausfüllen und als Query an die DB schicken
-				      ResultSet rs = stmt.executeQuery("SELECT id, value FROM propertyvalue "
-				          + " ORDER BY id");
-				      
-				      /***********************************************************************
-				       * INNER Join in Statements!!!
-				       ***********************************************************************/
-				      
-				      while (rs.next()) {
-				          PropertyValue propValue = new PropertyValue();
-				          propValue.setId(rs.getInt("id"));
-				          propValue.setValue(rs.getString("value"));
-				         
-				          		          
-		
-				          // Hinzufügen des neuen Objekts zum Ergebnisvektor
-				          propValueResult.addElement(propValue);
-				          
-				      	}
-				  } catch (SQLException e) {
-					  e.printStackTrace();
-				  } 
-				  
-				  return propValueResult;
-		}
+	  /*********************************************************************
+	   * 2 SELECT Statements jeweils ueber INNER JOIN? 
+	   * Fall a) Participation (status=true, id, user_id)
+	   * Fall b) Ownership (user_id, id)
+	   * 
+	   * Ausplittung in 2 Methoden?
+	   * 1) findAllByOwnershipt
+	   * 2) findAllByParticipation
+	   *********************************************************************/
 	  
 	  /*
-	   * Alle für Benutzer zug�nglichen PropertyValues werden gesucht, in einen Vector gespeichert und zur�ckgegeben
+	   * Alle fuer Benutzer zugaenglichen PropertyValues (Participant und Ownership)
+	   *  werden gesucht, in einen Vector gespeichert und zurueckgegeben
 	   */
 
-	  public Vector<PropertyValue> findAll(){
+	  public Vector<PropertyValue> findAll(PropertyValue pv, User u){
 				  
 				  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
 				  
@@ -263,12 +256,18 @@ public class PropertyValueMapper {
 					  // Leeres SQL Statement anlegen	
 					  stmt = con.createStatement();
 					  // Statement ausfüllen und als Query an die DB schicken
-				      ResultSet rs = stmt.executeQuery("SELECT id, value FROM propertyvalue "
-				          + " ORDER BY id");
+				      ResultSet rs = stmt.executeQuery(
+				      "SELECT propertyvalue.id, propertyvalue.value "
+						  	+ "FROM propertyvalue INNER JOIN businessobject" 
+						  	+ "WHERE propertyvalue.id=" 
+						  	+ "AND businessobject.user_id=" + u.getUserId() 
+						  	+ "AND businessobject.status=" + pv.getShared_Status()
+						  	+ "ORDER BY propertyvalue.id"
+					  );
 				      
 				      while (rs.next()) {
 				          PropertyValue propValue = new PropertyValue();
-				          propValue.setId(rs.getInt("id"));
+				          propValue.setBo_Id(rs.getInt("id"));
 				          propValue.setValue(rs.getString("value"));
 				          // Hinzufügen des neuen Objekts zum Ergebnisvektor
 				          propValueResult.addElement(propValue);
@@ -283,11 +282,11 @@ public class PropertyValueMapper {
 	  
 	  
 	  	/*
-	  	 * Alle f�r den Benutzer in der Applikation zug�nglichen Auspraegungen werden anhand ihrer Auspraegungswerte 
-	  	 * gesucht und zur�ckgegeben
+	  	 * Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen 
+	  	 * werden anhand ihrer Auspraegungswerte gesucht und zurueckgegeben
 	  	 */
 	  
-		public PropertyValue findPropertyValueByValue(String value) {
+		public PropertyValue findByValue(String value, PropertyValue pv) {
 				  
 				  PropertyValue propertyValue = new PropertyValue();	  
 				  Connection con = DBConnection.connection();
@@ -297,14 +296,16 @@ public class PropertyValueMapper {
 					  // Leeres SQL Statement anlegen	
 					  stmt = con.createStatement();
 					  // Statement ausfüllen und als Query an die DB schicken
-				      ResultSet rs = stmt.executeQuery("SELECT id, value FROM propertyvalue "
-				    		  + "WHERE value = " + value + " ORDER BY id");
+				      ResultSet rs = stmt.executeQuery(
+				      "SELECT id, value FROM propertyvalue "
+				    		+ "WHERE value = " + value 
+				    		+ "AND id =" + pv.getBo_Id() 
+				    		+ "ORDER BY id"
+				      );
 				      
 				      if (rs.next()) {
-				    	  propertyValue.setId(rs.getInt("id"));
+				    	  propertyValue.setBo_Id(rs.getInt("id"));
 				    	  propertyValue.setValue(rs.getString("value"));
-				    	  propertyValue.setCreationDate(rs.getTimestamp("creationDate"));
-				    	  propertyValue.setModifyDate(rs.getTimestamp("modificationDate"));
 				          
 				  }
 				  } catch (SQLException e) {
@@ -316,23 +317,54 @@ public class PropertyValueMapper {
 			  }
 		
 		/*
-		 * Alle f�r den Benutzer in der Applikation zug�nglichen Auspraegungen werden anhand ihrer zugeh�rigen Eigenschaften 
-	  	 * gesucht und zur�ckgegeben
+		 * Alle fuer den Benutzer in der Applikation zugaenglichen 
+		 * Auspraegungen werden anhand ihrer zugehoerigen Eigenschaften gesucht und zurueckgegeben
 		 */
 	  
-		public PropertyValue findPropertyValueByProp(Property prop) {
+		public Vector<PropertyValue> findByProp(PropertyValue pv,Property prop) {
 			  			  
-			  return PropertyMapper.propertyMapper().getProperty(prop);
+			  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
+			  
+			  Connection con = DBConnection.connection();
+			  Statement stmt = null;
+			  
+			  try {
+				  // Leeres SQL Statement anlegen	
+				  stmt = con.createStatement();
+				  // Statement ausfüllen und als Query an die DB schicken
+			      ResultSet rs = stmt.executeQuery
+			    	("SELECT propertyvalue.id, propertyvalue.value "
+			  			  + "FROM propertyvalue INNER JOIN property" 
+			  			  + "WHERE propertyvalue.id=" + pv.getBo_Id()
+			  			  + "AND" + "property.id=" + prop.getBo_Id()
+			  			  + "ORDER BY propertyvalue.id"
+			  		);
+			      
+			      while (rs.next()) {
+			          PropertyValue propValue = new PropertyValue();		          
+			          propValue.setBo_Id(rs.getInt("id"));
+			          propValue.setShared_Status(rs.getBoolean("status"));
+			          
+			          // Hinzufügen des neuen Objekts zum Ergebnisvektor
+			          propValueResult.addElement(propValue);
+			          
+			      	}
+			      
+			  } catch (SQLException e) {
+				  e.printStackTrace();
+			  } 
+			  
+			  return propValueResult;
 			  
 		  }
 		
 		/*
-		 * Alle für den Benutzer in der Applikation zugaenglichen Auspraegungen (selbst erstellt 
+		 * Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen (selbst erstellt 
 		 * oder Teilhaberschaft freigegeben) werden anhand 
-		 * ihres Status gesucht und Ergebnisse zurückgegeben
+		 * ihres Status gesucht und die Ergebnisse zurueckgegeben
 		 */
 	  
-		public Vector<PropertyValue> findByStatus(Boolean shared_status){
+		public Vector<PropertyValue> findByStatus (PropertyValue pv, Boolean shared_status){
 			  
 			  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
 			  
@@ -343,17 +375,23 @@ public class PropertyValueMapper {
 				  // Leeres SQL Statement anlegen	
 				  stmt = con.createStatement();
 				  // Statement ausfüllen und als Query an die DB schicken
-			      ResultSet rs = stmt.executeQuery("SELECT id, status FROM propertyvalue "
-			          + " ORDER BY id");
+			      ResultSet rs = stmt.executeQuery
+			    		("SELECT propertyvalue.id, propertyvalue.value "
+			    			+ "FROM propertyvalue INNER JOIN businessobject" 
+					  		+ "WHERE propertyvalue.id=" + pv.getBo_Id()
+					  		+ "AND" + "businessobject.status=" + pv.getShared_Status()
+					  	);
 			      
 			      while (rs.next()) {
-			          PropertyValue propValue = new PropertyValue();
-			          propValue.setId(rs.getInt("id"));
+			          PropertyValue propValue = new PropertyValue();		          
+			          propValue.setBo_Id(rs.getInt("id"));
 			          propValue.setShared_Status(rs.getBoolean("status"));
-			          // Hinzufügen des neuen Objekts zum Ergebnisvektor
+			          
+			          // Hinzufuegen des neuen Objekts zum Ergebnisvektor
 			          propValueResult.addElement(propValue);
 			          
 			      	}
+			      
 			  } catch (SQLException e) {
 				  e.printStackTrace();
 			  } 
@@ -361,16 +399,52 @@ public class PropertyValueMapper {
 			  return propValueResult;
 	}
 		
+		/*
+		 * Aufruf der Auspraegungen anhand ihrer zugeordneten Kontakte
+		 */
 		
-		public PropertyValue findByContact(PropertyValue propertyValue) {
-		    /*
-		     * Wir bedienen uns hier einfach des CustomerMapper. Diesem geben wir
-		     * einfach den in dem Account-Objekt enthaltenen Fremdschlüssel für den
-		     * Kontoinhaber. Der CustomerMapper lässt uns dann diese ID in ein Objekt
-		     * auf.
-		     */
-		    return ContactMapper.contactMapper().getId();
-		  }
+		public Vector<PropertyValue> findByContact (PropertyValue pv, Contact c){
+			  
+			  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
+			  
+			  Connection con = DBConnection.connection();
+			  Statement stmt = null;
+			  
+			  try {
+				  // Leeres SQL Statement anlegen	
+				  stmt = con.createStatement();
+				  
+				  // Statement ausfüllen und als Query an die DB schicken
+			      ResultSet rs = stmt.executeQuery
+			      ("SELECT propertyvalue.id, propertyvalue.value"
+			    	+ "FROM propertyvalue INNER JOIN contact" 
+			    	+ "WHERE propertyvalue.id=" + pv.getBo_Id()
+			    	+ "AND" + "contact.id=" + c.getBo_Id()
+			      );
+			    	
+			      while (rs.next()) {
+			          PropertyValue propValue = new PropertyValue();		          
+			          propValue.setBo_Id(rs.getInt("id"));
+			          propValue.setContact(c);
+			          
+			          // Hinzufuegen des neuen Objekts zum Ergebnisvektor
+			          propValueResult.addElement(propValue);
+			          
+			      	}
+			      
+			  } catch (SQLException e) {
+				  e.printStackTrace();
+			  } 
+			  
+			  return propValueResult;
+	}
+
+		
+		
+		public void deletePropertyValue(int property_id) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 		
 }
