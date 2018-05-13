@@ -12,8 +12,6 @@ import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
-//TODO: Test all Methods
-
 /**
  * Die Mapper-Klasse <code>ParticipationMapper</code> bildet <code>Participation</code>-Objekte 
  * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Ändern und 
@@ -23,8 +21,6 @@ import de.hdm.kontaktsystem.shared.bo.User;
  * @author Sandra
  *
  */
-
-//TODO: Implement Methods, create descriptions for methods
 
 
 public class ParticipationMapper {
