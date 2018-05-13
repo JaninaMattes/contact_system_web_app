@@ -195,13 +195,26 @@ public class PropertyMapper {
       }
    
    
-    // TODO: Kim-ly Rückfragen bei diesem Mapper --> Was ist hier genau gemeint?
+    /*
+     * Je nach übergebenem gesuchten Status findet der
+     * Abruf aller geteilter (participation) oder nicht geteilten (owner) Eigenschaften
+     * der Kontakte eines Users im KontaktSystem statt.
+     * Diese Methode soll es ermöglichen alle Eigenschaften, welche einerm User
+     * zugewiesen werden können und mit ihm geteilt wurden abzurufen.
+     *
+     * @param shared_status des gesuchten Objectes
+     * @return einen Vector mit Property Objekten, welche dem übergebenen boolean Parameter (shared_status)
+     * zugeordnet werden können. Dies entspricht null bei einem nicht vorhandenem DB-Tupel.
+     *
+     */
+    
    
-    public PropertyValue findByStatus(Property property) {
+    public Vector <Property> findByStatus(boolean shared_status) {
        
-        PropertyValue propertyValue = null;
-        boolean shared_status = false;
-         
+    	Vector <PropertyValue> propertyValue = new Vector <PropertyValue>();
+    	Vector <Property> propertiesByStautsResult = new Vector <Property>();
+        Property property = null;
+            
         Connection con = DBConnection.connection();
         Statement stmt = null;
          
@@ -215,19 +228,29 @@ public class PropertyMapper {
                     + "PropertyValue.ID, PropertyValue.value"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
-                    + "WHERE BusinessObject.status =" + property.getShared_Status());
+                    + "WHERE BusinessObject.status =" + shared_status);
              
-              if (rs.next()) {
+              while (rs.next()) {
                  
-                  propertyValue = new PropertyValue();
-                 
+                  property = new Property();
+                  
+                  property.setID(rs.getInt("id"));
+                  property.setDescription(rs.getString("property"));
+                  property.setCreationDate(rs.getDate("creationDate"));
+                  property.setModifyDate(rs.getDate("modificationDate"));
+                  property.setShared_Status(rs.getBoolean("status"));
+                  
+                  propertyValue = PropertyValueMapper.propertyValueMapper().findAllPropertyValuesByProperty(property);
+                  property.setPropertyValues(propertyValue);
+                  
+                  propertiesByStautsResult.add(property);
              }
              
          } catch (SQLException e) {
                  e.printStackTrace();
              }
        
-        return propertyValue;
+        return propertiesByStautsResult;
     }
    
    

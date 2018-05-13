@@ -445,6 +445,11 @@ public class PropertyValueMapper {
 			// TODO Auto-generated method stub
 			
 		}
+
+		public Vector<PropertyValue> findAllPropertyValuesByProperty(Property property) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		
 		
 }
