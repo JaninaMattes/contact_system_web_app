@@ -58,7 +58,7 @@ public class PropertyMapper {
         return propertyMapper;
       }
  
-      /*
+      /**
        * Abruf aller geteilter (participation) und eigener (ownership) Eigenschaften
        * der Kontakte eines Users im KontaktSystem.
        * Diese Methode soll es damit ermöglichen alle Eigenschaften, welche einerm User
@@ -98,7 +98,7 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.ID, BusinessObject.CreationDate, "
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
                     + "BusinessObject.ModificationDate, BusinessObject.Status, "
                     + "Property.ID, Property.description" +
                     "FROM BusinessObject" +
@@ -129,7 +129,7 @@ public class PropertyMapper {
           return propertyResult;
       }
      
-      /*
+      /**
        * Abruf aller geteilter (participation) Eigenschaften
        * der Kontakte eines Users im KontaktSystem.
        * Diese Methode soll es ermöglichen alle Eigenschaften, welche einerm User
@@ -161,11 +161,11 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.creationDate, "
-                    + "BusinessObject.modificationDate, BusinessObject.status, "
-                    + "Property.ID, Property.description" +
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
+                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
+                    + "Property.ID, Property.Description" +
                     "FROM BusinessObject" +
-                    "INNER JOIN Property ON BusinessObject.user_ID =" + user.getGoogleID() +
+                    "INNER JOIN Property ON BusinessObject.User_ID =" + user.getGoogleID() +
                     "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" +
                     "WHERE BusinessObject.status =" + 1);
              
@@ -200,7 +200,7 @@ public class PropertyMapper {
       }
    
    
-    /*
+    /**
      * Je nach übergebenem gesuchten Status findet der
      * Abruf aller geteilter (participation) oder nicht geteilten (owner) Eigenschaften
      * der Kontakte eines Users im KontaktSystem statt.
@@ -227,18 +227,17 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.creationDate, "
-                    + "BusinessObject.modificationDate, BusinessObject.status, "
-                    + "Property.ID, Property.description"
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
+                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
+                    + "Property.ID, Property.Description"
                     + "PropertyValue.ID, PropertyValue.value"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
                     + "INNER JOIN USER ON BusinessObject.Participation_ID = User.ID"
-                    + "WHERE BusinessObject.status =" + shared_status );
+                    + "WHERE BusinessObject.Status =" + shared_status );
                          
          while (rs.next()) {
              
-             //
               BusinessObject businessObject = new BusinessObject();              
               Property property = new Property();
              
@@ -266,7 +265,7 @@ public class PropertyMapper {
     }
    
  
-     /*
+     /**
        * Abruf aller NICHT geteilter (ownership) Eigenschaften
        * welche den Kontakten eines Users im KontaktSystem zugeordnet sind.
        * Diese Methode soll es so ermöglichen alle Eigenschaften, welche einerm User
@@ -337,7 +336,7 @@ public class PropertyMapper {
          
       }
      
-      /*
+      /**
        * Abruf aller PropertyValue Objekte, welche zu einem Property Objekt zugeordnet 
        * werden können. 
        *
@@ -358,9 +357,9 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.creationDate, "
-                    + "BusinessObject.modificationDate, BusinessObject.status, "
-                    + "Property.ID, Property.description,"
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
+                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
+                    + "Property.ID, Property.Description,"
                     + "PropertyValue.ID, PropertyValue.Value,"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
@@ -398,7 +397,7 @@ public class PropertyMapper {
           return propertyValueResult;    
       }
       
-      /*
+      /**
        * Auslesen eines Vectors mit PropertyValues anhand des Primärschlüssels 
        * eines Property Objektes in der DB
        */
@@ -528,9 +527,8 @@ public class PropertyMapper {
          
           try {
               stmt = con.createStatement();
-              stmt.executeUpdate("UPDATE property " + "SET description" + property.getDescription()
-                  + "\" " + "SET modificationDate=\"" + property.getModifyDate()
-                  + "\" " + "SET status=\"" + property.getShared_status()         
+              stmt.executeUpdate(
+            	 "UPDATE property " + "SET description" + property.getDescription()       
                   + "\" "+ "WHERE id=" + property.getBo_Id());
              
             }
@@ -636,7 +634,6 @@ public class PropertyMapper {
           Property property = new Property();
           PropertyValue propertyValueO = new PropertyValue();
          
-          //propertyValue = ContactMapper.contactMapper().findPropertyValueByValue(value);
                  
           Connection con = DBConnection.connection();
           Statement stmt = null;
@@ -684,10 +681,10 @@ public class PropertyMapper {
        * Löschen sämtlicher Eigenschaften <code>Property</code> Objekte eines Nutzers.
        *  
        * @param user_id als Primärschlüssel des <code>User</code> Objekts,
-       * zu dem die Properties gehören
+       * zu dem die Properties gehören.
        */
      
-      public void deleteAllPropertiesFromUser(int user_id) {
+      public void deleteAllPropertiesByUser(int user_id) {
          
          Vector <Property> propertyResult = new Vector <Property>();
          propertyResult = PropertyMapper.propertyMapper().getAllPropertiesByUser(user_id);
@@ -697,51 +694,41 @@ public class PropertyMapper {
               PropertyMapper.propertyMapper().deleteProperty(pV);
           }      
       }
+      
+      /**
+       * Löschen sämtlicher Eigenschaften <code>Property</code> Objekte eines Nutzers.
+       * @param user entspricht dem Nutzer dessen Eigenschaften gelöscht werden sollen.
+       */
+           
+      public void deleteAllPropertiesByUser(User user) {
+    	  this.deleteAllPropertiesByUser(user.getGoogleID());
+      }
      
+      
       /**
        * Einfügen eines <code>Property</code>-Objekts in die Datenbank. Dabei wird
        * auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
        * berichtigt.
        *
-       * @param a das zu speichernde Objekt
-       * @return das bereits übergebene Objekt, jedoch mit ggf. korrigierter
-       *         <code>id</code>.
+       * @param property ist das zu speichernde Objekt
+       * @return das bereits übergebene Objekt, jedoch mit gegebenfals korrigierter
+       * <code>id</code>.
        */    
      
       public void insert(Property property) {
          
-          Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-         
           Connection con = DBConnection.connection();
           Statement stmt = null;
-         
-          //TODO: Logik überprüfen --> Muss ein Object ebenso immer über den BOMapper eingefügt werden?
+          
           BusinessObjectMapper.businessObjectMapper().insert(property);
              
           try {
-             
-          propertyValues = property.getPropertyValues();
-       
-          stmt = con.createStatement();      
-          ResultSet rs = stmt.executeQuery("SELECT id"
-                  + "FROM businessObject"
-                  + "WHERE businessObject.bo_id = property.id");
-         
-          if (rs.next()) {
-             
-              property.setBo_Id(rs.getInt("id"));
-              property.setDescription(rs.getString("description"));
-              property.setCreationDate(rs.getDate("creationDate"));
-              property.setShared_status(rs.getBoolean("status"));
-              property.setPropertyValues(propertyValues);
-             
-              stmt = con.createStatement();
+                stmt = con.createStatement();
  
                 // die Einfügeoperation erfolgt
-                stmt.executeUpdate("INSERT INTO property (id, description, status, creationDate) "
-                    + "VALUES (" + property.getBo_Id() + ",'" + property.getDescription() + "','"
-                    + property.getShared_status() + "," + property.getCreationDate() + "')");
-            }
+                stmt.executeUpdate("INSERT INTO property (id, description) "
+                    + "VALUES (" + property.getBo_Id() + ",'" + property.getDescription() + "')");
+                
           } catch(SQLException e) {
               e.printStackTrace();
           }      
