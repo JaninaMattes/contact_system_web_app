@@ -43,30 +43,42 @@ public class PropertyValueMapper {
 		  Statement stmt = null;
 		  
 		  
-		  /**********************************************************************
-		   * INSERT INTO MULTIPLE TABLES??? 
-		   * Brauche ich hier 2 Statements die separat ueber executeQuery() abgerufen werden?
-		   ***********************************************************************/
+		  /**********************************************************************************
+		   * Abruf der MAX ID einmalig aus BusinessObject Tabelle
+		   * Einfügen der neuen Werte aus Objekt in BusinessObject UND PropertyValue Tabelle
+		   ************************************************************************************/
 		  
 		  try {
 		  stmt = con.createStatement();		  
 		  ResultSet rs1 = stmt.executeQuery(
-				  "SELECT MAX(id) AS maxid "
+				  "SELECT MAX(bo_id) AS maxid "
 		          + "FROM businessobject"
 				  );
 		  
 		  if (rs1.next()) {
 			 
 			  pv.setBo_Id(rs1.getInt("maxid") + 1);
-			  pv.setModifyDate(pv.getCreationDate());
-			  pv.setShared_Status(pv.getShared_Status());
+			  pv.setValue(pv.getValue());
+			  pv.setCreationDate(pv.getCreationDate());
+			  pv.setShared_Status(true);
+			  pv.setUser_ID(1);
 
 		        stmt = con.createStatement();
-
-		        // Einfügeoperation erfolgt
+		        
+		     // Einfügeoperation in businessobject erfolgt
 		        stmt.executeUpdate
-		        ("INSERT INTO propertyvalue (id, value) "
-		            + "VALUES (" + pv.getBo_Id() + ",'" 
+		        ("INSERT INTO businessobject (bo_id, creationDate, status, user_id)"
+		            + " VALUES (" + pv.getBo_Id() + "," 
+		            + pv.getCreationDate() + "," 
+		            + pv.getShared_Status() + "," 
+		            + pv.getUser_ID() + ")"
+		            );
+
+		        // Einfügeoperation in propertyvalue erfolgt
+		        stmt.executeUpdate
+		        ("INSERT INTO propertyvalue (id, property_id, value)"
+		            + " VALUES (" + pv.getBo_Id() + "," 
+		            	+ pv.getContact() + ",'"
 		        		+ pv.getValue() 
 		            + "')");
 		  	}
@@ -174,7 +186,58 @@ public class PropertyValueMapper {
 		    }
 		  
 	  }	  
+	 
+	  /*
+	   * Funktion zum Löschen aller Auspraegungen die von User selbst geteilt wurden
+	   */
 
+	  public void deleteAllSharedBy(int id) {
+		  Connection con = DBConnection.connection();
+		  Statement stmt = null;
+		  
+		  try {
+		      stmt = con.createStatement();
+		      stmt.executeUpdate
+		      ("DELETE FROM propertyvalue INNER JOIN businessobject" 
+		      + " WHERE businessobject.user_id=" + id
+		      + " AND businessobject.status= TRUE"
+		      );
+
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+		  
+	  }	  
+	  
+	  /*
+	   * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
+	   */
+
+	  public void deleteAllSharedByOther(int id) {
+		  Connection con = DBConnection.connection();
+		  Statement stmt = null;
+		  
+		  try {
+		      stmt = con.createStatement();
+		      stmt.executeUpdate
+		      
+		      /*
+		       * Id des Users suchen, der diese Auspraegungen geteilt hat
+		       */
+		      
+		      ("DELETE FROM propertyvalue INNER JOIN businessobject" 
+		      + " WHERE businessobject.user_id=" + id
+		      + " AND businessobject.status= TRUE"
+		      );
+
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+		  
+	  }	  
+	  
 	  
 	  /*
 	   * Anhand der uebergegebenen ID wird das 
