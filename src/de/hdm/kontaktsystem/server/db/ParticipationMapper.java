@@ -22,6 +22,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
  *
  */
 
+//TODO: alle User-Objekte durch User-ID ersetzen
 
 public class ParticipationMapper {
 	
@@ -215,6 +216,7 @@ public class ParticipationMapper {
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
+		//Change Status in BusinessObjectMapper zu geteilt (true)
 	}
 	
 	
