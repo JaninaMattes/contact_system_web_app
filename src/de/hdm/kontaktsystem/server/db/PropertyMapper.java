@@ -114,14 +114,6 @@ public class PropertyMapper {
     
       public Vector <Property> getAllPropertiesByUser(int user_id){
          
-         // User und Business Objekte erzeugen         
-          User user = null;
-         
-          if (user_id != 0) {
-              user = new User();
-              user = UserMapper.userMapper().getUserById(user_id);
-          }          
-         
           Vector <Property> propertyResult = new Vector<Property>();
          
           Connection con = DBConnection.connection();
@@ -136,7 +128,7 @@ public class PropertyMapper {
                     + "Property.ID, Property.Description" +
                     "FROM BusinessObject" +
                     "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" +
-                    "WHERE BusinessObject.user_ID =" + user.getGoogleID());
+                    "WHERE BusinessObject.user_ID =" + user_id);
              
               while (rs.next()) {
                   // TODO: Klären ob Business Objekt noch extra generiert werden muss
@@ -167,12 +159,15 @@ public class PropertyMapper {
     	 return this.getAllOwnedProperties(user.getGoogleID());
       }
       
+      
            
       /**
        * Abruf aller geteilter (participation) Eigenschaften
        * der Kontakte eines Users im KontaktSystem.
        * Diese Methode soll es ermöglichen alle Eigenschaften, welche einerm User
        * zugewiesen werden können und mit ihm geteilt wurden abzurufen.
+       * Da es sich hierbei um geteilte Eigenschaften <code>Property</code> handelt
+       * müssen hier keine zugehörigen Eigenschaftsausprägungen PropertyValues abgerufen werden. 
        *
        * @param id Primärschlüsselattribut des Users
        * @return einen Vector mit Property Objekten, welche dem übergebenen User Primärschlüssel,
@@ -181,16 +176,7 @@ public class PropertyMapper {
        */
      
     public Vector <Property> getAllSharedPropertiesByUser(int user_id){
-     
-     // User Objekte erzeugen
-         
-          User user = null;
-         
-          if (user_id != 0) {
-              user = new User();
-              user = UserMapper.userMapper().getUserById(user_id);
-          }          
-         
+                 
           Vector <Property> propertyResult = new Vector<Property>();
          
           Connection con = DBConnection.connection();
@@ -204,14 +190,13 @@ public class PropertyMapper {
                     + "BusinessObject.ModificationDate, BusinessObject.Status, "
                     + "Property.ID, Property.Description" +
                     "FROM BusinessObject" +
-                    "INNER JOIN Property ON BusinessObject.User_ID =" + user.getGoogleID() +
+                    "INNER JOIN Property ON BusinessObject.User_ID =" + user_id +
                     "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" +
                     "WHERE BusinessObject.Status =" + 1);
              
              
               while (rs.next()) {
-                 
-                  BusinessObject businessObject = new BusinessObject();              
+                           
                   Property property = new Property();
                  
                   property.setBo_Id(rs.getInt("ID"));
@@ -221,10 +206,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("CreationDate"));
                   property.setModifyDate(rs.getTimestamp("ModificationDate"));
                   property.setShared_status(rs.getBoolean("Status"));
-                 
-                  System.out.println(property.toString());
-                  System.out.println(businessObject.toString());
- 
+                  
                   // Hinzufügen des neuen Objekts zum Ergebnisvektor
                   propertyResult.addElement(property);
                  
@@ -608,7 +590,7 @@ public class PropertyMapper {
               propertyValueResult = property.getPropertyValues();
              
               for (PropertyValue pV : propertyValueResult){
-                  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV);
+                  PropertyValueMapper.propertyValueMapper().delete(pV);
               }              
               stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
             }
@@ -663,7 +645,7 @@ public class PropertyMapper {
              
               if(propertyValueResult != null) {
               for (PropertyValue pV : propertyValueResult){
-                  PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV);
+                  PropertyValueMapper.propertyValueMapper().delete(pV);
               }
               }          
               stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
