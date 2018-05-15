@@ -28,12 +28,19 @@ public class Contact extends BusinessObject {
 	/**
 	 * Kontruktoren
 	 */
+<<<<<<< HEAD
+	public Contact() {
+		
+	}
+	public Contact(PropertyValue name, String status, User owner) {
+=======
 	
 	public Contact() {
 		
 	}
 
 	public Contact(PropertyValue name, User owner) {
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 		this.name = name;
 		this.owner = owner;
 	}
