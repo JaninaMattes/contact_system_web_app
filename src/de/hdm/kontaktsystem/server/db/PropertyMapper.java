@@ -57,6 +57,46 @@ public class PropertyMapper {
  
         return propertyMapper;
       }
+      
+      
+      
+      public Vector <Property> getAllProperties(){
+    	  
+    	  	// Vector zur Speicherung aller Properties
+			Vector<Property> propertyResult = new Vector<Property>();
+			Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();
+			
+		  Connection con = DBConnection.connection();
+    	  Statement stmt; 
+    	  
+  		try{			
+  			
+  			stmt = con.createStatement();
+  			ResultSet rs = stmt.executeQuery(
+  					"SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, BusinessObject.ModificationDate,"
+  					+ "BusinessObject.Status, Property.ID, Property.Description, PropertyValue.ID, PropertyValue."
+  					+ "FROM BusinessObject "  
+  					+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
+  					+ "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
+  					+ "WHERE BusinessObject.bo_ID = Property.ID ");
+  			
+  			while(rs.next()){
+  				
+  				Property property = new Property();
+  				property.setBo_Id(rs.getInt("bo_id"));
+  				property.setDescription(rs.getString("Description")); 				
+  				property.setPropertyValues(propertyValues);
+  				
+  				
+  			}  			
+  			return propertyResult;
+  		}catch(SQLException e){
+  			e.printStackTrace();
+  		}
+  		
+  		return null;
+    	  
+      }
  
       /**
        * Abruf aller geteilter (participation) und eigener (ownership) Eigenschaften
@@ -71,17 +111,10 @@ public class PropertyMapper {
        *
        */
      
-      // TODO: Logik prüfen --> entweder user_id oder User als Parameter übergeben?
-      
-      public Vector <Property> getAllPropertiesByUser(User user){
-    	 return this.getAllOwnedProperties(user.getGoogleID());
-      }
-      
-     
+    
       public Vector <Property> getAllPropertiesByUser(int user_id){
          
-         // User und Business Objekte erzeugen
-         
+         // User und Business Objekte erzeugen         
           User user = null;
          
           if (user_id != 0) {
@@ -100,7 +133,7 @@ public class PropertyMapper {
               // Statement ausfüllen und als Query an die DB schicken
               ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
                     + "BusinessObject.ModificationDate, BusinessObject.Status, "
-                    + "Property.ID, Property.description" +
+                    + "Property.ID, Property.Description" +
                     "FROM BusinessObject" +
                     "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" +
                     "WHERE BusinessObject.user_ID =" + user.getGoogleID());
@@ -109,12 +142,12 @@ public class PropertyMapper {
                   // TODO: Klären ob Business Objekt noch extra generiert werden muss
                   Property property = new Property();
                   //Property
-                  property.setBo_Id(rs.getInt("id"));
-                  property.setDescription(rs.getString("description"));
+                  property.setBo_Id(rs.getInt("bo_ID"));
+                  property.setDescription(rs.getString("Description"));
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
-                  property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  property.setShared_status(rs.getBoolean("status"));
+                  property.setCreationDate(rs.getTimestamp("CreationDate"));
+                  property.setModifyDate(rs.getTimestamp("ModificationDate"));
+                  property.setShared_status(rs.getBoolean("Status"));
                  
                   System.out.println(property.toString());
  
@@ -128,7 +161,13 @@ public class PropertyMapper {
          
           return propertyResult;
       }
-     
+      
+      
+      public Vector <Property> getAllPropertiesByUser(User user){
+    	 return this.getAllOwnedProperties(user.getGoogleID());
+      }
+      
+           
       /**
        * Abruf aller geteilter (participation) Eigenschaften
        * der Kontakte eines Users im KontaktSystem.
@@ -167,23 +206,21 @@ public class PropertyMapper {
                     "FROM BusinessObject" +
                     "INNER JOIN Property ON BusinessObject.User_ID =" + user.getGoogleID() +
                     "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" +
-                    "WHERE BusinessObject.status =" + 1);
+                    "WHERE BusinessObject.Status =" + 1);
              
-                    // TODO: Klären Business Object Status = TinyInt in der DB
-                    // Bedeutet dies --> True (shared) = 1, False (not_shared) = 0
              
               while (rs.next()) {
                  
                   BusinessObject businessObject = new BusinessObject();              
                   Property property = new Property();
                  
-                  property.setBo_Id(rs.getInt("id"));
-                  property.setDescription(rs.getString("description"));
+                  property.setBo_Id(rs.getInt("ID"));
+                  property.setDescription(rs.getString("Description"));
                  
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
-                  property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  property.setShared_status(rs.getBoolean("status"));
+                  property.setCreationDate(rs.getTimestamp("CreationDate"));
+                  property.setModifyDate(rs.getTimestamp("ModificationDate"));
+                  property.setShared_status(rs.getBoolean("Status"));
                  
                   System.out.println(property.toString());
                   System.out.println(businessObject.toString());
@@ -213,9 +250,7 @@ public class PropertyMapper {
      *
      */
        
-   
-    //TODO: Methode anpassen und mit Kim-ly überprüfen
-   
+     
     public Vector <Property> findPropertyByStatus(boolean shared_status) {
        
         Vector <Property> propertyResult = null;
@@ -241,13 +276,13 @@ public class PropertyMapper {
               BusinessObject businessObject = new BusinessObject();              
               Property property = new Property();
              
-              property.setBo_Id(rs.getInt("id"));
-              property.setDescription(rs.getString("description"));
+              property.setBo_Id(rs.getInt("ID"));
+              property.setDescription(rs.getString("Description"));
              
               // Superklasse Business Object Attribute befüllen
-              property.setCreationDate(rs.getTimestamp("creationDate"));
-              property.setModifyDate(rs.getTimestamp("modificationDate"));
-              property.setShared_status(rs.getBoolean("status"));
+              property.setCreationDate(rs.getTimestamp("CreationDate"));
+              property.setModifyDate(rs.getTimestamp("ModificationDate"));
+              property.setShared_status(rs.getBoolean("Status"));
              
               System.out.println(property.toString());
               System.out.println(businessObject.toString());
@@ -296,15 +331,13 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.creationDate, "
-                    + "BusinessObject.modificationDate, BusinessObject.status, "
-                    + "Property.ID, Property.description" +
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
+                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
+                    + "Property.ID, Property.Description" +
                     "FROM BusinessObject" +
-                    "INNER JOIN Property ON BusinessObject.owner_ID =" + user.getGoogleID() +
+                    "INNER JOIN Property ON BusinessObject.Owner_ID =" + user.getGoogleID() +
                     "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" +
                     "WHERE BusinessObject.Status =" + 0);
-                    // TODO: Klären Business Object Status = TinyInt in der DB
-                    // Bedeutet --> True = 1, False = 0
              
               while (rs.next()) {
                  
@@ -313,13 +346,13 @@ public class PropertyMapper {
                  
                   Property property = new Property();
                  
-                  property.setBo_Id(rs.getInt("id"));
-                  property.setDescription(rs.getString("description"));
+                  property.setBo_Id(rs.getInt("ID"));
+                  property.setDescription(rs.getString("Description"));
                  
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
-                  property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  property.setShared_status(rs.getBoolean("status"));
+                  property.setCreationDate(rs.getTimestamp("CreationDate"));
+                  property.setModifyDate(rs.getTimestamp("ModificationDate"));
+                  property.setShared_status(rs.getBoolean("Status"));
                  
                   System.out.println(property.toString());
  
@@ -335,6 +368,7 @@ public class PropertyMapper {
           return propertyResult;         
          
       }
+      
      
       /**
        * Abruf aller PropertyValue Objekte, welche zu einem Property Objekt zugeordnet 
@@ -370,19 +404,16 @@ public class PropertyMapper {
                     // Business Object Tabelle übergeben? Diese sollte gleich sein
              
               while (rs.next()) {
-                 
-                  //TODO: Klären --> Muss hier auch ein BO erstellt werden?
-                  //BusinessObject businessObject = new BusinessObject();  
-                 
+                                  
                   PropertyValue propertyValue = new PropertyValue();
                  
-                  propertyValue.setBo_Id(rs.getInt("id"));
-                  propertyValue.setValue(rs.getString("value"));
+                  propertyValue.setBo_Id(rs.getInt("ID"));
+                  propertyValue.setValue(rs.getString("Value"));
                  
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
-                  property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  property.setShared_status(rs.getBoolean("status"));
+                  property.setCreationDate(rs.getTimestamp("CreationDate"));
+                  property.setModifyDate(rs.getTimestamp("ModificationDate"));
+                  property.setShared_status(rs.getBoolean("Status"));
                  
                   System.out.println(property.toString());
  
@@ -400,6 +431,7 @@ public class PropertyMapper {
       /**
        * Auslesen eines Vectors mit PropertyValues anhand des Primärschlüssels 
        * eines Property Objektes in der DB
+       * 
        */
       
       public Vector <PropertyValue> findPropertyValuesByPropertyID(int property_id){
@@ -418,6 +450,7 @@ public class PropertyMapper {
        * @param id ist das Primärschlüsselattribut
        * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
        * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
+       * 
        */
      
      
@@ -441,6 +474,7 @@ public class PropertyMapper {
                   property.setDescription(rs.getString("description"));
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   property.setModifyDate(rs.getTimestamp("modificationDate"));
+                  
                   //Abrufen der Eigenschaftsausprägungen
                   propertyValue = this.findPropertyValuesByProperty(property);
                   property.setPropertyValues(propertyValue);
@@ -451,12 +485,22 @@ public class PropertyMapper {
           return property;
       }
      
+      /**
+       * Suchen eines Eigenschaft Objekts innerhalb der DB anhand derer Primärschlüssel ID.
+       * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
+       *
+       * @param user ist das User Objekt des Nutzers.
+       * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
+       * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
+       */
+      
      
       public Property findPropertyByUser(User user) {
           //TODO: Überprüfen ob die Google ID hier der richtige Parameter ist
         return this.findPropertyByID(user.getGoogleID());        
       }
      
+      
       /**
        * Suchen eines oder mehrerer Eigenschaft Objekte innerhalb der DB anhand derer Beschreibung.
        * Da dies nicht unbedingt eindeutig ist, wird nicht immer genau ein Eigenschafts Objekt zurückgegeben.
@@ -479,20 +523,20 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT id, description FROM property "
-                      + "WHERE description = " + description + " ORDER BY id");
+              ResultSet rs = stmt.executeQuery("SELECT ID, Description FROM Property "
+                      + "WHERE Description = " + description + " ORDER BY ID");
              
               while (rs.next()) {
                  
                   Property property = new Property();                        
                                  
-                  property.setBo_Id(rs.getInt("id"));
-                  property.setDescription(rs.getString("description"));
+                  property.setBo_Id(rs.getInt("ID"));
+                  property.setDescription(rs.getString("Description"));
                  
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
-                  property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  property.setShared_status(rs.getBoolean("status"));
+                  property.setCreationDate(rs.getTimestamp("CreationDate"));
+                  property.setModifyDate(rs.getTimestamp("ModificationDate"));
+                  property.setShared_status(rs.getBoolean("Status"));
                  
                   // Auslesen der Eigenschaftsausprägungen einer Eigenschaft
                   propertyValueResult = this.findPropertyValuesByProperty(property);
@@ -536,8 +580,11 @@ public class PropertyMapper {
               e.printStackTrace();
             }
          
-          // Um eine Analogie zu insert Methode zu wahren wird das
-          // <code>Property</code> Objekt zurück gegeben
+          /**
+           *  Um eine Analogie zu insert Methode zu wahren wird das
+           *  <code>Property</code> Objekt zurück gegeben
+           * 
+           */  
             return property;
           }
          
@@ -567,16 +614,16 @@ public class PropertyMapper {
             }
             catch (SQLException e2) {
               e2.printStackTrace();
-            }
-         
+            }          
+          	BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);         
       }
      
       /**
-       * Löschen der Daten eines <code>Property</code>-Objekts aus der Datenbank.     *
+       * Löschen der Daten eines <code>Property</code>-Objekts aus der Datenbank.     
        * @param id ist der Primärschlüssel, des aus der DB zu löschenden "Objektes"
        */
      
-      public void deletePropertyByID(int id) {
+      public void deletePropertyByPropertyID(int property_id) {
          
           Property property = null;
           PropertyValue propertyValue = null;
@@ -592,13 +639,14 @@ public class PropertyMapper {
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
               ResultSet rs = stmt.executeQuery("SELECT id FROM property "
-                      + "WHERE id = " + id + " ORDER BY id");
+                      + "WHERE id = " + property_id + " ORDER BY id");
              
               if (rs.next()) {
-                  property.setBo_Id(rs.getInt("id"));
-                  property.setDescription(rs.getString("description"));
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
-                  property.setModifyDate(rs.getTimestamp("modificationDate"));
+                  property.setBo_Id(rs.getInt("ID"));
+                  property.setDescription(rs.getString("Description"));
+                  property.setCreationDate(rs.getTimestamp("CreationDate"));
+                  property.setModifyDate(rs.getTimestamp("mMdificationDate"));
+                  property.setShared_status(rs.getBoolean("Status"));
                  
           }
           } catch (SQLException e) {
@@ -626,57 +674,7 @@ public class PropertyMapper {
          
       }
      
-      // TODO: Klären ob diese Methode so sinnvoll ist
-      // Achtung was passiert, wenn PropertyValue gelöscht wird
-      // --> Property hat keine Verbindung zu PropertyValue
-     
-      public void deletePropertyByContact(Contact contact) {
-          Property property = new Property();
-          PropertyValue propertyValueO = new PropertyValue();
-         
-                 
-          Connection con = DBConnection.connection();
-          Statement stmt = null;
-         
-          try {
-              // Leeres SQL Statement anlegen  
-              stmt = con.createStatement();
-              // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.creationDate, "
-                    + "BusinessObject.modificationDate, BusinessObject.status, "
-                    + "Property.ID, Property.description,"
-                    + "PropertyValue.ID, PropertyValue.Value,"
-                    + "Contact.ID, Contact.Owner_ID,"
-                    + "FROM BusinessObject"
-                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
-                    + "INNER JOIN Property ON BusinessObject.bo_ID = PropertyValue.ID"
-                    + "INNER JOIN Property ON BusinessObject.bo_ID = Contact.ID"               
-                    + "WHERE Contact.user_ID =" + contact.getUserId());
-             
-                    // TODO: Klären wie wird hier die ID - Google Token (g_token) aus der DB in die
-                    // Business Object Tabelle übergeben? Diese sollte gleich sein
-             
-              while (rs.next()) {
-                 
-                  //TODO: Klären --> Erstellung des zu löschenden PropertyValueObjektes
-                             
-                }
-              } catch (SQLException e2) {
-                  e2.printStackTrace();
-                }
-         
-          try {
-              stmt = con.createStatement();
-             // PropertyValueMapper.propertyValueMapper().deleteByProperty(pv, prop);
-              stmt.executeUpdate("DELETE FROM property " + "WHERE owner=" + contact.getBo_Id());
- 
-            }
-            catch (SQLException e2) {
-              e2.printStackTrace();
-            }
-         
-      }
-     
+    
       /**
        * Löschen sämtlicher Eigenschaften <code>Property</code> Objekte eines Nutzers.
        *  
@@ -700,7 +698,7 @@ public class PropertyMapper {
        * @param user entspricht dem Nutzer dessen Eigenschaften gelöscht werden sollen.
        */
            
-      public void deleteAllPropertiesByUser(User user) {
+      public void deleteAllPropertiesByUserID(User user) {
     	  this.deleteAllPropertiesByUser(user.getGoogleID());
       }
      
@@ -716,7 +714,7 @@ public class PropertyMapper {
        */    
      
       public void insert(Property property) {
-         
+    	           
           Connection con = DBConnection.connection();
           Statement stmt = null;
           
