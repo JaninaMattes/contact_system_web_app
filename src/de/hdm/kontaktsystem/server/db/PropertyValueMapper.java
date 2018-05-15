@@ -38,7 +38,7 @@ public class PropertyValueMapper {
 	   * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
 	   */
 	  
-	  public void insert(PropertyValue pv) {
+	  public void insert(PropertyValue pv) { 
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
@@ -363,7 +363,8 @@ public class PropertyValueMapper {
 		
 		/*
 		 * Alle fuer den Benutzer in der Applikation zugaenglichen 
-		 * Auspraegungen werden anhand ihrer zugehoerigen Eigenschaften gesucht und zurueckgegeben
+		 * Auspraegungen werden anhand ihrer zugehoerigen Eigenschaften gesucht und 
+		 * mit dieser (!!!!!!!!!) zurueckgegeben
 		 */
 	  
 		public Vector<PropertyValue> findBy(Property prop) {
