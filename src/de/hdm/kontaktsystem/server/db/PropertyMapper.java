@@ -490,7 +490,7 @@ public class PropertyMapper {
        * @param property, welches das aus der DB zu löschende "Objekt" ist
        */
      
-      public void deleteProperty(Property property) {
+      public void delete(Property property) {
        
           Vector <PropertyValue> propertyValueResult = new Vector<PropertyValue>();
          
@@ -508,11 +508,13 @@ public class PropertyMapper {
                   PropertyValueMapper.propertyValueMapper().delete(pV);
               }              
               stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
+              // Löschen des Eintrags in der BO Tabelle
+              BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);      
             }
             catch (SQLException e2) {
               e2.printStackTrace();
             }          
-          	BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);         
+          	   
       }
      
       /**
@@ -520,50 +522,30 @@ public class PropertyMapper {
        * @param id ist der Primärschlüssel, des aus der DB zu löschenden "Objektes"
        */
      
-      public void deletePropertyByPropertyID(int property_id) {
+      public void deleteById(int property_id) {
          
-          Property property = null;
-          PropertyValue propertyValue = null;
-          Vector <PropertyValue> propertyValueResult = new Vector<PropertyValue>();
+         Property property = new Property();
+         property = this.findByID(property_id);
          
-          Connection con = DBConnection.connection();
-          Statement stmt = null;
-         
-          try {
-             
-              property = new Property();
-              // Leeres SQL Statement anlegen  
-              stmt = con.createStatement();
-              // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT id FROM property "
-                      + "WHERE id = " + property_id + " ORDER BY id");
-             
-              if (rs.next()) {
-                  property.setBo_Id(rs.getInt("ID"));
-                  property.setDescription(rs.getString("Description"));
-                  property.setCreationDate(rs.getTimestamp("CreationDate"));
-                  property.setModifyDate(rs.getTimestamp("mMdificationDate"));
-                  property.setShared_status(rs.getBoolean("Status"));
-                 
-          }
-          } catch (SQLException e) {
-              e.printStackTrace();
-          }          
+         Connection con = DBConnection.connection();
+         Statement stmt = null;
          
           try {
              
               stmt = con.createStatement();
              
               // Abruf aller PropertyValues, welche zu einem Property Objekt gehören können
-              propertyValue = new PropertyValue();           
-              propertyValueResult = property.getPropertyValues();
-             
-              if(propertyValueResult != null) {
-              for (PropertyValue pV : propertyValueResult){
-                  PropertyValueMapper.propertyValueMapper().delete(pV);
-              }
+              Vector <PropertyValue>propertyValue = new Vector <PropertyValue>();           
+              propertyValue = property.getPropertyValues();
+              // Löschen aller PropertyValues
+              if(propertyValue != null) {
+            	  for (PropertyValue pV : propertyValue){
+            		  PropertyValueMapper.propertyValueMapper().delete(pV);
+              		}
               }          
               stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
+              // Löschen des Eintrags in der BO Tabelle
+              BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);      
             }
             catch (SQLException e2) {
               e2.printStackTrace();
@@ -579,15 +561,18 @@ public class PropertyMapper {
        * zu dem die Properties gehören.
        */
      
-      public void deleteByUser(int user_id) {
+      public void deleteByUserId(int user_id) {
          
          Vector <Property> propertyResult = new Vector <Property>();
          propertyResult = PropertyMapper.propertyMapper().findByUserID(user_id);
        
-         for (Property pV : propertyResult){                 
-              PropertyValueMapper.propertyValueMapper().deletePropertyValue(pV.getBo_Id());
-              PropertyMapper.propertyMapper().deleteProperty(pV);
-          }      
+         for (Property p : propertyResult){                 
+              PropertyValueMapper.propertyValueMapper().deletePropertyValue(p.getBo_Id());
+              PropertyMapper.propertyMapper().delete(p);
+              //Löschen des Eintrags in der BO Tabelle
+              BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(p);  
+          }   
+          
       }
       
       /**
@@ -595,8 +580,8 @@ public class PropertyMapper {
        * @param user entspricht dem Nutzer dessen Eigenschaften gelöscht werden sollen.
        */
            
-      public void deleteAllPropertiesByUserID(User user) {
-    	  this.deleteByUser(user.getGoogleID());
+      public void deleteByUser(User user) {
+    	  this.deleteByUserId(user.getGoogleID());
       }
      
       
