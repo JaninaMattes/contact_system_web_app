@@ -11,16 +11,36 @@ public class PropertyValue extends BusinessObject{
 			
 	private String value = null;
 	private Property prop = null;
+	private Contact contact = null;
+	
+	/*
+	 * Beschreibung des Status, dieser ist entweder geteilt 
+	 * (shared) oder nicht geteilt (unshared)
+	 * Per default gilt ein neu erstelltes Property Objekt
+	 * nicht geteilt, daher wird dieser zuerst als false angegeben
+	 * 
+	 */
+	
+	
+
+	private boolean shared_Status = false;	
 	
 	
 	// TODO: Überprüfen ob die Verbindung von Property/PropertyValue so sinnvoll ist
+	
+	
+
+	public PropertyValue() {
+		
+	}
 	
 	public PropertyValue(String value) {
 		
 		this.value = value;		
 		prop = new Property(value);
-		
+
 	}
+	
 
 	/*
 	 * Auslesen des Ausprägungswertes
@@ -39,6 +59,31 @@ public class PropertyValue extends BusinessObject{
 		this.value = value;
 	}
 	
+	
+	public Property getProp() {
+		return prop;
+	}
+
+	public void setProp(Property prop) {
+		this.prop = prop;
+	}
+	
+	public boolean getShared_Status() {
+		return shared_Status;
+	}
+
+	public void setShared_Status(boolean shared_Status) {
+		this.shared_Status = shared_Status;
+	}
+	
+	public Contact getContact() {
+		return contact;
+	}
+
+	public void setContact(Contact c) {
+		this.contact = contact;
+	}
+
 	/*
 	 * <p>
 	 * Feststellen der <em>inhaltlichen</em> Gleichheit zweier PropertyValue-Objekte.

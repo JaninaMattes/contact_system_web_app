@@ -17,12 +17,17 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  *
  */
 
-
 public class Property extends BusinessObject{
 	
+	/*
+	 * Die default Serial Version UID vergibt jeder serialisierbaren Java Klasse
+	 * eine einzigartige ID. Diese wird bei der <em> desirialisation </em> verwendet
+	 * um sicherzustellen, dass Sender und Empfänger die Klassen für das empfangene
+	 * Objekt geladen haben. 
+	 */
 
 	private static final long serialVersionUID = 1L;
-	
+		
 	/*
 	 * Beschreibung der Eigenschaft
 	 */
@@ -34,34 +39,55 @@ public class Property extends BusinessObject{
 	 * zugeordnet. Diese werden durch eine Vector Liste repräsentiert
 	 * 
 	 * */
+	
 	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
+	/*
+	* ***************************************************************************
+	* ABSCHNITT 1: Konstruktoren
+	* ***************************************************************************
+	*/
+	
+	/*
+	 * Default Konstruktor
+	 */
+		
+	public Property() {
+		
+	}
+	
+	/*
+	 * Bei der Erzeugung einer neuen Eigenschaftsinstanz muss nicht zwingend
+	 * eine Eigenschaftsausprägung (PropertyValue Instanz) erzeugt werden
+	 */
+	
+	public Property(String description) {
+		this.description = description;
+		
+	}
 	
 	/*
 	 * Bei der Erzeugung einer neuen Eigenschaftinstanz muss ebenso eine neue
 	 * Eigenschaftsausprägung dieser erzeugt und zugeordnet werden
 	 */
 	
-	// TODO: Überprüfen der Sinnvolligkeit dieser Lösung --> Achtung Mapper
-	
-	public Property () {
-		
-	}
-	
-	public Property(String value) {
-		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
-		PropertyValue propertyValue = new PropertyValue(value);
-		propertyValues.addElement(propertyValue);
-	
-	}
-	
 	public Property(String value, String description) {
-		this.description = description;
+		this.description = description;		
+		
+		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
 		PropertyValue propertyValue = new PropertyValue(value);
 		propertyValues.addElement(propertyValue);
 		
 	}	
 
+	
+	/*
+	* ***************************************************************************
+	* ABSCHNITT 2: Getter und Setter
+	* ***************************************************************************
+	*/
+	
+	
 	/*
 	 * Auslesen der Beschreibung eines Eigenschafts Objektes
 	 */
@@ -77,28 +103,53 @@ public class Property extends BusinessObject{
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}		
+		
+	
+	/*
+	 * Auslesen des PropertyValue Vectors
+	 *  
+	 */
+	
+	public Vector<PropertyValue> getPropertyValues() {
+		return propertyValues;
 	}	
+
+	/*
+	 * Setzen des PropertyValue Vectors für eine neue Liste
+	 * an PropertyValues, welche einer Property zugeordnet werden.
+	 * Möglichkeit auch nur eine PropertyValue Instanz dem Vector
+	 * beizufügen, wenn nur ein einziges Objekt zugeordnet werden soll.
+	 *  
+	 */
 	
-	
-	
-	/**
-	   * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
-	   */
-	
-	@Override
-	public String toString() {
-		return "Property [description=" + description + ", propertyValues=" + propertyValues + "]";
+	public void setPropertyValues(Vector<PropertyValue> propertyValues) {
+		this.propertyValues = propertyValues;
 	}
 	
+	/*
+	 * Möglichkeit bei Bedarf auch nur ein einziges PropertyValue Objekt
+	 * zu setzen. 
+	 */
 	
+	public void setPropertyValue(PropertyValue propertyVal) {
+		this.propertyValues.addElement(propertyVal);
+	}
+		
+	/*
+	* ***************************************************************************
+	* ABSCHNITT 3: toString und equals Methode
+	* ***************************************************************************
+	*/
+	
+
 	/*
 	 * <p>
 	 * Feststellen der <em>inhaltlichen</em> Gleichheit zweier PropertyValue-Objekte.
 	 * Die Gleichheit wird in diesem Beispiel auf eine gleiche Identität
 	 * beschränkt.
 	 * </p>
-	 * 
-	 * 
+	 *  
 	 */
 	
 	 public boolean equals(Object o) {
@@ -117,6 +168,33 @@ public class Property extends BusinessObject{
 		    }
 		    return false;
 		}
+	 
+	 
+	 /**
+		 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
+		 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
+		 * der ID des Objekts.
+		 * Dies überschreibt die Methode hashCode() der Klasse Object.
+		 * 
+		 */
+	 
+		@Override
+		public int hashCode(){
+			return super.getBo_Id();
+		}
+	 
+
+		/**
+		   * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
+		   * Dies überschreibt die Methode toString() der Klasse Object
+		   * 
+		   */
+		
+		@Override
+		public String toString() {
+			return "Property [description=" + description + ", propertyValues=" + propertyValues + "]";
+		}
+		
 	
 
 }

@@ -25,6 +25,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	private Contact contact = null;
 	
 	//Referenzen auf die zugehörigen DatenbankMapper
+
 	
 	private BusinessObjectMapper boMapper = null;	
 	private ContactListMapper clMapper = null;
@@ -225,4 +226,3 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	
 }
-

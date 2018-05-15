@@ -1,5 +1,10 @@
 package de.hdm.kontaktsystem.server.db;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -10,11 +15,6 @@ import de.hdm.kontaktsystem.shared.bo.User;
  */
 
 public class UserMapper {
-	
-	/**
-	 * Create an UserMapper object 
-	 */
-	private static UserMapper INSTANCE = new UserMapper();
 	
 	private static UserMapper userMapper = null;
 	
@@ -37,20 +37,33 @@ public class UserMapper {
     return userMapper;
   }
 
-	/**
-	 * Returns an Instance of the UserMapper 
-	 * @return Instance of the UserMapper
-	 */
-	public static UserMapper getInstance(){
-		return INSTANCE;
-	}
+	
 	
 	/**
 	 * Returns all <code>User</code> objects from the database table 
 	 * @return Vector<User>
 	 */
-	public Vector<User> getAllUsers(){
-		// TODO SQL Statement
+	public Vector <User> getAllUsers(){
+		
+		Connection con = DBConnection.connection();
+		try{
+			// Create Vector to save all Users from the Database
+			Vector<User> userList = new Vector<User>();
+			
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM User");
+			while(rs.next()){
+				User u = new User();
+				u.setGoogleID(rs.getInt("ID"));
+				u.setGMail(rs.getString("g_mail"));
+				// u.setContact(ContactMapper.contactMapper().getContactByID(rs.getInt("contactID")));
+				userList.add(u);
+			}
+			return userList;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 	
@@ -60,18 +73,51 @@ public class UserMapper {
 	 * @return User
 	 */
 	public User getUserById(int id){
-		// TODO SQL Statement
-		return null;
+		
+		User u = new User();
+		Connection con = DBConnection.connection();
+		
+		try{
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User WHERE id = ?");
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()){
+				u.setGoogleID(rs.getInt("ID"));
+				u.setGMail(rs.getString("g_token"));
+				// u.setContact(ContactMapper.contactMapper().getContactByID(rs.getInt("contactID")));
+				
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return u;
 	}
 	
 	/**
-	 * Select the User which is connect to the Google Account or generate a new <code>User</code> when the token is unknown
+	 * Select the User which is connect to the Google Account or generate a new <code>User</code> when the email is unknown
 	 * This method is used for Login
-	 * @param token
+	 * @param email
 	 * @return User that is linked to the Google Account
 	 */
-	public User getUserByToken(String token){
-		// TODO SQL Statement
+	public User getUserByEmail(String email){
+		
+		Connection con = DBConnection.connection();
+		try{
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User WHERE g_mail = ?");
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()){
+				User u = new User();
+				u.setGoogleID(rs.getInt("ID"));
+				u.setGMail(rs.getString("g_mail"));
+				// u.setContact(ContactMapper.contactMapper().getContactByID(rs.getInt("contactID")));
+				return u;
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 	
@@ -79,7 +125,14 @@ public class UserMapper {
 	 * Delete all <code>User</code> objects from the database table 
 	 */
 	public void deleteAllUsers(){
-		// TODO SQL Statement
+		
+		Connection con = DBConnection.connection();
+		try{
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("DELETE FROM User");
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -87,15 +140,25 @@ public class UserMapper {
 	 * @param id
 	 */
 	public void deleteUserById(int id){
-		// TODO SQL Statement
+		Connection con = DBConnection.connection();
+		try{
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("DELETE FROM User Where user_ID = "+ id);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**
-	 * 
+	 * Update the User account
 	 * @param user
 	 */
 	public void updateUser(User user){
-		// TODO SQL Statement
+		/*
+		 * There is nothing to update at this time, because the Google-Data (Email, ID) don't change.
+		 * Possible usage: Update Profile Image, use Nickname, give the User possibility to customise GUI (Color, ...)
+		 */
+		
 	}
 	
 	/**
@@ -103,21 +166,53 @@ public class UserMapper {
 	 * @param user
 	 */
 	public void insertUser(User user){
-		// TODO SQL Statement
+		Connection con = DBConnection.connection();
+		try{
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_token) VALUES (?, ?)");
+			stmt.setInt(1, user.getGoogleID());
+			stmt.setString(2, user.getGMail());
+			stmt.execute();
+			
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**
-	 * Generate a new UserTabel in the Database
+	 * Generate a new UserTable in the Database
 	 */
-	public void initUserTabel(){
-		// TODO SQL Statement
+	public void initUserTable(){
+		Connection con = DBConnection.connection();
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			// Create new User table
+			stmt.executeUpdate("CREATE TABLE User (ID INT(10) NOT NULL, g_mail VARCHAR(255) NOT NULL, PRIMARY KEY(ID));");
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	/**
-	 * Delete the hole UserTabel
+	 * Delete the hole UserTable
 	 */
-	public void deleteUserTabel(){
-		// TODO SQL Statement
+	public void deleteUserTable(){
+		Connection con = DBConnection.connection();
+		Statement stmt;
+		
+		/*
+		 * Delete the BusinessObject table before the User table because the UserID is used as ForeignKey
+		 */
+		//BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectTable();
+		
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate("DROP TABLE User");
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
 	}
 	
 	

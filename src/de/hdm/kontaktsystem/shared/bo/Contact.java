@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+
 /**
  * Die Klasse Contact stellt die Kontakte dar, die von einem User erstellt werden bzw. auf welche ein User zugreifen kann, 
 sowie den User selbst.
@@ -14,12 +15,7 @@ public class Contact extends BusinessObject {
 	 *  Bezug zu dem User der den Kontakt besitzt
 	 */
 	private User owner = null;
-	
-	/**
-	 * 
-	 */
-	private String status = null;
-	
+		
 	/**
 	 * Name des Kontakts
 	 */
@@ -32,18 +28,25 @@ public class Contact extends BusinessObject {
 	/**
 	 * Kontruktoren
 	 */
+<<<<<<< HEAD
 	public Contact() {
 		
 	}
 	public Contact(PropertyValue name, String status, User owner) {
+=======
+	
+	public Contact() {
+		
+	}
+
+	public Contact(PropertyValue name, User owner) {
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 		this.name = name;
-		this.status = status;
 		this.owner = owner;
 	}
 	
-	public Contact(PropertyValue name, String status) {
+	public Contact(PropertyValue name) {
 		this.name = name;
-		this.status = status;
 	}
 	
 	
@@ -52,7 +55,7 @@ public class Contact extends BusinessObject {
 	 */
 	
 	/**
-	 * Auslesen des Eigentümers
+	 * Auslesen des Eigentï¿½mers
 	 */
 	
 	public User getOwner() {
@@ -60,27 +63,13 @@ public class Contact extends BusinessObject {
 	}
 
 	/**
-	 * Eigentümer setzen
+	 * Eigentï¿½mer setzen
 	 */
 
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	/**
-	 * Status auslesen
-	 */
 	
-	public String getStatus() {
-		return status;
-	}
-
-	/**
-	 * Status setzen
-	 */
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
 	/**
 	 * Namen auslesen
 	 */

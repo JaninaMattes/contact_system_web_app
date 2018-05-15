@@ -55,6 +55,7 @@ public class ContactMapper {
 			e.printStackTrace();
 		}
 	}
+<<<<<<< HEAD
 	/**
 	 * Mapper-Methode um Kontakte mit Hilfe der ID zu löschen
 	 * @param id
@@ -192,4 +193,22 @@ public class ContactMapper {
 		  }
 		  
 	  }
+=======
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 
+	public PropertyValue getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Vector <PropertyValue> findAllPropertyValues() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public PropertyValue findPropertyValueByValue(String value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	  
+}
