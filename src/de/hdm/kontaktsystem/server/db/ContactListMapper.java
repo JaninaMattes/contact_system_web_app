@@ -90,7 +90,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Eine Kontaktliste über ihre ID finden
+	 * Eine Kontaktliste ï¿½ber ihre ID finden
 	 * 
 	 * @param id
 	 * @return ContactList
@@ -118,13 +118,13 @@ public class ContactListMapper {
 
 		return cl;
 	}
-	//NOCHMAL PRÜFEN!
+	//NOCHMAL PRï¿½FEN!
 	public Vector<ContactList> findContactListByUser(User user) {
 
 		Connection con = DBConnection.connection();
 		try{
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM ContactList WHERE User = ?");
-			stmt.setString(User, user);
+			//stmt.setString(User, user);
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
 				ContactList cl = new ContactList();
@@ -132,7 +132,8 @@ public class ContactListMapper {
 				cl.setName(rs.getString("contactList_name"));
 				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("owner")));
 				cl.setShared_status(rs.getBoolean("status"));
-				return cl;
+				//return cl; --> Vector
+				return null; 
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -141,7 +142,7 @@ public class ContactListMapper {
 		return null;
 	}
 
-	//NOCHMAL PRÜFEN!
+	//NOCHMAL PRï¿½FEN!
 	public Vector<ContactList> findContactListByName(String name) {
 		Connection con = DBConnection.connection();
 		try{
@@ -154,7 +155,8 @@ public class ContactListMapper {
 				cl.setName(rs.getString("contactList_name"));
 				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("owner")));
 				//cl.setShared_status(rs.getBoolean("status"));
-				return cl;
+				// return cl; --> Vector
+				return null;
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -172,7 +174,7 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO ContactList (ID, ContactList_ID) VALUES (?, ?)");
 			stmt.setInt(1, cl.getBo_Id());
 			stmt.setString(2, cl.getName());
-			stmt.setString(3, cl.getOwner()); //Zum Nachprüfen
+			// stmt.setString(3, cl.getOwner()); //Zum NachprÃ¼fen
 			stmt.execute();
 			
 			
@@ -198,7 +200,7 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try{
 			Statement stmt = con.createStatement();
-			//SQL BEFEHL NOCHMAL PRÜFEN
+			//SQL BEFEHL NOCHMAL PRï¿½FEN
 			stmt.executeUpdate("DELETE FROM ContactList Where ContactList_User = "+ user);
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -223,7 +225,7 @@ public class ContactListMapper {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			//SQL BEFEHL NOCHMAL NACHPRÜFEN
+			//SQL BEFEHL NOCHMAL NACHPRï¿½FEN
 			stmt.executeUpdate("CREATE TABLE ContactList (ID INT(10) NOT NULL, Name VARCHAR(255) NOT NULL, PRIMARY KEY(ID));");
 		
 		} catch (SQLException e) {
@@ -244,7 +246,7 @@ public class ContactListMapper {
 		
 	}
 	
-	//METHODE KLÄREN
+	//METHODE KLï¿½REN
 	public ContactListMapper findInstance() {
 		// findInstance Mapper
 		return null;

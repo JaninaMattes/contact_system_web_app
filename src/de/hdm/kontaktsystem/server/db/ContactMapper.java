@@ -46,5 +46,10 @@ public class ContactMapper {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Contact findContactById(int int1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	  
 }

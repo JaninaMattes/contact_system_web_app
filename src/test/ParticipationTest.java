@@ -33,7 +33,7 @@ public class ParticipationTest {
 		
 		//Test-Aufgabe des eingefügten Objekts
 		System.out.println(
-			PropertyValueMapper.propertyValueMapper().findByValue("Musterweg", shared)
+			//PropertyValueMapper.propertyValueMapper().findByValue("Musterweg", shared)
 			);
 		
 		

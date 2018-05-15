@@ -78,9 +78,9 @@ public class PropertyValueMapper {
 		        stmt.executeUpdate
 		        ("INSERT INTO propertyvalue (id, property_id, value)"
 		            + " VALUES (" + pv.getBo_Id() + "," 
-		            	+ pv.getContact() + ",'"
-		        		+ pv.getValue() 
-		            + "')");
+		            + pv.getContact() + ",'"
+		        	+ pv.getValue() + "')"
+		            );
 		  	}
 		  
 		  } catch(SQLException e) {
