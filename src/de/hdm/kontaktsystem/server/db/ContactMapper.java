@@ -45,22 +45,17 @@ public class ContactMapper {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
-<<<<<<< HEAD
+
 			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getBo_Id());
-			PropertyValueMapper.propertyValueMapper().deleteBy(contact);
-=======
-			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getId());
-			PropertyValueMapper.propertyValueMapper().deletePropertyOfContact(contact);
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
+			PropertyValueMapper.propertyValueMapper().deleteBy(contact); //TODO: abklären ob der richtige?
+
+
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
+
 	}
-=======
-	}
-	
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
+
 	/**
 	 * Mapper-Methode um Kontakte mit Hilfe der ID zu lï¿½schen
 	 * @param id
@@ -77,7 +72,7 @@ public class ContactMapper {
 	/**
 	 * Mapper-Methode um alle Kontakte eines Users zu lï¿½schen
 	 */
-<<<<<<< HEAD
+
 	public void deleteAllContactsByUser(int user_id) {
 		//TODO:get all contacts und dann durchgehen und löschen
 	         
@@ -128,12 +123,11 @@ public class ContactMapper {
 	             return result;
 	         }
 	    
-=======
+
 	public void deleteAllContacts() {
 		//TODO:get all contacts und dann durchgehen und lï¿½schen
 	}
 	
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 	//Kontakt erstellen
 	public void insertContact(Contact contact) {
 		//TODO:kontaktobjekt in id reinschreiben
@@ -162,11 +156,7 @@ public class ContactMapper {
 		      while (rs.next()) {
 		          Contact contact = new Contact();
 		          contact.setBo_Id(rs.getInt("id"));
-<<<<<<< HEAD
 		          contact.setShared_status(rs.getBoolean("status"));
-=======
-		          contact.setShared_status(rs.getString("status"));
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 		         // contact.setName(rs.get //PropertyValue
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -195,11 +185,7 @@ public class ContactMapper {
 		      
 		      if (rs.next()) {
 		          contact.setBo_Id(rs.getInt("id"));
-<<<<<<< HEAD
 		          contact.setShared_status(rs.getBoolean("status"));
-=======
-		          contact.setShared_status(rs.getString("status"));
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 		          // contact.setName(rs.get //PropertyValue
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -225,13 +211,10 @@ public class ContactMapper {
 		      ResultSet rs = stmt.executeQuery("SELECT name FROM contact WHERE name = " + name);
 		      
 		      if (rs.next()) {
-<<<<<<< HEAD
+
 		    	  contact.setBo_Id(rs.getInt("id"));
 		    	  contact.setShared_status(rs.getBoolean("status"));
-=======
 		          contact.setBo_Id(rs.getInt("id"));
-		          contact.setShared_status(rs.getString("status"));
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 		          // contact.setName(rs.get //PropertyValue
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -266,12 +249,6 @@ public class ContactMapper {
 		    return contact;
 		  }
 		  
-<<<<<<< HEAD
-	  
-=======
-	  
-
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 
 	public PropertyValue getId() {
 		// TODO Auto-generated method stub
