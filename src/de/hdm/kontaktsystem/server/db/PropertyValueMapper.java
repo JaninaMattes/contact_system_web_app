@@ -8,7 +8,6 @@ import java.util.Vector;
 
 import com.google.appengine.api.users.User;
 
-import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -104,7 +103,6 @@ public class PropertyValueMapper {
 		    	  + pv.getValue()
 		          + "\"" 
 		          + "WHERE id=" + pv.getBo_Id()
-		          + "ORDER BY id"
 		          );
 
 		    } 
@@ -239,7 +237,7 @@ public class PropertyValueMapper {
 	  }	  
 	  
 	  
-	  /*
+	  /**
 	   * Anhand der uebergegebenen ID wird das 
 	   * zugehoerige PropertyValue eindeutig identifiziert und zurueckgegeben
 	   */
@@ -282,7 +280,7 @@ public class PropertyValueMapper {
 	   * 2) findAllByParticipation
 	   *********************************************************************/
 	  
-	  /*
+	  /**
 	   * Alle fuer Benutzer zugaenglichen PropertyValues (Participant und Ownership)
 	   *  werden gesucht, in einen Vector gespeichert und zurueckgegeben
 	   */
@@ -323,7 +321,7 @@ public class PropertyValueMapper {
 		}
 	  
 	  
-	  	/*
+	  	/**
 	  	 * Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen 
 	  	 * werden anhand ihrer Auspraegungswerte gesucht und zurueckgegeben
 	  	 */
@@ -361,7 +359,7 @@ public class PropertyValueMapper {
 				  
 			  }
 		
-		/*
+		/**
 		 * Alle fuer den Benutzer in der Applikation zugaenglichen 
 		 * Auspraegungen werden anhand ihrer zugehoerigen Eigenschaften gesucht und zurueckgegeben
 		 */
@@ -402,7 +400,7 @@ public class PropertyValueMapper {
 			  
 		  }
 		
-		/*
+		/**
 		 * Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen (selbst erstellt 
 		 * oder Teilhaberschaft freigegeben) werden anhand 
 		 * ihres Status gesucht und die Ergebnisse zurueckgegeben
@@ -442,7 +440,7 @@ public class PropertyValueMapper {
 			  return propValueResult;
 	}
 		
-		/*
+		/**
 		 * Aufruf der Auspraegungen anhand ihrer zugeordneten Kontakte
 		 */
 		
@@ -489,7 +487,7 @@ public class PropertyValueMapper {
 			
 		}
 
-		public Vector<PropertyValue> findAllPropertyValuesByProperty(Property property) {
+		public Vector<PropertyValue> findByProperty(Property property) {
 			// TODO Auto-generated method stub
 			return null;
 		}
