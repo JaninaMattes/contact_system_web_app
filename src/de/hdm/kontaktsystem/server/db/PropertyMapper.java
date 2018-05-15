@@ -317,22 +317,7 @@ public class PropertyMapper {
           }
           return null;
       }
-     
-      /**
-       * Suchen eines Eigenschaft Objekts innerhalb der DB anhand derer Primärschlüssel ID.
-       * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
-       *
-       * @param user ist das User Objekt des Nutzers.
-       * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
-       * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
-       */
-      
-     
-      public Property findPropertyByUser(User user) {
-          //TODO: Überprüfen ob die Google ID hier der richtige Parameter ist
-        return this.findPropertyByID(user.getGoogleID());        
-      }
-     
+         
       
       /**
        * Suchen eines oder mehrerer Eigenschaft Objekte innerhalb der DB anhand derer Beschreibung.
@@ -344,10 +329,9 @@ public class PropertyMapper {
        */
      
      
-      public Vector <Property> findPropertyByDescription(String description) {
+      public Vector <Property> findByDescription(String description) {
          
           Vector <Property> propertyResult = new Vector <Property>();    
-          Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
          
           Connection con = DBConnection.connection();
           Statement stmt = null;
@@ -356,12 +340,20 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT ID, Description FROM Property "
-                      + "WHERE Description = " + description + " ORDER BY ID");
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
+                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
+                    + "Property.ID, Property.Description"
+                    + "PropertyValue.ID, PropertyValue.Value"
+                    + "FROM BusinessObject"
+                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
+                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
+                    + "WHERE Property.Description =" + description 
+                    + "ORDER BY Property.Description");
              
               while (rs.next()) {
                  
-                  Property property = new Property();                        
+                  Property property = new Property(); 
+                  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                                  
                   property.setBo_Id(rs.getInt("ID"));
                   property.setDescription(rs.getString("Description"));
@@ -371,22 +363,20 @@ public class PropertyMapper {
                   property.setModifyDate(rs.getTimestamp("ModificationDate"));
                   property.setShared_status(rs.getBoolean("Status"));
                  
-                  // Auslesen der Eigenschaftsausprägungen einer Eigenschaft
-                  propertyValueResult = this.findPropertyValuesByProperty(property);
-                  property.setPropertyValues(propertyValueResult);
-                 
-                  System.out.println(property.toString());
- 
-                  // Hinzufügen des neuen Objekts zum Ergebnisvektor
-                  propertyResult.addElement(property);
+                  // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
+                  propertyValues = PropertyValueMapper.propertyValueMapper().findAllPropertyValuesByProperty(property);
+                  // Setzen des Eigenschaftsausprägungs Vector
+                  property.setPropertyValues(propertyValues);
                  
                 }
+              
+              return propertyResult;
              
           } catch (SQLException e) {
               e.printStackTrace();
           }
          
-          return propertyResult;
+          return null;
          
       }
    
