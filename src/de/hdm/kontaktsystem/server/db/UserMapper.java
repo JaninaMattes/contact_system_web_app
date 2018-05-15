@@ -74,23 +74,24 @@ public class UserMapper {
 	 */
 	public User getUserById(int id){
 		
+		User u = new User();
 		Connection con = DBConnection.connection();
+		
 		try{
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User WHERE ID = ?");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User WHERE id = ?");
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
-				User u = new User();
 				u.setGoogleID(rs.getInt("ID"));
-				u.setGMail(rs.getString("g_mail"));
+				u.setGMail(rs.getString("g_token"));
 				// u.setContact(ContactMapper.contactMapper().getContactByID(rs.getInt("contactID")));
-				return u;
+				
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		
-		return null;
+		return u;
 	}
 	
 	/**
@@ -167,7 +168,7 @@ public class UserMapper {
 	public void insertUser(User user){
 		Connection con = DBConnection.connection();
 		try{
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_mail) VALUES (?, ?)");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_token) VALUES (?, ?)");
 			stmt.setInt(1, user.getGoogleID());
 			stmt.setString(2, user.getGMail());
 			stmt.execute();
