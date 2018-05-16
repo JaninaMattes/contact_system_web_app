@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
+import de.hdm.kontaktsystem.shared.bo.Property;
 
 public class BusinessObjectMapper implements Serializable {
 	
@@ -68,6 +69,11 @@ public class BusinessObjectMapper implements Serializable {
 				e.printStackTrace();
 			}
 	  }
+
+	public void deleteBusinessObject(BusinessObject bo) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	  
 	  

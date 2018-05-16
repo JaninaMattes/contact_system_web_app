@@ -61,7 +61,7 @@ public class PropertyValueMapper {
 			  pv.setValue(pv.getValue());
 			  pv.setCreationDate(pv.getCreationDate());
 			  pv.setShared_Status(true);
-			  pv.setUser_ID(1);
+			  pv.setBo_Id(1);
 
 		        stmt = con.createStatement();
 		        
@@ -71,7 +71,7 @@ public class PropertyValueMapper {
 		            + " VALUES (" + pv.getBo_Id() + "," 
 		            + pv.getCreationDate() + "," 
 		            + pv.getShared_Status() + "," 
-		            + pv.getUser_ID() + ")"
+		            + pv.getBo_Id() + ")"
 		            );
 
 		        // Einfügeoperation in propertyvalue erfolgt

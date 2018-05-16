@@ -6,12 +6,9 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
 <!-- Servlets -->
-<<<<<<< HEAD
+
  <!--  TODO: Ausformulieren der Servlets muss noch erledigt werden -->
-=======
- 
- <!--  TODO: Ausformulieren der Servlets -->
->>>>>>> d7f1bb2adcc228e3fdb225b4b9c4fe2d4d9303cc
+
  
   <servlet>
     <servlet-name>contactSystemServlet</servlet-name>
