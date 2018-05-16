@@ -1,5 +1,7 @@
 package test;
 
+import java.util.Vector;
+
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
@@ -10,6 +12,8 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class PropertyMapperTest {
 	
 	public static void main(String args[]) {
+		
+		Vector <Property> testProp = new Vector <Property>();
 		
 		User user = new User();	
 		Contact contact = new Contact();
@@ -39,7 +43,17 @@ public class PropertyMapperTest {
 		contactList.setName("Friendlist");
 		
 		
-		PropertyMapper.propertyMapper().insert(property);
+		// PropertyMapper.propertyMapper().insert(property);
+		
+		// PropertyMapper.propertyMapper().deleteById(90); --> Noch einmal testen
+		
+		//testProp = PropertyMapper.propertyMapper().findAll(); // --> Rückgabewert ist leer
+		
+		
+		//System.out.println(testProp);
+		// System.out.println(PropertyMapper.propertyMapper().findAll());
+		
+		System.out.println(PropertyMapper.propertyMapper().findByDescription("Name"));
 		
 	}
 

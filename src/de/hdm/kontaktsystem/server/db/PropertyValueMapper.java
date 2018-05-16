@@ -52,11 +52,14 @@ public class PropertyValueMapper {
 		  stmt = con.createStatement();		  
 		  ResultSet rs1 = stmt.executeQuery(
 				  "SELECT MAX(bo_id) AS maxid "
-		          + "FROM businessobject"
+		          + "FROM BusinessObject"
 				  );
 		  
 		  if (rs1.next()) {
 			 
+			  Property p = new Property();
+			  p = pv.getProp();
+			  
 			  pv.setBo_Id(rs1.getInt("maxid") + 1);
 			  pv.setValue(pv.getValue());
 			  pv.setCreationDate(pv.getCreationDate());
@@ -64,23 +67,27 @@ public class PropertyValueMapper {
 			  pv.setBo_Id(1);
 
 		        stmt = con.createStatement();
-		        
+		      
 		     // Einfügeoperation in businessobject erfolgt
 		        stmt.executeUpdate
-		        ("INSERT INTO businessobject (bo_id, creationDate, status, user_id)"
+		        ("INSERT INTO BusinessObject (bo_id, creationDate, status, user_id)"
 		            + " VALUES (" + pv.getBo_Id() + "," 
 		            + pv.getCreationDate() + "," 
 		            + pv.getShared_Status() + "," 
 		            + pv.getBo_Id() + ")"
 		            );
+		     
+		        
+		        BusinessObjectMapper.businessObjectMapper().insert(pv);
 
 		        // Einfügeoperation in propertyvalue erfolgt
 		        stmt.executeUpdate
-		        ("INSERT INTO propertyvalue (id, property_id, value)"
+		        ("INSERT INTO PropertyValue (id, property_id, value)"
 		            + " VALUES (" + pv.getBo_Id() + "," 
-		            	+ pv.getContact() + ",'"
-		        		+ pv.getValue() 
-		            + "')");
+		            + p.getBo_Id() + ",'"
+		        	+ pv.getValue() + "')"
+		            );
+
 		  	}
 		  
 		  } catch(SQLException e) {
@@ -492,6 +499,11 @@ public class PropertyValueMapper {
 		public Vector<PropertyValue> findAllPropertyValuesByProperty(Property property) {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		public void deleteByContactId(int id) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 		
