@@ -1,6 +1,7 @@
 package de.hdm.kontaktsystem.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -43,18 +44,16 @@ public class PropertyValueMapper {
 		  BusinessObjectMapper.businessObjectMapper().insert(pv);
 		  
 		  Connection con = DBConnection.connection();
-		  Statement stmt = null;
-		 
 
 
 		  try {
 		        // Einfügeoperation in propertyvalue erfolgt
-		        stmt.executeUpdate
-		        ("INSERT INTO PropertyValue (id, property_id, value)"
-		            + " VALUES (" + pv.getBo_Id() + "," 
-		            + pv.getProp().getBo_Id() + ",'"
-		        	+ pv.getValue() + "')"
-		            );
+			  PreparedStatement stmt = con.prepareStatement
+		        ("INSERT INTO PropertyValue (id, property_id, value) VALUES (?, ?, ?)");
+		        	stmt.setInt(1, pv.getBo_Id());
+		        	stmt.setInt(2, pv.getProp().getBo_Id());
+		        	stmt.setString(3, pv.getValue());
+		        	stmt.execute();
 
 		  
 		  } catch(SQLException e) {
@@ -74,16 +73,11 @@ public class PropertyValueMapper {
 		  
 		  try {
 		      stmt = con.createStatement();
-
-		      /*************************************************************
-		       * UPDATE BusinessObject Tabelle!!
-		       * Set Property_Id
-		       *************************************************************/
 		      
 		      
-		      stmt.executeUpdate("UPDATE propertyvalue " + "SET value=\"" 
+		      stmt.executeUpdate("UPDATE propertyvalue " + "SET value='" 
 		    	  + pv.getValue()
-		          + "\"" 
+		          + "'" 
 		          + "WHERE id=" + pv.getBo_Id()
 		          + "ORDER BY id"
 		          );
