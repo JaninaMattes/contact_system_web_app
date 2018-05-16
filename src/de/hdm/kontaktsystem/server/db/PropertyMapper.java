@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.kontaktsystem.shared.bo.BusinessObject;
-import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -446,7 +444,7 @@ public class PropertyMapper {
        * @param id ist der Primärschlüssel, des aus der DB zu löschenden "Objektes"
        */
      
-      public void deletePropertyByPropertyID(int property_id) {
+      public void deleteByPropertyID(int property_id) {
          
           Property property = null;
           PropertyValue propertyValue = null;
@@ -505,7 +503,7 @@ public class PropertyMapper {
        * zu dem die Properties gehören.
        */
      
-      public void deleteAllPropertiesByUser(int user_id) {
+      public void deleteByUserID(int user_id) {
          
          Vector <Property> propertyResult = new Vector <Property>();
          propertyResult = PropertyMapper.propertyMapper().findByUserID(user_id);
@@ -522,7 +520,7 @@ public class PropertyMapper {
        */
            
       public void deleteAllPropertiesByUserID(User user) {
-    	  this.deleteAllPropertiesByUser(user.getGoogleID());
+    	  this.deleteByUserID(user.getGoogleID());
       }
      
       

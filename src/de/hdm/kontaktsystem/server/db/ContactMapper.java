@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 //import com.mysql.jdbc.Connection;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
-import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 /**
  * 
@@ -47,7 +46,7 @@ public class ContactMapper {
 			Statement stmt = con.createStatement();
 
 			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getBo_Id());
-			PropertyValueMapper.propertyValueMapper().deleteBy(contact); //TODO: abklären ob der richtige?
+			PropertyValueMapper.propertyValueMapper().deleteBy(contact); //TODO: abklï¿½ren ob der richtige?
 
 
 		}catch(SQLException e){
@@ -74,7 +73,7 @@ public class ContactMapper {
 	 */
 
 	public void deleteAllContactsByUser(int user_id) {
-		//TODO:get all contacts und dann durchgehen und löschen
+		//TODO:get all contacts und dann durchgehen und lï¿½schen
 	         
 	         Vector <Contact> result = new Vector <Contact>();
 	         result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
