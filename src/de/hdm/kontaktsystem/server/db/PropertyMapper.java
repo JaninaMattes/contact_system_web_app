@@ -1,14 +1,12 @@
 package de.hdm.kontaktsystem.server.db;
 
 import java.sql.Connection;
-
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.kontaktsystem.shared.bo.BusinessObject;
-import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -73,15 +71,13 @@ public class PropertyMapper {
   			stmt = con.createStatement();
   			// Statement ausfüllen und als Query an DB schicken
   			ResultSet rs = stmt.executeQuery(
-  					"SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
-  					+ "BusinessObject.ModificationDate, BusinessObject.Status"
-  					+ "Property.ID, Property.Description, "
-  					+ "PropertyValue.ID, PropertyValue.Value"
-  					+ "FROM BusinessObject,"  
-  					+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
-  					+ "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
-  					+ "WHERE BusinessObject.bo_ID = Property.ID "
-  					+ "ORDER BY Property.Description");
+  					  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, BusinessObject.creationDate,"
+  					+ "BusinessObject.modificationDate, BusinessObject.status,"
+  					+ "Property.ID, Property.description, "
+  					+ "FROM BusinessObject"  
+  					+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
+  					+ "WHERE BusinessObject.bo_ID = Property.ID"
+  					+ "ORDER BY BusinessObject.user_ID");
   			
   			while(rs.next()){  				
   				// Vector um Eigenschaftsausprägungen zu speichern
@@ -89,16 +85,16 @@ public class PropertyMapper {
   				
   				Property property = new Property();
   				property.setBo_Id(rs.getInt("bo_id"));
-  				property.setDescription(rs.getString("Description"));
-  				property.setCreationDate(rs.getTimestamp("CreationDate"));
-  				property.setModifyDate(rs.getTimestamp("ModificationDate"));
-  				property.setShared_status(rs.getBoolean("Status"));
+  				property.setDescription(rs.getString("description"));
+  				property.setCreationDate(rs.getTimestamp("creationDate"));
+  				property.setModifyDate(rs.getTimestamp("modificationDate"));
+  				property.setShared_status(rs.getBoolean("status"));
+  				property.setUserId(rs.getInt("user_ID"));
   				
   				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
   				propertyValues = PropertyValueMapper.propertyValueMapper().findAllPropertyValuesByProperty(property);
   				// Setzen des Eigenschaftsausprägungs Vector
-  				property.setPropertyValues(propertyValues); 
-  				
+  				property.setPropertyValues(propertyValues);   				
 
                 // Hinzufügen des neuen Objekts zum Ergebnisvektor
                 propertyResult.addElement(property);
@@ -140,14 +136,15 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
-                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
+                    + "BusinessObject.CreationDate, BusinessObject.ModificationDate, BusinessObject.Status,"
                     + "Property.ID, Property.Description" 
                     + "PropertyValue.ID, PropertyValue.Value "
                     + "FROM BusinessObject" 
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" 
                     + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID" 
-                    + "WHERE BusinessObject.user_ID =" + user_id
+                    + "WHERE BusinessObject.bo_ID = Property.ID"
+                    + "AND BusinessObject.user_ID =" + user_id
                     + "ORDER BY Property.Description");
              
               while (rs.next()) {
@@ -160,6 +157,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("CreationDate"));
                   property.setModifyDate(rs.getTimestamp("ModificationDate"));
                   property.setShared_status(rs.getBoolean("Status"));
+                  property.setUserId(rs.getInt("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findAllPropertyValuesByProperty(property);
@@ -217,13 +215,12 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
-                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
+                    + "BusinessObject.CreationDate, BusinessObject.ModificationDate, BusinessObject.Status,"
                     + "Property.ID, Property.Description"
                     + "PropertyValue.ID, PropertyValue.Value"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
-                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
                     + "WHERE BusinessObject.Status =" + shared_status 
                     + "AND BusinessObject.user_ID =" + user_id
                     + "ORDER BY Property.Description");
@@ -239,6 +236,7 @@ public class PropertyMapper {
               property.setCreationDate(rs.getTimestamp("CreationDate"));
               property.setModifyDate(rs.getTimestamp("ModificationDate"));
               property.setShared_status(rs.getBoolean("Status"));
+              property.setUserId(rs.getInt("user_ID"));
                            
               // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
               propertyValues = PropertyValueMapper.propertyValueMapper().findAllPropertyValuesByProperty(property);
@@ -260,6 +258,8 @@ public class PropertyMapper {
      
     }
    
+    
+    
          
       /**
        * Suchen eines Eigenschaft Objekts innerhalb der DB anhand derer Primärschlüssel ID.
@@ -284,13 +284,12 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
-                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
+                    + " BusinessObject.creationDate, BusinessObject.ModificationDate, BusinessObject.Status, "
                     + "Property.ID, Property.Description"
                     + "PropertyValue.ID, PropertyValue.Value"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
-                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
                     + "WHERE BusinessObject.bo_ID =" + property_id 
                     + "ORDER BY Property.Description");
              
@@ -303,6 +302,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("Status"));
+                  property.setUserId(rs.getInt("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findAllPropertyValuesByProperty(property);
@@ -340,15 +340,14 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
-                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
-                    + "Property.ID, Property.Description"
-                    + "PropertyValue.ID, PropertyValue.Value"
+              ResultSet rs = stmt.executeQuery(
+            		  "SELECT BusinessObject.bo_ID, BusinessObject.creationDate,"
+                    + "BusinessObject.modificationDate, BusinessObject.status,"
+                    + "Property.ID, Property.description"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
-                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
-                    + "WHERE Property.Description =" + description 
-                    + "ORDER BY Property.Description");
+                    + "WHERE Property.description =" + description 
+                    + "ORDER BY Property.ID");
              
               while (rs.next()) {
                  
@@ -362,6 +361,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("CreationDate"));
                   property.setModifyDate(rs.getTimestamp("ModificationDate"));
                   property.setShared_status(rs.getBoolean("Status"));
+                  property.setUserId(rs.getInt("user_ID"));
                  
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findAllPropertyValuesByProperty(property);
@@ -380,37 +380,6 @@ public class PropertyMapper {
          
       }
    
-      /**
-       * Wiederholtes Schreiben eines Objekts in die Datenbank.
-       *
-       * @param property das Eigenschaft (Property) Objekt, das in die DB geschrieben werden soll
-       * @return das als Parameter übergebene Objekt
-       */    
-     
-         
-      public Property updateProperty(Property property){
-          Connection con = DBConnection.connection();
-          Statement stmt = null;
-         
-          try {
-              stmt = con.createStatement();
-              stmt.executeUpdate(
-            	 "UPDATE property " + "SET description" + property.getDescription()       
-                  + "\" "+ "WHERE id=" + property.getBo_Id());
-             
-            }
-              catch (SQLException e) {
-              e.printStackTrace();
-            }
-         
-          /**
-           *  Um eine Analogie zu insert Methode zu wahren wird das
-           *  <code>Property</code> Objekt zurück gegeben
-           * 
-           */  
-            return property;
-          }
-         
      
       /**
        * Löschen der Daten eines <code>Property</code>-Objekts aus der Datenbank.     *
@@ -433,7 +402,7 @@ public class PropertyMapper {
               for (PropertyValue pV : propertyValueResult){
                   PropertyValueMapper.propertyValueMapper().delete(pV);
               }              
-              stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
+              stmt.executeUpdate("DELETE FROM Property " + "WHERE Property.ID=" + property.getBo_Id());
             }
             catch (SQLException e2) {
               e2.printStackTrace();
@@ -446,7 +415,7 @@ public class PropertyMapper {
        * @param id ist der Primärschlüssel, des aus der DB zu löschenden "Objektes"
        */
      
-      public void deletePropertyByPropertyID(int property_id) {
+      public void deleteByPropertyID(int property_id) {
          
           Property property = null;
           PropertyValue propertyValue = null;
@@ -461,15 +430,15 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT id FROM property "
-                      + "WHERE id = " + property_id + " ORDER BY id");
+              ResultSet rs = stmt.executeQuery("SELECT ID FROM Property "
+                      + "WHERE Property.ID = " + property_id + " ORDER BY Property.ID");
              
               if (rs.next()) {
                   property.setBo_Id(rs.getInt("ID"));
-                  property.setDescription(rs.getString("Description"));
-                  property.setCreationDate(rs.getTimestamp("CreationDate"));
-                  property.setModifyDate(rs.getTimestamp("mMdificationDate"));
-                  property.setShared_status(rs.getBoolean("Status"));
+                  property.setDescription(rs.getString("description"));
+                  property.setCreationDate(rs.getTimestamp("creationDate"));
+                  property.setModifyDate(rs.getTimestamp("modificationDate"));
+                  property.setShared_status(rs.getBoolean("status"));
                  
           }
           } catch (SQLException e) {
@@ -489,7 +458,7 @@ public class PropertyMapper {
                   PropertyValueMapper.propertyValueMapper().delete(pV);
               }
               }          
-              stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
+              stmt.executeUpdate("DELETE FROM Property " + "WHERE Property.ID =" + property.getBo_Id());
             }
             catch (SQLException e2) {
               e2.printStackTrace();
@@ -505,7 +474,7 @@ public class PropertyMapper {
        * zu dem die Properties gehören.
        */
      
-      public void deleteAllPropertiesByUser(int user_id) {
+      public void deleteByUserID(int user_id) {
          
          Vector <Property> propertyResult = new Vector <Property>();
          propertyResult = PropertyMapper.propertyMapper().findByUserID(user_id);
@@ -522,7 +491,7 @@ public class PropertyMapper {
        */
            
       public void deleteAllPropertiesByUserID(User user) {
-    	  this.deleteAllPropertiesByUser(user.getGoogleID());
+    	  this.deleteByUserID(user.getGoogleID());
       }
      
       
@@ -537,24 +506,81 @@ public class PropertyMapper {
        */    
      
       public void insert(Property property) {
-    	           
+    	       	  
           Connection con = DBConnection.connection();
-          Statement stmt = null;
-          
+                    
+          // Eintrag in BusinessObjekt Tabelle
           BusinessObjectMapper.businessObjectMapper().insert(property);
              
-          try {
-                stmt = con.createStatement();
- 
-                // die Einfügeoperation erfolgt
-                stmt.executeUpdate("INSERT INTO property (id, description) "
-                    + "VALUES (" + property.getBo_Id() + ",'" + property.getDescription() + "')");
+          try {        	  
+        	  System.out.println("Aufruf Prepared Statement");
+              	// Die Einfügeoperation erfolgt	
+              	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
+    			stmt.setInt(1, property.getBo_Id());
+    			stmt.setString(2, property.getDescription());
+    			stmt.execute();
+    			 
+    			// Die Einfügeoperation für PropertyValue
+    			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
+        	  	propertyValues = property.getPropertyValues();
+        	  
+                // Eintrag in PropertyValue erfolgt
+                for (PropertyValue pV : propertyValues){                 
+                	PropertyValueMapper.propertyValueMapper().insert(pV);
+                	
+                	System.out.println("gelöscht:" + pV);
+                }          	      
+                
                 
           } catch(SQLException e) {
               e.printStackTrace();
-          }      
+          }  
+          
       }
        
        
+      /**
+       * Wiederholtes Schreiben eines Objekts in die Datenbank.
+       *
+       * @param property das Eigenschaft (Property) Objekt, das in die DB geschrieben werden soll
+       * @return das als Parameter übergebene Objekt
+       */    
      
+         
+      public Property updateProperty(Property property){
+          Connection con = DBConnection.connection();
+          
+          BusinessObjectMapper.businessObjectMapper().update(property);
+                   
+          try{
+  			PreparedStatement stmt = con.prepareStatement("UPDATE Property SET description = ? WHERE ID = ?");
+  			stmt.setString(1, property.getDescription());
+  			stmt.setInt(2, property.getBo_Id());
+  			stmt.execute();
+            
+  			// Die Update-peration für PropertyValue
+			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
+    	  	propertyValues = property.getPropertyValues();
+    	  
+            // Update von PropertyValue erfolgt
+            for (PropertyValue pV : propertyValues){                 
+            	PropertyValueMapper.propertyValueMapper().insert(pV);
+            }  
+            
+            }
+              catch (SQLException e) {
+              e.printStackTrace();
+            }
+         
+          /**
+           *  Um eine Analogie zu insert Methode zu wahren wird das
+           *  <code>Property</code> Objekt zurück gegebena
+           * 
+           */  
+            return property;
+
+      }
 }
+         
+      
+     

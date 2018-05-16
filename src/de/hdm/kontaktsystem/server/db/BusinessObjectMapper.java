@@ -48,6 +48,34 @@ public class BusinessObjectMapper implements Serializable {
 	  }
 	  
 	  
+	  public void setStatusTrue(int boID){
+		  Connection con = DBConnection.connection();
+		  try{
+			  PreparedStatement stmt = con.prepareStatement("UPDATE BusinessObject SET status = ? WHERE bo_ID = ?");
+			  stmt.setBoolean(1, true);
+			  stmt.setInt(2, boID);
+			  stmt.executeUpdate();
+			  
+		  }catch(SQLException e){
+			  
+		  }
+	  }
+	  
+	  
+	  public void setStatusFalse(int boID){
+		  Connection con = DBConnection.connection();
+		  try{
+			  PreparedStatement stmt = con.prepareStatement("UPDATE BusinessObject SET status = ? WHERE bo_ID = ?");
+			  stmt.setBoolean(1, false);
+			  stmt.setInt(2, boID);
+			  stmt.executeUpdate();
+			  
+		  }catch(SQLException e){
+			  
+		  }
+	  }
+	  
+	  
 	  /*
 	   * Creates an new row in the BusinessObject table that generates a ID for the BusinessObject 
 	   * and set a Timestamp for the creationDate
@@ -84,6 +112,11 @@ public class BusinessObjectMapper implements Serializable {
 	  }
 
 	public void deleteBusinessObject(BusinessObject bo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteBusinessObjectById(int id) {
 		// TODO Auto-generated method stub
 		
 	}

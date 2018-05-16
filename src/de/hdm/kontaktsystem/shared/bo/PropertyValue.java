@@ -11,7 +11,7 @@ public class PropertyValue extends BusinessObject{
 			
 	private String value = null;
 	private Property prop = null;
-	private Contact contact = null;
+	private int propId;
 	
 	/*
 	 * Beschreibung des Status, dieser ist entweder geteilt 
@@ -22,25 +22,28 @@ public class PropertyValue extends BusinessObject{
 	 */
 	
 	
-
-	private boolean shared_Status = false;	
-	
 	
 	// TODO: Überprüfen ob die Verbindung von Property/PropertyValue so sinnvoll ist
 	
 	
 
+
 	public PropertyValue() {
+		
+	}
+	
+	public PropertyValue(String value, Property prop) {
+		
+		this.value = value;		
+		this.prop = prop;
 		
 	}
 	
 	public PropertyValue(String value) {
 		
 		this.value = value;		
-		prop = new Property(value);
-
+		
 	}
-	
 
 	/*
 	 * Auslesen des Ausprägungswertes
@@ -68,20 +71,13 @@ public class PropertyValue extends BusinessObject{
 		this.prop = prop;
 	}
 	
-	public boolean getShared_Status() {
-		return shared_Status;
-	}
-
-	public void setShared_Status(boolean shared_Status) {
-		this.shared_Status = shared_Status;
-	}
 	
-	public Contact getContact() {
-		return contact;
+	public int getPropId() {
+		return propId;
 	}
 
-	public void setContact(Contact c) {
-		this.contact = contact;
+	public void setPropId(int propId) {
+		this.propId = propId;
 	}
 
 	/*

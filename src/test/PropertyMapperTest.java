@@ -24,7 +24,7 @@ public class PropertyMapperTest {
 		//Vorbereitung der Instanzen
 		
 		user.setContact(contact);	
-		user.setGoogleID(1);
+		user.setGoogleID(1111);
 		user.setGMail("janinaMail@gmail.com");
 		
 		contact.setOwner(user);
@@ -43,17 +43,21 @@ public class PropertyMapperTest {
 		contactList.setName("Friendlist");
 		
 		
-		// PropertyMapper.propertyMapper().insert(property);
+		PropertyMapper.propertyMapper().insert(property); // --> Problem PropertyValue Insert
 		
 		// PropertyMapper.propertyMapper().deleteById(90); --> Noch einmal testen
 		
 		//testProp = PropertyMapper.propertyMapper().findAll(); // --> Rückgabewert ist leer
 		
+		//System.out.println( PropertyMapper.propertyMapper().findAll());
+		
 		
 		//System.out.println(testProp);
-		// System.out.println(PropertyMapper.propertyMapper().findAll());
 		
-		System.out.println(PropertyMapper.propertyMapper().findByDescription("Name"));
+		//System.out.println(PropertyMapper.propertyMapper().findAll());
+		
+		
+		//System.out.println(PropertyMapper.propertyMapper().findByDescription("Name"));
 		
 	}
 

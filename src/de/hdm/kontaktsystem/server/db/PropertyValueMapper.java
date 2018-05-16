@@ -38,64 +38,32 @@ public class PropertyValueMapper {
 	   * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
 	   */
 	  
-	  public void insert(PropertyValue pv) {
+	  public void insert(PropertyValue pv) { 
+		  
+		  BusinessObjectMapper.businessObjectMapper().insert(pv);
+		  
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
-		  
-		  
-		  /**********************************************************************************
-		   * Abruf der MAX ID einmalig aus BusinessObject Tabelle
-		   * Einfügen der neuen Werte aus Objekt in BusinessObject UND PropertyValue Tabelle
-		   ************************************************************************************/
-		  
+		 
+
+
 		  try {
-		  stmt = con.createStatement();		  
-		  ResultSet rs1 = stmt.executeQuery(
-				  "SELECT MAX(bo_id) AS maxid "
-		          + "FROM BusinessObject"
-				  );
-		  
-		  if (rs1.next()) {
-			 
-			  Property p = new Property();
-			  p = pv.getProp();
-			  
-			  pv.setBo_Id(rs1.getInt("maxid") + 1);
-			  pv.setValue(pv.getValue());
-			  pv.setCreationDate(pv.getCreationDate());
-			  pv.setShared_Status(true);
-			  pv.setBo_Id(1);
-
-		        stmt = con.createStatement();
-		      
-		     // Einfügeoperation in businessobject erfolgt
-		        stmt.executeUpdate
-		        ("INSERT INTO BusinessObject (bo_id, creationDate, status, user_id)"
-		            + " VALUES (" + pv.getBo_Id() + "," 
-		            + pv.getCreationDate() + "," 
-		            + pv.getShared_Status() + "," 
-		            + pv.getBo_Id() + ")"
-		            );
-		     
-		        
-		        BusinessObjectMapper.businessObjectMapper().insert(pv);
-
 		        // Einfügeoperation in propertyvalue erfolgt
 		        stmt.executeUpdate
 		        ("INSERT INTO PropertyValue (id, property_id, value)"
 		            + " VALUES (" + pv.getBo_Id() + "," 
-		            + p.getBo_Id() + ",'"
+		            + pv.getProp().getBo_Id() + ",'"
 		        	+ pv.getValue() + "')"
 		            );
 
-		  	}
 		  
 		  } catch(SQLException e) {
 			  e.printStackTrace();
 		  }
 		  
-	  }
-	  
+}
+
+
 	  /*
 	   *  Aktualisierung der Daten fuer PropertyValue Tabelle in DB
 	   */
@@ -107,6 +75,12 @@ public class PropertyValueMapper {
 		  try {
 		      stmt = con.createStatement();
 
+		      /*************************************************************
+		       * UPDATE BusinessObject Tabelle!!
+		       * Set Property_Id
+		       *************************************************************/
+		      
+		      
 		      stmt.executeUpdate("UPDATE propertyvalue " + "SET value=\"" 
 		    	  + pv.getValue()
 		          + "\"" 
@@ -172,6 +146,7 @@ public class PropertyValueMapper {
 		  
 	  }
 	  
+	  
 	  /*
 	   * Anhand der zugehörigen Eigenschaft wird eine Auspraegung gelöscht  
 	   */
@@ -197,6 +172,10 @@ public class PropertyValueMapper {
 	  /*
 	   * Funktion zum Löschen aller Auspraegungen die von User selbst geteilt wurden
 	   */
+	  
+	  /***********************************************************************
+	   * IDENTIFIKATION EIGENE user_id??
+	   ***********************************************************************/
 
 	  public void deleteAllSharedBy(int id) {
 		  Connection con = DBConnection.connection();
@@ -221,6 +200,10 @@ public class PropertyValueMapper {
 	   * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
 	   */
 
+	  /***********************************************************************
+	   * IDENTIFIKATION EIGENE user_id??
+	   ***********************************************************************/
+	  
 	  public void deleteAllSharedByOther(int id) {
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
@@ -370,7 +353,8 @@ public class PropertyValueMapper {
 		
 		/*
 		 * Alle fuer den Benutzer in der Applikation zugaenglichen 
-		 * Auspraegungen werden anhand ihrer zugehoerigen Eigenschaften gesucht und zurueckgegeben
+		 * Auspraegungen werden anhand ihrer zugehoerigen Eigenschaften gesucht und 
+		 * mit dieser (!!!!!!!!!) zurueckgegeben
 		 */
 	  
 		public Vector<PropertyValue> findBy(Property prop) {
