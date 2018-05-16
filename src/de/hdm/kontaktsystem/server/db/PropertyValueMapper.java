@@ -44,7 +44,8 @@ public class PropertyValueMapper {
 		  
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
-		  
+		 
+
 
 		  try {
 		        // Einfügeoperation in propertyvalue erfolgt

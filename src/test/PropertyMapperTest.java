@@ -43,7 +43,7 @@ public class PropertyMapperTest {
 		contactList.setName("Friendlist");
 		
 		
-		// PropertyMapper.propertyMapper().insert(property); --> Problem PropertyValue Insert
+		PropertyMapper.propertyMapper().insert(property); // --> Problem PropertyValue Insert
 		
 		// PropertyMapper.propertyMapper().deleteById(90); --> Noch einmal testen
 		

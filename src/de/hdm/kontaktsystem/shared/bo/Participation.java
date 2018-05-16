@@ -86,6 +86,46 @@ public class Participation implements Serializable {
 	public void setReferenceID(int referenceID) {
 		this.referenceID = referenceID;
 	}
+
+	
+	
+	@Override
+	public String toString() {
+		return "Participation [owner=" + owner + ", participantID=" + participantID + ", referenceID=" + referenceID
+				+ "]";
+	}
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result + participantID;
+		result = prime * result + referenceID;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Participation other = (Participation) obj;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
+		if (participantID != other.participantID)
+			return false;
+		if (referenceID != other.referenceID)
+			return false;
+		return true;
+	}
 	
 	
 	
