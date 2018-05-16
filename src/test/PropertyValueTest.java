@@ -17,16 +17,8 @@ public class PropertyValueTest {
 
 	public static void main(String args[]) {
 			
-		
-	
-		
-		
-		Property p = new Property();
-		PropertyValue pv = new PropertyValue("Hihi", p);
-		PropertyValue pv2 = new PropertyValue("Haha", p);
-		p.setPropertyValue(pv);
-		p.setPropertyValue(pv2);
-		PropertyValueMapper.propertyValueMapper().deleteBy(p);
+		Contact c = new Contact();
+		PropertyValueMapper.propertyValueMapper().deleteBy(c);
 				
 		
 		
