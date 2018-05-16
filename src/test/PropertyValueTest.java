@@ -18,13 +18,17 @@ public class PropertyValueTest {
 	public static void main(String args[]) {
 			
 		
-		Property p = new Property();
-		p.setBo_Id(54);
-		PropertyValue pv = new PropertyValue("Bussenstrasse", p);
-		pv.setBo_Id(12);
+	
 		
-		PropertyValueMapper.propertyValueMapper().insert(pv);
-		PropertyValueMapper.propertyValueMapper().update(pv);
+		
+		Property p = new Property();
+		PropertyValue pv = new PropertyValue("Hihi", p);
+		PropertyValue pv2 = new PropertyValue("Haha", p);
+		p.setPropertyValue(pv);
+		p.setPropertyValue(pv2);
+		PropertyValueMapper.propertyValueMapper().deleteBy(p);
+				
+		
 		
 		 
 		/*
