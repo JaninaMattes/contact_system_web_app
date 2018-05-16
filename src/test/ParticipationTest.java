@@ -26,19 +26,19 @@ public class ParticipationTest {
 			UserMapper.userMapper().getUserByEmail("mail@gmail.com").getGMail()
 			);
 		
-		//Generate PropertyValue (as referenced BusinessObject)
-		PropertyValue shared = new PropertyValue("Musterweg");
-		//insert into table
-		PropertyValueMapper.propertyValueMapper().insert(shared);
-		
-		//Test-Aufgabe des eingefügten Objekts
-		System.out.println(
-			PropertyValueMapper.propertyValueMapper().findByValue("Musterweg", shared)
-			);
+//		//Generate PropertyValue (as referenced BusinessObject)
+//		PropertyValue shared = new PropertyValue("Musterweg");
+//		//insert into table
+//		PropertyValueMapper.propertyValueMapper().insert(shared);
+//		
+//		//Test-Aufgabe des eingefügten Objekts
+//		System.out.println(
+//			PropertyValueMapper.propertyValueMapper().findByValue("Musterweg", shared)
+//			);
 		
 		
 		//Generate Participation
-		Participation participation = new Participation(participant.getGoogleID(), shared.getBo_Id());
+		Participation participation = new Participation(participant.getGoogleID(), 3);
 		//insert Participation into table
 		ParticipationMapper.participationMapper().insertParticipation(participation);
 		
@@ -46,7 +46,6 @@ public class ParticipationTest {
 		System.out.println(
 				ParticipationMapper.participationMapper().getParticipationsByParticipant(participant)
 				);
-		
 		
 	}
 
