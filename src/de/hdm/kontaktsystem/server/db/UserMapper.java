@@ -178,8 +178,7 @@ public class UserMapper {
 			
 		}catch(SQLException e){
 			e.printStackTrace();
-		}
-		
+		}	
 		
 	}
 	
@@ -187,6 +186,7 @@ public class UserMapper {
 	 * Generate new row in the UserTable with the data from the <code>User</code> object
 	 * @param user
 	 */
+	
 	public void insertUser(User user){
 		Connection con = DBConnection.connection();
 		try{
@@ -204,6 +204,9 @@ public class UserMapper {
 	/**
 	 * Generate a new UserTable in the Database
 	 */
+	
+	//TODO: Methode hier Löschen
+	
 	public void initUserTable(){
 		Connection con = DBConnection.connection();
 		Statement stmt;
@@ -221,8 +224,11 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Delete the hole UserTable
+	 * Delete the whole UserTable
 	 */
+	
+	// TODO: Methode hier Löschen 
+	
 	public void deleteUserTable(){
 		Connection con = DBConnection.connection();
 		Statement stmt;

@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 //import com.mysql.jdbc.Connection;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
-import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 /**
  * 
@@ -37,18 +36,20 @@ public class ContactMapper {
 	  
 	  	  
 	/**
-	 *  Mapper-Methoden um einen Kontakt zu löschen
+	 *  Mapper-Methoden um einen Kontakt zu lï¿½schen
 	 * @param contact
 	 */
 	public void deleteContact (Contact contact) {
-		//nur contact löschen.. rest in applogik
+		//nur contact lï¿½schen.. rest in applogik
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
 
 			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getBo_Id());
-			PropertyValueMapper.propertyValueMapper().deleteBy(contact); //löscht PropertyValue des Kontaktes
+			//lÃ¶scht PropertyValue des Kontaktes
+			PropertyValueMapper.propertyValueMapper().deleteBy(contact); 
 			BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(contact);
+
 
 
 		}catch(SQLException e){
@@ -58,7 +59,7 @@ public class ContactMapper {
 	}
 
 	/**
-	 * Mapper-Methode um einen Kontakt mit Hilfe der ID zu löschen
+	 * Mapper-Methode um einen Kontakt mit Hilfe der ID zu lï¿½schen
 	 * @param id
 	 */
 	public void deleteContactByID (int id){
@@ -74,7 +75,7 @@ public class ContactMapper {
 		}
 	}
 	/**
-	 * Mapper-Methode um alle Kontakte eines bestimmten Users mittels der User-ID zu löschen
+	 * Mapper-Methode um alle Kontakte eines bestimmten Users mittels der User-ID zu lï¿½schen
 	 */
 
 	public void deleteAllContactsByUser(int user_id) {
@@ -111,7 +112,7 @@ public class ContactMapper {
 	                     Contact contact = new Contact();
 			          contact.setBo_Id(rs.getInt("id"));
 			          contact.setShared_status(rs.getBoolean("status"));
-			         // contact.setName(rs.get //PropertyValue TODO: Abklären
+			         // contact.setName(rs.get //PropertyValue TODO: Abklï¿½ren
 			          contact.setCreationDate(rs.getTimestamp("creationDate"));
 			          contact.setModifyDate(rs.getTimestamp("modificationDate"));
 	                    
@@ -128,10 +129,10 @@ public class ContactMapper {
 	         }
 	    
 /**
- * Mapper-Methode um alle Kontakte zu löschen
+ * Mapper-Methode um alle Kontakte zu lï¿½schen
  */
 	public void deleteAllContacts() {
-		//TODO:alle Kontakte durchgehen löschen
+		//TODO:alle Kontakte durchgehen lï¿½schen
         Vector <Contact> result = new Vector <Contact>();
         result = ContactMapper.contactMapper().findAllContacts();
       
@@ -186,7 +187,7 @@ public class ContactMapper {
 		          Contact contact = new Contact();
 		          contact.setBo_Id(rs.getInt("id"));
 		          contact.setShared_status(rs.getBoolean("status"));
-		         // contact.setName(rs.get //PropertyValue TODO:Abklären
+		         // contact.setName(rs.get //PropertyValue TODO:Abklï¿½ren
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
 		          		          
@@ -215,7 +216,7 @@ public class ContactMapper {
 		      if (rs.next()) {
 		          contact.setBo_Id(rs.getInt("id"));
 		          contact.setShared_status(rs.getBoolean("status"));
-		          // contact.setName(rs.get //PropertyValue TODO: Abklären
+		          // contact.setName(rs.get //PropertyValue TODO: Abklï¿½ren
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
 		          
@@ -244,7 +245,7 @@ public class ContactMapper {
 		    	  contact.setBo_Id(rs.getInt("id"));
 		    	  contact.setShared_status(rs.getBoolean("status"));
 		          contact.setBo_Id(rs.getInt("id"));
-		          // contact.setName(rs.get //PropertyValue TODO: Abklären
+		          // contact.setName(rs.get //PropertyValue TODO: Abklï¿½ren
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
 		          
