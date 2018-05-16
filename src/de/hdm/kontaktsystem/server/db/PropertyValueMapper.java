@@ -39,59 +39,32 @@ public class PropertyValueMapper {
 	   */
 	  
 	  public void insert(PropertyValue pv) { 
+		  
+		  BusinessObjectMapper.businessObjectMapper().insert(pv);
+		  
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
 		  
-		  /**********************************************************************************
-		   * Einfügen der neuen Werte in BusinessObject Tabelle über BO Mapper
-		   ************************************************************************************/
-		  
 		  try {
-		  stmt = con.createStatement();		  
-		  ResultSet rs1 = stmt.executeQuery(
-				  "SELECT MAX(bo_id) AS maxid "
-		          + "FROM businessobject"
-				  );
-		  
-		  if (rs1.next()) {
-			 
-			  pv.setBo_Id(rs1.getInt("maxid") + 1);
-			  pv.setValue(pv.getValue());
-			  pv.setCreationDate(pv.getCreationDate());
-			  pv.setShared_Status(true);
-			  pv.setUserId(pv.getUserId());
-			  pv.setBo_Id(1);
-
 
 		        stmt = con.createStatement();
 		        
-		     // Einfügeoperation in businessobject erfolgt
+		     // Einfügeoperation erfolgt
 		        stmt.executeUpdate
-		        ("INSERT INTO businessobject (bo_id, creationDate, status, user_id)"
-		            + " VALUES (" + pv.getBo_Id() + "," 
-		            + pv.getCreationDate() + "," 
-		            + pv.getShared_Status() + "," 
-		            + pv.getUserId() + ")"
-		            + pv.getBo_Id() + ")"
-
-		            );
-
-		        // Einfügeoperation in propertyvalue erfolgt
-		        stmt.executeUpdate
-		        ("INSERT INTO propertyvalue (id, property_id, value)"
-		            + " VALUES (" + pv.getBo_Id() + "," 
-		            	+ pv.getProp() + ",'"
-		        		+ pv.getValue() 
-		            + "')");
-		  	}
+		        ("INSERT INTO PropertyValue(ID, property_ID, value) "
+	                    + "VALUES (" + pv.getBo_Id() 
+	                    + pv.getProp().getBo_Id() + ",'" + pv.getValue() 
+	                    + "')"
+	            );
 		  
 		  } catch(SQLException e) {
 			  e.printStackTrace();
 		  }
 		  
-	  }
-	  
+		}
+
+
 	  /*
 	   *  Aktualisierung der Daten fuer PropertyValue Tabelle in DB
 	   */
@@ -173,6 +146,7 @@ public class PropertyValueMapper {
 		    }
 		  
 	  }
+	  
 	  
 	  /*
 	   * Anhand der zugehörigen Eigenschaft wird eine Auspraegung gelöscht  

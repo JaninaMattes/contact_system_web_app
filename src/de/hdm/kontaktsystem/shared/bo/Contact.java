@@ -34,18 +34,13 @@ public class Contact extends BusinessObject {
 	public Contact() {
 		
 	}
-<<<<<<< HEAD
+
 	public Contact(PropertyValue name, String status, User owner) {
-=======
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 
-<<<<<<< HEAD
 	}
-	public Contact(PropertyValue name, User owner) {
 
-=======
+
 	public Contact(PropertyValue name, User owner) {
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 		this.name = name;
 		this.owner = owner;
 	}
