@@ -50,7 +50,7 @@ public class PropertyMapperTest {
 		
 		// PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
 		
-		PropertyMapper.propertyMapper().findAll(); // --> Inner Join Problem
+		// PropertyMapper.propertyMapper().findAll(); // --> Funktioniert
 		
 		//System.out.println( PropertyMapper.propertyMapper().findAll());
 		

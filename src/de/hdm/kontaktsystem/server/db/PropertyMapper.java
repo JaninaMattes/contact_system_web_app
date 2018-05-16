@@ -69,21 +69,24 @@ public class PropertyMapper {
 		  Vector<Property> propertyResult = new Vector<Property>();
 			
 		  Connection con = DBConnection.connection();
-    	  Statement stmt; 
+    	   
     	  
   		try{			
   			// Leeres SQL Statement anlegen
-  			stmt = con.createStatement();
+  			Statement stmt = con.createStatement();
   			
   			// Löschoperation für Property wird aufgerufen              
   			ResultSet rs = stmt.executeQuery( 
-					  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, BusinessObject.creationDate,"
-					+ "BusinessObject.modificationDate, BusinessObject.status,"
-					+ "Property.ID, Property.description"
+					  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, BusinessObject.creationDate, "
+					+ "BusinessObject.modificationDate, BusinessObject.status, "
+					+ "Property.ID, Property.description "
 					+ "FROM BusinessObject "  
 					+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
-					+ "WHERE BusinessObject.bo_ID = Property.ID"
-					+ "ORDER BY BusinessObject.user_ID");
+					+ "WHERE BusinessObject.bo_ID = Property.ID "
+					+ "ORDER BY BusinessObject.user_ID"
+					);
+  			
+  		
   			
   			System.out.println("Aufruf SQL Statement");
   			
@@ -92,14 +95,14 @@ public class PropertyMapper {
   				Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();
   				
   				Property property = new Property();
-  				property.setBo_Id(rs.getInt("bo_id"));
+  				property.setBo_Id(rs.getInt("bo_ID"));
   				property.setDescription(rs.getString("description"));
   				property.setCreationDate(rs.getTimestamp("creationDate"));
   				//property.setModifyDate(rs.getTimestamp("modificationDate"));
   				property.setShared_status(rs.getBoolean("status"));
   				property.setUserId(rs.getInt("user_ID"));
   				
-  				System.out.println("Property wurde erzeugt:" + property);
+  				System.out.println("Property id: " + rs.getInt("bo_ID"));
   				
   				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
   				propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
