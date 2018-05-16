@@ -138,11 +138,9 @@ public class PropertyMapper {
               // Statement ausfüllen und als Query an die DB schicken
               ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
                     + "BusinessObject.CreationDate, BusinessObject.ModificationDate, BusinessObject.Status,"
-                    + "Property.ID, Property.Description" 
-                    + "PropertyValue.ID, PropertyValue.Value "
+                    + "Property.ID, Property.Description," 
                     + "FROM BusinessObject" 
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" 
-                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID" 
                     + "WHERE BusinessObject.bo_ID = Property.ID"
                     + "AND BusinessObject.user_ID =" + user_id
                     + "ORDER BY Property.Description");
