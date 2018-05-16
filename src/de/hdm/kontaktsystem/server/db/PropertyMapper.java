@@ -70,16 +70,15 @@ public class PropertyMapper {
   			// Leeres SQL Statement anlegen
   			stmt = con.createStatement();
   			// Statement ausfüllen und als Query an DB schicken
-  			ResultSet rs = stmt.executeQuery(
-  					"SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
-  					+ "BusinessObject.ModificationDate, BusinessObject.Status"
-  					+ "Property.ID, Property.Description, "
-  					+ "PropertyValue.ID, PropertyValue.Value"
-  					+ "FROM BusinessObject,"  
-  					+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
-  					+ "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
-  					+ "WHERE BusinessObject.bo_ID = Property.ID "
-  					+ "ORDER BY Property.Description");
+  			ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.creationDate,"
+  					+ "BusinessObject.modificationDate, BusinessObject.status,"
+  					+ "Property.ID, Property.description, "
+  					+ "PropertyValue.ID, PropertyValue.value"
+  					+ " FROM ((BusinessObject"  
+  					+ " INNER JOIN Property ON BusinessObject.bo_ID = Property.ID)"
+  					+ " INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID)"
+  					+ " WHERE BusinessObject.bo_ID = Property.ID "
+  					+ " ORDER BY Property.ID");
   			
   			while(rs.next()){  				
   				// Vector um Eigenschaftsausprägungen zu speichern
@@ -87,10 +86,10 @@ public class PropertyMapper {
   				
   				Property property = new Property();
   				property.setBo_Id(rs.getInt("bo_id"));
-  				property.setDescription(rs.getString("Description"));
-  				property.setCreationDate(rs.getTimestamp("CreationDate"));
-  				property.setModifyDate(rs.getTimestamp("ModificationDate"));
-  				property.setShared_status(rs.getBoolean("Status"));
+  				property.setDescription(rs.getString("description"));
+  				property.setCreationDate(rs.getTimestamp("creationDate"));
+  				property.setModifyDate(rs.getTimestamp("modificationDate"));
+  				property.setShared_status(rs.getBoolean("status"));
   				
   				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
   				propertyValues = PropertyValueMapper.propertyValueMapper().findByProperty(property);
@@ -348,13 +347,14 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
-                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
-                    + "Property.ID, Property.Description"
-                    + "PropertyValue.ID, PropertyValue.Value"
-                    + "FROM BusinessObject"
-                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
-                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
+              ResultSet rs = stmt.executeQuery(
+            		  "SELECT BusinessObject.bo_ID, BusinessObject.creationDate, "
+                    + "BusinessObject.modificationDate, BusinessObject.status, "
+                    + "Property.description, "
+                    + "PropertyValue.value "
+                    + "FROM (( BusinessObject "
+                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID) "
+                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID) "
                     + "WHERE BusinessObject.bo_ID =" + property_id 
                     );
              
@@ -404,15 +404,15 @@ public class PropertyMapper {
               // Leeres SQL Statement anlegen  
               stmt = con.createStatement();
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
-                    + "BusinessObject.ModificationDate, BusinessObject.Status, "
-                    + "Property.ID, Property.Description"
-                    + "PropertyValue.ID, PropertyValue.Value"
-                    + "FROM BusinessObject"
-                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
-                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID"
-                    + "WHERE Property.Description =" + description 
-                    + "ORDER BY Property.Description");
+              ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.creationDate,"
+                    + "BusinessObject.modificationDate, BusinessObject.status,"
+                    + "Property.ID, Property.description,"
+                    + "PropertyValue.ID, PropertyValue.value"
+                    + "FROM ((BusinessObject"
+                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID)"
+                    + "INNER JOIN PropertyValue ON BusinessObject.bo_ID = PropertyValue.ID)"
+                    + "WHERE Property.description =" + description 
+                    + "ORDER BY Property.description");
              
               while (rs.next()) {
                  
@@ -543,7 +543,7 @@ public class PropertyMapper {
             		  PropertyValueMapper.propertyValueMapper().delete(pV);
               		}
               }          
-              stmt.executeUpdate("DELETE FROM property " + "WHERE id=" + property.getBo_Id());
+              stmt.executeUpdate("DELETE FROM Property " + "WHERE id=" + property.getBo_Id());
               // Löschen des Eintrags in der BO Tabelle
               BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);      
             }
@@ -606,7 +606,7 @@ public class PropertyMapper {
                 stmt = con.createStatement();
  
                 // die Einfügeoperation erfolgt
-                stmt.executeUpdate("INSERT INTO property (id, description) "
+                stmt.executeUpdate("INSERT INTO Property (id, description) "
                     + "VALUES (" + property.getBo_Id() + ",'" + property.getDescription() + "')");
                 
                 // die zugehörigen Eigenschaftsausprägungen werden ebenfalls in die DB eingefügt
