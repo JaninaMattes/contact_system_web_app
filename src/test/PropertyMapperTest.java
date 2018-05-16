@@ -49,6 +49,8 @@ public class PropertyMapperTest {
 		
 		//testProp = PropertyMapper.propertyMapper().findAll(); // --> Rückgabewert ist leer
 		
+		//System.out.println( PropertyMapper.propertyMapper().findAll());
+		
 		
 		//System.out.println(testProp);
 		

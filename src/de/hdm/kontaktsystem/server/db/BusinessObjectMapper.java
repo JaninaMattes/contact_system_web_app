@@ -37,9 +37,37 @@ public class BusinessObjectMapper implements Serializable {
 	  public void update(BusinessObject bo){
 		  Connection con = DBConnection.connection();
 		  try{
-			  PreparedStatement stmt = con.prepareStatement("UPDATE FROM BusinessObject SET status = ? WHERE bo_ID = ?");
+			  PreparedStatement stmt = con.prepareStatement("UPDATE BusinessObject SET status = ? WHERE bo_ID = ?");
 			  stmt.setBoolean(1, bo.getShared_status());
 			  stmt.setInt(2, bo.getBo_Id());
+			  stmt.executeUpdate();
+			  
+		  }catch(SQLException e){
+			  
+		  }
+	  }
+	  
+	  
+	  public void setStatusTrue(int boID){
+		  Connection con = DBConnection.connection();
+		  try{
+			  PreparedStatement stmt = con.prepareStatement("UPDATE BusinessObject SET status = ? WHERE bo_ID = ?");
+			  stmt.setBoolean(1, true);
+			  stmt.setInt(2, boID);
+			  stmt.executeUpdate();
+			  
+		  }catch(SQLException e){
+			  
+		  }
+	  }
+	  
+	  
+	  public void setStatusFalse(int boID){
+		  Connection con = DBConnection.connection();
+		  try{
+			  PreparedStatement stmt = con.prepareStatement("UPDATE BusinessObject SET status = ? WHERE bo_ID = ?");
+			  stmt.setBoolean(1, false);
+			  stmt.setInt(2, boID);
 			  stmt.executeUpdate();
 			  
 		  }catch(SQLException e){
@@ -84,6 +112,11 @@ public class BusinessObjectMapper implements Serializable {
 	  }
 
 	public void deleteBusinessObject(BusinessObject bo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteBusinessObjectById(int id) {
 		// TODO Auto-generated method stub
 		
 	}
