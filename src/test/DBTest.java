@@ -8,18 +8,21 @@ import java.sql.SQLException;
 import java.util.Random;
 
 import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
+import de.hdm.kontaktsystem.server.db.ContactMapper;
 import de.hdm.kontaktsystem.server.db.DBConnection;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
+import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 public class DBTest {
 	
 	
 	public static void main(String args[]){
-		
+		/*
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -40,7 +43,7 @@ public class DBTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		// Test insert method from BusinessObjectMapper 
 		
 		//BusinessObjectMapper.businessObjectMapper().insert(new Property());
@@ -55,6 +58,9 @@ public class DBTest {
 		
 		*/
 		//UserMapper.userMapper().insertUser(u);
+		PropertyValue c = PropertyValueMapper.propertyValueMapper().findByKey(10);
+		c.setShared_status(true);
+		BusinessObjectMapper.businessObjectMapper().update(c);
 		
 	}
 }
