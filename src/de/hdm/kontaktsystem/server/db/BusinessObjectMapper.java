@@ -74,11 +74,6 @@ public class BusinessObjectMapper implements Serializable {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public void update(BusinessObject bo) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	  
 	  

@@ -19,9 +19,8 @@ public class DBConnection {
 	//TODO: URL mit deren Hilfe die DB angesprochen wird
 	// private static String url = " " Google URL
 	//private static String url = "jdbc:mysql://localhost:3306/it_projekt?user=root&password="; LocalHost
-	//private static String url = "jdbc:mysql://127.0.0.1:3306/it_Projekt?user=JaninaMattes&password=JaninaMattes"; LocalHost
+	 private static String url = "jdbc:mysql://85.183.140.53:8170/ITProjekt?user=ITProjekt&password=ITProjekt"; 
 	
-	private static String url = "jdbc:mysql://85.183.140.53:8170/ITProjekt?user=ITProjekt&password=ITProjekt"; 
 	
 	
 	public static Connection connection() {

@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 //import com.mysql.jdbc.Connection;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 /**
  * 
@@ -44,13 +45,17 @@ public class ContactMapper {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getId());
-			PropertyValueMapper.propertyValueMapper().deletePropertyOfContact(contact);
+
+			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getBo_Id());
+			PropertyValueMapper.propertyValueMapper().deleteBy(contact); //TODO: abklären ob der richtige?
+
+
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
+
 	}
-	
+
 	/**
 	 * Mapper-Methode um Kontakte mit Hilfe der ID zu lï¿½schen
 	 * @param id
@@ -67,6 +72,58 @@ public class ContactMapper {
 	/**
 	 * Mapper-Methode um alle Kontakte eines Users zu lï¿½schen
 	 */
+
+	public void deleteAllContactsByUser(int user_id) {
+		//TODO:get all contacts und dann durchgehen und löschen
+	         
+	         Vector <Contact> result = new Vector <Contact>();
+	         result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
+	       
+	         for (Contact c : result){         
+	        	 ContactMapper.contactMapper().deleteContactByID(c.getBo_Id());
+	              PropertyValueMapper.propertyValueMapper().deletePropertyValue(c.getBo_Id());
+	         }
+	          }      
+	/**
+	 * Mapper-Methode um alle Kontakte eines bestimmten Users zu finden
+	 * @param user_id
+	 * @return
+	 */
+	         public Vector<Contact> findAllContactsByUser(int user_id) {
+	        	 Vector <Contact> result = new Vector<Contact>();
+	             
+	             Connection con = DBConnection.connection();
+	            
+	             try {  
+	                 Statement stmt = con.createStatement();
+	                 ResultSet rs = stmt.executeQuery("SELECT BusinessObject.bo_ID, BusinessObject.CreationDate, "
+	                       + "BusinessObject.ModificationDate, BusinessObject.Status, "
+	                       + "Contact.ID, Contact.name" +
+	                       "FROM BusinessObject" +
+	                       "INNER JOIN Contact ON BusinessObject.bo_ID = Contact.ID" +
+	                       "WHERE BusinessObject.user_ID =" + user_id);
+	                
+	                 while (rs.next()) {
+	                     Contact contact = new Contact();
+			          contact.setBo_Id(rs.getInt("id"));
+			          contact.setShared_status(rs.getBoolean("status"));
+			         // contact.setName(rs.get //PropertyValue
+			          contact.setCreationDate(rs.getTimestamp("creationDate"));
+			          contact.setModifyDate(rs.getTimestamp("modificationDate"));
+	                    
+	                     System.out.println(contact.toString());
+	    
+	                     result.addElement(contact);
+	                    
+	                   }
+	             } catch (SQLException e) {
+	                 e.printStackTrace();
+	             }
+	            
+	             return result;
+	         }
+	    
+
 	public void deleteAllContacts() {
 		//TODO:get all contacts und dann durchgehen und lï¿½schen
 	}
@@ -99,7 +156,7 @@ public class ContactMapper {
 		      while (rs.next()) {
 		          Contact contact = new Contact();
 		          contact.setBo_Id(rs.getInt("id"));
-		          contact.setShared_status(rs.getString("status"));
+		          contact.setShared_status(rs.getBoolean("status"));
 		         // contact.setName(rs.get //PropertyValue
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -128,7 +185,7 @@ public class ContactMapper {
 		      
 		      if (rs.next()) {
 		          contact.setBo_Id(rs.getInt("id"));
-		          contact.setShared_status(rs.getString("status"));
+		          contact.setShared_status(rs.getBoolean("status"));
 		          // contact.setName(rs.get //PropertyValue
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -154,8 +211,10 @@ public class ContactMapper {
 		      ResultSet rs = stmt.executeQuery("SELECT name FROM contact WHERE name = " + name);
 		      
 		      if (rs.next()) {
+
+		    	  contact.setBo_Id(rs.getInt("id"));
+		    	  contact.setShared_status(rs.getBoolean("status"));
 		          contact.setBo_Id(rs.getInt("id"));
-		          contact.setShared_status(rs.getString("status"));
 		          // contact.setName(rs.get //PropertyValue
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
 		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -179,9 +238,9 @@ public class ContactMapper {
 		  try {
 		      Statement stmt = con.createStatement();
 
-		      stmt.executeUpdate("UPDATE contact " + "SET status=\"" + contact.getStatus()
+		      stmt.executeUpdate("UPDATE contact " + "SET status=\"" + contact.getShared_status()
 		          + "\" " + "SET modificationDate=\"" + contact.getModifyDate()
-		          + "\" "+ "WHERE id=" + contact.getId());
+		          + "\" "+ "WHERE id=" + contact.getBo_Id());
 
 		    } 
 		  	  catch (SQLException e) {
@@ -190,8 +249,6 @@ public class ContactMapper {
 		    return contact;
 		  }
 		  
-	  
-
 
 	public PropertyValue getId() {
 		// TODO Auto-generated method stub
