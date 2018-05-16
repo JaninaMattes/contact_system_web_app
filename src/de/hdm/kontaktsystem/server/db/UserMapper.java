@@ -145,9 +145,7 @@ public class UserMapper {
 	 */
 	public void deleteUserById(int id){
 		
-		User user = getUserById(id);
-		
-		ParticipationMapper.participationMapper().deleteParticipationForOwner(user);
+		ParticipationMapper.participationMapper().deleteParticipationForOwnerID(id);;
 		//BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByUser(user);
 		
 		Connection con = DBConnection.connection();
