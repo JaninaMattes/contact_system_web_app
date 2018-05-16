@@ -37,6 +37,7 @@ public class PropertyValueMapper {
 	  
 	  /*
 	   * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
+	   * 
 	   */
 	  
 	  public void insert(PropertyValue pv) { 

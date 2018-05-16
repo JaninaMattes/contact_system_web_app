@@ -97,7 +97,15 @@ public class PropertyValue extends BusinessObject{
 		    }
 		    return false;
 		  }
+
+	 
+/*
+ * public String toString() {
+		return "PropertyValue [value=" + value + ", prop=" + prop + "]";
+	}
 	
+	
+ */
 	
 
 }

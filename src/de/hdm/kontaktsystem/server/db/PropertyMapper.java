@@ -73,7 +73,7 @@ public class PropertyMapper {
   			ResultSet rs = stmt.executeQuery(
   					  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, BusinessObject.creationDate,"
   					+ "BusinessObject.modificationDate, BusinessObject.status,"
-  					+ "Property.ID, Property.description, "
+  					+ "Property.ID, Property.description"
   					+ "FROM BusinessObject"  
   					+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
   					+ "WHERE BusinessObject.bo_ID = Property.ID"
@@ -142,8 +142,8 @@ public class PropertyMapper {
               // Statement ausfüllen und als Query an die DB schicken
               ResultSet rs = stmt.executeQuery(
             		  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
-                    + "BusinessObject.CreationDate, BusinessObject.ModificationDate, BusinessObject.Status,"
-                    + "Property.ID, Property.Description," 
+                    + "BusinessObject.creationDate, BusinessObject.modificationDate, BusinessObject.status,"
+                    + "Property.ID, Property.description" 
                     + "FROM BusinessObject" 
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID" 
                     + "WHERE BusinessObject.bo_ID = Property.ID"
@@ -157,11 +157,11 @@ public class PropertyMapper {
                   Property property = new Property();
                   //Property
                   property.setBo_Id(rs.getInt("bo_ID"));
-                  property.setDescription(rs.getString("Description"));
+                  property.setDescription(rs.getString("description"));
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("CreationDate"));
-                  property.setModifyDate(rs.getTimestamp("ModificationDate"));
-                  property.setShared_status(rs.getBoolean("Status"));
+                  property.setCreationDate(rs.getTimestamp("creationDate"));
+                  property.setModifyDate(rs.getTimestamp("modificationDate"));
+                  property.setShared_status(rs.getBoolean("status"));
                   property.setUserId(rs.getInt("user_ID"));
                   
                   System.out.println(property);
@@ -226,7 +226,6 @@ public class PropertyMapper {
             		  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
                     + "BusinessObject.creationDate, BusinessObject.modificationDate, BusinessObject.status,"
                     + "Property.ID, Property.description"
-                    + "PropertyValue.ID, PropertyValue.value"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
                     + "WHERE BusinessObject.status =" + shared_status 
@@ -241,11 +240,11 @@ public class PropertyMapper {
               Property property = new Property();
              
               property.setBo_Id(rs.getInt("ID"));
-              property.setDescription(rs.getString("Description"));             
+              property.setDescription(rs.getString("description"));             
               // Superklasse Business Object Attribute befüllen
-              property.setCreationDate(rs.getTimestamp("CreationDate"));
-              property.setModifyDate(rs.getTimestamp("ModificationDate"));
-              property.setShared_status(rs.getBoolean("Status"));
+              property.setCreationDate(rs.getTimestamp("creationDate"));
+              property.setModifyDate(rs.getTimestamp("modificationDate"));
+              property.setShared_status(rs.getBoolean("status"));
               property.setUserId(rs.getInt("user_ID"));
               
               System.out.println(property);
@@ -296,9 +295,8 @@ public class PropertyMapper {
               // Statement ausfüllen und als Query an die DB schicken
               ResultSet rs = stmt.executeQuery(
             		  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
-                    + "BusinessObject.creationDate, BusinessObject.modificationDate, BusinessObject.status, "
+                    + "BusinessObject.creationDate, BusinessObject.modificationDate, BusinessObject.status,"
                     + "Property.ID, Property.description"
-                    + "PropertyValue.ID, PropertyValue.value"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
                     + "WHERE BusinessObject.bo_ID =" + property_id 
@@ -368,12 +366,12 @@ public class PropertyMapper {
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                                  
                   property.setBo_Id(rs.getInt("ID"));
-                  property.setDescription(rs.getString("Description"));
+                  property.setDescription(rs.getString("description"));
                  
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("CreationDate"));
-                  property.setModifyDate(rs.getTimestamp("ModificationDate"));
-                  property.setShared_status(rs.getBoolean("Status"));
+                  property.setCreationDate(rs.getTimestamp("creationDate"));
+                  property.setModifyDate(rs.getTimestamp("modificationDate"));
+                  property.setShared_status(rs.getBoolean("status"));
                   property.setUserId(rs.getInt("user_ID"));
                  
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
@@ -423,6 +421,8 @@ public class PropertyMapper {
           	BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);         
       }
      
+      
+      
       /**
        * Löschen der Daten eines <code>Property</code>-Objekts aus der Datenbank.     
        * @param id ist der Primärschlüssel, des aus der DB zu löschenden "Objektes"
@@ -507,7 +507,7 @@ public class PropertyMapper {
           BusinessObjectMapper.businessObjectMapper().insert(property);
              
           try {        	  
-        	  System.out.println("Aufruf Prepared Statement");
+        	    System.out.println("Aufruf Prepared Statement");
               	// Die Einfügeoperation erfolgt	
               	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
     			stmt.setInt(1, property.getBo_Id());
@@ -522,7 +522,7 @@ public class PropertyMapper {
                 for (PropertyValue pV : propertyValues){                 
                 	PropertyValueMapper.propertyValueMapper().insert(pV);
                 	
-                	System.out.println("hinzugefügt:" + pV);
+                	System.out.println("eingefügt:" + pV);
                 }          	      
                 
                 
