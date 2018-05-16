@@ -34,12 +34,13 @@ public class Contact extends BusinessObject {
 	public Contact() {
 		
 	}
-	
+
 	
 	public Contact(PropertyValue name, String status, User owner) {
 
 	}
 	
+
 	public Contact(PropertyValue name, User owner) {
 		this.name = name;
 		this.owner = owner;
