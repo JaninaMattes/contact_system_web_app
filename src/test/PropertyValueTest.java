@@ -22,8 +22,9 @@ public class PropertyValueTest {
 		p.setBo_Id(54);
 		PropertyValue pv = new PropertyValue("Bussenstrasse", p);
 		pv.setBo_Id(12);
-		PropertyValueMapper.propertyValueMapper().insert(pv);
 		
+		PropertyValueMapper.propertyValueMapper().insert(pv);
+		PropertyValueMapper.propertyValueMapper().update(pv);
 		
 		 
 		/*
