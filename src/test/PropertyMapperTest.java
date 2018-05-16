@@ -35,7 +35,6 @@ public class PropertyMapperTest {
 		// normalerweise nur gesetzt, wenn Objekt geteilt wurde
 		property.setShared_status(true);
 		
-		propertyValue.setContact(contact);
 		propertyValue.setProp(property);
 		propertyValue.setValue("Janina");
 		
