@@ -61,7 +61,7 @@ public class PropertyValueMapper {
 			  pv.setValue(pv.getValue());
 			  pv.setCreationDate(pv.getCreationDate());
 			  pv.setShared_Status(true);
-			  pv.setUser_ID(1);
+			  pv.setUserId(pv.getUserId());
 
 		        stmt = con.createStatement();
 		        
@@ -71,14 +71,14 @@ public class PropertyValueMapper {
 		            + " VALUES (" + pv.getBo_Id() + "," 
 		            + pv.getCreationDate() + "," 
 		            + pv.getShared_Status() + "," 
-		            + pv.getUser_ID() + ")"
+		            + pv.getUserId() + ")"
 		            );
 
 		        // Einfügeoperation in propertyvalue erfolgt
 		        stmt.executeUpdate
 		        ("INSERT INTO propertyvalue (id, property_id, value)"
 		            + " VALUES (" + pv.getBo_Id() + "," 
-		            	+ pv.getContact() + ",'"
+		            	+ pv.getProp() + ",'"
 		        		+ pv.getValue() 
 		            + "')");
 		  	}
@@ -100,6 +100,12 @@ public class PropertyValueMapper {
 		  try {
 		      stmt = con.createStatement();
 
+		      /*************************************************************
+		       * UPDATE BusinessObject Tabelle!!
+		       * Set Property_Id
+		       *************************************************************/
+		      
+		      
 		      stmt.executeUpdate("UPDATE propertyvalue " + "SET value=\"" 
 		    	  + pv.getValue()
 		          + "\"" 
@@ -190,6 +196,10 @@ public class PropertyValueMapper {
 	  /*
 	   * Funktion zum Löschen aller Auspraegungen die von User selbst geteilt wurden
 	   */
+	  
+	  /***********************************************************************
+	   * IDENTIFIKATION EIGENE user_id??
+	   ***********************************************************************/
 
 	  public void deleteAllSharedBy(int id) {
 		  Connection con = DBConnection.connection();
@@ -214,6 +224,10 @@ public class PropertyValueMapper {
 	   * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
 	   */
 
+	  /***********************************************************************
+	   * IDENTIFIKATION EIGENE user_id??
+	   ***********************************************************************/
+	  
 	  public void deleteAllSharedByOther(int id) {
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
