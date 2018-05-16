@@ -513,7 +513,7 @@ public class PropertyMapper {
           BusinessObjectMapper.businessObjectMapper().insert(property);
              
           try {        	  
-
+        	  System.out.println("Aufruf Prepared Statement");
               	// Die Einfügeoperation erfolgt	
               	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
     			stmt.setInt(1, property.getBo_Id());
@@ -527,12 +527,15 @@ public class PropertyMapper {
                 // Eintrag in PropertyValue erfolgt
                 for (PropertyValue pV : propertyValues){                 
                 	PropertyValueMapper.propertyValueMapper().insert(pV);
+                	
+                	System.out.println("gelöscht:" + pV);
                 }          	      
                 
                 
           } catch(SQLException e) {
               e.printStackTrace();
-          }      
+          }  
+          
       }
        
        
@@ -546,13 +549,24 @@ public class PropertyMapper {
          
       public Property updateProperty(Property property){
           Connection con = DBConnection.connection();
+          
+          BusinessObjectMapper.businessObjectMapper().update(property);
                    
           try{
   			PreparedStatement stmt = con.prepareStatement("UPDATE Property SET description = ? WHERE ID = ?");
   			stmt.setString(1, property.getDescription());
   			stmt.setInt(2, property.getBo_Id());
   			stmt.execute();
-             
+            
+  			// Die Update-peration für PropertyValue
+			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
+    	  	propertyValues = property.getPropertyValues();
+    	  
+            // Update von PropertyValue erfolgt
+            for (PropertyValue pV : propertyValues){                 
+            	PropertyValueMapper.propertyValueMapper().insert(pV);
+            }  
+            
             }
               catch (SQLException e) {
               e.printStackTrace();
@@ -560,7 +574,7 @@ public class PropertyMapper {
          
           /**
            *  Um eine Analogie zu insert Methode zu wahren wird das
-           *  <code>Property</code> Objekt zurück gegeben
+           *  <code>Property</code> Objekt zurück gegebena
            * 
            */  
             return property;

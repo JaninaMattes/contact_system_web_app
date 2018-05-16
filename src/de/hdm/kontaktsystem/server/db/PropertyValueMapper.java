@@ -69,8 +69,8 @@ public class PropertyValueMapper {
 		        stmt = con.createStatement();
 		      
 		     // Einfügeoperation in businessobject erfolgt
-		        stmt.executeUpdate
-		        ("INSERT INTO BusinessObject (bo_ID, creationDate, status, user_ID)"
+		        stmt.executeUpdate(
+		        	"INSERT INTO BusinessObject (bo_ID, creationDate, status, user_ID)"
 		            + " VALUES (" + pv.getBo_Id() + "," 
 		            + pv.getCreationDate() + "," 
 		            + pv.getShared_Status() + "," 

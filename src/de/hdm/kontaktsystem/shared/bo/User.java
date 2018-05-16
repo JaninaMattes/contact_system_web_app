@@ -76,4 +76,40 @@ public class User {
 		this.userContact = contact;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((gMail == null) ? 0 : gMail.hashCode());
+		result = prime * result + googleID;
+		result = prime * result + ((userContact == null) ? 0 : userContact.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (gMail == null) {
+			if (other.gMail != null)
+				return false;
+		} else if (!gMail.equals(other.gMail))
+			return false;
+		if (googleID != other.googleID)
+			return false;
+		if (userContact == null) {
+			if (other.userContact != null)
+				return false;
+		} else if (!userContact.equals(other.userContact))
+			return false;
+		return true;
+	}
+
+	
+	
 }
