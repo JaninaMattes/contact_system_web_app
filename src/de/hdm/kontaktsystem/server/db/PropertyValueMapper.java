@@ -105,6 +105,8 @@ public class PropertyValueMapper {
 	  
 	  public void deleteBy(int id) {
 		  
+		  // BusinessObjectMapper.businessObjectMapper().update(id);
+		  
 		  Connection con = DBConnection.connection();
 		  
 		  try {
@@ -127,14 +129,17 @@ public class PropertyValueMapper {
 	  
 	  public void deleteBy(Contact c) {
 		   
+		  // BusinessObjectMapper.businessObjectMapper().update(c);
+		  
 		  Connection con = DBConnection.connection();
 
 		  
 		  try {
 			  // Einfügeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement
-		      ("DELETE FROM PropertyValue INNER JOIN Contact ON Contact.ID = ?");
-		      stmt.setInt(1, 31);
+		      ("DELETE FROM PropertyValue "
+		      		+ "INNER JOIN Contact WHERE Contact.ID = ?");
+		      stmt.setInt(1, c.getBo_Id(31));
 		      stmt.execute();
 
 		    }
@@ -180,19 +185,15 @@ public class PropertyValueMapper {
 	   * Funktion zum Löschen aller Auspraegungen die von User selbst geteilt wurden
 	   */
 	  
-	  /***********************************************************************
-	   * IDENTIFIKATION EIGENE user_id??
-	   ***********************************************************************/
 
-	  public void deleteAllSharedBy(int id) {
+	  public void deleteAllSharedBy(User u) {
+		  
 		  Connection con = DBConnection.connection();
-		  Statement stmt = null;
 		  
 		  try {
-		      stmt = con.createStatement();
-		      stmt.executeUpdate
+			  PreparedStatement stmt = con.prepareStatement
 		      ("DELETE FROM propertyvalue INNER JOIN businessobject" 
-		      + " WHERE businessobject.user_id=" + id
+		      + " WHERE businessobject.user_id=" + u
 		      + " AND businessobject.status= TRUE"
 		      );
 
