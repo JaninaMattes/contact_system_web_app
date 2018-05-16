@@ -34,18 +34,14 @@ public class Contact extends BusinessObject {
 	public Contact() {
 		
 	}
-<<<<<<< HEAD
+
+	
 	public Contact(PropertyValue name, String status, User owner) {
-=======
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 
-<<<<<<< HEAD
 	}
-	public Contact(PropertyValue name, User owner) {
+	
 
-=======
 	public Contact(PropertyValue name, User owner) {
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 		this.name = name;
 		this.owner = owner;
 	}
@@ -90,5 +86,48 @@ public class Contact extends BusinessObject {
 	public void setName(PropertyValue name) {
 		this.name = name;
 	}
+
+
+	
+	@Override
+	public String toString() {
+		return "Contact [owner=" + owner + ", id=" + id + ", name=" + name + "]";
+	}
+
+	
+	 /**
+	 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
+	 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
+	 * der ID des Objekts.
+	 * Dies überschreibt die Methode hashCode() der Klasse Object.
+	 * 
+	 */
+ 
+	@Override
+	public int hashCode(){
+		return super.getBo_Id();
+	}
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Contact other = (Contact) obj;
+		if (id != other.id)
+			return false;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
+		return true;
+	}
+	
+	
 	
 }

@@ -69,5 +69,48 @@ public class ContactList extends BusinessObject {
 	}
 
 	
+	
+	@Override
+	public String toString() {
+		return "ContactList [name=" + name + ", owner=" + owner + ", contacts=" + contacts + "]";
+	}
+
+	 /**
+	 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
+	 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
+	 * der ID des Objekts.
+	 * Dies überschreibt die Methode hashCode() der Klasse Object.
+	 * 
+	 */
+ 
+	@Override
+	public int hashCode(){
+		return super.getBo_Id();
+	}
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ContactList other = (ContactList) obj;
+		if (contacts == null) {
+			if (other.contacts != null)
+				return false;
+		} else if (!contacts.equals(other.contacts))
+			return false;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
+		return true;
+	}
+
+	
 
 }

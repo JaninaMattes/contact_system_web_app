@@ -90,7 +90,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Eine Kontaktliste über ihre ID finden
+	 * Eine Kontaktliste ï¿½ber ihre ID finden
 	 * 
 	 * @param id
 	 * @return ContactList
@@ -120,6 +120,7 @@ public class ContactListMapper {
 		return cl;
 	}
 
+	
 	/**
 	 * Alle Kontaktlisten eines Users finden.
 	 * 
@@ -196,6 +197,7 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement("UPDATE ContactList SET contactList_name = ? WHERE ID = ?");
 			stmt.setString(1, cl.getName());
 			stmt.setInt(2, cl.getBo_Id());
+
 			stmt.execute();
 
 		} catch (SQLException e) {
@@ -251,8 +253,10 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
+
 			stmt.executeUpdate("DELETE cl.*, bo.* FROM ContactList cl "
 					+ "INNER JOIN BusinessObject bo ON cl.ID = bo.bo_ID Where bo.user_ID =" + userId);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -266,10 +270,25 @@ public class ContactListMapper {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("DELETE * FROM ContactList");
+
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+	}
+
+	public void initContactListTable() {
+		Connection con = DBConnection.connection();
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			//SQL BEFEHL NOCHMAL NACHPRï¿½FEN
+			stmt.executeUpdate("CREATE TABLE ContactList (ID INT(10) NOT NULL, Name VARCHAR(255) NOT NULL, PRIMARY KEY(ID));");
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
 
 	/**
 	 * Einen Kontakt zur Kontaktliste hinzufügen.
@@ -314,6 +333,7 @@ public class ContactListMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 }
