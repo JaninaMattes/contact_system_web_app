@@ -50,7 +50,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("owner")));
+				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				findContactFromList(cl);
 				contactList.add(cl);
@@ -103,7 +103,7 @@ public class ContactListMapper {
 		try {
 
 			PreparedStatement stmt = con.prepareStatement(
-					"SELECT * FROM ContactList WHERE id = ? LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID");
+					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE id = ?");
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -133,7 +133,7 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					"SELECT * FROM ContactList WHERE user_ID = ? LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID");
+					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE user_ID = ?");
 			stmt.setInt(1, user.getGoogleID());
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -164,7 +164,7 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					"SELECT * FROM ContactList WHERE contactList_name = ? LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID");
+					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID WHERE contactList_name = ?");
 			stmt.setString(1, name);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -184,7 +184,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Name der Liste verändern.
+	 * Name der Liste verï¿½ndern.
 	 * 
 	 * @param cl
 	 */
@@ -228,7 +228,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Eine Kontaktliste löschen, mit der übergebenden ID.
+	 * Eine Kontaktliste lï¿½schen, mit der ï¿½bergebenden ID.
 	 * 
 	 * @param id
 	 */
@@ -244,7 +244,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Es löscht alle Kontakte, welche zu einer userID gehören.
+	 * Es lï¿½scht alle Kontakte, welche zu einer userID gehï¿½ren.
 	 * 
 	 * @param userId
 	 */
@@ -263,7 +263,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Alle Kontaktlisten löschen.
+	 * Alle Kontaktlisten lï¿½schen.
 	 */
 	public void deleteAllContactList() {
 		Connection con = DBConnection.connection();
@@ -277,7 +277,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Einen Kontakt zur Kontaktliste hinzufügen.
+	 * Einen Kontakt zur Kontaktliste hinzufï¿½gen.
 	 * 
 	 * @param cl
 	 * @param c
@@ -292,7 +292,7 @@ public class ContactListMapper {
 					.prepareStatement("INSERT INTO Contact_ContactList (Contact_ID, ContactList_ID) VALUES (?, ?)");
 			stmt.setInt(1, c.getBo_Id());
 			stmt.setInt(2, cl.getBo_Id());
-			stmt.execute();
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
