@@ -1,7 +1,7 @@
 package de.hdm.kontaktsystem.server.db;
 
 import java.sql.Connection;
-
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -343,7 +343,7 @@ public class PropertyMapper {
               ResultSet rs = stmt.executeQuery(
             		  "SELECT BusinessObject.bo_ID, BusinessObject.creationDate,"
                     + "BusinessObject.modificationDate, BusinessObject.status,"
-                    + "Property.ID, Property.description,"
+                    + "Property.ID, Property.description"
                     + "FROM BusinessObject"
                     + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID"
                     + "WHERE Property.description =" + description 
@@ -380,37 +380,6 @@ public class PropertyMapper {
          
       }
    
-      /**
-       * Wiederholtes Schreiben eines Objekts in die Datenbank.
-       *
-       * @param property das Eigenschaft (Property) Objekt, das in die DB geschrieben werden soll
-       * @return das als Parameter übergebene Objekt
-       */    
-     
-         
-      public Property updateProperty(Property property){
-          Connection con = DBConnection.connection();
-          Statement stmt = null;
-         
-          try {
-              stmt = con.createStatement();
-              stmt.executeUpdate(
-            	 "UPDATE Property " + "SET Property.description" + property.getDescription()       
-                  + "\" "+ "WHERE Property.ID =" + property.getBo_Id());
-             
-            }
-              catch (SQLException e) {
-              e.printStackTrace();
-            }
-         
-          /**
-           *  Um eine Analogie zu insert Methode zu wahren wird das
-           *  <code>Property</code> Objekt zurück gegeben
-           * 
-           */  
-            return property;
-          }
-         
      
       /**
        * Löschen der Daten eines <code>Property</code>-Objekts aus der Datenbank.     *
@@ -539,26 +508,26 @@ public class PropertyMapper {
       public void insert(Property property) {
     	       	  
           Connection con = DBConnection.connection();
-          Statement stmt = null;
-          
+                    
           // Eintrag in BusinessObjekt Tabelle
           BusinessObjectMapper.businessObjectMapper().insert(property);
              
           try {        	  
 
-              	stmt = con.createStatement();
-
               	// Die Einfügeoperation erfolgt	
-              	stmt.executeUpdate("INSERT INTO Property (ID, description) "
-                  + "VALUES (" + property.getBo_Id() + ",'" + property.getDescription() + "')");              
-              
-        	  	Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
+              	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
+    			stmt.setInt(1, property.getBo_Id());
+    			stmt.setString(2, property.getDescription());
+    			stmt.execute();
+    			 
+    			// Die Einfügeoperation für PropertyValue
+    			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
         	  	propertyValues = property.getPropertyValues();
         	  
                 // Eintrag in PropertyValue erfolgt
                 for (PropertyValue pV : propertyValues){                 
                 	PropertyValueMapper.propertyValueMapper().insert(pV);
-                }      
+                }          	      
                 
                 
           } catch(SQLException e) {
@@ -567,5 +536,36 @@ public class PropertyMapper {
       }
        
        
+      /**
+       * Wiederholtes Schreiben eines Objekts in die Datenbank.
+       *
+       * @param property das Eigenschaft (Property) Objekt, das in die DB geschrieben werden soll
+       * @return das als Parameter übergebene Objekt
+       */    
+     
+         
+      public Property updateProperty(Property property){
+          Connection con = DBConnection.connection();
+                   
+          try{
+  			PreparedStatement stmt = con.prepareStatement("UPDATE Property SET description = ? WHERE ID = ?");
+  			stmt.setString(1, property.getDescription());
+  			stmt.setInt(2, property.getBo_Id());
+  			stmt.execute();
+             
+            }
+              catch (SQLException e) {
+              e.printStackTrace();
+            }
+         
+          /**
+           *  Um eine Analogie zu insert Methode zu wahren wird das
+           *  <code>Property</code> Objekt zurück gegeben
+           * 
+           */  
+            return property;
+          }
+         
+      
      
 }
