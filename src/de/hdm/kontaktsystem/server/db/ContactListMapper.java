@@ -101,7 +101,7 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			
+
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM ContactList WHERE id = ?");
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
@@ -118,15 +118,16 @@ public class ContactListMapper {
 
 		return cl;
 	}
-	//NOCHMAL PRÜFEN!
+
+	// NOCHMAL PRÜFEN!
 	public Vector<ContactList> findContactListByUser(User user) {
 
 		Connection con = DBConnection.connection();
-		try{
+		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM ContactList WHERE User = ?");
 			stmt.setString(User, user);
 			ResultSet rs = stmt.executeQuery();
-			if(rs.next()){
+			if (rs.next()) {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
@@ -134,117 +135,85 @@ public class ContactListMapper {
 				cl.setShared_status(rs.getBoolean("status"));
 				return cl;
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
-	//NOCHMAL PRÜFEN!
+	// NOCHMAL PRÜFEN!
 	public Vector<ContactList> findContactListByName(String name) {
 		Connection con = DBConnection.connection();
-		try{
+		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM ContactList WHERE name = ?");
 			stmt.setString(1, name);
 			ResultSet rs = stmt.executeQuery();
-			if(rs.next()){
+			if (rs.next()) {
 				ContactList cl = new ContactList();
-				//cl.setBo_Id(rs.getInt("ID"));
+				// cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
 				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("owner")));
-				//cl.setShared_status(rs.getBoolean("status"));
+				// cl.setShared_status(rs.getBoolean("status"));
 				return cl;
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
+
 	public void updateContactList(ContactList cl) {
 		// updateCl Mapper
 	}
 
 	public void insertContactList(ContactList cl) {
 		Connection con = DBConnection.connection();
-		try{
+		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO ContactList (ID, ContactList_ID) VALUES (?, ?)");
 			stmt.setInt(1, cl.getBo_Id());
 			stmt.setString(2, cl.getName());
-			stmt.setString(3, cl.getOwner()); //Zum Nachprüfen
+			stmt.setString(3, cl.getOwner()); // Zum Nachprüfen
 			stmt.execute();
-			
-			
-		}catch(SQLException e){
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void deleteContactListById(int id) {
 		Connection con = DBConnection.connection();
-		try{
+		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM ContactList Where ConactList_ID = "+ id);
-		}catch(SQLException e){
+			stmt.executeUpdate("DELETE FROM ContactList Where ConactList_ID = " + id);
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	
-	
-	
 	public void deleteContactListByUser(User user) {
 		Connection con = DBConnection.connection();
-		try{
+		try {
 			Statement stmt = con.createStatement();
-			//SQL BEFEHL NOCHMAL PRÜFEN
-			stmt.executeUpdate("DELETE FROM ContactList Where ContactList_User = "+ user);
-		}catch(SQLException e){
+			// SQL BEFEHL NOCHMAL PRÜFEN
+			stmt.executeUpdate("DELETE FROM ContactList Where ContactList_User = " + user);
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	
-	
-	
 	public void deleteAllContactList() {
 		Connection con = DBConnection.connection();
-		try{
+		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("DELETE * FROM ContactList");
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void initContactListTable() {
-		Connection con = DBConnection.connection();
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			//SQL BEFEHL NOCHMAL NACHPRÜFEN
-			stmt.executeUpdate("CREATE TABLE ContactList (ID INT(10) NOT NULL, Name VARCHAR(255) NOT NULL, PRIMARY KEY(ID));");
-		
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
-	public void deleteContactListTable() {
-		Connection con = DBConnection.connection();
-		Statement stmt;
-
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate("DROP TABLE ContactList");
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		
-	}
-	
-	//METHODE KLÄREN
+	// METHODE KLÄREN
 	public ContactListMapper findInstance() {
 		// findInstance Mapper
 		return null;
