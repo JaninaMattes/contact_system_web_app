@@ -45,24 +45,22 @@ public class PropertyValueMapper {
 		  Connection con = DBConnection.connection();
 		  Statement stmt = null;
 		  
-		  
-		  try {
 
-		        stmt = con.createStatement();
-		        
-		     // Einfügeoperation erfolgt
+		  try {
+		        // Einfügeoperation in propertyvalue erfolgt
 		        stmt.executeUpdate
-		        ("INSERT INTO PropertyValue(ID, property_ID, value) "
-	                    + "VALUES (" + pv.getBo_Id() 
-	                    + pv.getProp().getBo_Id() + ",'" + pv.getValue() 
-	                    + "')"
-	            );
+		        ("INSERT INTO PropertyValue (id, property_id, value)"
+		            + " VALUES (" + pv.getBo_Id() + "," 
+		            + pv.getProp().getBo_Id() + ",'"
+		        	+ pv.getValue() + "')"
+		            );
+
 		  
 		  } catch(SQLException e) {
 			  e.printStackTrace();
 		  }
 		  
-		}
+}
 
 
 	  /*
@@ -484,6 +482,11 @@ public class PropertyValueMapper {
 		public Vector<PropertyValue> findAllPropertyValuesByProperty(Property property) {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		public void deleteByContactId(int id) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 		

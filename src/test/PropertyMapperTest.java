@@ -1,5 +1,7 @@
 package test;
 
+import java.util.Vector;
+
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
@@ -11,6 +13,8 @@ public class PropertyMapperTest {
 	
 	public static void main(String args[]) {
 		
+		Vector <Property> testProp = new Vector <Property>();
+		
 		User user = new User();	
 		Contact contact = new Contact();
 		Property property = new Property();
@@ -20,7 +24,7 @@ public class PropertyMapperTest {
 		//Vorbereitung der Instanzen
 		
 		user.setContact(contact);	
-		user.setGoogleID(1);
+		user.setGoogleID(1111);
 		user.setGMail("janinaMail@gmail.com");
 		
 		contact.setOwner(user);
@@ -39,7 +43,21 @@ public class PropertyMapperTest {
 		contactList.setName("Friendlist");
 		
 		
-		PropertyMapper.propertyMapper().insert(property);
+		// PropertyMapper.propertyMapper().insert(property); --> Problem PropertyValue Insert
+		
+		// PropertyMapper.propertyMapper().deleteById(90); --> Noch einmal testen
+		
+		//testProp = PropertyMapper.propertyMapper().findAll(); // --> Rückgabewert ist leer
+		
+		//System.out.println( PropertyMapper.propertyMapper().findAll());
+		
+		
+		//System.out.println(testProp);
+		
+		//System.out.println(PropertyMapper.propertyMapper().findAll());
+		
+		
+		//System.out.println(PropertyMapper.propertyMapper().findByDescription("Name"));
 		
 	}
 

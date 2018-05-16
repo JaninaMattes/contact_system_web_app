@@ -126,6 +126,10 @@ public class UserMapper {
 	 */
 	public void deleteAllUsers(){
 		
+
+		ParticipationMapper.participationMapper().deleteAllParticipations();
+		//BusinessObjectMapper.businessObjectMapper().deleteAllBusinessObjects();
+		
 		Connection con = DBConnection.connection();
 		try{
 			Statement stmt = con.createStatement();
@@ -140,10 +144,16 @@ public class UserMapper {
 	 * @param id
 	 */
 	public void deleteUserById(int id){
+		
+		User user = getUserById(id);
+		
+		ParticipationMapper.participationMapper().deleteParticipationForOwner(user);
+		//BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByUser(user);
+		
 		Connection con = DBConnection.connection();
 		try{
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM User Where user_ID = "+ id);
+			stmt.executeUpdate("DELETE FROM User WHERE ID = "+ id);
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -158,6 +168,17 @@ public class UserMapper {
 		 * There is nothing to update at this time, because the Google-Data (Email, ID) don't change.
 		 * Possible usage: Update Profile Image, use Nickname, give the User possibility to customise GUI (Color, ...)
 		 */
+		Connection con = DBConnection.connection();
+		try{
+			PreparedStatement stmt = con.prepareStatement("UPDATE User SET own_Contact = ? WHERE ID = ?");
+			stmt.setInt(1, user.getContact().getBo_Id());
+			stmt.setInt(2, user.getGoogleID());
+			stmt.execute();
+			
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}	
 		
 	}
 	
@@ -165,10 +186,11 @@ public class UserMapper {
 	 * Generate new row in the UserTable with the data from the <code>User</code> object
 	 * @param user
 	 */
+	
 	public void insertUser(User user){
 		Connection con = DBConnection.connection();
 		try{
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_token) VALUES (?, ?)");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_mail) VALUES (?, ?)");
 			stmt.setInt(1, user.getGoogleID());
 			stmt.setString(2, user.getGMail());
 			stmt.execute();
@@ -182,21 +204,31 @@ public class UserMapper {
 	/**
 	 * Generate a new UserTable in the Database
 	 */
+	
+	//TODO: Methode hier Löschen
+	
 	public void initUserTable(){
 		Connection con = DBConnection.connection();
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
 			// Create new User table
-			stmt.executeUpdate("CREATE TABLE User (ID INT(10) NOT NULL, g_mail VARCHAR(255) NOT NULL, PRIMARY KEY(ID));");
+			stmt.executeUpdate(	"CREATE TABLE User (ID INT(10) NOT NULL, "
+								+ "g_mail VARCHAR(255) NOT NULL, "
+								+ "own_Contact INT(10) NULL, "
+								+ "creationDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, "
+								+ "PRIMARY KEY(ID));");
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
 	/**
-	 * Delete the hole UserTable
+	 * Delete the whole UserTable
 	 */
+	
+	// TODO: Methode hier Löschen 
+	
 	public void deleteUserTable(){
 		Connection con = DBConnection.connection();
 		Statement stmt;
