@@ -54,8 +54,8 @@ public class ParticipationMapper {
   
 	
 	/**
-	 * Get all Participations in the Database
-	 * @return all Participations as Participation-Objects in a Vector
+	 * Zurückgeben aller Teilhaberschaften in der Datenbank
+	 * @return alle Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
 	public Vector<Participation> findAllParticipations(){
 		Connection con = DBConnection.connection();
@@ -93,8 +93,8 @@ public class ParticipationMapper {
 
 	
 	/**
-	 * Get all Participations which refer to Business-Objects, that a given User owns
-	 * @return Participation-Objects in a Vector
+	 * Zurückgeben aller Teilhaberschaften zu Objekten eines gegebenen Users
+	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
 	public Vector<Participation> findParticipationsByOwnerID(int userID) {
 		Connection con = DBConnection.connection();
@@ -128,8 +128,8 @@ public class ParticipationMapper {
 	
 	
 	/**
-	 * Get all Participations that a given User participates in
-	 * @return Participation-Objects in a Vector
+	 * Zurückgeben aller Teilhaberschaften, die mit einem gegebenen User geteilt werden
+	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
 	public Vector<Participation> findParticipationsByParticipantID(int userID){
 		Connection con = DBConnection.connection();
@@ -158,10 +158,10 @@ public class ParticipationMapper {
 	}
 	
 	/**
-	 * Get all Participations that refer to a given Business-Object
-	 * @return Participation-Objects in a Vector
+	 * Zurückgeben aller Teilhaberschaften, die sich auf ein gegebenes BusinessObject beziehen
+	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
-	public Vector<Participation> findParticipationsByContact(BusinessObject businessObject){
+	public Vector<Participation> findParticipationsByBusinessObject(BusinessObject businessObject){
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -200,7 +200,7 @@ public class ParticipationMapper {
 	
 	
 	/**
-	 * Insert a new Participation into the database
+	 * Einfügen einer neuen Teilhaberschaft in die Datenbank
 	 * @param participation
 	 */
 	public void insertParticipation(Participation participation) {
@@ -215,12 +215,12 @@ public class ParticipationMapper {
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
-		//Change Status in BusinessObjectMapper zu geteilt (true)
+		//Change Status in BusinessObjectMapper zu geteilt (true) (Methode UpdateStatus)
 	}
 	
 	
 	/**
-	 * Delete all Participations in the database
+	 * Löschen aller Teilhaberschaften
 	 */
 	public void deleteAllParticipations() {
 		Connection con = DBConnection.connection();
@@ -243,11 +243,11 @@ public class ParticipationMapper {
 //	}
 	
 	/**
-	 * Delete all Participations, which refer to Business-Objects, that a given User owns
+	 * Löschen aller Teilhaberschaften zu Objekten eines gegebenen Users
 	 * @param owner
 	 */
 	public void deleteParticipationForOwnerID(int userID) {
-		Vector<Participation> participations = getParticipationsByOwnerID(userID);
+		Vector<Participation> participations = findParticipationsByOwnerID(userID);
 		
 		Connection con = DBConnection.connection();
 		for(Participation p : participations) {
@@ -263,7 +263,7 @@ public class ParticipationMapper {
 	}
 	
 	/**
-	 * Delete all Participations, that a given User participates in
+	 * Löschen aller Teilhaberschaften, die mit einem gegebenen User geteilt werden
 	 * @param participant
 	 */
 	public void deleteParticipationForParticipantID(int userID) {
@@ -280,7 +280,7 @@ public class ParticipationMapper {
 	}
 	
 	/**
-	 * Delete all Participations, that refer to a given BusinessObject
+	 * Löschen aller Teilhaberschaften, die sich auf ein gegebenes BusinessObject beziehen
 	 * @param businessObject
 	 */
 	public void deleteParticipationForBusinessObject(BusinessObject businessObject) {
@@ -297,43 +297,5 @@ public class ParticipationMapper {
 	}
 	
 	
-	
-	/**
-	 * Generate a new Participation-Table in the database
-	 */
-	public void initParticipationTable() {
-		Connection con = DBConnection.connection();
-		Statement stmt;
-		
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate("CREATE TABLE User_BusinessObject(\r\n" + 
-					"BusinessObject_ID INT (10) NOT NULL,\r\n" + 
-					"User_ID INT (10) NOT NULL,\r\n" + 
-					"PRIMARY KEY(BusinessObject_ID, User_ID),\r\n" + 
-					"FOREIGN KEY(BusinessObject_ID) REFERENCES BusinessObject(bo_ID),\r\n" + 
-					"FOREIGN KEY(User_ID) REFERENCES User(ID)\r\n" + 
-					")");
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-	
-	
-	/**
-	 * Delete the Participation-Table in the database
-	 */
-	public void deleteParticipationTable() {
-		Connection con = DBConnection.connection();
-		Statement stmt;
-		
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate("DROP TABLE User_BusinessObject");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
 }
