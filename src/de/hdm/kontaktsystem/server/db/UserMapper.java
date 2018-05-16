@@ -190,7 +190,7 @@ public class UserMapper {
 	public void insertUser(User user){
 		Connection con = DBConnection.connection();
 		try{
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_token) VALUES (?, ?)");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_mail) VALUES (?, ?)");
 			stmt.setInt(1, user.getGoogleID());
 			stmt.setString(2, user.getGMail());
 			stmt.execute();
