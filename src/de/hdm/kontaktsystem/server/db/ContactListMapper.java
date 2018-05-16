@@ -102,7 +102,8 @@ public class ContactListMapper {
 
 		try {
 
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM ContactList WHERE id = ?");
+			PreparedStatement stmt = con.prepareStatement(
+					"SELECT * FROM ContactList WHERE id = ? LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID");
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -119,61 +120,84 @@ public class ContactListMapper {
 		return cl;
 	}
 
-	public Vector<ContactList> findContactListByUser(User user) {
+	
+	/**
+	 * Alle Kontaktlisten eines Users finden.
+	 * 
+	 * @param user
+	 * @return
+	 */
 
+	public Vector<ContactList> findContactListByUser(User user) {
+		Vector<ContactList> cll = new Vector<ContactList>();
 		Connection con = DBConnection.connection();
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM ContactList WHERE User = ?");
-			stmt.setString(User, user);
+			PreparedStatement stmt = con.prepareStatement(
+					"SELECT * FROM ContactList WHERE user_ID = ? LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID");
+			stmt.setInt(1, user.getGoogleID());
 			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("owner")));
+				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
-				return cl;
+				cll.add(cl);
 			}
+			return cll;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		return cll;
 	}
-	
-	
+
+	/**
+	 * Kontaktlisten durch Namensssuche finden.
+	 * 
+	 * @param name
+	 * @return
+	 */
+
 	public Vector<ContactList> findContactListByName(String name) {
+		Vector<ContactList> cll = new Vector<ContactList>();
 		Connection con = DBConnection.connection();
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM ContactList WHERE name = ?");
+			PreparedStatement stmt = con.prepareStatement(
+					"SELECT * FROM ContactList WHERE contactList_name = ? LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID");
 			stmt.setString(1, name);
 			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				ContactList cl = new ContactList();
-				// cl.setBo_Id(rs.getInt("ID"));
+				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("owner")));
-				// cl.setShared_status(rs.getBoolean("status"));
-				return cl;
+				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("user_ID")));
+				cl.setShared_status(rs.getBoolean("status"));
+				cll.add(cl);
 			}
+			return cll;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		return cll;
 	}
+
+	/**
+	 * Name der Liste verändern.
+	 * 
+	 * @param cl
+	 */
 
 	public void updateContactList(ContactList cl) {
-		// updateCl Mapper
-	}
-
-	public void insertContactList(ContactList cl) {
+		BusinessObjectMapper.businessObjectMapper().update(cl);
 		Connection con = DBConnection.connection();
+
 		try {
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO ContactList (ID, ContactList_ID) VALUES (?, ?)");
-			stmt.setInt(1, cl.getBo_Id());
-			stmt.setString(2, cl.getName());
-			stmt.setString(3, cl.getOwner()); //NachprÃ¼fen
+			PreparedStatement stmt = con.prepareStatement("UPDATE ContactList SET contactList_name = ? WHERE ID = ?");
+			stmt.setString(1, cl.getName());
+			stmt.setInt(2, cl.getBo_Id());
+
 			stmt.execute();
 
 		} catch (SQLException e) {
@@ -181,28 +205,66 @@ public class ContactListMapper {
 		}
 	}
 
+	/**
+	 * Eine Kontaktliste erstellen.
+	 * 
+	 * @param cl
+	 */
+
+	public void insertContactList(ContactList cl) {
+		BusinessObjectMapper.businessObjectMapper().insert(cl);
+		Connection con = DBConnection.connection();
+
+		try {
+			PreparedStatement stmt = con
+					.prepareStatement("INSERT INTO ContactList (ID, contactList_name) VALUES (?, ?)");
+			stmt.setInt(1, cl.getBo_Id());
+			stmt.setString(2, cl.getName());
+			stmt.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Eine Kontaktliste löschen, mit der übergebenden ID.
+	 * 
+	 * @param id
+	 */
+
 	public void deleteContactListById(int id) {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM ContactList Where ConactList_ID = " + id);
+			stmt.executeUpdate("DELETE FROM ContactList Where ID = " + id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void deleteContactListByUser(User user) {
+	/**
+	 * Es löscht alle Kontakte, welche zu einer userID gehören.
+	 * 
+	 * @param userId
+	 */
+
+	public void deleteContactListByUserId(int userId) {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
 
-			// SQL BEFEHL NOCHMAL PRï¿½FEN
-			stmt.executeUpdate("DELETE FROM ContactList Where ContactList_User = " + user);
+			stmt.executeUpdate("DELETE cl.*, bo.* FROM ContactList cl "
+					+ "INNER JOIN BusinessObject bo ON cl.ID = bo.bo_ID Where bo.user_ID =" + userId);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Alle Kontaktlisten löschen.
+	 */
 	public void deleteAllContactList() {
 		Connection con = DBConnection.connection();
 		try {
@@ -214,38 +276,50 @@ public class ContactListMapper {
 		}
 	}
 
-	public void initContactListTable() {
+	/**
+	 * Einen Kontakt zur Kontaktliste hinzufügen.
+	 * 
+	 * @param cl
+	 * @param c
+	 */
+
+	public void addContactToContactlist(ContactList cl, Contact c) {
+
 		Connection con = DBConnection.connection();
-		Statement stmt;
+
 		try {
-			stmt = con.createStatement();
-			//SQL BEFEHL NOCHMAL NACHPRï¿½FEN
-			stmt.executeUpdate("CREATE TABLE ContactList (ID INT(10) NOT NULL, Name VARCHAR(255) NOT NULL, PRIMARY KEY(ID));");
-		
+			PreparedStatement stmt = con
+					.prepareStatement("INSERT INTO Contact_ContactList (Contact_ID, ContactList_ID) VALUES (?, ?)");
+			stmt.setInt(1, c.getBo_Id());
+			stmt.setInt(2, cl.getBo_Id());
+			stmt.execute();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Einen Kontakt aus der Kontaktliste entfernen.
+	 * 
+	 * @param cl
+	 * @param c
+	 */
 
-	public void deleteContactListTable() {
+	public void removeContactFromContactList(ContactList cl, Contact c) {
 		Connection con = DBConnection.connection();
-		Statement stmt;
 
 		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate("DROP TABLE ContactList");
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		
-	}
-	
-	//METHODE KLÃ¤REN
+			PreparedStatement stmt = con
+					.prepareStatement("DELETE FROM Contact_ContactList WHERE Contact_ID = ? AND ContactList_ID = ?");
+			stmt.setInt(1, c.getBo_Id());
+			stmt.setInt(2, cl.getBo_Id());
+			stmt.execute();
 
-	public ContactListMapper findInstance() {
-		// findInstance Mapper
-		return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
