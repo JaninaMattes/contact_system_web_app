@@ -247,7 +247,7 @@ public class ParticipationMapper {
 	 * @param owner
 	 */
 	public void deleteParticipationForOwnerID(int userID) {
-		Vector<Participation> participations = getParticipationsByOwnerID(userID);
+		Vector<Participation> participations = findParticipationsByOwnerID(userID);
 		
 		Connection con = DBConnection.connection();
 		for(Participation p : participations) {
