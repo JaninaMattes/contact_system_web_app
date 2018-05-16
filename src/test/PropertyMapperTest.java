@@ -42,12 +42,15 @@ public class PropertyMapperTest {
 		contactList.setContact(contact);
 		contactList.setName("Friendlist");
 		
+		int property_ID = 901;
 		
 		// PropertyMapper.propertyMapper().insert(property); // --> Funktioniert 
 		
-		PropertyMapper.propertyMapper().deleteByID(901); //--> Noch einmal testen
+		// PropertyMapper.propertyMapper().deleteByID(property_ID); //--> Funktioniert
 		
-		//testProp = PropertyMapper.propertyMapper().findAll(); // --> Rückgabewert ist leer
+		// PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
+		
+		PropertyMapper.propertyMapper().findAll(); // --> Inner Join Problem
 		
 		//System.out.println( PropertyMapper.propertyMapper().findAll());
 		
