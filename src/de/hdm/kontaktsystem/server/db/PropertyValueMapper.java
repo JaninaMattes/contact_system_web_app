@@ -500,6 +500,11 @@ public class PropertyValueMapper {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		public void deleteByContactId(int id) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 		
 }

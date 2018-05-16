@@ -37,7 +37,7 @@ public class ContactMapper {
 	  
 	  	  
 	/**
-	 *  Mapper-Methoden um Kontakte zu lï¿½schen
+	 *  Mapper-Methoden um einen Kontakt zu löschen
 	 * @param contact
 	 */
 	public void deleteContact (Contact contact) {
@@ -57,7 +57,7 @@ public class ContactMapper {
 	}
 
 	/**
-	 * Mapper-Methode um Kontakte mit Hilfe der ID zu lï¿½schen
+	 * Mapper-Methode um einen Kontakt mit Hilfe der ID zu löschen
 	 * @param id
 	 */
 	public void deleteContactByID (int id){
@@ -65,23 +65,23 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("DELETE FROM CONTACT WHERE ID = " + id);
+			 PropertyValueMapper.propertyValueMapper().deleteByContactId(id);
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	/**
-	 * Mapper-Methode um alle Kontakte eines Users zu lï¿½schen
+	 * Mapper-Methode um alle Kontakte eines bestimmten Users mittels der User-ID zu löschen
 	 */
 
 	public void deleteAllContactsByUser(int user_id) {
-		//TODO:get all contacts und dann durchgehen und löschen
 	         
 	         Vector <Contact> result = new Vector <Contact>();
 	         result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
 	       
-	         for (Contact c : result){         
+	         for (Contact c : result){     
 	        	 ContactMapper.contactMapper().deleteContactByID(c.getBo_Id());
-	              PropertyValueMapper.propertyValueMapper().deletePropertyValue(c.getBo_Id());
+	        	 PropertyValueMapper.propertyValueMapper().deleteBy(c);     
 	         }
 	          }      
 	/**
@@ -125,7 +125,9 @@ public class ContactMapper {
 	    
 
 	public void deleteAllContacts() {
-		//TODO:get all contacts und dann durchgehen und lï¿½schen
+		//TODO:alle Kontakte durchgehen löschen
+		Vector <Contact> result = new Vector <Contact>();
+		
 	}
 	
 	//Kontakt erstellen
@@ -198,7 +200,7 @@ public class ContactMapper {
 		  return contact;
 	  }
 	  /**
-	   * Mapper-Methode um einen Kontakt anhand des Namens zu finden
+	   * Mapper-Methode um einen Kontakt durch den Namen zu finden
 	   * @param name
 	   * @return
 	   */
@@ -249,25 +251,35 @@ public class ContactMapper {
 		    return contact;
 		  }
 		  
-
-	public PropertyValue getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Vector <PropertyValue> findAllPropertyValues() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+/**
+ * 
+ * @param user_id
+ * @param shared_status
+ * @return
+ */
 	
-	public PropertyValue findPropertyValueByValue(String value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public Vector <Contact> findByStatus(int user_id, boolean shared_status){
-		// TODO Auto-generated method stub
-				return null;
+	public Contact findContactByStatus(int user_id, boolean shared_status){
+		  Contact contact = new Contact();
+		  Connection con = DBConnection.connection();
+		  
+		  try {	
+			  Statement stmt = con.createStatement();
+		      ResultSet rs = stmt.executeQuery("SELECT id FROM contact WHERE shared_status = " + shared_status);
+		      //SQL-Statement?
+		      
+		      if (rs.next()) {
+		          contact.setBo_Id(rs.getInt("id"));
+		          contact.setShared_status(rs.getBoolean("status"));
+		          // contact.setName(rs.get //PropertyValue
+		          contact.setCreationDate(rs.getTimestamp("creationDate"));
+		          contact.setModifyDate(rs.getTimestamp("modificationDate"));
+		          
+		  }
+		  } catch (SQLException e) {
+			  e.printStackTrace();
+		  } 
+		  
+		  return contact;
 	}
 
 	
