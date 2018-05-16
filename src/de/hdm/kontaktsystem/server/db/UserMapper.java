@@ -83,7 +83,7 @@ public class UserMapper {
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
 				u.setGoogleID(rs.getInt("ID"));
-				u.setGMail(rs.getString("g_token"));
+				u.setGMail(rs.getString("g_mail"));
 				// u.setContact(ContactMapper.contactMapper().getContactByID(rs.getInt("contactID")));
 				
 			}
@@ -145,9 +145,7 @@ public class UserMapper {
 	 */
 	public void deleteUserById(int id){
 		
-		User user = getUserById(id);
-		
-		ParticipationMapper.participationMapper().deleteParticipationForOwner(user);
+		ParticipationMapper.participationMapper().deleteParticipationForOwnerID(id);;
 		//BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByUser(user);
 		
 		Connection con = DBConnection.connection();

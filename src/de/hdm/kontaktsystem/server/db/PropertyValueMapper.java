@@ -37,6 +37,7 @@ public class PropertyValueMapper {
 	  
 	  /*
 	   * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
+	   * 
 	   */
 	  
 	  public void insert(PropertyValue pv) { 
@@ -377,10 +378,10 @@ public class PropertyValueMapper {
 				  stmt = con.createStatement();
 				  // Statement ausfüllen und als Query an die DB schicken
 			      ResultSet rs = stmt.executeQuery
-			    	("SELECT propertyvalue.id, propertyvalue.value"
-			  			  + " FROM propertyvalue INNER JOIN property" 
-			  			  + " WHERE property.id=" + prop.getBo_Id()
-			  			  + " ORDER BY propertyvalue.id"
+			    	("SELECT PropertyValue.id, PropertyValue.value"
+			  			  + " FROM PropertyValue INNER JOIN Property" 
+			  			  + " WHERE Property.id=" + prop.getBo_Id()
+			  			  + " ORDER BY PropertyValue.id"
 			  		);
 			      
 			      while (rs.next()) {

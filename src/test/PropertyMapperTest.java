@@ -24,29 +24,33 @@ public class PropertyMapperTest {
 		//Vorbereitung der Instanzen
 		
 		user.setContact(contact);	
-		user.setGoogleID(1111);
+		user.setGoogleID(1011);
 		user.setGMail("janinaMail@gmail.com");
 		
 		contact.setOwner(user);
 		contact.setName(propertyValue);
 		
-		property.setPropertyValue(propertyValue);
-		property.setDescription("Name");
-		// normalerweise nur gesetzt, wenn Objekt geteilt wurde
-		property.setShared_status(true);
-		
 		propertyValue.setProp(property);
 		propertyValue.setValue("Janina");
+		
+		property.setPropertyValue(propertyValue);
+		property.setDescription("Name");
+		
+		// normalerweise nur gesetzt, wenn Objekt geteilt wurde
+		property.setShared_status(true);	
 		
 		contactList.setContact(contact);
 		contactList.setName("Friendlist");
 		
+		int property_ID = 901;
 		
-		PropertyMapper.propertyMapper().insert(property); // --> Problem PropertyValue Insert
+		// PropertyMapper.propertyMapper().insert(property); // --> Funktioniert 
 		
-		// PropertyMapper.propertyMapper().deleteById(90); --> Noch einmal testen
+		// PropertyMapper.propertyMapper().deleteByID(property_ID); //--> Funktioniert
 		
-		//testProp = PropertyMapper.propertyMapper().findAll(); // --> Rückgabewert ist leer
+		// PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
+		
+		// PropertyMapper.propertyMapper().findAll(); // --> Funktioniert
 		
 		//System.out.println( PropertyMapper.propertyMapper().findAll());
 		
