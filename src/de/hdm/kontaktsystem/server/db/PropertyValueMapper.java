@@ -68,20 +68,19 @@ public class PropertyValueMapper {
 	   */
 	  
 	  public PropertyValue update(PropertyValue pv){
+		  
+		  BusinessObjectMapper.businessObjectMapper().update(pv);
+		  
 		  Connection con = DBConnection.connection();
-		  Statement stmt = null;
 		  
 		  try {
-		      stmt = con.createStatement();
+			  // Einfügeoperation in propertyvalue erfolgt
+		      PreparedStatement stmt = con.prepareStatement
+		      ("UPDATE PropertyValue SET value=? WHERE id= ?");
+		      stmt.setString(1, pv.getValue());
+		      stmt.setInt(2, pv.getBo_Id());
+		      stmt.execute();
 		      
-		      
-		      stmt.executeUpdate("UPDATE propertyvalue " + "SET value='" 
-		    	  + pv.getValue()
-		          + "'" 
-		          + "WHERE id=" + pv.getBo_Id()
-		          + "ORDER BY id"
-		          );
-
 		    } 
 		  	  catch (SQLException e) {
 		      e.printStackTrace();
@@ -105,13 +104,16 @@ public class PropertyValueMapper {
 	   */
 	  
 	  public void deleteBy(int id) {
+		  
 		  Connection con = DBConnection.connection();
-		  Statement stmt = null;
 		  
 		  try {
-		      stmt = con.createStatement();
-		      stmt.executeUpdate("DELETE FROM propertyvalue " + "WHERE id=" + id);
-
+			  // Einfügeoperation in propertyvalue erfolgt
+		      PreparedStatement stmt = con.prepareStatement
+		      ("DELETE FROM PropertyValue WHERE id= ?");
+		      stmt.setInt(1, id);
+		      stmt.execute();
+		      
 		    }
 		    catch (SQLException e) {
 		      e.printStackTrace();
@@ -124,14 +126,16 @@ public class PropertyValueMapper {
 	   */
 	  
 	  public void deleteBy(Contact c) {
+		   
 		  Connection con = DBConnection.connection();
-		  Statement stmt = null;
+
 		  
 		  try {
-		      stmt = con.createStatement();
-		      stmt.executeUpdate
-		      ("DELETE FROM propertyvalue INNER JOIN Contact" 
-		      + "WHERE Contact.id=" + c.getBo_Id());
+			  // Einfügeoperation in propertyvalue erfolgt
+		      PreparedStatement stmt = con.prepareStatement
+		      ("DELETE FROM PropertyValue INNER JOIN Contact ON Contact.ID = ?");
+		      stmt.setInt(1, 31);
+		      stmt.execute();
 
 		    }
 		    catch (SQLException e) {
@@ -146,15 +150,24 @@ public class PropertyValueMapper {
 	   */
 	  
 	  public void deleteBy(Property prop) {
+		  
 		  Connection con = DBConnection.connection();
-		  Statement stmt = null;
 		  
 		  try {
-		      stmt = con.createStatement();
-		      stmt.executeUpdate
-		      ("DELETE FROM propertyvalue INNER JOIN property" 
-		      + "WHERE property.id=" + prop.getBo_Id()
-		      );
+			  
+			  Vector <PropertyValue> propResult = new Vector<PropertyValue>();     
+			  propResult = prop.getPropertyValues();
+              
+              for (PropertyValue pV : propResult) {
+              	  
+			  // Einfügeoperation in propertyvalue erfolgt
+		      PreparedStatement stmt = con.prepareStatement
+		      ("DELETE FROM PropertyValue "
+		      		+ "WHERE PropertyValue.ID = ? AND PropertyValue.property_ID = ?");
+		      stmt.setInt(1, pV.getBo_Id());
+		      stmt.setInt(2, prop.getBo_Id());
+		      stmt.execute();
+              }
 
 		    }
 		    catch (SQLException e) {

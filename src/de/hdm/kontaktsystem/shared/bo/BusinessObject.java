@@ -61,6 +61,13 @@ public class BusinessObject implements Serializable{
 	public int getBo_Id() {
 		return this.bo_id;
 	}
+	
+	/**
+	* Zurückgeben der ID.
+	*/
+	public int getBo_Id(int Bo_id) {
+		return this.bo_id = Bo_id;
+	}
 
 	/**
 	 * Setzen der ID
@@ -68,6 +75,8 @@ public class BusinessObject implements Serializable{
 	public void setBo_Id(int id) {
 		this.bo_id = id;
 	}
+	
+	
 	
 	/**
 	* Zurückgeben der UserID.
