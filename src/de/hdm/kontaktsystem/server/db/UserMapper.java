@@ -83,7 +83,7 @@ public class UserMapper {
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
 				u.setGoogleID(rs.getInt("ID"));
-				u.setGMail(rs.getString("g_token"));
+				u.setGMail(rs.getString("g_mail"));
 				// u.setContact(ContactMapper.contactMapper().getContactByID(rs.getInt("contactID")));
 				
 			}
