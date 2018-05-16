@@ -9,12 +9,7 @@ import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Participation;
-import de.hdm.kontaktsystem.shared.bo.User;
-<<<<<<< HEAD
-//import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-=======
 
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 
 /**
  * Die Mapper-Klasse <code>ParticipationMapper</code> bildet <code>Participation</code>-Objekte 
@@ -26,7 +21,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
  *
  */
 
-//TODO: alle User-Objekte durch User-ID ersetzen
+
 
 public class ParticipationMapper {
 	
@@ -62,7 +57,7 @@ public class ParticipationMapper {
 	 * Get all Participations in the Database
 	 * @return all Participations as Participation-Objects in a Vector
 	 */
-	public Vector<Participation> getAllParticipations(){
+	public Vector<Participation> findAllParticipations(){
 		Connection con = DBConnection.connection();
 		Statement stmt;
 		try {
@@ -101,7 +96,7 @@ public class ParticipationMapper {
 	 * Get all Participations which refer to Business-Objects, that a given User owns
 	 * @return Participation-Objects in a Vector
 	 */
-	public Vector<Participation> getParticipationsByOwner(User owner) {
+	public Vector<Participation> findParticipationsByOwnerID(int userID) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -114,7 +109,7 @@ public class ParticipationMapper {
 					+ "INNER JOIN BusinessObject"
 					+ "ON User_BusinessObject.BusinessObject_ID = BusinessObject.bo_ID"
 					+ "WHERE BusinessObject.user_ID = ?");
-			stmt.setInt(1, owner.getGoogleID());
+			stmt.setInt(1, userID);
 			ResultSet rs = stmt.executeQuery();
 			
 			//Transfer all Participations from database to Participation-Objects
@@ -136,7 +131,7 @@ public class ParticipationMapper {
 	 * Get all Participations that a given User participates in
 	 * @return Participation-Objects in a Vector
 	 */
-	public Vector<Participation> getParticipationsByParticipant(User participant){
+	public Vector<Participation> findParticipationsByParticipantID(int userID){
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -145,7 +140,7 @@ public class ParticipationMapper {
 			
 			// Get all Participations from database and store in a ResultSet-Object
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User_BusinessObject WHERE User_ID = ?");
-			stmt.setInt(1, participant.getGoogleID());
+			stmt.setInt(1, userID);
 			ResultSet rs = stmt.executeQuery();
 			
 			//Transfer all Participations from database to Participation-Objects
@@ -166,7 +161,7 @@ public class ParticipationMapper {
 	 * Get all Participations that refer to a given Business-Object
 	 * @return Participation-Objects in a Vector
 	 */
-	public Vector<Participation> getParticipationsByContact(BusinessObject businessObject){
+	public Vector<Participation> findParticipationsByContact(BusinessObject businessObject){
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -251,8 +246,8 @@ public class ParticipationMapper {
 	 * Delete all Participations, which refer to Business-Objects, that a given User owns
 	 * @param owner
 	 */
-	public void deleteParticipationForOwner(User owner) {
-		Vector<Participation> participations = getParticipationsByOwner(owner);
+	public void deleteParticipationForOwnerID(int userID) {
+		Vector<Participation> participations = getParticipationsByOwnerID(userID);
 		
 		Connection con = DBConnection.connection();
 		for(Participation p : participations) {
@@ -271,12 +266,12 @@ public class ParticipationMapper {
 	 * Delete all Participations, that a given User participates in
 	 * @param participant
 	 */
-	public void deleteParticipationForParticipant(User participant) {
+	public void deleteParticipationForParticipantID(int userID) {
 		Connection con = DBConnection.connection();
 		
 		try {
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE User_ID = ?");
-			stmt.setInt(1, participant.getGoogleID());
+			stmt.setInt(1, userID);
 			stmt.execute();
 			
 		} catch(SQLException e){
