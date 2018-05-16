@@ -44,8 +44,7 @@ public class PropertyValueMapper {
 		  
 		  
 		  /**********************************************************************************
-		   * Abruf der MAX ID einmalig aus BusinessObject Tabelle
-		   * Einfügen der neuen Werte aus Objekt in BusinessObject UND PropertyValue Tabelle
+		   * Einfügen der neuen Werte in BusinessObject Tabelle über BO Mapper
 		   ************************************************************************************/
 		  
 		  try {
@@ -62,6 +61,8 @@ public class PropertyValueMapper {
 			  pv.setCreationDate(pv.getCreationDate());
 			  pv.setShared_Status(true);
 			  pv.setUserId(pv.getUserId());
+			  pv.setBo_Id(1);
+
 
 		        stmt = con.createStatement();
 		        
@@ -72,6 +73,8 @@ public class PropertyValueMapper {
 		            + pv.getCreationDate() + "," 
 		            + pv.getShared_Status() + "," 
 		            + pv.getUserId() + ")"
+		            + pv.getBo_Id() + ")"
+
 		            );
 
 		        // Einfügeoperation in propertyvalue erfolgt

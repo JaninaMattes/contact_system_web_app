@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
+import de.hdm.kontaktsystem.shared.bo.Property;
 
 public class BusinessObjectMapper implements Serializable {
 	
@@ -62,13 +63,17 @@ public class BusinessObjectMapper implements Serializable {
 					 */
 					
 					bo.setBo_Id(rs.getInt(1));
-					bo.setShared_status(rs.getBoolean("status"));
 					System.out.println("ID: "+ bo.getBo_Id());
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 	  }
+
+	public void deleteBusinessObject(BusinessObject bo) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	  
 	  
