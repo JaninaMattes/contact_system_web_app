@@ -87,6 +87,11 @@ public class BusinessObjectMapper implements Serializable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void deleteBusinessObjectById(int id) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	  
 	  
