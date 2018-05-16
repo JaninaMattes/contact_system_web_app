@@ -293,7 +293,7 @@ public class PropertyValueMapper {
 						  	+ "FROM propertyvalue INNER JOIN businessobject" 
 						  	+ "WHERE propertyvalue.id=" 
 						  	+ "AND businessobject.user_id=" + u.getUserId() 
-						  	+ "AND businessobject.status=" + pv.getShared_Status()
+						  	+ "AND businessobject.status=" + pv.getShared_status()
 						  	+ "ORDER BY propertyvalue.id"
 					  );
 				      
@@ -399,7 +399,7 @@ public class PropertyValueMapper {
 		 * ihres Status gesucht und die Ergebnisse zurueckgegeben
 		 */
 	  
-		public Vector<PropertyValue> findBy(Boolean shared_status){
+		public Vector <PropertyValue> findBy(Boolean shared_status){
 			  
 			  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
 			  
@@ -419,7 +419,7 @@ public class PropertyValueMapper {
 			      while (rs.next()) {
 			          PropertyValue propValue = new PropertyValue();		          
 			          propValue.setBo_Id(rs.getInt("id"));
-			          propValue.setShared_Status(rs.getBoolean("status"));
+			          propValue.setShared_status(rs.getBoolean("status"));
 			          
 			          // Hinzufuegen des neuen Objekts zum Ergebnisvektor
 			          propValueResult.addElement(propValue);
@@ -459,7 +459,7 @@ public class PropertyValueMapper {
 			      while (rs.next()) {
 			          PropertyValue propValue = new PropertyValue();		          
 			          propValue.setBo_Id(rs.getInt("id"));
-			          propValue.setContact(c);
+			          propValue.setValue(rs.getString("value"));		
 			          
 			          // Hinzufuegen des neuen Objekts zum Ergebnisvektor
 			          propValueResult.addElement(propValue);
@@ -475,12 +475,12 @@ public class PropertyValueMapper {
 
 		
 		
-		public void deletePropertyValue(int property_id) {
+		public void deleteByProperty(int property_id) {
 			// TODO Auto-generated method stub
 			
 		}
 
-		public Vector<PropertyValue> findAllPropertyValuesByProperty(Property property) {
+		public Vector<PropertyValue> findByProperty(Property property) {
 			// TODO Auto-generated method stub
 			return null;
 		}
