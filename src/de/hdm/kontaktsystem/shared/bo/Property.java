@@ -27,28 +27,12 @@ public class Property extends BusinessObject{
 	 */
 
 	private static final long serialVersionUID = 1L;
-	
-	/*
-	 *  ID der Eigenschaft
-	 */
-	
-	private int ID = 0;
-	
+		
 	/*
 	 * Beschreibung der Eigenschaft
 	 */
 	
 	private String description = null;
-	
-	/*
-	 * Beschreibung des Status, dieser ist entweder geteilt 
-	 * (shared) oder nicht geteilt (unshared)
-	 * Per default gilt ein neu erstelltes Property Objekt
-	 * nicht geteilt, daher wird dieser zuerst als false angegeben
-	 * 
-	 */
-	
-	private boolean shared_Status = false;	
 	
 	/*
 	 * Jeder Eigenschaftinstanz ist einer oder mehrerer Eigenschaftsausprägungen
@@ -105,22 +89,6 @@ public class Property extends BusinessObject{
 	
 	
 	/*
-	 * Abruf der ID 
-	 */
-	
-	public int getID() {
-		return ID;
-	}
-	
-	/*
-	 * Setzen der ID
-	 */
-	
-	public void setID(int iD) {
-		ID = iD;
-	}
-	
-	/*
 	 * Auslesen der Beschreibung eines Eigenschafts Objektes
 	 */
 
@@ -137,29 +105,6 @@ public class Property extends BusinessObject{
 		this.description = description;
 	}		
 		
-	/*
-	 * Abrufen des Teilhaber Status 
-	 * dieser gibt Informationen darüber ob 
-	 * eine Eigenschaft geteilt oder nicht geteilt wurde
-	 * @return shared_Status ist boolean
-	 * 
-	 */
-	
-	public boolean getShared_Status() {
-		return shared_Status;
-	}
-	
-	/*
-	 * Wurde eine Property Instanz mit einem anderen Nutzer
-	 * im Kontaktsystem geteilt wird der isShared Status auf true gesetzt.
-	 * Dieser kann später über die Oberfläche im Client dem Nutzer dargestellt
-	 * werden, um so zusätzliche Informationen zu bieten. 
-	 * 
-	 */
-
-	public void setShared_Status(boolean shared_Status) {
-		this.shared_Status = shared_Status;
-	}
 	
 	/*
 	 * Auslesen des PropertyValue Vectors
@@ -183,14 +128,14 @@ public class Property extends BusinessObject{
 	}
 	
 	/*
-	 * Möglichkeit nur eine einzelnee Eigenschaftsausprägung (PropertyValue) Instanz
-	 * für eine Eigenschaft zu setzen
+	 * Möglichkeit bei Bedarf auch nur ein einziges PropertyValue Objekt
+	 * zu setzen. 
 	 */
 	
-	public void addPropertyValue(PropertyValue value) {
-		this.propertyValues.addElement(value);
+	public void setPropertyValue(PropertyValue propertyVal) {
+		this.propertyValues.addElement(propertyVal);
 	}
-	
+		
 	/*
 	* ***************************************************************************
 	* ABSCHNITT 3: toString und equals Methode
@@ -235,7 +180,7 @@ public class Property extends BusinessObject{
 	 
 		@Override
 		public int hashCode(){
-			return this.getID();
+			return super.getBo_Id();
 		}
 	 
 

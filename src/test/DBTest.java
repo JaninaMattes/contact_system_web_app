@@ -21,12 +21,21 @@ public class DBTest {
 	public static void main(String args[]){
 		
 		Connection con = DBConnection.connection();
+		
 		try {
-			ResultSet rs = con.createStatement().executeQuery("Select * from User");
-			while(rs.next()){
-				System.out.println("Name: "+rs.getInt("ID")+" E-Mail: "+rs.getString("g_mail"));
+			ResultSet rs1 = con.createStatement().executeQuery(
+					"Select * from User"
+					);
+
+			ResultSet rs2 = con.createStatement().executeQuery(
+					"Select * from User"
+					);
+			while(rs2.next()){
+				System.out.println("Name: "+rs2.getInt("ID")+" E-Mail: "+rs2.getString("g_token"));
 			}
-			con.createStatement().executeUpdate("Update BusinessObject Set user_ID = 0 Where bo_ID = 2");
+			con.createStatement().executeUpdate(
+					"Update BusinessObject Set user_ID = 0 Where bo_ID = 2"
+					);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,17 +46,15 @@ public class DBTest {
 		//BusinessObjectMapper.businessObjectMapper().insert(new Property());
 		
 		// Generate test User with random ID
+		
+		/*
 		User u = new User();
 		Random rng = new Random();
 		u.setGMail("mail@gmail.com");
 		u.setGoogleID(rng.nextInt(1000)+1);
+		
+		*/
 		//UserMapper.userMapper().insertUser(u);
 		
-		
-		
-		
-		// **** TESTS *****
-		
-		PropertyMapper.propertyMapper().getAllPropertiesByUser(u.getGoogleID());
 	}
 }

@@ -16,15 +16,13 @@ public class Contact extends BusinessObject {
 	 */
 	private User owner = null;
 	
-	/**
-	 * 
-	 */
-	private String status = null;
-	
+	private int id;
+		
 	/**
 	 * Name des Kontakts
 	 */
 	private PropertyValue name = null;
+
 	
 	/**
 	*Datum wird von BusinessObject geerbt
@@ -33,16 +31,27 @@ public class Contact extends BusinessObject {
 	/**
 	 * Kontruktoren
 	 */
-
+	public Contact() {
+		
+	}
+<<<<<<< HEAD
 	public Contact(PropertyValue name, String status, User owner) {
+=======
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
+
+<<<<<<< HEAD
+	}
+	public Contact(PropertyValue name, User owner) {
+
+=======
+	public Contact(PropertyValue name, User owner) {
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 		this.name = name;
-		this.status = status;
 		this.owner = owner;
 	}
 	
-	public Contact(PropertyValue name, String status) {
+	public Contact(PropertyValue name) {
 		this.name = name;
-		this.status = status;
 	}
 	
 	
@@ -65,21 +74,7 @@ public class Contact extends BusinessObject {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	/**
-	 * Status auslesen
-	 */
 	
-	public String getStatus() {
-		return status;
-	}
-
-	/**
-	 * Status setzen
-	 */
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
 	/**
 	 * Namen auslesen
 	 */

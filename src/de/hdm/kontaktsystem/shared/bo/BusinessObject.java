@@ -113,27 +113,12 @@ public class BusinessObject implements Serializable{
 		this.modifyDate = modifyDate;
 	}
 	
-	/*
-	 * Abrufen der User ID
-	 */
-
-	public int getUser_ID() {
-		return user_id;
-	}
-
-	/*
-	 * Setzen der User ID
-	 */
-
-	public void setUser_ID(int user_ID) {
-		this.user_id = user_ID;
-	}
-	
+		
 	/*
 	 * Status abrufen ob ein BO geteilt wurde 
 	 */
 
-	public boolean isShared_status() {
+	public boolean getShared_status() {
 		return shared_status;
 	}
 

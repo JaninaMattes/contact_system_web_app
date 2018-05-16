@@ -18,8 +18,11 @@ public class User {
 	private static final long serialVersionUID = 1L;
 	
 	private int googleID = 0;
-	private String gMail = null;
+	
+	private String gMail = null; 
+	
 	private Contact userContact = null;
+	
 	
 	public User() {
 
