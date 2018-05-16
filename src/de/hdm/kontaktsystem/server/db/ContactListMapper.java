@@ -276,20 +276,6 @@ public class ContactListMapper {
 		}
 	}
 
-	public void initContactListTable() {
-		Connection con = DBConnection.connection();
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			//SQL BEFEHL NOCHMAL NACHPRï¿½FEN
-			stmt.executeUpdate("CREATE TABLE ContactList (ID INT(10) NOT NULL, Name VARCHAR(255) NOT NULL, PRIMARY KEY(ID));");
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-
 	/**
 	 * Einen Kontakt zur Kontaktliste hinzufügen.
 	 * 

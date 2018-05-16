@@ -11,7 +11,6 @@ public class PropertyValue extends BusinessObject{
 			
 	private String value = null;
 	private Property prop = null;
-	private int propId;
 	
 	/*
 	 * Beschreibung des Status, dieser ist entweder geteilt 
@@ -71,14 +70,6 @@ public class PropertyValue extends BusinessObject{
 		this.prop = prop;
 	}
 	
-	
-	public int getPropId() {
-		return propId;
-	}
-
-	public void setPropId(int propId) {
-		this.propId = propId;
-	}
 
 	/*
 	 * <p>
