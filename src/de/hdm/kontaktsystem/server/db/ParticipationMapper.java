@@ -215,7 +215,7 @@ public class ParticipationMapper {
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
-		//Change Status in BusinessObjectMapper zu geteilt (true) (Methode UpdateStatus)
+		BusinessObjectMapper.businessObjectMapper().setStatusTrue(participation.getReferenceID());
 	}
 	
 	
@@ -259,7 +259,9 @@ public class ParticipationMapper {
 			} catch(SQLException e){
 				e.printStackTrace();
 			}
+			BusinessObjectMapper.businessObjectMapper().setStatusFalse(p.getReferenceID());
 		}
+		
 	}
 	
 	/**
@@ -267,17 +269,30 @@ public class ParticipationMapper {
 	 * @param participant
 	 */
 	public void deleteParticipationForParticipantID(int userID) {
+		Vector<Participation> participations = findParticipationsByParticipantID(userID);
+		
 		Connection con = DBConnection.connection();
 		
-		try {
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE User_ID = ?");
-			stmt.setInt(1, userID);
-			stmt.execute();
+		for(Participation p : participations) {
+			try {
+				PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE User_ID = ? AND BusinessObject_ID = ?");
+				stmt.setInt(1, p.getParticipantID());
+				stmt.setInt(2, p.getReferenceID());
+				stmt.execute();
+				
+			} catch(SQLException e){
+				e.printStackTrace();
+			}
 			
-		} catch(SQLException e){
-			e.printStackTrace();
+			//Prüfen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt, 
+			//wenn nicht, Status (geteilt) des Objekt auf false setzen
+			Vector<Participation> part = findParticipationsByParticipantID(p.getParticipantID());
+			if(part.isEmpty()) {
+				BusinessObjectMapper.businessObjectMapper().setStatusFalse(p.getReferenceID());
+			}
 		}
 	}
+	
 	
 	/**
 	 * Löschen aller Teilhaberschaften, die sich auf ein gegebenes BusinessObject beziehen
@@ -294,6 +309,7 @@ public class ParticipationMapper {
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().setStatusFalse(businessObject.getBo_Id());
 	}
 	
 	
