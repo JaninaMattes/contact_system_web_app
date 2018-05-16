@@ -101,13 +101,15 @@ public class DBTest {
 		
 		clMapper.updateContactList(cl);
 		
-		clMapper.deleteContactListById(242);
+		clMapper.deleteContactListById(241);
 		
-		Contact c = cMapper.findContactById(31);
+		Contact c = new Contact();
 		System.out.println(c);
+		c.setOwner(uMapper.getUserById(615));
 		c.setBo_Id(31);
 		clMapper.addContactToContactlist(cl, c);
-		
+		c.setBo_Id(32);
+		clMapper.removeContactFromContactList(cl, c);
 		
 	}
 }
