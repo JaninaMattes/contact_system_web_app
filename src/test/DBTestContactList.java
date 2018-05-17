@@ -39,7 +39,7 @@ public class DBTestContactList {
 		
 		ContactList cl = new ContactList();
 		cl.setName("Kontaktliste 1");
-		cl.setOwner(uMapper.getUserById(615));
+		cl.setOwner(uMapper.getUserById(01));
 		
 		Vector<ContactList> cll = new Vector<ContactList>();
 		
