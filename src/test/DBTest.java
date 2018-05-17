@@ -41,42 +41,22 @@ public class DBTest {
 		PropertyMapper propMapper = PropertyMapper.propertyMapper(); 
 		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
 		UserMapper uMapper = UserMapper.userMapper();
-		/*
-		Connection con = DBConnection.connection();
 		
-		try {
-			ResultSet rs1 = con.createStatement().executeQuery(
-					"Select * from User"
-					);
-
-			ResultSet rs2 = con.createStatement().executeQuery(
-					"Select * from User"
-					);
-			while(rs2.next()){
-				System.out.println("Name: "+rs2.getInt("ID")+" E-Mail: "+rs2.getString("g_token"));
-			}
-			con.createStatement().executeUpdate(
-					"Update BusinessObject Set user_ID = 0 Where bo_ID = 2"
-					);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		
 		// Test insert method from BusinessObjectMapper 
 		
-		//BusinessObjectMapper.businessObjectMapper().insert(new Property());
+		// BusinessObjectMapper.businessObjectMapper().insert(new Property());
 		
 		// Generate test User with random ID
 		
-		/*
+		
 		User u = new User();
 		Random rng = new Random();
 		u.setGMail("mail@gmail.com");
 		u.setGoogleID(rng.nextInt(1000)+1);
 		
-		*/
-		//UserMapper.userMapper().insertUser(u);
+		
+		UserMapper.userMapper().insertUser(u);
 		
 		
 		/**
@@ -85,7 +65,7 @@ public class DBTest {
 		
 		ContactList cl = new ContactList();
 		cl.setName("Meine Liste");
-		cl.setOwner(uMapper.getUserById(615));
+		cl.setOwner(uMapper.findUserById(615));
 		
 		//clMapper.insertContactList(cl);
 		
@@ -97,7 +77,7 @@ public class DBTest {
 		cll = clMapper.findContactListByName("Meine Liste");
 		System.out.println(cll);
 		
-		cll = clMapper.findContactListByUser(uMapper.getUserById(615));
+		cll = clMapper.findContactListByUser(uMapper.findUserById(615));
 		System.out.println(cll);
 		
 
@@ -115,7 +95,7 @@ public class DBTest {
 		 */
 		
 		Contact c = new Contact();
-		c.setOwner(uMapper.getUserById(615));
+		c.setOwner(uMapper.findUserById(615));
 		c.setName(propValMapper.findByKey(230));
 		
 		cMapper.insertContact(c);
