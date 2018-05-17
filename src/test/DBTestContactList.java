@@ -39,7 +39,7 @@ public class DBTestContactList {
 		
 		ContactList cl = new ContactList();
 		cl.setName("Kontaktliste 1");
-		cl.setOwner(uMapper.findUserById(01));
+		cl.setOwner(uMapper.findUserById(325));
 		
 		Vector<ContactList> cll = new Vector<ContactList>();
 		
@@ -53,8 +53,40 @@ public class DBTestContactList {
 		 * Kontaktliste durch die ID finden.
 		 */
 		
-		System.out.println(clMapper.findContactListById(01));
+		//System.out.println(clMapper.findContactListById(243));
 		
+		/**
+		 * Einen Kontakt aus einer Liste finden.
+		 */
+		
+		//clMapper.findContactFromList(cl);
+		//System.out.println(cl);
+		
+		/**
+		 * Kontaktliste durch die ID eines beinhaltenden User finden.
+		 */
+		
+		//cll = clMapper.findContactListByUser(uMapper.findUserById(325));
+		
+		/**
+		 * Kontaktliste nach Namen der Liste finden.
+		 */
+		
+		//cll = clMapper.findContactListByName("KontaktListe_1");
+		//System.out.println(cll);
+	
+		/**
+		 * Den Name einer Kontaktliste ändern / aktualisieren.
+		 */
+		//Nochmals prüfen.
+		
+		//cl.setName("KontaktListe_2");
+		//clMapper.updateContactList(cl);
+		//cll = clMapper.findContactListByName("KontaktListe_2");
+		//System.out.println(cll);
+		
+		
+	
 	}
 
 }

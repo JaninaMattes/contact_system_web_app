@@ -98,7 +98,7 @@ public class PropertyMapper {
   				property.setCreationDate(rs.getTimestamp("creationDate"));
   				//property.setModifyDate(rs.getTimestamp("modificationDate"));
   				property.setShared_status(rs.getBoolean("status"));
-  				property.setUserId(rs.getInt("user_ID"));
+  				property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
   				
   				System.out.println("Property id: " + rs.getInt("bo_ID"));
   				
@@ -169,8 +169,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setUserId(rs.getInt("user_ID"));
-                  
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));                  
                   System.out.println("Property ID: " + rs.getInt("bo_ID"));
                   System.out.println("User ID: " + rs.getInt("user_ID"));
                   
@@ -259,7 +258,7 @@ public class PropertyMapper {
               property.setCreationDate(rs.getTimestamp("creationDate"));
               // property.setModifyDate(rs.getTimestamp("modificationDate"));
               property.setShared_status(rs.getBoolean("status"));
-              property.setUserId(rs.getInt("user_ID"));
+              property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
               
               System.out.println("Property ID: " + rs.getInt("ID"));
               System.out.println("Description: " + rs.getString("description"));
@@ -334,7 +333,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setUserId(rs.getInt("user_ID"));
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
                   
                   System.out.println("propertyid : " + (rs.getInt("ID")));
   				  System.out.println("description : " + (rs.getString("description")));
@@ -402,7 +401,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setUserId(rs.getInt("user_ID"));
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
                   
                   System.out.println("Property ID: " + rs.getInt("ID"));
                   System.out.println("Description: " + rs.getString("description"));

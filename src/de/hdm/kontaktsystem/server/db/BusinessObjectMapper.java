@@ -95,10 +95,11 @@ public class BusinessObjectMapper implements Serializable {
 		  Connection con = DBConnection.connection();
 
 			try {
+				System.out.println("Set Owner " + bo.getOwner());
 				PreparedStatement statement = con.prepareStatement(
 						"INSERT INTO BusinessObject (user_ID) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 				
-				statement.setInt(1, bo.getUserId());
+				statement.setInt(1, bo.getOwner().getGoogleID());
 				
 				
 				// Führt das PreparedStatement aus
