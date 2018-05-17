@@ -1,6 +1,7 @@
 package de.hdm.kontaktsystem.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
@@ -109,7 +110,7 @@ public class ContactMapper {
 				 Contact contact = new Contact();
 				 contact.setBo_Id(rs.getInt("id"));
 				 contact.setShared_status(rs.getBoolean("status"));
-				 
+				// setOwner?
 				 contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 				 contact.setCreationDate(rs.getTimestamp("creationDate"));
 				 contact.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -139,6 +140,10 @@ public class ContactMapper {
         }
      }  
 		
+	/**
+	 * Nochmal Überarbeiten / Überdenken
+	 * @author Oli
+	 */
 
 	//Kontakt erstellen
 	public void insertContact(Contact contact) {
@@ -148,9 +153,10 @@ public class ContactMapper {
 		
 		//setzt in insert BO die ID (Verbindung zu BO)--> braucht man bei insert, delete
 		try {
+			
 			Statement stmt = con.createStatement();
-
-			stmt.executeQuery("INSERT INTO Contact (ID, status) VALUES (" + contact.getBo_Id() + "," + contact.getShared_status() +"'");
+			
+			stmt.executeQuery("INSERT INTO Contact (ID, owner_ID) VALUES (" + contact.getBo_Id() + "," + contact.getOwner().getGoogleID() +"'");
 			         
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -179,6 +185,7 @@ public class ContactMapper {
 		      
 		      while (rs.next()) {
 		          Contact contact = new Contact();
+		       // setOwner?
 		          contact.setBo_Id(rs.getInt("id"));
 		          contact.setShared_status(rs.getBoolean("status"));
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
@@ -204,14 +211,20 @@ public class ContactMapper {
 		  Connection con = DBConnection.connection();
 		  
 		  try {	
-			  Statement stmt = con.createStatement();//TODO: Join mit bo tabelle und alle spalten ausw�hlen
-		      ResultSet rs = stmt.executeQuery("SELECT Contact.*, BusinessObject.*, "
-		    		  	+ "FROM Contact " 
-						+ "INNER JOIN BusinessObject "
-						+ "ON Contact.ID = BusinessObject.bo_ID "
-						+ "WHERE Contact.ID = ?");
+			  PreparedStatement stmt = con.prepareStatement("SELECT * "
+						+ "FROM  Contact c "
+			    		+ "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
+			    		+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
+			    		+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
+			    		+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
+						+ "WHERE description = 'Name' AND c.ID = ?");
+			  stmt.setInt(1, id);
+			  ResultSet rs = stmt.executeQuery();
 		      
 		      if (rs.next()) {
+		    	  
+		    	  // setOwner?
+		    	  
 		          contact.setBo_Id(rs.getInt("id"));
 		          contact.setShared_status(rs.getBoolean("status"));
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));
@@ -245,7 +258,7 @@ public class ContactMapper {
 		      	
 
 		      if (rs.next()) {
-
+		    	// setOwner?
 		    	  contact.setBo_Id(rs.getInt("id"));
 		    	  contact.setShared_status(rs.getBoolean("status"));
 		          contact.setBo_Id(rs.getInt("id"));
@@ -305,6 +318,7 @@ public class ContactMapper {
 		     
 		      
 		      if (rs.next()) {
+		    	// setOwner?
 		          contact.setBo_Id(rs.getInt("id"));
 		          contact.setShared_status(rs.getBoolean("status"));
 		          contact.setCreationDate(rs.getTimestamp("creationDate"));

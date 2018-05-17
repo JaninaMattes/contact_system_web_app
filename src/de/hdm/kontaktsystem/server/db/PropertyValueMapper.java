@@ -254,7 +254,7 @@ public class PropertyValueMapper {
 					  stmt = con.createStatement();
 					  // Statement ausfüllen und als Query an die DB schicken
 				      ResultSet rs = stmt.executeQuery(
-				      "SELECT id, value FROM propertyvalue "
+				      "SELECT id, value FROM PropertyValue "
 				    		+ "WHERE id = " + id 
 				    		+ " ORDER BY id");
 				      

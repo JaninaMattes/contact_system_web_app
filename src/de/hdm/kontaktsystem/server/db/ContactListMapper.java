@@ -79,7 +79,7 @@ public class ContactListMapper {
 			ResultSet rs = stmt
 					.executeQuery("SELECT Contact_ID from Contact_ContactList where ContactList_ID = " + cl.getBo_Id());
 			while (rs.next()) {
-				c.add(ContactMapper.contactMapper().findContactById(rs.getInt("ID")));
+				c.add(ContactMapper.contactMapper().findContactById(rs.getInt("Contact_ID")));
 
 			}
 			cl.setContacts(c);
@@ -109,7 +109,7 @@ public class ContactListMapper {
 			if (rs.next()) {
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("owner")));
+				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 
 			}
