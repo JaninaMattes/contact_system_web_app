@@ -1,5 +1,7 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+import java.util.Vector;
+
 import de.hdm.kontaktsystem.shared.bo.Property;
 
 public class PropertyValue extends BusinessObject{
@@ -11,6 +13,8 @@ public class PropertyValue extends BusinessObject{
 			
 	private String value = null;
 	private Property prop = null;
+	
+	//private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
 	/*
 	 * Beschreibung des Status, dieser ist entweder geteilt 
@@ -98,14 +102,10 @@ public class PropertyValue extends BusinessObject{
 		    return false;
 		  }
 
-	 
-/*
- * public String toString() {
-		return "PropertyValue [value=" + value + ", prop=" + prop + "]";
-	}
-	
-	
- */
-	
+
+	  public String toString() {
+			return "PropertyValue [value=" + value + ", prop=" + prop.getDescription() + "]";
+		}
+
 
 }

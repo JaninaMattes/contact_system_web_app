@@ -50,7 +50,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				findContactFromList(cl);
 				contactList.add(cl);
@@ -97,7 +97,7 @@ public class ContactListMapper {
 	 */
 
 	public ContactList findContactListById(int id) {
-		ContactList cl = new ContactList();
+		
 		Connection con = DBConnection.connection();
 
 		try {
@@ -107,17 +107,19 @@ public class ContactListMapper {
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
+				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
-
+				return cl;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return null;
 
-		return cl;
+		
 	}
 
 	
@@ -140,7 +142,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				cll.add(cl);
 			}
@@ -171,7 +173,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().getUserById(rs.getInt("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				cll.add(cl);
 			}

@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
+import de.hdm.kontaktsystem.server.db.BusinessObjectMapper.BONotFoundException;
 import de.hdm.kontaktsystem.server.db.ContactListMapper;
 import de.hdm.kontaktsystem.server.db.ContactMapper;
 import de.hdm.kontaktsystem.server.db.DBConnection;
@@ -25,12 +26,6 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class DBTest {
 	
 	
- 
-	
-	
-		
-	
-	
 	
 	public static void main(String args[]){
 		
@@ -41,81 +36,74 @@ public class DBTest {
 		PropertyMapper propMapper = PropertyMapper.propertyMapper(); 
 		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
 		UserMapper uMapper = UserMapper.userMapper();
-		/*
-		Connection con = DBConnection.connection();
 		
-		try {
-			ResultSet rs1 = con.createStatement().executeQuery(
-					"Select * from User"
-					);
-
-			ResultSet rs2 = con.createStatement().executeQuery(
-					"Select * from User"
-					);
-			while(rs2.next()){
-				System.out.println("Name: "+rs2.getInt("ID")+" E-Mail: "+rs2.getString("g_token"));
-			}
-			con.createStatement().executeUpdate(
-					"Update BusinessObject Set user_ID = 0 Where bo_ID = 2"
-					);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		
 		// Test insert method from BusinessObjectMapper 
+		System.out.println("############ Test BO ################");
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findAllBusinessObjectIDs());
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectIDsByUserID(325));
 		
-		//BusinessObjectMapper.businessObjectMapper().insert(new Property());
 		
-		// Generate test User with random ID
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(202));
 		
-		/*
+		
+		// Test insert method from UserMapper 
+		System.out.println("############ Test User ################");
 		User u = new User();
 		Random rng = new Random();
 		u.setGMail("mail@gmail.com");
+		// Generate test User with random ID
 		u.setGoogleID(rng.nextInt(1000)+1);
+		System.out.println("Create User "+u.getGoogleID());
 		
-		*/
-		//UserMapper.userMapper().insertUser(u);
+		uMapper.insertUser(u);
+		System.out.println(uMapper.findAllUsers());
+		System.out.println(uMapper.findUserByEmail("oli@gmail.de"));
 		
+		u.setContact(cMapper.findContactById(32));
+		uMapper.updateUser(u);
+		System.out.println(u = uMapper.findUserById(u.getGoogleID()));
+		
+		//uMapper.deleteUserById(502);
 		
 		/**
 		 * Test für den ContactList Mapper
 		 */
-		
+		System.out.println("############ Test ContactList ################");
+		System.out.println(u);
 		ContactList cl = new ContactList();
 		cl.setName("Meine Liste");
-		cl.setOwner(uMapper.getUserById(615));
+		cl.setOwner(u);
+		System.out.println(cl);
+		clMapper.insertContactList(cl);
 		
-		//clMapper.insertContactList(cl);
-		
-		System.out.println(clMapper.findAllContactLists());
+		System.out.println("Find All: "+clMapper.findAllContactLists());
 		
 		
 		Vector<ContactList> cll = new Vector<ContactList>();
 		
 		cll = clMapper.findContactListByName("Meine Liste");
-		System.out.println(cll);
+		System.out.println("Find By Name: " +cll);
 		
-		cll = clMapper.findContactListByUser(uMapper.getUserById(615));
-		System.out.println(cll);
+		cll = clMapper.findContactListByUser(u);
+		System.out.println("Find By User: " +cll);
 		
 
-		cl = clMapper.findContactListById(cl.getBo_Id());
+		cl = clMapper.findContactListById(70);
 		
 		cl.setName("Marcos Liste");
-		
+		System.out.println("Update Contact: "+cl);
 		clMapper.updateContactList(cl);
 		
-		clMapper.deleteContactListById(241);
+		//clMapper.deleteContactListById();
 		
 		
 		/**
 		 * Test Contact Mapper
 		 */
-		
+		System.out.println("############ Test Contact ################");
 		Contact c = new Contact();
-		c.setOwner(uMapper.getUserById(615));
+		c.setOwner(uMapper.findUserById(615));
 		c.setName(propValMapper.findByKey(230));
 		
 		cMapper.insertContact(c);

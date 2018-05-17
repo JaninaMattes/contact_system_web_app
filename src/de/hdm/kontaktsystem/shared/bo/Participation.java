@@ -22,23 +22,19 @@ public class Participation implements Serializable {
 	
 	/**
 	 * Seriennummer, vorgegeben durch das Interface {@link Serializable}
-	 */
-	
-	//TODO: Logik klären Soll hier auf UserID verwiesen werden?
-	private User owner = null;
+	 */	
 	private static final long serialVersionUID = 1L;
-	
-	// Owner = Owner des BusinessObjects, das geteilt wird
+
 	
 	/**
 	 * Verweis auf die ID des Users, der an der Teilhaberschaft teilnimmt
 	 */
-	private int participantID = 0;
+	private User participant = null;
 	
 	/**
 	 * Verweis auf die ID des geteilten BusinessObjects
 	 */
-	private int referenceID = 0;
+	private BusinessObject reference = null;
 
 	
 	/**
@@ -51,9 +47,9 @@ public class Participation implements Serializable {
 	/**
 	 * Konstruktor, der alle Attribute mit Werten belegt
 	 */
-	public Participation(int participantID, int referenceID) {
-		this.participantID = participantID;
-		this.referenceID = referenceID;
+	public Participation(User participant, BusinessObject reference) {
+		this.participant = participant;
+		this.reference = reference;
 	}
 	
 
@@ -62,14 +58,21 @@ public class Participation implements Serializable {
 	* Zurückgeben der TeilhaberID
 	*/
 	public int getParticipantID() {
-		return participantID;
+		return this.participant.getGoogleID();
 	}
 
 	/**
-	 * Setzen der TeilhaberID
+	 * Zurückgeben des Teilhabers
 	 */
-	public void setParticipantID(int participantID) {
-		this.participantID = participantID;
+	public User getParticipant() {
+		return this.participant;
+	}
+	
+	/**
+	 * Setzen des Teilhabers
+	 */
+	public void setParticipant(User participant) {
+		this.participant = participant;
 	}
 
 	
@@ -77,35 +80,42 @@ public class Participation implements Serializable {
 	* Zurückgeben der ID des geteilten BusinessObjects
 	*/
 	public int getReferenceID() {
-		return referenceID;
+		return this.reference.getBo_Id();
 	}
 
 	/**
-	 * Setzen der ID des geteilten BusinessObjects
+	 * Zurückgeben des BusinessObjects
 	 */
-	public void setReferenceID(int referenceID) {
-		this.referenceID = referenceID;
+	public BusinessObject getReferencedObject() {
+		return this.reference;
+	}
+	
+	/**
+	 * Setzen des geteilten BusinessObjects
+	 */
+	public void setReference(BusinessObject reference) {
+		this.reference = reference;
 	}
 
 	
-	
+	//Anpassen
 	@Override
 	public String toString() {
-		return "Participation [owner=" + owner + ", participantID=" + participantID + ", referenceID=" + referenceID
+		return "Participation [participantID=" + this.getParticipantID() + ", referenceID=" + this.getReferenceID()
 				+ "]";
 	}
 	
-
+	//Anpassen
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
-		result = prime * result + participantID;
-		result = prime * result + referenceID;
+		result = prime * result + getParticipantID();
+		result = prime * result + getReferenceID();
 		return result;
 	}
 
+	//Anpassen
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -115,14 +125,9 @@ public class Participation implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Participation other = (Participation) obj;
-		if (owner == null) {
-			if (other.owner != null)
-				return false;
-		} else if (!owner.equals(other.owner))
+		if (this.getParticipantID() != other.getParticipantID())
 			return false;
-		if (participantID != other.participantID)
-			return false;
-		if (referenceID != other.referenceID)
+		if (this.getReferenceID() != other.getReferenceID())
 			return false;
 		return true;
 	}

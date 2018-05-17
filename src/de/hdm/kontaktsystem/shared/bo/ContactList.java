@@ -10,7 +10,6 @@ public class ContactList extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 
 	private String name = null;
-	private User owner = null;
 	
 	private Vector <Contact> contacts = new Vector <Contact>();
 
@@ -27,9 +26,8 @@ public class ContactList extends BusinessObject {
 	 * 
 	 */
 
-	public ContactList(String name, User owner, Contact contact) {
+	public ContactList(String name, Contact contact) {
 		this.name = name;
-		this.owner = owner;
 		this.contacts = new Vector<Contact>();
 		contacts.add(contact);
 
@@ -45,15 +43,6 @@ public class ContactList extends BusinessObject {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
 	}
 
 	public Vector<Contact> getContacts() {
@@ -72,7 +61,7 @@ public class ContactList extends BusinessObject {
 	
 	@Override
 	public String toString() {
-		return "ContactList [name=" + name + ", owner=" + owner + ", contacts=" + contacts + "]";
+		return "ContactList [name=" + name + ", owner=" + getOwner() + ", contacts=" + contacts + "]";
 	}
 
 	 /**
@@ -103,10 +92,10 @@ public class ContactList extends BusinessObject {
 				return false;
 		} else if (!contacts.equals(other.contacts))
 			return false;
-		if (owner == null) {
-			if (other.owner != null)
+		if (getOwner() == null) {
+			if (other.getOwner() != null)
 				return false;
-		} else if (!owner.equals(other.owner))
+		} else if (!getOwner().equals(other.getOwner()))
 			return false;
 		return true;
 	}

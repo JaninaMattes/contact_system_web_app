@@ -43,7 +43,7 @@ public class UserMapper {
 	 * Returns all <code>User</code> objects from the database table 
 	 * @return Vector<User>
 	 */
-	public Vector <User> getAllUsers(){
+	public Vector <User> findAllUsers(){
 		
 		Connection con = DBConnection.connection();
 		try{
@@ -72,7 +72,7 @@ public class UserMapper {
 	 * @param id
 	 * @return User
 	 */
-	public User getUserById(int id){
+	public User findUserById(int id){
 		
 		User u = new User();
 		Connection con = DBConnection.connection();
@@ -100,7 +100,7 @@ public class UserMapper {
 	 * @param email
 	 * @return User that is linked to the Google Account
 	 */
-	public User getUserByEmail(String email){
+	public User findUserByEmail(String email){
 		
 		Connection con = DBConnection.connection();
 		try{

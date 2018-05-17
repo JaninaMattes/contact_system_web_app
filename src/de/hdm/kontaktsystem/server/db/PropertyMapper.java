@@ -98,7 +98,7 @@ public class PropertyMapper {
   				property.setCreationDate(rs.getTimestamp("creationDate"));
   				//property.setModifyDate(rs.getTimestamp("modificationDate"));
   				property.setShared_status(rs.getBoolean("status"));
-  				property.setUserId(rs.getInt("user_ID"));
+  				property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
   				
   				System.out.println("Property id: " + rs.getInt("bo_ID"));
   				
@@ -169,8 +169,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setUserId(rs.getInt("user_ID"));
-                  
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));                  
                   System.out.println("Property ID: " + rs.getInt("bo_ID"));
                   System.out.println("User ID: " + rs.getInt("user_ID"));
                   
@@ -259,7 +258,7 @@ public class PropertyMapper {
               property.setCreationDate(rs.getTimestamp("creationDate"));
               // property.setModifyDate(rs.getTimestamp("modificationDate"));
               property.setShared_status(rs.getBoolean("status"));
-              property.setUserId(rs.getInt("user_ID"));
+              property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
               
               System.out.println("Property ID: " + rs.getInt("ID"));
               System.out.println("Description: " + rs.getString("description"));
@@ -305,7 +304,7 @@ public class PropertyMapper {
      
       public Property findByID(int property_id) {
           
-          Property property = new Property(); 
+           
          
           Connection con = DBConnection.connection();          
          
@@ -325,7 +324,7 @@ public class PropertyMapper {
               ResultSet rs = stmt.executeQuery();          		 
                            
               if (rs.next()) {
-
+            	  Property property = new Property();
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                   
                   property.setBo_Id(rs.getInt("ID"));
@@ -333,19 +332,19 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setUserId(rs.getInt("user_ID"));
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
                   
                   System.out.println("propertyid : " + (rs.getInt("ID")));
   				  System.out.println("description : " + (rs.getString("description")));
   				  System.out.println("userid : " + (rs.getInt("user_ID")));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findByProperty(property);
+                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
                   property.setPropertyValues(propertyValues);
-     
+                  return property;
               }              
-              return property;
+              
               
           } catch (SQLException e) {
               e.printStackTrace();
@@ -401,7 +400,7 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setUserId(rs.getInt("user_ID"));
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
                   
                   System.out.println("Property ID: " + rs.getInt("ID"));
                   System.out.println("Description: " + rs.getString("description"));
