@@ -14,7 +14,6 @@ public class Contact extends BusinessObject {
 	/**
 	 *  Bezug zu dem User der den Kontakt besitzt
 	 */
-	private User owner = null;
 	
 	private int id;
 		
@@ -42,8 +41,8 @@ public class Contact extends BusinessObject {
 	
 
 	public Contact(PropertyValue name, User owner) {
+		super.setOwner(owner);
 		this.name = name;
-		this.owner = owner;
 	}
 	
 	public Contact(PropertyValue name) {
@@ -55,21 +54,8 @@ public class Contact extends BusinessObject {
 	 * Getter und Setter
 	 */
 	
-	/**
-	 * Auslesen des Eigent�mers
-	 */
 	
-	public User getOwner() {
-		return owner;
-	}
-
-	/**
-	 * Eigent�mer setzen
-	 */
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
+	
 	
 	/**
 	 * Namen auslesen
@@ -91,7 +77,7 @@ public class Contact extends BusinessObject {
 	
 	@Override
 	public String toString() {
-		return "Contact [owner=" + owner + ", id=" + id + ", name=" + name + "]";
+		return "Contact [owner=" + getOwner() + ", id=" + id + ", name=" + name + "]";
 	}
 
 	
@@ -120,10 +106,10 @@ public class Contact extends BusinessObject {
 		Contact other = (Contact) obj;
 		if (id != other.id)
 			return false;
-		if (owner == null) {
-			if (other.owner != null)
+		if (getOwner() == null) {
+			if (other.getOwner() != null)
 				return false;
-		} else if (!owner.equals(other.owner))
+		} else if (!getOwner().equals(other.getOwner()))
 			return false;
 		return true;
 	}

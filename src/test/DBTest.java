@@ -25,12 +25,6 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class DBTest {
 	
 	
- 
-	
-	
-		
-	
-	
 	
 	public static void main(String args[]){
 		
@@ -50,53 +44,62 @@ public class DBTest {
 		
 		// BusinessObjectMapper.businessObjectMapper().insert(new Property());
 		
-		// Generate test User with random ID
 		
-		
+		// Test insert method from UserMapper 
+		System.out.println("############ Test User ################");
 		User u = new User();
 		Random rng = new Random();
 		u.setGMail("mail@gmail.com");
+		// Generate test User with random ID
 		u.setGoogleID(rng.nextInt(1000)+1);
+		System.out.println("Create User "+u.getGoogleID());
 		
+		uMapper.insertUser(u);
+		System.out.println(uMapper.findAllUsers());
+		System.out.println(uMapper.findUserByEmail("oli@gmail.de"));
 		
-		UserMapper.userMapper().insertUser(u);
+		u.setContact(cMapper.findContactById(32));
+		uMapper.updateUser(u);
+		System.out.println(u = uMapper.findUserById(u.getGoogleID()));
 		
+		//uMapper.deleteUserById(502);
 		
 		/**
 		 * Test für den ContactList Mapper
 		 */
-		
+		System.out.println("############ Test ContactList ################");
+		System.out.println(u);
 		ContactList cl = new ContactList();
 		cl.setName("Meine Liste");
-		cl.setOwner(uMapper.findUserById(615));
+		cl.setOwner(u);
+		System.out.println(cl);
+		clMapper.insertContactList(cl);
 		
-		//clMapper.insertContactList(cl);
-		
-		System.out.println(clMapper.findAllContactLists());
+		System.out.println("Find All: "+clMapper.findAllContactLists());
 		
 		
 		Vector<ContactList> cll = new Vector<ContactList>();
 		
 		cll = clMapper.findContactListByName("Meine Liste");
-		System.out.println(cll);
+		System.out.println("Find By Name: " +cll);
 		
-		cll = clMapper.findContactListByUser(uMapper.findUserById(615));
-		System.out.println(cll);
+		cll = clMapper.findContactListByUser(u);
+		System.out.println("Find By User: " +cll);
 		
 
-		cl = clMapper.findContactListById(cl.getBo_Id());
+		cl = clMapper.findContactListById(70);
 		
 		cl.setName("Marcos Liste");
-		
+		System.out.println("Update Contact: "+cl);
 		clMapper.updateContactList(cl);
 		
-		clMapper.deleteContactListById(241);
+		//clMapper.deleteContactListById();
 		
 		
 		/**
 		 * Test Contact Mapper
 		 */
-		
+		System.out.println("############ Test Contact ################");
 		Contact c = new Contact();
 		c.setOwner(uMapper.findUserById(615));
 		c.setName(propValMapper.findByKey(230));

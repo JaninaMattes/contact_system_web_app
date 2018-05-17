@@ -43,7 +43,7 @@ public class BusinessObject implements Serializable{
 	 */
 	private Date creationDate = null;
 	private Date modifyDate = null;
-	private int user_id = 0;
+	private User owner = null;
 
 	private boolean shared_status = false; 
 	
@@ -81,15 +81,15 @@ public class BusinessObject implements Serializable{
 	/**
 	* Zurückgeben der UserID.
 	*/
-	public int getUserId() {
-		return this.user_id;
+	public User getOwner() {
+		return this.owner;
 	}
 
 	/**
 	 * Setzen der ID
 	 */
-	public void setUserId(int userId) {
-		this.user_id = userId;
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 	
 	
@@ -149,7 +149,7 @@ public class BusinessObject implements Serializable{
 		/*
 		 * Zurückgeben des Klassennamens + der ID der Instanz
 	     */
-		return this.getClass().getName() + " #" + this.user_id;
+		return this.getClass().getName() + " #" + this.owner.getGoogleID();
 	}
 	  
 	
