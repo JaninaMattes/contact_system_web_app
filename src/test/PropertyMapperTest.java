@@ -48,7 +48,7 @@ public class PropertyMapperTest {
 		
 		// PropertyMapper.propertyMapper().deleteByID(property_ID); //--> Funktioniert
 		
-		// PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
+		PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
 		
 		// PropertyMapper.propertyMapper().findAll(); // --> Funktioniert
 		
