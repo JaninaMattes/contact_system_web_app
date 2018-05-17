@@ -76,15 +76,12 @@ public class PropertyValueTest {
 		
 		*/
 		
+		
 		System.out.println(
-		PropertyValueMapper.propertyValueMapper().findByKey(2)
+		PropertyValueMapper.propertyValueMapper().findByKey(3)
 		);
 		 
-		/*
-		System.out.println("Eigenschaft Straße: " + 
-				PropertyValueMapper.propertyValueMapper().findByKey(10)
-				);
-		*/
+		
 		
 	
 			
