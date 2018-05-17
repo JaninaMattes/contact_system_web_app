@@ -73,8 +73,8 @@ public class ParticipationMapper {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
 				p.setParticipant(participant);
-				//Objekt für ID bekommen? --> Mapperaufruf: getObjectforID
-				BusinessObject reference = null;
+				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
+						.findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}
@@ -121,8 +121,8 @@ public class ParticipationMapper {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
 				p.setParticipant(participant);
-				//Objekt für ID bekommen? --> Mapperaufruf: getObjectforID
-				BusinessObject reference = null;
+				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
+						.findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}
@@ -156,8 +156,8 @@ public class ParticipationMapper {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
 				p.setParticipant(participant);
-				//Objekt für ID bekommen? --> Mapperaufruf: getObjectforID
-				BusinessObject reference = null;
+				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
+						.findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}
@@ -190,8 +190,8 @@ public class ParticipationMapper {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
 				p.setParticipant(participant);
-				//Objekt für ID bekommen? --> Mapperaufruf: getObjectforID
-				BusinessObject reference = null;
+				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
+						.findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}
