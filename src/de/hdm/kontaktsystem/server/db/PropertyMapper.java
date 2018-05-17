@@ -174,7 +174,7 @@ public class PropertyMapper {
                   System.out.println("User ID: " + rs.getInt("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findByProperty(property);
+                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
                   property.setPropertyValues(propertyValues); 
                   
@@ -265,7 +265,7 @@ public class PropertyMapper {
               System.out.println("Status: " + rs.getBoolean("status"));
                            
               // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-              propertyValues = PropertyValueMapper.propertyValueMapper().findByProperty(property);
+              propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
               // Setzen des Eigenschaftsausprägungs Vector
               property.setPropertyValues(propertyValues);
  
@@ -407,7 +407,7 @@ public class PropertyMapper {
                   System.out.println("User ID: " + rs.getInt("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findByProperty(property);
+                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
                   property.setPropertyValues(propertyValues);
                  

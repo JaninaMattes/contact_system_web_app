@@ -86,7 +86,7 @@ public class PropertyValueMapper {
 		  	  catch (SQLException e) {
 		      e.printStackTrace();
 		    } 
-		    return pv;
+		    return null;
 		  }
 	  
 	  /*
@@ -245,6 +245,23 @@ public class PropertyValueMapper {
 		  
 	  }	  
 	  
+	  	public void deleteAll(User u) {
+		  
+		Connection con = DBConnection.connection();
+		  
+		  try {
+			  PreparedStatement stmt = con.prepareStatement
+		      ("DELETE FROM PropertyValue INNER JOIN BusinessObject" 
+		      + " WHERE BusinessObject.user_ID=" + u.getUserId()
+		      + " AND BusinessObject.ID = PropertyValue.ID"
+		      );
+
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+		  
+	  }
 	  
 	  /*
 	   * Anhand der uebergegebenen ID wird das 

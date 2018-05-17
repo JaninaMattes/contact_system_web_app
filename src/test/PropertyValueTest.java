@@ -11,6 +11,7 @@ import de.hdm.kontaktsystem.server.db.DBConnection;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -76,17 +77,21 @@ public class PropertyValueTest {
 		
 		*/
 		
+		Property p = new Property();
+		p.setBo_Id(5);
+		User kimLy = new User();
+		PropertyValue pv = new PropertyValue();
+		pv.setOwner(kimLy);
+		pv.setProp(p);
+		pv.getOwner().setGoogleID(3);
+		pv.setValue("Lalala");
 		
-		System.out.println(
-		PropertyValueMapper.propertyValueMapper().findByKey(3)
-		);
+		
+		PropertyValueMapper.propertyValueMapper().insert(pv);
 		 
-		
-		
-	
 			
 		
-	}
+	} 
 }
 
 	
