@@ -25,7 +25,7 @@ public class ParticipationTest {
 		
 		//Test-Ausgabe des eingefügten Users
 		System.out.println(
-			UserMapper.userMapper().getUserByEmail("mail@gmail.com").getGMail()
+			UserMapper.userMapper().findUserByEmail("mail@gmail.com").getGMail()
 			);
 		
 //		//Generate PropertyValue (as referenced BusinessObject)
