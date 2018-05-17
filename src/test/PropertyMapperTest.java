@@ -53,7 +53,7 @@ public class PropertyMapperTest {
 		contactList.setContact(contact);
 		contactList.setName("Friendlist");
 		
-		int property_ID = 901;
+		int property_ID = 54;
 		String description = "Telefonnummer";
 		int user_id = 0;
 		boolean shared_status = false;
@@ -61,7 +61,7 @@ public class PropertyMapperTest {
 		
 		// PropertyMapper.propertyMapper().insert(property1); // --> Funktioniert 
 		
-		// PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
+		PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
 		
 		// PropertyMapper.propertyMapper().findAll(); // --> Funktioniert
 		
