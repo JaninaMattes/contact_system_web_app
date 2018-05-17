@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
+import de.hdm.kontaktsystem.server.db.BusinessObjectMapper.BONotFoundException;
 import de.hdm.kontaktsystem.server.db.ContactListMapper;
 import de.hdm.kontaktsystem.server.db.ContactMapper;
 import de.hdm.kontaktsystem.server.db.DBConnection;
@@ -42,7 +43,8 @@ public class DBTest {
 		System.out.println(BusinessObjectMapper.businessObjectMapper().findAllBusinessObjectIDs());
 		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectIDsByUserID(325));
 		
-		// BusinessObjectMapper.businessObjectMapper().insert(new Property());
+		
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(202));
 		
 		
 		// Test insert method from UserMapper 

@@ -123,18 +123,22 @@ public class BusinessObjectMapper implements Serializable {
 			}
 	  }
 	  
-	  public BusinessObject findBusinessObjectByID(int id) throws BONotFoundException{
+	  public BusinessObject findBusinessObjectByID(int id) {
 		  BusinessObject o = null;
-		  o = ContactMapper.contactMapper().findContactById(id);
+		  System.out.println("Test Contact");
+		  if(o == null) o = ContactMapper.contactMapper().findContactById(id);
+		  System.out.println("Test ContactList");
 		  if(o == null) o = ContactListMapper.contactListMapper().findContactListById(id);
+		  System.out.println("Test Property");
 		  if(o == null) o = PropertyMapper.propertyMapper().findByID(id);
+		  System.out.println("Test PropertyValue");
 		  if(o == null) o = PropertyValueMapper.propertyValueMapper().findByKey(id);
 		  //if(o == null) throw new BONotFoundException();
 		 
 		  return o;
 	  }
 	  
-	  private class BONotFoundException extends Exception{
+	  public class BONotFoundException extends Exception{
 
 		private static final long serialVersionUID = 1L;
 
