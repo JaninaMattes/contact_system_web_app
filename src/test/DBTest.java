@@ -41,31 +41,12 @@ public class DBTest {
 		PropertyMapper propMapper = PropertyMapper.propertyMapper(); 
 		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
 		UserMapper uMapper = UserMapper.userMapper();
-		/*
-		Connection con = DBConnection.connection();
 		
-		try {
-			ResultSet rs1 = con.createStatement().executeQuery(
-					"Select * from User"
-					);
-
-			ResultSet rs2 = con.createStatement().executeQuery(
-					"Select * from User"
-					);
-			while(rs2.next()){
-				System.out.println("Name: "+rs2.getInt("ID")+" E-Mail: "+rs2.getString("g_token"));
-			}
-			con.createStatement().executeUpdate(
-					"Update BusinessObject Set user_ID = 0 Where bo_ID = 2"
-					);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 		// Test insert method from BusinessObjectMapper 
+		System.out.println("############ Test BO ################");
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findAllBusinessObjectIDs());
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectIDsByUserID(325));
 		
-		//BusinessObjectMapper.businessObjectMapper().insert(new Property());
 		
 		// Generate test User with random ID
 		
@@ -82,7 +63,7 @@ public class DBTest {
 		/**
 		 * Test für den ContactList Mapper
 		 */
-		
+		System.out.println("############ Test ContactList ################");
 		ContactList cl = new ContactList();
 		cl.setName("Meine Liste");
 		cl.setOwner(uMapper.getUserById(615));
@@ -113,6 +94,8 @@ public class DBTest {
 		/**
 		 * Test Contact Mapper
 		 */
+		
+		System.out.println("############ Test Contact ################");
 		
 		Contact c = new Contact();
 		c.setOwner(uMapper.getUserById(615));
