@@ -103,12 +103,10 @@ public class DBTest {
 		
 		clMapper.deleteContactListById(241);
 		
-		Contact c = new Contact();
+		Contact c = cMapper.findContactById(31);
 		System.out.println(c);
-		c.setOwner(uMapper.getUserById(615));
-		c.setBo_Id(31);
 		clMapper.addContactToContactlist(cl, c);
-		c.setBo_Id(32);
+		c = cMapper.findContactById(32);
 		clMapper.removeContactFromContactList(cl, c);
 		
 	}
