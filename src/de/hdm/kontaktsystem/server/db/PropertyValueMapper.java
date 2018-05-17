@@ -49,7 +49,7 @@ public class PropertyValueMapper {
 
 		  try {
 		        // Einfügeoperation in propertyvalue erfolgt
-			  PreparedStatement stmt = con.prepareStatement
+			    PreparedStatement stmt = con.prepareStatement
 		        ("INSERT INTO PropertyValue (id, property_id, value) VALUES (?, ?, ?)");
 		        	stmt.setInt(1, pv.getBo_Id());
 		        	stmt.setInt(2, pv.getProp().getBo_Id());
