@@ -61,7 +61,7 @@ public class ContactList extends BusinessObject {
 	
 	@Override
 	public String toString() {
-		return "ContactList [name=" + name + ", owner=" + owner + ", contacts=" + contacts + "]";
+		return "ContactList [name=" + name + ", owner=" + getOwner() + ", contacts=" + contacts + "]";
 	}
 
 	 /**
@@ -92,10 +92,10 @@ public class ContactList extends BusinessObject {
 				return false;
 		} else if (!contacts.equals(other.contacts))
 			return false;
-		if (owner == null) {
-			if (other.owner != null)
+		if (getOwner() == null) {
+			if (other.getOwner() != null)
 				return false;
-		} else if (!owner.equals(other.owner))
+		} else if (!getOwner().equals(other.getOwner()))
 			return false;
 		return true;
 	}
