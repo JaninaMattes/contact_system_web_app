@@ -77,6 +77,12 @@ public class DBTest {
 		
 		*/
 		//UserMapper.userMapper().insertUser(u);
+		
+		
+		/**
+		 * Test für den ContactList Mapper
+		 */
+		
 		ContactList cl = new ContactList();
 		cl.setName("Meine Liste");
 		cl.setOwner(uMapper.getUserById(615));
@@ -103,13 +109,33 @@ public class DBTest {
 		
 		clMapper.deleteContactListById(241);
 		
+		
+		/**
+		 * Test Contact Mapper
+		 */
+		
 		Contact c = new Contact();
-		System.out.println(c);
 		c.setOwner(uMapper.getUserById(615));
-		c.setBo_Id(31);
+		c.setName(propValMapper.findByKey(230));
+		
+		cMapper.insertContact(c);
+		
+		System.out.println(cMapper.findByName(propValMapper.findByKey(230)));
+		System.out.println(cMapper.findAllContactsByUser(615));
+		System.out.println(cMapper.findContactByStatus(615, false));
+		System.out.println(cMapper.findAllContacts());
+		System.out.println(cMapper.findContactById(32));
+		
+		//cMapper.updateContact(c);
+		
+		cl = clMapper.findContactListById(16);
+		System.out.println(c);
 		clMapper.addContactToContactlist(cl, c);
-		c.setBo_Id(32);
+		c = cMapper.findContactById(32);
 		clMapper.removeContactFromContactList(cl, c);
+		
+		clMapper.deleteContactListById(cl.getBo_Id());
+		cMapper.deleteContactByID(c.getBo_Id());
 		
 	}
 }
