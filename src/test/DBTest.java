@@ -44,6 +44,9 @@ public class DBTest {
 		
 		
 		// Test insert method from BusinessObjectMapper 
+		System.out.println("############ Test BO ################");
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findAllBusinessObjectIDs());
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectIDsByUserID(325));
 		
 		// BusinessObjectMapper.businessObjectMapper().insert(new Property());
 		
