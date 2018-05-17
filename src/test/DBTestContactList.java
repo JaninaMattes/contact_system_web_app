@@ -84,6 +84,8 @@ public class DBTestContactList {
 		//clMapper.updateContactList(cl);
 		//cll = clMapper.findContactListByName("KontaktListe_2");
 		//System.out.println(cll);
+		
+		
 	
 	}
 
