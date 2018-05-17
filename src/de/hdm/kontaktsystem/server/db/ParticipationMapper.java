@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 
 /**
@@ -70,8 +71,11 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				p.setParticipantID(rs.getInt("User_ID"));
-				p.setReferenceID(rs.getInt("BusinessObject_ID"));
+				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
+				p.setParticipant(participant);
+				//Objekt für ID bekommen? --> Mapperaufruf: getObjectforID
+				BusinessObject reference = null;
+				p.setReference(reference);
 				participations.add(p);
 			}
 			return participations;
@@ -115,11 +119,15 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				p.setParticipantID(rs.getInt("User_ID"));
-				p.setReferenceID(rs.getInt("BusinessObject_ID"));
+				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
+				p.setParticipant(participant);
+				//Objekt für ID bekommen? --> Mapperaufruf: getObjectforID
+				BusinessObject reference = null;
+				p.setReference(reference);
 				participations.add(p);
 			}
 			return participations;
+			
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -146,11 +154,15 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				p.setParticipantID(rs.getInt("User_ID"));
-				p.setReferenceID(rs.getInt("BusinessObject_ID"));
+				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
+				p.setParticipant(participant);
+				//Objekt für ID bekommen? --> Mapperaufruf: getObjectforID
+				BusinessObject reference = null;
+				p.setReference(reference);
 				participations.add(p);
 			}
 			return participations;
+			
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -176,11 +188,15 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				p.setParticipantID(rs.getInt("User_ID"));
-				p.setReferenceID(rs.getInt("BusinessObject_ID"));
+				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
+				p.setParticipant(participant);
+				//Objekt für ID bekommen? --> Mapperaufruf: getObjectforID
+				BusinessObject reference = null;
+				p.setReference(reference);
 				participations.add(p);
 			}
 			return participations;
+			
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
