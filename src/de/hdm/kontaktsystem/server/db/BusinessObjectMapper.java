@@ -123,6 +123,31 @@ public class BusinessObjectMapper implements Serializable {
 			}
 	  }
 	  
+	  public BusinessObject findBusinessObjectByID(int id) throws BONotFoundException{
+		  BusinessObject o = null;
+		  o = ContactMapper.contactMapper().findContactById(id);
+		  if(o == null) o = ContactListMapper.contactListMapper().findContactListById(id);
+		  if(o == null) o = PropertyMapper.propertyMapper().findByID(id);
+		  if(o == null) o = PropertyValueMapper.propertyValueMapper().findByKey(id);
+		  //if(o == null) throw new BONotFoundException();
+		 
+		  return o;
+	  }
+	  
+	  private class BONotFoundException extends Exception{
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void printStackTrace() {
+			// TODO Auto-generated method stub
+			System.err.println("Das gesuchte BusinessObject existiert in der Datenbank nicht");
+		}
+		
+		
+		  
+	  }
+	  
 	  
 	  public Vector<Integer> findAllBusinessObjectIDs(){
 		  Vector<Integer> boList = new Vector<Integer>();
@@ -187,9 +212,6 @@ public class BusinessObjectMapper implements Serializable {
 		      e.printStackTrace();
 		    }
 		
-	}
-	
-	  
-	  
+	}	  
 
 }

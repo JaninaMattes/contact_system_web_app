@@ -304,7 +304,7 @@ public class PropertyMapper {
      
       public Property findByID(int property_id) {
           
-          Property property = new Property(); 
+           
          
           Connection con = DBConnection.connection();
           
@@ -325,7 +325,7 @@ public class PropertyMapper {
               ResultSet rs = stmt.executeQuery();          		 
                            
               if (rs.next()) {
-
+            	  Property property = new Property();
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                   
                   property.setBo_Id(rs.getInt("ID"));
@@ -343,9 +343,9 @@ public class PropertyMapper {
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
                   property.setPropertyValues(propertyValues);
-     
+                  return property;
               }              
-              return property;
+              
               
           } catch (SQLException e) {
               e.printStackTrace();

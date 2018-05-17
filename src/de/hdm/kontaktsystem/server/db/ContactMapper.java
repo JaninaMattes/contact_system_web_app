@@ -212,7 +212,7 @@ public class ContactMapper {
 	 * @return
 	 */
 	public Contact findContactById(int id) {
-		Contact contact = new Contact();
+		
 		Connection con = DBConnection.connection();
 
 		try {
@@ -226,6 +226,7 @@ public class ContactMapper {
 
 			if (rs.next()) {
 
+				Contact contact = new Contact();
 				
 				contact.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
@@ -233,13 +234,13 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
 				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
-
+				return contact;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return contact;
+		return null;
 	}
 
 	/**

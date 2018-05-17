@@ -272,7 +272,7 @@ public class PropertyValueMapper {
 	  
 	  public PropertyValue findByKey(int id) {
 				  	
-		  		  PropertyValue pv = new PropertyValue();
+		  		  
 				  Connection con = DBConnection.connection();
 			
 				  
@@ -286,10 +286,11 @@ public class PropertyValueMapper {
 					  ResultSet rs = stmt.executeQuery();
 				      
 				      if (rs.next()) {
+				    	  PropertyValue pv = new PropertyValue();
 				    	  pv.setBo_Id(rs.getInt("ID"));
 				    	  pv.setValue(rs.getString("value"));
 				    	  pv.getProp().setDescription(rs.getString("description"));
-				    	  
+				    	  return pv;
 				      }
 				      
 				  } catch (SQLException e) {
@@ -297,7 +298,7 @@ public class PropertyValueMapper {
 					  
 				  	} 
 				  
-				  return pv;
+				  return null;
 		}
 	  
 	  /*********************************************************************
