@@ -61,7 +61,7 @@ public class PropertyMapperTest {
 		
 		// PropertyMapper.propertyMapper().insert(property1); // --> Funktioniert 
 		
-		// PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
+		PropertyMapper.propertyMapper().findByID(property_ID); //--> Funktioniert 
 		
 		// PropertyMapper.propertyMapper().findAll(); // --> Funktioniert
 		
