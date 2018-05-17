@@ -306,18 +306,17 @@ public class PropertyMapper {
           
            
          
-          Connection con = DBConnection.connection();
-          
+          Connection con = DBConnection.connection();          
          
           try {
               // Leeres SQL Statement anlegen  
               PreparedStatement stmt = con.prepareStatement( 
-            		  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
+            		  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, "
                       + "BusinessObject.creationDate, BusinessObject.modificationDate, BusinessObject.status,"
                       + "Property.ID, Property.description "
                       + "FROM BusinessObject "
                       + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
-                      + "WHERE BusinessObject.bo_ID = ?" 
+                      + "WHERE BusinessObject.bo_ID = ? " 
                       );
               
               stmt.setInt(1, property_id);
@@ -519,7 +518,7 @@ public class PropertyMapper {
          
          Vector <Property> propertyResult = new Vector <Property>();
          propertyResult = PropertyMapper.propertyMapper().findByUserID(user_id);
-        
+         System.out.println("Properties gefunden");
          if(propertyResult != null) {
         	 for (Property pV : propertyResult){  
         		 
