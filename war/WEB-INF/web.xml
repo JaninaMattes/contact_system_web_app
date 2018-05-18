@@ -9,26 +9,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
  <!--  TODO: Ausformulieren der Servlets muss noch erledigt werden -->
 
- 
-  <servlet>
-    <servlet-name>contactSystemServlet</servlet-name>
-    <servlet-class>de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name><!-- Servletname --></servlet-name>
-    <url-pattern><!--/ContactSystem/administration--></url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>reportGeneratorServlet</servlet-name>
-    <servlet-class><!-- Servlet Klassenpfad --></servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>reportGeneratorServlet</servlet-name>
-    <url-pattern><!--/ContactSystem/reportgenerator--></url-pattern>
-  </servlet-mapping> 
+
   
   <!-- Default page to serve -->
   <welcome-file-list>
@@ -36,17 +17,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </welcome-file-list>
 
   <servlet>
-    <servlet-name>SystemServiceServlet</servlet-name>
-    <servlet-class><!-- Servlet Klassenpfad --></servlet-class>
-    <init-param>
-      <param-name>services</param-name>
-      <param-value/>
-    </init-param>
+    <servlet-name>LoginService</servlet-name>
+    <servlet-class>de.hdm.kontaktsystem.server.LoginServiceImpl</servlet-class>
+    
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>SystemServiceServlet</servlet-name>
-    <url-pattern>/_ah/spi/*</url-pattern>
+    <servlet-name>LoginService</servlet-name>
+    <url-pattern>/kontaktsystem/login</url-pattern>
   </servlet-mapping>
   
   
