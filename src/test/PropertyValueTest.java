@@ -11,6 +11,7 @@ import de.hdm.kontaktsystem.server.db.DBConnection;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -26,7 +27,7 @@ public class PropertyValueTest {
 		 * findBy(Prop) Test
 		 */
 		
-		/*
+		
 		Property prop = new Property("Test789");
 		
 		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
@@ -40,7 +41,7 @@ public class PropertyValueTest {
 				"Gefundene Ausprägungen zu Eigenschaft : " + pV);
 		
 		}		
-		*/
+		
 		
 		/*
 		Connection con = DBConnection.connection();
@@ -76,20 +77,21 @@ public class PropertyValueTest {
 		
 		*/
 		
-		System.out.println(
-		PropertyValueMapper.propertyValueMapper().findByKey(2)
-		);
-		 
-		/*
-		System.out.println("Eigenschaft Straße: " + 
-				PropertyValueMapper.propertyValueMapper().findByKey(10)
-				);
-		*/
+		Property p = new Property();
+		p.setBo_Id(5);
+		User kimLy = new User();
+		PropertyValue pv = new PropertyValue();
+		pv.setOwner(kimLy);
+		pv.setProp(p);
+		pv.getOwner().setGoogleID(3);
+		pv.setValue("Lalala");
 		
-	
+		
+		PropertyValueMapper.propertyValueMapper().insert(pv);
+		 
 			
 		
-	}
+	} 
 }
 
 	

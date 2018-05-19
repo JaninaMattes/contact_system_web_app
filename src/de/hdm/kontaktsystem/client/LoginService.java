@@ -1,15 +1,11 @@
 package de.hdm.kontaktsystem.client;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-public class LoginService implements EntryPoint {
+import de.hdm.kontaktsystem.shared.UserData;
 
-	@Override
-	public void onModuleLoad() {
-		// TODO Auto-generated method stub
-		RootPanel.get("content").add(new HTML("<h1>Login</h1>"));
-	}
-
+@RemoteServiceRelativePath("login")
+public interface LoginService extends RemoteService {
+	public UserData login(String requestUri);
 }

@@ -145,6 +145,7 @@ public class ContactMapper {
 	}
 
 	/**
+	 * Mapper-Methode um einen Kontakt zu erstellen
 	 * TODO: Owner ID überdenken!
 	 */
 
@@ -154,8 +155,7 @@ public class ContactMapper {
 
 		Connection con = DBConnection.connection();
 
-		// setzt in insert BO die ID (Verbindung zu BO)--> braucht man bei insert,
-		// delete
+		// setzt in insert BO die ID (Verbindung zu BO)
 		try {
 
 			Statement stmt = con.createStatement();
