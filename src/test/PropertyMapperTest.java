@@ -107,9 +107,11 @@ public class PropertyMapperTest {
 		participation1.setReference(property1);
 			
 	
+		//************************************************************
+		// Property Mapper - TESTS
+		//************************************************************
 		
-		
-		 PropertyMapper.propertyMapper().insert(property1); // --> Funktioniert 
+		 // PropertyMapper.propertyMapper().insert(property1); // --> Funktioniert 
 
 		// PropertyMapper.propertyMapper().findByID(property_id); //--> Funktioniert 
 		
@@ -119,10 +121,7 @@ public class PropertyMapperTest {
 		
 		// PropertyMapper.propertyMapper().findByStatus(user_id, shared_status); // --> Funktioniert
 		
-				
-		// ParticipationMapper.participationMapper().insertParticipation(participation);
-		
-		// PropertyMapper.propertyMapper().findByOwnership(user);
+		// PropertyMapper.propertyMapper().updateProperty(property1); // --> Funktioniert (Achtung Key Value Constraint)
 				
 		// PropertyMapper.propertyMapper().findByUser(user); // --> Funktioniert
 		
@@ -130,13 +129,18 @@ public class PropertyMapperTest {
 					
 		// PropertyMapper.propertyMapper().deleteProperty(test); // --> Funktionert
 		
-		// PropertyMapper.propertyMapper().deleteByUserID(user_id);
+		// PropertyMapper.propertyMapper().deleteByUserID(143); // --> Funktioniert
 		
-		// BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(property_id);
+		// PropertyMapper.propertyMapper().deleteByUser(user); // --> Funktioniert
 		
-		//PropertyMapper.propertyMapper().updateProperty(property1); // --> Fehler im Insert Statement von PropertyValue
-
+		// PropertyMapper.propertyMapper().delete(property1); // --> Funktioniert
 		
+		
+		
+		// PropertyMapper.propertyMapper().findByOwnership(user); --> ??
+		 
+	    // PropertyMapper.propertyMapper().findByParticipation(user); --> ?? 
+	
 	}
 
 }

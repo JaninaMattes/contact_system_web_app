@@ -216,7 +216,7 @@ public class BusinessObjectMapper implements Serializable {
 		  try {
 			  // Einfügeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement
-		      ("DELETE FROM BusinessObject WHERE id= ?");
+		      ("DELETE FROM BusinessObject WHERE bo_ID = ? ");
 		      stmt.setInt(1, id);
 		      stmt.execute();
 		      

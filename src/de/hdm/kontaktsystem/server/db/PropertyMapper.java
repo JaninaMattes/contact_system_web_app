@@ -424,18 +424,21 @@ public class PropertyMapper {
       	// Alle Properties welche dem User geteilt wurden
       	// Der Nutzer ist hier nur Participant und nicht Owner
       	Vector <Property> propertyResult = new Vector <Property>();
-      	
+      	System.out.println("Abruf Participation");
       	// Abruf aller Teilhaberschaften, welche mit geg. User geteilt wurden
       	Vector <Participation> participationResult = new Vector <Participation>();    	
       	participationResult = ParticipationMapper.participationMapper().findParticipationsByParticipantID(participant.getGoogleID());
-      	
+
+      	if(participationResult != null) {
       	for (Participation p : participationResult) {
-      		
+      		System.out.println("ID: " + p.getReferenceID());
       		Property property = new Property();
       		property = this.findByID(p.getReferenceID());
       		if(property != null) propertyResult.add(property);
       	}
       	return propertyResult;
+      }
+      	return null;
       }
       
       /**
@@ -448,20 +451,27 @@ public class PropertyMapper {
       public Vector<Property> findByOwnership(User owner){
       	
       	// Alle Properties welche vom User mit andere geteilt wurden
-      	Vector <Property> propertyResult = new Vector <Property>();    	
+      	Vector <Property> propertyResult = new Vector <Property>();
+      	System.out.println("Abruf Participation");
       	// Abruf aller Teilhaberschaften, zu Property Objekten eines Users
       	Vector <Participation> participationResult = new Vector <Participation>();    	
       	participationResult = ParticipationMapper.participationMapper().findParticipationsByOwnerID(owner.getGoogleID());
+      	System.out.println("Befüllen Participation-Objekt");
       	
-      	for (Participation p : participationResult) {
-
+      	if(participationResult != null) {
+      		for (Participation p : participationResult) {
+      	    
           		Property property = new Property();
           		property = this.findByID(p.getReferenceID());
+          		System.out.println("ID: " + property.getBo_Id());
           		if(property != null) propertyResult.add(property);
       		
-      			}
-      	
+      			}      	
       	return propertyResult;
+      	
+      	}
+      	
+      	return null;
       }
           
      
@@ -575,7 +585,11 @@ public class PropertyMapper {
        */
            
       public void deleteByUserID(int user_id) {
-    	  this.deleteByUserID(user_id);
+    	  // Aufruf des User-Objektes aus der DB
+    	  User user = new User();
+    	  user = UserMapper.userMapper().findUserById(user_id);
+    	  System.out.println("userID: " + user.getGoogleID());
+    	  this.deleteByUser(user);
       }
      
       
