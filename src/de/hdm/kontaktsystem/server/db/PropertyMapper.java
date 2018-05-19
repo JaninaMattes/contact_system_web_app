@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
+import java.util.logging.Logger;
 
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
+import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -174,7 +177,7 @@ public class PropertyMapper {
                   System.out.println("User ID: " + rs.getInt("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findByProperty(property);
+                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
                   property.setPropertyValues(propertyValues); 
                   
@@ -265,7 +268,7 @@ public class PropertyMapper {
               System.out.println("Status: " + rs.getBoolean("status"));
                            
               // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-              propertyValues = PropertyValueMapper.propertyValueMapper().findByProperty(property);
+              propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
               // Setzen des Eigenschaftsausprägungs Vector
               property.setPropertyValues(propertyValues);
  
@@ -285,9 +288,62 @@ public class PropertyMapper {
     }
    
     
-    public Vector<Property> findShared(int user_id, Property property){
+    public Vector<Property> findSharedByOthers(int participant_id){
+    	
     	// Alle Properties welche dem User geteilt wurden
-    	return null;
+    	// Der Nutzer ist hier nur Participant und nicht Owner
+    	Vector <Property> propertyResult = new Vector <Property>();
+    	// Abruf aller Teilhaberschaften, welche mit geg. User geteilt wurden
+    	Vector <Participation> participationResult = new Vector <Participation>();    	
+    	participationResult = ParticipationMapper.participationMapper().findParticipationsByParticipantID(participant_id);
+    	
+    	for (Participation p : participationResult) {
+    		Property prop = new Property();
+    		BusinessObject bo = new BusinessObject();
+    		bo = p.getReferencedObject();
+    		try {
+    			
+    			prop = (Property) BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(bo.getBo_Id());
+    			
+    		} catch(NullPointerException e) {
+    			e.printStackTrace();
+    		}
+    		  		
+    		propertyResult.add(prop);
+    	}
+    	return propertyResult;
+    }
+    
+    
+    public Vector<Property> findSharedByMe(int owner_id){
+    	
+    	// Alle Properties welche vom User mit andere geteilt wurden
+    	Vector <Property> propertyResult = new Vector <Property>();    	
+    	// Abruf aller Teilhaberschaften, zu Property Objekten eines Users
+    	Vector <Participation> participationResult = new Vector <Participation>();    	
+    	participationResult = ParticipationMapper.participationMapper().findParticipationsByOwnerID(owner_id);
+    	
+    	
+    	if(participationResult != null) {
+    	
+    		for (Participation p : participationResult) {
+    			System.out.println("User ID: " + p.getParticipantID());
+    		
+    			Property prop = new Property();
+    			BusinessObject bo = new BusinessObject();
+    		
+    			bo = p.getReferencedObject();
+    			System.out.println("BO_ID" + bo.getBo_Id());
+    		
+    			prop = (Property) BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(bo.getBo_Id());
+    		
+    			propertyResult.add(prop);
+    		
+    			}
+    	
+    		} else { return null; }
+    	
+    	return propertyResult;
     }
         
          
@@ -407,7 +463,7 @@ public class PropertyMapper {
                   System.out.println("User ID: " + rs.getInt("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findByProperty(property);
+                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
                   property.setPropertyValues(propertyValues);
                  
@@ -459,8 +515,7 @@ public class PropertyMapper {
             }          
           	BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);         
       }
-     
-      
+           
       
       /**
        * Löschen der Daten eines <code>Property</code>-Objekts aus der Datenbank.     
@@ -534,7 +589,7 @@ public class PropertyMapper {
        * @param user entspricht dem Nutzer dessen Eigenschaften gelöscht werden sollen.
        */
            
-      public void deleteAllPropertiesByUserID(User user) {
+      public void deleteByUser(User user) {
     	  this.deleteByUserID(user.getGoogleID());
       }
      
@@ -574,8 +629,7 @@ public class PropertyMapper {
                 	
                 	System.out.println("eingefügt:" + pV);
                 }          	      
-                
-                
+                                
           } catch(SQLException e) {
               e.printStackTrace();
           }  
