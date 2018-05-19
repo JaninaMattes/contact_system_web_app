@@ -26,7 +26,7 @@ import java.util.Date;
 
 //TODO: geeigneten Konstruktor erstellen
 
-public class BusinessObject implements Serializable{
+public abstract class BusinessObject implements Serializable{
 	
 	/**
 	 * Seriennummer, vorgegeben durch das Interface {@link Serializable}

@@ -471,22 +471,23 @@ public class PropertyValueMapper {
 				  
 				  // Statement ausfüllen und als Query an die DB schicken
 			      ResultSet rs = stmt.executeQuery
-			      ("SELECT propertyvalue.id, propertyvalue.value"
-			    	+ " FROM propertyvalue INNER JOIN contact" 
-			    	+ " WHERE contact.id=" + c.getBo_Id()
+			      ("SELECT PropertyValue.ID, PropertyValue.value"
+			    	+ " FROM PropertyValue INNER JOIN Contact" 
+			    	+ " WHERE Contact.ID=" + c.getBo_Id()
 			    	+ " \""
 			      );
 			    	
 			      while (rs.next()) {
 			          PropertyValue propValue = new PropertyValue();		          
-			          propValue.setBo_Id(rs.getInt("id"));
+			          propValue.setBo_Id(rs.getInt("ID"));
 			          propValue.setValue(rs.getString("value"));		
 			          
 			          // Hinzufuegen des neuen Objekts zum Ergebnisvektor
 			          propValueResult.addElement(propValue);
-			          return propValueResult;
-			          
+			          			          
 			      	}
+			      
+			      return propValueResult;
 			      
 			  } catch (SQLException e) {
 				  e.printStackTrace();
@@ -497,6 +498,49 @@ public class PropertyValueMapper {
 
 		
 
+		/*
+		 * Aufruf der Auspraegungen anhand ihrer zugeordneten Eigenschaft
+		 */
+		
+		public Vector<PropertyValue> findBy(Property p){
+			  
+			  Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
+			  
+			  Connection con = DBConnection.connection();
+			  Statement stmt = null;
+			  
+			  try {
+				  // Leeres SQL Statement anlegen	
+				  stmt = con.createStatement();
+				  
+				  // Statement ausfüllen und als Query an die DB schicken
+			      ResultSet rs = stmt.executeQuery
+			      ("SELECT PropertyValue.ID, PropertyValue.value"
+			    	+ " FROM PropertyValue INNER JOIN Property" 
+			    	+ " WHERE Property.ID=" + p.getBo_Id()
+			    	+ " \""
+			      );
+			    	
+			      while (rs.next()) {
+			          PropertyValue propValue = new PropertyValue();		          
+			          propValue.setBo_Id(rs.getInt("ID"));
+			          propValue.setValue(rs.getString("value"));		
+			          
+			          // Hinzufuegen des neuen Objekts zum Ergebnisvektor
+			          propValueResult.addElement(propValue);
+			          
+			      	}
+			      
+			      return propValueResult;
+			      
+			  } catch (SQLException e) {
+				  e.printStackTrace();
+			  } 
+			  
+			  return null;
+	}
+
+		
 		
 		
 }
