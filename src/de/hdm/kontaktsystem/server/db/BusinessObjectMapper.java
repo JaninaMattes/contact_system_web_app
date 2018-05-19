@@ -1,6 +1,7 @@
 package de.hdm.kontaktsystem.server.db;
 
 import java.io.Serializable;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +10,8 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
+import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Property;
 
 public class BusinessObjectMapper implements Serializable {
@@ -43,7 +46,7 @@ public class BusinessObjectMapper implements Serializable {
 		  Connection con = DBConnection.connection();
 		  try{
 			  PreparedStatement stmt = con.prepareStatement("UPDATE BusinessObject SET status = ? WHERE bo_ID = ?");
-			  stmt.setBoolean(1, bo.getShared_status());
+			  stmt.setBoolean(1, bo.isShared_status());
 			  stmt.setInt(2, bo.getBo_Id());
 			  stmt.executeUpdate();
 			  
@@ -123,22 +126,28 @@ public class BusinessObjectMapper implements Serializable {
 			}
 	  }
 	  
+	  // Business Object als Parameter übergeben und id zurück geben als Zuordnung zum Objekt
+	  
 	  public BusinessObject findBusinessObjectByID(int id) {
-		  BusinessObject o = null;
+		  
+		  BusinessObject bo = new BusinessObject();
+		  
 		  System.out.println("Test Contact");
-		  if(o == null) o = ContactMapper.contactMapper().findContactById(id);
+		  if(bo == null) return bo = ContactMapper.contactMapper().findContactById(id);
 		  System.out.println("Test ContactList");
-		  if(o == null) o = ContactListMapper.contactListMapper().findContactListById(id);
+		  if(bo == null) return bo = ContactListMapper.contactListMapper().findContactListById(id);
 		  System.out.println("Test Property");
-		  if(o == null) o = PropertyMapper.propertyMapper().findByID(id);
+		  if(bo == null) return bo = PropertyMapper.propertyMapper().findByID(id);
 		  System.out.println("Test PropertyValue");
-		  if(o == null) o = PropertyValueMapper.propertyValueMapper().findByKey(id);
+		  if(bo == null) return bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
 		  //if(o == null) throw new BONotFoundException();
 		 
-		  return o;
+		  return null;
 	  }
 	  
-	  public class BONotFoundException extends Exception {
+
+	 
+	  public class BONotFoundException extends Exception{
 
 		private static final long serialVersionUID = 1L;
 
@@ -147,10 +156,11 @@ public class BusinessObjectMapper implements Serializable {
 			// TODO Auto-generated method stub
 			System.err.println("Das gesuchte BusinessObject existiert in der Datenbank nicht");
 		}
-		
-		
+				
 		  
 	  }
+	  
+	   
 	  
 	  
 	  public Vector<Integer> findAllBusinessObjectIDs(){

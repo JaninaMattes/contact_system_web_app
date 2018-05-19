@@ -40,9 +40,10 @@ public class ParticipationTest {
 		
 		
 		//Generate Participation
-		Participation participation = new Participation(participant.getGoogleID(), 4);
-		//insert Participation into table
-		ParticipationMapper.participationMapper().insertParticipation(participation);
+		// Participation participation = new Participation(participant.getGoogleID(), 4);
+		// insert Participation into table
+		// ParticipationMapper.participationMapper().insertParticipation(participation);
+		
 		
 		//Ausgabe der Participation
 		System.out.println(

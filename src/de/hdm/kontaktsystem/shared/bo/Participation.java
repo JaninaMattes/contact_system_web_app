@@ -35,8 +35,7 @@ public class Participation implements Serializable {
 	 * Verweis auf die ID des geteilten BusinessObjects
 	 */
 	private BusinessObject reference = null;
-
-	
+		
 	/**
 	 * Leerer Konstruktor
 	 */
@@ -50,15 +49,15 @@ public class Participation implements Serializable {
 	public Participation(User participant, BusinessObject reference) {
 		this.participant = participant;
 		this.reference = reference;
+		
 	}
-	
-
 	
 	/**
 	* Zurückgeben der TeilhaberID
 	*/
 	public int getParticipantID() {
 		return this.participant.getGoogleID();
+		
 	}
 
 	/**
