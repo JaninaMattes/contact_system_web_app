@@ -138,7 +138,7 @@ public class BusinessObjectMapper implements Serializable {
 		  return o;
 	  }
 	  
-	  public class BONotFoundException extends Exception{
+	  public class BONotFoundException extends Exception {
 
 		private static final long serialVersionUID = 1L;
 

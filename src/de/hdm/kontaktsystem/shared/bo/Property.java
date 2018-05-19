@@ -1,7 +1,8 @@
 package de.hdm.kontaktsystem.shared.bo;
 
 import java.util.Vector;
-import de.hdm.kontaktsystem.shared.bo.PropertyValue;
+
+
 
 /**
  * <p>
@@ -40,7 +41,12 @@ public class Property extends BusinessObject{
 	 * 
 	 * */
 	
-	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
+	
+	/*
+	 * Ausprägung der Eigenschaft
+	 */
+	
+	private String value = null;
 	
 	/*
 	* ***************************************************************************
@@ -72,13 +78,12 @@ public class Property extends BusinessObject{
 	 */
 	
 	public Property(String value, String description) {
+		this.value =value;
 		this.description = description;		
 		
-		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
-		PropertyValue propertyValue = new PropertyValue(value);
-		propertyValues.addElement(propertyValue);
-		
 	}	
+	
+	
 
 	
 	/*
@@ -104,37 +109,29 @@ public class Property extends BusinessObject{
 	public void setDescription(String description) {
 		this.description = description;
 	}		
+	
+	/*
+	 * Auslesen der Ausprägung eines Eigenschaftsobjektes
+	 */
+	
+	 public String getValue() {
+		return value;
+	}
+	 
+	 /*
+	  * Setzen der Ausprägung einer Eigenschaft
+	  */
+
+	public void setValue(String value) {
+		this.value = value;
+	}
 		
 	
 	/*
 	 * Auslesen des PropertyValue Vectors
 	 *  
 	 */
-	
-	public Vector<PropertyValue> getPropertyValues() {
-		return propertyValues;
-	}	
 
-	/*
-	 * Setzen des PropertyValue Vectors für eine neue Liste
-	 * an PropertyValues, welche einer Property zugeordnet werden.
-	 * Möglichkeit auch nur eine PropertyValue Instanz dem Vector
-	 * beizufügen, wenn nur ein einziges Objekt zugeordnet werden soll.
-	 *  
-	 */
-	
-	public void setPropertyValues(Vector<PropertyValue> propertyValues) {
-		this.propertyValues = propertyValues;
-	}
-	
-	/*
-	 * Möglichkeit bei Bedarf auch nur ein einziges PropertyValue Objekt
-	 * zu setzen. 
-	 */
-	
-	public void setPropertyValue(PropertyValue propertyVal) {
-		this.propertyValues.addElement(propertyVal);
-	}
 		
 	/*
 	* ***************************************************************************
@@ -152,7 +149,9 @@ public class Property extends BusinessObject{
 	 *  
 	 */
 	
-	 public boolean equals(Object o) {
+
+
+	public boolean equals(Object o) {
 		    /*
 		     * Abfragen, ob ein Objekt ungl. NULL ist und ob ein Objekt gecastet werden
 		     * kann
@@ -192,7 +191,7 @@ public class Property extends BusinessObject{
 		
 		@Override
 		public String toString() {
-			return "Property [description=" + description + ", propertyValues=" + propertyValues + "]";
+			return "Property [description=" + description + ", propertyValues=" + value + "]";
 		}
 		
 	
