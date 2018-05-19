@@ -19,7 +19,7 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 public class Property extends BusinessObject{
 	
-	/*
+	/**
 	 * Die default Serial Version UID vergibt jeder serialisierbaren Java Klasse
 	 * eine einzigartige ID. Diese wird bei der <em> desirialisation </em> verwendet
 	 * um sicherzustellen, dass Sender und Empfänger die Klassen für das empfangene
@@ -28,15 +28,16 @@ public class Property extends BusinessObject{
 
 	private static final long serialVersionUID = 1L;
 		
-	/*
+	/**
 	 * Beschreibung der Eigenschaft
 	 */
 	
 	private String description = null;
 	
-	/*
+	/**
 	 * Jeder Eigenschaftinstanz ist einer oder mehrerer Eigenschaftsausprägungen
 	 * zugeordnet. Diese werden durch eine Vector Liste repräsentiert
+	 * 
 	 * 
 	 * */
 	
@@ -48,7 +49,7 @@ public class Property extends BusinessObject{
 	* ***************************************************************************
 	*/
 	
-	/*
+	/**
 	 * Default Konstruktor
 	 */
 		
@@ -56,7 +57,7 @@ public class Property extends BusinessObject{
 		
 	}
 	
-	/*
+	/**
 	 * Bei der Erzeugung einer neuen Eigenschaftsinstanz muss nicht zwingend
 	 * eine Eigenschaftsausprägung (PropertyValue Instanz) erzeugt werden
 	 */
@@ -66,7 +67,7 @@ public class Property extends BusinessObject{
 		
 	}
 	
-	/*
+	/**
 	 * Bei der Erzeugung einer neuen Eigenschaftinstanz muss ebenso eine neue
 	 * Eigenschaftsausprägung dieser erzeugt und zugeordnet werden
 	 */
@@ -88,7 +89,7 @@ public class Property extends BusinessObject{
 	*/
 	
 	
-	/*
+	/**
 	 * Auslesen der Beschreibung eines Eigenschafts Objektes
 	 */
 
@@ -106,7 +107,7 @@ public class Property extends BusinessObject{
 	}		
 		
 	
-	/*
+	/**
 	 * Auslesen des PropertyValue Vectors
 	 *  
 	 */
@@ -115,7 +116,8 @@ public class Property extends BusinessObject{
 		return propertyValues;
 	}	
 
-	/*
+	/**
+	 * 
 	 * Setzen des PropertyValue Vectors für eine neue Liste
 	 * an PropertyValues, welche einer Property zugeordnet werden.
 	 * Möglichkeit auch nur eine PropertyValue Instanz dem Vector
@@ -127,7 +129,7 @@ public class Property extends BusinessObject{
 		this.propertyValues = propertyValues;
 	}
 	
-	/*
+	/**
 	 * Möglichkeit bei Bedarf auch nur ein einziges PropertyValue Objekt
 	 * zu setzen. 
 	 */
@@ -143,7 +145,7 @@ public class Property extends BusinessObject{
 	*/
 	
 
-	/*
+	/**
 	 * <p>
 	 * Feststellen der <em>inhaltlichen</em> Gleichheit zweier PropertyValue-Objekte.
 	 * Die Gleichheit wird in diesem Beispiel auf eine gleiche Identität
@@ -153,10 +155,12 @@ public class Property extends BusinessObject{
 	 */
 	
 	 public boolean equals(Object o) {
-		    /*
+		    
+		 	/**
 		     * Abfragen, ob ein Objekt ungl. NULL ist und ob ein Objekt gecastet werden
 		     * kann
 		     */
+		 
 		    if (o != null && o instanceof Property) {
 		      Property prop = (Property) o;
 		      try {

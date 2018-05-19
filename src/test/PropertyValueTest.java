@@ -27,7 +27,7 @@ public class PropertyValueTest {
 		 * findBy(Prop) Test
 		 */
 		
-		/*
+		
 		Property prop = new Property("Test789");
 		
 		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
@@ -41,7 +41,7 @@ public class PropertyValueTest {
 				"Gefundene Ausprägungen zu Eigenschaft : " + pV);
 		
 		}		
-		*/
+		
 		
 		/*
 		Connection con = DBConnection.connection();

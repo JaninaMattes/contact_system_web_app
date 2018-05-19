@@ -108,10 +108,10 @@ public class ParticipationMapper {
 			Vector<Participation> participations = new Vector<Participation>();
 			
 			// Get all Participations from database and store in a ResultSet-Object
-			PreparedStatement stmt = con.prepareStatement("SELECT User_BusinessObject.*, BusinessObject.*"
-					+ "FROM  User_BusinessObject"
-					+ "INNER JOIN BusinessObject"
-					+ "ON User_BusinessObject.BusinessObject_ID = BusinessObject.bo_ID"
+			PreparedStatement stmt = con.prepareStatement("SELECT User_BusinessObject.*, BusinessObject.* "
+					+ "FROM  User_BusinessObject "
+					+ "INNER JOIN BusinessObject "
+					+ "ON User_BusinessObject.BusinessObject_ID = BusinessObject.bo_ID "
 					+ "WHERE BusinessObject.user_ID = ?");
 			stmt.setInt(1, userID);
 			ResultSet rs = stmt.executeQuery();
@@ -231,6 +231,7 @@ public class ParticipationMapper {
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
+		
 		BusinessObjectMapper.businessObjectMapper().setStatusTrue(participation.getReferenceID());
 	}
 	
