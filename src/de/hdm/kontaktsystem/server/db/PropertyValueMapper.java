@@ -9,11 +9,13 @@ import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
 
+
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 public class PropertyValueMapper {
 
@@ -214,10 +216,12 @@ public class PropertyValueMapper {
 		 */
 		
 		
-		public Vector <PropertyValue> findBy(User user) {
+		public Vector <PropertyValue> findByUser(User user) {
 			// TODO Auto-generated method stub
 			
-			return null;
+			Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
+			//...
+			return propertyValueResult;
 		}
 		
 				
@@ -462,7 +466,7 @@ public class PropertyValueMapper {
 				Property prop = new Property();
 				propValue.setProp(prop);
 				prop.setId(rs.getInt("property_ID"));
-				PropertyMapper.propertyMapper().findByID(prop.getId());
+				PropertyMapper.propertyMapper().findBy(prop.getId());
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
