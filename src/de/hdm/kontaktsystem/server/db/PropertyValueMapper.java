@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import com.google.appengine.api.users.User;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 
 public class PropertyValueMapper {
@@ -559,10 +559,12 @@ public class PropertyValueMapper {
 		 */
 		
 		
-		public Vector <PropertyValue> findBy(User user) {
+		public Vector <PropertyValue> findByUser(User user) {
 			// TODO Auto-generated method stub
 			
-			return null;
+			Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
+			//...
+			return propertyValueResult;
 		}
 		
 				

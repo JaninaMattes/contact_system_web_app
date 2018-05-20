@@ -134,6 +134,10 @@ public class PropertyMapper {
       }
       
       /**
+       * Die Methode <code>findBy</code> mit dem Übergabeparameter eines <em>PropertyValue</em>-Objekts
+       * ermöglicht das Suchen eines zu einer Eigenschaftsausprägung, eines <em>PropertyValue</em>-Objekts,
+       * zugehörigen Eigenschaft Objektes, bzw. <em>Property</em>-Objekts.
+       * Dies verdeutlicht auch die enge Kopplung von Property und PropertyValue-Objekten.
        * 
        * @param property_id
        * @return
@@ -198,18 +202,18 @@ public class PropertyMapper {
          
           Vector <Property> propertyResult = new Vector<Property>();
           Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
-
+      	
+          /**
+           *  Zur Einhaltung des SoC Aufruf der PropertyValueMapper Methode.
+           *  Aufruf aller PropertyValue - Objekte welche einem User im System zugeordnet werden können.
+           *  Durchlauf mit einer <code>for-each</code> Schleife, um Property-Objekte über den Aufruf
+           *  des zweiten PropertyValue Mapper <em>findBy(PropertyValue-Instanz)</em> zurück zu geben.
+           */
+          
          try { 
-        	
-         /**
-          *  Zur Einhaltung des SoC Aufruf der PropertyValueMapper Methode.
-          *  Aufruf aller PropertyValue - Objekte welche einem User im System zugeordnet werden können.
-          *  Durchlauf mit einer <code>for-each</code> Schleife, um Property-Objekte über den Aufruf
-          *  des zweiten PropertyValue Mapper <em>findBy(PropertyValue-Instanz)</em> zurück zu geben.
-          */
-         
+                 
          // Rückgabe von PropertyValue Werten 
-         propertyValueResult = PropertyValueMapper.propertyValueMapper().findBy(user); 
+         propertyValueResult = PropertyValueMapper.propertyValueMapper().findByUser(user);
                  
          for(PropertyValue pV: propertyValueResult) {
         	 Property property = new Property();
@@ -217,6 +221,8 @@ public class PropertyMapper {
         	 property = this.findBy(pV);        	 
         	 if(property != null) propertyResult.add(property);
          } 
+         
+         //TODO: Bessere Lösung finden
          
          // HashSet erlaubt per Default nur einzigartige Einträge
     	 HashSet<Property> uniqueEntries = new HashSet<Property>(propertyResult);   
@@ -242,7 +248,7 @@ public class PropertyMapper {
        * 
        */     
      
-      public Property findByID(int property_id) {       
+      public Property findBy(int property_id) {       
                     
     	  Property property = new Property();
           Connection con = DBConnection.connection();          
@@ -290,8 +296,7 @@ public class PropertyMapper {
        * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
        * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
        */
-      
-     
+           
       public Property findBy(String description) {
 
           Property property = new Property(); 
@@ -380,6 +385,8 @@ public class PropertyMapper {
       	return null;
       }
           
+      
+      
       /**
        * <code>Delete Methode</code>
        * Es war eine bewusste Entscheidung die CRUD Methoden für Property-Objekte nicht in den
