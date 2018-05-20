@@ -624,7 +624,7 @@ public class PropertyMapper {
         	    System.out.println("Aufruf Prepared Statement");
               	// Die Einfügeoperation erfolgt	
               	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
-    			// stmt.setInt(1, property.getBo_Id());
+    			stmt.setInt(1, property.getId());
     			stmt.setString(2, property.getDescription());
     			stmt.execute();
     			 
