@@ -207,9 +207,10 @@ public class PropertyMapper {
           *  Durchlauf mit einer <code>for-each</code> Schleife, um Property-Objekte über den Aufruf
           *  des zweiten PropertyValue Mapper <em>findBy(PropertyValue-Instanz)</em> zurück zu geben.
           */
-        	 
-         propertyValueResult = PropertyValueMapper.propertyValueMapper().findBy(user); // Rückgabe von PropertyValue Werten
          
+         // Rückgabe von PropertyValue Werten 
+         propertyValueResult = PropertyValueMapper.propertyValueMapper().findBy(user); 
+                 
          for(PropertyValue pV: propertyValueResult) {
         	 Property property = new Property();
         	 
@@ -379,119 +380,22 @@ public class PropertyMapper {
       	return null;
       }
           
-     
       /**
-       * Löschen der Daten eines <code>Property</code>-Objekts aus der Datenbank.     *
-       * @param property, welches das aus der DB zu löschende "Objekt" ist
+       * <code>Delete Methode</code>
+       * Es war eine bewusste Entscheidung die CRUD Methoden für Property-Objekte nicht in den
+       * Mappern abzubilden, da Property-Objekte als statisch festgelegte Objekte festgelegt sind.
+       * Diese können zwar mit anderen Nutzern <em>User</em>-Objekten im System geteilt werden,
+       * jedoch sind diese nicht veränderbar. Nur <em>PropertyValue</em>-Objekte sollen in diesem Zusammen-
+       * hang veränderbar sein. Property und <em>PropertyValue</em>-Objekte werden nur gemeinsam geteilt.
+       * Ein PropertyValue-Objekt kann dabei auch <em>null</em> sein.
+       * 
        */
-     
-      public void delete(Property property) {
-                
-          Connection con = DBConnection.connection();
-               
-          try {
-             
-              PreparedStatement stmt = con.prepareStatement("DELETE FROM Property WHERE Property.ID= ?");
-              // Aufruf und Übergabe aller PropertyValues
-              Vector <PropertyValue> propertyValueResult = new Vector<PropertyValue>();     
-              propertyValueResult = property.getPropertyValues();
-              
-              if(propertyValueResult != null) {
-            	  for (PropertyValue pV : propertyValueResult){
-            		    // Alle PropertyValue Einträge des Property-Objekts werden gelöscht
-            		  	PropertyValueMapper.propertyValueMapper().delete(pV);                 
-            	  	}
-            	  }                            
-              
-              stmt.setInt(1, property.getId());
-              stmt.executeUpdate();
-              
-            }
-            catch (SQLException e2) {
-              e2.printStackTrace();
-            }               
-      }
-           
       
-      /**
-       * Löschen der Daten eines <code>Property</code>-Objekts aus der Datenbank.     
-       * @param id ist der Primärschlüssel, des aus der DB zu löschenden "Objektes"
-       */
-     
-      public void deleteBy(int property_id) {
-         
-          Property property = new Property();
-          Vector <PropertyValue> propertyValueResult = new Vector<PropertyValue>();
-         
-          Connection con = DBConnection.connection();
-                      
-          try {      
-        	  
-        	  PreparedStatement stmt = con.prepareStatement("DELETE FROM Property WHERE Property.ID = ?");
-        	  
-              // Abruf des Property Objektes aus der DB anhand dessen Primärschlüssel ID
-              property = this.findByID(property_id);              
-              // Abruf aller PropertyValues, welche zu einem Property-Objekt gehören können                     
-              propertyValueResult = property.getPropertyValues();
-              // Falls diese vorhanden, löschen aller PropertyValue-Objekte
-              if(propertyValueResult != null) {
-            	  for (PropertyValue pV : propertyValueResult){
-                  PropertyValueMapper.propertyValueMapper().delete(pV);
-                  
-              	}
-              
-              }              
-              // Setzen des Wertes für ID und ausführen des Statements
-              stmt.setInt(1, property.getId());
-              stmt.executeUpdate();
-              
-            }
-            catch (SQLException e2) {
-              e2.printStackTrace();
-            }         
-      }
-     
-    
-      /**
-       * Löschen sämtlicher Eigenschaften <code>Property</code> Objekte eines Nutzers.
-       *  
-       * @param user_id als Primärschlüssel des <code>User</code> Objekts,
-       * zu dem die Properties gehören.
-       */     
-
-      public void deleteBy(User user) {
-         
-         Vector <Property> propertyResult = new Vector <Property>();
-         // Abruf aller Property-Objekte eines Users
-         propertyResult = this.findBy(user);
-         // Falls PropertyValue-Objekte vorhanden sind werden diese gelöscht
-         if(propertyResult != null) {
-        	 for (Property p : propertyResult){  
-        		 // zuerst löschen aller PropertyValue-Objekten
-        		 PropertyValueMapper.propertyValueMapper().deleteBy(p);
-        		 // dann löschen der Property-Objekte eines Users
-        		 PropertyMapper.propertyMapper().delete(p);
-          }  
-         }    
-      }
       
-      /**
-       * Löschen sämtlicher Eigenschaften <code>Property</code> Objekte eines Nutzers.
-       * @param user entspricht dem Nutzer dessen Eigenschaften gelöscht werden sollen.
-       */
-           
-      public void deleteByUserID(int user_id) {
-    	  // Aufruf des User-Objektes aus der DB
-    	  User user = new User();
-    	  user = UserMapper.userMapper().findUserById(user_id);
-    	  System.out.println("userID: " + user.getGoogleID());
-    	  this.deleteBy(user);
-      }
-     
       
       /**
        * Einfügen eines <code>Property</code>-Objekts in die Datenbank. Dabei wird
-       * auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
+       * auch der Primärschlüssel des übergebenen Objekts geprüft und gegebenfals
        * berichtigt.
        *
        * @param property ist das zu speichernde Objekt
@@ -502,10 +406,7 @@ public class PropertyMapper {
       public void insert(Property property) {
     	       	  
           Connection con = DBConnection.connection();
-                    
-          // Eintrag in BusinessObjekt Tabelle
-          // BusinessObjectMapper.businessObjectMapper().insert(property);
-             
+            
           try {        	  
               	// Die Einfügeoperation erfolgt	
               	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
@@ -528,45 +429,18 @@ public class PropertyMapper {
           
          
       }
-       
-       
-      /**
-       * Wiederholtes Schreiben eines Objekts in die Datenbank.
-       *
-       * @param property das Eigenschaft (Property) Objekt, das in die DB geschrieben werden soll
-       * @return das als Parameter übergebene Objekt
-       */    
      
-         
-      public void updateProperty(Property property){
-          Connection con = DBConnection.connection();
-                             
-          try{
-        	  
-  			PreparedStatement stmt = con.prepareStatement("UPDATE Property SET description = ? WHERE ID = ?");
-  			stmt.setString(1, property.getDescription());
-  			// stmt.setInt(2, property.getBo_Id());
-  			stmt.execute();
-            
-  			System.out.println("Aufruf SQL Statement");
-  			
-  			// Die Update-peration für PropertyValue
-			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-    	  	propertyValues = property.getPropertyValues();
-    	  
-            // Update von PropertyValue erfolgt
-            for (PropertyValue pV : propertyValues){                 
-            	PropertyValueMapper.propertyValueMapper().insert(pV);
-            	System.out.println("Insert: " + pV);
-            }  
-            
-            }
-              catch (SQLException e) {
-              e.printStackTrace();
-            }         
-      	}      
       
-      
+      /**
+       * <code>Update Methode</code>
+       * Analog zur Delete Methode wurde eine bewusste Entscheidung getroffen die CRUD Methoden 
+       * bei den Mappern für <em>Property</em>-Objekte nicht komplett durchzusetzen. Dabei wird
+       * berücksichtigt, dass die <em>Property</em>-Objekte als statisch in der DB festgelegte
+       * Objekte existieren sollen. Eine Update Methode würde diesem Grundprinzip daher nicht 
+       * entsprechen. 
+       * 
+       */
+     
 }
          
       
