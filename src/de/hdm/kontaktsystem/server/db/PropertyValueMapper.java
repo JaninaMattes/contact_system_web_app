@@ -586,6 +586,11 @@ public class PropertyValueMapper {
 		}
 
 
+		public void UpdatePropertyValueByContact(Contact contact) {
+			// TODO Auto-generated method stub
+			
+		}
+
 		
 		
 		

@@ -211,6 +211,7 @@ public class ContactMapper {
 		Connection con = DBConnection.connection();
 
 		try {
+			//SQL Statement erzeugen
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
 					"SELECT *" + "FROM  Contact c " + "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
@@ -283,6 +284,7 @@ public class ContactMapper {
 	 * @return
 	 */
 	public Contact findByName(PropertyValue name) {
+		
 		Contact contact = new Contact();
 		Connection con = DBConnection.connection();
 
@@ -293,6 +295,7 @@ public class ContactMapper {
 							+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
 							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
 							+ "WHERE description = 'Name' AND value = '" + name + "'");
+							//Innerjoin um auf den Namen zugreifen zu können
 
 			if (rs.next()) {
 				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
@@ -325,6 +328,9 @@ public class ContactMapper {
 
 			stmt.executeUpdate("UPDATE contact SET status = " + contact.isShared_status() + "SET modificationDate = "
 					+ contact.getModifyDate() + "WHERE id = " + contact.getBo_Id());
+			
+			//TODO: UpdatePropertyValueBYContact Methode?
+			PropertyValueMapper.propertyValueMapper().UpdatePropertyValueByContact(contact);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
