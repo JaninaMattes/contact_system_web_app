@@ -89,7 +89,7 @@ public class ContactMapper {
 	 * loeschen
 	 */
 
-	public void deleteAllContactsByUser(int user_id) {
+	public void deleteAllContactsByUser(double user_id) {
 
 		Vector<Contact> result = new Vector<Contact>();
 		
@@ -109,9 +109,12 @@ public class ContactMapper {
 	 * @param user_id
 	 * @return
 	 */
-	public Vector<Contact> findAllContactsByUser(int user_id) {
+
 		
 		//Vektor zur Speicherung der Contact-Objekte
+
+	public Vector<Contact> findAllContactsByUser(double user_id) {
+
 		Vector<Contact> result = new Vector<Contact>();
 
 		Connection con = DBConnection.connection();
@@ -119,11 +122,14 @@ public class ContactMapper {
 		try {
 			//SQL-Statement erzeugen
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(
-					"SELECT *" + "FROM  Contact c" + "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
+			ResultSet rs = stmt.executeQuery("SELECT *" 
+							+ "FROM  Contact c" 
+							+ "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
 							+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
-							+ "INNER JOIN Property p ON p.ID = pv.Property_ID " + "WHERE description = 'Name' AND"
-							+ " BusinessObject.user_ID =" + user_id);
+							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
+							+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
+							+ "WHERE description = 'Name' AND "
+							+ "bo.user_ID =" + user_id);
 
 			while (rs.next()) {
 				Contact contact = new Contact();
@@ -132,7 +138,7 @@ public class ContactMapper {
 				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 
 				System.out.println(contact.toString());
 				
@@ -170,6 +176,9 @@ public class ContactMapper {
 	 */
 
 	public void insertContact(Contact contact) {
+		
+		System.out.println("Create Contact: "+contact);
+		
 		BusinessObjectMapper.businessObjectMapper().insert(contact);
 
 		Connection con = DBConnection.connection();
@@ -178,8 +187,10 @@ public class ContactMapper {
 			
 			//SQL-Statement zur Erstellung eines Kontaktes erzeugen
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("INSERT INTO Contact (ID, owner_ID) VALUES (" + contact.getBo_Id() + ","
-					+ contact.getOwner().getGoogleID() + "'");
+
+
+			stmt.executeUpdate("INSERT INTO Contact (ID) VALUES (" + contact.getBo_Id() + ")");
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -208,7 +219,7 @@ public class ContactMapper {
 
 			while (rs.next()) {
 				Contact contact = new Contact();
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
@@ -241,7 +252,7 @@ public class ContactMapper {
 			PreparedStatement stmt = con.prepareStatement("SELECT * " + "FROM  Contact c "
 					+ "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
 					+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
-					+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
+					+ "INNER JOIN Property p ON p.ID = pv.property_ID "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " + "WHERE description = 'Name' AND c.ID = ?");
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
@@ -250,7 +261,7 @@ public class ContactMapper {
 
 				Contact contact = new Contact();
 				
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
@@ -284,7 +295,7 @@ public class ContactMapper {
 							+ "WHERE description = 'Name' AND value = '" + name + "'");
 
 			if (rs.next()) {
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setBo_Id(rs.getInt("id"));
@@ -312,7 +323,7 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE contact SET status = " + contact.getShared_status() + "SET modificationDate = "
+			stmt.executeUpdate("UPDATE contact SET status = " + contact.isShared_status() + "SET modificationDate = "
 					+ contact.getModifyDate() + "WHERE id = " + contact.getBo_Id());
 
 		} catch (SQLException e) {
@@ -328,7 +339,7 @@ public class ContactMapper {
 	 * @return
 	 */
 
-	public Contact findContactByStatus(int user_id, boolean shared_status) {
+	public Contact findContactByStatus(double user_id, boolean shared_status) {
 		Contact contact = new Contact();
 		Connection con = DBConnection.connection();
 
@@ -338,10 +349,11 @@ public class ContactMapper {
 					"SELECT * " + "FROM  Contact c " + "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
 							+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
 							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
-							+ "WHERE description = 'Name' AND status = " + shared_status);
+							+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
+							+ "WHERE description = 'Name' AND bo.status = " + shared_status);
 
 			if (rs.next()) {
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));

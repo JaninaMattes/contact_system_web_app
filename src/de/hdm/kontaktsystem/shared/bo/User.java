@@ -17,7 +17,7 @@ public class User {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int googleID = 0;
+	private Double googleID; // -> Double
 	
 	private String gMail = null; 
 	
@@ -35,14 +35,14 @@ public class User {
 	 * Return the Google-Account ID
 	 * @return googleID
 	 */
-	public int getGoogleID(){
+	public double getGoogleID(){
 		return googleID;
 	}
 	
 	/**
 	 * Set the unique UserID from the Google-Account
 	 */
-	public void setGoogleID(int id){
+	public void setGoogleID(double id){
 		this.googleID = id;
 	}
 	
@@ -80,8 +80,10 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		double dec = 1000000000000d;
+		
 		result = prime * result + ((gMail == null) ? 0 : gMail.hashCode());
-		result = prime * result + googleID;
+		result = prime * result + (int) (googleID / dec);
 		result = prime * result + ((userContact == null) ? 0 : userContact.hashCode());
 		return result;
 	}

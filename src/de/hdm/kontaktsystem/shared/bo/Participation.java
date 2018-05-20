@@ -55,7 +55,7 @@ public class Participation implements Serializable {
 	/**
 	* Zurückgeben der TeilhaberID
 	*/
-	public int getParticipantID() {
+	public double getParticipantID() {
 		return this.participant.getGoogleID();
 		
 	}
@@ -107,9 +107,10 @@ public class Participation implements Serializable {
 	//Anpassen
 	@Override
 	public int hashCode() {
+		double dec = 1000000000000d;
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + getParticipantID();
+		result = prime * result + (int) (getParticipantID() / dec);
 		result = prime * result + getReferenceID();
 		return result;
 	}
