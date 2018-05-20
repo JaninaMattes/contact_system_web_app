@@ -103,7 +103,7 @@ public class PropertyMapper {
   				property.setCreationDate(rs.getTimestamp("creationDate"));
   				//property.setModifyDate(rs.getTimestamp("modificationDate"));
   				property.setShared_status(rs.getBoolean("status"));
-  				property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+  				property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
   				
   				System.out.println("Property id: " + rs.getInt("bo_ID"));
   				
@@ -142,7 +142,9 @@ public class PropertyMapper {
        */
      
     
+
       public Vector <Property> findByUser(User user){
+
          
           Vector <Property> propertyResult = new Vector<Property>();
          
@@ -161,7 +163,7 @@ public class PropertyMapper {
                               // + "ORDER BY Property.Description"
                               );
         	  
-        	  stmt.setInt(1, user.getGoogleID());
+        	  stmt.setDouble(1, user.getGoogleID());
         	  
         	  // Statement ausfüllen und als Query an die DB schicken
               ResultSet rs = stmt.executeQuery();
@@ -176,10 +178,11 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));                  
-                
+
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));                  
+
                   System.out.println("Property ID: " + rs.getInt("bo_ID"));
-                  System.out.println("User ID: " + rs.getInt("user_ID"));
+                  System.out.println("User ID: " + rs.getDouble("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -198,8 +201,13 @@ public class PropertyMapper {
          
           return null;
       }
-          
-    
+
+      // @author Oli Ich habe es im Merge Conflikt mal drin gelassen, wenn es raus soll wieder löschen
+    public Vector<Property> findShared(double user_id, Property property){
+    	// Alle Properties welche dem User geteilt wurden
+    	return null;
+    }
+
          
       /**
        * Suchen eines Eigenschaft Objekts innerhalb der DB anhand derer Primärschlüssel ID.
@@ -241,11 +249,11 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
                   
                   System.out.println("propertyid : " + (rs.getInt("ID")));
   				  System.out.println("description : " + (rs.getString("description")));
-  				  System.out.println("userid : " + (rs.getInt("user_ID")));
+  				  System.out.println("userid : " + (rs.getDouble("user_ID")));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -309,11 +317,11 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
                   
                   System.out.println("Property ID: " + rs.getInt("ID"));
                   System.out.println("Description: " + rs.getString("description"));
-                  System.out.println("User ID: " + rs.getInt("user_ID"));
+                  System.out.println("User ID: " + rs.getDouble("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -367,7 +375,7 @@ public class PropertyMapper {
           	                    // + "ORDER BY Property.description"
           	                    );
           	  
-          	  stmt.setInt(1, user.getGoogleID());
+          	  stmt.setDouble(1, user.getGoogleID());
           	  stmt.setBoolean(2, shared_status);
           	  
           	  // Statement ausfüllen und als Query an die DB schicken
@@ -564,7 +572,9 @@ public class PropertyMapper {
        * zu dem die Properties gehören.
        */
      
+
       public void deleteByUser(User user) {
+
          
          Vector <Property> propertyResult = new Vector <Property>();
          propertyResult = PropertyMapper.propertyMapper().findByUser(user);

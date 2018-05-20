@@ -50,7 +50,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				findContactFromList(cl);
 				contactList.add(cl);
@@ -110,7 +110,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				return cl;
 			}
@@ -136,13 +136,13 @@ public class ContactListMapper {
 		try {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE user_ID = ?");
-			stmt.setInt(1, user.getGoogleID());
+			stmt.setDouble(1, user.getGoogleID());
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				cll.add(cl);
 			}
@@ -173,7 +173,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				cll.add(cl);
 			}
@@ -214,6 +214,9 @@ public class ContactListMapper {
 	 */
 
 	public void insertContactList(ContactList cl) {
+		
+		System.out.println("Create ContactList: "+cl);
+		
 		BusinessObjectMapper.businessObjectMapper().insert(cl);
 		Connection con = DBConnection.connection();
 
@@ -251,7 +254,7 @@ public class ContactListMapper {
 	 * @param userId
 	 */
 
-	public void deleteContactListByUserId(int userId) {
+	public void deleteContactListByUserId(Double userId) {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();

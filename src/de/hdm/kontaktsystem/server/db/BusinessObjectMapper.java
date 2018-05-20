@@ -102,7 +102,7 @@ public class BusinessObjectMapper implements Serializable {
 				PreparedStatement statement = con.prepareStatement(
 						"INSERT INTO BusinessObject (user_ID) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 				
-				statement.setInt(1, bo.getOwner().getGoogleID());
+				statement.setDouble(1, bo.getOwner().getGoogleID());
 				
 				
 				// Führt das PreparedStatement aus
@@ -144,9 +144,13 @@ public class BusinessObjectMapper implements Serializable {
 		 
 		  return null;
 	  }
-	  
 
-	 
+	  /**
+	   * Exception wenn das gesuchte BusinessBoject nicht gefunden wurde
+	   * Aktuell nicht genutzt
+	   * @author oli
+	   *
+	   */
 	  public class BONotFoundException extends Exception{
 
 		private static final long serialVersionUID = 1L;
@@ -162,7 +166,10 @@ public class BusinessObjectMapper implements Serializable {
 	  
 	   
 	  
-	  
+	  /**
+	   * Gibt alle BusinessObject IDs aus der Tabelle zurück
+	   * @return Vector<Integer>
+	   */
 	  public Vector<Integer> findAllBusinessObjectIDs(){
 		  Vector<Integer> boList = new Vector<Integer>();
 		  
@@ -180,13 +187,18 @@ public class BusinessObjectMapper implements Serializable {
 		  return boList;
 	  }
 	  
-	  public Vector<Integer> findBusinessObjectIDsByUserID(int userID){
+	  /**
+	   * Gibt alle BusinessObject IDs von einem User aus der Tabelle zurück
+	   * @return Vector<Integer>
+	   */
+	  public Vector<Integer> findBusinessObjectIDsByUserID(double userID){
 		  Vector<Integer> boList = new Vector<Integer>();
 		  
 		  Connection con = DBConnection.connection();
 		  try{
-			  Statement stmt = con.createStatement();
-			  ResultSet rs = stmt.executeQuery("Select * FROM BusinessObject WHERE user_ID = " + userID);
+			  PreparedStatement stmt = con.prepareStatement("Select * FROM BusinessObject WHERE user_ID = ?");
+			  stmt.setDouble(1, userID);
+			  ResultSet rs = stmt.executeQuery();
 			  while (rs.next()){
 				  boList.add(rs.getInt("bo_ID"));
 			  }
@@ -199,7 +211,7 @@ public class BusinessObjectMapper implements Serializable {
 	  
 
 	/**
-	 * Löscht den Eintrag der das Übergebene BusinessObject enthält  
+	 * Löscht den Eintrag der das übergebene BusinessObject enthält  
 	 * @param BusinessObject
 	 */
 	public void deleteBusinessObject(BusinessObject bo) {
@@ -210,15 +222,17 @@ public class BusinessObjectMapper implements Serializable {
 	 * Löscht das BusinessObject mit der übergebenen ID
 	 * @param BusinessObjectID
 	 */
-	public void deleteBusinessObjectById(int id) {
+	public void deleteBusinessObjectById(int bo_id) {
 		// TODO Auto-generated method stub
 		Connection con = DBConnection.connection();
 		  
 		  try {
 			  // Einfügeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement
+
 		      ("DELETE FROM BusinessObject WHERE bo_ID = ? ");
-		      stmt.setInt(1, id);
+		      stmt.setInt(1, bo_id);
+
 		      stmt.execute();
 		      
 		    }
@@ -226,6 +240,28 @@ public class BusinessObjectMapper implements Serializable {
 		      e.printStackTrace();
 		    }
 		
-	}	  
+	}
+	
+	/**
+	 * Löscht das BusinessObject mit der übergebenen UserID
+	 * @param BusinessObjectID
+	 */
+	public void deleteBusinessObjectByUserId(double id) {
+		// TODO Auto-generated method stub
+		Connection con = DBConnection.connection();
+		  
+		  try {
+			  // Einfügeoperation in propertyvalue erfolgt
+		      PreparedStatement stmt = con.prepareStatement
+		      ("DELETE FROM BusinessObject WHERE user_ID= ?");
+		      stmt.setDouble(1, id);
+		      stmt.execute();
+		      
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+		
+	}
 
 }

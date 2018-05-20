@@ -20,20 +20,37 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		de.hdm.kontaktsystem.shared.bo.User u = new de.hdm.kontaktsystem.shared.bo.User();
 		
 		if (user != null) {
-			int id = Integer.parseInt(user.getUserId().split("@")[0]);
-			System.out.println("Create User");
+			
+			
+			double id = Double.parseDouble(user.getUserId());
+			//long idl = Long.parseLong((user.getUserId()));
+
+			System.out.println(user.getUserId() + "\t -> Google ID");
+			System.out.println(Integer.MAX_VALUE + "\t \t -> Max Integer");
+			System.out.println(Long.MAX_VALUE + "\t -> Max Long");
+			//System.out.println(idl);
+			System.out.println(Double.MAX_VALUE + "\t -> Max Double");
+			System.out.println(id + "\t -> Google ID as Double");
+			
+			System.out.println("\n\n\n");
+			
+			
+			System.out.println("Create User: " + user.getUserId() + " -> " + id);
+			
 			u.setGoogleID(id);
 			u.setGMail(user.getEmail());
-			
-			UserMapper.userMapper().insertUser(u);
+			System.out.println(u);
+			System.out.println(user);
+			UserMapper.userMapper().insertUser(u);;
 			
 			data.setLoggedIn(true);
 			data.setEmailAddress(user.getEmail());
 			data.setNickname(user.getNickname());
-			data.setLogoutUrl(userService.createLogoutURL("http://google.de"));
+			data.setLogoutUrl(userService.createLogoutURL("/TestLogut"));
+			System.out.println(data.getLoginUrl());
 		} else {
 			data.setLoggedIn(false);
-			data.setLoginUrl(userService.createLoginURL("http://google.de"));
+			data.setLoginUrl(userService.createLoginURL("/TestLogin"));
 		}
 		
 		return data;
