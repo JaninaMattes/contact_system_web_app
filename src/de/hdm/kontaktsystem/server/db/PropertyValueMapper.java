@@ -585,6 +585,8 @@ public class PropertyValueMapper {
 			return null;
 		}
 
+		
+		// @Katalin?
 
 		public void UpdatePropertyValueByContact(Contact contact) {
 			// TODO Auto-generated method stub
