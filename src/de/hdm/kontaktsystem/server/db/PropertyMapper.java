@@ -98,7 +98,7 @@ public class PropertyMapper {
   				property.setCreationDate(rs.getTimestamp("creationDate"));
   				//property.setModifyDate(rs.getTimestamp("modificationDate"));
   				property.setShared_status(rs.getBoolean("status"));
-  				property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+  				property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
   				
   				System.out.println("Property id: " + rs.getInt("bo_ID"));
   				
@@ -137,7 +137,7 @@ public class PropertyMapper {
        */
      
     
-      public Vector <Property> findByUserID(int user_id){
+      public Vector <Property> findByUserID(double user_id){
          
           Vector <Property> propertyResult = new Vector<Property>();
          
@@ -169,9 +169,9 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));                  
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));                  
                   System.out.println("Property ID: " + rs.getInt("bo_ID"));
-                  System.out.println("User ID: " + rs.getInt("user_ID"));
+                  System.out.println("User ID: " + rs.getDouble("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -218,7 +218,7 @@ public class PropertyMapper {
      */
        
      
-    public Vector <Property> findByStatus(int user_id, boolean shared_status) {
+    public Vector <Property> findByStatus(double user_id, boolean shared_status) {
        
         Vector <Property> propertyResult = new Vector <Property>() ;                 
         Connection con = DBConnection.connection();
@@ -239,7 +239,7 @@ public class PropertyMapper {
         	 
         	  System.out.println("Aufruf SQL Statement");
         	  
-        	  stmt.setInt(1, user_id);
+        	  stmt.setDouble(1, user_id);
         	  stmt.setBoolean(2, shared_status);
         	  
         	  // Statement ausfüllen und als Query an die DB schicken
@@ -258,7 +258,7 @@ public class PropertyMapper {
               property.setCreationDate(rs.getTimestamp("creationDate"));
               // property.setModifyDate(rs.getTimestamp("modificationDate"));
               property.setShared_status(rs.getBoolean("status"));
-              property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+              property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
               
               System.out.println("Property ID: " + rs.getInt("ID"));
               System.out.println("Description: " + rs.getString("description"));
@@ -285,7 +285,7 @@ public class PropertyMapper {
     }
    
     
-    public Vector<Property> findShared(int user_id, Property property){
+    public Vector<Property> findShared(double user_id, Property property){
     	// Alle Properties welche dem User geteilt wurden
     	return null;
     }
@@ -332,11 +332,11 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
                   
                   System.out.println("propertyid : " + (rs.getInt("ID")));
   				  System.out.println("description : " + (rs.getString("description")));
-  				  System.out.println("userid : " + (rs.getInt("user_ID")));
+  				  System.out.println("userid : " + (rs.getDouble("user_ID")));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -400,11 +400,11 @@ public class PropertyMapper {
                   property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
                   property.setShared_status(rs.getBoolean("status"));
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
                   
                   System.out.println("Property ID: " + rs.getInt("ID"));
                   System.out.println("Description: " + rs.getString("description"));
-                  System.out.println("User ID: " + rs.getInt("user_ID"));
+                  System.out.println("User ID: " + rs.getDouble("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -514,7 +514,7 @@ public class PropertyMapper {
        * zu dem die Properties gehören.
        */
      
-      public void deleteByUserID(int user_id) {
+      public void deleteByUserID(double user_id) {
          
          Vector <Property> propertyResult = new Vector <Property>();
          propertyResult = PropertyMapper.propertyMapper().findByUserID(user_id);

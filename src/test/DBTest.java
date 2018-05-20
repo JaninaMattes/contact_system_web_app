@@ -37,6 +37,10 @@ public class DBTest {
 		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
 		UserMapper uMapper = UserMapper.userMapper();
 		
+		System.out.println("############ Test Property ################");
+		
+		System.out.println(propMapper.findByStatus(0, false));
+		
 		
 		// Test insert method from BusinessObjectMapper 
 		System.out.println("############ Test BO ################");
@@ -53,7 +57,7 @@ public class DBTest {
 		Random rng = new Random();
 		u.setGMail("mail@gmail.com");
 		// Generate test User with random ID
-		u.setGoogleID(rng.nextInt(1000)+1);
+		u.setGoogleID(rng.nextDouble()*100000000000000000d);
 		System.out.println("Create User "+u.getGoogleID());
 		
 		uMapper.insertUser(u);
@@ -89,7 +93,7 @@ public class DBTest {
 		System.out.println("Find By User: " +cll);
 		
 
-		cl = clMapper.findContactListById(70);
+		cl = clMapper.findContactListById(cl.getBo_Id());
 		
 		cl.setName("Marcos Liste");
 		System.out.println("Update Contact: "+cl);
@@ -103,7 +107,7 @@ public class DBTest {
 		 */
 		System.out.println("############ Test Contact ################");
 		Contact c = new Contact();
-		c.setOwner(uMapper.findUserById(615));
+		c.setOwner(u);
 		c.setName(propValMapper.findByKey(230));
 		
 		cMapper.insertContact(c);

@@ -71,7 +71,7 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
+				User participant = UserMapper.userMapper().findUserById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
 				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
 						.findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
@@ -100,7 +100,7 @@ public class ParticipationMapper {
 	 * Zurückgeben aller Teilhaberschaften zu Objekten eines gegebenen Users
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
-	public Vector<Participation> findParticipationsByOwnerID(int userID) {
+	public Vector<Participation> findParticipationsByOwnerID(double id) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -113,13 +113,13 @@ public class ParticipationMapper {
 					+ "INNER JOIN BusinessObject"
 					+ "ON User_BusinessObject.BusinessObject_ID = BusinessObject.bo_ID"
 					+ "WHERE BusinessObject.user_ID = ?");
-			stmt.setInt(1, userID);
+			stmt.setDouble(1, id);
 			ResultSet rs = stmt.executeQuery();
 			
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
+				User participant = UserMapper.userMapper().findUserById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
 				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
 						.findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
@@ -139,7 +139,7 @@ public class ParticipationMapper {
 	 * Zurückgeben aller Teilhaberschaften, die mit einem gegebenen User geteilt werden
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
-	public Vector<Participation> findParticipationsByParticipantID(int userID){
+	public Vector<Participation> findParticipationsByParticipantID(double userID){
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -148,13 +148,13 @@ public class ParticipationMapper {
 			
 			// Get all Participations from database and store in a ResultSet-Object
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User_BusinessObject WHERE User_ID = ?");
-			stmt.setInt(1, userID);
+			stmt.setDouble(1, userID);
 			ResultSet rs = stmt.executeQuery();
 			
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
+				User participant = UserMapper.userMapper().findUserById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
 				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
 						.findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
@@ -188,7 +188,7 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				User participant = UserMapper.userMapper().findUserById(rs.getInt("User_ID"));
+				User participant = UserMapper.userMapper().findUserById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
 				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
 						.findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
@@ -225,7 +225,7 @@ public class ParticipationMapper {
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO User_BusinessObject (BusinessObject_ID, User_ID) VALUES (?, ?)");
 			stmt.setInt(1, participation.getReferenceID());
-			stmt.setInt(2, participation.getParticipantID());
+			stmt.setDouble(2, participation.getParticipantID());
 			stmt.execute();
 			
 		} catch(SQLException e){
@@ -262,8 +262,8 @@ public class ParticipationMapper {
 	 * Löschen aller Teilhaberschaften zu Objekten eines gegebenen Users
 	 * @param owner
 	 */
-	public void deleteParticipationForOwnerID(int userID) {
-		Vector<Participation> participations = findParticipationsByOwnerID(userID);
+	public void deleteParticipationForOwnerID(double id) {
+		Vector<Participation> participations = findParticipationsByOwnerID(id);
 		
 		Connection con = DBConnection.connection();
 		for(Participation p : participations) {
@@ -284,7 +284,7 @@ public class ParticipationMapper {
 	 * Löschen aller Teilhaberschaften, die mit einem gegebenen User geteilt werden
 	 * @param participant
 	 */
-	public void deleteParticipationForParticipantID(int userID) {
+	public void deleteParticipationForParticipantID(double userID) {
 		Vector<Participation> participations = findParticipationsByParticipantID(userID);
 		
 		Connection con = DBConnection.connection();
@@ -292,7 +292,7 @@ public class ParticipationMapper {
 		for(Participation p : participations) {
 			try {
 				PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE User_ID = ? AND BusinessObject_ID = ?");
-				stmt.setInt(1, p.getParticipantID());
+				stmt.setDouble(1, p.getParticipantID());
 				stmt.setInt(2, p.getReferenceID());
 				stmt.execute();
 				
