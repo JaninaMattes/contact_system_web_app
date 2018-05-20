@@ -254,7 +254,7 @@ public class PropertyValueMapper {
 
 		try {
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM PropertyValue INNER JOIN BusinessObject"
-					+ " WHERE BusinessObject.user_ID=" + u.getUserId() + " AND BusinessObject.ID = PropertyValue.ID");
+					+ " WHERE BusinessObject.user_ID=" + u.getGoogleID() + " AND BusinessObject.ID = PropertyValue.ID");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -314,7 +314,7 @@ public class PropertyValueMapper {
 			// Statement ausfüllen und als Query an die DB schicken
 			ResultSet rs = stmt.executeQuery(
 					"SELECT propertyvalue.id, propertyvalue.value " + "FROM propertyvalue INNER JOIN businessobject"
-							+ "WHERE propertyvalue.id=" + "AND businessobject.user_id=" + u.getUserId()
+							+ "WHERE propertyvalue.id=" + "AND businessobject.user_id=" + u.getGoogleID()
 							+ "AND businessobject.status=" + pv.isShared_status() + "ORDER BY propertyvalue.id");
 
 			while (rs.next()) {
@@ -470,7 +470,7 @@ public class PropertyValueMapper {
 				Property prop = new Property();
 				propValue.setProp(prop);
 				prop.setId(rs.getInt("property_ID"));
-				PropertyMapper.propertyMapper().findByID(prop.getId());
+				PropertyMapper.propertyMapper().findBy(prop.getId());
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
