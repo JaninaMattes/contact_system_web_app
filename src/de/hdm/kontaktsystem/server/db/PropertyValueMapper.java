@@ -7,10 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import com.google.appengine.api.users.User;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
@@ -136,10 +137,11 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con
-					.prepareStatement("DELETE PropertyValue FROM PropertyValue " + "INNER JOIN Contact_PropertyValue "
-							+ "ON PropertyValue.ID = Contact_PropertyValue.propertyValue_ID "
-							+ "WHERE Contact_PropertyValue.Contact_ID = ? ");
+			PreparedStatement stmt = con.prepareStatement
+			("DELETE FROM PropertyValue " 
+				+ "INNER JOIN Contact "
+				+ "ON PropertyValue.contact_ID = Contact = ? "
+				);
 			stmt.setInt(1, id);
 			stmt.execute();
 
@@ -170,8 +172,10 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con
-					.prepareStatement("DELETE FROM PropertyValue " + "WHERE PropertyValue.property_ID = ?");
+			PreparedStatement stmt = con.prepareStatement
+			("DELETE FROM PropertyValue " 
+			+ "WHERE PropertyValue.property_ID = ?"
+			);
 			stmt.setInt(1, property_id);
 			stmt.execute();
 
@@ -185,11 +189,10 @@ public class PropertyValueMapper {
 	 * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
 	 */
 
-	public void deleteAllShared(PropertyValue pV) {
+	public void deleteAllShared(User u) {
 
-		Connection con = DBConnection.connection();
 
-		ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
+		// TODO: ParticipationMapper fehlt?
 
 	}
 		
@@ -225,21 +228,12 @@ public class PropertyValueMapper {
 	 * anhand des mitgegebenen Kontakts
 	 */
 
-	public void deleteAllSharedFrom(Contact c) {
-		Connection con = DBConnection.connection();
-		Statement stmt = null;
+	public void deleteAllSharedFrom(User u) {
+		
+		ParticipationMapper.participationMapper().deleteParticipationForParticipantID(u.getGoogleID());
 
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate
 
-			("DELETE FROM propertyvalue INNER JOIN businessobject" + " WHERE businessobject.user_id="
-					+ " AND businessobject.status= TRUE");
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+		
 	}
 
 	/*
@@ -252,7 +246,7 @@ public class PropertyValueMapper {
 
 		try {
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM PropertyValue INNER JOIN BusinessObject"
-					+ " WHERE BusinessObject.user_ID=" + u.getUserId() + " AND BusinessObject.ID = PropertyValue.ID");
+					+ " WHERE BusinessObject.user_ID=" + u.getGoogleID() + " AND BusinessObject.ID = PropertyValue.ID");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -312,7 +306,7 @@ public class PropertyValueMapper {
 			// Statement ausfüllen und als Query an die DB schicken
 			ResultSet rs = stmt.executeQuery(
 					"SELECT propertyvalue.id, propertyvalue.value " + "FROM propertyvalue INNER JOIN businessobject"
-							+ "WHERE propertyvalue.id=" + "AND businessobject.user_id=" + u.getUserId()
+							+ "WHERE propertyvalue.id=" + "AND businessobject.user_id=" + u.getGoogleID()
 							+ "AND businessobject.status=" + pv.isShared_status() + "ORDER BY propertyvalue.id");
 
 			while (rs.next()) {
