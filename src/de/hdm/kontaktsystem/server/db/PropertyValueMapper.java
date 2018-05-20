@@ -192,6 +192,33 @@ public class PropertyValueMapper {
 		ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
 
 	}
+		
+		
+		
+		
+		// TODO: 
+		/**
+		 * @author Janina, um anhand eines Users zugehörige PropertyValues suchen zu können
+		 * zugeordnet werden abrufen. Würde diese mal als Vorschlag hier lassen.
+		 * Dies würde mir später ermöglichen auch nach allen, einem User zugehörigen Property-Objekten
+		 * zu filtern. 
+		 * 
+		 * --> Falls nicht anders möglich wäre es super wenn diese Methode noch umgesetzt würde. Danke :)!
+		 *  
+		 * @param user
+		 * @return Vector <PropertyValue>
+		 * 
+		 */
+		
+		
+		public Vector <PropertyValue> findBy(User user) {
+			// TODO Auto-generated method stub
+			
+			return null;
+		}
+		
+				
+		// @Katalin?
 
 	/*
 	 * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
