@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
-import java.util.logging.Logger;
 
-import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -71,10 +69,8 @@ public class PropertyMapper {
       public Vector <Property> findAll(){
     	  
     	  // Vector zur Speicherung aller Properties
-		  Vector<Property> propertyResult = new Vector<Property>();
-			
-		  Connection con = DBConnection.connection();
-    	   
+		  Vector<Property> propertyResult = new Vector<Property>();			
+		  Connection con = DBConnection.connection();    	   
     	  
   		try{			
   			// Leeres SQL Statement anlegen
@@ -82,31 +78,23 @@ public class PropertyMapper {
   			
   			// Löschoperation für Property wird aufgerufen              
   			ResultSet rs = stmt.executeQuery( 
-					  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, BusinessObject.creationDate, "
-					+ "BusinessObject.modificationDate, BusinessObject.status, "
-					+ "Property.ID, Property.description "
-					+ "FROM BusinessObject "  
-					+ "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
-					+ "WHERE BusinessObject.bo_ID = Property.ID "
-					+ "ORDER BY BusinessObject.user_ID "
+					  "SELECT Property.ID, Property.description, "
+					+ "PropertyValue.ID, PropertyValue.value "
+					+ "FROM Property "  
+					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
+					+ "WHERE PropertyValue.property_ID = Property.ID "
+				    + "ORDER BY Property.ID "
 					);		
   			
-  			System.out.println("Aufruf SQL Statement");
-  			
-  			while(rs.next()){  				
+  			while(rs.next()){  			
+  				
   				// Vector um Eigenschaftsausprägungen zu speichern
   				Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();
   				
   				Property property = new Property();
-  				//property.setBo_Id(rs.getInt("bo_ID"));
   				property.setDescription(rs.getString("description"));
-  				//property.setCreationDate(rs.getTimestamp("creationDate"));
-  				//property.setModifyDate(rs.getTimestamp("modificationDate"));
-  				//property.setShared_status(rs.getBoolean("status"));
-  				//property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
-  				
-  				System.out.println("Property id: " + rs.getInt("bo_ID"));
-  				
+  				property.setId(rs.getInt("ID"));
+  				  				
   				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
   				propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
   				
@@ -140,75 +128,38 @@ public class PropertyMapper {
        * zugeordnet werden können. Dies entspricht null bei einem nicht vorhandenem DB-Tupel.
        *
        */
-     
-    
+         
 
       public Vector <Property> findByUser(User user){
-
          
           Vector <Property> propertyResult = new Vector<Property>();
-         
-          Connection con = DBConnection.connection();
-                 
-          try {
-              // Leeres SQL Statement anlegen  
-        	  PreparedStatement stmt = con.prepareStatement(
-            		  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID,"
-                              + "BusinessObject.creationDate, BusinessObject.modificationDate, BusinessObject.status, "
-                              + "Property.ID, Property.description " 
-                              + "FROM BusinessObject " 
-                              + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID " 
-                              + "WHERE BusinessObject.bo_ID = Property.ID "
-                              + "AND BusinessObject.user_ID = ? "
-                              // + "ORDER BY Property.Description"
-                              );
-        	  
-        	  stmt.setDouble(1, user.getGoogleID());
-        	  
-        	  // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery();
-                           
-              while (rs.next()) {
-            	  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-                  Property property = new Property();
-                  //Property-Objekt befüllen
-                  //property.setBo_Id(rs.getInt("bo_ID"));
-                  //property.setDescription(rs.getString("description"));
-                  // Superklasse Business Object Attribute befüllen
-                  //property.setCreationDate(rs.getTimestamp("creationDate"));
-                  // property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  //property.setShared_status(rs.getBoolean("status"));
+          Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
 
-                  //property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));                  
-
-                  System.out.println("Property ID: " + rs.getInt("bo_ID"));
-                  System.out.println("User ID: " + rs.getDouble("user_ID"));
-                  
-                  // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
-                  // Setzen des Eigenschaftsausprägungs Vector
-                  property.setPropertyValues(propertyValues); 
-                                    
-                  // Hinzufügen des neuen Objekts zum Ergebnisvektor
-                  propertyResult.addElement(property);
-                 
-                }
-              return propertyResult;
-              
-          } catch (SQLException e) {
-              e.printStackTrace();
-          }
+         try { 
+        	
+         /*
+          *  Zur Einhaltung des SoC Aufruf der PropertyValueMapper Methode.
+          *  
+          */
+         propertyValueResult =  PropertyValueMapper.propertyValueMapper().findBy(user);   // Rückgabe von PropertyValue Werten
          
+         for(PropertyValue pV: propertyValueResult) {
+        	 Property property = new Property();
+        	 
+        	 property = PropertyValueMapper.propertyValueMapper().findBy(pV);
+        	 
+        	 propertyResult.add(property);
+         } 
+         
+         return propertyResult;
+         
+        } catch(NullPointerException e) {
+        	e.printStackTrace();
+        }         
           return null;
       }
 
-      // @author Oli Ich habe es im Merge Conflikt mal drin gelassen, wenn es raus soll wieder löschen
-    public Vector<Property> findShared(double user_id, Property property){
-    	// Alle Properties welche dem User geteilt wurden
-    	return null;
-    }
-
-         
+            
       /**
        * Suchen eines Eigenschaft Objekts innerhalb der DB anhand derer Primärschlüssel ID.
        * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
@@ -229,13 +180,12 @@ public class PropertyMapper {
           try {
               // Leeres SQL Statement anlegen  
               PreparedStatement stmt = con.prepareStatement( 
-            		  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, "
-                      + "BusinessObject.creationDate, BusinessObject.modificationDate, BusinessObject.status,"
-                      + "Property.ID, Property.description "
-                      + "FROM BusinessObject "
-                      + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
-                      + "WHERE BusinessObject.bo_ID = ? " 
-                      );
+            		  "SELECT Property.ID, Property.description, "
+          			+ "PropertyValue.ID, PropertyValue.value "
+          			+ "FROM Property "  
+          			+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
+                    + "WHERE Property.ID = ? " 
+                    );
               
               stmt.setInt(1, property_id);
               // Statement ausfüllen und als Query an die DB schicken
@@ -243,17 +193,9 @@ public class PropertyMapper {
                            
               if (rs.next()) {
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-                  
-                 // property.setBo_Id(rs.getInt("ID"));
-                 // property.setDescription(rs.getString("description"));
-                  //property.setCreationDate(rs.getTimestamp("creationDate"));
-                  // property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  //property.setShared_status(rs.getBoolean("status"));
-                 // property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
-                  
-                  System.out.println("propertyid : " + (rs.getInt("ID")));
-  				  System.out.println("description : " + (rs.getString("description")));
-  				  System.out.println("userid : " + (rs.getDouble("user_ID")));
+                 
+                  property.setId(rs.getInt("ID"));
+                  property.setDescription(rs.getString("description"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -280,7 +222,7 @@ public class PropertyMapper {
        */
      
      
-      public Vector <Property> findByDescription(String description) {
+      public Vector <Property> findBy(String description) {
          
           Vector <Property> propertyResult = new Vector <Property>();    
           // Verbindung zur DB herstellen
@@ -290,38 +232,24 @@ public class PropertyMapper {
               
               // Statement ausfüllen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
-            		  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, BusinessObject.creationDate, "
-                    + "BusinessObject.modificationDate, BusinessObject.status, "
-                    + "Property.ID, Property.description "
-                    + "FROM BusinessObject "
-                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
-                    + "WHERE Property.description = ?" 
-                   // + "ORDER BY Property.ID "
-                    );
+            		 			"SELECT Property.ID, Property.description, "
+            		 		  + "PropertyValue.ID, PropertyValue.value "
+                   			  + "FROM Property "  
+                   			  + "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
+                              + "WHERE Property.ID = ? " 
+                              );
              
              stmt.setString(1, description);
              // Statement ausfüllen und als Query an die DB schicken
              ResultSet rs = stmt.executeQuery();
-             
-             System.out.println("Statement ausgeführt");
                           
               while (rs.next()) {
             	  
                   Property property = new Property(); 
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                                  
-                  // property.setBo_Id(rs.getInt("ID"));
+                  property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
-                 
-                  // Superklasse Business Object Attribute befüllen
-                  //  property.setCreationDate(rs.getTimestamp("creationDate"));
-                  // property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  // property.setShared_status(rs.getBoolean("status"));
-                  //property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
-                  
-                  System.out.println("Property ID: " + rs.getInt("ID"));
-                  System.out.println("Description: " + rs.getString("description"));
-                  System.out.println("User ID: " + rs.getDouble("user_ID"));
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -359,60 +287,15 @@ public class PropertyMapper {
       public Vector <Property> findByStatus(User user, boolean shared_status) {
          
           Vector <Property> propertyResult = new Vector <Property>() ;                 
-          Connection con = DBConnection.connection();
                    
            try {
           	        	 
-               // Leeres SQL Statement anlegen  
-          	 PreparedStatement stmt = con.prepareStatement( 
-          			 			  "SELECT BusinessObject.bo_ID, BusinessObject.user_ID, "
-          	                    + "BusinessObject.creationDate, BusinessObject.modificationDate, BusinessObject.status, "
-          	                    + "Property.ID, Property.description "
-          	                    + "FROM BusinessObject "
-          	                    + "INNER JOIN Property ON BusinessObject.bo_ID = Property.ID "
-          	                    + "WHERE BusinessObject.user_ID = ? " 
-          	                    + "AND BusinessObject.status = ? "
-          	                    // + "ORDER BY Property.description"
-          	                    );
-          	  
-          	  stmt.setDouble(1, user.getGoogleID());
-          	  stmt.setBoolean(2, shared_status);
-          	  
-          	  // Statement ausfüllen und als Query an die DB schicken
-          	  ResultSet rs = stmt.executeQuery();           		
-                      
-                System.out.println("Aufruf ResultSet");
-                
-           while (rs.next()) {
-                
-          	  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-                Property property = new Property();
-               
-                // property.setBo_Id(rs.getInt("ID"));
-                property.setDescription(rs.getString("description"));             
-                // Superklasse Business Object Attribute befüllen
-                //property.setCreationDate(rs.getTimestamp("creationDate"));
-                // property.setModifyDate(rs.getTimestamp("modificationDate"));
-                // property.setShared_status(rs.getBoolean("status"));
-                // property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
-                
-                System.out.println("Property ID: " + rs.getInt("ID"));
-                System.out.println("Description: " + rs.getString("description"));
-                System.out.println("Status: " + rs.getBoolean("status"));
-                             
-                // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
-                // Setzen des Eigenschaftsausprägungs Vector
-                property.setPropertyValues(propertyValues);
-   
-                // Hinzufügen des neuen Objekts zum Ergebnisvektor
-                propertyResult.addElement(property);
-               
+              
               }
            
            return propertyResult;
            
-        } catch (SQLException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
            

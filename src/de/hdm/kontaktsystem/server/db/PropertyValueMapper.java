@@ -540,6 +540,53 @@ public class PropertyValueMapper {
 			  
 			  return null;
 	}
+		
+		
+		
+		
+		// TODO: 
+		/**
+		 * @author Janina, um anhand eines Users zugehörige PropertyValues suchen zu können
+		 * zugeordnet werden abrufen. Würde diese mal als Vorschlag hier lassen.
+		 * Dies würde mir später ermöglichen auch nach allen, einem User zugehörigen Property-Objekten
+		 * zu filtern. 
+		 * 
+		 * --> Falls nicht anders möglich wäre es super wenn diese Methode noch umgesetzt würde. Danke :)!
+		 *  
+		 * @param user
+		 * @return Vector <PropertyValue>
+		 * 
+		 */
+		
+		
+		public Vector <PropertyValue> findBy(User user) {
+			// TODO Auto-generated method stub
+			
+			return null;
+		}
+		
+		//TODO:
+		
+		/**
+		 * @author Janina, um Anhand eines PropertyValue-Objektes zugehörige Property-Objekte suchen zu können.
+		 * Dies erlaubt mir auch hier über eine PropertyValue nach dem Property-Objekt zu suchen, ich könnte dies
+		 * aber auch bei mir über einen Inner Join und den FK von PropertyValue zu Property lösen. Hätte nur gedacht
+		 * dass es hier von der Zuständigkeit wahrscheinlich eher zu PropValMapper gehört.
+		 * 
+		 * --> Daher nur optional
+		 * 
+		 * @param propVal
+		 * @return
+		 */
+		
+		public Property findBy(PropertyValue propVal) {
+			// TODO Auto-generated method stub
+			
+			return null;
+		}
+
+		
+		// @Katalin?
 
 		public void UpdatePropertyValueByContact(Contact contact) {
 			// TODO Auto-generated method stub
