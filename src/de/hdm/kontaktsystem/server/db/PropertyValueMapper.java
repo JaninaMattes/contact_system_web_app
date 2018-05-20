@@ -565,27 +565,7 @@ public class PropertyValueMapper {
 			return null;
 		}
 		
-		//TODO:
-		
-		/**
-		 * @author Janina, um Anhand eines PropertyValue-Objektes zugehörige Property-Objekte suchen zu können.
-		 * Dies erlaubt mir auch hier über eine PropertyValue nach dem Property-Objekt zu suchen, ich könnte dies
-		 * aber auch bei mir über einen Inner Join und den FK von PropertyValue zu Property lösen. Hätte nur gedacht
-		 * dass es hier von der Zuständigkeit wahrscheinlich eher zu PropValMapper gehört.
-		 * 
-		 * --> Daher nur optional
-		 * 
-		 * @param propVal
-		 * @return
-		 */
-		
-		public Property findBy(PropertyValue propVal) {
-			// TODO Auto-generated method stub
-			
-			return null;
-		}
-
-		
+				
 		// @Katalin?
 
 		public void UpdatePropertyValueByContact(Contact contact) {

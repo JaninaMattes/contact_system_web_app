@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -115,6 +116,69 @@ public class PropertyMapper {
   		return null;
     	  
       }
+      
+      /**
+       * Die Methode <code>findAll</code> mit einem User Objekt als übergebenes 
+       * Parameter ermöglicht das Abrufen aller Property Objekte
+       * in der Datenbank. Diese werden über einen Vector mit Property-Objekten, und
+       * nach dem zugehörigen User zurück gegeben.
+       * 
+       * @param user Objekt
+       * @return Vector mit Property-Objekten
+       */
+      
+      public Vector <Property> findAll(User user){    	  
+    	//TODO: Abklären 
+  		return null;
+    	  
+      }
+      
+      /**
+       * 
+       * @param property_id
+       * @return
+       */
+      
+      public Property findBy(PropertyValue pV) {     
+          
+    	  Property property = new Property();
+          Connection con = DBConnection.connection();          
+         
+          try {
+              // Leeres SQL Statement anlegen  
+              PreparedStatement stmt = con.prepareStatement( 
+            		  "SELECT Property.ID, Property.description, "
+          			+ "PropertyValue.ID, PropertyValue.value "
+          			+ "FROM Property "  
+          			+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
+                    + "WHERE Property.ID = ? " 
+                    );
+              
+              stmt.setInt(1, pV.getProp().getId());
+              // Statement ausfüllen und als Query an die DB schicken
+              ResultSet rs = stmt.executeQuery();          		 
+                           
+              if (rs.next()) {
+                  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
+                 
+                  property.setId(rs.getInt("ID"));
+                  property.setDescription(rs.getString("description"));
+                  
+                  // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
+                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
+                  // Setzen des Eigenschaftsausprägungs Vector
+                  property.setPropertyValues(propertyValues);
+                  
+              }              
+              return property;
+              
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }
+          return null;
+      }
+         
+      
  
       /**
        * Abruf aller geteilter (participation) und eigener (ownership) Eigenschaften
@@ -130,28 +194,35 @@ public class PropertyMapper {
        */
          
 
-      public Vector <Property> findByUser(User user){
+      public Vector <Property> findBy(User user){
          
           Vector <Property> propertyResult = new Vector<Property>();
           Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
 
          try { 
         	
-         /*
+         /**
           *  Zur Einhaltung des SoC Aufruf der PropertyValueMapper Methode.
-          *  
+          *  Aufruf aller PropertyValue - Objekte welche einem User im System zugeordnet werden können.
+          *  Durchlauf mit einer <code>for-each</code> Schleife, um Property-Objekte über den Aufruf
+          *  des zweiten PropertyValue Mapper <em>findBy(PropertyValue-Instanz)</em> zurück zu geben.
           */
-         propertyValueResult =  PropertyValueMapper.propertyValueMapper().findBy(user);   // Rückgabe von PropertyValue Werten
+        	 
+         propertyValueResult = PropertyValueMapper.propertyValueMapper().findBy(user); // Rückgabe von PropertyValue Werten
          
          for(PropertyValue pV: propertyValueResult) {
         	 Property property = new Property();
         	 
-        	 property = PropertyValueMapper.propertyValueMapper().findBy(pV);
-        	 
-        	 propertyResult.add(property);
+        	 property = this.findBy(pV);        	 
+        	 if(property != null) propertyResult.add(property);
          } 
          
-         return propertyResult;
+         // HashSet erlaubt per Default nur einzigartige Einträge
+    	 HashSet<Property> uniqueEntries = new HashSet<Property>(propertyResult);   
+         // Umwandeln des HashSet in einen Vector 
+    	 Vector<Property> uniqueVector = new Vector<Property>(uniqueEntries);    	 
+    	 
+         return propertyResult = uniqueVector;
          
         } catch(NullPointerException e) {
         	e.printStackTrace();
@@ -161,19 +232,17 @@ public class PropertyMapper {
 
             
       /**
-       * Suchen eines Eigenschaft Objekts innerhalb der DB anhand derer Primärschlüssel ID.
+       * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primärschlüssel ID.
        * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
        *
        * @param id ist das Primärschlüsselattribut
        * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
        * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
        * 
-       */
+       */     
      
-     
-      public Property findByID(int property_id) {         
+      public Property findByID(int property_id) {       
                     
-
     	  Property property = new Property();
           Connection con = DBConnection.connection();          
          
@@ -213,39 +282,37 @@ public class PropertyMapper {
          
       
       /**
-       * Suchen eines oder mehrerer Eigenschaft Objekte innerhalb der DB anhand derer Beschreibung.
-       * Da dies nicht unbedingt eindeutig ist, wird nicht immer genau ein Eigenschafts Objekt zurückgegeben.
+       * Suchen eines <code>Property</code> -Objektes innerhalb der DB anhand dessen Beschreibung.
+       * Da dies in diesem Fall eindeutig ist, wird genau ein Eigenschafts - Objekt zurückgegeben.
        *
        * @param description ist ein Attribut in der Property Tabelle
        * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
        * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
        */
+      
      
-     
-      public Vector <Property> findBy(String description) {
-         
-          Vector <Property> propertyResult = new Vector <Property>();    
+      public Property findBy(String description) {
+
+          Property property = new Property(); 
           // Verbindung zur DB herstellen
           Connection con = DBConnection.connection();
                    
-          try {
-              
-              // Statement ausfüllen und als Query an die DB schicken
+          try {              
+             // Statement ausfüllen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
             		 			"SELECT Property.ID, Property.description, "
             		 		  + "PropertyValue.ID, PropertyValue.value "
                    			  + "FROM Property "  
                    			  + "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
                               + "WHERE Property.ID = ? " 
-                              );
+                   			  );
              
              stmt.setString(1, description);
              // Statement ausfüllen und als Query an die DB schicken
              ResultSet rs = stmt.executeQuery();
                           
-              while (rs.next()) {
+              if (rs.next()) {
             	  
-                  Property property = new Property(); 
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                                  
                   property.setId(rs.getInt("ID"));
@@ -256,10 +323,8 @@ public class PropertyMapper {
                   // Setzen der Eigenschaftsausprägungen
                   property.setPropertyValues(propertyValues);
                  
-                  propertyResult.add(property);
-                }
-              
-              return propertyResult;
+                }              
+              return property;
              
           } catch (SQLException e) {
               e.printStackTrace();
@@ -284,21 +349,8 @@ public class PropertyMapper {
        */
          
        
-      public Vector <Property> findByStatus(User user, boolean shared_status) {
-         
-          Vector <Property> propertyResult = new Vector <Property>() ;                 
-                   
-           try {
-          	        	 
-              
-              }
-           
-           return propertyResult;
-           
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-           
+      public Vector <Property> findByStatus(User user, boolean shared_status) {         
+        //TODO: Abklären           
         return null;
        
       }
@@ -311,24 +363,7 @@ public class PropertyMapper {
        */
       
       public Vector<Property> findByParticipation(User participant){
-      	
-      	// Alle Properties welche dem User geteilt wurden
-      	// Der Nutzer ist hier nur Participant und nicht Owner
-      	Vector <Property> propertyResult = new Vector <Property>();
-      	System.out.println("Abruf Participation");
-      	// Abruf aller Teilhaberschaften, welche mit geg. User geteilt wurden
-      	Vector <Participation> participationResult = new Vector <Participation>();    	
-      	participationResult = ParticipationMapper.participationMapper().findParticipationsByParticipantID(participant.getGoogleID());
-
-      	if(participationResult != null) {
-      	for (Participation p : participationResult) {
-      		System.out.println("ID: " + p.getReferenceID());
-      		Property property = new Property();
-      		property = this.findByID(p.getReferenceID());
-      		if(property != null) propertyResult.add(property);
-      	}
-      	return propertyResult;
-      }
+      	// TODO: Abklären
       	return null;
       }
       
@@ -340,28 +375,7 @@ public class PropertyMapper {
        */
       
       public Vector<Property> findByOwnership(User owner){
-      	
-      	// Alle Properties welche vom User mit andere geteilt wurden
-      	Vector <Property> propertyResult = new Vector <Property>();
-      	System.out.println("Abruf Participation");
-      	// Abruf aller Teilhaberschaften, zu Property Objekten eines Users
-      	Vector <Participation> participationResult = new Vector <Participation>();    	
-      	participationResult = ParticipationMapper.participationMapper().findParticipationsByOwnerID(owner.getGoogleID());
-      	System.out.println("Befüllen Participation-Objekt");
-      	
-      	if(participationResult != null) {
-      		for (Participation p : participationResult) {
-      	    
-          		Property property = new Property();
-          		property = this.findByID(p.getReferenceID());
-          		// System.out.println("ID: " + property.getBo_Id());
-          		if(property != null) propertyResult.add(property);
-      		
-      			}      	
-      	return propertyResult;
-      	
-      	}
-      	
+      	//TODO: Abklären
       	return null;
       }
           
@@ -374,7 +388,7 @@ public class PropertyMapper {
       public void delete(Property property) {
                 
           Connection con = DBConnection.connection();
-                  
+               
           try {
              
               PreparedStatement stmt = con.prepareStatement("DELETE FROM Property WHERE Property.ID= ?");
@@ -384,22 +398,18 @@ public class PropertyMapper {
               
               if(propertyValueResult != null) {
             	  for (PropertyValue pV : propertyValueResult){
-
-            		  System.out.println("Gelöscht - propertyValueId: " + pV.getBo_Id());
-            		  PropertyValueMapper.propertyValueMapper().delete(pV);                 
+            		    // Alle PropertyValue Einträge des Property-Objekts werden gelöscht
+            		  	PropertyValueMapper.propertyValueMapper().delete(pV);                 
             	  	}
             	  }                            
-
-              // System.out.println("Gelöscht - propertyid: " + property.getBo_Id());
               
-              // stmt.setInt(1, property.getBo_Id());
+              stmt.setInt(1, property.getId());
               stmt.executeUpdate();
               
             }
             catch (SQLException e2) {
               e2.printStackTrace();
-            }          
-          	// BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);         
+            }               
       }
            
       
@@ -408,38 +418,32 @@ public class PropertyMapper {
        * @param id ist der Primärschlüssel, des aus der DB zu löschenden "Objektes"
        */
      
-      public void deleteByID(int property_id) {
+      public void deleteBy(int property_id) {
          
           Property property = new Property();
           Vector <PropertyValue> propertyValueResult = new Vector<PropertyValue>();
          
           Connection con = DBConnection.connection();
                       
-          try {           
-              
-              // Abruf eines Property Objektes aus der DB
-              property = this.findByID(property_id);
-              
-              // Abruf aller PropertyValues, welche zu einem Property Objekt gehören können                     
+          try {      
+        	  
+        	  PreparedStatement stmt = con.prepareStatement("DELETE FROM Property WHERE Property.ID = ?");
+        	  
+              // Abruf des Property Objektes aus der DB anhand dessen Primärschlüssel ID
+              property = this.findByID(property_id);              
+              // Abruf aller PropertyValues, welche zu einem Property-Objekt gehören können                     
               propertyValueResult = property.getPropertyValues();
-              
+              // Falls diese vorhanden, löschen aller PropertyValue-Objekte
               if(propertyValueResult != null) {
             	  for (PropertyValue pV : propertyValueResult){
                   PropertyValueMapper.propertyValueMapper().delete(pV);
                   
-                  System.out.println("Gelöscht PV: " + pV);
               	}
-              }
               
-              PreparedStatement stmt = con.prepareStatement("DELETE FROM Property WHERE Property.ID = ?");
-              // Löschoperation für Property wird aufgerufen              
-             // stmt.setInt(1, property.getBo_Id());
+              }              
+              // Setzen des Wertes für ID und ausführen des Statements
+              stmt.setInt(1, property.getId());
               stmt.executeUpdate();
-                            
-             // System.out.println("Property: " + property.getBo_Id() + " gelöscht");              
-
-              // Löschoperation für BO Tabelle wird aufgerufen
-             // BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);
               
             }
             catch (SQLException e2) {
@@ -453,20 +457,19 @@ public class PropertyMapper {
        *  
        * @param user_id als Primärschlüssel des <code>User</code> Objekts,
        * zu dem die Properties gehören.
-       */
-     
+       */     
 
-      public void deleteByUser(User user) {
-
+      public void deleteBy(User user) {
          
          Vector <Property> propertyResult = new Vector <Property>();
-         propertyResult = PropertyMapper.propertyMapper().findByUser(user);
-         System.out.println("Properties gefunden");
+         // Abruf aller Property-Objekte eines Users
+         propertyResult = this.findBy(user);
+         // Falls PropertyValue-Objekte vorhanden sind werden diese gelöscht
          if(propertyResult != null) {
         	 for (Property p : propertyResult){  
-        		 
-        		 // System.out.println("Gelöscht ID: " + p.getBo_Id());
+        		 // zuerst löschen aller PropertyValue-Objekten
         		 PropertyValueMapper.propertyValueMapper().deleteBy(p);
+        		 // dann löschen der Property-Objekte eines Users
         		 PropertyMapper.propertyMapper().delete(p);
           }  
          }    
@@ -482,7 +485,7 @@ public class PropertyMapper {
     	  User user = new User();
     	  user = UserMapper.userMapper().findUserById(user_id);
     	  System.out.println("userID: " + user.getGoogleID());
-    	  this.deleteByUser(user);
+    	  this.deleteBy(user);
       }
      
       
@@ -504,7 +507,6 @@ public class PropertyMapper {
           // BusinessObjectMapper.businessObjectMapper().insert(property);
              
           try {        	  
-        	    System.out.println("Aufruf Prepared Statement");
               	// Die Einfügeoperation erfolgt	
               	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
     			// stmt.setInt(1, property.getBo_Id());
@@ -538,9 +540,7 @@ public class PropertyMapper {
          
       public void updateProperty(Property property){
           Connection con = DBConnection.connection();
-          
-          // BusinessObjectMapper.businessObjectMapper().update(property);
-                   
+                             
           try{
         	  
   			PreparedStatement stmt = con.prepareStatement("UPDATE Property SET description = ? WHERE ID = ?");
