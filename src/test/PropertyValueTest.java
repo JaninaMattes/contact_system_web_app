@@ -1,6 +1,7 @@
 package test;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,20 +29,16 @@ public class PropertyValueTest {
 		 */
 		
 		
-		Property prop = new Property("Test789");
+		Property prop = new Property("Hihihi");
+		prop.setId(5);
 		
 		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
 		hilfsVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
+	
 		
-		
-		for (PropertyValue pV : hilfsVector) {
-			
-		
-		System.out.println(
-				"Gefundene Ausprägungen zu Eigenschaft : " + pV);
-		
-		}		
-		
+		for(int i = 0; i < hilfsVector.size(); i++) {
+			System.out.println(hilfsVector.elementAt(i));
+		}
 		
 		/*
 		Connection con = DBConnection.connection();
@@ -77,18 +74,21 @@ public class PropertyValueTest {
 		
 		*/
 		
-		Property p = new Property();
-		p.setBo_Id(5);
-		User kimLy = new User();
-		PropertyValue pv = new PropertyValue();
-		pv.setOwner(kimLy);
-		pv.setProp(p);
-		pv.getOwner().setGoogleID(3);
-		pv.setValue("Lalala");
-		
-		
-		PropertyValueMapper.propertyValueMapper().insert(pv);
-		 
+//		Property p = new Property("Hihihi");
+//		p.setId(5);
+//		User kimLy = new User();
+//		PropertyValue pv = new PropertyValue();
+//		pv.setOwner(kimLy);
+//		pv.setProp(p);
+//		pv.getOwner().setGoogleID(3);
+//		pv.getOwner().setGMail("kl@hdm.de");
+//		pv.setValue("Lalala");
+//		
+//		
+//		//PropertyMapper.propertyMapper().insert(p);
+//		
+//		PropertyValueMapper.propertyValueMapper().insert(pv);
+//		 
 			
 		
 	} 
