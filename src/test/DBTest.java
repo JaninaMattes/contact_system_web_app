@@ -30,7 +30,7 @@ public class DBTest {
 		
 		System.out.println("############ Test Property ################");
 		
-		System.out.println(propMapper.findByStatus(0, false));
+		//System.out.println(propMapper.findByStatus(0, false));
 		
 		
 		// Test insert method from BusinessObjectMapper 

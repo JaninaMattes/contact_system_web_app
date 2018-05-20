@@ -224,9 +224,7 @@ public class PropertyValueMapper {
 			return propertyValueResult;
 		}
 		
-				
-		// @Katalin?
-
+	
 	/*
 	 * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
 	 * anhand des mitgegebenen Kontakts
@@ -235,8 +233,6 @@ public class PropertyValueMapper {
 	public void deleteAllSharedFrom(User u) {
 		
 		ParticipationMapper.participationMapper().deleteParticipationForParticipantID(u.getGoogleID());
-
-
 		
 	}
 
@@ -325,7 +321,6 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
