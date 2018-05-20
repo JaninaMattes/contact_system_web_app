@@ -10,14 +10,15 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  * </p>
  * <p>
  * Ein Nutzer (User Klasse) ist dabei entweder der Besitzer (owner) der Eigenschaft oder 
- * ein Teilhaber dieser (participant).
+ * ein Teilhaber dieser (participant). Die Teilhaberschaft wird dabei über die Zuordnung
+ * zu der Ausprägung der Eigenschaft mit <code>PropertyValue</code> hergestellt. 
  * </p>
  * 
  * @author Janina Mattes
  *
  */
 
-public class Property extends BusinessObject{
+public class Property {
 	
 	/**
 	 * Die default Serial Version UID vergibt jeder serialisierbaren Java Klasse
@@ -27,7 +28,13 @@ public class Property extends BusinessObject{
 	 */
 
 	private static final long serialVersionUID = 1L;
-		
+	
+	/**
+	 * Eindeutige Identifikationsnummer einer Instanz dieser Klasse
+	 */
+	
+	private int id = 0;
+	
 	/**
 	 * Beschreibung der Eigenschaft
 	 */
@@ -37,8 +44,7 @@ public class Property extends BusinessObject{
 	/**
 	 * Jeder Eigenschaftinstanz ist einer oder mehrerer Eigenschaftsausprägungen
 	 * zugeordnet. Diese werden durch eine Vector Liste repräsentiert
-	 * 
-	 * 
+	 *
 	 * */
 	
 	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
@@ -88,9 +94,28 @@ public class Property extends BusinessObject{
 	* ***************************************************************************
 	*/
 	
+
+	/**
+	 * Auslesen der Id zu eindeutigen Identifikation einer Instanz
+	 * @return id
+	 */
+	
+	public int getId() {
+		return id;
+	}
+	
+	/**
+	 * Setzen der Id zu eindeutigen Identifikation einer Instanz
+	 * @param id
+	 */
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	/**
 	 * Auslesen der Beschreibung eines Eigenschafts Objektes
+	 * @return description 
 	 */
 
 	public String getDescription() {
@@ -184,7 +209,7 @@ public class Property extends BusinessObject{
 	 
 		@Override
 		public int hashCode(){
-			return super.getBo_Id();
+			return this.id;
 		}
 	 
 

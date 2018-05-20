@@ -24,7 +24,6 @@ import java.util.Date;
  * 
  */
 
-//TODO: geeigneten Konstruktor erstellen
 
 public abstract class BusinessObject implements Serializable{
 	
@@ -34,7 +33,7 @@ public abstract class BusinessObject implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Eindeutige Identifikationsnummer einer Instanz dieser Klasse.
+	 * Eindeutige Identifikationsnummer einer Instanz der Subklasse dieser Klasse.
 	 */
 	private int bo_id = 0;
 	
@@ -44,17 +43,13 @@ public abstract class BusinessObject implements Serializable{
 	private Date creationDate = null;
 	private Date modifyDate = null;
 	private User owner = null;
-
+    
+	/**
+	 * Shared Status einer Instanz der Subklasse dieser Klasse 
+	 */
 	private boolean shared_status = false; 
 	
-	/*
-	 * Default Konstruktor
-	 */
-	
-	public BusinessObject() {
 		
-	}
-	
 	/**
 	* Zurückgeben der ID.
 	*/
@@ -75,8 +70,7 @@ public abstract class BusinessObject implements Serializable{
 	public void setBo_Id(int id) {
 		this.bo_id = id;
 	}
-	
-	
+		
 	
 	/**
 	* Zurückgeben der UserID.
@@ -144,6 +138,7 @@ public abstract class BusinessObject implements Serializable{
 	 * Erzeugen einer Darstellung der jeweiligen Instanz als String (Text).
 	 * Dies überschreibt die Methode toString() der Klasse Object.
 	 */
+	
 	@Override
 	public String toString() {
 		/*

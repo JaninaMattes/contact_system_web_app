@@ -98,12 +98,12 @@ public class PropertyMapper {
   				Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();
   				
   				Property property = new Property();
-  				property.setBo_Id(rs.getInt("bo_ID"));
+  				//property.setBo_Id(rs.getInt("bo_ID"));
   				property.setDescription(rs.getString("description"));
-  				property.setCreationDate(rs.getTimestamp("creationDate"));
+  				//property.setCreationDate(rs.getTimestamp("creationDate"));
   				//property.setModifyDate(rs.getTimestamp("modificationDate"));
-  				property.setShared_status(rs.getBoolean("status"));
-  				property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+  				//property.setShared_status(rs.getBoolean("status"));
+  				//property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
   				
   				System.out.println("Property id: " + rs.getInt("bo_ID"));
   				
@@ -172,14 +172,14 @@ public class PropertyMapper {
             	  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                   Property property = new Property();
                   //Property-Objekt befüllen
-                  property.setBo_Id(rs.getInt("bo_ID"));
-                  property.setDescription(rs.getString("description"));
+                  //property.setBo_Id(rs.getInt("bo_ID"));
+                  //property.setDescription(rs.getString("description"));
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
+                  //property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  property.setShared_status(rs.getBoolean("status"));
+                  //property.setShared_status(rs.getBoolean("status"));
 
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));                  
+                  //property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));                  
 
                   System.out.println("Property ID: " + rs.getInt("bo_ID"));
                   System.out.println("User ID: " + rs.getDouble("user_ID"));
@@ -244,12 +244,12 @@ public class PropertyMapper {
               if (rs.next()) {
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                   
-                  property.setBo_Id(rs.getInt("ID"));
-                  property.setDescription(rs.getString("description"));
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
+                 // property.setBo_Id(rs.getInt("ID"));
+                 // property.setDescription(rs.getString("description"));
+                  //property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  property.setShared_status(rs.getBoolean("status"));
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+                  //property.setShared_status(rs.getBoolean("status"));
+                 // property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
                   
                   System.out.println("propertyid : " + (rs.getInt("ID")));
   				  System.out.println("description : " + (rs.getString("description")));
@@ -310,14 +310,14 @@ public class PropertyMapper {
                   Property property = new Property(); 
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                                  
-                  property.setBo_Id(rs.getInt("ID"));
+                  // property.setBo_Id(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
                  
                   // Superklasse Business Object Attribute befüllen
-                  property.setCreationDate(rs.getTimestamp("creationDate"));
+                  //  property.setCreationDate(rs.getTimestamp("creationDate"));
                   // property.setModifyDate(rs.getTimestamp("modificationDate"));
-                  property.setShared_status(rs.getBoolean("status"));
-                  property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+                  // property.setShared_status(rs.getBoolean("status"));
+                  //property.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
                   
                   System.out.println("Property ID: " + rs.getInt("ID"));
                   System.out.println("Description: " + rs.getString("description"));
@@ -388,13 +388,13 @@ public class PropertyMapper {
           	  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                 Property property = new Property();
                
-                property.setBo_Id(rs.getInt("ID"));
+                // property.setBo_Id(rs.getInt("ID"));
                 property.setDescription(rs.getString("description"));             
                 // Superklasse Business Object Attribute befüllen
-                property.setCreationDate(rs.getTimestamp("creationDate"));
+                //property.setCreationDate(rs.getTimestamp("creationDate"));
                 // property.setModifyDate(rs.getTimestamp("modificationDate"));
-                property.setShared_status(rs.getBoolean("status"));
-                property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
+                // property.setShared_status(rs.getBoolean("status"));
+                // property.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
                 
                 System.out.println("Property ID: " + rs.getInt("ID"));
                 System.out.println("Description: " + rs.getString("description"));
@@ -471,7 +471,7 @@ public class PropertyMapper {
       	    
           		Property property = new Property();
           		property = this.findByID(p.getReferenceID());
-          		System.out.println("ID: " + property.getBo_Id());
+          		// System.out.println("ID: " + property.getBo_Id());
           		if(property != null) propertyResult.add(property);
       		
       			}      	
@@ -507,16 +507,16 @@ public class PropertyMapper {
             	  	}
             	  }                            
 
-              System.out.println("Gelöscht - propertyid: " + property.getBo_Id());
+              // System.out.println("Gelöscht - propertyid: " + property.getBo_Id());
               
-              stmt.setInt(1, property.getBo_Id());
+              // stmt.setInt(1, property.getBo_Id());
               stmt.executeUpdate();
               
             }
             catch (SQLException e2) {
               e2.printStackTrace();
             }          
-          	BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);         
+          	// BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);         
       }
            
       
@@ -550,13 +550,13 @@ public class PropertyMapper {
               
               PreparedStatement stmt = con.prepareStatement("DELETE FROM Property WHERE Property.ID = ?");
               // Löschoperation für Property wird aufgerufen              
-              stmt.setInt(1, property.getBo_Id());
+             // stmt.setInt(1, property.getBo_Id());
               stmt.executeUpdate();
                             
-              System.out.println("Property: " + property.getBo_Id() + " gelöscht");              
+             // System.out.println("Property: " + property.getBo_Id() + " gelöscht");              
 
               // Löschoperation für BO Tabelle wird aufgerufen
-              BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);
+             // BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(property);
               
             }
             catch (SQLException e2) {
@@ -582,7 +582,7 @@ public class PropertyMapper {
          if(propertyResult != null) {
         	 for (Property p : propertyResult){  
         		 
-        		 System.out.println("Gelöscht ID: " + p.getBo_Id());
+        		 // System.out.println("Gelöscht ID: " + p.getBo_Id());
         		 PropertyValueMapper.propertyValueMapper().deleteBy(p);
         		 PropertyMapper.propertyMapper().delete(p);
           }  
@@ -618,13 +618,13 @@ public class PropertyMapper {
           Connection con = DBConnection.connection();
                     
           // Eintrag in BusinessObjekt Tabelle
-          BusinessObjectMapper.businessObjectMapper().insert(property);
+          // BusinessObjectMapper.businessObjectMapper().insert(property);
              
           try {        	  
         	    System.out.println("Aufruf Prepared Statement");
               	// Die Einfügeoperation erfolgt	
               	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
-    			stmt.setInt(1, property.getBo_Id());
+    			// stmt.setInt(1, property.getBo_Id());
     			stmt.setString(2, property.getDescription());
     			stmt.execute();
     			 
@@ -656,13 +656,13 @@ public class PropertyMapper {
       public void updateProperty(Property property){
           Connection con = DBConnection.connection();
           
-          BusinessObjectMapper.businessObjectMapper().update(property);
+          // BusinessObjectMapper.businessObjectMapper().update(property);
                    
           try{
         	  
   			PreparedStatement stmt = con.prepareStatement("UPDATE Property SET description = ? WHERE ID = ?");
   			stmt.setString(1, property.getDescription());
-  			stmt.setInt(2, property.getBo_Id());
+  			// stmt.setInt(2, property.getBo_Id());
   			stmt.execute();
             
   			System.out.println("Aufruf SQL Statement");
