@@ -501,6 +501,7 @@ public class PropertyValueMapper {
 		/*
 		 * Aufruf der Auspraegungen anhand ihrer zugeordneten Eigenschaft
 		 */
+
 		
 		public Vector<PropertyValue> findBy(Property p){
 			  

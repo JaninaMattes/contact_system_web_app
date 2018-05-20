@@ -14,14 +14,21 @@ import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 /**
+ * Die Mapper-Klasse <code>ContactMapper</code> bildet <code>Contact</code>-Objekte 
+ * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Ändern und 
+ * Löschen von Objekten zur Verfügung gestellt. Es können sowohl Objekte in Datenbank-Strukturen, 
+ * als auch Datenbank-Strukturen in Objekte überführt werden.
  * 
  * @author Katalin
  *
  */
 public class ContactMapper {
 	/**
-	 * Singleton Pattern
-	 * Test für Änderung
+	 * Die Klasse <code>ContactMapper</code> ist ein Singleton, 
+	 * d.h. sie wird nur einmal instantiiert.
+	 * Die statische Variable <code>INSTANCE</code> speichert die einzige Instanz der Klasse. 
+	 * Durch den Bezeichner <code>static</code> ist diese Variable 
+	 * nur einmal für alle Instanzen der Klasse vorhanden.
 	 */
 
 	private static ContactMapper contactMapper = null;
@@ -39,18 +46,20 @@ public class ContactMapper {
 	}
 
 	/**
-	 * Mapper-Methoden um einen Kontakt zu loeschen
+	 * Mapper-Methode um einen Kontakt zu loeschen
 	 * 
 	 * @param contact
 	 */
 	public void deleteContact(Contact contact) {
-		// nur contact l�schen.. rest in applogik
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
 
 			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getBo_Id());
-			PropertyValueMapper.propertyValueMapper().deleteBy(contact); // l�scht PropertyValue des Kontaktes
+			
+			//loeschen der Eigenschaftsausprägungen eines Kontaktes
+			PropertyValueMapper.propertyValueMapper().deleteBy(contact); 
+			
 			BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(contact);
 
 		} catch (SQLException e) {
@@ -83,8 +92,11 @@ public class ContactMapper {
 	public void deleteAllContactsByUser(int user_id) {
 
 		Vector<Contact> result = new Vector<Contact>();
+		
+		//Aufrufen aller Kontakte eines bestimmten Users
 		result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
 
+		//Kontakte loeschen
 		for (Contact c : result) {
 			deleteContactByID(c.getBo_Id());
 
@@ -92,17 +104,20 @@ public class ContactMapper {
 	}
 
 	/**
-	 * Mapper-Methode um alle Kontakte eines bestimmten Users zu finden
+	 * Mapper-Methode zur Rückgabe aller Kontakte eines bestimmten Users
 	 * 
 	 * @param user_id
 	 * @return
 	 */
 	public Vector<Contact> findAllContactsByUser(int user_id) {
+		
+		//Vektor zur Speicherung der Contact-Objekte
 		Vector<Contact> result = new Vector<Contact>();
 
 		Connection con = DBConnection.connection();
 
 		try {
+			//SQL-Statement erzeugen
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
 					"SELECT *" + "FROM  Contact c" + "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
@@ -120,14 +135,16 @@ public class ContactMapper {
 				contact.setOwner(UserMapper.userMapper().findUserById(rs.getInt("user_ID")));
 
 				System.out.println(contact.toString());
-
+				
+				//Hinzufügen zum Ergebnisvektor
 				result.addElement(contact);
 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
+		//Rückgabe des Ergebnisvektors
 		return result;
 	}
 
@@ -137,8 +154,11 @@ public class ContactMapper {
 	public void deleteAllContacts() {
 
 		Vector<Contact> result = new Vector<Contact>();
+		
+		//Aufruf aller Kontakte
 		result = ContactMapper.contactMapper().findAllContacts();
 
+		//Loeschen der Kontakte
 		for (Contact c : result) {
 			deleteContactByID(c.getBo_Id());
 		}
@@ -149,17 +169,15 @@ public class ContactMapper {
 	 * TODO: Owner ID überdenken!
 	 */
 
-	// Kontakt erstellen
 	public void insertContact(Contact contact) {
 		BusinessObjectMapper.businessObjectMapper().insert(contact);
 
 		Connection con = DBConnection.connection();
 
-		// setzt in insert BO die ID (Verbindung zu BO)
 		try {
-
+			
+			//SQL-Statement zur Erstellung eines Kontaktes erzeugen
 			Statement stmt = con.createStatement();
-
 			stmt.executeQuery("INSERT INTO Contact (ID, owner_ID) VALUES (" + contact.getBo_Id() + ","
 					+ contact.getOwner().getGoogleID() + "'");
 
@@ -175,6 +193,8 @@ public class ContactMapper {
 	 * @return
 	 */
 	public Vector<Contact> findAllContacts() {
+		
+		//Vektor zur Speicherung der Contact-Objekte
 		Vector<Contact> result = new Vector<Contact>();
 
 		Connection con = DBConnection.connection();
@@ -195,6 +215,7 @@ public class ContactMapper {
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
 				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 
+				//Hinzufügen zum Ergebnisvektor
 				result.addElement(contact);
 
 			}
@@ -202,6 +223,7 @@ public class ContactMapper {
 			e.printStackTrace();
 		}
 
+		//Rückgabe des Ergebnisvektors
 		return result;
 	}
 

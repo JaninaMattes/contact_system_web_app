@@ -130,16 +130,16 @@ public class BusinessObjectMapper implements Serializable {
 	  
 	  public BusinessObject findBusinessObjectByID(int id) {
 		  
-		  BusinessObject bo = new BusinessObject();
+		//  BusinessObject bo = new BusinessObject();
 		  
 		  System.out.println("Test Contact");
-		  if(bo == null) return bo = ContactMapper.contactMapper().findContactById(id);
+		 // if(bo == null) return bo = ContactMapper.contactMapper().findContactById(id);
 		  System.out.println("Test ContactList");
-		  if(bo == null) return bo = ContactListMapper.contactListMapper().findContactListById(id);
+		 // if(bo == null) return bo = ContactListMapper.contactListMapper().findContactListById(id);
 		  System.out.println("Test Property");
-		  if(bo == null) return bo = PropertyMapper.propertyMapper().findByID(id);
+		 // if(bo == null) return bo = PropertyMapper.propertyMapper().findByID(id);
 		  System.out.println("Test PropertyValue");
-		  if(bo == null) return bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
+		 // if(bo == null) return bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
 		  //if(o == null) throw new BONotFoundException();
 		 
 		  return null;
@@ -217,7 +217,7 @@ public class BusinessObjectMapper implements Serializable {
 		  try {
 			  // Einfügeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement
-		      ("DELETE FROM BusinessObject WHERE id= ?");
+		      ("DELETE FROM BusinessObject WHERE bo_ID = ? ");
 		      stmt.setInt(1, id);
 		      stmt.execute();
 		      
