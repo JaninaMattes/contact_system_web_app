@@ -10,4 +10,13 @@ h1 {
   text-align: center;
 }
 
+.link{
+    border: solid 2px black ;
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    text-shadow: 1px 1px #DCDCDC;
+    box-shadow:  2px 2px #DCDCDC;
+    background: #FAFAFA;
+}
 
