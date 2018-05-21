@@ -191,41 +191,33 @@ public class PropertyValueMapper {
 
 	}
 
-	// TODO:
-	/**
-	 * @author Janina, um anhand eines Users zugehörige PropertyValues suchen zu
-	 *         können zugeordnet werden abrufen. Würde diese mal als Vorschlag hier
-	 *         lassen. Dies würde mir später ermöglichen auch nach allen, einem User
-	 *         zugehörigen Property-Objekten zu filtern.
-	 * 
-	 *         --> Falls nicht anders möglich wäre es super wenn diese Methode noch
-	 *         umgesetzt würde. Danke :)!
-	 * 
-	 * @param user
-	 * @return Vector <PropertyValue>
-	 * 
-	 */
-
-	public Vector<PropertyValue> findByUser(User user) {
-		// TODO Auto-generated method stub
-
-		Vector<PropertyValue> propertyValueResult = new Vector<PropertyValue>();
-		// ...
-		return propertyValueResult;
-	}
-
-	// @Katalin?
-
-	/*
-	 * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
-	 * anhand des mitgegebenen Kontakts
-	 */
-
-	public void deleteAllSharedFrom(User u) {
-
-		ParticipationMapper.participationMapper().deleteParticipationForParticipantID(u.getGoogleID());
-
-	}
+		
+		
+		
+		// TODO: 
+		/**
+		 * @author Janina, um anhand eines Users zugehörige PropertyValues suchen zu können
+		 * zugeordnet werden abrufen. Würde diese mal als Vorschlag hier lassen.
+		 * Dies würde mir später ermöglichen auch nach allen, einem User zugehörigen Property-Objekten
+		 * zu filtern. 
+		 * 
+		 * --> Falls nicht anders möglich wäre es super wenn diese Methode noch umgesetzt würde. Danke :)!
+		 *  
+		 * @param user
+		 * @return Vector <PropertyValue>
+		 * 
+		 */
+		
+		
+		public Vector <PropertyValue> findByUser(User user) {
+			// TODO Auto-generated method stub
+			
+			Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
+			//...
+			return propertyValueResult;
+		}
+		
+	
 
 	/*
 	 * Löschen aller für den User geteilten und und vom User erstellten
@@ -305,7 +297,6 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
