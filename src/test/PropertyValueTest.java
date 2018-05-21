@@ -24,21 +24,34 @@ public class PropertyValueTest {
 			
 		
 		
+		
+		User u = new User();
+		u.setGoogleID(3);
+		Property prop = new Property();
+		prop.setId(3);
+		PropertyValue pV = new PropertyValue();
+		pV.setProp(prop);
+		Contact contact = new Contact();
+		contact.setBo_Id(100);
+		
+		PropertyValueMapper.propertyValueMapper().findBy(contact);
+		
+		
 		/*
 		 * findBy(Prop) Test
 		 */
 		
-		
-		Property prop = new Property("Hihihi");
-		prop.setId(5);
-		
-		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
-		hilfsVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
-	
-		
-		for(int i = 0; i < hilfsVector.size(); i++) {
-			System.out.println(hilfsVector.elementAt(i));
-		}
+//		
+//		Property prop = new Property("Hihihi");
+//		prop.setId(5);
+//		
+//		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
+//		hilfsVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
+//	
+//		
+//		for(int i = 0; i < hilfsVector.size(); i++) {
+//			System.out.println(hilfsVector.elementAt(i));
+//		}
 		
 		/*
 		Connection con = DBConnection.connection();
