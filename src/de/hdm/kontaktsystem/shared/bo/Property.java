@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+import java.io.Serializable;
 import java.util.Vector;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
@@ -18,7 +19,7 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  *
  */
 
-public class Property {
+public class Property implements Serializable{
 	
 	/**
 	 * Die default Serial Version UID vergibt jeder serialisierbaren Java Klasse

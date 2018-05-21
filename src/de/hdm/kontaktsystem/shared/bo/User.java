@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+import java.io.Serializable;
 
 /**<p>
  * An User is a special <code>Contact</code> an inherits all Attributes from <code>Contact</code>. 
@@ -13,7 +14,7 @@ package de.hdm.kontaktsystem.shared.bo;
 
 // TODO: Mit Datenbank Modell abgleichen!
 
-public class User {
+public class User implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	

@@ -18,8 +18,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		UserService userService = UserServiceFactory.getUserService();
 		com.google.appengine.api.users.User guser = userService.getCurrentUser();
 		User user = new User();
-		
-		if (user != null) {
+		System.out.println(requestUri);
+		if (guser != null) {
 			
 			
 			double id = Double.parseDouble(guser.getUserId());
@@ -30,19 +30,21 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			user.setGMail(guser.getEmail());
 			//user.setNickname(guser.getNickname()); // Not used
 			
-			user.setLoggedIn(true);
-			user.setLogoutUrl(userService.createLogoutURL("/TestLogut"));
-			
+			user.setLoggedIn(false); // norm True
+			System.out.println(userService.createLogoutURL(requestUri));
+			user.setLogoutUrl(userService.createLogoutURL(requestUri));
+
+			UserMapper.userMapper().insertUser(user);
 		} else {
 			
 			user.setLoggedIn(false);
-			user.setLoginUrl(userService.createLoginURL("/TestLogin"));
+			System.out.println(userService.createLogoutURL(requestUri));
+			user.setLoginUrl(userService.createLoginURL(requestUri));
 			
 		}
 		
 		System.out.println("Insert User to DB -> " + user);
 		
-		UserMapper.userMapper().insertUser(user);
 		
 		return user;
 		
