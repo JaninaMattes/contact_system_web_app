@@ -18,7 +18,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 public class Login implements EntryPoint {
 
-	private User loginInfo = null;
+	private User userInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private VerticalPanel root = new VerticalPanel();
 	private Label loginLabel = new Label(
@@ -40,8 +40,13 @@ public class Login implements EntryPoint {
 			
 			}
 			public void onSuccess(User result) {
-				loginInfo = result;
-				loadLogin();
+				userInfo = result;
+				if(userInfo.isLoggedIn()){
+					loadDashboard();
+				}else{
+					loadLogin();
+				}
+				
 			}
 		});
 		
@@ -53,16 +58,20 @@ public class Login implements EntryPoint {
 	private void loadLogin() {
 		// Assemble login panel.
 		
-		signInLink.setHref(loginInfo.getLoginUrl());
+		signInLink.setHref(userInfo.getLoginUrl());
 		signInLink.setStyleName("link");
-		signOutLink.setHref(loginInfo.getLogoutUrl());
-		signOutLink.setStyleName("link");
 		loginPanel.add(loginLabel);
 		loginPanel.add(new HTML("<br /> <br /> "));
-		HorizontalPanel hp = new HorizontalPanel();
-		hp.add(signInLink);
-		hp.add(signOutLink);
-		loginPanel.add(hp);
+		loginPanel.add(signInLink);
 		root.add(loginPanel);
-		}
+	}
+	
+	
+	private void loadDashboard(){
+		root.add(new HTML("<h2> Dashboard </h2>"));
+		root.add(new HTML("<br /> <br /> "));
+		signOutLink.setHref(userInfo.getLogoutUrl());
+		signOutLink.setStyleName("link");
+		root.add(signOutLink);
+	}
 }

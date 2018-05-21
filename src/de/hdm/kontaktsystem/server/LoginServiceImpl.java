@@ -24,17 +24,20 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			
 			double id = Double.parseDouble(guser.getUserId());
 			
-			System.out.println("Create User: " + guser.getUserId() + " -> " + id);
-			
 			user.setGoogleID(id);
 			user.setGMail(guser.getEmail());
 			//user.setNickname(guser.getNickname()); // Not used
 			
-			user.setLoggedIn(false); // norm True
+			user.setLoggedIn(true); // norm True
 			System.out.println(userService.createLogoutURL(requestUri));
 			user.setLogoutUrl(userService.createLogoutURL(requestUri));
-
-			UserMapper.userMapper().insertUser(user);
+			if(UserMapper.userMapper().findUserById(id) == null){
+				System.out.println("Create new User: " + user);
+				UserMapper.userMapper().insertUser(user);
+			}else{
+				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
+			}
+			
 		} else {
 			
 			user.setLoggedIn(false);
@@ -42,9 +45,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			user.setLoginUrl(userService.createLoginURL(requestUri));
 			
 		}
-		
-		System.out.println("Insert User to DB -> " + user);
-		
+			
 		
 		return user;
 		

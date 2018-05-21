@@ -74,7 +74,7 @@ public class UserMapper {
 	 */
 	public User findUserById(double id){
 		
-		User u = new User();
+		
 		Connection con = DBConnection.connection();
 		
 		try{
@@ -82,16 +82,17 @@ public class UserMapper {
 			stmt.setDouble(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
+				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
 				u.setContact(ContactMapper.contactMapper().findContactById(rs.getInt("own_Contact")));
-				
+				return u;
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		
-		return u;
+		return null;
 	}
 	
 	/**
