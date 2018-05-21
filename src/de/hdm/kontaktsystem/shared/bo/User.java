@@ -17,6 +17,12 @@ public class User {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private boolean loggedIn = false;
+	
+	private String loginUrl;
+	
+	private String logoutUrl;
+	
 	private Double googleID; // -> Double
 	
 	private String gMail = null; 
@@ -74,6 +80,30 @@ public class User {
 	 */
 	public void setContact(Contact contact){
 		this.userContact = contact;
+	}
+	
+	public String getLoginUrl() {
+		return loginUrl;
+	}
+
+	public void setLoginUrl(String loginUrl) {
+		this.loginUrl = loginUrl;
+	}
+
+	public String getLogoutUrl() {
+		return logoutUrl;
+	}
+
+	public void setLogoutUrl(String logoutUrl) {
+		this.logoutUrl = logoutUrl;
+	}
+	
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
 	}
 
 	@Override

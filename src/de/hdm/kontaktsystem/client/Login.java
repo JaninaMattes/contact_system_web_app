@@ -9,11 +9,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.kontaktsystem.shared.UserData;
+import de.hdm.kontaktsystem.shared.bo.User;
+
 
 public class Login implements EntryPoint {
 
-	private UserData loginInfo = null;
+	private User loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private VerticalPanel root = new VerticalPanel();
 	private Label loginLabel = new Label(
@@ -29,12 +30,12 @@ public class Login implements EntryPoint {
 		root.add(Label);
 		
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
-		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<UserData>() {
+		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
 				
 			
 			}
-			public void onSuccess(UserData result) {
+			public void onSuccess(User result) {
 				loginInfo = result;
 				loadLogin();
 			}
