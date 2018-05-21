@@ -49,8 +49,9 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con
-					.prepareStatement("INSERT INTO PropertyValue (id, property_id, value) VALUES (?, ?, ?)");
+			PreparedStatement stmt = con.prepareStatement
+			("INSERT INTO PropertyValue (id, property_id, value) VALUES (?, ?, ?)"
+					);
 			stmt.setInt(1, pv.getBo_Id());
 			stmt.setInt(2, pv.getProp().getId());
 			stmt.setString(3, pv.getValue());
@@ -74,7 +75,9 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement("UPDATE PropertyValue SET value= ? WHERE id= ?");
+			PreparedStatement stmt = con.prepareStatement
+					("UPDATE PropertyValue SET value= ? WHERE ID= ?"
+					);
 			stmt.setString(1, pv.getValue());
 			stmt.setInt(2, pv.getBo_Id());
 			stmt.execute();
@@ -108,7 +111,9 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM PropertyValue WHERE id= ?");
+			PreparedStatement stmt = con.prepareStatement
+			("DELETE FROM PropertyValue WHERE id= ?"
+			);
 			stmt.setInt(1, id);
 			stmt.execute();
 
@@ -138,8 +143,10 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM PropertyValue " + "INNER JOIN Contact "
-					+ "ON PropertyValue.contact_ID = Contact = ? ");
+			PreparedStatement stmt = con.prepareStatement
+					("DELETE FROM PropertyValue " + "INNER JOIN Contact "
+					+ "ON PropertyValue.contact_ID = Contact = ? "
+					);
 			stmt.setInt(1, id);
 			stmt.execute();
 
@@ -170,8 +177,9 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con
-					.prepareStatement("DELETE FROM PropertyValue " + "WHERE PropertyValue.property_ID = ?");
+			PreparedStatement stmt = con.prepareStatement
+					("DELETE FROM PropertyValue " + "WHERE PropertyValue.property_ID = ?"
+					);
 			stmt.setInt(1, property_id);
 			stmt.execute();
 
@@ -209,12 +217,32 @@ public class PropertyValueMapper {
 		 */
 		
 		
-		public Vector <PropertyValue> findByUser(User user) {
-			// TODO Auto-generated method stub
+		public Vector <PropertyValue> findBy(User u) {
 			
-			Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
-			//...
-			return propertyValueResult;
+			Vector<Contact> contacts = new Vector<Contact>();
+			
+			contacts = ContactMapper.contactMapper().findAllContactsByUser(u.getGoogleID());
+		
+			
+			for (Contact c : contacts) {
+				
+				Vector<PropertyValue> pV = new Vector<PropertyValue>();
+				
+				pV = findBy(c);	
+				
+				
+				for (PropertyValue PropValue : pV) {
+					
+				c.setName(PropValue);
+				
+				System.out.println(PropValue);
+				
+				}
+			}
+
+			return null;
+			
+	
 		}
 		
 	
@@ -306,36 +334,31 @@ public class PropertyValueMapper {
 	 * und die Ergebnisse zurueckgegeben
 	 */
 
-	public Vector<PropertyValue> findAllShared(User u) {
+	public Vector<PropertyValue> findAllShared(User u, PropertyValue pV) {
 
-		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
-		Connection con = DBConnection.connection();
-		Statement stmt = null;
-
-		try {
-			// Leeres SQL Statement anlegen
-			stmt = con.createStatement();
-			// Statement ausfüllen und als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT propertyvalue.id, propertyvalue.value"
-					+ " FROM propertyvalue INNER JOIN businessobject" + " WHERE businessobject.status= TRUE");
-
-			while (rs.next()) {
-				PropertyValue propValue = new PropertyValue();
-				propValue.setBo_Id(rs.getInt("id"));
-				propValue.setShared_status(rs.getBoolean("status"));
-
-				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
-				propValueResult.addElement(propValue);
-				return propValueResult;
-
+		Vector<Participation> partVector1 = new Vector<Participation>();
+		
+		partVector1 = ParticipationMapper.participationMapper().findParticipationsByOwnerID(u.getGoogleID());
+		
+		for (Participation part1 : partVector1) {
+			
+			part1.setReference(pV);
+			Vector<Participation> partVector2 = new Vector<Participation>();
+			partVector2 = ParticipationMapper.participationMapper().findParticipationsByBusinessObject(part1.getReferencedObject());	
+				
+			for (Participation part2 : partVector1) {
+				
+				System.out.println(part2);
+				
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+			
+			}
+		
+		
+		
 		return null;
+		
 	}
 
 	/*
@@ -391,11 +414,18 @@ public class PropertyValueMapper {
 			stmt = con.createStatement();
 
 			// Statement ausfüllen und als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT PropertyValue.ID, PropertyValue.value"
-					+ " FROM PropertyValue INNER JOIN Contact" + " WHERE Contact.ID=" + c.getBo_Id() + " \"");
+			ResultSet rs = stmt.executeQuery
+					("SELECT PropertyValue.ID, PropertyValue.value"
+					+ " FROM PropertyValue INNER JOIN Contact" 
+					+ " WHERE Contact.ID=" + c.getBo_Id() 
+					);
 
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();
+				Property prop = new Property();
+				propValue.setProp(prop);
+				prop.setId(rs.getInt("property_ID"));
+				PropertyMapper.propertyMapper().findBy(prop.getId());
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
 

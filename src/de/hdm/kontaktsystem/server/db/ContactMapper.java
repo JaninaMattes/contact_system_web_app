@@ -122,20 +122,20 @@ public class ContactMapper {
 		try {
 			//SQL-Statement erzeugen
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT *" 
-							+ "FROM  Contact c" 
+			ResultSet rs = stmt.executeQuery("SELECT * " 
+							+ "FROM  Contact AS c " 
 							+ "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
-							+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
-							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
-							+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
-							+ "WHERE description = 'Name' AND "
-							+ "bo.user_ID =" + user_id);
+							+ "INNER JOIN PropertyValue AS pv ON pv.ID = bez.PropertyValue_ID "
+							+ "INNER JOIN Property AS p ON p.ID = pv.Property_ID "
+							+ "INNER JOIN BusinessObject AS bo ON bo.bo_ID = c.ID "
+							//+ "WHERE description = 'Name' AND "
+							+ "WHERE bo.user_ID =" + user_id);
 
 			while (rs.next()) {
 				Contact contact = new Contact();
-				contact.setBo_Id(rs.getInt("id"));
+				contact.setBo_Id(rs.getInt("ID"));
 				contact.setShared_status(rs.getBoolean("status"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
+				//contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
