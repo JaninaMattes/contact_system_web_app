@@ -9,7 +9,6 @@ import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
 
-
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -139,11 +138,8 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement
-			("DELETE FROM PropertyValue " 
-				+ "INNER JOIN Contact "
-				+ "ON PropertyValue.contact_ID = Contact = ? "
-				);
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM PropertyValue " + "INNER JOIN Contact "
+					+ "ON PropertyValue.contact_ID = Contact = ? ");
 			stmt.setInt(1, id);
 			stmt.execute();
 
@@ -174,10 +170,8 @@ public class PropertyValueMapper {
 
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement
-			("DELETE FROM PropertyValue " 
-			+ "WHERE PropertyValue.property_ID = ?"
-			);
+			PreparedStatement stmt = con
+					.prepareStatement("DELETE FROM PropertyValue " + "WHERE PropertyValue.property_ID = ?");
 			stmt.setInt(1, property_id);
 			stmt.execute();
 
@@ -193,39 +187,34 @@ public class PropertyValueMapper {
 
 	public void deleteAllShared(User u) {
 
-
 		// TODO: ParticipationMapper fehlt?
 
 	}
-		
-		
-		
-		
-		// TODO: 
-		/**
-		 * @author Janina, um anhand eines Users zugehörige PropertyValues suchen zu können
-		 * zugeordnet werden abrufen. Würde diese mal als Vorschlag hier lassen.
-		 * Dies würde mir später ermöglichen auch nach allen, einem User zugehörigen Property-Objekten
-		 * zu filtern. 
-		 * 
-		 * --> Falls nicht anders möglich wäre es super wenn diese Methode noch umgesetzt würde. Danke :)!
-		 *  
-		 * @param user
-		 * @return Vector <PropertyValue>
-		 * 
-		 */
-		
-		
-		public Vector <PropertyValue> findByUser(User user) {
-			// TODO Auto-generated method stub
-			
-			Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
-			//...
-			return propertyValueResult;
-		}
-		
-				
-		// @Katalin?
+
+	// TODO:
+	/**
+	 * @author Janina, um anhand eines Users zugehörige PropertyValues suchen zu
+	 *         können zugeordnet werden abrufen. Würde diese mal als Vorschlag hier
+	 *         lassen. Dies würde mir später ermöglichen auch nach allen, einem User
+	 *         zugehörigen Property-Objekten zu filtern.
+	 * 
+	 *         --> Falls nicht anders möglich wäre es super wenn diese Methode noch
+	 *         umgesetzt würde. Danke :)!
+	 * 
+	 * @param user
+	 * @return Vector <PropertyValue>
+	 * 
+	 */
+
+	public Vector<PropertyValue> findByUser(User user) {
+		// TODO Auto-generated method stub
+
+		Vector<PropertyValue> propertyValueResult = new Vector<PropertyValue>();
+		// ...
+		return propertyValueResult;
+	}
+
+	// @Katalin?
 
 	/*
 	 * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
@@ -233,28 +222,19 @@ public class PropertyValueMapper {
 	 */
 
 	public void deleteAllSharedFrom(User u) {
-		
+
 		ParticipationMapper.participationMapper().deleteParticipationForParticipantID(u.getGoogleID());
 
-
-		
 	}
 
 	/*
-	 * Löschen aller für den User geteilten und erstellten Eigenschaftsausprägungen
+	 * Löschen aller für den User geteilten und und vom User erstellten
+	 * Eigenschaftsausprägungen
 	 */
 
 	public void deleteAll(User u) {
 
-		Connection con = DBConnection.connection();
-
-		try {
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM PropertyValue INNER JOIN BusinessObject"
-					+ " WHERE BusinessObject.user_ID=" + u.getGoogleID() + " AND BusinessObject.ID = PropertyValue.ID");
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		ParticipationMapper.participationMapper().deleteParticipationForParticipantID(u.getGoogleID());
 
 	}
 
