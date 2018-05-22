@@ -39,7 +39,7 @@ public class DBTestContactList {
 		
 		ContactList cl = new ContactList();
 		cl.setName("Kontaktliste 1");
-		cl.setOwner(uMapper.findUserById(325));
+		cl.setOwner(uMapper.findById(325));
 		
 		Vector<ContactList> cll = new Vector<ContactList>();
 		
@@ -76,9 +76,9 @@ public class DBTestContactList {
 		//System.out.println(cll);
 	
 		/**
-		 * Den Name einer Kontaktliste ändern / aktualisieren.
+		 * Den Name einer Kontaktliste ï¿½ndern / aktualisieren.
 		 */
-		//Nochmals prüfen.
+		//Nochmals prï¿½fen.
 		
 		//cl.setName("KontaktListe_2");
 		//clMapper.updateContactList(cl);

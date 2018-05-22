@@ -31,9 +31,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			user.setLoggedIn(true); // norm True
 			System.out.println(userService.createLogoutURL(requestUri));
 			user.setLogoutUrl(userService.createLogoutURL(requestUri));
-			if(UserMapper.userMapper().findUserById(id) == null){
+			if(UserMapper.userMapper().findById(id) == null){
 				System.out.println("Create new User: " + user);
-				UserMapper.userMapper().insertUser(user);
+				UserMapper.userMapper().insert(user);
 			}else{
 				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
 			}

@@ -50,7 +50,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				findContactFromList(cl);
 				contactList.add(cl);
@@ -110,7 +110,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				return cl;
 			}
@@ -142,7 +142,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				cll.add(cl);
 			}
@@ -173,7 +173,7 @@ public class ContactListMapper {
 				ContactList cl = new ContactList();
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
 				cll.add(cl);
 			}
@@ -215,7 +215,7 @@ public class ContactListMapper {
 
 	public void insertContactList(ContactList cl) {
 		
-		System.out.println("Create ContactList: "+cl);
+		System.out.println("Create ContactList: " + cl);
 		
 		BusinessObjectMapper.businessObjectMapper().insert(cl);
 		Connection con = DBConnection.connection();

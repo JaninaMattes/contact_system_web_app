@@ -21,14 +21,14 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class PropertyValueTest {
 
 	public static void main(String args[]) {
-			
+
 		
 		User u = new User();
 		u.setGoogleID(0);
 		PropertyValue pv = new PropertyValue();
 		pv.setBo_Id(123);
 		
-		PropertyValueMapper.propertyValueMapper().findAllShared(u, pv);
+		PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
 		
 		
 		//PropertyValueMapper.propertyValueMapper().deleteAll();
@@ -45,10 +45,7 @@ public class PropertyValueTest {
 //		User testUser = new User();
 //		testUser.setGoogleID(8.914336227056141e15);
 //		pv.setOwner(testUser);
-//		
-//		System.out.println(PropertyValueMapper.propertyValueMapper().findByKey(103));
-		
-			
+
 		
 		
 //		
@@ -112,8 +109,22 @@ public class PropertyValueTest {
 //		//PropertyMapper.propertyMapper().insert(p);
 //		
 //		PropertyValueMapper.propertyValueMapper().insert(pv);
-//		 
-			
+		// PropertyValueMapper.propertyValueMapper().deleteAll();
+		
+		Double userId = 8.914336227056141e15;
+//		
+		PropertyValue pV = new PropertyValue();
+				
+		User user = new User();
+		user.setGoogleID(userId);
+		
+		//****************TESTS*********************
+		//******************************************
+		
+		// PropertyValueMapper.propertyValueMapper().findAllSharedByMe(user); // Funktioniert
+		// PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(user); --> Contact Mapper Problem
+		
+		PropertyValueMapper.propertyValueMapper().findAllOwnedByMe(user);
 		
 	} 
 }

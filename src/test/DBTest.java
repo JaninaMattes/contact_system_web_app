@@ -39,7 +39,7 @@ public class DBTest {
 		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectIDsByUserID(325));
 		
 		
-		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(2));
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findBy(2));
 		
 		
 		// Test insert method from UserMapper 
@@ -51,13 +51,13 @@ public class DBTest {
 		u.setGoogleID(rng.nextDouble()*100000000000000000d);
 		System.out.println("Create User "+u.getGoogleID());
 		
-		uMapper.insertUser(u);
-		System.out.println(uMapper.findAllUsers());
-		System.out.println(uMapper.findUserByEmail("oli@gmail.de"));
+		uMapper.insert(u);
+		System.out.println(uMapper.findAll());
+		System.out.println(uMapper.findByEmail("oli@gmail.de"));
 		
 		u.setContact(cMapper.findContactById(32));
-		uMapper.updateUser(u);
-		System.out.println(u = uMapper.findUserById(u.getGoogleID()));
+		uMapper.update(u);
+		System.out.println(u = uMapper.findById(u.getGoogleID()));
 		
 		//uMapper.deleteUserById(502);
 		
@@ -99,11 +99,11 @@ public class DBTest {
 		System.out.println("############ Test Contact ################");
 		Contact c = new Contact();
 		c.setOwner(u);
-		c.setName(propValMapper.findByKey(230));
+		c.setpV(propValMapper.findByKey(230));
 		
 		cMapper.insertContact(c);
 		
-		System.out.println(cMapper.findByName(propValMapper.findByKey(230)));
+		System.out.println(cMapper.findBy(propValMapper.findByKey(230)));
 		System.out.println(cMapper.findAllContactsByUser(615));
 		System.out.println(cMapper.findContactByStatus(615, false));
 		System.out.println(cMapper.findAllContacts());
