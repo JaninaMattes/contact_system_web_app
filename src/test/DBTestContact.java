@@ -9,36 +9,40 @@ public class DBTestContact {
 	
 	public static void main(String args[]) {
 		
-		
-		ContactMapper mapper = ContactMapper.contactMapper();
-		
-		User user = new User();
-		User user2 = new User();
-		Contact contact = new Contact();
-		Contact contact2 = new Contact();
-		Contact contact3 = new Contact();
 		PropertyValue pv = new PropertyValue();
 		
-		user.setContact(contact);
-		user.setContact(contact2);
-		user2.setContact(contact3);
-		contact.setOwner(user);
-		contact2.setOwner(user);
-		contact3.setOwner(user2);
-		contact.setName(pv);
-		contact.setShared_status(false);
+		ContactMapper.contactMapper().findBy(pv);
 		
-		/**
-		 * Test: Einen Kontakt durch die ID finden
-		 */
-		//System.out.println(mapper.findContactById(2));
 		
-		/**
-		 * Test: Einen Kontakt hizufügen
-		 */
-		ContactMapper.contactMapper().insertContact(contact);
-		ContactMapper.contactMapper().insertContact(contact2);
-		ContactMapper.contactMapper().insertContact(contact3);
+//		ContactMapper mapper = ContactMapper.contactMapper();
+//		
+//		User user = new User();
+//		User user2 = new User();
+//		Contact contact = new Contact();
+//		Contact contact2 = new Contact();
+//		Contact contact3 = new Contact();
+//		PropertyValue pv = new PropertyValue();
+//		
+//		user.setContact(contact);
+//		user.setContact(contact2);
+//		user2.setContact(contact3);
+//		contact.setOwner(user);
+//		contact2.setOwner(user);
+//		contact3.setOwner(user2);
+//		contact.setpV(pv);
+//		contact.setShared_status(false);
+//		
+//		/**
+//		 * Test: Einen Kontakt durch die ID finden
+//		 */
+//		//System.out.println(mapper.findContactById(2));
+//		
+//		/**
+//		 * Test: Einen Kontakt hizufügen
+//		 */
+//		ContactMapper.contactMapper().insertContact(contact);
+//		ContactMapper.contactMapper().insertContact(contact2);
+//		ContactMapper.contactMapper().insertContact(contact3);
 		/**
 		 * Test: Alle Kontakte eines Users finden
 		 */

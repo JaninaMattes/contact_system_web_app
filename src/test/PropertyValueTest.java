@@ -22,7 +22,17 @@ public class PropertyValueTest {
 
 	public static void main(String args[]) {
 			
-		PropertyValueMapper.propertyValueMapper().deleteAll();
+		
+//		PropertyValue pv = new PropertyValue("Janina");
+//		Property prop = new Property();
+//		prop.setId(2);
+//		pv.setBo_Id(103);
+//		pv.setProp(prop);
+//		User testUser = new User();
+//		testUser.setGoogleID(8.914336227056141e15);
+//		pv.setOwner(testUser);
+		
+		//System.out.println(PropertyValueMapper.propertyValueMapper().findByKey(103));
 		
 			
 		
@@ -96,15 +106,15 @@ public class PropertyValueTest {
 		
 		*/
 		
-//		Property p = new Property("Hihihi");
-//		p.setId(5);
+//		Property p = new Property("Sternzeichen");
+//		p.setId(7);
 //		User kimLy = new User();
 //		PropertyValue pv = new PropertyValue();
 //		pv.setOwner(kimLy);
 //		pv.setProp(p);
-//		pv.getOwner().setGoogleID(3);
-//		pv.getOwner().setGMail("kl@hdm.de");
-//		pv.setValue("Lalala");
+//		pv.getOwner().setGoogleID(0);
+//		pv.getOwner().setGMail("default@sys.de");
+//		pv.setValue("Fische");
 //		
 //		
 //		//PropertyMapper.propertyMapper().insert(p);
