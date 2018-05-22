@@ -48,11 +48,12 @@ public class PropertyValueMapper {
 
 		try {
 			PreparedStatement stmt = con.prepareStatement
-			("INSERT INTO PropertyValue (id, property_id, value) VALUES (?, ?, ?)"
+			("INSERT INTO PropertyValue (id, property_id, value, contact_ID) VALUES (?, ?, ?, ?)"
 					);
 			stmt.setInt(1, pv.getBo_Id());
 			stmt.setInt(2, pv.getProp().getId());
 			stmt.setString(3, pv.getValue());
+			stmt.setInt(4, pv.getContact().getBo_Id());
 			stmt.execute();
 
 		} catch (SQLException e) {
@@ -197,14 +198,19 @@ public class PropertyValueMapper {
 
 	}
 
+	/**
+	 * Methode zum Leeren der PropertyValue Tabelle
+	 * WICHTIG: In App Logik nicht anwendbar, da Namensausprägung für Contact ggf. leer
+	 */
 	
 	public void deleteAll() {
-		
+
 		Connection con = DBConnection.connection();
 		
 		try {
 			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue" 
+					("DELETE FROM PropertyValue INNER JOIN BusinessObject "
+					+ "ON PropertyValue.ID = BusinessObject.bo_ID" 
 					);
 					stmt.execute();
 					
@@ -521,7 +527,8 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findBy(Property p) {
-		System.out.println("PV-FindBy Methode...");
+		//System.out.println("PV-FindBy Methode");
+
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
@@ -529,11 +536,13 @@ public class PropertyValueMapper {
 		try {
 
 			// Statement ausfüllen und als Query an die DB schicken
-			PreparedStatement stmt = con.prepareStatement(
-					  "SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID "
+
+			PreparedStatement stmt = con.prepareStatement
+					("SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID, "
+					+ "Property.description "
 					+ "FROM PropertyValue "
 					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
-					+ "WHERE PropertyValue.property_ID = ?" 
+					+ "WHERE PropertyValue.property_ID = ? "
 					);
 					stmt.setInt(1, p.getId());
 					stmt.execute();
@@ -542,12 +551,12 @@ public class PropertyValueMapper {
 			if (rs.next()) {
 				PropertyValue propValue = new PropertyValue();
 				Property prop = new Property();				
-				prop.setId(rs.getInt("property_ID"));								
-				
+				prop.setId(rs.getInt("property_ID"));	
+				prop.setDescription(rs.getString("description"));
 				//PropertyMapper.propertyMapper().findBy(prop.getId());
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
-				System.out.println("PV-id: " + propValue.getValue());
+				//System.out.println("PV-id: " + propValue.getValue());
 				propValue.setProp(prop);
 				
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor

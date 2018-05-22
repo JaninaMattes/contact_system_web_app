@@ -177,25 +177,23 @@ public class ContactMapper {
 	 */
 
 	public void insertContact(Contact contact) {
-		
-		System.out.println("Create Contact: "+contact);
+
 		
 		BusinessObjectMapper.businessObjectMapper().insert(contact);
+		PropertyValueMapper.propertyValueMapper().insert(contact.getpropertyValue());
 
 		Connection con = DBConnection.connection();
 
-		try {
-			
+		try {		
 			//SQL-Statement zur Erstellung eines Kontaktes erzeugen
 			Statement stmt = con.createStatement();
-
-
 			stmt.executeUpdate("INSERT INTO Contact (ID) VALUES (" + contact.getBo_Id() + ")");
 
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 
 	}
 
@@ -295,13 +293,16 @@ public class ContactMapper {
 							//Innerjoin um auf den Namen zugreifen zu können
 
 			if (rs.next()) {
+
+				PropertyValue propValue = new PropertyValue();
+				propValue = PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID"));
+				Property prop = new Property();
+				prop = PropertyMapper.propertyMapper().findBy(propValue);
+				propValue.setProp(prop);
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
-				contact.setBo_Id(rs.getInt("id"));
-				contact.setShared_status(rs.getBoolean("status"));
-				contact.setBo_Id(rs.getInt("id"));
-				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
-				contact.setCreationDate(rs.getTimestamp("creationDate"));
-				contact.setModifyDate(rs.getTimestamp("modificationDate"));
+				contact.setBo_Id(rs.getInt("id"));			
+				contact.setpropertyValue(propValue);
+				
 
 			}
 			
