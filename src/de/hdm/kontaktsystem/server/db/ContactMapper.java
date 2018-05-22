@@ -262,16 +262,14 @@ public class ContactMapper {
 				
 				Contact contact = new Contact();
 
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("bo.user_ID")));
+				//contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("bo.user_ID")));
 				contact.setBo_Id(rs.getInt("bo.bo_ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				
-				System.out.println(rs.getInt("pv.ID"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
+				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
 				
-				System.err.println(contact);
 				return contact;
 			}
 		} catch (SQLException e) {

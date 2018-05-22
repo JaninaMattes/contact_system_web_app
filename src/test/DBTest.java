@@ -48,7 +48,7 @@ public class DBTest {
 		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectIDsByUserID(vUID));
 		
 
-		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(vCLID));
+		//System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(vCLID));
 
 		
 		
@@ -133,15 +133,7 @@ public class DBTest {
 		/*
 		Contact c = new Contact();
 		c.setOwner(u);
-<<<<<<< HEAD
-		c.setpropertyValue(propValMapper.findByKey(230));
-		
-		cMapper.insertContact(c);
-		
-		System.out.println(cMapper.findBy(propValMapper.findByKey(230)));
-		System.out.println(cMapper.findAllContactsByUser(615));
-		System.out.println(cMapper.findContactByStatus(615, false));
-=======
+
 		c.setName(propValMapper.findByKey(111));
 		//cMapper.insertContact(c);
 		*/
@@ -150,7 +142,7 @@ public class DBTest {
 		System.out.println(cMapper.findByName(pvMapper.findByKey(vPVID)));
 		System.out.println(cMapper.findAllContactsByUser(vUID));
 		System.out.println(cMapper.findContactByStatus(vUID, false));
->>>>>>> refs/heads/OliverGorges
+
 		System.out.println(cMapper.findAllContacts());
 		*/
 		System.out.println(c = cMapper.findContactById(vCID));
@@ -159,19 +151,19 @@ public class DBTest {
 		
 		System.out.println("\n ############ Test Property ################ \n");
 		
-		//System.out.println(pMapper.findAll());
+		System.out.println(pMapper.findAll());
 		System.out.println(pMapper.findBy(vPVID));
-		//System.out.println(pMapper.findBy("Name"));
+		System.out.println(pMapper.findBy("Name"));
 		System.out.println(pMapper.findBy(pvMapper.findByKey(vPVID)));
 		
 		System.out.println("\n ############ Test PropertyValue ################ \n");
 		
 		PropertyValue pv;
 		System.out.println(pv = pvMapper.findByKey(vPVID));
-		System.out.println(pvMapper.findAll(pv, u));
+		//System.out.println(pvMapper.findAll(pv, u));
 		System.out.println(pvMapper.findBy(c));
 		System.out.println(pvMapper.findBy(u));
 		System.out.println(pvMapper.findBy(pMapper.findBy(vPID)));
-		System.out.println(pvMapper.findAllShared(u, pv));
+		//System.out.println(pvMapper.findAllShared(u, pv));
 	}
 }
