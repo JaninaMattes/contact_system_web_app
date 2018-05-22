@@ -99,6 +99,7 @@ public class PropertyMapper {
   				}  			
   			
   			// Rückgabe der gefundenen Property Werte
+  			
   			return propertyResult;
   			
   		}catch(SQLException e){
@@ -131,8 +132,7 @@ public class PropertyMapper {
           			+ "FROM Property "  
           			+ "INNER JOIN PropertyValue ON Property.ID = PropertyValue.property_ID "
                     + "WHERE Property.ID = ? " 
-                    );
-              
+          			);
               stmt.setInt(1, pV.getProp().getId());
               System.out.println("ID: " + pV.getProp().getId());
               // Statement ausfüllen und als Query an die DB schicken
