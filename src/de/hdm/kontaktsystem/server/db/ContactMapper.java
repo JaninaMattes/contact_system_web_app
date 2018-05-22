@@ -225,7 +225,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
+				contact.setpV(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 
 				//Hinzufügen zum Ergebnisvektor
 				result.addElement(contact);
@@ -267,7 +267,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
+				contact.setpV(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 				return contact;
 			}
 		} catch (SQLException e) {
@@ -283,7 +283,7 @@ public class ContactMapper {
 	 * @param name
 	 * @return
 	 */
-	public Contact findByName(PropertyValue name) {
+	public Contact findBy(PropertyValue pV) {
 		
 		Contact contact = new Contact();
 		Connection con = DBConnection.connection();
@@ -291,10 +291,11 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT * " + "FROM  Contact c " + "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
-							+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
-							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
-							+ "WHERE description = 'Name' AND value = '" + name + "'");
+							"SELECT PropertyValue.value "
+							+ "FROM PropertyValue AS pv INNER JOIN Contact AS c "
+							+ "ON pv.contact_ID = c.ID "
+							+ "WHERE pv.ID = " + pV.getBo_Id() 
+							);
 							//Innerjoin um auf den Namen zugreifen zu können
 
 			if (rs.next()) {
@@ -302,16 +303,19 @@ public class ContactMapper {
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setBo_Id(rs.getInt("id"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
+				contact.setpV(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
 
 			}
+			
+			return contact;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return contact;
+		return null;
 	}
 
 	/**
@@ -364,7 +368,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
+				contact.setpV(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 
 			}
 		} catch (SQLException e) {

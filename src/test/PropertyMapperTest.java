@@ -40,7 +40,7 @@ public class PropertyMapperTest {
 		
 		user = UserMapper.userMapper().findById(id);
 	
-		contact.setName(propertyValue);
+		contact.setpV(propertyValue);
 		
 		propertyValue.setProp(property);
 		propertyValue.setValue("Janina");

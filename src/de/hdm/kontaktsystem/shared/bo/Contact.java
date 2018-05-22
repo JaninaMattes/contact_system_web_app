@@ -20,7 +20,7 @@ public class Contact extends BusinessObject {
 	/**
 	 * Name des Kontakts
 	 */
-	private PropertyValue name = null;
+	private PropertyValue pV = null;
 
 	
 	/**
@@ -35,18 +35,18 @@ public class Contact extends BusinessObject {
 	}
 
 	
-	public Contact(PropertyValue name, String status, User owner) {
+	public Contact(PropertyValue pV, String status, User owner) {
 
 	}
 	
 
-	public Contact(PropertyValue name, User owner) {
+	public Contact(PropertyValue pV, User owner) {
 		super.setOwner(owner);
-		this.name = name;
+		this.pV = pV;
 	}
 	
-	public Contact(PropertyValue name) {
-		this.name = name;
+	public Contact(PropertyValue pV) {
+		this.pV = pV;
 	}
 	
 	
@@ -55,29 +55,28 @@ public class Contact extends BusinessObject {
 	 */
 	
 	
-	
-	
 	/**
 	 * Namen auslesen
 	 */
 	
-	public PropertyValue getName() {
-		return name;
+	public PropertyValue getpV() {
+		return pV;
 	}
 
 	/**
 	 * Namen setzen
 	 */
 
-	public void setName(PropertyValue name) {
-		this.name = name;
+	public void setpV(PropertyValue pV) {
+		this.pV = pV;
 	}
 
 
 	
 	@Override
 	public String toString() {
-		return "Contact [owner=" + getOwner() + ", id=" + id + ", name=" + name + "]";
+		return "Contact [owner=" + getOwner() + ", id=" + id + ", Eigenschaft = "
+				+ pV.getProp() + "Ausprägung =" + pV.getValue() + "]";
 	}
 
 	

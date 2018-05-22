@@ -99,11 +99,11 @@ public class DBTest {
 		System.out.println("############ Test Contact ################");
 		Contact c = new Contact();
 		c.setOwner(u);
-		c.setName(propValMapper.findByKey(230));
+		c.setpV(propValMapper.findByKey(230));
 		
 		cMapper.insertContact(c);
 		
-		System.out.println(cMapper.findByName(propValMapper.findByKey(230)));
+		System.out.println(cMapper.findBy(propValMapper.findByKey(230)));
 		System.out.println(cMapper.findAllContactsByUser(615));
 		System.out.println(cMapper.findContactByStatus(615, false));
 		System.out.println(cMapper.findAllContacts());

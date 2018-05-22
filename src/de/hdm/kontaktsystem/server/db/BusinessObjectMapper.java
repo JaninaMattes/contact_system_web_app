@@ -100,7 +100,7 @@ public class BusinessObjectMapper implements Serializable {
 		  Connection con = DBConnection.connection();
 
 			try {
-				System.out.println("Set Owner " + bo.getOwner());
+				//System.out.println("Set Owner " + bo.getOwner());
 				PreparedStatement statement = con.prepareStatement(
 						"INSERT INTO BusinessObject (user_ID) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 				
@@ -121,7 +121,7 @@ public class BusinessObjectMapper implements Serializable {
 					 */
 					
 					bo.setBo_Id(rs.getInt(1));
-					System.out.println("ID: "+ bo.getBo_Id());
+					//System.out.println("ID: "+ bo.getBo_Id());
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

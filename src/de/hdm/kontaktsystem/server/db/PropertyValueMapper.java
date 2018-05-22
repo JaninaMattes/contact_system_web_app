@@ -48,7 +48,6 @@ public class PropertyValueMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			// Einfügeoperation in propertyvalue erfolgt
 			PreparedStatement stmt = con.prepareStatement
 			("INSERT INTO PropertyValue (id, property_id, value) VALUES (?, ?, ?)"
 					);
@@ -206,8 +205,7 @@ public class PropertyValueMapper {
 		
 		try {
 			PreparedStatement stmt = con.prepareStatement
-					("DELETE PropertyValue.ID, PropertyValue.value "
-					+ "FROM PropertyValue" 
+					("DELETE FROM PropertyValue" 
 					);
 					stmt.execute();
 					
@@ -249,7 +247,7 @@ public class PropertyValueMapper {
 				
 				for (PropertyValue PropValue : pV) {
 					
-				c.setName(PropValue);
+				c.setpV(PropValue);
 				
 				System.out.println(PropValue);
 				
@@ -260,14 +258,12 @@ public class PropertyValueMapper {
 			
 	
 		}
-		
-	
 
-	/*
-	 * Löschen aller für den User geteilten und und vom User erstellten
-	 * Eigenschaftsausprägungen
+	/**
+	 * Löschen aller DB Einträge für PropertyValue	
+	 * @param user
 	 */
-
+		
 	public void deleteAllFrom(User user) {
 
 		ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
@@ -305,9 +301,10 @@ public class PropertyValueMapper {
 				pv.setBo_Id(rs.getInt("ID"));
 				pv.setValue(rs.getString("value"));
 				pv.setProp(p);
-				System.out.println("Pv-id: " + pv.getBo_Id());
+				//System.out.println("Pv-id: " + pv.getBo_Id());
 			}
 			return pv;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
