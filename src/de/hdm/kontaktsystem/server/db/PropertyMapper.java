@@ -73,34 +73,31 @@ public class PropertyMapper {
   			// Leeres SQL Statement anlegen
   			Statement stmt = con.createStatement();
   			
-  			// Löschoperation für Property wird aufgerufen              
+  			// Alle Property Objekte aus DB abrufen          
   			ResultSet rs = stmt.executeQuery( 
-					  "SELECT Property.ID, Property.description, "
-					+ "PropertyValue.ID, PropertyValue.value "
+					  "SELECT Property.ID, Property.description "
 					+ "FROM Property "  
-					+ "INNER JOIN PropertyValue ON Property.ID = PropertyValue.property_ID "
-					+ "WHERE PropertyValue.property_ID = Property.ID "
-				    + "ORDER BY Property.ID "
+					+ "ORDER BY Property.ID "
 					);		
   			
   			while(rs.next()){  			
-  				
   				// Vector um Eigenschaftsausprägungen zu speichern
-  				Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();
+  				Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();  				
+  				Property property = new Property();  				
   				
-  				Property property = new Property();
-  				property.setDescription(rs.getString("description"));
   				property.setId(rs.getInt("ID"));
-  				System.out.println("P-id: " + rs.getInt("ID"));  	
+  				property.setDescription(rs.getString("description"));
+  				System.out.println("P-id: " + property.getDescription());  	
   				
   				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
   				propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);  				
   				// Setzen des Eigenschaftsausprägungs Vector
-  				property.setPropertyValues(propertyValues);   		
-                // Hinzufügen des neuen Objekts zum Ergebnisvektor
+  				property.setPropertyValues(propertyValues);   	
+  				 // Hinzufügen des neuen Objekts zum Ergebnisvektor
                 propertyResult.addElement(property);
   				
   				}  			
+  			
   			// Rückgabe der gefundenen Property Werte
   			return propertyResult;
   			
@@ -146,7 +143,6 @@ public class PropertyMapper {
                  
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
-                  System.out.println("P-id: " + rs.getInt("ID"));
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
@@ -183,14 +179,12 @@ public class PropertyMapper {
               stmt.setInt(1, property_id);
               // Statement ausfüllen und als Query an die DB schicken
               ResultSet rs = stmt.executeQuery();     
-              System.out.println("P-id: " + property_id);
-                           
+                                        
               if (rs.next()) {
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
                   
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
-                  System.out.println("P-id: " + rs.getInt("ID"));
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
@@ -240,7 +234,7 @@ public class PropertyMapper {
                                  
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
-                  System.out.println("P-id: " + rs.getInt("ID"));
+                  
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen der Eigenschaftsausprägungen
@@ -287,7 +281,7 @@ public class PropertyMapper {
     			stmt.setInt(1, property.getId());
     			stmt.setString(2, property.getDescription());
     			stmt.execute();
-    			System.out.println("P-id: " + property.getId());
+    			
     			// Die Einfügeoperation für PropertyValue
     			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
         	  	propertyValues = property.getPropertyValues();
