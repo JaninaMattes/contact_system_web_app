@@ -459,19 +459,24 @@ public class PropertyValueMapper {
 			stmt = con.createStatement();
 
 			// Statement ausfüllen und als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID"
-					+ " FROM PropertyValue INNER JOIN Property" + " ON Property.ID = " + p.getId());
+			ResultSet rs = stmt.executeQuery(
+					  "SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID "
+					+ "FROM PropertyValue "
+					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
+					+ "WHERE PropertyValue.property_ID = " + p.getId()
+					);
 
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();
 				Property prop = new Property();				
-				prop.setId(rs.getInt("property_ID"));
-				propValue.setProp(prop);
+				prop.setId(rs.getInt("property_ID"));								
 				
-				System.out.println("PV-id: " + propValue.getValue());
 				//PropertyMapper.propertyMapper().findBy(prop.getId());
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
+				System.out.println("PV-id: " + propValue.getValue());
+				propValue.setProp(prop);
+				
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
 			}
