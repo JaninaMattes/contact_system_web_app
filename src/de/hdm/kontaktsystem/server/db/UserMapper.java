@@ -112,7 +112,7 @@ public class UserMapper {
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
-				u.setContact(ContactMapper.contactMapper().findContactById(rs.getInt("contactID")));
+				u.setContact(ContactMapper.contactMapper().findContactById(rs.getInt("own_Contact")));
 				return u;
 			}
 		}catch(SQLException e){

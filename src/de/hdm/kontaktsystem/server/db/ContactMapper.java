@@ -124,8 +124,7 @@ public class ContactMapper {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * " 
 							+ "FROM  Contact AS c " 
-							+ "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
-							+ "INNER JOIN PropertyValue AS pv ON pv.ID = bez.PropertyValue_ID "
+							+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 							+ "INNER JOIN Property AS p ON p.ID = pv.Property_ID "
 							+ "INNER JOIN BusinessObject AS bo ON bo.bo_ID = c.ID "
 							//+ "WHERE description = 'Name' AND "
@@ -214,8 +213,8 @@ public class ContactMapper {
 			//SQL Statement erzeugen
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT *" + "FROM  Contact c " + "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
-							+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
+					"SELECT *" + "FROM  Contact c " 
+							+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 							+ "INNER JOIN Property p ON p.ID = pv.Property_ID " + "WHERE description = 'Name'");
 
 			while (rs.next()) {
@@ -250,24 +249,27 @@ public class ContactMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * " + "FROM  Contact c "
-					+ "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
-					+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
+			PreparedStatement stmt = con.prepareStatement("SELECT c.* , pv.*, p.*, bo.* " + "FROM  Contact c "
+					+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 					+ "INNER JOIN Property p ON p.ID = pv.property_ID "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " + "WHERE description = 'Name' AND c.ID = ?");
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 
-			if (rs.next()) {
-
+			if (rs.next()) {		
+				
 				Contact contact = new Contact();
 				
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
-				contact.setBo_Id(rs.getInt("id"));
-				contact.setShared_status(rs.getBoolean("status"));
-				contact.setCreationDate(rs.getTimestamp("creationDate"));
-				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
+				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("bo.user_ID")));
+				contact.setBo_Id(rs.getInt("bo.bo_ID"));
+				contact.setShared_status(rs.getBoolean("bo.status"));
+				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
+				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
+				
+				System.out.println(rs.getInt("pv.ID"));
+				contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
+				
+				System.err.println(contact);
 				return contact;
 			}
 		} catch (SQLException e) {
@@ -291,8 +293,8 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT * " + "FROM  Contact c " + "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
-							+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
+					"SELECT * " + "FROM  Contact c " 
+							+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
 							+ "WHERE description = 'Name' AND value = '" + name + "'");
 							//Innerjoin um auf den Namen zugreifen zu können
@@ -352,8 +354,8 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT * " + "FROM  Contact c " + "INNER JOIN Contact_PropertyValue bez ON c.ID = bez.Contact_ID "
-							+ "INNER JOIN PropertyValue pv ON pv.ID = bez.PropertyValue_ID "
+					"SELECT * " + "FROM  Contact c " 
+							+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
 							+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
 							+ "WHERE description = 'Name' AND bo.status = " + shared_status);

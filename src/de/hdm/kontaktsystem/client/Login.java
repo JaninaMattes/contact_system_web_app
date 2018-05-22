@@ -60,9 +60,11 @@ public class Login implements EntryPoint {
 		
 		signInLink.setHref(userInfo.getLoginUrl());
 		signInLink.setStyleName("link");
+		loginPanel.add(new HTML("<center>"));
 		loginPanel.add(loginLabel);
 		loginPanel.add(new HTML("<br /> <br /> "));
 		loginPanel.add(signInLink);
+		loginPanel.add(new HTML("</center>"));
 		root.add(loginPanel);
 	}
 	
