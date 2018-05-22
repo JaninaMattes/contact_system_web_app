@@ -353,9 +353,8 @@ public class PropertyValueMapper {
 
 	public Vector<PropertyValue> findAllShared(User u, PropertyValue pV) {
 
-
-		Vector<Participation> partVector1 = new Vector<Participation>();
 		
+		Vector<Participation> partVector1 = new Vector<Participation>();		
 		partVector1 = ParticipationMapper.participationMapper().findParticipationsByOwnerID(u.getGoogleID());
 		
 		for (Participation part1 : partVector1) {
