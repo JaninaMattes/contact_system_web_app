@@ -22,7 +22,6 @@ public class PropertyValueTest {
 
 	public static void main(String args[]) {
 			
-		PropertyValueMapper.propertyValueMapper().deleteAll();
 		
 			
 		
@@ -110,8 +109,17 @@ public class PropertyValueTest {
 //		//PropertyMapper.propertyMapper().insert(p);
 //		
 //		PropertyValueMapper.propertyValueMapper().insert(pv);
-//		 
-			
+		// PropertyValueMapper.propertyValueMapper().deleteAll();
+		
+		Double userId = 8.914336227056141e15;
+//		
+		PropertyValue pV = new PropertyValue();
+				
+		User user = new User();
+		user.setGoogleID(userId);
+		
+		// PropertyValueMapper.propertyValueMapper().findAllSharedByMe(user); // Funktioniert
+		PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(user);
 		
 	} 
 }

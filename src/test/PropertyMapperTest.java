@@ -38,7 +38,7 @@ public class PropertyMapperTest {
 		
 		ContactList contactList = new ContactList();
 		
-		user = UserMapper.userMapper().findUserById(id);
+		user = UserMapper.userMapper().findById(id);
 	
 		contact.setName(propertyValue);
 		
@@ -106,7 +106,7 @@ public class PropertyMapperTest {
 		 //PropertyMappe//r.propertyMapper().insert(property4); // -> Erfolgreich  
 		 //PropertyMapper.propertyMapper().findAll(); // -> Erfolgreich 
 		 //PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
-		 //PropertyMapper.propertyMapper().findBy(propertyValue4); // -> Erfolgreich 
+		 // PropertyMapper.propertyMapper().findBy(propertyValue4); // -> Erfolgreich 
 		 PropertyMapper.propertyMapper().findBy("Sternzeichen"); // -> Erfolgreich 
 
 

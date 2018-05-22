@@ -13,6 +13,8 @@ import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 public class BusinessObjectMapper implements Serializable {
 	
@@ -126,25 +128,46 @@ public class BusinessObjectMapper implements Serializable {
 			}
 	  }
 	  
-	  // Business Object als Parameter übergeben und id zurück geben als Zuordnung zum Objekt
+	  // BO Tabelle anhand der ID abfragen ob BO enthalten ist
 	  
-	  public BusinessObject findBusinessObjectByID(int id) {
-		  
-		//  BusinessObject bo = new BusinessObject();
-		  
-		  System.out.println("Test Contact");
-		 // if(bo == null) return bo = ContactMapper.contactMapper().findContactById(id);
-		  System.out.println("Test ContactList");
-		 // if(bo == null) return bo = ContactListMapper.contactListMapper().findContactListById(id);
-		  System.out.println("Test Property");
-		 // if(bo == null) return bo = PropertyMapper.propertyMapper().findByID(id);
-		  System.out.println("Test PropertyValue");
-		 // if(bo == null) return bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
-		  //if(o == null) throw new BONotFoundException();
-		 
-		  return null;
+	  public BusinessObject findBy(int bo_id) {
+		
+		  BusinessObject bo = new BusinessObject();
+          // Verbindung zur DB herstellen
+          Connection con = DBConnection.connection();
+                   
+          try {              
+             // Statement ausfüllen und als Query an die DB schicken
+             PreparedStatement stmt = con.prepareStatement(
+            		 			"SELECT * "
+            		 		  + "FROM BusinessObject "  
+                              + "WHERE BusinessObject.bo_ID = ? " 
+                   			  );
+             
+             stmt.setInt(1, bo_id);
+             // Statement ausfüllen und als Query an die DB schicken
+             ResultSet rs = stmt.executeQuery();
+                          
+              if (rs.next()) {
+            	 User user = new User();
+            	 user.setGoogleID(rs.getDouble("user_Id"));
+            	 
+            	 bo.setBo_Id(rs.getInt("bo_ID"));
+            	 bo.setCreationDate(rs.getTimestamp("creationDate"));
+            	 bo.setModifyDate(rs.getTimestamp("modificationDate"));
+            	 bo.setShared_status(rs.getBoolean("status"));
+            	 bo.setOwner(user);                           
+                }              
+              
+              return bo;
+             
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }       
+		 return null;
 	  }
 
+	  	  
 	  /**
 	   * Exception wenn das gesuchte BusinessBoject nicht gefunden wurde
 	   * Aktuell nicht genutzt
@@ -164,6 +187,7 @@ public class BusinessObjectMapper implements Serializable {
 		  
 	  }
 	  
+	
 	   
 	  
 	  /**
@@ -215,14 +239,15 @@ public class BusinessObjectMapper implements Serializable {
 	 * @param BusinessObject
 	 */
 	public void deleteBusinessObject(BusinessObject bo) {
-		deleteBusinessObjectById(bo.getBo_Id());
+		deleteBusinessObjectByID(bo.getBo_Id());
 	}
 
+	
 	/**
 	 * Löscht das BusinessObject mit der übergebenen ID
 	 * @param BusinessObjectID
 	 */
-	public void deleteBusinessObjectById(int bo_id) {
+	public void deleteBusinessObjectByID(int bo_id) {
 		// TODO Auto-generated method stub
 		Connection con = DBConnection.connection();
 		  
@@ -246,7 +271,7 @@ public class BusinessObjectMapper implements Serializable {
 	 * Löscht das BusinessObject mit der übergebenen UserID
 	 * @param BusinessObjectID
 	 */
-	public void deleteBusinessObjectByUserId(double id) {
+	public void deleteBusinessObjectByUserId(User user) {
 		// TODO Auto-generated method stub
 		Connection con = DBConnection.connection();
 		  
@@ -254,7 +279,7 @@ public class BusinessObjectMapper implements Serializable {
 			  // Einfügeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement
 		      ("DELETE FROM BusinessObject WHERE user_ID= ?");
-		      stmt.setDouble(1, id);
+		      stmt.setDouble(1, user.getGoogleID());
 		      stmt.execute();
 		      
 		    }

@@ -268,9 +268,9 @@ public class PropertyValueMapper {
 	 * Eigenschaftsausprägungen
 	 */
 
-	public void deleteAllFrom(User u) {
+	public void deleteAllFrom(User user) {
 
-		ParticipationMapper.participationMapper().deleteParticipationForParticipantID(u.getGoogleID());
+		ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
 
 	}
 
@@ -357,33 +357,59 @@ public class PropertyValueMapper {
 		return null;
 	}
 
-	/*
-	 * Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen (selbst
-	 * erstellt oder Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
-	 * und die Ergebnisse zurueckgegeben
+	/**
+	 *  Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen <code>PropertyValue</code> - Objekte 
+	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
+	 *  und die Ergebnisse zurueckgegeben
 	 */
 
-	public Vector<PropertyValue> findAllShared(User u, PropertyValue pV) {
+	public Vector<PropertyValue> findAllSharedByMe(User user) {
 
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+		Vector<Participation> participationVector = new Vector<Participation>();		
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
+		// Vector für die Speicherung aller BusinessObjekte erzeugen
+		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
 		
-		Vector<Participation> partVector1 = new Vector<Participation>();		
-		partVector1 = ParticipationMapper.participationMapper().findParticipationsByOwnerID(u.getGoogleID());
 		
-		for (Participation part1 : partVector1) {
-			
-			part1.setReference(pV);
-			Vector<Participation> partVector2 = new Vector<Participation>();
-			partVector2 = ParticipationMapper.participationMapper().findParticipationsByBusinessObject(part1.getReferencedObject());	
-				
-			for (Participation part2 : partVector2) {
-				
-				System.out.println(part2.getReferenceID());
-				
-			}
-			
-			}
+		for (Participation part : participationVector) {
+			 PropertyValue propVal = new PropertyValue();
+			 propVal = this.findByKey(part.getReferenceID());			 
+			 System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 if(propVal != null) {
+			  propertyResultVector.addElement(propVal);
+		     }
+		}
+		return propertyResultVector;
+		
+	}
+	
+	/**
+	 * Alle fuer den Benutzer in der Applikation geteilte Ausprägungen <code>PropertyValue</code> Objekte
+	 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
+	 * 
+	 * @param user-Objekt
+	 * @return Vector PropertyValue-Objekte
+	 */
 
-		return null;
+	public Vector<PropertyValue> findAllSharedByOthersToMe(User user) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+		Vector<Participation> participationVector = new Vector<Participation>();		
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
+		// Vector für die Speicherung aller BusinessObjekte erzeugen
+		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
+		
+		
+		for (Participation part : participationVector) {
+			 PropertyValue propVal = new PropertyValue();
+			 propVal = this.findByKey(part.getReferenceID());			 
+			 System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 if(propVal != null) {
+			  propertyResultVector.addElement(propVal);
+		     }
+		}
+		return propertyResultVector;
 		
 	}
 

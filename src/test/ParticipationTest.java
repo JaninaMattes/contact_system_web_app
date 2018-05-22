@@ -21,11 +21,11 @@ public class ParticipationTest {
 		participant.setGMail("mail@gmail.com");
 		participant.setGoogleID(rng.nextInt(1000)+1);
 		//insert participant in Table
-		UserMapper.userMapper().insertUser(participant);
+		UserMapper.userMapper().insert(participant);
 		
 		//Test-Ausgabe des eingefügten Users
 		System.out.println(
-			UserMapper.userMapper().findUserByEmail("mail@gmail.com").getGMail()
+			UserMapper.userMapper().findByEmail("mail@gmail.com").getGMail()
 			);
 		
 //		//Generate PropertyValue (as referenced BusinessObject)
@@ -47,7 +47,7 @@ public class ParticipationTest {
 		
 		//Ausgabe der Participation
 		System.out.println(
-				ParticipationMapper.participationMapper().findParticipationsByParticipantID(participant.getGoogleID())
+				ParticipationMapper.participationMapper().findParticipationsByParticipant(participant)
 				);
 //		
 

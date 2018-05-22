@@ -138,7 +138,7 @@ public class ContactMapper {
 				//contact.setName(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID")));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 
 				System.out.println(contact.toString());
 				
@@ -220,7 +220,7 @@ public class ContactMapper {
 
 			while (rs.next()) {
 				Contact contact = new Contact();
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
@@ -262,7 +262,7 @@ public class ContactMapper {
 
 				Contact contact = new Contact();
 				
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
@@ -298,7 +298,7 @@ public class ContactMapper {
 							//Innerjoin um auf den Namen zugreifen zu können
 
 			if (rs.next()) {
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setBo_Id(rs.getInt("id"));
@@ -359,7 +359,7 @@ public class ContactMapper {
 							+ "WHERE description = 'Name' AND bo.status = " + shared_status);
 
 			if (rs.next()) {
-				contact.setOwner(UserMapper.userMapper().findUserById(rs.getDouble("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
