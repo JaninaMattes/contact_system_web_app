@@ -121,38 +121,13 @@ public class PropertyMapper {
       
       public Property findBy(PropertyValue pV) {     
           
-    	  Property property = new Property();
-          Connection con = DBConnection.connection();          
-         
-          try {
-              // Leeres SQL Statement anlegen  
-              PreparedStatement stmt = con.prepareStatement( 
-            		  "SELECT Property.ID, Property.description, "
-          			+ "PropertyValue.ID, PropertyValue.value "
-          			+ "FROM Property "  
-          			+ "INNER JOIN PropertyValue ON Property.ID = PropertyValue.property_ID "
-                    + "WHERE Property.ID = ? " 
-          			);
-              stmt.setInt(1, pV.getProp().getId());
-              System.out.println("ID: " + pV.getProp().getId());
-              // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery();          		 
-                           
-              if (rs.next()) {
-                  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-                 
-                  property.setId(rs.getInt("ID"));
-                  property.setDescription(rs.getString("description"));
-                  // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
-                  // Setzen des Eigenschaftsausprägungs Vector
-                  property.setPropertyValues(propertyValues);                  
-              }              
-              return property;              
-          } catch (SQLException e) {
-              e.printStackTrace();
-          }
-          return null;
+    	Property property = new Property();
+    	PropertyValue propertyValue = new PropertyValue();
+    	// Abrufen ob Property-Objekt in DB vorhanden ist
+    	propertyValue = PropertyValueMapper.propertyValueMapper().findByKey(pV.getBo_Id());
+    	property = propertyValue.getProp();
+    	
+        return property;
       }
             
             
@@ -174,7 +149,10 @@ public class PropertyMapper {
           try {
               // Leeres SQL Statement anlegen  
               PreparedStatement stmt = con.prepareStatement( 
-            		  "SELECT Property.ID, Property.description FROM Property WHERE Property.ID = ?");
+            		  "SELECT Property.ID, Property.description "
+            		+ "FROM Property "
+            		+ "WHERE Property.ID = ?"
+            		);
               
               stmt.setInt(1, property_id);
               // Statement ausfüllen und als Query an die DB schicken
@@ -188,7 +166,10 @@ public class PropertyMapper {
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
-                  property.setPropertyValues(propertyValues);                  
+                  property.setPropertyValues(propertyValues);            
+                  System.out.println("P-id: " + property.getId());
+                  System.out.println("P-description: " + property.getDescription());
+                  
               }              
               return property;
               

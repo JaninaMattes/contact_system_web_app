@@ -263,32 +263,41 @@ public class PropertyValueMapper {
 	 * identifiziert und zurueckgegeben
 	 */
 
-	public PropertyValue findByKey(int id) {
+	public PropertyValue findByKey(int propvalue_id) {
 
 		Connection con = DBConnection.connection();
-
+		PropertyValue pv = new PropertyValue();
+		
 		try {
 			PreparedStatement stmt = con
-					.prepareStatement("SELECT PropertyValue.ID, PropertyValue.value, Property.description "
-							+ "FROM PropertyValue " + "INNER JOIN Property " + "WHERE PropertyValue.ID = ?");
-			stmt.setInt(1, id);
+					.prepareStatement(
+							  "SELECT PropertyValue.ID, PropertyValue.value, "
+							+ "Property.description, Property.ID "
+							+ "FROM PropertyValue " 
+							+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID " 
+							+ "WHERE PropertyValue.ID = ? "
+							);
+			
+			stmt.setInt(1, propvalue_id);
 			stmt.execute();
 
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				PropertyValue pv = new PropertyValue();
+				// Erzeugen eines Property-Objektes und befüllen
+				Property p = new Property();
+				p.setId(rs.getInt("ID"));
+				p.setDescription(rs.getString("description"));
+				// Befülen eines PropertyValue-Objektes und setzen der Property-Objektes
 				pv.setBo_Id(rs.getInt("ID"));
 				pv.setValue(rs.getString("value"));
-				pv.getProp().setDescription(rs.getString("description"));
-				return pv;
+				pv.setProp(p);
+				System.out.println("Pv-id: " + pv.getBo_Id());
 			}
-
+			return pv;
 		} catch (SQLException e) {
 			e.printStackTrace();
-
 		}
-
 		return null;
 	}
 
@@ -447,7 +456,7 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findBy(Property p) {
-
+		System.out.println("PV-FindBy Methode");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
