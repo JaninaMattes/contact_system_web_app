@@ -9,6 +9,14 @@ public class DBTestContact {
 	
 	public static void main(String args[]) {
 		
+		
+//		User u = new User();
+//		u.setGoogleID(3);
+//		
+//		Contact c = new Contact();
+//		c.setOwner(u);
+//		ContactMapper.contactMapper().insertContact(c);
+		
 		PropertyValue pv = new PropertyValue();
 		
 		ContactMapper.contactMapper().findBy(pv);

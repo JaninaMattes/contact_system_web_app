@@ -103,8 +103,7 @@ public class BusinessObjectMapper implements Serializable {
 						"INSERT INTO BusinessObject (user_ID) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 				
 				statement.setDouble(1, bo.getOwner().getGoogleID());
-				
-				
+
 				// Führt das PreparedStatement aus
 				statement.executeUpdate();
 				
