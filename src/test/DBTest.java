@@ -99,7 +99,7 @@ public class DBTest {
 		System.out.println("############ Test Contact ################");
 		Contact c = new Contact();
 		c.setOwner(u);
-		c.setpV(propValMapper.findByKey(230));
+		c.setpropertyValue(propValMapper.findByKey(230));
 		
 		cMapper.insertContact(c);
 		

@@ -233,15 +233,13 @@ public class PropertyValueMapper {
 		public Vector <PropertyValue> findBy(User u) {
 			
 			Vector<Contact> contacts = new Vector<Contact>();
-			
-			contacts = ContactMapper.contactMapper().findAllContactsByUser(u.getGoogleID());
-		
+			contacts = ContactMapper.contactMapper().findAllContactsByUser(u.getGoogleID());		
 			
 			for (Contact c : contacts) {
 				
-				Vector<PropertyValue> pV = new Vector<PropertyValue>();
+				Vector<PropertyValue> pV = new Vector<PropertyValue>();			
 				
-				pV = findBy(c);					
+				pV = findBy(c);				
 				
 				for (PropertyValue PropValue : pV) {
 					
@@ -372,7 +370,7 @@ public class PropertyValueMapper {
 		for(PropertyValue p1 : propertyValueResult) {			
 			for(PropertyValue p2: propertyValueShared) {
 			    if(p1.equals(p2)) {
-				propertyValueResult.remove(p2);
+				propertyValueResult.remove(p1);
 			}		
 		  }
 		}

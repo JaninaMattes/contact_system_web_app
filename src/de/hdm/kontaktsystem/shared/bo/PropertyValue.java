@@ -23,12 +23,10 @@ public class PropertyValue extends BusinessObject {
 	 * nicht geteilt, daher wird dieser zuerst als false angegeben
 	 * 
 	 */
-	
-	
+		
 	
 	// TODO: Überprüfen ob die Verbindung von Property/PropertyValue so sinnvoll ist
-	
-	
+		
 
 
 	public PropertyValue() {
