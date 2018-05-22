@@ -466,9 +466,11 @@ public class PropertyValueMapper {
 
 			if (rs.next()) {
 				PropertyValue propValue = new PropertyValue();
-				Property prop = new Property();
+				Property prop = new Property();				
 				prop.setId(rs.getInt("property_ID"));
 				propValue.setProp(prop);
+				
+				System.out.println("PV-id: " + propValue.getValue());
 				//PropertyMapper.propertyMapper().findBy(prop.getId());
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));

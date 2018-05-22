@@ -12,7 +12,9 @@ public class PropertyMapperTest {
 	
 	public static void main(String args[]) {
 		
-		Double id = 8.914336227056141e15;
+		/* 
+		 * Double id = 8.914336227056141e15;
+		 
 		
 		User user = new User();	
 		Contact contact = new Contact();
@@ -64,7 +66,7 @@ public class PropertyMapperTest {
 		propertyValue4.setOwner(user);
 		
 		propertyValue5.setProp(property4);
-		propertyValue5.setValue("Einhorn");
+		propertyValue5.setValue("Silberfisch");
 		propertyValue5.setOwner(user);
 		
 		// Property - Objekte befüllen
@@ -96,16 +98,25 @@ public class PropertyMapperTest {
 		contactList.setContact(contact);
 		contactList.setName("Friendlist");
 		
+		*/
 	
 		//************************************************************
 		// Property Mapper Test
 		//************************************************************
 				
+<<<<<<< HEAD
 		 //PropertyMappe//r.propertyMapper().insert(property4); // -> Erfolgreich  
 		 PropertyMapper.propertyMapper().findAll(); // -> Erfolgreich 
 //		 PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
 		 //PropertyMapper.propertyMapper().findBy(propertyValue2); // -> Erfolgreich x
 //		 PropertyMapper.propertyMapper().findBy("Sternzeichen"); // -> Erfolgreich 
+=======
+		// PropertyMapper.propertyMapper().insert(property4); // -> Erfolgreich  
+		 PropertyMapper.propertyMapper().findAll(); // -> Erfolgreich 
+		 //PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
+		 //PropertyMapper.propertyMapper().findBy(propertyValue2); // -> Erfolgreich x
+		 //PropertyMapper.propertyMapper().findBy("Sternzeichen"); // -> Erfolgreich 
+>>>>>>> a0b017ba89218c8c8d4223c80b52a61069f2321e
 		
 	}
 

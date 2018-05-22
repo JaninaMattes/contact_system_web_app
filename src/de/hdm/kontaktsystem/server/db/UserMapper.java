@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.User;
 /**
  * 
@@ -108,11 +109,14 @@ public class UserMapper {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User WHERE g_mail = ?");
 			stmt.setString(1, email);
 			ResultSet rs = stmt.executeQuery();
-			if(rs.next()){
+			if(rs.next()){				
+				Contact contact = new Contact();
+				contact = ContactMapper.contactMapper().findContactById(rs.getInt("ID"));
+				
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
-				u.setContact(ContactMapper.contactMapper().findContactById(rs.getInt("contactID")));
+				u.setContact(contact);
 				return u;
 			}
 		}catch(SQLException e){
