@@ -101,11 +101,11 @@ public class PropertyMapperTest {
 		// Property Mapper Test
 		//************************************************************
 				
-		 PropertyMapper.propertyMapper().insert(property4); // -> Erfolgreich  
+		 //PropertyMappe//r.propertyMapper().insert(property4); // -> Erfolgreich  
 		 PropertyMapper.propertyMapper().findAll(); // -> Erfolgreich 
-		 PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
-		 PropertyMapper.propertyMapper().findBy(propertyValue2); // -> Erfolgreich x
-		 PropertyMapper.propertyMapper().findBy("Sternzeichen"); // -> Erfolgreich 
+//		 PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
+		 //PropertyMapper.propertyMapper().findBy(propertyValue2); // -> Erfolgreich x
+//		 PropertyMapper.propertyMapper().findBy("Sternzeichen"); // -> Erfolgreich 
 		
 	}
 

@@ -195,7 +195,7 @@ public class PropertyValueMapper {
 
 	public void deleteAllShared(User u) {
 
-		// TODO: ParticipationMapper fehlt?
+		// TODO: @ Sandra --> ParticipationMapper fehlt?
 
 	}
 
@@ -297,21 +297,20 @@ public class PropertyValueMapper {
 	 * werden gesucht, in einen Vector gespeichert und zurueckgegeben
 	 */
 
-	public Vector<PropertyValue> findAll(PropertyValue pv, User u) {
+	public Vector<PropertyValue> findAll() {
 
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
-		Statement stmt = null;
 
 		try {
-			// Leeres SQL Statement anlegen
-			stmt = con.createStatement();
-			// Statement ausfüllen und als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery(
-					"SELECT propertyvalue.id, propertyvalue.value " + "FROM propertyvalue INNER JOIN businessobject"
-							+ "WHERE propertyvalue.id=" + "AND businessobject.user_id=" + u.getGoogleID()
-							+ "AND businessobject.status=" + pv.isShared_status() + "ORDER BY propertyvalue.id");
+			PreparedStatement stmt = con.prepareStatement
+					("SELECT PropertyValue.ID, PropertyValue.value " 
+					+ "FROM PropertyValue "
+						);
+					stmt.execute();
+							
+					ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();
@@ -459,19 +458,23 @@ public class PropertyValueMapper {
 			stmt = con.createStatement();
 
 			// Statement ausfüllen und als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID"
-					+ " FROM PropertyValue INNER JOIN Property" + " ON Property.ID = " + p.getId());
+			ResultSet rs = stmt.executeQuery
+					("SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID"
+					+ " FROM PropertyValue INNER JOIN Property" 
+					+ " ON Property.ID = " + p.getId()
+					);
 
-			while (rs.next()) {
+			if (rs.next()) {
 				PropertyValue propValue = new PropertyValue();
 				Property prop = new Property();
-				propValue.setProp(prop);
 				prop.setId(rs.getInt("property_ID"));
-				PropertyMapper.propertyMapper().findBy(prop.getId());
+				propValue.setProp(prop);
+				//PropertyMapper.propertyMapper().findBy(prop.getId());
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
+
 			}
 			return propValueResult;
 

@@ -80,7 +80,6 @@ public class PropertyMapper {
 					+ "FROM Property "  
 					+ "INNER JOIN PropertyValue ON Property.ID = PropertyValue.property_ID "
 					+ "WHERE PropertyValue.property_ID = Property.ID "
-				    + "ORDER BY Property.ID "
 					);		
   			
   			while(rs.next()){  			
@@ -90,18 +89,19 @@ public class PropertyMapper {
   				
   				Property property = new Property();
   				property.setDescription(rs.getString("description"));
-  				property.setId(rs.getInt("ID"));
-  				System.out.println("P-id: " + rs.getInt("ID"));  	
+  				property.setId(rs.getInt("ID"));	
+  				System.out.println("P-id: " + rs.getInt("ID"));
   				
   				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
   				propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);  				
   				// Setzen des Eigenschaftsausprägungs Vector
-  				property.setPropertyValues(propertyValues);   		
+  				property.setPropertyValues(propertyValues);   
                 // Hinzufügen des neuen Objekts zum Ergebnisvektor
                 propertyResult.addElement(property);
   				
   				}  			
   			// Rückgabe der gefundenen Property Werte
+  			
   			return propertyResult;
   			
   		}catch(SQLException e){
@@ -134,8 +134,7 @@ public class PropertyMapper {
           			+ "FROM Property "  
           			+ "INNER JOIN PropertyValue ON Property.ID = PropertyValue.property_ID "
                     + "WHERE Property.ID = ? " 
-                    );
-              
+          			);
               stmt.setInt(1, pV.getProp().getId());
               System.out.println("ID: " + pV.getProp().getId());
               // Statement ausfüllen und als Query an die DB schicken
@@ -146,7 +145,6 @@ public class PropertyMapper {
                  
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
-                  System.out.println("P-id: " + rs.getInt("ID"));
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector

@@ -31,10 +31,16 @@ public class PropertyValueTest {
 		prop.setId(3);
 		PropertyValue pV = new PropertyValue();
 		pV.setProp(prop);
-		Contact contact = new Contact();
-		contact.setBo_Id(100);
+
 		
-		PropertyValueMapper.propertyValueMapper().findBy(contact);
+		Vector<PropertyValue> ResultVector = new Vector<PropertyValue>();
+		ResultVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
+		
+		for (PropertyValue pv : ResultVector) {
+			
+			System.out.println(pv);
+			
+		}
 		
 		
 		/*
