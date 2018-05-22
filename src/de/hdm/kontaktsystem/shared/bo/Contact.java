@@ -12,7 +12,7 @@ sowie den User selbst.
 public class Contact extends BusinessObject {
 
 	/**
-	 *  Bezug zu dem User der den Kontakt besitzt
+	 *  Eindeutige ID 
 	 */
 	
 	private int id;
@@ -20,55 +20,50 @@ public class Contact extends BusinessObject {
 	/**
 	 * Name des Kontakts
 	 */
-	private PropertyValue pV = null;
+	private PropertyValue propertyValue = null;
 
-	
-	/**
+	/*
 	*Datum wird von BusinessObject geerbt
 	*/
 	
 	/**
 	 * Kontruktoren
+	 * 
 	 */
 	public Contact() {
-		
-	}
-
 	
-	public Contact(PropertyValue pV, String status, User owner) {
-
 	}
 	
-
+	/**
+	 * Konstruktor muss mindestens das Setzen einer Eigenschaftsausprägung erzwingen.
+	 * Der Kontakt <code>Contact</code> darf nie leer angelegt werden. 
+	 * 
+	 */
+	
 	public Contact(PropertyValue pV, User owner) {
 		super.setOwner(owner);
-		this.pV = pV;
+		this.propertyValue = pV;
 	}
 	
 	public Contact(PropertyValue pV) {
-		this.pV = pV;
+		this.propertyValue = pV;
 	}
-	
-	
-	/**
-	 * Getter und Setter
-	 */
-	
+
 	
 	/**
-	 * Namen auslesen
+	 * Kontact Name auslesen
 	 */
 	
-	public PropertyValue getpV() {
-		return pV;
+	public PropertyValue getpropertyValue() {
+		return this.propertyValue;
 	}
 
 	/**
-	 * Namen setzen
+	 * Kontakt Name setzen
 	 */
 
-	public void setpV(PropertyValue pV) {
-		this.pV = pV;
+	public void setpropertyValue(PropertyValue pV) {
+		this.propertyValue = pV;
 	}
 
 
@@ -76,7 +71,7 @@ public class Contact extends BusinessObject {
 	@Override
 	public String toString() {
 		return "Contact [owner=" + getOwner() + ", id=" + id + ", Eigenschaft = "
-				+ pV.getProp() + "Ausprägung =" + pV.getValue() + "]";
+				+ propertyValue.getProp() + "Ausprägung =" + propertyValue.getValue() + "]";
 	}
 
 	

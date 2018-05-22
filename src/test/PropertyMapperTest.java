@@ -40,7 +40,7 @@ public class PropertyMapperTest {
 		
 		user = UserMapper.userMapper().findById(id);
 	
-		contact.setpV(propertyValue);
+		contact.setpropertyValue(propertyValue);
 		
 		propertyValue.setProp(property);
 		propertyValue.setValue("Janina");
@@ -103,11 +103,11 @@ public class PropertyMapperTest {
 		// Property Mapper Test
 		//************************************************************
 				
-		 //PropertyMappe//r.propertyMapper().insert(property4); // -> Erfolgreich  
-		 //PropertyMapper.propertyMapper().findAll(); // -> Erfolgreich 
-		 //PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
-		 // PropertyMapper.propertyMapper().findBy(propertyValue4); // -> Erfolgreich 
-		 PropertyMapper.propertyMapper().findBy("Sternzeichen"); // -> Erfolgreich 
+		 PropertyMapper.propertyMapper().insert(property4); // -> Erfolgreich  
+		 PropertyMapper.propertyMapper().findAll(); // -> Erfolgreich 
+		 PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
+		 PropertyMapper.propertyMapper().findBy(propertyValue4); // -> Erfolgreich 
+		 PropertyMapper.propertyMapper().findBy("Name"); // -> Erfolgreich 
 
 
 	}

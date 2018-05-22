@@ -215,7 +215,7 @@ public class ContactListMapper {
 
 	public void insertContactList(ContactList cl) {
 		
-		System.out.println("Create ContactList: "+cl);
+		System.out.println("Create ContactList: " + cl);
 		
 		BusinessObjectMapper.businessObjectMapper().insert(cl);
 		Connection con = DBConnection.connection();

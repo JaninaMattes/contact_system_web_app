@@ -128,8 +128,13 @@ public class PropertyValueTest {
 		User user = new User();
 		user.setGoogleID(userId);
 		
+		//****************TESTS*********************
+		//******************************************
+		
 		// PropertyValueMapper.propertyValueMapper().findAllSharedByMe(user); // Funktioniert
-		PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(user);
+		// PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(user); --> Contact Mapper Problem
+		
+		PropertyValueMapper.propertyValueMapper().findAllOwnedByMe(user);
 		
 	} 
 }

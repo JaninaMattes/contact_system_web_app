@@ -194,7 +194,7 @@ public class PropertyMapper {
           Property property = new Property(); 
           // Verbindung zur DB herstellen
           Connection con = DBConnection.connection();
-                   
+          System.out.println("P-FindBy-Methode...");       
           try {              
              // Statement ausfüllen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
@@ -207,14 +207,16 @@ public class PropertyMapper {
              
              stmt.setString(1, description);
              // Statement ausfüllen und als Query an die DB schicken
-             ResultSet rs = stmt.executeQuery();
-                          
-              if (rs.next()) {
-            	  
-                  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-                                 
+             ResultSet rs = stmt.executeQuery();           
+              
+             if (rs.next()) {
+            	 
+                  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();                                 
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
+                  
+                  System.out.println("p-id: " + property.getId());
+                  System.out.println("p-description: " + property.getDescription());
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
@@ -229,6 +231,7 @@ public class PropertyMapper {
           return null;         
       }
    
+     
       
       /**
        * <code>Delete Methode</code>
