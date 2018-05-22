@@ -104,7 +104,9 @@ public class PropertyValue extends BusinessObject {
 
 
 	  public String toString() {
-			return "PropertyValue [value=" + value + ", prop=" + prop.getDescription() + "]";
+			return "PropertyValue: " + "\n" 
+					+ "Eigenschaft = " + prop.getDescription() + " \n" 
+					+ "Ausprägung = " + value;
 		}
 
 
