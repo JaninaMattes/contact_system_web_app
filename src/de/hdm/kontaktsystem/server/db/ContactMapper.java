@@ -301,17 +301,17 @@ public class ContactMapper {
 
 							//Innerjoin um auf den Namen zugreifen zu können
 
-			if (rs.next()) {
-
+			if (rs.next()) {	
+				User u = new User();
 				PropertyValue propValue = new PropertyValue();
 				propValue = PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("propertyValue_ID"));
 				Property prop = new Property();
 				prop = PropertyMapper.propertyMapper().findBy(propValue);
 				propValue.setProp(prop);
+				//contact.setOwner(u);
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));			
-				contact.setpropertyValue(propValue);
-				
+				contact.setpropertyValue(propValue);			
 
 			}
 			

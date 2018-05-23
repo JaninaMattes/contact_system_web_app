@@ -23,12 +23,29 @@ public class PropertyValueTest {
 	public static void main(String args[]) {
 
 		
-		User u = new User();
-		u.setGoogleID(0);
-		PropertyValue pv = new PropertyValue();
-		pv.setBo_Id(123);
+//		Vector<PropertyValue> pVVector = new Vector<PropertyValue>();
+//		pVVector = PropertyValueMapper.propertyValueMapper().findAll();
+//		
+//		for (PropertyValue pV : pVVector) {
+//			
+//			System.out.println(pV);
+//			
+//		}
 		
-		PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
+		
+		
+
+		
+//		System.out.println(
+//				PropertyValueMapper.propertyValueMapper().findByKey(123)
+//						);
+		
+//		User u = new User();
+//		u.setGoogleID(0);
+//		PropertyValue pv = new PropertyValue();
+//		pv.setBo_Id(123);
+//		
+//		PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
 		
 		
 		//PropertyValueMapper.propertyValueMapper().deleteAll();
@@ -48,23 +65,23 @@ public class PropertyValueTest {
 
 		
 		
-//		
-//		User u = new User();
-//		u.setGoogleID(0);
-//		Property prop = new Property();
-//		prop.setId(1);
-//		PropertyValue pV = new PropertyValue();
-//		pV.setProp(prop);
-//
-//		
-//		Vector<PropertyValue> ResultVector = new Vector<PropertyValue>();
-//		ResultVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
-//		
-//		for (PropertyValue pv : ResultVector) {
-//			
-//			System.out.println(pv);
-//			
-//		}
+		
+		User u = new User();
+		u.setGoogleID(0);
+		Property prop = new Property();
+		prop.setId(1);
+		PropertyValue pV = new PropertyValue();
+		pV.setProp(prop);
+
+		
+		Vector<PropertyValue> ResultVector = new Vector<PropertyValue>();
+		ResultVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
+	
+		for (PropertyValue pv : ResultVector) {
+			
+			System.out.println(pv);
+			
+		}
 		
 		
 		/*
@@ -111,20 +128,20 @@ public class PropertyValueTest {
 //		PropertyValueMapper.propertyValueMapper().insert(pv);
 		// PropertyValueMapper.propertyValueMapper().deleteAll();
 		
-		Double userId = 8.914336227056141e15;
+//		Double userId = 8.914336227056141e15;
+////		
+//		PropertyValue pV = new PropertyValue();
+//				
+//		User user = new User();
+//		user.setGoogleID(userId);
 //		
-		PropertyValue pV = new PropertyValue();
-				
-		User user = new User();
-		user.setGoogleID(userId);
-		
-		//****************TESTS*********************
-		//******************************************
-		
-		// PropertyValueMapper.propertyValueMapper().findAllSharedByMe(user); // Funktioniert
-		// PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(user); --> Contact Mapper Problem
-		
-		PropertyValueMapper.propertyValueMapper().findAllOwnedByMe(user);
+//		//****************TESTS*********************
+//		//******************************************
+//		
+//		// PropertyValueMapper.propertyValueMapper().findAllSharedByMe(user); // Funktioniert
+//		// PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(user); --> Contact Mapper Problem
+//		
+//		PropertyValueMapper.propertyValueMapper().findAllOwnedByMe(user);
 		
 	} 
 }
