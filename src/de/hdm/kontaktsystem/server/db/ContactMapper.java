@@ -177,7 +177,6 @@ public class ContactMapper {
 
 		
 		BusinessObjectMapper.businessObjectMapper().insert(contact);
-		PropertyValueMapper.propertyValueMapper().insert(contact.getpropertyValue());
 
 		Connection con = DBConnection.connection();
 
@@ -377,7 +376,7 @@ public class ContactMapper {
 					+ contact.getModifyDate() + "WHERE id = " + contact.getBo_Id());
 			
 			//TODO: UpdatePropertyValueBYContact Methode?
-			PropertyValueMapper.propertyValueMapper().UpdatePropertyValueByContact(contact);
+ 			PropertyValueMapper.propertyValueMapper().UpdatePropertyValueByContact(contact);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
