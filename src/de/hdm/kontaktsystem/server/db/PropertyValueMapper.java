@@ -491,19 +491,18 @@ public class PropertyValueMapper {
 
 			// Statement ausfüllen und als Query an die DB schicken
 			PreparedStatement stmt = con.prepareStatement
-					("SELECT PropertyValue.ID, PropertyValue.value"
-					+ " FROM PropertyValue INNER JOIN Contact" 
-					+ " WHERE Contact.ID=" + c.getBo_Id() 
+					("SELECT pv.* "
+					+ "FROM PropertyValue pv "
+					+ "INNER JOIN Contact c ON c.ID = pv.contact_ID " 
+					+ "WHERE c.ID =" + c.getBo_Id() 
 					);
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();
-				Property prop = new Property();
-				propValue.setProp(prop);
-				prop.setId(rs.getInt("property_ID"));
-				PropertyMapper.propertyMapper().findBy(prop.getId());
+				
+				propValue.setProp(PropertyMapper.propertyMapper().findBy(rs.getInt("property_ID")));
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
 

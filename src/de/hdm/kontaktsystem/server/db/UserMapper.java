@@ -57,7 +57,7 @@ public class UserMapper {
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
-				u.setContact(ContactMapper.contactMapper().findContactById(rs.getInt("own_Contact")));
+				ContactMapper.contactMapper().findOwnContact(rs.getInt("own_Contact"), u);
 				userList.add(u);
 			}
 			return userList;
@@ -84,12 +84,13 @@ public class UserMapper {
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
 				User u = new User();
-				Contact c = new Contact();
-				c = ContactMapper.contactMapper().findContactById(rs.getInt("own_Contact"));
+				
+				
 				
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
-				u.setContact(c);
+				ContactMapper.contactMapper().findOwnContact(rs.getInt("own_Contact"), u);
+				
 				return u;
 			}
 		}catch(SQLException e){
@@ -117,8 +118,7 @@ public class UserMapper {
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
-
-				u.setContact(ContactMapper.contactMapper().findContactById(rs.getInt("own_Contact")));
+				ContactMapper.contactMapper().findOwnContact(rs.getInt("own_Contact"), u);
 
 				return u;
 			}
