@@ -177,7 +177,6 @@ public class ContactMapper {
 
 		
 		BusinessObjectMapper.businessObjectMapper().insert(contact);
-		PropertyValueMapper.propertyValueMapper().insert(contact.getpropertyValue());
 
 		Connection con = DBConnection.connection();
 
