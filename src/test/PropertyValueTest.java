@@ -22,14 +22,14 @@ public class PropertyValueTest {
 
 	public static void main(String args[]) {
 		
+//		
+//		Contact c = new Contact();
+//		c.setBo_Id(126);
+//		
+//		
+//
+//		PropertyValueMapper.propertyValueMapper().deleteBy(c);
 		
-		Contact c = new Contact();
-		c.setBo_Id(126);
-		
-		
-		System.out.println(
-		PropertyValueMapper.propertyValueMapper().findBy(c)
-		);
 		
 //		
 //		Property prop = new Property();
@@ -67,12 +67,12 @@ public class PropertyValueTest {
 //				PropertyValueMapper.propertyValueMapper().findByKey(123)
 //						);
 		
-//		User u = new User();
-//		u.setGoogleID(0);
-//		PropertyValue pv = new PropertyValue();
-//		pv.setBo_Id(123);
-//		
-//		PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
+		User u = new User();
+		u.setGoogleID(0);
+		PropertyValue pv = new PropertyValue();
+		pv.setBo_Id(130);
+		
+		PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
 		
 		
 		//PropertyValueMapper.propertyValueMapper().deleteAll();

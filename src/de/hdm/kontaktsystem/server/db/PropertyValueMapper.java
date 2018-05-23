@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
-
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
@@ -134,6 +134,7 @@ public class PropertyValueMapper {
 
 	/*
 	 * Löschen der Ausprägung anhand der zugehörigen Kontakt Id
+	 * Aufruf über Contact, der PropertyValue löscht
 	 */
 
 	public void deleteByContact(int id) {
@@ -143,8 +144,8 @@ public class PropertyValueMapper {
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
 			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue " + "INNER JOIN Contact "
-					+ "ON PropertyValue.contact_ID = Contact = ? "
+					("DELETE FROM PropertyValue " 
+					+ "WHERE PropertyValue.contact_ID = ? "
 					);
 			stmt.setInt(1, id);
 			stmt.execute();
@@ -205,7 +206,22 @@ public class PropertyValueMapper {
 
 	public void deleteAllSharedByMe(User u) {
 
-		
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+				Vector<Participation> participationVector = new Vector<Participation>();		
+				//participationVector = ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
+				// Vector für die Speicherung aller BusinessObjekte erzeugen
+				Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
+				
+				
+				for (Participation part : participationVector) {
+					
+					 PropertyValue propVal = new PropertyValue();
+					 propVal = this.findByKey(part.getReferenceID());			 
+					 System.out.println("pov-id: " + propVal.getBo_Id());		     
+					 	if(propVal != null) {
+					 		propertyResultVector.addElement(propVal);
+				     }
+				}
 
 	}
 	
@@ -341,14 +357,16 @@ public class PropertyValueMapper {
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
 		// Vector für die Speicherung aller BusinessObjekte erzeugen
-		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
-		
+		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 		
 		
 		for (Participation part : participationVector) {
 			
 			 PropertyValue propVal = new PropertyValue();
-			 propVal = this.findByKey(part.getReferenceID());			 
-			 System.out.println("pov-id: " + propVal.getBo_Id());		     
+//			 BusinessObject bo = new BusinessObject();
+//			 bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+			 propVal = this.findByKey(part.getReferenceID());	
+			 System.out.println(propVal);
+			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
 			 	if(propVal != null) {
 			 		propertyResultVector.addElement(propVal);
 		     }
