@@ -5,5 +5,17 @@ package de.hdm.kontaktsystem.gui;
  *
  */
 public class ContactGUI {
+	
+	public void onModuleLoad() {
 
+		/**
+		 * Instantiieren der GWT Widgets und Panels
+		 */
+		
+		/**
+		 * Widgets/Panels anordnen
+		 */
+	}
+	
+	
 }

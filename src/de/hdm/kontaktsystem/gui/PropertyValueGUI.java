@@ -5,5 +5,9 @@ package de.hdm.kontaktsystem.gui;
  *
  */
 public class PropertyValueGUI {
+	
+	public void onModuleLoad() {
+
+	}
 
 }

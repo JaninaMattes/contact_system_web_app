@@ -5,5 +5,9 @@ package de.hdm.kontaktsystem.gui;
  *
  */
 public class ContactListGUI {
+	
+	public void onModuleLoad() {
+
+	}
 
 }
