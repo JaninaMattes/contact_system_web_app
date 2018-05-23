@@ -81,25 +81,19 @@ public class PropertyMapper {
 					);		
   			
   			while(rs.next()){  			
-  				// Vector um Eigenschaftsausprägungen zu speichern
-  				Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();  				
+  				
   				Property property = new Property();  				
   				
   				property.setId(rs.getInt("ID"));
   				property.setDescription(rs.getString("description"));
   				System.out.println("P-id: " + property.getDescription());  	
-  				
-  				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-  				propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);  				
-  				// Setzen des Eigenschaftsausprägungs Vector
-  				property.setPropertyValues(propertyValues);   	
+  				 	
   				 // Hinzufügen des neuen Objekts zum Ergebnisvektor
                 propertyResult.addElement(property);
   				
   				}  			
   			
-  			// Rückgabe der gefundenen Property Werte
-  			
+  			// Rückgabe der gefundenen Property-Werte  			
   			return propertyResult;
   			
   		}catch(SQLException e){
@@ -107,42 +101,33 @@ public class PropertyMapper {
   		}  		
   		return null;    	  
       }
-      
-      
-      /**
-       * Die Methode <code>findBy</code> mit dem Übergabeparameter eines <em>PropertyValue</em>-Objekts
-       * ermöglicht das Suchen eines zu einer Eigenschaftsausprägung, eines <em>PropertyValue</em>-Objekts,
-       * zugehörigen Eigenschaft Objektes, bzw. <em>Property</em>-Objekts.
-       * Dies verdeutlicht auch die enge Kopplung von Property und PropertyValue-Objekten.
-       * 
-       * @param property_id
-       * @return Property-objekt
-       */
-      
-      public Property findBy(PropertyValue pV) {     
-          
-    	Property property = new Property();
-    	PropertyValue propertyValue = new PropertyValue();
-    	// Abrufen ob Property-Objekt in DB vorhanden ist
-    	propertyValue = PropertyValueMapper.propertyValueMapper().findByKey(pV.getBo_Id());
-    	property = propertyValue.getProp();
-    	
-        return property;
-      }
-            
-            
-      /**
+   
+     /**
        * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primärschlüssel ID.
        * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
        *
-       * @param id ist das Primärschlüsselattribut
+       * @param prop ist ein Property-Objekt 
        * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
        * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
        * 
-       */     
+       */             
+          
+     public Property findBy(Property prop ) {
+    	 return findBy(prop.getId());
+     }
+     
+     /**
+      * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primärschlüssel ID.
+      * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
+      *
+      * @param id ist das Primärschlüsselattribut
+      * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
+      * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
+      * 
+      */      
      
       public Property findBy(int property_id) {       
-                    
+          
     	  Property property = new Property();
           Connection con = DBConnection.connection();          
          
@@ -167,9 +152,9 @@ public class PropertyMapper {
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
                   property.setPropertyValues(propertyValues);            
+                 
                   System.out.println("P-id: " + property.getId());
                   System.out.println("P-description: " + property.getDescription());
-                  
               }              
               return property;
               

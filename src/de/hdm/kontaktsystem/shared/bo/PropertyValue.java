@@ -11,6 +11,7 @@ public class PropertyValue extends BusinessObject {
 	 */
 	private static final long serialVersionUID = 1L;
 			
+	
 	private String value = null;
 	private Property prop = null;
 	private Contact contact = null;

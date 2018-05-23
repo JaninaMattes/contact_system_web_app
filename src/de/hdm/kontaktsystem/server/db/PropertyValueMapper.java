@@ -40,6 +40,8 @@ public class PropertyValueMapper {
 	 * 
 	 */
 
+	// Achtung in Aufrufkette denken -> Contact ruft insert Methode auf
+	
 	public void insert(PropertyValue pv) {
 
 		BusinessObjectMapper.businessObjectMapper().insert(pv);
@@ -47,13 +49,14 @@ public class PropertyValueMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement
-			("INSERT INTO PropertyValue (id, property_id, value, contact_ID) VALUES (?, ?, ?, ?)"
-					);
+			PreparedStatement stmt = con.prepareStatement(
+			"INSERT INTO PropertyValue (ID, property_ID, value, contact_ID) VALUES (?, ?, ?, ?)"
+			);
 			stmt.setInt(1, pv.getBo_Id());
 			stmt.setInt(2, pv.getProp().getId());
 			stmt.setString(3, pv.getValue());
 			stmt.setInt(4, pv.getContact().getBo_Id());
+			
 			stmt.execute();
 
 		} catch (SQLException e) {
@@ -362,6 +365,9 @@ public class PropertyValueMapper {
 	 * @param user
 	 * @return
 	 */
+	
+	// Hinweis: Brauchen wir nicht -> Hinweis doppelte Resultate
+	// Besser vorhandene Methoden nutzen und dies im User setzen
 	
 	public Vector<PropertyValue> findAllOwnedByMe(User user){
 		

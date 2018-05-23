@@ -21,6 +21,12 @@ public class Contact extends BusinessObject {
 	 * Name des Kontakts
 	 */
 	private PropertyValue propertyValue = null;
+	
+	/*
+	 * Name des Kontaktes festsetzen
+	 */
+	
+	private String name = null;
 
 	/*
 	*Datum wird von BusinessObject geerbt
