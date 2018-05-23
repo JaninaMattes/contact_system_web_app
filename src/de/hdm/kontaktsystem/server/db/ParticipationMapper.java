@@ -103,7 +103,7 @@ public class ParticipationMapper {
 	 */
 	public Vector<Participation> findParticipationsByOwner(User user) {
 		Connection con = DBConnection.connection();
-		System.out.println("Methode findParticipation..");
+		//System.out.println("Methode findParticipation..");
 		
 		try {
 			// Create Vector for all Participation-Objects
@@ -133,8 +133,8 @@ public class ParticipationMapper {
 				
 				participations.add(participation);
 				
-				System.out.println("Participant id: " + participant.getGoogleID());
-				System.out.println("Participation object id: " + reference.getBo_Id());
+//				System.out.println("Participant id: " + participant.getGoogleID());
+//				System.out.println("Participation object id: " + reference.getBo_Id());
 			}
 			return participations;
 			

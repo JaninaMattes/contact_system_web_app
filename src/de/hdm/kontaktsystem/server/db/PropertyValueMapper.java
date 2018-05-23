@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
-
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
@@ -137,6 +137,7 @@ public class PropertyValueMapper {
 
 	/*
 	 * Löschen der Ausprägung anhand der zugehörigen Kontakt Id
+	 * Aufruf über Contact, der PropertyValue löscht
 	 */
 
 	public void deleteByContact(int id) {
@@ -146,8 +147,8 @@ public class PropertyValueMapper {
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
 			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue " + "INNER JOIN Contact "
-					+ "ON PropertyValue.contact_ID = Contact = ? "
+					("DELETE FROM PropertyValue " 
+					+ "WHERE PropertyValue.contact_ID = ? "
 					);
 			stmt.setInt(1, id);
 			stmt.execute();
@@ -180,7 +181,8 @@ public class PropertyValueMapper {
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
 			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue " + "WHERE PropertyValue.property_ID = ?"
+					("DELETE FROM PropertyValue " 
+					+ "WHERE PropertyValue.property_ID = ?"
 					);
 			stmt.setInt(1, property_id);
 			stmt.execute();
@@ -195,16 +197,52 @@ public class PropertyValueMapper {
 	 * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
 	 */
 
-	public void deleteAllShared(User u) {
+	public void deleteAllSharedForMe(User u) {
+
+		
+
+	}
+	
+	/*
+	 * Funktion zum Löschen aller Auspraegungen die vom User geteilt wurden
+	 */
+
+	public void deleteAllSharedByMe(User u) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+				Vector<Participation> participationVector = new Vector<Participation>();		
+				//participationVector = ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
+				// Vector für die Speicherung aller BusinessObjekte erzeugen
+				Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
+				
+				
+				for (Participation part : participationVector) {
+					
+					 PropertyValue propVal = new PropertyValue();
+					 propVal = this.findByKey(part.getReferenceID());			 
+					 System.out.println("pov-id: " + propVal.getBo_Id());		     
+					 	if(propVal != null) {
+					 		propertyResultVector.addElement(propVal);
+				     }
+				}
+
+	}
+	
+
+	/*
+	 * Funktion zum Löschen aller Auspraegungen die vom User erstellt wurden
+	 */
+
+	public void deleteAllOwnership(User u) {
 
 		// TODO: @ Sandra --> ParticipationMapper fehlt?
 
 	}
 
-	/**
+	/*************************************************************************************
 	 * Methode zum Leeren der PropertyValue Tabelle
 	 * WICHTIG: In App Logik nicht anwendbar, da Namensausprägung für Contact ggf. leer
-	 */
+	 *************************************************************************************/
 	
 	public void deleteAll() {
 
@@ -223,57 +261,8 @@ public class PropertyValueMapper {
 	}
 		
 		
-		
-		// TODO: 
-		/**
-		 * @author Janina, um anhand eines Users zugehörige PropertyValues suchen zu können
-		 * zugeordnet werden abrufen. Würde diese mal als Vorschlag hier lassen.
-		 * Dies würde mir später ermöglichen auch nach allen, einem User zugehörigen Property-Objekten
-		 * zu filtern. 
-		 * 
-		 * --> Falls nicht anders möglich wäre es super wenn diese Methode noch umgesetzt würde. Danke :)!
-		 *  
-		 * @param user
-		 * @return Vector <PropertyValue>
-		 * 
-		 */
-		
-		
-		public Vector <PropertyValue> findBy(User u) {
-			
-			Vector<Contact> contacts = new Vector<Contact>();
-			contacts = ContactMapper.contactMapper().findAllContactsByUser(u.getGoogleID());		
-			
-			for (Contact c : contacts) {
-				
-				Vector<PropertyValue> pV = new Vector<PropertyValue>();			
-				
-				pV = findBy(c);				
-				
-				for (PropertyValue PropValue : pV) {
-					
-				c.setpropertyValue(PropValue);
-				
-				System.out.println(PropValue);
-				
-				}
-			}
 
-			return null;
-			
 	
-		}
-
-	/**
-	 * Löschen aller DB Einträge für PropertyValue	
-	 * @param user
-	 */
-		
-	public void deleteAllFrom(User user) {
-
-		ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
-
-	}
 
 	/*
 	 * Anhand der uebergegebenen ID wird das zugehoerige PropertyValue eindeutig
@@ -360,13 +349,16 @@ public class PropertyValueMapper {
 	}
 
 	/**
+
 	 * Abrufen aller Property-Value Objekte, welche einem Nutzer im System
 	 * zugeordnet werden können und von diesem ausschließlich 
 	 * @param user
 	 * @return
 	 */
 	
-	// Hinweis: Brauchen wir nicht -> Hinweis doppelte Resultate
+	/*
+	 * 
+	 * // Hinweis: Brauchen wir nicht -> Hinweis doppelte Resultate
 	// Besser vorhandene Methoden nutzen und dies im User setzen
 	
 	public Vector<PropertyValue> findAllOwnedByMe(User user){
@@ -389,6 +381,7 @@ public class PropertyValueMapper {
 		return propertyValueResult;
 	}
 	
+	 */
 	
 	/**
 	 *  Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen <code>PropertyValue</code> - Objekte 
@@ -396,19 +389,23 @@ public class PropertyValueMapper {
 	 *  und die Ergebnisse zurueckgegeben
 	 */
 
-	public Vector<PropertyValue> findAllSharedByMe(User user) {
+	public Vector<PropertyValue> findAllSharedByMe (User user) {
 
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
 		// Vector für die Speicherung aller BusinessObjekte erzeugen
-		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
-		
+		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 		
+		//System.out.println(participationVector);
 		
 		for (Participation part : participationVector) {
+			 Property prop = new Property();
 			 PropertyValue propVal = new PropertyValue();
-			 propVal = this.findByKey(part.getReferenceID());			 
-			 System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 prop = PropertyMapper.propertyMapper().findBy(prop.getId());
+			 // Methode aus Property, die anhand der gefundenen Property ID ausgegeben wird
+			 
+			 propVal = this.findByKey(part.getReferenceID());	
+			 propVal.setProp(prop);  
 			 	if(propVal != null) {
 			 		propertyResultVector.addElement(propVal);
 		     }
@@ -425,22 +422,31 @@ public class PropertyValueMapper {
 	 * @return Vector PropertyValue-Objekte
 	 */
 
-	public Vector<PropertyValue> findAllSharedByOthersToMe(User user) {
+	public Vector<PropertyValue> findAllSharedByOthersToMe (User user) {
 
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
+//		for (Participation part : participationVector) {
+//			
+//			System.out.println(part);
+//			
+//		}
 		// Vector für die Speicherung aller BusinessObjekte erzeugen
 		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
 		
 		
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
-			 propVal = this.findByKey(part.getReferenceID());			 
-			 System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 Property prop = new Property();
+			 part.setReference(propVal);	
+			 propVal = this.findByKey(part.getReferenceID());	
+			 propVal.setProp(prop);
+			 System.out.println(propVal);
+			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
 			 if(propVal != null) {
-			  propertyResultVector.addElement(propVal);
-		     }
+				  propertyResultVector.addElement(propVal);
+			     }
 		}
 		return propertyResultVector;
 		
@@ -452,43 +458,19 @@ public class PropertyValueMapper {
 
 	 public Vector <PropertyValue> findAllCreated(User u) {
 	
-	 Vector <PropertyValue> propValueResult = new Vector<PropertyValue>();
-	
-	 	Connection con = DBConnection.connection();
-	 	Statement stmt = null;
-	
-	 	try {
-	 			// Leeres SQL Statement anlegen
-	 			stmt = con.createStatement();
-	 				// Statement ausfüllen und als Query an die DB schicken
-	 				ResultSet rs = stmt.executeQuery(
-	 					   "SELECT PropertyValue.ID, PropertyValue.value "
-	 					 + "FROM PropertyValue INNER JOIN BusinessObject "
-	 					 + "WHERE BusinessObject.status = false"
-	 					 );
-	
-	 while (rs.next()) {
-	 PropertyValue propValue = new PropertyValue();
-	 propValue.setBo_Id(rs.getInt("id"));
-	 propValue.setShared_status(rs.getBoolean("status"));
-	 propValueResult.addElement(propValue);
-	 return propValueResult;
-	
-	 }
-	
-	 } catch (SQLException e) {
-	 e.printStackTrace();
-	 }
-	
-	 return null;
+		 return null; 
+		 
 	 }
 
 	/*
 	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Kontakte
+	 * ContactMapper, 
 	 */
 
 	public Vector<PropertyValue> findBy(Contact c) {
 
+		c = ContactMapper.contactMapper().findContactById(c.getBo_Id());
+		
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
@@ -499,8 +481,7 @@ public class PropertyValueMapper {
 			PreparedStatement stmt = con.prepareStatement
 					("SELECT pv.* "
 					+ "FROM PropertyValue pv "
-					+ "INNER JOIN Contact c ON c.ID = pv.contact_ID " 
-					+ "WHERE c.ID =" + c.getBo_Id() 
+					+ "WHERE pv.contact_ID =" + c.getBo_Id() 
 					);
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
