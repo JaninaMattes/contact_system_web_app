@@ -21,7 +21,35 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class PropertyValueTest {
 
 	public static void main(String args[]) {
+		
+//		
+//		Contact c = new Contact();
+//		c.setBo_Id(126);
+//		
+//		
+//
+//		PropertyValueMapper.propertyValueMapper().deleteBy(c);
+		
+		
+//		
+//		Property prop = new Property();
+//		prop.setId(1);
+//		
+//		PropertyValueMapper.propertyValueMapper().deleteBy(prop);
 
+//		User u = new User();
+//		u.setGoogleID(8.207046809097136e16);
+//		
+//		Vector<PropertyValue> pVVector = new Vector<PropertyValue>();
+//		pVVector = PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(u);
+		
+//		for (PropertyValue pV : pVVector) {
+//			
+//			System.out.println(pV);
+//			
+//		}
+		
+		
 		
 //		Vector<PropertyValue> pVVector = new Vector<PropertyValue>();
 //		pVVector = PropertyValueMapper.propertyValueMapper().findAll();
@@ -33,19 +61,18 @@ public class PropertyValueTest {
 //		}
 		
 		
-		
-
+	
 		
 //		System.out.println(
 //				PropertyValueMapper.propertyValueMapper().findByKey(123)
 //						);
 		
-//		User u = new User();
-//		u.setGoogleID(0);
-//		PropertyValue pv = new PropertyValue();
-//		pv.setBo_Id(123);
-//		
-//		PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
+		User u = new User();
+		u.setGoogleID(0);
+		PropertyValue pv = new PropertyValue();
+		pv.setBo_Id(130);
+		
+		PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
 		
 		
 		//PropertyValueMapper.propertyValueMapper().deleteAll();
@@ -66,22 +93,22 @@ public class PropertyValueTest {
 		
 		
 		
-		User u = new User();
-		u.setGoogleID(0);
-		Property prop = new Property();
-		prop.setId(1);
-		PropertyValue pV = new PropertyValue();
-		pV.setProp(prop);
-
-		
-		Vector<PropertyValue> ResultVector = new Vector<PropertyValue>();
-		ResultVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
-	
-		for (PropertyValue pv : ResultVector) {
-			
-			System.out.println(pv);
-			
-		}
+//		User u = new User();
+//		u.setGoogleID(0);
+//		Property prop = new Property();
+//		prop.setId(1);
+//		PropertyValue pV = new PropertyValue();
+//		pV.setProp(prop);
+//
+//		
+//		Vector<PropertyValue> ResultVector = new Vector<PropertyValue>();
+//		ResultVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
+//	
+//		for (PropertyValue pv : ResultVector) {
+//			
+//			System.out.println(pv);
+//			
+//		}
 		
 		
 		/*
