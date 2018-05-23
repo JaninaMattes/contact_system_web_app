@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+import java.io.Serializable;
 import java.util.Vector;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
@@ -18,7 +19,7 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  *
  */
 
-public class Property {
+public class Property implements Serializable{
 	
 	/**
 	 * Die default Serial Version UID vergibt jeder serialisierbaren Java Klasse
@@ -48,12 +49,7 @@ public class Property {
 	 * */
 	
 	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-	
-	/*
-	* ***************************************************************************
-	* ABSCHNITT 1: Konstruktoren
-	* ***************************************************************************
-	*/
+
 	
 	/**
 	 * Default Konstruktor
@@ -76,30 +72,22 @@ public class Property {
 	/**
 	 * Bei der Erzeugung einer neuen Eigenschaftinstanz muss ebenso eine neue
 	 * Eigenschaftsausprägung dieser erzeugt und zugeordnet werden
+	 * 
 	 */
 	
 	public Property(String value, String description) {
-		this.description = description;		
-		
+		this.description = description;			
 		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
 		PropertyValue propertyValue = new PropertyValue(value);
-		propertyValues.addElement(propertyValue);
-		
+		propertyValues.addElement(propertyValue);		
 	}	
 
-	
-	/*
-	* ***************************************************************************
-	* ABSCHNITT 2: Getter und Setter
-	* ***************************************************************************
-	*/
-	
 
 	/**
-	 * Auslesen der Id zu eindeutigen Identifikation einer Instanz
-	 * @return id
+	 * Auslesen der Id zu eindeutigen Identifikation einer Instanz	
+	 * @return <code>id</code> des Property-Objektes
 	 */
-	
+		
 	public int getId() {
 		return id;
 	}
@@ -162,12 +150,6 @@ public class Property {
 	public void setPropertyValue(PropertyValue propertyVal) {
 		this.propertyValues.addElement(propertyVal);
 	}
-		
-	/*
-	* ***************************************************************************
-	* ABSCHNITT 3: toString und equals Methode
-	* ***************************************************************************
-	*/
 	
 
 	/**

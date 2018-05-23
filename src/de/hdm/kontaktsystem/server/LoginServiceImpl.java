@@ -1,11 +1,12 @@
 package de.hdm.kontaktsystem.server;
 
-import com.google.appengine.api.users.*;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.kontaktsystem.client.LoginService;
 import de.hdm.kontaktsystem.server.db.UserMapper;
-import de.hdm.kontaktsystem.shared.UserData;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService{
 	/**
@@ -13,47 +14,40 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public UserData login(String requestUri) {
+	public User login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();
-		User user = userService.getCurrentUser();
-		UserData data = new UserData();
-		de.hdm.kontaktsystem.shared.bo.User u = new de.hdm.kontaktsystem.shared.bo.User();
-		
-		if (user != null) {
+		com.google.appengine.api.users.User guser = userService.getCurrentUser();
+		User user = new User();
+		System.out.println(requestUri);
+		if (guser != null) {
 			
 			
-			double id = Double.parseDouble(user.getUserId());
-			//long idl = Long.parseLong((user.getUserId()));
-
-			System.out.println(user.getUserId() + "\t -> Google ID");
-			System.out.println(Integer.MAX_VALUE + "\t \t -> Max Integer");
-			System.out.println(Long.MAX_VALUE + "\t -> Max Long");
-			//System.out.println(idl);
-			System.out.println(Double.MAX_VALUE + "\t -> Max Double");
-			System.out.println(id + "\t -> Google ID as Double");
+			double id = Double.parseDouble(guser.getUserId());
 			
-			System.out.println("\n\n\n");
+			user.setGoogleID(id);
+			user.setGMail(guser.getEmail());
+			//user.setNickname(guser.getNickname()); // Not used
 			
+			user.setLoggedIn(true); // norm True
+			System.out.println(userService.createLogoutURL(requestUri));
+			user.setLogoutUrl(userService.createLogoutURL(requestUri));
+			if(UserMapper.userMapper().findById(id) == null){
+				System.out.println("Create new User: " + user);
+				UserMapper.userMapper().insert(user);
+			}else{
+				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
+			}
 			
-			System.out.println("Create User: " + user.getUserId() + " -> " + id);
-			
-			u.setGoogleID(id);
-			u.setGMail(user.getEmail());
-			System.out.println(u);
-			System.out.println(user);
-			UserMapper.userMapper().insertUser(u);;
-			
-			data.setLoggedIn(true);
-			data.setEmailAddress(user.getEmail());
-			data.setNickname(user.getNickname());
-			data.setLogoutUrl(userService.createLogoutURL("/TestLogut"));
-			System.out.println(data.getLoginUrl());
 		} else {
-			data.setLoggedIn(false);
-			data.setLoginUrl(userService.createLoginURL("/TestLogin"));
+			
+			user.setLoggedIn(false);
+			System.out.println(userService.createLogoutURL(requestUri));
+			user.setLoginUrl(userService.createLoginURL(requestUri));
+			
 		}
+			
 		
-		return data;
+		return user;
 		
 	}
 }

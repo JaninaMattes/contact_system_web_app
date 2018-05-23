@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+import java.io.Serializable;
 
 /**<p>
  * An User is a special <code>Contact</code> an inherits all Attributes from <code>Contact</code>. 
@@ -13,9 +14,15 @@ package de.hdm.kontaktsystem.shared.bo;
 
 // TODO: Mit Datenbank Modell abgleichen!
 
-public class User {
+public class User implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
+	
+	private boolean loggedIn = false;
+	
+	private String loginUrl;
+	
+	private String logoutUrl;
 	
 	private Double googleID; // -> Double
 	
@@ -75,6 +82,30 @@ public class User {
 	public void setContact(Contact contact){
 		this.userContact = contact;
 	}
+	
+	public String getLoginUrl() {
+		return loginUrl;
+	}
+
+	public void setLoginUrl(String loginUrl) {
+		this.loginUrl = loginUrl;
+	}
+
+	public String getLogoutUrl() {
+		return logoutUrl;
+	}
+
+	public void setLogoutUrl(String logoutUrl) {
+		this.logoutUrl = logoutUrl;
+	}
+	
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
 
 	@Override
 	public int hashCode() {
@@ -114,7 +145,7 @@ public class User {
 	
 	@Override
 	public String toString(){
-		return "User " + googleID +": " + gMail +" -> "+userContact;
+		return "User " + googleID +": " + gMail +" -> "+userContact.getBo_Id();
 	}
 
 	

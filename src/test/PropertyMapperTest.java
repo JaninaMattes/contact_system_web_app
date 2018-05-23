@@ -1,15 +1,10 @@
 package test;
 
-import java.util.Vector;
-
-import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
-import de.hdm.kontaktsystem.server.db.ParticipationMapper;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
+import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
-import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
-import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -18,48 +13,43 @@ public class PropertyMapperTest {
 	
 	public static void main(String args[]) {
 		
-		Vector <Property> testProp = new Vector <Property>();
+		
+		
+		Double id = 8.914336227056141e15;
+		 
 		
 		User user = new User();	
 		Contact contact = new Contact();
 		
 		Property property = new Property();
+		Property property0 = new Property();
 		Property property1 = new Property();
 		Property property2 = new Property();
 		Property property3 = new Property();
+		Property property4 = new Property();
 		
 		PropertyValue propertyValue = new PropertyValue();
+		PropertyValue propertyValue0 = new PropertyValue();
 		PropertyValue propertyValue1 = new PropertyValue();
 		PropertyValue propertyValue2 = new PropertyValue();
 		PropertyValue propertyValue3 = new PropertyValue();
 		PropertyValue propertyValue4 = new PropertyValue();
+		PropertyValue propertyValue5 = new PropertyValue();
 		
 		// BusinessObject bo = new BusinessObject();
 		
 		
 		ContactList contactList = new ContactList();
 		
-		
-		// int property_id = 54;
-		// String description = "Telefonnummer";
-		// int user_id = 0;
-		// int owner_id = 2;
-		// boolean shared_status = false;
-		
-		//Vorbereitung der Instanzen
-		
-		//user.setContact(contact);	
-		//user.setGoogleID(2);
-		//user.setGMail("janinaMail@gmail.com");
-		//user.setContact(contact);
+		user = UserMapper.userMapper().findById(id);
 	
-		user = UserMapper.userMapper().findUserById(2);
-		
-		//contact.setOwner(user);
-		contact.setName(propertyValue);
+		contact.setpropertyValue(propertyValue);
 		
 		propertyValue.setProp(property);
 		propertyValue.setValue("Janina");
+		
+		propertyValue0.setProp(property0);
+		propertyValue0.setValue("Wonder");
 		
 		propertyValue1.setProp(property1);
 		propertyValue1.setValue("+4916666666");
@@ -67,80 +57,61 @@ public class PropertyMapperTest {
 		
 		propertyValue2.setProp(property2);
 		propertyValue2.setValue("Liststraße");
+		propertyValue2.setOwner(user);
 		
 		propertyValue3.setProp(property3);
 		propertyValue3.setValue("Daimler");
+		propertyValue3.setOwner(user);
 		
 		propertyValue4.setProp(property3);
 		propertyValue4.setValue("Porsche");
+		propertyValue4.setOwner(user);
+		propertyValue4.setBo_Id(17);
 		
+		propertyValue5.setProp(property4);
+		propertyValue5.setValue("Silberfisch");
+		propertyValue5.setOwner(user);
+		
+		// Property - Objekte befüllen
 		property.setPropertyValue(propertyValue);
-		property.setDescription("Name");
-		//property.setBo_Id(400);
-		property.setOwner(user);
+		property.setDescription("Vorname");
+		property.setId(1);
 		
-		// normalerweise nur gesetzt, wenn Objekt geteilt wurde
-		property.setShared_status(true);
+		property0.setPropertyValue(propertyValue0);
+		property0.setDescription("Nachname");
+		property0.setId(1);
 		
 		property1.setPropertyValue(propertyValue1);
 		property1.setDescription("Telefonnummer");
+		property1.setId(3);
 		
 		property2.setPropertyValue(propertyValue2);
 		property2.setDescription("Straße");
+		property2.setId(4);
 		
 		property3.setPropertyValue(propertyValue3);
 		property3.setPropertyValue(propertyValue4);
 		property3.setDescription("Arbeitgeber");
+		property3.setId(6);
+		
+		property4.setPropertyValue(propertyValue5);
+		property4.setDescription("Sternzeichen");
+		property4.setId(7);
 		
 		contactList.setContact(contact);
 		contactList.setName("Friendlist");
 		
-		//bo.setBo_Id(900);
-		//bo.setOwner(user);				
-		
-		Participation participation = new Participation();
-		participation.setParticipant(user);
-		participation.setReference(property);
-		
-		Participation participation1 = new Participation();
-		participation1.setParticipant(user);
-		participation1.setReference(property1);
-			
 	
 		//************************************************************
-		// Property Mapper - TESTS
+		// Property Mapper Test
 		//************************************************************
-		
-		 // PropertyMapper.propertyMapper().insert(property1); // --> Funktioniert 
-
-		// PropertyMapper.propertyMapper().findByID(property_id); //--> Funktioniert 
-		
-		// PropertyMapper.propertyMapper().findAll(); // --> Funktioniert
-		
-		// PropertyMapper.propertyMapper().findByDescription(description); // --> Funktioniert
-		
-		// PropertyMapper.propertyMapper().findByStatus(user_id, shared_status); // --> Funktioniert
-		
-		// PropertyMapper.propertyMapper().updateProperty(property1); // --> Funktioniert (Achtung Key Value Constraint)
 				
-		// PropertyMapper.propertyMapper().findByUser(user); // --> Funktioniert
-		
-		// PropertyMapper.propertyMapper().findByUserID(user_id); // --> Funktioniert
-					
-		// PropertyMapper.propertyMapper().deleteProperty(test); // --> Funktionert
-		
-		// PropertyMapper.propertyMapper().deleteByUserID(143); // --> Funktioniert
-		
-		// PropertyMapper.propertyMapper().deleteByUser(user); // --> Funktioniert
-		
-		// PropertyMapper.propertyMapper().delete(property1); // --> Funktioniert
-		
-		
-		
-		// PropertyMapper.propertyMapper().findByOwnership(user); --> ??
-		 
-	    // PropertyMapper.propertyMapper().findByParticipation(user); --> ?? 
-	
-	}
+		 PropertyMapper.propertyMapper().insert(property4); // -> Erfolgreich  
+		 PropertyMapper.propertyMapper().findAll(); // -> Erfolgreich 
+		 PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
+		 PropertyMapper.propertyMapper().findBy(propertyValue4); // -> Erfolgreich 
+		 PropertyMapper.propertyMapper().findBy("Name"); // -> Erfolgreich 
 
+
+	}
 }

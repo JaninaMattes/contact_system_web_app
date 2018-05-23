@@ -12,65 +12,187 @@ import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
+import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 public class DBTest {
 	
+	private final static BusinessObjectMapper boMapper = BusinessObjectMapper.businessObjectMapper();	
+	private final static ContactListMapper clMapper = ContactListMapper.contactListMapper();
+	private final static ContactMapper cMapper = ContactMapper.contactMapper();
+	private final static ParticipationMapper partMapper = ParticipationMapper.participationMapper();
+	private final static PropertyMapper pMapper = PropertyMapper.propertyMapper(); 
+	private final static PropertyValueMapper pvMapper = PropertyValueMapper.propertyValueMapper();
+	private final static UserMapper uMapper = UserMapper.userMapper();
 	
+	// Gültige IDs zu Testen
+	private final static double vUID = 3d;//1.1423815165163371e20;
+	private final static int vCID = 106;
+	private final static int vCLID = 101;
+	private final static int vPID = 5; // = Sternzeichen
+	private final static int vPVID = 123; // = Janina
 	
 	public static void main(String args[]){
 		
-		BusinessObjectMapper boMapper = BusinessObjectMapper.businessObjectMapper();	
-		ContactListMapper clMapper = ContactListMapper.contactListMapper();
-		ContactMapper cMapper = ContactMapper.contactMapper();
-		ParticipationMapper partMapper = ParticipationMapper.participationMapper();
-		PropertyMapper propMapper = PropertyMapper.propertyMapper(); 
-		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
-		UserMapper uMapper = UserMapper.userMapper();
-		
-		System.out.println("############ Test Property ################");
-		
-		System.out.println(propMapper.findByStatus(0, false));
+		createAll();
+		//findAll();
 		
 		
-		// Test insert method from BusinessObjectMapper 
-		System.out.println("############ Test BO ################");
-		System.out.println(BusinessObjectMapper.businessObjectMapper().findAllBusinessObjectIDs());
-		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectIDsByUserID(325));
+	}
+	
+	public static void createAll(){
+		
+		int pTestID = 8;
+		
+		System.out.println("\n ############ Test Poperty ################ \n");
+		
+		Property p = new Property();
+		p.setId(pTestID);
+		p.setDescription("Test"+pTestID);
+		pMapper.insert(p);
 		
 		
-		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(2));
+		System.out.println("\n ############ Test User ################ \n");
 		
-		
-		// Test insert method from UserMapper 
-		System.out.println("############ Test User ################");
 		User u = new User();
 		Random rng = new Random();
 		u.setGMail("mail@gmail.com");
 		// Generate test User with random ID
 		u.setGoogleID(rng.nextDouble()*100000000000000000d);
-		System.out.println("Create User "+u.getGoogleID());
+		uMapper.insert(u);
 		
-		uMapper.insertUser(u);
-		System.out.println(uMapper.findAllUsers());
-		System.out.println(uMapper.findUserByEmail("oli@gmail.de"));
 		
-		u.setContact(cMapper.findContactById(32));
-		uMapper.updateUser(u);
-		System.out.println(u = uMapper.findUserById(u.getGoogleID()));
 		
-		//uMapper.deleteUserById(502);
+		System.out.println("\n ############ Test Contact ################ \n");
+		
+		Contact c = new Contact();
+		c.setOwner(u);
+		cMapper.insertContact(c);
+		
+		
+		System.out.println("\n ############ Test PopertyValue ################ \n");
+		
+		PropertyValue pv = new PropertyValue();
+		pv.setContact(c);
+		pv.setOwner(c.getOwner());
+		pv.setProp(pMapper.findBy(pTestID));
+		pv.setValue("TestUser");
+		pvMapper.insert(pv);
+		
+		System.out.println("Add Contact to User");
+		u.setContact(c);
+		uMapper.update(u);
+		
+		
+		System.out.println("\n ############ Test ContactList ################ \n");
+	
+		ContactList cl = new ContactList();
+		cl.setName("Meine Liste");
+		cl.setOwner(u);
+		clMapper.insertContactList(cl);
+		
+		System.out.println("Add Contact to ContactList");
+		clMapper.addContactToContactlist(cl, c);
+		
+		
+		System.out.println("\n ############ Test Participation ################ \n");
+		
+		Participation p1 = new Participation();
+		Participation p2 = new Participation();
+		
+		p1.setParticipant(uMapper.findById(vUID));
+		p2.setParticipant(uMapper.findById(vUID));
+		
+		p1.setReference(c);
+		p2.setReference(cl);
+		
+		partMapper.insertParticipation(p1);
+		partMapper.insertParticipation(p2);
+		
+		
+	}
+	
+	public static void updateAll(){
+int pTestID = 8;
+		
+		//System.out.println("\n ############ Test Poperty ################ \n");
+		
+		
+		
+		
+		System.out.println("\n ############ Test User ################ \n");
+		
+		User u = uMapper.findById(vUID);
+		u.setContact(cMapper.findContactById(vCID));
+		uMapper.update(u);
+		
+		
+		System.out.println("\n ############ Test Contact ################ \n");
+		
+		Contact c = cMapper.findContactById(vCID);
+		c.setShared_status(true);
+		cMapper.updateContact(c);
+		
+		
+		System.out.println("\n ############ Test PopertyValue ################ \n");
+		
+		PropertyValue pv = pvMapper.findByKey(vPVID);
+		pv.setShared_status(true);
+		pv.setValue("OlisTest");
+		pvMapper.update(pv);
+		
+		
+		System.out.println("\n ############ Test ContactList ################ \n");
+	
+		ContactList cl = clMapper.findContactListById(vCLID);
+		cl.setShared_status(true);
+		cl.setName("Olis Liste");
+		clMapper.updateContactList(cl);
+		
+		
+		System.out.println("\n ############ Test Participation ################ \n");
+		
+	
+		
+		
+	}
+	
+	public static void findAll(){
+		
+		
+		// Test insert method from BusinessObjectMapper 
+		System.out.println("\n ############ Test BO ################ \n");
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findAllBusinessObjectIDs());
+		System.out.println(BusinessObjectMapper.businessObjectMapper().findBusinessObjectIDsByUserID(vUID));
+		
+
+		
+
+		
+		// Test insert method from UserMapper 
+		System.out.println("\n ############ Test User ################ \n");
+		
+		
+		System.out.println("Find All: " +uMapper.findAll());
+		System.out.println("Find by EMail: " +uMapper.findByEmail("Oli@example.com"));
+		User u = uMapper.findById(vUID);
+		u.setContact(cMapper.findContactById(117));
+		
+		uMapper.update(u);
+		System.out.println(u = uMapper.findById(u.getGoogleID()));
+
+		
+		
+		
 		
 		/**
 		 * Test für den ContactList Mapper
 		 */
-		System.out.println("############ Test ContactList ################");
-		System.out.println(u);
-		ContactList cl = new ContactList();
-		cl.setName("Meine Liste");
-		cl.setOwner(u);
-		System.out.println(cl);
-		clMapper.insertContactList(cl);
+		System.out.println("\n ############ Test ContactList ################ \n");
+		
+		
 		
 		System.out.println("Find All: "+clMapper.findAllContactLists());
 		
@@ -84,41 +206,62 @@ public class DBTest {
 		System.out.println("Find By User: " +cll);
 		
 
-		cl = clMapper.findContactListById(cl.getBo_Id());
+		ContactList cl = clMapper.findContactListById(vCLID);
 		
-		cl.setName("Marcos Liste");
-		System.out.println("Update Contact: "+cl);
+		cl.setName("Die Liste");
+		System.out.println("Update ContactList: "+cl);
 		clMapper.updateContactList(cl);
 		
-		//clMapper.deleteContactListById();
+		// Testet Contact - ContactList BezTabelle
+		System.out.println("Add Contact to Contact List");
+		clMapper.addContactToContactlist(cl, cMapper.findContactById(vCID));
+		
+		System.out.println("Find CL by ID: " + clMapper.findContactListById(vCLID));
+		
+		System.out.println("Remove Contact from Contact List");
+		clMapper.removeContactFromContactList(cl, cMapper.findContactById(vCID));
+		
+		
 		
 		
 		/**
 		 * Test Contact Mapper
 		 */
-		System.out.println("############ Test Contact ################");
-		Contact c = new Contact();
-		c.setOwner(u);
-		c.setName(propValMapper.findByKey(230));
+		System.out.println("\n ############ Test Contact ################ \n");
 		
-		cMapper.insertContact(c);
+		Contact c;
 		
-		System.out.println(cMapper.findByName(propValMapper.findByKey(230)));
-		System.out.println(cMapper.findAllContactsByUser(615));
-		System.out.println(cMapper.findContactByStatus(615, false));
-		System.out.println(cMapper.findAllContacts());
-		System.out.println(cMapper.findContactById(32));
+		//System.out.println(cMapper.findBy(pvMapper.findByKey(vPVID)));
+		System.out.println("Find by User: " +cMapper.findAllContactsByUser(vUID));
+		System.out.println("Find by Status False: " +cMapper.findContactByStatus(vUID, false));
+
+		System.out.println("Find All: " +cMapper.findAllContacts());
 		
-		//cMapper.updateContact(c);
+		System.out.println(c = cMapper.findContactById(vCID));
 		
-		cl = clMapper.findContactListById(16);
-		System.out.println(c);
-		clMapper.addContactToContactlist(cl, c);
-		c = cMapper.findContactById(32);
-		clMapper.removeContactFromContactList(cl, c);
 		
-		clMapper.deleteContactListById(cl.getBo_Id());
-		cMapper.deleteContactByID(c.getBo_Id());
 		
+		
+		
+		System.out.println("\n ############ Test Property ################ \n");
+		
+		System.out.println("Find All: " +pMapper.findAll());
+		System.out.println("Find by ID: " +pMapper.findBy(vPVID));
+		System.out.println("Find by Desc: " +pMapper.findBy("Name"));
+		System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
+		
+		
+		
+		
+		System.out.println("\n ############ Test PropertyValue ################ \n");
+		
+		PropertyValue pv;
+		System.out.println("Find by ID: " +pvMapper.findByKey(vPVID));
+		//System.out.println(pvMapper.findAll(pv, u));
+		System.out.println("Find by Contact: " +pvMapper.findBy(c));
+		System.out.println("Find by User: " +pvMapper.findBy(u));
+		System.out.println("Find by Property: " +pvMapper.findBy(pMapper.findBy(vPID)));
+		//System.out.println(pvMapper.findAllShared(u, pv));
 	}
+	
 }

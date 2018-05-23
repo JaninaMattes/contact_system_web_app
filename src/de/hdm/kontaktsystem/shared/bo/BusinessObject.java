@@ -25,7 +25,7 @@ import java.util.Date;
  */
 
 
-public abstract class BusinessObject implements Serializable{
+public class BusinessObject implements Serializable{
 	
 	/**
 	 * Seriennummer, vorgegeben durch das Interface {@link Serializable}

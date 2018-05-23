@@ -13,6 +13,7 @@ public class PropertyValue extends BusinessObject {
 			
 	private String value = null;
 	private Property prop = null;
+	private Contact contact = null;
 	
 	//private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
@@ -23,13 +24,10 @@ public class PropertyValue extends BusinessObject {
 	 * nicht geteilt, daher wird dieser zuerst als false angegeben
 	 * 
 	 */
-	
-	
+		
 	
 	// TODO: Überprüfen ob die Verbindung von Property/PropertyValue so sinnvoll ist
-	
-	
-
+		
 
 	public PropertyValue() {
 		
@@ -74,6 +72,14 @@ public class PropertyValue extends BusinessObject {
 		this.prop = prop;
 	}
 	
+	public Contact getContact() {
+		return contact;
+	}
+
+	public void setContact(Contact contact) {
+		this.contact = contact;
+	}
+	
 
 	/*
 	 * <p>
@@ -104,7 +110,9 @@ public class PropertyValue extends BusinessObject {
 
 
 	  public String toString() {
-			return "PropertyValue [value=" + value + ", prop=" + prop.getDescription() + "]";
+			return "PropertyValue: " + "\n" 
+					+ "Eigenschaft = " + prop.getDescription() + " \n" 
+					+ "Ausprägung = " + value;
 		}
 
 

@@ -5,13 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
 import java.util.Vector;
 
-import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
-import de.hdm.kontaktsystem.shared.bo.User;
 
 /**
  * Die Mapper-Klasse <code>PropertyMapper</code> bildet <code>Property</code>-Objekte
@@ -28,7 +25,7 @@ public class PropertyMapper {
    
     /**
      * Die Klasse <code>PropertyMapper</code> ist ein Singleton (Singleton Design Pattern),
-     * d.h. sie wird nur einmal instantiiert.Die statische Variable <code>INSTANCE</code> speichert
+     * d.h. sie wird nur einmal instantiiert. Die statische Variable <code>INSTANCE</code> speichert
      * die einzige Instanz der Klasse. Durch den Bezeichner <code>static</code> ist diese Variable
      * nur einmal für alle Instanzen der Klasse vorhanden.
      *
@@ -53,8 +50,7 @@ public class PropertyMapper {
       public static PropertyMapper propertyMapper() {
         if (propertyMapper == null) {
           propertyMapper = new PropertyMapper();
-        }
- 
+        } 
         return propertyMapper;
       }
       
@@ -77,160 +73,63 @@ public class PropertyMapper {
   			// Leeres SQL Statement anlegen
   			Statement stmt = con.createStatement();
   			
-  			// Löschoperation für Property wird aufgerufen              
+  			// Alle Property Objekte aus DB abrufen          
   			ResultSet rs = stmt.executeQuery( 
-					  "SELECT Property.ID, Property.description, "
-					+ "PropertyValue.ID, PropertyValue.value "
+					  "SELECT Property.ID, Property.description "
 					+ "FROM Property "  
-					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
-					+ "WHERE PropertyValue.property_ID = Property.ID "
-				    + "ORDER BY Property.ID "
+					+ "ORDER BY Property.ID "
 					);		
   			
   			while(rs.next()){  			
-  				
   				// Vector um Eigenschaftsausprägungen zu speichern
-  				Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();
+  				Vector<PropertyValue> propertyValues = new Vector <PropertyValue>();  				
+  				Property property = new Property();  				
   				
-  				Property property = new Property();
-  				property.setDescription(rs.getString("description"));
   				property.setId(rs.getInt("ID"));
-  				  				
-  				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-  				propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
+  				property.setDescription(rs.getString("description"));
+  				System.out.println("P-id: " + property.getDescription());  	
   				
+  				// Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
+  				propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);  				
   				// Setzen des Eigenschaftsausprägungs Vector
-  				property.setPropertyValues(propertyValues);   				
-
-                // Hinzufügen des neuen Objekts zum Ergebnisvektor
+  				property.setPropertyValues(propertyValues);   	
+  				 // Hinzufügen des neuen Objekts zum Ergebnisvektor
                 propertyResult.addElement(property);
   				
   				}  			
+  			
   			// Rückgabe der gefundenen Property Werte
+  			
   			return propertyResult;
   			
   		}catch(SQLException e){
   			e.printStackTrace();
-  		}
-  		
-  		return null;
-    	  
+  		}  		
+  		return null;    	  
       }
       
-      /**
-       * Die Methode <code>findAll</code> mit einem User Objekt als übergebenes 
-       * Parameter ermöglicht das Abrufen aller Property Objekte
-       * in der Datenbank. Diese werden über einen Vector mit Property-Objekten, und
-       * nach dem zugehörigen User zurück gegeben.
-       * 
-       * @param user Objekt
-       * @return Vector mit Property-Objekten
-       */
-      
-      public Vector <Property> findAll(User user){    	  
-    	//TODO: Abklären 
-  		return null;
-    	  
-      }
       
       /**
+       * Die Methode <code>findBy</code> mit dem Übergabeparameter eines <em>PropertyValue</em>-Objekts
+       * ermöglicht das Suchen eines zu einer Eigenschaftsausprägung, eines <em>PropertyValue</em>-Objekts,
+       * zugehörigen Eigenschaft Objektes, bzw. <em>Property</em>-Objekts.
+       * Dies verdeutlicht auch die enge Kopplung von Property und PropertyValue-Objekten.
        * 
        * @param property_id
-       * @return
+       * @return Property-objekt
        */
       
       public Property findBy(PropertyValue pV) {     
           
-    	  Property property = new Property();
-          Connection con = DBConnection.connection();          
-         
-          try {
-              // Leeres SQL Statement anlegen  
-              PreparedStatement stmt = con.prepareStatement( 
-            		  "SELECT Property.ID, Property.description, "
-          			+ "PropertyValue.ID, PropertyValue.value "
-          			+ "FROM Property "  
-          			+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
-                    + "WHERE Property.ID = ? " 
-                    );
-              
-              stmt.setInt(1, pV.getProp().getId());
-              // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery();          		 
-                           
-              if (rs.next()) {
-                  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-                 
-                  property.setId(rs.getInt("ID"));
-                  property.setDescription(rs.getString("description"));
-                  
-                  // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
-                  // Setzen des Eigenschaftsausprägungs Vector
-                  property.setPropertyValues(propertyValues);
-                  
-              }              
-              return property;
-              
-          } catch (SQLException e) {
-              e.printStackTrace();
-          }
-          return null;
+    	Property property = new Property();
+    	PropertyValue propertyValue = new PropertyValue();
+    	// Abrufen ob Property-Objekt in DB vorhanden ist
+    	propertyValue = PropertyValueMapper.propertyValueMapper().findByKey(pV.getBo_Id());
+    	property = propertyValue.getProp();
+    	
+        return property;
       }
-         
-      
- 
-      /**
-       * Abruf aller geteilter (participation) und eigener (ownership) Eigenschaften
-       * der Kontakte eines Users im KontaktSystem.
-       * Diese Methode soll es damit ermöglichen alle Eigenschaften, welche einerm User
-       * zugewiesen werden können, sei es dass sie diesem geteilt wurden oder er
-       * selbst diese erstellt hat, abzurufen.
-       *
-       * @param id Primärschlüsselattribut des Users
-       * @return einen Vector mit Property Objekten, welche dem übergebenen User Primärschlüssel,
-       * zugeordnet werden können. Dies entspricht null bei einem nicht vorhandenem DB-Tupel.
-       *
-       */
-         
-
-      public Vector <Property> findBy(User user){
-         
-          Vector <Property> propertyResult = new Vector<Property>();
-          Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
-
-         try { 
-        	
-         /**
-          *  Zur Einhaltung des SoC Aufruf der PropertyValueMapper Methode.
-          *  Aufruf aller PropertyValue - Objekte welche einem User im System zugeordnet werden können.
-          *  Durchlauf mit einer <code>for-each</code> Schleife, um Property-Objekte über den Aufruf
-          *  des zweiten PropertyValue Mapper <em>findBy(PropertyValue-Instanz)</em> zurück zu geben.
-          */
-         
-         // Rückgabe von PropertyValue Werten 
-         propertyValueResult = PropertyValueMapper.propertyValueMapper().findBy(user); 
-                 
-         for(PropertyValue pV: propertyValueResult) {
-        	 Property property = new Property();
-        	 
-        	 property = this.findBy(pV);        	 
-        	 if(property != null) propertyResult.add(property);
-         } 
-         
-         // HashSet erlaubt per Default nur einzigartige Einträge
-    	 HashSet<Property> uniqueEntries = new HashSet<Property>(propertyResult);   
-         // Umwandeln des HashSet in einen Vector 
-    	 Vector<Property> uniqueVector = new Vector<Property>(uniqueEntries);    	 
-    	 
-         return propertyResult = uniqueVector;
-         
-        } catch(NullPointerException e) {
-        	e.printStackTrace();
-        }         
-          return null;
-      }
-
+            
             
       /**
        * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primärschlüssel ID.
@@ -242,7 +141,7 @@ public class PropertyMapper {
        * 
        */     
      
-      public Property findByID(int property_id) {       
+      public Property findBy(int property_id) {       
                     
     	  Property property = new Property();
           Connection con = DBConnection.connection();          
@@ -250,27 +149,26 @@ public class PropertyMapper {
           try {
               // Leeres SQL Statement anlegen  
               PreparedStatement stmt = con.prepareStatement( 
-            		  "SELECT Property.ID, Property.description, "
-          			+ "PropertyValue.ID, PropertyValue.value "
-          			+ "FROM Property "  
-          			+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
-                    + "WHERE Property.ID = ? " 
-                    );
+            		  "SELECT Property.ID, Property.description "
+            		+ "FROM Property "
+            		+ "WHERE Property.ID = ?"
+            		);
               
               stmt.setInt(1, property_id);
               // Statement ausfüllen und als Query an die DB schicken
-              ResultSet rs = stmt.executeQuery();          		 
-                           
+              ResultSet rs = stmt.executeQuery();     
+                                        
               if (rs.next()) {
                   Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-                 
+                  
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
-                  
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen des Eigenschaftsausprägungs Vector
-                  property.setPropertyValues(propertyValues);
+                  property.setPropertyValues(propertyValues);            
+                  System.out.println("P-id: " + property.getId());
+                  System.out.println("P-description: " + property.getDescription());
                   
               }              
               return property;
@@ -290,96 +188,51 @@ public class PropertyMapper {
        * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
        * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
        */
-      
-     
+           
       public Property findBy(String description) {
 
           Property property = new Property(); 
           // Verbindung zur DB herstellen
           Connection con = DBConnection.connection();
-                   
+          System.out.println("P-FindBy-Methode...");       
           try {              
              // Statement ausfüllen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
             		 			"SELECT Property.ID, Property.description, "
             		 		  + "PropertyValue.ID, PropertyValue.value "
                    			  + "FROM Property "  
-                   			  + "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
-                              + "WHERE Property.ID = ? " 
+                   			  + "INNER JOIN PropertyValue ON Property.ID = PropertyValue.property_ID "
+                              + "WHERE Property.description = ? " 
                    			  );
              
              stmt.setString(1, description);
              // Statement ausfüllen und als Query an die DB schicken
-             ResultSet rs = stmt.executeQuery();
-                          
-              if (rs.next()) {
-            	  
-                  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-                                 
+             ResultSet rs = stmt.executeQuery();           
+              
+             if (rs.next()) {
+            	 
+                  Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();                                 
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
+                  
+                  System.out.println("p-id: " + property.getId());
+                  System.out.println("p-description: " + property.getDescription());
                   
                   // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   // Setzen der Eigenschaftsausprägungen
-                  property.setPropertyValues(propertyValues);
-                 
+                  property.setPropertyValues(propertyValues);                 
                 }              
               return property;
              
           } catch (SQLException e) {
               e.printStackTrace();
-          }
-         
-          return null;
-         
+          }         
+          return null;         
       }
    
-      
-      /**
-       * Je nach übergebenem gesuchten Status findet der
-       * Abruf aller geteilter (participation) oder nicht geteilten (owner) Eigenschaften
-       * der Kontakte eines Users im KontaktSystem statt.
-       * Diese Methode soll es ermöglichen alle Eigenschaften, welche einerm User
-       * zugewiesen werden können und mit ihm geteilt wurden abzurufen.
-       *
-       * @param shared_status des gesuchten Objectes
-       * @return einen Vector mit Property Objekten, welche dem übergebenen boolean Parameter (shared_status)
-       * zugeordnet werden können. Dies entspricht null bei einem nicht vorhandenem DB-Tupel.
-       *
-       */
-         
-       
-      public Vector <Property> findByStatus(User user, boolean shared_status) {         
-        //TODO: Abklären           
-        return null;
-       
-      }
      
-      /**
-       * Abruf aller <code>Property</code>-Objekte welche einem bestimmten 
-       * User nur als Teilhaber <em>participant</em> zugeordnet werden könnten. 
-       * @param participant ist ein User-Objekt
-       * @return Vector <Property>
-       */
       
-      public Vector<Property> findByParticipation(User participant){
-      	// TODO: Abklären
-      	return null;
-      }
-      
-      /**
-       * Abruf aller <code>Property</code>-Objekte welche einem bestimmten 
-       * User als Eigentümer <em>owner</em> zugeordnet werden könnten. 
-       * @param owner ist ein User-Objekt
-       * @return Vector <Property>
-       */
-      
-      public Vector<Property> findByOwnership(User owner){
-      	//TODO: Abklären
-      	return null;
-      }
-          
       /**
        * <code>Delete Methode</code>
        * Es war eine bewusste Entscheidung die CRUD Methoden für Property-Objekte nicht in den
@@ -389,8 +242,7 @@ public class PropertyMapper {
        * hang veränderbar sein. Property und <em>PropertyValue</em>-Objekte werden nur gemeinsam geteilt.
        * Ein PropertyValue-Objekt kann dabei auch <em>null</em> sein.
        * 
-       */
-      
+       */      
       
       
       /**
@@ -410,10 +262,10 @@ public class PropertyMapper {
           try {        	  
               	// Die Einfügeoperation erfolgt	
               	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
-    			// stmt.setInt(1, property.getBo_Id());
+    			stmt.setInt(1, property.getId());
     			stmt.setString(2, property.getDescription());
     			stmt.execute();
-    			 
+    			
     			// Die Einfügeoperation für PropertyValue
     			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
         	  	propertyValues = property.getPropertyValues();
@@ -421,20 +273,18 @@ public class PropertyMapper {
                 // Eintrag in PropertyValue erfolgt
                 for (PropertyValue pV : propertyValues){                 
                 		PropertyValueMapper.propertyValueMapper().insert(pV);
-                }  
-                
+                		System.out.println("PV-id: " + pV.getBo_Id());
+                }                  
           	} catch(SQLException e) {
               e.printStackTrace();
-          }  
-          
-         
+          }          
       }
      
       
       /**
        * <code>Update Methode</code>
        * Analog zur Delete Methode wurde eine bewusste Entscheidung getroffen die CRUD Methoden 
-       * bei den Mappern für <em>Property</em>-Objekte nicht komplett durchzusetzen. Dabei wird
+       * bei den Mappern für <em>Property</em>-Objekte hier nicht komplett umzusetzen. Dabei wird
        * berücksichtigt, dass die <em>Property</em>-Objekte als statisch in der DB festgelegte
        * Objekte existieren sollen. Eine Update Methode würde diesem Grundprinzip daher nicht 
        * entsprechen. 

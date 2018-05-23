@@ -1,6 +1,7 @@
 package test;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,56 +21,87 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class PropertyValueTest {
 
 	public static void main(String args[]) {
+
+		
+//		Vector<PropertyValue> pVVector = new Vector<PropertyValue>();
+//		pVVector = PropertyValueMapper.propertyValueMapper().findAll();
+//		
+//		for (PropertyValue pV : pVVector) {
+//			
+//			System.out.println(pV);
+//			
+//		}
+		
+		
+		
+
+		
+//		System.out.println(
+//				PropertyValueMapper.propertyValueMapper().findByKey(123)
+//						);
+		
+//		User u = new User();
+//		u.setGoogleID(0);
+//		PropertyValue pv = new PropertyValue();
+//		pv.setBo_Id(123);
+//		
+//		PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
+		
+		
+		//PropertyValueMapper.propertyValueMapper().deleteAll();
+		
+//		PropertyValue pv = new PropertyValue("Janina");
+//		pv.setBo_Id(111);
+//		PropertyValueMapper.propertyValueMapper().update(pv);
+		
+//		PropertyValue pv = new PropertyValue("Janina");
+//		Property prop = new Property();
+//		prop.setId(2);
+//		pv.setBo_Id(103);
+//		pv.setProp(prop);
+//		User testUser = new User();
+//		testUser.setGoogleID(8.914336227056141e15);
+//		pv.setOwner(testUser);
+
+		
+		
+		
+		User u = new User();
+		u.setGoogleID(0);
+		Property prop = new Property();
+		prop.setId(1);
+		PropertyValue pV = new PropertyValue();
+		pV.setProp(prop);
+
+		
+		Vector<PropertyValue> ResultVector = new Vector<PropertyValue>();
+		ResultVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
+	
+		for (PropertyValue pv : ResultVector) {
 			
+			System.out.println(pv);
+			
+		}
 		
 		
 		/*
 		 * findBy(Prop) Test
 		 */
 		
-		
-		Property prop = new Property("Test789");
-		
-		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
-		hilfsVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
-		
-		
-		for (PropertyValue pV : hilfsVector) {
-			
-		
-		System.out.println(
-				"Gefundene Ausprägungen zu Eigenschaft : " + pV);
-		
-		}		
+//		
+//		Property prop = new Property("Hihihi");
+//		prop.setId(5);
+//		
+//		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
+//		hilfsVector = PropertyValueMapper.propertyValueMapper().findBy(prop);
+//	
+//		
+//		for(int i = 0; i < hilfsVector.size(); i++) {
+//			System.out.println(hilfsVector.elementAt(i));
+//		}
 		
 		
-		/*
-		Connection con = DBConnection.connection();
-		try {
-			PreparedStatement stmt3 = con.prepareStatement
-			("INSERT INTO Property (ID, description) VALUES (?, ?)");
-					stmt3.setInt(1, 7);
-					stmt3.setString(2, "testProp");
-					stmt3.execute();
-			
-			PreparedStatement stmt1 = con.prepareStatement
-			("INSERT INTO PropertyValue (ID, property_ID, value) VALUES (?, ?, ?)");
-				   stmt1.setInt(1, 2);
-				   stmt1.setInt(2, 7);
-				   stmt1.setString(3, "testPv");
-				   stmt1.execute();
-			
-	        // Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt2 = con.prepareStatement
-	        ("INSERT INTO Contact_PropertyValue (Contact_ID, propertyValue_ID) VALUES (?, ?)");
-			    stmt2.setInt(1, 32);
-			    stmt2.setInt(2, 2);
-			    stmt2.execute();
-
-	  } catch(SQLException e) {
-		  e.printStackTrace();
-	  }
-	  */
+	  
 		
 		/*
 		Contact c = new Contact();
@@ -77,19 +109,39 @@ public class PropertyValueTest {
 		
 		*/
 		
-		Property p = new Property();
-		p.setBo_Id(5);
-		User kimLy = new User();
-		PropertyValue pv = new PropertyValue();
-		pv.setOwner(kimLy);
-		pv.setProp(p);
-		pv.getOwner().setGoogleID(3);
-		pv.setValue("Lalala");
+//		Property p = new Property("Sternzeichen");
+//		p.setId(5);
+//		User kimLy = new User();
+//		PropertyValue pv = new PropertyValue();
+//		Contact c = new Contact();
+//		c.setBo_Id(106);
+//		pv.setContact(c);
+//		pv.setOwner(kimLy);
+//		pv.setProp(p);
+//		pv.getOwner().setGoogleID(0);
+//		pv.getOwner().setGMail("default@sys.de");
+//		pv.setValue("Fische");
+//		
+//		
+//		//PropertyMapper.propertyMapper().insert(p);
+//		
+//		PropertyValueMapper.propertyValueMapper().insert(pv);
+		// PropertyValueMapper.propertyValueMapper().deleteAll();
 		
-		
-		PropertyValueMapper.propertyValueMapper().insert(pv);
-		 
-			
+//		Double userId = 8.914336227056141e15;
+////		
+//		PropertyValue pV = new PropertyValue();
+//				
+//		User user = new User();
+//		user.setGoogleID(userId);
+//		
+//		//****************TESTS*********************
+//		//******************************************
+//		
+//		// PropertyValueMapper.propertyValueMapper().findAllSharedByMe(user); // Funktioniert
+//		// PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(user); --> Contact Mapper Problem
+//		
+//		PropertyValueMapper.propertyValueMapper().findAllOwnedByMe(user);
 		
 	} 
 }

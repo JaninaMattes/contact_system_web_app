@@ -1,6 +1,9 @@
 body {
+	margin: 0 auto;
     text-align: center;  /* Zentrierung im Internet Explorer */
-  }
+    height: 100vh;
+    width: 100vw;
+    }
 
 h1 {
   font-size: 2em;
@@ -10,4 +13,13 @@ h1 {
   text-align: center;
 }
 
+.link{
+    border: solid 2px black ;
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    text-shadow: 1px 1px #DCDCDC;
+    box-shadow:  2px 2px #DCDCDC;
+    background: #FAFAFA;
+}
 
