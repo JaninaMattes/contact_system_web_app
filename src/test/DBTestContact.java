@@ -17,10 +17,23 @@ public class DBTestContact {
 //		c.setOwner(u);
 //		ContactMapper.contactMapper().insertContact(c);
 		
+		
+		Contact c = new Contact(); 
 		PropertyValue pv = new PropertyValue();
 		
-		ContactMapper.contactMapper().findBy(pv);
+		System.out.println(
 		
+		ContactMapper.contactMapper().findBy(pv)
+				);
+		
+
+		/**
+		 * Test: Einen Kontakt hizufügen
+		 */
+		//ContactMapper.contactMapper().insertContact(contact);
+		//ContactMapper.contactMapper().insertContact(contact2);
+		//ContactMapper.contactMapper().insertContact(contact3);
+
 		
 //		ContactMapper mapper = ContactMapper.contactMapper();
 //		
@@ -48,13 +61,12 @@ public class DBTestContact {
 //		/**
 //		 * Test: Einen Kontakt hizufügen
 //		 */
-//		ContactMapper.contactMapper().insertContact(contact);
-//		ContactMapper.contactMapper().insertContact(contact2);
-//		ContactMapper.contactMapper().insertContact(contact3);
+
+
 		/**
 		 * Test: Alle Kontakte eines Users finden
 		 */
-		//ContactMapper.contactMapper().findAllContactsByUser(0);
+		ContactMapper.contactMapper().findAllContactsByUser(0);
 		/**
 		 * Test: Alle vorhandenen Kontakte suchen
 		 */

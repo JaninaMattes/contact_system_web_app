@@ -165,7 +165,22 @@ public class BusinessObjectMapper implements Serializable {
           }       
 		 return null;
 	  }
-
+	  public BusinessObject findBusinessObjectByID(int id) {
+		  	  
+		BusinessObject bo = null;
+		 	  
+		System.out.println("Test Contact");
+		if(bo == null) bo = ContactMapper.contactMapper().findContactById(id);
+		 
+		System.out.println("Test ContactList");
+		if(bo == null) bo = ContactListMapper.contactListMapper().findContactListById(id);
+		
+		System.out.println("Test PropertyValue");
+		if(bo == null) bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
+		  	  
+		  	 
+		return bo;
+	  }
 	  	  
 	  /**
 	   * Exception wenn das gesuchte BusinessBoject nicht gefunden wurde

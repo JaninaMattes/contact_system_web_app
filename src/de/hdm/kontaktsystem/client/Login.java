@@ -72,6 +72,15 @@ public class Login implements EntryPoint {
 	private void loadDashboard(){
 		root.add(new HTML("<h2> Dashboard </h2>"));
 		root.add(new HTML("<br /> <br /> "));
+		
+		/**
+		 * ####### Start #######
+		 * Ab hier können die Komponenten in das Dashbord engebunden werden
+		 */
+		
+		
+		
+		
 		signOutLink.setHref(userInfo.getLogoutUrl());
 		signOutLink.setStyleName("link");
 		root.add(signOutLink);
