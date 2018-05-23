@@ -56,7 +56,7 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getBo_Id());
+			stmt.executeUpdate("DELET FROM Contact WHERE id = " + contact.getBo_Id());
 			
 			//loeschen der Eigenschaftsausprägungen eines Kontaktes
 			PropertyValueMapper.propertyValueMapper().deleteBy(contact); 
@@ -75,10 +75,11 @@ public class ContactMapper {
 	 * @param id
 	 */
 	public void deleteContactByID(int id) {
+		PropertyValueMapper.propertyValueMapper().deleteByContact(id);
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM CONTACT WHERE ID = " + id);
+			stmt.executeUpdate("DELETE FROM Contact WHERE ID = " + id);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -372,8 +373,12 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE contact SET status = " + contact.isShared_status() + "SET modificationDate = "
-					+ contact.getModifyDate() + "WHERE id = " + contact.getBo_Id());
+			stmt.executeUpdate("UPDATE contact SET status = " 
+					+ contact.isShared_status() 
+					+ " SET modificationDate = "
+					+ contact.getModifyDate() 
+					+ " WHERE id = " 
+					+ contact.getBo_Id());
 			
 			//TODO: UpdatePropertyValueBYContact Methode?
 			PropertyValueMapper.propertyValueMapper().UpdatePropertyValueByContact(contact);

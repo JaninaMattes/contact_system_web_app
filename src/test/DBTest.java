@@ -36,8 +36,10 @@ public class DBTest {
 	
 	public static void main(String args[]){
 		
-		createAll();
+		//createAll();
+		//updateAll();
 		//findAll();
+		deleteAll();
 		
 		
 	}
@@ -115,7 +117,7 @@ public class DBTest {
 	}
 	
 	public static void updateAll(){
-int pTestID = 8;
+		
 		
 		//System.out.println("\n ############ Test Poperty ################ \n");
 		
@@ -129,12 +131,8 @@ int pTestID = 8;
 		uMapper.update(u);
 		
 		
-		System.out.println("\n ############ Test Contact ################ \n");
-		
-		Contact c = cMapper.findContactById(vCID);
-		c.setShared_status(true);
-		cMapper.updateContact(c);
-		
+		//System.out.println("\n ############ Test Contact ################ \n");
+
 		
 		System.out.println("\n ############ Test PopertyValue ################ \n");
 		
@@ -264,4 +262,37 @@ int pTestID = 8;
 		//System.out.println(pvMapper.findAllShared(u, pv));
 	}
 	
+	public static void deleteAll(){
+
+		
+		System.out.println("\n ############ Test Contact ################ \n");
+		
+		cMapper.deleteContactByID(126);
+		
+		System.out.println("\n ############ Test Poperty ################ \n");
+		
+		
+		
+		
+		System.out.println("\n ############ Test User ################ \n");
+		
+		
+		
+		
+	
+		
+		
+		
+		System.out.println("\n ############ Test PopertyValue ################ \n");
+		
+		
+		
+		
+		System.out.println("\n ############ Test ContactList ################ \n");
+	
+		
+		
+	
+		
+	}
 }
