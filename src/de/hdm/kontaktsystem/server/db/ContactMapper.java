@@ -338,6 +338,7 @@ public class ContactMapper {
 
 							//Innerjoin um auf den Namen zugreifen zu können
 
+
 			if (rs.next()) {
 
 				contact.setBo_Id(rs.getInt("bo.bo_ID"));

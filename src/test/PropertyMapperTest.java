@@ -1,6 +1,7 @@
 package test;
 
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
+import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
@@ -11,6 +12,8 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class PropertyMapperTest {
 	
 	public static void main(String args[]) {
+		
+		
 		
 		Double id = 8.914336227056141e15;
 		 
