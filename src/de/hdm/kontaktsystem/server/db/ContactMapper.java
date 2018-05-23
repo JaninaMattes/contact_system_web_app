@@ -52,20 +52,7 @@ public class ContactMapper {
 	 * @param contact
 	 */
 	public void deleteContact(Contact contact) {
-		Connection con = DBConnection.connection();
-		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("DELET FROM Contact WHERE id = " + contact.getBo_Id());
-			
-			//loeschen der Eigenschaftsausprägungen eines Kontaktes
-			PropertyValueMapper.propertyValueMapper().deleteBy(contact); 
-			
-			BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(contact);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		deleteContactByID(contact.getBo_Id());
 
 	}
 
@@ -84,6 +71,7 @@ public class ContactMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 	}
 
 	/**
