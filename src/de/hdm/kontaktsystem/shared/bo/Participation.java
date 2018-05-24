@@ -101,7 +101,8 @@ public class Participation implements Serializable {
 	@Override
 	public String toString() {
 		return "Participant = " + this.getParticipant() + "\n"		
-		+ "Reference Object = " + this.getReferencedObject();
+		+ "Reference Object = " + this.getReferencedObject() + "\n"
+		;
 	}
 	
 	//Anpassen

@@ -106,12 +106,14 @@ public class ContactMapperTest {
 
 		
 		double id = 7.818651631034612e15;
+		double id2 = 1.1423815165163371e20;
 		
 		User user = new User();
-		user.setGoogleID(id);
+		user.setGoogleID(id2);
 		
 		Vector <Contact> contact = new Vector <Contact>();
-		contact = ContactMapper.contactMapper().findAllSharedByMe(user);
+		contact = ContactMapper.contactMapper().findAllSharedByOthersToMe(user);
+		//contact = ContactMapper.contactMapper().findAllSharedByMe(user);
 		
 		// Contact contact = new Contact();
 		// contact = ContactMapper.contactMapper().findContactById(166);

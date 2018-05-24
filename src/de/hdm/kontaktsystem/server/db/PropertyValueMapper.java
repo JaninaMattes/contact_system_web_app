@@ -4,11 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
-import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
@@ -380,6 +378,7 @@ public class PropertyValueMapper {
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
 			 propVal = this.findByKey(part.getReferenceID());
+			 System.out.println(propVal);
 			 part.setReference(propVal);
 			 part.setParticipant(user);	 	
 			 	if(propVal != null) {
@@ -403,16 +402,21 @@ public class PropertyValueMapper {
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
+//		for (Participation part : participationVector) {
+//			System.out.println(part);
+//		}
+
 		// Vector für die Speicherung aller BusinessObjekte erzeugen
 		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
-		
 		
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
 			 Property prop = new Property();
-			 part.setReference(propVal);	
+			 	
 			 propVal = this.findByKey(part.getReferenceID());	
-			 propVal.setProp(prop);
+			 part.setReference(propVal);
+			 part.setParticipant(user);	 
+			 //System.out.println(part);		     
 			 //System.out.println(propVal);
 			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
 			 if(propVal != null) {

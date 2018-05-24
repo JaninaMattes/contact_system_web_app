@@ -129,6 +129,7 @@ public class ParticipationMapper {
 				participation.setParticipant(participant);
 				
 				reference = BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("bo_ID"));
+				//System.out.println(reference);
 				participation.setReference(reference);
 				
 				participations.add(participation);
@@ -167,6 +168,7 @@ public class ParticipationMapper {
 				BusinessObject reference = new BusinessObject();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
+				//System.out.println(reference);
 				reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				//System.out.println(p);
