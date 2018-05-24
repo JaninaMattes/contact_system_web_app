@@ -164,9 +164,10 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
+				BusinessObject reference = new BusinessObject();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
-				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("BusinessObject_ID"));
+				reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}
@@ -212,6 +213,8 @@ public class ParticipationMapper {
 	}
 
 
+	
+	
 	
 	/**
 	 * Update a specific Participation in the database

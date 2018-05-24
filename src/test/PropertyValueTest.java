@@ -74,10 +74,10 @@ public class PropertyValueTest {
 		Property prop = new Property();
 		pv.setProp(prop);
 		prop.setId(1);
-		prop.setDescription("Name");
+
 		
 		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
-		hilfsVector = PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
+		hilfsVector = PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(u);
 		
 		for (PropertyValue pV : hilfsVector) {
 			System.out.println(pV);

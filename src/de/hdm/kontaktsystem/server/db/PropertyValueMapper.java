@@ -431,11 +431,6 @@ public class PropertyValueMapper {
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
-//		for (Participation part : participationVector) {
-//			
-//			System.out.println(part);
-//			
-//		}
 		// Vector für die Speicherung aller BusinessObjekte erzeugen
 		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
 		
@@ -446,7 +441,7 @@ public class PropertyValueMapper {
 			 part.setReference(propVal);	
 			 propVal = this.findByKey(part.getReferenceID());	
 			 propVal.setProp(prop);
-			 System.out.println(propVal);
+			 //System.out.println(propVal);
 			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
 			 if(propVal != null) {
 				  propertyResultVector.addElement(propVal);
