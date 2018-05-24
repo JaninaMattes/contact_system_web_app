@@ -1,5 +1,7 @@
 package de.hdm.kontaktsystem.gui;
 
-public class ReceivedParticipationForm {
+import com.google.gwt.user.client.ui.VerticalPanel;
+
+public class ReceivedParticipationForm extends VerticalPanel{
 
 }

@@ -4,6 +4,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.user.cellview.client.CellBrowser;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -20,6 +22,23 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class ContactSystem implements EntryPoint {
 
+	/**
+<<<<<<< HEAD
+	 * Interface aus BankProjekt übernommen
+	 */
+	static interface TreeResources extends CellTree.Resources {
+		@Override
+		@Source("cellTreeClosedItem.gif")
+	    ImageResource cellTreeClosedItem();
+
+	    @Override
+		@Source("cellTreeOpenItem.gif")
+	    ImageResource cellTreeOpenItem();
+
+	    @Override
+		@Source("CellTree.css")
+	    CellTree.Style cellTreeStyle(); 
+	}
 	
 	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
 	
@@ -40,8 +59,8 @@ public class ContactSystem implements EntryPoint {
 
 	
 	
-	/**
-	 * Instantiieren der GWT Widgets und Panels
+
+	/** Instanziieren der GWT Widgets und Panels
 	 */
 	
 	//Panels
@@ -96,29 +115,46 @@ public class ContactSystem implements EntryPoint {
 		//ClickHandler für ContactButton
 		ContactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				CellTree.Resources contactTreeRecource = GWT.create(ContactTreeResources.class);
+				CellTree.Resources contactTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 				cellTree.setAnimationEnabled(true);	
 				
-				RootPanel.get("Liste").add(cellTree);
+				VerticalPanel addPanel = new VerticalPanel();
+				Button addButton = new Button("Hinzufügen");
+				addPanel.add(addButton);
+				addPanel.add(cellTree);
+				
+				RootPanel.get("Liste").add(addPanel);
 			}
+			
+			//TODO: ClickHandler AddButton
+			
 		});
 		
 		//Clickhandler für ContactListButton
 		ContactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				CellTree.Resources contactListTreeRecource = GWT.create(ContactListTreeResources.class);
+				CellTree.Resources contactListTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactListTreeRecource);
 				cellTree.setAnimationEnabled(true);
 				
-				RootPanel.get("Liste").add(cellTree);
+				VerticalPanel addPanel = new VerticalPanel();
+				Button addButton = new Button("Hinzufügen");
+				addPanel.add(addButton);
+				addPanel.add(cellTree);
+				
+				RootPanel.get("Liste").add(addPanel);
 			}
+			
+			//TODO: ClickHandler AddButton
+			
 		});
+		
 		
 		//Clickhandler für MyParticipationsButton
 		MyParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				CellTree.Resources myParticipationTreeRecource = GWT.create(MyParticipationTreeResources.class);
+				CellTree.Resources myParticipationTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", myParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);
 				
@@ -129,7 +165,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		ReceivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				CellTree.Resources receivedParticipationTreeRecource = GWT.create(ReceivedParticipationTreeResources.class);
+				CellTree.Resources receivedParticipationTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", receivedParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);	
 				
