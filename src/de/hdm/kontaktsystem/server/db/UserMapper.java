@@ -147,8 +147,22 @@ public class UserMapper {
 		
 	}
 	
-	public void delete(User user){
-		deleteByID(user.getGoogleID());
+	public User delete(User user){
+		//deleteByID(user.getGoogleID());
+
+		ContactMapper.contactMapper().deleteAllContactsByUser(user.getGoogleID());
+		ContactListMapper.contactListMapper().deleteContactListByUserId(user.getGoogleID());
+		
+		Connection con = DBConnection.connection();
+		try{
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM User WHERE ID = ?");
+			stmt.setDouble(1, user.getGoogleID());
+			stmt.executeUpdate();
+			return user;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return  null;
 	}
 	
 	/**
