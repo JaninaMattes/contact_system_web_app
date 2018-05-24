@@ -37,7 +37,9 @@ public class DBTest {
 	public static void main(String args[]){
 		
 		createAll();
+		//updateAll();
 		//findAll();
+		deleteAll();
 		
 		
 	}
@@ -51,7 +53,7 @@ public class DBTest {
 		Property p = new Property();
 		p.setId(pTestID);
 		p.setDescription("Test"+pTestID);
-		pMapper.insert(p);
+		//pMapper.insert(p);
 		
 		
 		System.out.println("\n ############ Test User ################ \n");
@@ -115,7 +117,7 @@ public class DBTest {
 	}
 	
 	public static void updateAll(){
-int pTestID = 8;
+		
 		
 		//System.out.println("\n ############ Test Poperty ################ \n");
 		
@@ -129,12 +131,8 @@ int pTestID = 8;
 		uMapper.update(u);
 		
 		
-		System.out.println("\n ############ Test Contact ################ \n");
-		
-		Contact c = cMapper.findContactById(vCID);
-		c.setShared_status(true);
-		cMapper.updateContact(c);
-		
+		//System.out.println("\n ############ Test Contact ################ \n");
+
 		
 		System.out.println("\n ############ Test PopertyValue ################ \n");
 		
@@ -248,7 +246,7 @@ int pTestID = 8;
 		System.out.println("Find All: " +pMapper.findAll());
 		System.out.println("Find by ID: " +pMapper.findBy(vPVID));
 		System.out.println("Find by Desc: " +pMapper.findBy("Name"));
-		System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
+		//System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
 		
 		
 		
@@ -259,9 +257,38 @@ int pTestID = 8;
 		System.out.println("Find by ID: " +pvMapper.findByKey(vPVID));
 		//System.out.println(pvMapper.findAll(pv, u));
 		System.out.println("Find by Contact: " +pvMapper.findBy(c));
-		System.out.println("Find by User: " +pvMapper.findBy(u));
+		//System.out.println("Find by User: " +pvMapper.findBy(u));
 		System.out.println("Find by Property: " +pvMapper.findBy(pMapper.findBy(vPID)));
 		//System.out.println(pvMapper.findAllShared(u, pv));
 	}
 	
+	public static void deleteAll(){
+
+		double uID = 2.3862612474697788E16;
+		
+		System.out.println("\n ############ Test Contact ################ \n");
+		
+		cMapper.deleteAllContactsByUser(uID);
+		
+		System.out.println("\n ############ Test Poperty ################ \n");
+		
+
+		System.out.println("\n ############ Test ContactList ################ \n");
+
+		clMapper.deleteContactListByUserId(uID);
+		
+		
+		System.out.println("\n ############ Test User ################ \n");
+		
+		uMapper.deleteByID(uID);
+		
+		System.out.println("\n ############ Test PopertyValue ################ \n");
+		
+		
+		
+		
+		
+	
+		
+	}
 }

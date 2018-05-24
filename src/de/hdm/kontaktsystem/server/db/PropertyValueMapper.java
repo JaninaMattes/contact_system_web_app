@@ -107,7 +107,7 @@ public class PropertyValueMapper {
 
 	public void deleteByPropValue(int id) {
 
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		
 
 		Connection con = DBConnection.connection();
 
@@ -122,6 +122,7 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 
 	}
 
@@ -142,7 +143,7 @@ public class PropertyValueMapper {
 
 	public void deleteByContact(int id) {
 		
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		
 
 		Connection con = DBConnection.connection();
 
@@ -158,7 +159,7 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 	}
 
 	/*
@@ -178,7 +179,7 @@ public class PropertyValueMapper {
 
 	public void deleteByProp(int property_id) {
 		
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(property_id);
+		
 
 		Connection con = DBConnection.connection();
 
@@ -194,6 +195,8 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(property_id);
 
 	}
 
@@ -527,8 +530,9 @@ public class PropertyValueMapper {
 			PreparedStatement stmt = con.prepareStatement
 					("SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID, "
 					+ "Property.description "
-					+ "FROM PropertyValue INNER JOIN Property "
-					+ "ON PropertyValue.property_ID = ? "
+					+ "FROM PropertyValue "
+					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
+					+ "WHERE PropertyValue.property_ID = ? "
 					);
 					stmt.setInt(1, p.getId());
 					stmt.execute();
@@ -543,10 +547,11 @@ public class PropertyValueMapper {
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
 				//System.out.println("PV-id: " + propValue.getValue());
-				propValue.setProp(prop);				
+				propValue.setProp(prop);
+				
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
-				
+
 			}
 			return propValueResult;
 
