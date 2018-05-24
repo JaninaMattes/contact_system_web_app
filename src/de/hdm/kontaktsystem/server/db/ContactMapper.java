@@ -7,10 +7,12 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.sql.ResultSet;
 
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
+
 //import com.mysql.jdbc.Connection;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
-import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
@@ -52,21 +54,7 @@ public class ContactMapper {
 	 * @param contact
 	 */
 	public void deleteContact(Contact contact) {
-		Connection con = DBConnection.connection();
-		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getBo_Id());
-			
-			//loeschen der Eigenschaftsausprägungen eines Kontaktes
-			PropertyValueMapper.propertyValueMapper().deleteBy(contact); 
-			
-			BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(contact);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+		deleteContactByID(contact.getBo_Id());
 	}
 
 	/**
@@ -75,14 +63,18 @@ public class ContactMapper {
 	 * @param id
 	 */
 	public void deleteContactByID(int id) {
+		System.out.println("Delete Contact");
+		PropertyValueMapper.propertyValueMapper().deleteByContact(id);
 		Connection con = DBConnection.connection();
 		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM CONTACT WHERE ID = " + id);
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM Contact WHERE ID = ?" );
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 	}
 
 	/**
@@ -92,15 +84,15 @@ public class ContactMapper {
 
 	public void deleteAllContactsByUser(double user_id) {
 
-		Vector<Contact> result = new Vector<Contact>();
-		
+		Vector<Contact> result = new Vector<Contact>();		
 		//Aufrufen aller Kontakte eines bestimmten Users
 		result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
 
 		//Kontakte loeschen
 		for (Contact c : result) {
 			deleteContactByID(c.getBo_Id());
-
+			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(c.getBo_Id());
+			System.out.println("contact deleted: " + c.getBo_Id());
 		}
 	}
 
@@ -112,79 +104,184 @@ public class ContactMapper {
 	 */
 
 		
-		//Vektor zur Speicherung der Contact-Objekte
+	//Vektor zur Speicherung der Contact-Objekte
 
 	public Vector<Contact> findAllContactsByUser(double user_id) {
 
 		Vector<Contact> result = new Vector<Contact>();
-
 		Connection con = DBConnection.connection();
 
 		try {
 			//SQL-Statement erzeugen
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT c.* , pv.*, p.*, bo.* " 
-							+ "FROM  Contact AS c " 
-							+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
-							+ "INNER JOIN Property AS p ON p.ID = pv.Property_ID "
-							+ "INNER JOIN BusinessObject AS bo ON bo.bo_ID = c.ID "
-							//+ "WHERE description = 'Name' AND "
-							+ "WHERE bo.user_ID =" + user_id);
+			PreparedStatement stmt = con.prepareStatement(
+					  "SELECT c.* , bo.* " 
+					+ "FROM  Contact AS c " 
+					+ "INNER JOIN BusinessObject AS bo ON bo.bo_ID = c.ID "
+					+ "WHERE bo.user_ID = ?"
+					);
+			
+			stmt.setDouble(1, user_id);
+			ResultSet rs = stmt.executeQuery();							  
 
 			while (rs.next()) {
 				Contact contact = new Contact();
 				contact.setBo_Id(rs.getInt("c.ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
-				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
+				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				
-				//Hinzufügen zum Ergebnisvektor
 				result.addElement(contact);
-
 			}
+			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		//Rückgabe des Ergebnisvektors
-		return result;
+		return null;
 	}
+	
+	/**
+	 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
+	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
+	 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
+	 */
 
+	public Vector<Contact> findAllSharedByMe (User user) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+		Vector<Participation> participationVector = new Vector<Participation>();		
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
+		
+		Vector<Contact> contactResultVector = new Vector <Contact>(); 		
+				
+		for (Participation part : participationVector) {
+			 System.out.println("part id:" + part.getReferenceID());
+			 
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+			 Contact contact = new Contact();
+			 
+			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
+			 	if(bo instanceof Contact) {			 		
+			 		contact = (Contact) bo;
+			 		System.out.println("contact name " + contact.getpropertyValue());
+			 		contactResultVector.addElement(contact);	     
+			 }		
+		}	 	
+		if(contactResultVector.isEmpty()) System.out.println("# no contacts found");			
+		
+		return contactResultVector;
+		
+	}
+	
+	/**
+	 * Alle für den Benutzer in der Applikation geteilte Kontakte <code>Contact</code> Objekte
+	 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
+	 * 
+	 * @param user-Objekt
+	 * @return Vector Contact-Objekte
+	 */
+
+	public Vector<Contact> findAllSharedByOthersToMe (User user) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+		Vector<Participation> participationVector = new Vector<Participation>();		
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
+		// Vector für die Speicherung aller BusinessObjekte erzeugen
+		Vector<Contact> contactResultVector = new Vector <Contact>(); 
+		
+		
+		for (Participation part : participationVector) {
+			System.out.println("part id:" + part.getReferenceID());
+			 
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+			 System.out.println(bo.getClass());
+			 Contact contact = new Contact();
+			 
+			 System.out.println("bo gefunden: " + bo.getBo_Id());
+			    
+			    //Prüfe ob bo eine Instanz enth�lt von der Klasse Contact
+			 	if(bo instanceof Contact) {				
+
+			 		contact = (Contact) bo;
+			 		System.out.println("contact name " + bo);
+			 		contactResultVector.addElement(contact);
+			 	}
+		}		
+		if(contactResultVector.isEmpty()) System.out.println("# no contacts found");
+		
+		return contactResultVector;
+		
+	}
+	
+    
+	/**
+	 * Methode zur Löschung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
+	 * welche im System mit anderen Nutzern geteilt wurden. 
+	 * @param user
+	 */
+	
+	public void deleteAllSharedByMe(User user) {
+		
+		Vector <Contact> contactResult = new Vector <Contact>();
+		contactResult = this.findAllSharedByMe(user);
+		
+		for(Contact contact : contactResult) {
+			// löschen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
+			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
+			this.deleteContact(contact);
+			System.out.println("# shared contact deleted: " + contact.getBo_Id() );
+		}
+	}
+	
+	/**
+	 * Eine Methode zur Löschung aller Verbindungen in der Participation Tabelle der DB.
+	 * Dies f�hrt dazu, dass für einen Nutzer geteilten Objekte nicht mehr aufgerufen werden k�nnen.
+	 * 
+	 */
+	
+	public void deleteAllSharedByOthersToMe(User user) {
+		
+		Vector <Contact> contactResult = new Vector <Contact>();
+		contactResult = this.findAllSharedByOthersToMe(user);		
+
+		for(Contact contact : contactResult) {
+			// löschen aller Verbindungen in der Teilhaberschaft Tabelle Participation f�r den User
+			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
+			System.out.println("# participation for contact deleted: " + contact.getBo_Id() );
+		}
+	}
+	
+	
 	/**
 	 * Mapper-Methode um alle Kontakte zu loeschen
 	 */
 	public void deleteAllContacts() {
 
 		Vector<Contact> result = new Vector<Contact>();
-		
-		//Aufruf aller Kontakte
 		result = ContactMapper.contactMapper().findAllContacts();
 
 		//Loeschen der Kontakte
 		for (Contact c : result) {
-			deleteContactByID(c.getBo_Id());
+			this.deleteContactByID(c.getBo_Id());
 		}
 	}
 
+	
 	/**
 	 * Mapper-Methode um einen Kontakt zu erstellen
 	 * TODO: Owner ID überdenken!
 	 */
 
 	public void insertContact(Contact contact) {
-
 		
 		BusinessObjectMapper.businessObjectMapper().insert(contact);
-
 		Connection con = DBConnection.connection();
 
 		try {		
 			//SQL-Statement zur Erstellung eines Kontaktes erzeugen
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO Contact (ID) VALUES (" + contact.getBo_Id() + ")");
-
+			stmt.executeUpdate("INSERT INTO Contact (ID) VALUES (" + contact.getBo_Id() + ")");			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -209,20 +306,19 @@ public class ContactMapper {
 			//SQL Statement erzeugen
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT c.* , pv.*, p.*, bo.* " 
-							+ "FROM  Contact c "
-							+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
-							+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
-							+ "INNER JOIN Property p ON p.ID = pv.Property_ID " + "WHERE description = 'Name'");
+					"SELECT c.* , bo.* " 
+				  + "FROM  Contact c "
+				  + "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
+				  );
 
 			while (rs.next()) {
 				Contact contact = new Contact();
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
-				contact.setBo_Id(rs.getInt("id"));
+				contact.setBo_Id(rs.getInt("ID"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
+				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 
 				//Hinzufügen zum Ergebnisvektor
 				result.addElement(contact);
@@ -247,13 +343,14 @@ public class ContactMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-
-			PreparedStatement stmt = con.prepareStatement("SELECT c.* , pv.*, p.*, bo.* " 
+			
+			PreparedStatement stmt = con.prepareStatement(
+					  "SELECT c.* , pv.*, p.*, bo.* " 
 					+ "FROM  Contact c "
 					+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 					+ "INNER JOIN Property p ON p.ID = pv.property_ID "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
-					+ "WHERE c.ID = ?"); // description = 'Name' AND
+					+ "WHERE c.ID = ?"); 
 
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
@@ -262,15 +359,14 @@ public class ContactMapper {
 			if (rs.next()) {		
 				
 				Contact contact = new Contact();
-
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("bo.user_ID")));
 				contact.setBo_Id(rs.getInt("bo.bo_ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				
-				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
-				
+				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				//System.out.println("contact id1 " + contact.getBo_Id());
 				return contact;
 			}
 		} catch (SQLException e) {
@@ -286,11 +382,13 @@ public class ContactMapper {
 
 		try {
 
-			PreparedStatement stmt = con.prepareStatement("SELECT c.* , pv.*, p.*, bo.* " 
+			PreparedStatement stmt = con.prepareStatement(
+					  "SELECT c.* , pv.*, p.*, bo.* " 
 					+ "FROM  Contact c "
 					+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 					+ "INNER JOIN Property p ON p.ID = pv.property_ID "
-					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " + "WHERE description = 'Name' AND c.ID = ?");
+					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
+					+ "WHERE description = 'Name' AND c.ID = ?");
 
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
@@ -306,7 +404,7 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				
-				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
+				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				u.setContact(contact);
 			}
 		} catch (SQLException e) {
@@ -334,10 +432,8 @@ public class ContactMapper {
 							+ "FROM  Contact c " 
 							+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
+							+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
 							+ "WHERE value = '" + pV.getValue() + "'");
-
-							//Innerjoin um auf den Namen zugreifen zu können
-
 
 			if (rs.next()) {
 
@@ -346,11 +442,8 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));		
-				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
-				
-
-			}
-			
+				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+			}			
 			return contact;
 			
 		} catch (SQLException e) {
@@ -372,12 +465,19 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE contact SET status = " + contact.isShared_status() + "SET modificationDate = "
-					+ contact.getModifyDate() + "WHERE id = " + contact.getBo_Id());
-			
-			//TODO: UpdatePropertyValueBYContact Methode?
- 			PropertyValueMapper.propertyValueMapper().UpdatePropertyValueByContact(contact);
-
+			stmt.executeUpdate(
+					  "UPDATE contact SET status = " 
+					+ contact.isShared_status() 
+					+ "SET modificationDate = "
+					+ contact.getModifyDate() 
+					+ "WHERE id = " 
+					+ contact.getBo_Id());
+		
+		Vector <PropertyValue> propResult = new Vector <PropertyValue>();
+		propResult = PropertyValueMapper.propertyValueMapper().findBy(contact);
+			for(PropertyValue pV : propResult) {
+				PropertyValueMapper.propertyValueMapper().update(pV);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -398,11 +498,10 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT * " + "FROM  Contact c " 
-							+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
-							+ "INNER JOIN Property p ON p.ID = pv.Property_ID "
-							+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
-							+ "WHERE description = 'Name' AND bo.status = " + shared_status);
+					  "SELECT * "
+					+ "FROM  Contact c " 
+					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
+					+ "WHERE description = 'Name' AND bo.status = " + shared_status);
 
 			if (rs.next()) {
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
@@ -418,6 +517,11 @@ public class ContactMapper {
 		}
 
 		return contact;
+	}
+
+	public Vector<Contact> findAllContactsByUser(User user) {
+		
+		return findAllContactsByUser(user.getGoogleID());
 	}
 
 }

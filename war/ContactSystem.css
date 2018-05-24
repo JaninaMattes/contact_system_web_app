@@ -5,6 +5,10 @@ body {
     width: 100vw;
     }
 
+div {
+	border: solid 2px black;
+}
+
 h1 {
   font-size: 2em;
   font-weight: bold;

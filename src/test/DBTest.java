@@ -10,6 +10,7 @@ import de.hdm.kontaktsystem.server.db.ParticipationMapper;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -28,30 +29,35 @@ public class DBTest {
 	private final static UserMapper uMapper = UserMapper.userMapper();
 	
 	// Gültige IDs zu Testen
-	private final static double vUID = 3d;//1.1423815165163371e20;
-	private final static int vCID = 106;
-	private final static int vCLID = 101;
+	private final static double vUID = 666;
+	private final static int vCID = 165;
+	private final static int vCLID = 167;
 	private final static int vPID = 5; // = Sternzeichen
-	private final static int vPVID = 123; // = Janina
+	private final static int vPVID = 166; // = Janina
+	
+	static double uID;
 	
 	public static void main(String args[]){
 		
-		createAll();
+		//createAll();
+		//updateAll();
 		//findAll();
+		//deleteAll();
 		
+		findAllShared();
 		
 	}
 	
 	public static void createAll(){
 		
-		int pTestID = 8;
+		int pTestID = 1;
 		
 		System.out.println("\n ############ Test Poperty ################ \n");
 		
 		Property p = new Property();
 		p.setId(pTestID);
 		p.setDescription("Test"+pTestID);
-		pMapper.insert(p);
+		//pMapper.insert(p);
 		
 		
 		System.out.println("\n ############ Test User ################ \n");
@@ -60,9 +66,10 @@ public class DBTest {
 		Random rng = new Random();
 		u.setGMail("mail@gmail.com");
 		// Generate test User with random ID
-		u.setGoogleID(rng.nextDouble()*100000000000000000d);
-		uMapper.insert(u);
-		
+		u.setGoogleID(666);//rng.nextDouble()*100000000000000000d);
+		uID = u.getGoogleID();
+		//uMapper.insert(u);
+		u = uMapper.findById(666);
 		
 		
 		System.out.println("\n ############ Test Contact ################ \n");
@@ -101,21 +108,25 @@ public class DBTest {
 		
 		Participation p1 = new Participation();
 		Participation p2 = new Participation();
+		Participation p3 = new Participation();
 		
 		p1.setParticipant(uMapper.findById(vUID));
 		p2.setParticipant(uMapper.findById(vUID));
+		p3.setParticipant(uMapper.findById(vUID));
 		
 		p1.setReference(c);
 		p2.setReference(cl);
+		p3.setReference(pv);
 		
 		partMapper.insertParticipation(p1);
 		partMapper.insertParticipation(p2);
+		partMapper.insertParticipation(p3);
 		
 		
 	}
 	
 	public static void updateAll(){
-int pTestID = 8;
+		
 		
 		//System.out.println("\n ############ Test Poperty ################ \n");
 		
@@ -129,12 +140,8 @@ int pTestID = 8;
 		uMapper.update(u);
 		
 		
-		System.out.println("\n ############ Test Contact ################ \n");
-		
-		Contact c = cMapper.findContactById(vCID);
-		c.setShared_status(true);
-		cMapper.updateContact(c);
-		
+		//System.out.println("\n ############ Test Contact ################ \n");
+
 		
 		System.out.println("\n ############ Test PopertyValue ################ \n");
 		
@@ -248,20 +255,85 @@ int pTestID = 8;
 		System.out.println("Find All: " +pMapper.findAll());
 		System.out.println("Find by ID: " +pMapper.findBy(vPVID));
 		System.out.println("Find by Desc: " +pMapper.findBy("Name"));
-		System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
-		
-		
-		
+
+		//System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
+
 		
 		System.out.println("\n ############ Test PropertyValue ################ \n");
 		
 		PropertyValue pv;
 		System.out.println("Find by ID: " +pvMapper.findByKey(vPVID));
-		//System.out.println(pvMapper.findAll(pv, u));
-		System.out.println("Find by Contact: " +pvMapper.findBy(c));
-		System.out.println("Find by User: " +pvMapper.findBy(u));
+		
 		System.out.println("Find by Property: " +pvMapper.findBy(pMapper.findBy(vPID)));
-		//System.out.println(pvMapper.findAllShared(u, pv));
+		System.out.println("Find by Contact: " +pvMapper.findBy(cMapper.findContactById(vCID)));
+		System.out.println("Find by PropertyID: " +pvMapper.findByPropertyID(vPID));
+		System.out.println("Find by Property: " +pvMapper.findAllCreated(uMapper.findById(vUID)));
 	}
 	
+	public static void deleteAll(){
+		
+		/*
+		User user = new User();
+		user.setGoogleID(uID);
+		
+
+		System.out.println("\n ############ Test PopertyValue ################ \n");
+		
+		pvMapper.deleteByProp(1);
+		pvMapper.deleteByContact(113);
+		pvMapper.deleteByPropValue(136);
+
+		System.out.println("\n ############ Test ContactList ################ \n");
+
+		clMapper.deleteContactListByUserId(uID);
+		clMapper.deleteContactListById(1);
+		
+		System.out.println("\n ############ Test Contact ################ \n");
+		
+		cMapper.deleteAllContactsByUser(uID);
+		//cMapper.deleteContact(cMapper.findContactById(119));
+		cMapper.deleteContactByID(113);
+		
+		*/
+		System.out.println("\n ############ Test User ################ \n");
+		
+		//uMapper.delete(user);
+		//uMapper.deleteByID(1.9452793556627856e16);
+		uMapper.deleteAll();
+		
+		
+		
+		
+		
+		
+		
+	
+		
+	}
+
+	public static void findAllShared(){
+		
+		User user = uMapper.findById(vUID);
+		
+		
+		System.out.println("\n ########### Contact ############## \n");
+		System.out.println("FASPV: " +cMapper.findAllSharedByMe(user));
+		System.out.println("FASBOTMPV: " +cMapper.findAllSharedByOthersToMe(user));
+		
+		
+		System.out.println("\n ######### ProptertyValue ########### \n");
+		
+		System.out.println("FASPV: " + pvMapper.findAllSharedByMe(user));
+		
+		System.out.println("\n \n");
+		
+		System.out.println("FASBOTMPV: " +pvMapper.findAllSharedByOthersToMe(user));
+		
+		
+		
+		System.out.println("\n ########### ContactList ############## \n");
+		
+		System.out.println("FASC: " +clMapper.findAllSharedByMe(user));
+		System.out.println("FASBOTMPV: " +clMapper.findAllSharedByOthersToMe(user));
+	}
 }

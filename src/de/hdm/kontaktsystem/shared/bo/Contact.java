@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+import java.util.Vector;
 
 /**
  * Die Klasse Contact stellt die Kontakte dar, die von einem User erstellt werden bzw. auf welche ein User zugreifen kann, 
@@ -11,26 +12,12 @@ sowie den User selbst.
 
 public class Contact extends BusinessObject {
 
-	/**
-	 *  Eindeutige ID 
-	 */
-	
-	private int id;
 		
 	/**
-	 * Name des Kontakts
+	 * Eigenschaftsausprägungen des Kontakts
 	 */
-	private PropertyValue propertyValue = null;
-	
-	/*
-	 * Name des Kontaktes festsetzen
-	 */
-	
-	private String name = null;
+	private Vector <PropertyValue> propertyValues = null;
 
-	/*
-	*Datum wird von BusinessObject geerbt
-	*/
 	
 	/**
 	 * Kontruktoren
@@ -46,13 +33,15 @@ public class Contact extends BusinessObject {
 	 * 
 	 */
 	
-	public Contact(PropertyValue pV, User owner) {
-		super.setOwner(owner);
-		this.propertyValue = pV;
+
+	public Contact(PropertyValue name) {
+		this.propertyValues.add(name);
 	}
 	
-	public Contact(PropertyValue pV) {
-		this.propertyValue = pV;
+	
+	public Contact(PropertyValue name, User owner) {
+		super.setOwner(owner);
+		this.propertyValues.addElement(name);
 	}
 
 	
@@ -60,24 +49,37 @@ public class Contact extends BusinessObject {
 	 * Kontact Name auslesen
 	 */
 	
-	public PropertyValue getpropertyValue() {
-		return this.propertyValue;
+	public Vector <PropertyValue> getpropertyValue() {
+		return this.propertyValues;
 	}
 
 	/**
 	 * Kontakt Name setzen
 	 */
 
-	public void setpropertyValue(PropertyValue pV) {
-		this.propertyValue = pV;
+	public void setpropertyValue(Vector <PropertyValue> pV) {
+		this.propertyValues = pV;
 	}
 
+	/**
+	 * Einzelne PropertyValue -Objekte hinzufügen
+	 * @param pv
+	 */
+	
+	public void addPropertyValue(PropertyValue pv) {
+		this.propertyValues.addElement(pv);
+	}
 
 	
 	@Override
 	public String toString() {
-		return "Contact [owner=" + getOwner() + ", id=" + id + ", Eigenschaft = "
-				+ propertyValue.getProp() + "Ausprägung =" + propertyValue.getValue() + "]";
+
+		if(propertyValues.isEmpty()){
+			return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = leer Ausprägung = leer ]";
+		}
+		
+		return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = "
+				+ propertyValues + "]";
 	}
 
 	
@@ -104,7 +106,7 @@ public class Contact extends BusinessObject {
 		if (getClass() != obj.getClass())
 			return false;
 		Contact other = (Contact) obj;
-		if (id != other.id)
+		if (getBo_Id() != other.getBo_Id())
 			return false;
 		if (getOwner() == null) {
 			if (other.getOwner() != null)

@@ -21,27 +21,42 @@ import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
-public class DBTestContactList {
+public class ContactListMapperTest {
 
 	public static void main(String args[]) {
 
-		BusinessObjectMapper boMapper = BusinessObjectMapper.businessObjectMapper();
-		ContactListMapper clMapper = ContactListMapper.contactListMapper();
-		ContactMapper cMapper = ContactMapper.contactMapper();
-		ParticipationMapper partMapper = ParticipationMapper.participationMapper();
-		PropertyMapper propMapper = PropertyMapper.propertyMapper();
-		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
-		UserMapper uMapper = UserMapper.userMapper();
+		User u = new User();
+		u.setGoogleID(3);
+		
 
-		/**
-		 * Test fuer den ContactList Mapper.
-		 */
+		Vector<ContactList> hilfsVektor = new Vector<ContactList>();
+		// hilfsVektor = ContactListMapper.contactListMapper().findAllSharedByOthersToMe(u);
 		
-		ContactList cl = new ContactList();
-		cl.setName("Kontaktliste 1");
-		cl.setOwner(uMapper.findById(325));
+		// for (ContactList cl : hilfsVektor) {
+			
+		//	System.out.println(cl);
+			
+		// }
 		
-		Vector<ContactList> cll = new Vector<ContactList>();
+		
+		
+//		BusinessObjectMapper boMapper = BusinessObjectMapper.businessObjectMapper();
+//		ContactListMapper clMapper = ContactListMapper.contactListMapper();
+//		ContactMapper cMapper = ContactMapper.contactMapper();
+//		ParticipationMapper partMapper = ParticipationMapper.participationMapper();
+//		PropertyMapper propMapper = PropertyMapper.propertyMapper();
+//		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
+//		UserMapper uMapper = UserMapper.userMapper();
+//
+//		/**
+//		 * Test fuer den ContactList Mapper.
+//		 */
+//		
+//		ContactList cl = new ContactList();
+//		cl.setName("Kontaktliste 1");
+//		cl.setOwner(uMapper.findById(325));
+//		
+//		Vector<ContactList> cll = new Vector<ContactList>();
 		
 		/**
 		 *Test alle Kontakte finden.
@@ -85,8 +100,34 @@ public class DBTestContactList {
 		//cll = clMapper.findContactListByName("KontaktListe_2");
 		//System.out.println(cll);
 		
+
+
 		
-	
+		
+		//######## TESTS #######
+		
+		double id = 666;
+		double id2 = 777;
+		double id3 = 798019057881227.4;
+		
+		User user = new User();
+		user.setGoogleID(id2);
+		
+		Vector <ContactList> cl = new Vector<ContactList>();
+		//cl = ContactListMapper.contactListMapper().findAllSharedByMe(user);
+		cl = ContactListMapper.contactListMapper().findAllSharedByOthersToMe(user);
+		
+		System.out.println(cl);
+		
+		//####### DELETE ########
+		
+		//ContactListMapper.contactListMapper().deleteAllSharedByMe(user);
+		ContactListMapper.contactListMapper().deleteAllSharedByOthersToMe(user);
+		
+		
 	}
+	
+	
+	
 
 }

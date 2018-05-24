@@ -169,15 +169,16 @@ public class BusinessObjectMapper implements Serializable {
 		  	  
 		BusinessObject bo = null;
 		 	  
-		System.out.println("Test Contact");
+		//System.out.println("Test Contact");
 		if(bo == null) bo = ContactMapper.contactMapper().findContactById(id);
 		 
-		System.out.println("Test ContactList");
+		//System.out.println("Test ContactList");
 		if(bo == null) bo = ContactListMapper.contactListMapper().findContactListById(id);
 		
-		System.out.println("Test PropertyValue");
+		//System.out.println("Test PropertyValue");
 		if(bo == null) bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
-		  	  
+		 
+		//System.out.println(bo.getClass());
 		  	 
 		return bo;
 	  }
@@ -281,11 +282,15 @@ public class BusinessObjectMapper implements Serializable {
 		
 	}
 	
+	public void deleteBusinessObjectByUser(User user) {
+		deleteBusinessObjectByUserId(user.getGoogleID());
+	}
+	
 	/**
 	 * Löscht das BusinessObject mit der übergebenen UserID
 	 * @param BusinessObjectID
 	 */
-	public void deleteBusinessObjectByUserId(User user) {
+	public void deleteBusinessObjectByUserId(double id) {
 		// TODO Auto-generated method stub
 		Connection con = DBConnection.connection();
 		  
@@ -293,7 +298,7 @@ public class BusinessObjectMapper implements Serializable {
 			  // Einfügeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement
 		      ("DELETE FROM BusinessObject WHERE user_ID= ?");
-		      stmt.setDouble(1, user.getGoogleID());
+		      stmt.setDouble(1, id);
 		      stmt.execute();
 		      
 		    }

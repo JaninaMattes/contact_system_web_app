@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.kontaktsystem.server.db.ContactMapper;
 import de.hdm.kontaktsystem.server.db.DBConnection;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
@@ -22,6 +23,14 @@ public class PropertyValueTest {
 
 	public static void main(String args[]) {
 		
+		User u = new User();
+		u.setGoogleID(0);
+		
+		PropertyValueMapper.propertyValueMapper().deleteAllSharedByMe(u);
+		
+//		for (PropertyValue pV : hilfsVector) {
+//			System.out.println(pV);
+//		}
 //		
 //		Contact c = new Contact();
 //		c.setBo_Id(126);
@@ -67,21 +76,18 @@ public class PropertyValueTest {
 //				PropertyValueMapper.propertyValueMapper().findByKey(123)
 //						);
 		
-		User u = new User();
-		u.setGoogleID(0);
-		PropertyValue pv = new PropertyValue();
-		pv.setBo_Id(123);
-		Property prop = new Property();
-		pv.setProp(prop);
-		prop.setId(1);
-		prop.setDescription("Name");
-		
-		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
-		hilfsVector = PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
-		
-		for (PropertyValue pV : hilfsVector) {
-			System.out.println(pV);
-		}
+//		User u = new User();
+//		u.setGoogleID(666);
+//
+//		
+//		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
+//		hilfsVector = PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(u);
+//		
+//		
+//		
+//		for (PropertyValue pV : hilfsVector) {
+//			System.out.println(pV);
+//		}
 		
 		
 		
@@ -147,21 +153,29 @@ public class PropertyValueTest {
 		
 		*/
 		
-//		Property p = new Property("Sternzeichen");
-//		p.setId(5);
+
 //		User kimLy = new User();
+//		kimLy.setGoogleID(0);
+//		kimLy.setGMail("kl055@hdm-stuttgart.de");
 //		PropertyValue pv = new PropertyValue();
-//		Contact c = new Contact();
-//		c.setBo_Id(106);
+//		pv.setValue("Kim-Ly");
+		//Property p = new Property();
+		//System.out.println(p.getId());
+		//Contact c = new Contact();
+		//c.setBo_Id(106);
+//		c.setOwner(kimLy);
 //		pv.setContact(c);
 //		pv.setOwner(kimLy);
-//		pv.setProp(p);
+//		pv.setProp(PropertyMapper.propertyMapper().findBy(1));
 //		pv.getOwner().setGoogleID(0);
 //		pv.getOwner().setGMail("default@sys.de");
 //		pv.setValue("Fische");
-//		
-//		
-//		//PropertyMapper.propertyMapper().insert(p);
+		
+		
+		
+		//UserMapper.userMapper().insert(kimLy);
+		//ContactMapper.contactMapper().insertContact(c);
+		//PropertyValueMapper.propertyValueMapper().insert(pv);
 //		
 //		PropertyValueMapper.propertyValueMapper().insert(pv);
 		// PropertyValueMapper.propertyValueMapper().deleteAll();

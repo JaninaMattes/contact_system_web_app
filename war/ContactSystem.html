@@ -8,14 +8,8 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
-    <!--                                                               -->
-    <!-- Consider inlining CSS to reduce the number of requested files -->
-    <!--                                                               -->
     <link type="text/css" rel="stylesheet" href="ContactSystem.css">
 
-    <!--                                           -->
-    <!-- Any title is fine                         -->
-    <!--                                           -->
     <title>Contact System</title>
     
     <!--                                           -->
@@ -46,9 +40,26 @@
 
 
 	<div id="TopLevelFrame">
-		<div id="Header"><h1>BankVerwaltung-Demo</h1></div>
-		<div id="Navigator"></div>
-		<div id="Details"></div>
+	<!-- TODO: Header ersetzen durch Widget mit Logo und Titel -->
+		<div id="Header"><h1>Kontaktsystem</h1></div>
+		
+		<table>
+			<tr>
+				<td>
+					<!-- Dieses div nimmt den Navigator auf der linken Seite des Bildschirms auf -->
+					<div id="Navigator">Navigation</div>
+				</td>
+				<td>
+					<!-- In diesem div wird eine Liste von Elementen angezeigt -->
+					<div id ="Liste">Liste</div>
+				</td>
+				<td>
+					<!-- In diesem div werden die einzelnen Elemente angezeigt und bearbeitet -->
+					<div id="Details">Details</div>
+				</td>
+			</tr>
+		</table>
+			
 		<div id="Trailer">Copyright Hochschule der Medien, Stuttgart</div>
 	</div>
 
