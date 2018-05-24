@@ -143,23 +143,10 @@ public class PropertyValueMapper {
 
 	public void deleteByContact(int id) {
 		
-		
-
-		Connection con = DBConnection.connection();
-
-		try {
-			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue " 
-					+ "WHERE PropertyValue.contact_ID = ? "
-					);
-			stmt.setInt(1, id);
-			stmt.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		for(PropertyValue pv : findByContactID(id)){
+			delete(pv);
 		}
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		
 	}
 
 	/*
@@ -179,24 +166,9 @@ public class PropertyValueMapper {
 
 	public void deleteByProp(int property_id) {
 		
-		
-
-		Connection con = DBConnection.connection();
-
-		try {
-			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue " 
-					+ "WHERE PropertyValue.property_ID = ?"
-					);
-			stmt.setInt(1, property_id);
-			stmt.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		for(PropertyValue pv : findByPropertyID(property_id)){
+			delete(pv);
 		}
-		
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(property_id);
 
 	}
 
@@ -466,14 +438,19 @@ public class PropertyValueMapper {
 		 
 	 }
 
+	 
+	 public Vector<PropertyValue> findBy(Contact c) {
+		 return findByContactID(c.getBo_Id());
+	 }
+	 
+	 
 	/*
 	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Kontakte
 	 * ContactMapper, 
 	 */
 
-	public Vector<PropertyValue> findBy(Contact c) {
+	public Vector<PropertyValue> findByContactID(int contactID) {
 
-		c = ContactMapper.contactMapper().findContactById(c.getBo_Id());
 		
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
@@ -485,7 +462,7 @@ public class PropertyValueMapper {
 			PreparedStatement stmt = con.prepareStatement
 					("SELECT pv.* "
 					+ "FROM PropertyValue pv "
-					+ "WHERE pv.contact_ID =" + c.getBo_Id() 
+					+ "WHERE pv.contact_ID =" + contactID
 					);
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
@@ -511,12 +488,18 @@ public class PropertyValueMapper {
 		return null;
 	}
 
+	public Vector<PropertyValue> findBy(Property p) {
+		return findByPropertyID(p.getId());
+		
+	}
+	
+	
 	/**
 	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Eigenschaft
 	 * 
 	 */
 
-	public Vector<PropertyValue> findBy(Property p) {
+	public Vector<PropertyValue> findByPropertyID(int propertyID) {
 		//System.out.println("PV-FindBy Methode");
 
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
@@ -534,7 +517,7 @@ public class PropertyValueMapper {
 					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
 					+ "WHERE PropertyValue.property_ID = ? "
 					);
-					stmt.setInt(1, p.getId());
+					stmt.setInt(1, propertyID);
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
 

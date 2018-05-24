@@ -62,6 +62,7 @@ public class ContactMapper {
 	 * @param id
 	 */
 	public void deleteContactByID(int id) {
+		System.out.println("Delete Contact");
 		PropertyValueMapper.propertyValueMapper().deleteByContact(id);
 		Connection con = DBConnection.connection();
 		try {
