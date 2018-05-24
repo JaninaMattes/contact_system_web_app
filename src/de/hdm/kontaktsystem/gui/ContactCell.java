@@ -28,7 +28,11 @@ public class ContactCell extends AbstractCell<Contact> {
 		      sb.appendHtmlConstant("</td>"
 		    		  + "<td>");
 		      
-		      //TODO: if 
+		      /**
+		       * Mit einer If-Abfrage herausfinden ob der Kontakt ein mit dem User geteilter Kontakt 
+		       * oder ein vom User selbst erzeugter Kontakt ist.
+		       */
+		      //TODO: IF-Abfrage
 		      
 		      sb.appendHtmlConstant("<td>" 
 		    		  + "<tr>"
