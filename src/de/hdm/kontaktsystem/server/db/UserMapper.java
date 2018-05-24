@@ -134,9 +134,8 @@ public class UserMapper {
 	 */
 	public void deleteAll(){
 		
-
-		ParticipationMapper.participationMapper().deleteAllParticipations();
-		
+		ContactMapper.contactMapper().deleteAllContacts();
+		ContactListMapper.contactListMapper().deleteAllContactList();
 		
 		Connection con = DBConnection.connection();
 		try{
@@ -145,21 +144,27 @@ public class UserMapper {
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public void delete(User user){
+		deleteByID(user.getGoogleID());
 	}
 	
 	/**
 	 * Delete the <code>User</code> object with the param id
 	 * @param id
 	 */
-	public void delete(User user){
+	public void deleteByID(double id){
 		
-		ParticipationMapper.participationMapper().deleteParticipationForOwner(user);
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByUserId(user);
+
+		ContactMapper.contactMapper().deleteAllContactsByUser(id);
+		ContactListMapper.contactListMapper().deleteContactListByUserId(id);
 		
 		Connection con = DBConnection.connection();
 		try{
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM User WHERE ID = ?");
-			stmt.setDouble(1, user.getGoogleID());
+			stmt.setDouble(1, id);
 			stmt.executeUpdate();
 		}catch(SQLException e){
 			e.printStackTrace();
