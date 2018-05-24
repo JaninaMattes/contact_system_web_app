@@ -69,15 +69,16 @@ public class PropertyValueTest {
 		
 		User u = new User();
 		u.setGoogleID(0);
-		Property prop = new Property();
-		prop.setId(1);
+
 		
 		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
 		hilfsVector = PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(u);
 		
-		for (PropertyValue pV : hilfsVector) {
-			System.out.println(pV);
-		}
+		
+		
+//		//for (PropertyValue pV : hilfsVector) {
+//			System.out.println(hilfsVector);
+//		//}
 		
 		
 		

@@ -107,7 +107,7 @@ public class PropertyValueMapper {
 
 	public void deleteByPropValue(int id) {
 
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		
 
 		Connection con = DBConnection.connection();
 
@@ -122,6 +122,7 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 
 	}
 
@@ -142,23 +143,10 @@ public class PropertyValueMapper {
 
 	public void deleteByContact(int id) {
 		
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
-
-		Connection con = DBConnection.connection();
-
-		try {
-			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue " 
-					+ "WHERE PropertyValue.contact_ID = ? "
-					);
-			stmt.setInt(1, id);
-			stmt.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		for(PropertyValue pv : findByContactID(id)){
+			delete(pv);
 		}
-
+		
 	}
 
 	/*
@@ -178,21 +166,8 @@ public class PropertyValueMapper {
 
 	public void deleteByProp(int property_id) {
 		
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(property_id);
-
-		Connection con = DBConnection.connection();
-
-		try {
-			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue " 
-					+ "WHERE PropertyValue.property_ID = ?"
-					);
-			stmt.setInt(1, property_id);
-			stmt.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		for(PropertyValue pv : findByPropertyID(property_id)){
+			delete(pv);
 		}
 
 	}
@@ -432,17 +407,19 @@ public class PropertyValueMapper {
 //		for (Participation part : participationVector) {
 //			System.out.println(part);
 //		}
-		
+
+		// Vector für die Speicherung aller BusinessObjekte erzeugen
 		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
 		
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
 			 part.setReference(propVal);	
 			 propVal = this.findByKey(part.getReferenceID());	
-			 //System.out.println(propVal);
 			 part.setReference(propVal);
 			 part.setParticipant(user);	 
 			 //System.out.println(part);		     
+			 //System.out.println(propVal);
+			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
 			 if(propVal != null) {
 				  propertyResultVector.addElement(propVal);
 			     }
@@ -461,14 +438,19 @@ public class PropertyValueMapper {
 		 
 	 }
 
+	 
+	 public Vector<PropertyValue> findBy(Contact c) {
+		 return findByContactID(c.getBo_Id());
+	 }
+	 
+	 
 	/*
 	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Kontakte
 	 * ContactMapper, 
 	 */
 
-	public Vector<PropertyValue> findBy(Contact c) {
+	public Vector<PropertyValue> findByContactID(int contactID) {
 
-		c = ContactMapper.contactMapper().findContactById(c.getBo_Id());
 		
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
@@ -480,7 +462,7 @@ public class PropertyValueMapper {
 			PreparedStatement stmt = con.prepareStatement
 					("SELECT pv.* "
 					+ "FROM PropertyValue pv "
-					+ "WHERE pv.contact_ID =" + c.getBo_Id() 
+					+ "WHERE pv.contact_ID =" + contactID
 					);
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
@@ -506,12 +488,18 @@ public class PropertyValueMapper {
 		return null;
 	}
 
+	public Vector<PropertyValue> findBy(Property p) {
+		return findByPropertyID(p.getId());
+		
+	}
+	
+	
 	/**
 	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Eigenschaft
 	 * 
 	 */
 
-	public Vector<PropertyValue> findBy(Property p) {
+	public Vector<PropertyValue> findByPropertyID(int propertyID) {
 		//System.out.println("PV-FindBy Methode");
 
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
@@ -525,10 +513,11 @@ public class PropertyValueMapper {
 			PreparedStatement stmt = con.prepareStatement
 					("SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID, "
 					+ "Property.description "
-					+ "FROM PropertyValue INNER JOIN Property "
-					+ "ON PropertyValue.property_ID = ? "
+					+ "FROM PropertyValue "
+					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
+					+ "WHERE PropertyValue.property_ID = ? "
 					);
-					stmt.setInt(1, p.getId());
+					stmt.setInt(1, propertyID);
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
 
@@ -541,10 +530,11 @@ public class PropertyValueMapper {
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
 				//System.out.println("PV-id: " + propValue.getValue());
-				propValue.setProp(prop);				
+				propValue.setProp(prop);
+				
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
-				
+
 			}
 			return propValueResult;
 

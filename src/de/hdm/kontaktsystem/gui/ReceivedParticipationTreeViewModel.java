@@ -2,7 +2,7 @@ package de.hdm.kontaktsystem.gui;
 
 import com.google.gwt.view.client.TreeViewModel;
 
-public class ParticipationsTreeViewModel implements TreeViewModel {
+public class ReceivedParticipationTreeViewModel implements TreeViewModel {
 
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
