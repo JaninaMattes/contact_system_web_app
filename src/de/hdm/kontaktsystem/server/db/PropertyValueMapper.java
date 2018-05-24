@@ -107,7 +107,7 @@ public class PropertyValueMapper {
 
 	public void deleteByPropValue(int id) {
 
-		// BusinessObjectMapper.businessObjectMapper().update(id);
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 
 		Connection con = DBConnection.connection();
 
@@ -141,6 +141,8 @@ public class PropertyValueMapper {
 	 */
 
 	public void deleteByContact(int id) {
+		
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 
 		Connection con = DBConnection.connection();
 
@@ -175,6 +177,8 @@ public class PropertyValueMapper {
 	 */
 
 	public void deleteByProp(int property_id) {
+		
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(property_id);
 
 		Connection con = DBConnection.connection();
 
@@ -235,7 +239,6 @@ public class PropertyValueMapper {
 
 	public void deleteAllOwnership(User u) {
 
-		// TODO: @ Sandra --> ParticipationMapper fehlt?
 
 	}
 
@@ -245,6 +248,7 @@ public class PropertyValueMapper {
 	 *************************************************************************************/
 	
 	public void deleteAll() {
+		
 
 		Connection con = DBConnection.connection();
 		
