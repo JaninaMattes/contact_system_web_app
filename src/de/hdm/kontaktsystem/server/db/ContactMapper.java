@@ -147,14 +147,14 @@ public class ContactMapper {
 	}
 	
 	/**
-	 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
+	 *  Alle fï¿½r den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
 	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
 	 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
 	 */
 
 	public Vector<Contact> findAllSharedByMe (User user) {
 
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+		// Alle Participation-Objekte eines Users abrufen, welche fï¿½r Objekte kapseln, die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
 		
@@ -168,7 +168,7 @@ public class ContactMapper {
 			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
 			 Contact contact = new Contact();
 			 
-			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
+			    //Prï¿½fe ob bo eine Instanz enthï¿½lt von der Klasse Contact
 			 	if(bo instanceof Contact) {			 		
 			 		contact = (Contact) bo;
 			 		System.out.println("contact name " + contact.getpropertyValue());
@@ -383,7 +383,7 @@ public class ContactMapper {
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				
 				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findByKey(rs.getInt("pv.ID")));
-				System.out.println("contact id1 " + contact.getBo_Id());
+				//System.out.println("contact id1 " + contact.getBo_Id());
 				return contact;
 			}
 		} catch (SQLException e) {

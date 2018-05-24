@@ -120,9 +120,14 @@ public class PropertyValue extends BusinessObject {
 
 
 	  public String toString() {
-			return "PropertyValue: " + "\n" 
-					+ "Eigenschaft = " + prop.getDescription() + " \n" 
-					+ "Ausprägung = " + value;
+		  if(prop == null){
+			  return "PropertyValue: " + "\n" 
+						+ "Eigenschaft = leer \n" 
+						+ "Ausprägung = " + value;
+		  }
+		return "PropertyValue: " + "\n" 
+				+ "Eigenschaft = " + prop.getDescription() + " \n" 
+				+ "Ausprägung = " + value;
 		}
 
 

@@ -64,7 +64,13 @@ public class Contact extends BusinessObject {
 	
 	@Override
 	public String toString() {
-		return "Contact [owner=" + getOwner() + ", id=" + super.getBo_Id() + ", Eigenschaft = "
+
+		if(propertyValue == null){
+			return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = leer Ausprägung = leer ]";
+		}
+		
+		return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = "
+
 				+ propertyValue.getProp() + "Ausprägung =" + propertyValue.getValue() + "]";
 	}
 
@@ -92,7 +98,7 @@ public class Contact extends BusinessObject {
 		if (getClass() != obj.getClass())
 			return false;
 		Contact other = (Contact) obj;
-		if (super.getBo_Id() != other.getBo_Id())
+		if (getBo_Id() != other.getBo_Id())
 			return false;
 		if (getOwner() == null) {
 			if (other.getOwner() != null)
