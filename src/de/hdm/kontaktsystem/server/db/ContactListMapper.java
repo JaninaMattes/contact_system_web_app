@@ -124,7 +124,9 @@ public class ContactListMapper {
 		
 	}
 
-	
+	public Vector<ContactList> findContactListByUser(User user) {
+		return findContactListByUser(user.getGoogleID());
+	}
 	/**
 	 * Alle Kontaktlisten eines Users finden.
 	 * 
@@ -132,13 +134,13 @@ public class ContactListMapper {
 	 * @return
 	 */
 
-	public Vector<ContactList> findContactListByUser(User user) {
+	public Vector<ContactList> findContactListByUser(double userID) {
 		Vector<ContactList> cll = new Vector<ContactList>();
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE user_ID = ?");
-			stmt.setDouble(1, user.getGoogleID());
+			stmt.setDouble(1, userID);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				ContactList cl = new ContactList();
@@ -256,6 +258,7 @@ public class ContactListMapper {
 			 //System.out.println(bo.getClass());
 			 ContactList cl = new ContactList();			 
 			 //System.out.println("bo gefunden: " + bo.getBo_Id());
+
 			 
 			 	if(bo instanceof ContactList) {			 		
 			 		cl = (ContactList) bo;
@@ -264,7 +267,7 @@ public class ContactListMapper {
 			 	}
 			}
 		
-		if(clResultVector.isEmpty()) System.out.println("# no contacts found");	
+		if(clResultVector.isEmpty()) System.out.println("# no contactList found");	
 		
 		return clResultVector;		
 	}
@@ -306,6 +309,7 @@ public class ContactListMapper {
 			for(ContactList cl : clResult) {
 				ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
 				//System.out.println("# participation for contact deleted: " + cl.getBo_Id() );
+
 			}
 		}	
 	
@@ -355,6 +359,9 @@ public class ContactListMapper {
 		}
 	}
 
+	public void deleteContactList(ContactList cl) {
+		deleteContactListById(cl.getBo_Id());
+	}
 	/**
 	 * Eine Kontaktliste löschen, mit der übergebenden ID.
 	 * 
@@ -371,6 +378,7 @@ public class ContactListMapper {
 			e.printStackTrace();
 		}
 		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+
 	}
 	
 	
@@ -382,6 +390,7 @@ public class ContactListMapper {
 	
 	public void delete(ContactList cl) {
 		this.deleteContactListById(cl.getBo_Id());
+
 	}
 
 	
@@ -392,18 +401,11 @@ public class ContactListMapper {
 	 */
 
 	public void deleteContactListByUserId(Double userId) {
-		Connection con = DBConnection.connection();
-		try {
-			PreparedStatement stmt = con.prepareStatement(
-					"DELETE cl.*, bo.* "
-				  + "FROM ContactList cl "
-				  + "INNER JOIN BusinessObject bo ON cl.ID = bo.bo_ID Where bo.user_ID = ?" 
-				  );
-			stmt.setDouble(1, userId);
-			stmt.executeUpdate();
 
-		} catch (SQLException e) {
-			e.printStackTrace();
+		
+		for(ContactList cl : findContactListByUser(userId)){
+			this.deleteContactListById(cl.getBo_Id());
+
 		}
 		
 		Vector<ContactList> clList = new Vector <ContactList>();
@@ -421,7 +423,9 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE * FROM ContactList");
+			stmt.executeUpdate("DELETE cl.*, bo.* FROM ContactList cl "
+					+ "INNER JOIN BusinessObject bo "
+					+ "WHERE cl.ID = bo.bo_ID");
 
 		}catch(SQLException e){
 			e.printStackTrace();

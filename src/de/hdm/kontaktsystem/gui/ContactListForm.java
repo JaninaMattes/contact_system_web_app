@@ -1,6 +1,6 @@
 package de.hdm.kontaktsystem.gui;
 
-import java.awt.Label;
+
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -8,13 +8,15 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
+import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
-import de.hdm.thies.bankProjekt.client.gui.CustomerForm.deleteCustomerCallback;
-import de.hdm.thies.bankProjekt.shared.bo.Customer;
+import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 //Anzeige und Bearbeiten einer Kontaktliste
 
@@ -45,7 +47,7 @@ public class ContactListForm extends VerticalPanel{
 	 * Löschenbutton um eine Kontaktliste zu löschen.
 	 */
 
-	Button addButton = new Button ("Kontakt der Liste inzufügen");
+	Button addButton = new Button ("Kontakt der Liste hinzufügen");
 	Button shareButton = new Button ("Kontaktliste teilen");
 	Button deleteButton = new Button ("Kontakt aus eine Liste löschen");
 	Button deleteClButton = new Button ("Kontaktliste löschen");
@@ -85,6 +87,62 @@ public class ContactListForm extends VerticalPanel{
 		contactListGrid.setWidget(7, 1, deleteClButton);
 		
 	}
+
+
+	class addClickHandler implements ClickHandler {
+	public void onClick(ClickEvent event) {
+		if (contactListToDisplay == null) {
+			Window.alert("Keine Kontaktliste ausgewählt");
+			} else {
+				
+			}
+	}
+}
+
+//class shareClickHandler implements ClickHandler {
+//	public void onClick(ClickEvent event) {
+//		if (contactListToDisplay == null) {
+//			Window.alert("Keine Kontaktliste ausgewählt");
+//		} else {
+//			contactSystemVerwaltung.
+//		}
+//	}
+//}
+
+/**
+ * ClickHandler zum Löschen eines Kontaktes in einer Kontaktliste
+ */
+
+class DeleteClickHandler implements ClickHandler {
+	
+	public void onClick(ClickEvent event) {
+		if (contactListToDisplay == null) {
+			Window.alert("Keinen Kontaktliste ausgewählt");
+		}else {
+			contactSystemVerwaltung.delete(contactListToDisplay, 
+					new deleteContactCallback(contactListToDisplay));
+		}
+	}
+}
+
+class deleteContactCallback implements AsyncCallback<Void> {
+	
+	ContactList contactList = null;
+	
+	deleteContactCallback(ContactList cl){
+		contactList = cl;
+		}
+	
+	public void onFailure(Throwable caught) {
+		Window.alert("Löschen eines Kontaktes fehlgeschlagen");
+	}
+	
+	public void onSuccess(Void result) {
+		if (contactList != null) {
+			setSelected(null);
+			cltvm.removeContactList(contactList);
+		}
+	}
 }
 
 /**
@@ -93,18 +151,17 @@ public class ContactListForm extends VerticalPanel{
  *
  */
 
-private class DeleteClClickHandler implements ClickHandler {
+class DeleteClClickHandler implements ClickHandler {
 
 	@Override
 	public void onClick(ClickEvent event) {
 		if (contactListToDisplay == null) {
-			Window.alert("keine KontaktListe ausgewählt");
+			Window.alert("keine Kontaktliste ausgewählt");
 		} else {
-			contactSystemVerwaltung.delete(contactListToDisplay,
+			ContactSystemAdministrationImpl.deleteContactList(contactListToDisplay,
 					new deleteContactListCallback(contactListToDisplay));
 		}
 	}
-}
 
 class deleteContactListCallback implements AsyncCallback<Void> {
 
@@ -128,3 +185,43 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 	}
 }
 
+	/**
+	 *  cstvm setter
+	 */
+
+	void setCStvm(ContactListsTreeViewModel cltvm) {
+	this.cltvm = cltvm;
+	}
+
+	void setSelected(ContactList cl) {
+		if (cl != null) {
+			contactListToDisplay = cl;
+			deleteButton.setEnabled(true);
+			nameContactList.setText(p.getParticipant().getContact().getpropertyValue().getName());
+			
+			if(cl.getReferencedObject() instanceof Contact) {
+		    	  Contact c = (Contact) p.getReferencedObject();
+		    	  sharedObject.setText(c.getpropertyValue().getName());
+		    	  objectType.setText("Kontakt");
+		      }else if(p.getReferencedObject() instanceof ContactList) {
+		    	  ContactList cl = (ContactList) p.getReferencedObject();
+		    	  objectType.setText("Kontaktliste");
+		      }else if(p.getReferencedObject() instanceof PropertyValue) {
+		    	  PropertyValue pv = (PropertyValue) p.getReferencedObject();
+		    	  objectType.setText("Eigenschaftswert");
+		      }
+			
+			sharedDate.setText(p.getReferencedObject().getModifyDate().toString());
+			
+		} else {
+			nameContactList.setText("");
+			firstNameContact.setText("");
+			lastNameContact.setText("");
+			//sharedContact.setText("");
+
+			deleteButton.setEnabled(false);
+		}
+	}
+
+}
+}

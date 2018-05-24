@@ -210,6 +210,7 @@ public class ContactMapper {
 			    
 			    //Pr�fe ob bo eine Instanz enth�lt von der Klasse Contact
 			 	if(bo instanceof Contact) {			 		
+
 			 		contact = (Contact) bo;
 			 		System.out.println("contact name " + bo);
 			 		contactResultVector.addElement(contact);
@@ -534,6 +535,11 @@ public class ContactMapper {
 		}
 
 		return contact;
+	}
+
+	public Vector<Contact> findAllContactsByUser(User user) {
+		
+		return findAllContactsByUser(user.getGoogleID());
 	}
 
 }

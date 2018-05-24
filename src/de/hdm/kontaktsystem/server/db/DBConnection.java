@@ -18,6 +18,7 @@ public class DBConnection {
 	//private static String url = "jdbc:mysql://google/ITProjekt?cloudSqlInstance=ITProjekt&socketFactory=com.google.cloud.sql.mysql.SocketFactory&user=root&password=n6obMwAe51M9lnrxT9&useSSL=false"; //LocalHost
 	private static String localUrl = "jdbc:mysql://85.183.140.53:8170/ITProjekt?user=ITProjekt&password=ITProjekt"; 
 	//private static String kimlyUrl = "jdbc:mysql://127.0.0.1:3306/itprojekt?user=root&password=";
+
 	
 	
 	public static Connection connection() {
