@@ -11,11 +11,6 @@ sowie den User selbst.
 
 public class Contact extends BusinessObject {
 
-	/**
-	 *  Eindeutige ID 
-	 */
-	
-	private int id;
 		
 	/**
 	 * Name des Kontakts
