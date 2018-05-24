@@ -123,11 +123,11 @@ public class PropertyValue extends BusinessObject {
 		  if(prop == null){
 			  return "PropertyValue: " + "\n" 
 						+ "Eigenschaft = leer \n" 
-						+ "Ausprägung = " + value;
+						+ "Ausprägung = " + value+ " \n";
 		  }
 		return "PropertyValue: " + "\n" 
 				+ "Eigenschaft = " + prop.getDescription() + " \n" 
-				+ "Ausprägung = " + value;
+				+ "Ausprägung = " + value+ " \n";
 		}
 
 
