@@ -165,7 +165,7 @@ public class ContactMapper {
 		for (Participation part : participationVector) {
 			 System.out.println("part id:" + part.getReferenceID());
 			 
-			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBy(part.getReferenceID());
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
 			 Contact contact = new Contact();
 			 
 			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
@@ -199,13 +199,14 @@ public class ContactMapper {
 		for (Participation part : participationVector) {
 			System.out.println("part id:" + part.getReferenceID());
 			 
-			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBy(part.getReferenceID());
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
 			 Contact contact = new Contact();
 			 
+			 System.out.println("bo gefunden: " + bo.getBo_Id());
 			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
-			 	if(bo instanceof Contact) {			 		
+			 	if(bo.getClass().isInstance(contact)) {			 		
 			 		contact = (Contact) bo;
-			 		System.out.println("contact name " + contact.getpropertyValue());
+			 		System.out.println("contact name " + bo);
 			 		contactResultVector.addElement(contact);
 			 	}
 		}
