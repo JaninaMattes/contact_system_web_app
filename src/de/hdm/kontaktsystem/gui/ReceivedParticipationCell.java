@@ -5,7 +5,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 import de.hdm.kontaktsystem.shared.bo.Participation;
 
-public class ParticipationCell extends AbstractCell<Participation> {
+public class ReceivedParticipationCell extends AbstractCell<Participation> {
 
 	@Override
 	public void render(Context context, Participation value, SafeHtmlBuilder sb) {
