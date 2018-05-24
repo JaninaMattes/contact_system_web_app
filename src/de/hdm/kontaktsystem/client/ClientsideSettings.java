@@ -22,7 +22,6 @@ public class ClientsideSettings extends CommonSettings {
    * Remote Service Proxy zur Verbindungsaufnahme mit dem Serverseitgen Dienst
    * namens <code>ContactSystemAdministration</code>.
    */
-
   private static ContactSystemAdministrationAsync contactSystemAdministration = null;
 
   /**
@@ -31,6 +30,7 @@ public class ClientsideSettings extends CommonSettings {
    */
   private static ReportGeneratorAsync reportGenerator = null;
 
+  //Logger notwendig?
   /**
    * Name des Clientseitigen Loggers.
    */
@@ -70,6 +70,8 @@ public class ClientsideSettings extends CommonSettings {
   }
 
  
+  
+  
   /*
    
    /

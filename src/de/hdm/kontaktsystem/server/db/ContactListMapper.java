@@ -11,7 +11,6 @@ import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
-import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 public class ContactListMapper {
@@ -93,7 +92,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Eine Kontaktliste �ber ihre ID finden
+	 * Eine Kontaktliste über ihre ID finden
 	 * 
 	 * @param id
 	 * @return ContactList
@@ -153,10 +152,24 @@ public class ContactListMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return cll;
 	}
 
+	
+	/**
+	 * Alle Konaktlisten eines Users finden anhand seiner User-ID
+	 * 
+	 * @param user_id
+	 * @return ContactList Vector
+	 */
+
+	public Vector <ContactList> findContactListByUserID(double user_id){
+		User u = new User();
+		u = UserMapper.userMapper().findById(user_id);
+		return this.findContactListByUser(u);
+	}
+	
+	
 	/**
 	 * Kontaktlisten durch Namensssuche finden.
 	 * 
@@ -189,16 +202,15 @@ public class ContactListMapper {
 	}
 	
 	/**
-	 *  Alle fuer den Benutzer in der Applikation zugaenglichen Kontaktlisten <code>ContactList</code> - Objekte
+	 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
 	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
-	 *  und die Ergebnisse zurueckgegeben
+	 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
 	 */
 
 	public Vector<ContactList> findAllSharedByMe (User user) {
 
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-				Vector<Participation> participationVector = new Vector<Participation>();		
-				participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
+		Vector<Participation> participationVector = new Vector<Participation>();		
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
 				// Vector für die Speicherung aller BusinessObjekte erzeugen
 				Vector<ContactList> contactListVector = new Vector <ContactList>(); 		
 				//System.out.println(participationVector);
@@ -220,61 +232,85 @@ public class ContactListMapper {
 				
 			}
 	
-	public Vector<ContactList> findAllSharedByOthersToMe (User user) {
+	
 
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+	
+	/**
+	 * Alle für den Benutzer in der Applikation geteilte Kontaktelisten <code>ContactList</code> -Objekte
+	 * künnen über den Aufruf dieser Methode aus der DB zur�ck gegeben werden.
+	 * 
+	 * @param user-Objekt
+	 * @return Vector ContactList-Objekte
+	 */
+
+	public Vector<ContactList> findAllSharedByOthersToMe(User user) {
+
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
-//		for (Participation part : participationVector) {
-//			System.out.println(part);
-//		}
-
-		// Vector für die Speicherung aller BusinessObjekte erzeugen
-		Vector<ContactList> contactListResultVector = new Vector <ContactList>(); 
+		Vector<ContactList> clResultVector = new Vector <ContactList>(); 		
 		
 		for (Participation part : participationVector) {
-			ContactList cl = new ContactList();
-			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());	
-			 //System.out.println(part);		     
-			 //System.out.println(propVal);
-			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
-			 if(bo instanceof ContactList) {			 		
-				 cl = (ContactList) bo;
-			 		//System.out.println("Ausprägung " + propVal.getProp());
-				 contactListResultVector.addElement(cl);		     
-			 }
+			 System.out.println("part id:" + part.getReferenceID());	
+			 
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+			 System.out.println(bo.getClass());
+			 ContactList cl = new ContactList();			 
+			 System.out.println("bo gefunden: " + bo.getBo_Id());
+			 
+			 	if(bo instanceof ContactList) {			 		
+			 		cl = (ContactList) bo;
+			 		System.out.println("contactList name " + bo);
+			 		clResultVector.addElement(cl);
+			 	}
+			}
+		
+		if(clResultVector.isEmpty()) System.out.println("# no contacts found");	
+		
+		return clResultVector;		
+	}
+	
+	
+	
+	   
+		/**
+		 * Methode zur Löschung aller von einem User erstellten Kontaktlisten <code>ContactList</code> -Objekte,
+		 * welche im System mit anderen Nutzern geteilt wurden. 
+		 * @param user
+		 */
+		
+		public void deleteAllSharedByMe(User user) {
+			
+			Vector <ContactList> clResult = new Vector <ContactList>();
+			clResult = this.findAllSharedByMe(user);
+			
+			for(ContactList cl : clResult) {
+				ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(cl);
+				this.deleteContactListById(cl.getBo_Id());
+				System.out.println("# shared contact deleted: " + cl.getBo_Id() );
+			}
 		}
-		return contactListResultVector;
 		
-	}
-
-	
-	/**
-	 * Die Methode erm�glicht das l�schen aller f�r einen User geteilten <code>ContactListen</code>, 
-	 * sowie deren enthaltene Kontakte <code>Contact</code> und deren PropertyValue-Objekte
-	 */
-	
-	public void deleteAllSharedForMe() {
+		/**
+		 * Eine Methode zur Löschung aller Verbindungen in der Participation Tabelle der DB.
+		 * Dies führt dazu, dass die für einen Nutzer geteilten Objekte nicht mehr aufgerufen werden können.
+		 * Die Teilhaberschaft ist damit beendet. 
+		 * 
+		 */
 		
-	}
-	
-	/**
-	 * Funktion zum l�schen aller geteilten ContactListe - Objekte
-	 * @param user 
-	 * 
-	 */
+		public void deleteAllSharedByOthersToMe(User user) {
+			
+			Vector <ContactList> clResult = new Vector <ContactList>();
+			clResult = this.findAllSharedByOthersToMe(user);		
 
-	public void deleteAllSharedByMe() {
-
-				
-
-	}
-	
-	
+			for(ContactList cl : clResult) {
+				ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
+				System.out.println("# participation for contact deleted: " + cl.getBo_Id() );
+			}
+		}	
 	
 
 	/**
-	 * Name der Liste ver�ndern.
+	 * Name der Liste verändern.
 	 * 
 	 * @param cl
 	 */
@@ -287,7 +323,6 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement("UPDATE ContactList SET contactList_name = ? WHERE ID = ?");
 			stmt.setString(1, cl.getName());
 			stmt.setInt(2, cl.getBo_Id());
-
 			stmt.execute();
 
 		} catch (SQLException e) {
@@ -295,6 +330,7 @@ public class ContactListMapper {
 		}
 	}
 
+	
 	/**
 	 * Eine Kontaktliste erstellen.
 	 * 
@@ -302,9 +338,7 @@ public class ContactListMapper {
 	 */
 
 	public void insertContactList(ContactList cl) {
-		
-		System.out.println("Create ContactList: " + cl);
-		
+			
 		BusinessObjectMapper.businessObjectMapper().insert(cl);
 		Connection con = DBConnection.connection();
 
@@ -314,14 +348,14 @@ public class ContactListMapper {
 			stmt.setInt(1, cl.getBo_Id());
 			stmt.setString(2, cl.getName());
 			stmt.execute();
-
+			System.out.println("Create ContactList: " + cl);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Eine Kontaktliste l�schen, mit der �bergebenden ID.
+	 * Eine Kontaktliste löschen, mit der übergebenden ID.
 	 * 
 	 * @param id
 	 */
@@ -329,15 +363,29 @@ public class ContactListMapper {
 	public void deleteContactListById(int id) {
 		Connection con = DBConnection.connection();
 		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM ContactList Where ID = " + id);
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM ContactList Where ID = ?");
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+	}
+	
+	
+	/**
+	 *  Eine Kontaktliste löschen anhand deren übergebenen ContactList-Objekts
+	 *  
+	 *  @param cl
+	 */
+	
+	public void delete(ContactList cl) {
+		this.deleteContactListById(cl.getBo_Id());
 	}
 
+	
 	/**
-	 * Es l�scht alle Kontakte, welche zu einer userID geh�ren.
+	 * Es löscht alle Kontakte, welche zu einer userID gehören.
 	 * 
 	 * @param userId
 	 */
@@ -345,20 +393,30 @@ public class ContactListMapper {
 	public void deleteContactListByUserId(Double userId) {
 		Connection con = DBConnection.connection();
 		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("DELETE cl.*, bo.* FROM ContactList cl "
-					+ "INNER JOIN BusinessObject bo ON cl.ID = bo.bo_ID Where bo.user_ID =" + userId);
+			PreparedStatement stmt = con.prepareStatement(
+					"DELETE cl.*, bo.* "
+				  + "FROM ContactList cl "
+				  + "INNER JOIN BusinessObject bo ON cl.ID = bo.bo_ID Where bo.user_ID = ?" 
+				  );
+			stmt.setDouble(1, userId);
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		Vector<ContactList> clList = new Vector <ContactList>();
+		clList = this.findContactListByUserID(userId);
+		for(ContactList cl : clList) {
+			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBo_Id());
+		}
 	}
 
 	/**
-	 * Alle Kontaktlisten l�schen.
+	 * Alle Kontaktlisten löschen.
 	 */
-	public void deleteAllContactList() {
+	
+	public void deleteAllContactLists() {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
@@ -367,10 +425,16 @@ public class ContactListMapper {
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
+		
+		Vector<ContactList> clList = new Vector <ContactList>();
+		clList = this.findAllContactLists();
+		for(ContactList cl : clList) {
+			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBo_Id());
+		}
 	}
 
 	/**
-	 * Einen Kontakt zur Kontaktliste hinzuf�gen.
+	 * Einen Kontakt zur Kontaktliste hinzufögen.
 	 * 
 	 * @param cl
 	 * @param c
@@ -379,7 +443,6 @@ public class ContactListMapper {
 	public void addContactToContactlist(ContactList cl, Contact c) {
 
 		Connection con = DBConnection.connection();
-
 		try {
 			PreparedStatement stmt = con
 					.prepareStatement("INSERT INTO Contact_ContactList (Contact_ID, ContactList_ID) VALUES (?, ?)");

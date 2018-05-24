@@ -135,7 +135,7 @@ public class UserMapper {
 	public void deleteAll(){
 		
 		ContactMapper.contactMapper().deleteAllContacts();
-		ContactListMapper.contactListMapper().deleteAllContactList();
+		ContactListMapper.contactListMapper().deleteAllContactLists();
 		
 		Connection con = DBConnection.connection();
 		try{
