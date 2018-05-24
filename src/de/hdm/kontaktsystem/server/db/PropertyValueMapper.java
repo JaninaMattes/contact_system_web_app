@@ -405,6 +405,7 @@ public class PropertyValueMapper {
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
 			 propVal = this.findByKey(part.getReferenceID());
+			 System.out.println(propVal);
 			 part.setReference(propVal);
 			 part.setParticipant(user);	 	
 			 	if(propVal != null) {
@@ -429,22 +430,19 @@ public class PropertyValueMapper {
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
 //		for (Participation part : participationVector) {
-//			
 //			System.out.println(part);
-//			
 //		}
-		// Vector für die Speicherung aller BusinessObjekte erzeugen
-		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
 		
+		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
 		
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
-			 Property prop = new Property();
 			 part.setReference(propVal);	
 			 propVal = this.findByKey(part.getReferenceID());	
-			 propVal.setProp(prop);
-			 System.out.println(propVal);
-			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 //System.out.println(propVal);
+			 part.setReference(propVal);
+			 part.setParticipant(user);	 
+			 //System.out.println(part);		     
 			 if(propVal != null) {
 				  propertyResultVector.addElement(propVal);
 			     }
