@@ -3,6 +3,7 @@ package de.hdm.kontaktsystem.gui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -11,6 +12,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 /**
@@ -69,49 +71,24 @@ public class ContactForm extends VerticalPanel{
 		vp.add(label);
 		vp.add(contactGrid);
 		vp.add(Buttonpanel);
-		//Die Buttons werden auf dem HorizontalPanel angeordnet
-		Buttonpanel.add(Kontaktloeschen);
-		Buttonpanel.add(Kontaktteilen);
-		Buttonpanel.add(Kontaktbearbeiten);
 		
-		//Chlickhandler
+		//Die Buttons werden auf dem HorizontalPanel angeordnet
 		
 		Kontaktloeschen.addClickHandler(new loeschenClickHandler());
+		Kontaktloeschen.setEnabled(false);
+		Buttonpanel.add(Kontaktloeschen);
+		
 		Kontaktteilen.addClickHandler(new teilenClickHandler());
+		Buttonpanel.add(Kontaktteilen);
+		
 		Kontaktbearbeiten.addClickHandler(new bearbeitenClickHandler());
+		Buttonpanel.add(Kontaktbearbeiten);
 		
 	}
 
 		
 		
-
-	
-
-	/**
-	 * 
-	 * in ContactSystemClass hinzufügen
-	 *
-	 */
-	//private class hinzufClickHandler implements ClickHandler {
-
-	//@Override
-			//public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				//TODO: def. was passieren soll wenn man auf den Button klickt
-					//If-Abfrage um zu prüfen ob etwas in die Textbox eingegeben wurde
-				//if(TextBoxName != null) {
-					
-					//Name für einen Kontakt eingeben
-					//String name = TextBoxName.getText();
-					//TODO: Verbindung
-					//angezeigterKontakt.getpropertyValue().setName(TextBoxName.getText());
-					
-				//} else {
-				//	Window.alert("kein Kunde eingegeben");
-				//}
-		//	}
-			
-		//}
+		//Klassen erstellen welche die Clickhandler-Klasse implementieren
 	
 		//ChlickHandler um einen Kontakt zu loeschen (Bei Klick auf den "Kontakt loeschen"-Button)
 		private class loeschenClickHandler implements ClickHandler {
@@ -151,7 +128,43 @@ public class ContactForm extends VerticalPanel{
 						//TODO: Verbindung
 					}
 				}
-			
+			class deleteContactCallback implements AsyncCallback<Void> {
+
+				Contact contact = null;
+
+				deleteContactCallback(Contact c) {
+					contact = c;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Löschen des Kontakts ist fehlgeschlagen!");
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					if (contact != null) {
+						setSelected(null);
+						ctvm.removeContact(contact);
+					}
+				}
+
+
+			}
+			// catvm setter
+			void setCatvm(ContactsTreeViewModel ctvm) {
+				this.ctvm = ctvm;
+			}
+			/**
+			 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
+			 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
+			 * gefüllt bzw. gelöscht.
+			*/
+				private void setSelected(Object object) {
+					// TODO Auto-generated method stub
+					
+				}
 
 }
+
 
