@@ -27,16 +27,15 @@ public class DBConnection {
 			try {
 				// Laden des Treibers
 				DriverManager.registerDriver(new AppEngineDriver());
-				System.out.println(SystemProperty.environment.value());
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
 					
-					System.out.println("Load Google Driver");
+					//System.out.println("Load Google Driver");
                     // Load the class that provides the new
                     // "jdbc:google:mysql://" prefix.
                     Class.forName("com.mysql.jdbc.GoogleDriver");
                     url = googleUrl;
                 } else {
-                	System.out.println("Load MySQL Driver");
+                	//System.out.println("Load MySQL Driver");
                     // Local MySQL instance to use during development.
                 	Class.forName("com.mysql.jdbc.Driver");
                     url = localUrl;

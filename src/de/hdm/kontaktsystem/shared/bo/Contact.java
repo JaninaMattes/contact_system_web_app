@@ -11,11 +11,6 @@ sowie den User selbst.
 
 public class Contact extends BusinessObject {
 
-	/**
-	 *  Eindeutige ID 
-	 */
-	
-	private int id;
 		
 	/**
 	 * Name des Kontakts
@@ -37,12 +32,14 @@ public class Contact extends BusinessObject {
 	 * 
 	 */
 	
-	public Contact(PropertyValue pV, User owner) {
-		super.setOwner(owner);
+
+	public Contact(PropertyValue pV) {
 		this.propertyValue = pV;
 	}
 	
-	public Contact(PropertyValue pV) {
+	
+	public Contact(PropertyValue pV, User owner) {
+		super.setOwner(owner);
 		this.propertyValue = pV;
 	}
 
@@ -67,7 +64,13 @@ public class Contact extends BusinessObject {
 	
 	@Override
 	public String toString() {
-		return "Contact [owner=" + getOwner() + ", id=" + id + ", Eigenschaft = "
+
+		if(propertyValue == null){
+			return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = leer Ausprägung = leer ]";
+		}
+		
+		return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = "
+
 				+ propertyValue.getProp() + "Ausprägung =" + propertyValue.getValue() + "]";
 	}
 
@@ -95,7 +98,7 @@ public class Contact extends BusinessObject {
 		if (getClass() != obj.getClass())
 			return false;
 		Contact other = (Contact) obj;
-		if (id != other.id)
+		if (getBo_Id() != other.getBo_Id())
 			return false;
 		if (getOwner() == null) {
 			if (other.getOwner() != null)
