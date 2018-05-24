@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
@@ -59,9 +60,12 @@ public class ContactForm extends VerticalPanel{
 		
 		//TODO: While-Schleife um alle Eigenschaften eines Kontaktes anzuzeigen
 		while (angezeigterKontakt.getpropertyValue() != null) {
-			PropertyValue Eigenschaft = angezeigterKontakt.getpropertyValue();
+				PropertyValue Eigenschaft = angezeigterKontakt.getpropertyValue();	
+			}
+	
 			
-		}
+			
+		
 		
 		/**
 		 * Widgets/Panels anordnen
@@ -155,14 +159,24 @@ public class ContactForm extends VerticalPanel{
 			void setCatvm(ContactsTreeViewModel ctvm) {
 				this.ctvm = ctvm;
 			}
+			
 			/**
 			 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
 			 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
 			 * gefüllt bzw. gelöscht.
 			*/
-				private void setSelected(Object object) {
+				private void setSelected(Contact c) {
 					// TODO Auto-generated method stub
-					
+					if (c != null) {
+						angezeigterKontakt = c;
+						Kontaktloeschen.setEnabled(true);
+						TextBoxName.setText(c.getpropertyValue().getName());
+					} else {
+						TextBoxName.setText("");
+						//TODO: Andere Propertys + PropertyValues füllen bzw. löschen
+
+						Kontaktloeschen.setEnabled(false);
+					}
 				}
 
 }
