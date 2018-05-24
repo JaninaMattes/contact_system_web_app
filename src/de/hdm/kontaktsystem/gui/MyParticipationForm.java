@@ -2,6 +2,6 @@ package de.hdm.kontaktsystem.gui;
 
 //Anzeige und Bearbeiten einer Teilhaberschaft
 
-public class ParticipationForm {
+public class MyParticipationForm {
 	
 }

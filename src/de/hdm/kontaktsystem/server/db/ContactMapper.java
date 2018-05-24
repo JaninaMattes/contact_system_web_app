@@ -54,20 +54,7 @@ public class ContactMapper {
 	 * @param contact
 	 */
 	public void deleteContact(Contact contact) {
-		Connection con = DBConnection.connection();
-		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("DELET FROM CONTACT WHERE id = " + contact.getBo_Id());
-			
-			//loeschen der Eigenschaftsausprägungen eines Kontaktes
-			PropertyValueMapper.propertyValueMapper().deleteBy(contact); 
-			
-			BusinessObjectMapper.businessObjectMapper().deleteBusinessObject(contact);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		deleteContactByID(contact.getBo_Id());
 
 	}
 
@@ -77,14 +64,16 @@ public class ContactMapper {
 	 * @param id
 	 */
 	public void deleteContactByID(int id) {
+		PropertyValueMapper.propertyValueMapper().deleteByContact(id);
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM CONTACT WHERE ID = " + id);
+			stmt.executeUpdate("DELETE FROM Contact WHERE ID = " + id);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 	}
 
 	/**
@@ -404,8 +393,12 @@ public class ContactMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE contact SET status = " + contact.isShared_status() + "SET modificationDate = "
-					+ contact.getModifyDate() + "WHERE id = " + contact.getBo_Id());
+			stmt.executeUpdate("UPDATE contact SET status = " 
+					+ contact.isShared_status() 
+					+ " SET modificationDate = "
+					+ contact.getModifyDate() 
+					+ " WHERE id = " 
+					+ contact.getBo_Id());
 			
 			//TODO: UpdatePropertyValueBYContact Methode?
  			PropertyValueMapper.propertyValueMapper().UpdatePropertyValueByContact(contact);
