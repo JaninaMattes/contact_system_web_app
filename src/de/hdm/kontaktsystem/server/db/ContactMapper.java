@@ -162,7 +162,7 @@ public class ContactMapper {
 		//System.out.println(participationVector);
 		
 		for (Participation part : participationVector) {
-			System.out.println("part id:" + part.getReferenceID());
+			 System.out.println("part id:" + part.getReferenceID());
 			 
 			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBy(part.getReferenceID());
 			 Contact contact = new Contact();
