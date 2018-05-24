@@ -211,28 +211,29 @@ public class ContactListMapper {
 
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
-		
-		Vector<ContactList> clResultVector = new Vector <ContactList>(); 		
+				// Vector für die Speicherung aller BusinessObjekte erzeugen
+				Vector<ContactList> contactListVector = new Vector <ContactList>(); 		
+				//System.out.println(participationVector);
 				
-		for (Participation part : participationVector) {
-			 System.out.println("part id:" + part.getReferenceID());
-			 
-			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
-			 ContactList cl = new ContactList();
-			    System.out.println(bo.getClass());
-			 	
-			    if(bo instanceof ContactList) {			 		
-			 		cl = (ContactList) bo;
-			 		System.out.println("contactList id: " + cl.getBo_Id());
-			 		clResultVector.addElement(cl);		     
-			 }		
-		}	 	
-		if(clResultVector.isEmpty()) System.out.println("# no contacts found");			
-			
-		return clResultVector;
-		
-	}
+				for (Participation part : participationVector) { 		
+					
+					//System.out.println(part);
+					 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+					 //System.out.println(bo);
+					 ContactList contactList = new ContactList();	 
+					 //System.out.println(propVal); 	
+					 if(bo instanceof ContactList) {			 		
+						 contactList = (ContactList) bo;
+					 		//System.out.println("Ausprägung " + propVal.getProp());
+						 contactListVector.addElement(contactList);		     
+					 }
+				}
+				return contactListVector;
+				
+			}
 	
+	
+
 	
 	/**
 	 * Alle für den Benutzer in der Applikation geteilte Kontaktelisten <code>ContactList</code> -Objekte
@@ -242,7 +243,7 @@ public class ContactListMapper {
 	 * @return Vector ContactList-Objekte
 	 */
 
-	public Vector<ContactList> findAllSharedByOthersToMe (User user) {
+	public Vector<ContactList> findAllSharedByOthersToMe(User user) {
 
 		Vector<Participation> participationVector = new Vector<Participation>();		
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
@@ -267,6 +268,7 @@ public class ContactListMapper {
 		
 		return clResultVector;		
 	}
+	
 	
 	
 	   

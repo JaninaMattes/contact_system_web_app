@@ -68,11 +68,11 @@ public class PropertyValueTest {
 //						);
 		
 		User u = new User();
-		u.setGoogleID(0);
+		u.setGoogleID(666);
 
 		
 		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
-		hilfsVector = PropertyValueMapper.propertyValueMapper().findAllSharedByMe(u);
+		hilfsVector = PropertyValueMapper.propertyValueMapper().findAllSharedByOthersToMe(u);
 		
 		
 		
