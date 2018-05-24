@@ -134,7 +134,8 @@ public class UserMapper {
 	 */
 	public void deleteAll(){
 		
-		
+		ContactMapper.contactMapper().deleteAllContacts();
+		ContactListMapper.contactListMapper().deleteAllContactList();
 		
 		Connection con = DBConnection.connection();
 		try{
@@ -143,8 +144,7 @@ public class UserMapper {
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		ContactMapper.contactMapper().deleteAllContacts();
-		ContactListMapper.contactListMapper().deleteAllContactList();
+		
 	}
 	
 	public void delete(User user){
@@ -158,8 +158,8 @@ public class UserMapper {
 	public void deleteByID(double id){
 		
 
-//		ContactMapper.contactMapper().deleteAllContactsByUser(id);
-//		ContactListMapper.contactListMapper().deleteContactListByUserId(id);
+		ContactMapper.contactMapper().deleteAllContactsByUser(id);
+		ContactListMapper.contactListMapper().deleteContactListByUserId(id);
 		
 		Connection con = DBConnection.connection();
 		try{

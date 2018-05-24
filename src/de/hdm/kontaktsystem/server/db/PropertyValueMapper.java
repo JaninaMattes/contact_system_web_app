@@ -107,7 +107,7 @@ public class PropertyValueMapper {
 
 	public void deleteByPropValue(int id) {
 
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		
 
 		Connection con = DBConnection.connection();
 
@@ -122,6 +122,7 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 
 	}
 
@@ -142,7 +143,7 @@ public class PropertyValueMapper {
 
 	public void deleteByContact(int id) {
 		
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		
 
 		Connection con = DBConnection.connection();
 
@@ -158,7 +159,7 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 	}
 
 	/*
@@ -178,7 +179,7 @@ public class PropertyValueMapper {
 
 	public void deleteByProp(int property_id) {
 		
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(property_id);
+		
 
 		Connection con = DBConnection.connection();
 
@@ -194,6 +195,8 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(property_id);
 
 	}
 

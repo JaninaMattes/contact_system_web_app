@@ -36,7 +36,7 @@ public class DBTest {
 	
 	public static void main(String args[]){
 		
-		//createAll();
+		createAll();
 		//updateAll();
 		//findAll();
 		deleteAll();
@@ -246,7 +246,7 @@ public class DBTest {
 		System.out.println("Find All: " +pMapper.findAll());
 		System.out.println("Find by ID: " +pMapper.findBy(vPVID));
 		System.out.println("Find by Desc: " +pMapper.findBy("Name"));
-		System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
+		//System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
 		
 		
 		
@@ -264,18 +264,18 @@ public class DBTest {
 	
 	public static void deleteAll(){
 
-		double uID = 7.460720265931182e16;
+		double uID = 2.3862612474697788E16;
 		
 		System.out.println("\n ############ Test Contact ################ \n");
 		
-		//cMapper.deleteAllContactsByUser(uID);
+		cMapper.deleteAllContactsByUser(uID);
 		
 		System.out.println("\n ############ Test Poperty ################ \n");
 		
 
 		System.out.println("\n ############ Test ContactList ################ \n");
 
-		//clMapper.deleteContactListByUserId(uID);
+		clMapper.deleteContactListByUserId(uID);
 		
 		
 		System.out.println("\n ############ Test User ################ \n");
@@ -286,8 +286,6 @@ public class DBTest {
 		
 		
 		
-		
-	
 		
 		
 	
