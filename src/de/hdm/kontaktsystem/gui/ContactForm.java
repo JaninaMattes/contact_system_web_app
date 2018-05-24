@@ -167,7 +167,7 @@ public class ContactForm extends VerticalPanel{
 			 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
 			 * gefüllt bzw. gelöscht.
 			*/
-				private void setSelected(Contact c) {
+				void setSelected(Contact c) {
 					// TODO Auto-generated method stub
 					if (c != null) {
 						angezeigterKontakt = c;
