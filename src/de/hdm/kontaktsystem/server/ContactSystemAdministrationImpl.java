@@ -1,16 +1,13 @@
 package de.hdm.kontaktsystem.server;
 
+import java.util.Vector;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
-import de.hdm.kontaktsystem.server.db.ContactListMapper;
-import de.hdm.kontaktsystem.server.db.ContactMapper;
-import de.hdm.kontaktsystem.server.db.ParticipationMapper;
-import de.hdm.kontaktsystem.server.db.PropertyMapper;
-import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
-import de.hdm.kontaktsystem.server.db.UserMapper;
+
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
-import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.*;
+import de.hdm.kontaktsystem.server.db.*;
 
 
 
@@ -76,153 +73,135 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/*
-	public User createUser() {
-		return user;
+	* ***************************************************************************
+	* ABSCHNITT, User 
+	* ***************************************************************************
+	*/
+	
+	public void createUser(User user) {
+		uMapper.insert(user);
 		
 	}
 	
-	public Vector<User> getUserByName(String name){
-		return null;
+	public User getUserByEmail(String email){
+		return uMapper.findByEmail(email);
 		
 	}
 	
 	public User getUserByID(int id) {
-		return user;
+		return uMapper.findById(id);
 		
 	}
 	
-	public Vector <User> getAllUsers(){
-		return null;
+	public Vector<User> getAllUsers(){
+		return uMapper.findAll();
 		
 	}
 	
 	public void saveUser(User user) {
-		
+		//?????
 	}
 	
 	public void deleteUser(int id) {
-		
+		uMapper.deleteByID(id);;
+	}
+	
+	public void deleteUser(User user) {
+		uMapper.delete(user);;
 	}
 	
 	
+	/*
+	* ***************************************************************************
+	* ABSCHNITT, Beginn: Methoden 
+	* ***************************************************************************
+	*/
 	public Vector<Contact> getAllContacts(){
-		return null;
+		return cMapper.findAllContacts();
 		
 	}
 	
-	public Contact getContactFromUser(User user) {
-		return contact;
+	public Vector<Contact> getContactFromUser(User user) {
+		return cMapper.findAllContactsByUser(user);
 		
 	}
 	
-	public Contact getContactByID(int it) {
-		return contact;
+	public Contact getContactByID(int id) {
+		return cMapper.findContactById(id);
 		
 	}
 	
-	public Contact createContactForUser(User user) {
-		return contact;
+	public void createContactForUser(Contact contact) {
+		cMapper.insertContact(contact);
 		
 	}
 	
-	public void addContactToList(Contact contact, ContactList conList) {
+	public void addContactToList(Contact contact, ContactList contactList) {
+		clMapper.addContactToContactlist(contactList, contact);
+	}
+	
+	public void shareBusinessObjectWith(Participation part) {
+		partMapper.insertParticipation(part);
+	}
+	
+	
+	public Vector<PropertyValue> getPropertyValuesOfContact(Contact contact) {
+		return propValMapper.findBy(contact);
+	}
+	
+	
+	public void createContact(Contact contact) {
+		cMapper.insertContact(contact);
 		
 	}
 	
-
-	
-	
-	public void shareContactWith(Contact contact, User user) {
-		
-	}
-	
-	public void shareContactListWith(ContactList contactList, User user) {
-		
-	}
-	
-	public void sharePropertyValueOfContactWith(Contact contact, User user) {
-		
-	}
-	
-	public void sharePropertyOfContactWith(Contact contact, User user) {
-		
-	}
-	
-	public PropertyValue getPropertyValueOfContact(Contact contact) {
-		
-	}
-	
-	public Property getPropertyOfContact(Contact contact) {
-		return null;
-		
-	}
-	
-	public Contact createContact() {
-		return contact;
-		
-	}
-	
-	public ContactList createContactList() {
-		return null;
+	public void createContactList(ContactList contactList) {
+		clMapper.insertContactList(contactList);
 			
 	}
 	
-	public Property createProperty() {
-		return null;
+	
+	public void createPropertyValue(PropertyValue propertyValue) {
+		propValMapper.insert(propertyValue);
+	}
+	
+	
+	public Vector<ContactList> getContactListByName(String name) {
+		return clMapper.findContactListByName(name);
 		
 	}
 	
-	public PropertyValue createPropertyValue() {
-		return null;
-	}
-	
-	
-	public ContactList getContactListByName(String name) {
-		return null;
+	public void editUser(User user) {
+		uMapper.update(user);
 		
 	}
 	
-	public User editUser() {
-		return user;
+	public void editContact(Contact contact) {
+		cMapper.updateContact(contact);
 		
 	}
 	
-	public Contact editContact() {
-		return contact;
-		
-	}
 	
-	public Property editProperty() {
-		return null;
-		
-	}
-	
-	public PropertyValue editPropertyValue() {
-		return null;
+	public void editPropertyValue(PropertyValue propertyValue) {
+		propValMapper.update(propertyValue);
 	}
 	
 	
 	
 
 	public void deleteContact(Contact contact) {
-		
+		cMapper.deleteContact(contact);
 	}
 	
-	public void deleteContactList(ContactList contList) {
-		
+	public void deleteContactList(ContactList contactList) {
+		clMapper.deleteContactList(contactList);
 	}
 	
-	public void deleteProperty(Property prop) {
-		
+	
+	public void deletePropertyValue(int id) {
+		propValMapper.deleteByPropValue(id);
 	}
 	
-	public void deletePropertyValue(PropertyValue <T> propVal) {
-		
-	}
-	
-	*
-	*
-	*/
 	
 	
 }

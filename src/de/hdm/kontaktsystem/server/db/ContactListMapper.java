@@ -322,6 +322,9 @@ public class ContactListMapper {
 		}
 	}
 
+	public void deleteContactList(ContactList cl) {
+		deleteContactListById(cl.getBo_Id());
+	}
 	/**
 	 * Eine Kontaktliste l�schen, mit der �bergebenden ID.
 	 * 

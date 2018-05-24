@@ -315,19 +315,25 @@ public class DBTest {
 		
 		User user = uMapper.findById(vUID);
 		
-		//System.out.println(cMapper.findAllSharedByMe(user));
 		
-		System.out.println("\n \n \n");
+		System.out.println("\n ########### Contact ############## \n");
+		System.out.println("FASPV: " +cMapper.findAllSharedByMe(user));
+		System.out.println("FASBOTMPV: " +cMapper.findAllSharedByOthersToMe(user));
+		
+		
+		System.out.println("\n ######### ProptertyValue ########### \n");
 		
 		System.out.println("FASPV: " + pvMapper.findAllSharedByMe(user));
 		
-		System.out.println("\n \n \n");
-		
+		System.out.println("\n \n");
 		
 		System.out.println("FASBOTMPV: " +pvMapper.findAllSharedByOthersToMe(user));
 		
-		System.out.println("\n \n \n");
+		
+		
+		System.out.println("\n ########### ContactList ############## \n");
 		
 		System.out.println("FASC: " +clMapper.findAllSharedByMe(user));
+		System.out.println("FASBOTMPV: " +clMapper.findAllSharedByOthersToMe(user));
 	}
 }

@@ -44,7 +44,7 @@ public class UserMapper {
 	 * Returns all <code>User</code> objects from the database table 
 	 * @return Vector<User>
 	 */
-	public Vector <User> findAll(){
+	public Vector<User> findAll(){
 		
 		Connection con = DBConnection.connection();
 		try{

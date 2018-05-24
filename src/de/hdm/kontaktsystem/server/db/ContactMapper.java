@@ -186,8 +186,8 @@ public class ContactMapper {
 	}
 	
 	/**
-	 * Alle für den Benutzer in der Applikation geteilte Kontakte <code>Contact</code> Objekte
-	 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
+	 * Alle fï¿½r den Benutzer in der Applikation geteilte Kontakte <code>Contact</code> Objekte
+	 * kï¿½nnen ï¿½ber den Aufruf dieser Methode aus der DB zurï¿½ck gegeben werden.
 	 * 
 	 * @param user-Objekt
 	 * @return Vector Contact-Objekte
@@ -209,7 +209,7 @@ public class ContactMapper {
 			 Contact contact = new Contact();
 			 
 			 System.out.println("bo gefunden: " + bo.getBo_Id());
-			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
+			    //Prï¿½fe ob bo eine Instanz enthï¿½lt von der Klasse Contact
 			 	if(bo.getClass().isInstance(contact)) {			 		
 			 		contact = (Contact) bo;
 			 		System.out.println("contact name " + bo);
@@ -227,7 +227,7 @@ public class ContactMapper {
 	
     
 	/**
-	 * Methode zur Löschung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
+	 * Methode zur Lï¿½schung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
 	 * welche im System mit anderen Nutzern geteilt wurden. 
 	 * @param user
 	 */
@@ -238,7 +238,7 @@ public class ContactMapper {
 		contactResult = this.findAllSharedByMe(user);
 		
 		for(Contact contact : contactResult) {
-			// löschen aller Einträge in der Teilhaberschaft Tabelle Participation
+			// lï¿½schen aller Eintrï¿½ge in der Teilhaberschaft Tabelle Participation
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
 			this.deleteContact(contact);
 			System.out.println("# shared contact deleted: " + contact.getBo_Id() );
@@ -246,8 +246,8 @@ public class ContactMapper {
 	}
 	
 	/**
-	 * Eine Methode zur Löschung aller Verbindungen in der Participation Tabelle der DB.
-	 * Dies führt dazu, dass für einen Nutzer geteilten Objekte nicht mehr aufgerufen werden können.
+	 * Eine Methode zur Lï¿½schung aller Verbindungen in der Participation Tabelle der DB.
+	 * Dies fï¿½hrt dazu, dass fï¿½r einen Nutzer geteilten Objekte nicht mehr aufgerufen werden kï¿½nnen.
 	 * 
 	 */
 	
@@ -257,7 +257,7 @@ public class ContactMapper {
 		contactResult = this.findAllSharedByOthersToMe(user);		
 
 		for(Contact contact : contactResult) {
-			// löschen aller Verbindungen in der Teilhaberschaft Tabelle Participation für den User
+			// lï¿½schen aller Verbindungen in der Teilhaberschaft Tabelle Participation fï¿½r den User
 			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
 			System.out.println("# participation for contact deleted: " + contact.getBo_Id() );
 		}
@@ -534,6 +534,11 @@ public class ContactMapper {
 		}
 
 		return contact;
+	}
+
+	public Vector<Contact> findAllContactsByUser(User user) {
+		
+		return findAllContactsByUser(user.getGoogleID());
 	}
 
 }
