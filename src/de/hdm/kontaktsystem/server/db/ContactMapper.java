@@ -206,11 +206,13 @@ public class ContactMapper {
 			System.out.println("part id:" + part.getReferenceID());
 			 
 			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+			 System.out.println(bo.getClass());
 			 Contact contact = new Contact();
 			 
 			 System.out.println("bo gefunden: " + bo.getBo_Id());
+			    
 			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
-			 	if(bo.getClass().isInstance(contact)) {			 		
+			 	if(bo instanceof Contact) {			 		
 			 		contact = (Contact) bo;
 			 		System.out.println("contact name " + bo);
 			 		contactResultVector.addElement(contact);
