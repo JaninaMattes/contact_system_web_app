@@ -39,8 +39,6 @@ public class PropertyValueMapper {
 	 * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
 	 * 
 	 */
-
-	// Achtung in Aufrufkette denken -> Contact ruft insert Methode auf
 	
 	public void insert(PropertyValue pv) {
 
