@@ -15,6 +15,7 @@ public class PropertyValue extends BusinessObject {
 	private String value = null;
 	private Property prop = null;
 	private Contact contact = null;
+	private String name = null;
 	
 	//private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
@@ -81,6 +82,14 @@ public class PropertyValue extends BusinessObject {
 		this.contact = contact;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 
 	/*
 	 * <p>
@@ -115,6 +124,7 @@ public class PropertyValue extends BusinessObject {
 					+ "Eigenschaft = " + prop.getDescription() + " \n" 
 					+ "Ausprägung = " + value;
 		}
+
 
 
 }
