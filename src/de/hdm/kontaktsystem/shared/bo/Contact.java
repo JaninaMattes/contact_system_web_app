@@ -32,12 +32,14 @@ public class Contact extends BusinessObject {
 	 * 
 	 */
 	
-	public Contact(PropertyValue pV, User owner) {
-		super.setOwner(owner);
+
+	public Contact(PropertyValue pV) {
 		this.propertyValue = pV;
 	}
 	
-	public Contact(PropertyValue pV) {
+	
+	public Contact(PropertyValue pV, User owner) {
+		super.setOwner(owner);
 		this.propertyValue = pV;
 	}
 

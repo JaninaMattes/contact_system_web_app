@@ -109,16 +109,27 @@ public class ContactMapperTest {
 		double id2 = 1.1423815165163371e20;
 		double id3 = 666;
 		
+		double id4 = 8.914336227056141e15;
+		
 		User user = new User();
-		user.setGoogleID(id);
+		user.setGoogleID(id4);
 		
 		Vector <Contact> contact = new Vector <Contact>();
-		contact = ContactMapper.contactMapper().findAllSharedByOthersToMe(user);
-		//contact = ContactMapper.contactMapper().findAllSharedByMe(user);
+		
+		// System.out.println("##### shared methods test #####");
+		
+		// contact = ContactMapper.contactMapper().findAllSharedByOthersToMe(user);
+		// contact = ContactMapper.contactMapper().findAllSharedByMe(user);
+		
+		System.out.println("##### delete tests #####");
+		
+		ContactMapper.contactMapper().deleteAllSharedByMe(user);
+		// ContactMapper.contactMapper().deleteAllSharedByOthersToMe(user);
 		
 		// Contact contact = new Contact();
 		// contact = ContactMapper.contactMapper().findContactById(166);
 		
 		System.out.println(contact);
+		
 	}
 }
