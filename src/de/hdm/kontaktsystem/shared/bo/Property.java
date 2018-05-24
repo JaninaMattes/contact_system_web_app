@@ -203,6 +203,9 @@ public class Property implements Serializable{
 		
 		@Override
 		public String toString() {
+			if(propertyValues == null){
+				return "Property [description=" + description + ", propertyValues= leer ]";
+			}
 			return "Property [description=" + description + ", propertyValues=" + propertyValues + "]";
 		}
 		
