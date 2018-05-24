@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -196,30 +197,60 @@ public class ContactListMapper {
 	public Vector<ContactList> findAllSharedByMe (User user) {
 
 		// Alle Participation-Objekte eines Users abrufen, welche fÃ¼r Objekte kapseln, die von diesem geteilt wurden
+				Vector<Participation> participationVector = new Vector<Participation>();		
+				participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
+				// Vector fÃ¼r die Speicherung aller BusinessObjekte erzeugen
+				Vector<ContactList> contactListVector = new Vector <ContactList>(); 		
+				//System.out.println(participationVector);
+				
+				for (Participation part : participationVector) { 		
+					
+					//System.out.println(part);
+					 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+					 //System.out.println(bo);
+					 ContactList contactList = new ContactList();	 
+					 //System.out.println(propVal); 	
+					 if(bo instanceof ContactList) {			 		
+						 contactList = (ContactList) bo;
+					 		//System.out.println("AusprÃ¤gung " + propVal.getProp());
+						 contactListVector.addElement(contactList);		     
+					 }
+				}
+				return contactListVector;
+				
+			}
+	
+	public Vector<ContactList> findAllSharedByOthersToMe (User user) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche fÃ¼r Objekte kapseln, die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();		
-		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
+//		for (Participation part : participationVector) {
+//			System.out.println(part);
+//		}
+
 		// Vector fÃ¼r die Speicherung aller BusinessObjekte erzeugen
-		Vector<ContactList> propertyResultVector = new Vector <ContactList>(); 		
-		//System.out.println(participationVector);
+		Vector<ContactList> contactListResultVector = new Vector <ContactList>(); 
 		
 		for (Participation part : participationVector) {
-			 
-			ContactList contactList = new ContactList();
-			 contactList = this.findContactListById(part.getReferenceID());
-			 part.setReference(contactList);
-			 part.setParticipant(user);	 	
-			 	if(contactList != null) {
-			 		propertyResultVector.addElement(contactList);
-			 		System.out.println("contactList id: " + contactList.getBo_Id());
-			 		System.out.println("contactList name: " + contactList.getName());
-		     }
+			ContactList cl = new ContactList();
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());	
+			 //System.out.println(part);		     
+			 //System.out.println(propVal);
+			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 if(bo instanceof ContactList) {			 		
+				 cl = (ContactList) bo;
+			 		//System.out.println("AusprÃ¤gung " + propVal.getProp());
+				 contactListResultVector.addElement(cl);		     
+			 }
 		}
-		return propertyResultVector;
+		return contactListResultVector;
 		
 	}
+
 	
 	/**
-	 * Die Methode ermöglicht das löschen aller für einen User geteilten <code>ContactListen</code>, 
+	 * Die Methode ermï¿½glicht das lï¿½schen aller fï¿½r einen User geteilten <code>ContactListen</code>, 
 	 * sowie deren enthaltene Kontakte <code>Contact</code> und deren PropertyValue-Objekte
 	 */
 	
@@ -228,7 +259,7 @@ public class ContactListMapper {
 	}
 	
 	/**
-	 * Funktion zum löschen aller geteilten ContactListe - Objekte
+	 * Funktion zum lï¿½schen aller geteilten ContactListe - Objekte
 	 * @param user 
 	 * 
 	 */
