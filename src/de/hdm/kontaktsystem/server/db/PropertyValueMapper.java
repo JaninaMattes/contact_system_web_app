@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
@@ -414,17 +415,15 @@ public class PropertyValueMapper {
 		
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
-			 Property prop = new Property();
-			 	
-			 propVal = this.findByKey(part.getReferenceID());	
-			 part.setReference(propVal);
-			 part.setParticipant(user);	 
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());	
 			 //System.out.println(part);		     
-			 System.out.println(propVal);
+			 //System.out.println(propVal);
 			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
-			 if(propVal != null) {
-				  propertyResultVector.addElement(propVal);
-			     }
+			 if(bo instanceof PropertyValue) {			 		
+				 propVal = (PropertyValue) bo;
+			 		//System.out.println("Ausprägung " + propVal.getProp());
+			 		propertyResultVector.addElement(propVal);		     
+			 }
 		}
 		return propertyResultVector;
 		
