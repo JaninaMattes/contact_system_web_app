@@ -4,12 +4,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 /**
  * 
@@ -19,13 +21,17 @@ import de.hdm.kontaktsystem.shared.bo.Contact;
 
 public class ContactForm extends VerticalPanel{
 	
+	//ContactSystemAdministrationAsync muss noch erstellt werden
+	ContactSystemAdministrationAsync contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact angezeigterKontakt = null;
+	ContactsTreeViewModel ctvm = null;
 	
 	/**
 	 * Instanziieren der Widgets
 	 */
 	private TextBox TextBoxName = new TextBox();
 	private Label label = new Label("Kontakt:");
+	private Label labelname = new Label("Name:");
 	private Button Kontaktloeschen = new Button("Kontakt löschen");
 	private Button Kontaktteilen = new Button("Kontakt teilen");
 	private Button Kontaktbearbeiten = new Button("Kontakt bearbeiten");
@@ -44,13 +50,24 @@ public class ContactForm extends VerticalPanel{
 	public void onLoad() {
 		super.onLoad();
 		
+		Grid contactGrid = new Grid(0, 1);
+		
+		contactGrid.setWidget(0, 0, labelname);
+		contactGrid.setWidget(0, 1, TextBoxName);
+		
+		//TODO: While-Schleife um alle Eigenschaften eines Kontaktes anzuzeigen
+		while (angezeigterKontakt.getpropertyValue() != null) {
+			PropertyValue Eigenschaft = angezeigterKontakt.getpropertyValue();
+			
+		}
+		
 		/**
 		 * Widgets/Panels anordnen
 		 */
 		//Die TextBox um den Kontakt einzugeben, das label und das Panel für die Buttons werden 
 		//untereinander auf dem VerticalPanel angeordnet.
 		vp.add(label);
-		vp.add(TextBoxName);
+		vp.add(contactGrid);
 		vp.add(Buttonpanel);
 		//Die Buttons werden auf dem HorizontalPanel angeordnet
 		Buttonpanel.add(Kontaktloeschen);

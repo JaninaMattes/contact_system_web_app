@@ -159,7 +159,7 @@ public class ContactMapper {
 		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
 		
 		// Vector für die Speicherung aller BusinessObjekte erzeugen
-		Vector<Contact> propertyResultVector = new Vector <Contact>(); 		
+		Vector<Contact> contactResultVector = new Vector <Contact>(); 		
 		//System.out.println(participationVector);
 		
 		for (Participation part : participationVector) {
@@ -172,10 +172,16 @@ public class ContactMapper {
 			 	if(bo instanceof Contact) {			 		
 			 		contact = (Contact) bo;
 			 		System.out.println("contact name " + contact.getpropertyValue());
-			 		propertyResultVector.addElement(contact);		     
+			 		contactResultVector.addElement(contact);		     
 			 }
+		
 		}
-		return propertyResultVector;
+	 	
+		if(contactResultVector.isEmpty()) {
+				System.out.println("# no contacts found");
+			}
+			
+		return contactResultVector;
 		
 	}
 	
@@ -210,6 +216,11 @@ public class ContactMapper {
 			 		contactResultVector.addElement(contact);
 			 	}
 		}
+		
+		if(contactResultVector.isEmpty()) {
+			System.out.println("# no contacts found");
+		}
+		
 		return contactResultVector;
 		
 	}
