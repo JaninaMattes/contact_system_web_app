@@ -145,7 +145,8 @@ public class User implements Serializable{
 	
 	@Override
 	public String toString(){
-		return "User " + googleID +": " + gMail +" -> "+userContact.getBo_Id();
+		return "User " + googleID + ": " ;
+	//+  gMail +" -> "+userContact.getBo_Id();
 	}
 
 	
