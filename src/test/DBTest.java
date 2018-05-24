@@ -29,7 +29,7 @@ public class DBTest {
 	private final static UserMapper uMapper = UserMapper.userMapper();
 	
 	// Gültige IDs zu Testen
-	private final static double vUID = 7.818651631034612E15;
+	private final static double vUID = 666;
 	private final static int vCID = 165;
 	private final static int vCLID = 167;
 	private final static int vPID = 5; // = Sternzeichen
@@ -41,15 +41,10 @@ public class DBTest {
 		
 		//createAll();
 		//updateAll();
-		//findAll();
+		findAll();
 		//deleteAll();
-		BusinessObject bo = boMapper.findBusinessObjectByID(vPVID);
-		PropertyValue pv = new PropertyValue();
-		if(bo.getClass().isInstance(pv) ){
-			System.out.println("IS PropertyValue");
-			pv = (PropertyValue) bo;
-			System.out.println(pv);
-		}
+		
+		//findAllShared();
 		
 	}
 	
@@ -71,7 +66,7 @@ public class DBTest {
 		Random rng = new Random();
 		u.setGMail("mail@gmail.com");
 		// Generate test User with random ID
-		u.setGoogleID(rng.nextDouble()*100000000000000000d);
+		u.setGoogleID(666);//rng.nextDouble()*100000000000000000d);
 		uID = u.getGoogleID();
 		uMapper.insert(u);
 		
@@ -274,6 +269,11 @@ public class DBTest {
 	public static void deleteAll(){
 
 		
+	
+
+	
+
+		
 		
 		User user = new User();
 		user.setGoogleID(uID);
@@ -302,5 +302,23 @@ public class DBTest {
 		
 	
 		
+	}
+
+	public static void findAllShared(){
+		
+		User user = uMapper.findById(vUID);
+		
+		System.out.println(cMapper.findAllSharedByMe(user));
+		
+		System.out.println("\n \n \n");
+		
+		//System.out.println(pvMapper.findAllSharedByMe(user));
+		
+		System.out.println("\n \n \n");
+		
+		
+		//System.out.println(pvMapper.findAllSharedByOthersToMe(user));
+		
+		System.out.println(clMapper.findAllSharedByMe(user));
 	}
 }
