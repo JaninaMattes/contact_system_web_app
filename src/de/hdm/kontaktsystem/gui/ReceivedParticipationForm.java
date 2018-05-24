@@ -117,9 +117,8 @@ public class ReceivedParticipationForm extends VerticalPanel{
 	}
 
 	/**
-	 * Wenn der anzuzeigende Kunde gesetzt bzw. gelöscht wird, werden die
-	 * zugehörenden Textfelder mit den Informationen aus dem Kundenobjekt
-	 * gefüllt bzw. gelöscht.
+	 * Wenn die anzuzeigende Teilhaberschaft gelöscht wird, werden die
+	 * zugehörenden Textfelder gelöscht.
 	*/
 	void setSelected(Participation p) {
 		if (p != null) {

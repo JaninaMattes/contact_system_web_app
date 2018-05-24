@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -198,27 +199,57 @@ public class ContactListMapper {
 	public Vector<ContactList> findAllSharedByMe (User user) {
 
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+				Vector<Participation> participationVector = new Vector<Participation>();		
+				participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
+				// Vector für die Speicherung aller BusinessObjekte erzeugen
+				Vector<ContactList> contactListVector = new Vector <ContactList>(); 		
+				//System.out.println(participationVector);
+				
+				for (Participation part : participationVector) { 		
+					
+					//System.out.println(part);
+					 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+					 //System.out.println(bo);
+					 ContactList contactList = new ContactList();	 
+					 //System.out.println(propVal); 	
+					 if(bo instanceof ContactList) {			 		
+						 contactList = (ContactList) bo;
+					 		//System.out.println("Ausprägung " + propVal.getProp());
+						 contactListVector.addElement(contactList);		     
+					 }
+				}
+				return contactListVector;
+				
+			}
+	
+	public Vector<ContactList> findAllSharedByOthersToMe (User user) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();		
-		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
+//		for (Participation part : participationVector) {
+//			System.out.println(part);
+//		}
+
 		// Vector für die Speicherung aller BusinessObjekte erzeugen
-		Vector<ContactList> propertyResultVector = new Vector <ContactList>(); 		
-		//System.out.println(participationVector);
+		Vector<ContactList> contactListResultVector = new Vector <ContactList>(); 
 		
 		for (Participation part : participationVector) {
-			 
-			ContactList contactList = new ContactList();
-			 contactList = this.findContactListById(part.getReferenceID());
-			 part.setReference(contactList);
-			 part.setParticipant(user);	 	
-			 	if(contactList != null) {
-			 		propertyResultVector.addElement(contactList);
-			 		System.out.println("contactList id: " + contactList.getBo_Id());
-			 		System.out.println("contactList name: " + contactList.getName());
-		     }
+			ContactList cl = new ContactList();
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());	
+			 //System.out.println(part);		     
+			 //System.out.println(propVal);
+			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 if(bo instanceof ContactList) {			 		
+				 cl = (ContactList) bo;
+			 		//System.out.println("Ausprägung " + propVal.getProp());
+				 contactListResultVector.addElement(cl);		     
+			 }
 		}
-		return propertyResultVector;
+		return contactListResultVector;
 		
 	}
+
 	
 	/**
 	 * Die Methode erm�glicht das l�schen aller f�r einen User geteilten <code>ContactListen</code>, 

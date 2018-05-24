@@ -175,7 +175,7 @@ public class PropertyValueMapper {
 	 * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
 	 */
 
-	public void deleteAllSharedForMe(User u) {
+	public void deleteAllSharedByMe(User u) {
 
 		
 
@@ -185,7 +185,7 @@ public class PropertyValueMapper {
 	 * Funktion zum Löschen aller Auspraegungen die vom User geteilt wurden
 	 */
 
-	public void deleteAllSharedByMe(User u) {
+	public void deleteAllSharedByOthersToMe(User u) {
 
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 				Vector<Participation> participationVector = new Vector<Participation>();		
@@ -211,10 +211,10 @@ public class PropertyValueMapper {
 	 * Funktion zum Löschen aller Auspraegungen die vom User erstellt wurden
 	 */
 
-	public void deleteAllOwnership(User u) {
-
-
-	}
+//	public void deleteAllOwnership(User u) {
+//
+//
+//	}
 
 	/*************************************************************************************
 	 * Methode zum Leeren der PropertyValue Tabelle
@@ -378,10 +378,10 @@ public class PropertyValueMapper {
 		
 		for (Participation part : participationVector) { 		
 			
+			//System.out.println(part);
 			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
 			 //System.out.println(bo);
-			 PropertyValue propVal = new PropertyValue();
-			 
+			 PropertyValue propVal = new PropertyValue();	 
 			 //System.out.println(propVal); 	
 			 if(bo instanceof PropertyValue) {			 		
 				 propVal = (PropertyValue) bo;
@@ -415,17 +415,15 @@ public class PropertyValueMapper {
 		
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
-			 Property prop = new Property();
-			 	
-			 propVal = this.findByKey(part.getReferenceID());	
-			 part.setReference(propVal);
-			 part.setParticipant(user);	 
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());	
 			 //System.out.println(part);		     
-			 System.out.println(propVal);
+			 //System.out.println(propVal);
 			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
-			 if(propVal != null) {
-				  propertyResultVector.addElement(propVal);
-			     }
+			 if(bo instanceof PropertyValue) {			 		
+				 propVal = (PropertyValue) bo;
+			 		//System.out.println("Ausprägung " + propVal.getProp());
+			 		propertyResultVector.addElement(propVal);		     
+			 }
 		}
 		return propertyResultVector;
 		
