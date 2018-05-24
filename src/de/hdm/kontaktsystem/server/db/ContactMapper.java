@@ -443,9 +443,7 @@ public class ContactMapper {
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));		
 				contact.setpropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
-
-			}
-			
+			}			
 			return contact;
 			
 		} catch (SQLException e) {

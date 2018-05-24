@@ -26,8 +26,20 @@ public class ContactListMapperTest {
 	public static void main(String args[]) {
 
 		User u = new User();
-		u.setGoogleID(666);
+		u.setGoogleID(3);
 		
+<<<<<<< HEAD
+		ContactListMapper.contactListMapper().deleteAllSharedByOthersToMe(u);
+		
+//		for (ContactList cl : hilfsVektor) {
+//			
+//			System.out.println(cl);
+//			
+//		}
+		
+		
+		
+=======
 		Vector<ContactList> hilfsVektor = new Vector<ContactList>();
 		// hilfsVektor = ContactListMapper.contactListMapper().findAllSharedByOthersToMe(u);
 		
@@ -36,6 +48,7 @@ public class ContactListMapperTest {
 		//	System.out.println(cl);
 			
 		// }
+>>>>>>> 2218cffb89a33163ebc3acbe4deffbd6e597b982
 		
 		
 		
