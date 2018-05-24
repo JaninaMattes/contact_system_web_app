@@ -4,11 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
-import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
@@ -438,7 +436,7 @@ public class PropertyValueMapper {
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
 			 Property prop = new Property();
-			 part.setReference(propVal);	
+			 // part.setReference(propVal);	
 			 propVal = this.findByKey(part.getReferenceID());	
 			 propVal.setProp(prop);
 			 //System.out.println(propVal);

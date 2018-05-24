@@ -177,7 +177,81 @@ public class ContactMapper {
 		return propertyResultVector;
 		
 	}
+	
+	/**
+	 * Alle für den Benutzer in der Applikation geteilte Kontakte <code>Contact</code> Objekte
+	 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
+	 * 
+	 * @param user-Objekt
+	 * @return Vector Contact-Objekte
+	 */
 
+	public Vector<Contact> findAllSharedByOthersToMe (User user) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche fÃ¼r Objekte kapseln, die von diesem geteilt wurden
+		Vector<Participation> participationVector = new Vector<Participation>();		
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
+		// Vector fÃ¼r die Speicherung aller BusinessObjekte erzeugen
+		Vector<Contact> contactResultVector = new Vector <Contact>(); 
+		
+		
+		for (Participation part : participationVector) {
+			System.out.println("part id:" + part.getReferenceID());
+			 
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBy(part.getReferenceID());
+			 Contact contact = new Contact();
+			 
+			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
+			 	if(bo instanceof Contact) {			 		
+			 		contact = (Contact) bo;
+			 		System.out.println("contact name " + contact.getpropertyValue());
+			 		contactResultVector.addElement(contact);
+			 	}
+		}
+		return contactResultVector;
+		
+	}
+	
+    
+	/**
+	 * Methode zur Löschung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
+	 * welche im System mit anderen Nutzern geteilt wurden. 
+	 * @param user
+	 */
+	
+	public void deleteAllSharedByMe(User user) {
+		
+		Vector <Contact> contactResult = new Vector <Contact>();
+		contactResult = this.findAllSharedByMe(user);
+		
+		for(Contact contact : contactResult) {
+			// löschen aller Einträge in der Teilhaberschaft Tabelle Participation
+			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
+			this.deleteContact(contact);
+			System.out.println("# shared contact deleted: " + contact.getBo_Id() );
+		}
+	}
+	
+	/**
+	 * Eine Methode zur Löschung aller Verbindungen in der Participation Tabelle der DB.
+	 * Dies führt dazu, dass für einen Nutzer geteilten Objekte nicht mehr aufgerufen werden können.
+	 * 
+	 */
+	
+	public void deleteAllSharedByOthersToMe(User user) {
+		
+		Vector <Contact> contactResult = new Vector <Contact>();
+		contactResult = this.findAllSharedByOthersToMe(user);		
+
+		for(Contact contact : contactResult) {
+			// löschen aller Verbindungen in der Teilhaberschaft Tabelle Participation für den User
+			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
+			System.out.println("# participation for contact deleted: " + contact.getBo_Id() );
+		}
+	}
+	
+
+	
 	/**
 	 * Mapper-Methode um alle Kontakte zu loeschen
 	 */
@@ -317,7 +391,8 @@ public class ContactMapper {
 					+ "FROM  Contact c "
 					+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 					+ "INNER JOIN Property p ON p.ID = pv.property_ID "
-					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " + "WHERE description = 'Name' AND c.ID = ?");
+					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
+					+ "WHERE description = 'Name' AND c.ID = ?");
 
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
