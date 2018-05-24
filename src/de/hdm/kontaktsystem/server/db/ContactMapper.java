@@ -254,11 +254,12 @@ public class ContactMapper {
 		
 		Vector <Contact> contactResult = new Vector <Contact>();
 		contactResult = this.findAllSharedByOthersToMe(user);		
+		System.out.println(contactResult);
 
 		for(Contact contact : contactResult) {
 			// l�schen aller Verbindungen in der Teilhaberschaft Tabelle Participation f�r den User
-			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
-			System.out.println("# participation for contact deleted: " + contact.getBo_Id() );
+			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);		
+			//System.out.println("# participation for contact deleted: " + contact.getBo_Id() );
 		}
 	}
 	

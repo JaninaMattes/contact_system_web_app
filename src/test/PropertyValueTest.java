@@ -27,6 +27,10 @@ public class PropertyValueTest {
 		u.setGoogleID(0);
 		
 		PropertyValueMapper.propertyValueMapper().deleteAllSharedByMe(u);
+		
+//		for (PropertyValue pV : hilfsVector) {
+//			System.out.println(pV);
+//		}
 //		
 //		Contact c = new Contact();
 //		c.setBo_Id(126);
