@@ -67,7 +67,7 @@ public class Contact extends BusinessObject {
 	
 	@Override
 	public String toString() {
-		return "Contact [owner=" + getOwner() + ", id=" + id + ", Eigenschaft = "
+		return "Contact [owner =" + getOwner() + ", id =" + id + ", Eigenschaft = "
 				+ propertyValue.getProp() + "Ausprägung =" + propertyValue.getValue() + "]";
 	}
 
