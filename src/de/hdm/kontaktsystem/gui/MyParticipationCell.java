@@ -27,21 +27,8 @@ public class MyParticipationCell extends AbstractCell<Participation> {
 	      		+ "<table>"
 	      		+ "<tr>"
 	      		+ "<td>");
-	      //TODO: Darstellung der Teilhaberschaft?
+	      
 	      sb.append(participation.getParticipant().getContact().getpropertyValue().getName());
-	      
-	      sb.appendHtmlConstant("</td>"
-	      		+ "<td>");
-	      
-//	      //Falls der Nutzer der Eigentümer des Objekts ist, zeige das Symbol "geteilt" an
-//	      if(participation.getReferencedObject().getOwner().getGoogleID() == ) {
-//	    	  sb.append("geteilt");
-//	      };
-//	    	  
-//	      //Falls der Nutzer Teilhaber des Objekts ist, zeige das Symbol "Teilhaber" an
-//	      if(participation.getParticipantID() == ) {
-//	    	  sb.append("Teilhaber");
-//	      };
 	      
 	      sb.appendHtmlConstant("</td>"
 		      	+ "</tr>"
