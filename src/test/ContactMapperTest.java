@@ -1,5 +1,7 @@
 package test;
 
+import java.util.Vector;
+
 import de.hdm.kontaktsystem.server.db.ContactMapper;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -103,13 +105,17 @@ public class ContactMapperTest {
 		//ContactMapper.contactMapper().deleteAllContacts();
 
 		
-		double id = 0;
+		double id = 7.818651631034612e15;
 		
 		User user = new User();
-		user.setGoogleID(0);
+		user.setGoogleID(id);
 		
-		ContactMapper.contactMapper().findAllSharedByMe(user);
+		Vector <Contact> contact = new Vector <Contact>();
+		contact = ContactMapper.contactMapper().findAllSharedByMe(user);
 		
+		// Contact contact = new Contact();
+		// contact = ContactMapper.contactMapper().findContactById(166);
 		
+		System.out.println(contact);
 	}
 }

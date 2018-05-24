@@ -177,7 +177,8 @@ public class BusinessObjectMapper implements Serializable {
 		
 		//System.out.println("Test PropertyValue");
 		if(bo == null) bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
-		  	  
+		 
+		System.out.println(bo.getClass());
 		  	 
 		return bo;
 	  }

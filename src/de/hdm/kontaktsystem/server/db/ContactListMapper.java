@@ -203,7 +203,8 @@ public class ContactListMapper {
 		//System.out.println(participationVector);
 		
 		for (Participation part : participationVector) {
-			 ContactList contactList = new ContactList();
+			 
+			ContactList contactList = new ContactList();
 			 contactList = this.findContactListById(part.getReferenceID());
 			 part.setReference(contactList);
 			 part.setParticipant(user);	 	

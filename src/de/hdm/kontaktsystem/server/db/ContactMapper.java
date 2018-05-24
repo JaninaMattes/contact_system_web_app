@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.sql.ResultSet;
 
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
+
 //import com.mysql.jdbc.Connection;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
@@ -64,6 +66,7 @@ public class ContactMapper {
 	 * @param id
 	 */
 	public void deleteContactByID(int id) {
+		System.out.println("Delete Contact");
 		PropertyValueMapper.propertyValueMapper().deleteByContact(id);
 		Connection con = DBConnection.connection();
 		try {
@@ -162,11 +165,12 @@ public class ContactMapper {
 		for (Participation part : participationVector) {
 			System.out.println("part id:" + part.getReferenceID());
 			 
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBy(part.getReferenceID());
 			 Contact contact = new Contact();
-			 contact = this.findContactById(part.getReferenceID());
-			 System.out.println("contact id " + contact.getBo_Id());
- 	
-			 	if(contact != null) {
+			 
+			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
+			 	if(bo instanceof Contact) {			 		
+			 		contact = (Contact) bo;
 			 		System.out.println("contact name " + contact.getpropertyValue());
 			 		propertyResultVector.addElement(contact);		     
 			 }

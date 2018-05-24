@@ -2,11 +2,14 @@ package de.hdm.kontaktsystem.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import de.hdm.kontaktsystem.shared.bo.Contact;
 
 /**
  * 
@@ -15,6 +18,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 
 public class ContactForm extends VerticalPanel{
+	
+	Contact angezeigterKontakt = null;
 	
 	/**
 	 * Instanziieren der Widgets
@@ -50,7 +55,9 @@ public class ContactForm extends VerticalPanel{
 		Buttonpanel.add(Kontaktloeschen);
 		Buttonpanel.add(Kontakthinzufuegen);
 		
+		//Chlickhandler
 		Kontakthinzufuegen.addClickHandler(new hinzufClickHandler());
+		
 		
 		Kontaktloeschen.addClickHandler(new loeschenClickHandler());
 		
@@ -64,7 +71,17 @@ public class ContactForm extends VerticalPanel{
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				//TODO: def. was passieren soll wenn man auf den Button klickt
-				
+					//If-Abfrage um zu prüfen ob etwas in die Textbox eingegeben wurde
+				if(TextBoxName != null) {
+					
+					//Name für einen Kontakt eingeben
+					String name = TextBoxName.getText();
+					//TODO: Verbindung
+					//angezeigterKontakt.getpropertyValue().setName(TextBoxName.getText());
+					
+				} else {
+					Window.alert("kein Kunde eingegeben");
+				}
 			}
 			
 		}
@@ -74,7 +91,11 @@ public class ContactForm extends VerticalPanel{
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				//TODO: def. was passieren soll wenn man auf den Button klickt
-				
+				if (angezeigterKontakt == null) {
+					Window.alert("kein Kunde ausgewÃ¤hlt");
+				} else {
+					//TODO: Verbindung
+				}
 			}
 			
 		}
