@@ -29,16 +29,13 @@ public class ContactListMapperTest {
 		u.setGoogleID(666);
 		
 		Vector<ContactList> hilfsVektor = new Vector<ContactList>();
-		hilfsVektor = ContactListMapper.contactListMapper().findAllSharedByOthersToMe(u);
+		// hilfsVektor = ContactListMapper.contactListMapper().findAllSharedByOthersToMe(u);
 		
-		for (ContactList cl : hilfsVektor) {
+		// for (ContactList cl : hilfsVektor) {
 			
-			System.out.println(cl);
+		//	System.out.println(cl);
 			
-		}
-		
-		
-		
+		// }
 		
 		
 		
@@ -102,13 +99,34 @@ public class ContactListMapperTest {
 		//cll = clMapper.findContactListByName("KontaktListe_2");
 		//System.out.println(cll);
 		
-//		int id = 0;
-//		
-//		User user = new User();
-//		user.setGoogleID(id);
-//		
-//		ContactListMapper.contactListMapper().findAllSharedByMe(user);
+
+
+		
+		
+		//######## TESTS #######
+		
+		double id = 666;
+		double id2 = 777;
+		double id3 = 798019057881227.4;
+		
+		User user = new User();
+		user.setGoogleID(id2);
+		
+		Vector <ContactList> cl = new Vector<ContactList>();
+		//cl = ContactListMapper.contactListMapper().findAllSharedByMe(user);
+		cl = ContactListMapper.contactListMapper().findAllSharedByOthersToMe(user);
+		
+		System.out.println(cl);
+		
+		//####### DELETE ########
+		
+		//ContactListMapper.contactListMapper().deleteAllSharedByMe(user);
+		ContactListMapper.contactListMapper().deleteAllSharedByOthersToMe(user);
+		
 		
 	}
+	
+	
+	
 
 }

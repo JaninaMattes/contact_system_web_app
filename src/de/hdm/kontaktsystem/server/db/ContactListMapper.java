@@ -255,7 +255,7 @@ public class ContactListMapper {
 			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
 			 System.out.println(bo.getClass());
 			 ContactList cl = new ContactList();			 
-			 System.out.println("bo gefunden: " + bo.getBo_Id());
+			 System.out.println("bo id gefunden: " + bo.getBo_Id());
 			 
 			 	if(bo instanceof ContactList) {			 		
 			 		cl = (ContactList) bo;
@@ -264,7 +264,7 @@ public class ContactListMapper {
 			 	}
 			}
 		
-		if(clResultVector.isEmpty()) System.out.println("# no contacts found");	
+		if(clResultVector.isEmpty()) System.out.println("# no contactList found");	
 		
 		return clResultVector;		
 	}
@@ -303,8 +303,8 @@ public class ContactListMapper {
 			clResult = this.findAllSharedByOthersToMe(user);		
 
 			for(ContactList cl : clResult) {
-				ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
 				System.out.println("# participation for contact deleted: " + cl.getBo_Id() );
+				ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);				
 			}
 		}	
 	
