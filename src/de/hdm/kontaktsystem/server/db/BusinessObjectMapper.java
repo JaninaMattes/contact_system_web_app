@@ -169,15 +169,16 @@ public class BusinessObjectMapper implements Serializable {
 		  	  
 		BusinessObject bo = null;
 		 	  
-		System.out.println("Test Contact");
+		//System.out.println("Test Contact");
 		if(bo == null) bo = ContactMapper.contactMapper().findContactById(id);
 		 
-		System.out.println("Test ContactList");
+		//System.out.println("Test ContactList");
 		if(bo == null) bo = ContactListMapper.contactListMapper().findContactListById(id);
 		
-		System.out.println("Test PropertyValue");
+		//System.out.println("Test PropertyValue");
 		if(bo == null) bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
-		  	  
+		 
+		System.out.println(bo.getClass());
 		  	 
 		return bo;
 	  }
