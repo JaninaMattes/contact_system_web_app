@@ -124,7 +124,9 @@ public class ContactListMapper {
 		
 	}
 
-	
+	public Vector<ContactList> findContactListByUser(User user) {
+		return findContactListByUser(user.getGoogleID());
+	}
 	/**
 	 * Alle Kontaktlisten eines Users finden.
 	 * 
@@ -132,13 +134,13 @@ public class ContactListMapper {
 	 * @return
 	 */
 
-	public Vector<ContactList> findContactListByUser(User user) {
+	public Vector<ContactList> findContactListByUser(double userID) {
 		Vector<ContactList> cll = new Vector<ContactList>();
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE user_ID = ?");
-			stmt.setDouble(1, user.getGoogleID());
+			stmt.setDouble(1, userID);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				ContactList cl = new ContactList();
@@ -219,7 +221,7 @@ public class ContactListMapper {
 	}
 	
 	/**
-	 * Die Methode ermöglicht das löschen aller für einen User geteilten <code>ContactListen</code>, 
+	 * Die Methode ermï¿½glicht das lï¿½schen aller fï¿½r einen User geteilten <code>ContactListen</code>, 
 	 * sowie deren enthaltene Kontakte <code>Contact</code> und deren PropertyValue-Objekte
 	 */
 	
@@ -228,7 +230,7 @@ public class ContactListMapper {
 	}
 	
 	/**
-	 * Funktion zum löschen aller geteilten ContactListe - Objekte
+	 * Funktion zum lï¿½schen aller geteilten ContactListe - Objekte
 	 * @param user 
 	 * 
 	 */
@@ -303,6 +305,7 @@ public class ContactListMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 	}
 
 	/**
@@ -312,15 +315,9 @@ public class ContactListMapper {
 	 */
 
 	public void deleteContactListByUserId(Double userId) {
-		Connection con = DBConnection.connection();
-		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("DELETE cl.*, bo.* FROM ContactList cl "
-					+ "INNER JOIN BusinessObject bo ON cl.ID = bo.bo_ID Where bo.user_ID =" + userId);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		
+		for(ContactList cl : findContactListByUser(userId)){
+			this.deleteContactListById(cl.getBo_Id());
 		}
 	}
 
@@ -331,7 +328,9 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE * FROM ContactList");
+			stmt.executeUpdate("DELETE cl.*, bo.* FROM ContactList cl "
+					+ "INNER JOIN BusinessObject bo "
+					+ "WHERE cl.ID = bo.bo_ID");
 
 		}catch(SQLException e){
 			e.printStackTrace();
