@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.User;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;

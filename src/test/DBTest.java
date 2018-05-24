@@ -41,10 +41,10 @@ public class DBTest {
 		
 		//createAll();
 		//updateAll();
-		findAll();
+		//findAll();
 		//deleteAll();
 		
-		//findAllShared();
+		findAllShared();
 		
 	}
 	
@@ -308,16 +308,18 @@ public class DBTest {
 		
 		User user = uMapper.findById(vUID);
 		
-		System.out.println(cMapper.findAllSharedByMe(user));
+		//System.out.println(cMapper.findAllSharedByMe(user));
 		
 		System.out.println("\n \n \n");
 		
-		//System.out.println(pvMapper.findAllSharedByMe(user));
+		System.out.println(pvMapper.findAllSharedByMe(user));
 		
 		System.out.println("\n \n \n");
 		
 		
-		//System.out.println(pvMapper.findAllSharedByOthersToMe(user));
+		System.out.println(pvMapper.findAllSharedByOthersToMe(user));
+		
+		System.out.println("\n \n \n");
 		
 		System.out.println(clMapper.findAllSharedByMe(user));
 	}
