@@ -524,7 +524,7 @@ public class PropertyValueMapper {
 			// Statement ausfüllen und als Query an die DB schicken
 
 			PreparedStatement stmt = con.prepareStatement
-					("SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID, "
+					( "SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID, "
 					+ "Property.description "
 					+ "FROM PropertyValue "
 					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
@@ -556,10 +556,19 @@ public class PropertyValueMapper {
 		}
 		return null;
 	}
+	
 
-	public void UpdatePropertyValueByContact(Contact contact) {
+	/**
+	 * Methode um den Namen eines Kontakts zurück zu geben
+	 * 
+	 * @param contact
+	 * @return PropertyValue - Objekt
+	 */
+
+	public PropertyValue findName(Contact contact) {
+		PropertyValue name = new PropertyValue();
 		// TODO Auto-generated method stub
-
+		return name;
 	}
 
 }

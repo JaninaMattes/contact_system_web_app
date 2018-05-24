@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.shared.bo;
 
+import java.util.Vector;
 
 /**
  * Die Klasse Contact stellt die Kontakte dar, die von einem User erstellt werden bzw. auf welche ein User zugreifen kann, 
@@ -13,9 +14,9 @@ public class Contact extends BusinessObject {
 
 		
 	/**
-	 * Name des Kontakts
+	 * Eigenschaftsausprägungen des Kontakts
 	 */
-	private PropertyValue propertyValue = null;
+	private Vector <PropertyValue> propertyValues = null;
 
 	
 	/**
@@ -33,14 +34,14 @@ public class Contact extends BusinessObject {
 	 */
 	
 
-	public Contact(PropertyValue pV) {
-		this.propertyValue = pV;
+	public Contact(PropertyValue name) {
+		this.propertyValues.add(name);
 	}
 	
 	
-	public Contact(PropertyValue pV, User owner) {
+	public Contact(PropertyValue name, User owner) {
 		super.setOwner(owner);
-		this.propertyValue = pV;
+		this.propertyValues.addElement(name);
 	}
 
 	
@@ -48,30 +49,37 @@ public class Contact extends BusinessObject {
 	 * Kontact Name auslesen
 	 */
 	
-	public PropertyValue getpropertyValue() {
-		return this.propertyValue;
+	public Vector <PropertyValue> getpropertyValue() {
+		return this.propertyValues;
 	}
 
 	/**
 	 * Kontakt Name setzen
 	 */
 
-	public void setpropertyValue(PropertyValue pV) {
-		this.propertyValue = pV;
+	public void setpropertyValue(Vector <PropertyValue> pV) {
+		this.propertyValues = pV;
 	}
 
+	/**
+	 * Einzelne PropertyValue -Objekte hinzufügen
+	 * @param pv
+	 */
+	
+	public void addPropertyValue(PropertyValue pv) {
+		this.propertyValues.addElement(pv);
+	}
 
 	
 	@Override
 	public String toString() {
 
-		if(propertyValue == null){
+		if(propertyValues.isEmpty()){
 			return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = leer Ausprägung = leer ]";
 		}
 		
 		return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = "
-
-				+ propertyValue.getProp() + "Ausprägung =" + propertyValue.getValue() + "]";
+				+ propertyValues + "]";
 	}
 
 	
