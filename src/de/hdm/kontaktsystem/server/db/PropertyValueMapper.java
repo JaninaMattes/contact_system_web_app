@@ -403,13 +403,10 @@ public class PropertyValueMapper {
 		//System.out.println(participationVector);
 		
 		for (Participation part : participationVector) {
-			 Property prop = new Property();
 			 PropertyValue propVal = new PropertyValue();
-			 prop = PropertyMapper.propertyMapper().findBy(prop.getId());
-			 // Methode aus Property, die anhand der gefundenen Property ID ausgegeben wird
-			 
-			 propVal = this.findByKey(part.getReferenceID());	
-			 propVal.setProp(prop);  
+			 propVal = this.findByKey(part.getReferenceID());
+			 part.setReference(propVal);
+			 part.setParticipant(user);	 	
 			 	if(propVal != null) {
 			 		propertyResultVector.addElement(propVal);
 		     }
