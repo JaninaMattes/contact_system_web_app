@@ -46,6 +46,10 @@ public class PropertyValueMapper {
 		BusinessObjectMapper.businessObjectMapper().insert(pv);
 
 		Connection con = DBConnection.connection();
+		Property prop = new Property();
+		Contact contact = new Contact();
+		pv.setContact(contact);
+		pv.setProp(prop);
 
 		try {
 			PreparedStatement stmt = con.prepareStatement(
@@ -171,14 +175,22 @@ public class PropertyValueMapper {
 
 	}
 
-	/*
-	 * Funktion zum Löschen aller Auspraegungen die für den User geteilt wurden
+	/**
+	 * Methode zur L�schung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
+	 * welche im System mit anderen Nutzern geteilt wurden. 
+	 * @param user
 	 */
-
-	public void deleteAllSharedByMe(User u) {
-
+	
+	public void deleteAllSharedByMe(User user) {
 		
-
+		Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
+		propertyValueResult = this.findAllSharedByMe(user);
+		
+		for(PropertyValue pV : propertyValueResult) {
+			// l�schen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
+			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
+			this.delete(pV);
+		}
 	}
 	
 	/*

@@ -41,16 +41,16 @@ public class DBTest {
 		
 		//createAll();
 		//updateAll();
-		findAll();
+		//findAll();
 		//deleteAll();
 		
-		//findAllShared();
+		findAllShared();
 		
 	}
 	
 	public static void createAll(){
 		
-		int pTestID = 8;
+		int pTestID = 1;
 		
 		System.out.println("\n ############ Test Poperty ################ \n");
 		
@@ -68,8 +68,8 @@ public class DBTest {
 		// Generate test User with random ID
 		u.setGoogleID(666);//rng.nextDouble()*100000000000000000d);
 		uID = u.getGoogleID();
-		uMapper.insert(u);
-		
+		//uMapper.insert(u);
+		u = uMapper.findById(666);
 		
 		
 		System.out.println("\n ############ Test Contact ################ \n");
@@ -108,15 +108,19 @@ public class DBTest {
 		
 		Participation p1 = new Participation();
 		Participation p2 = new Participation();
+		Participation p3 = new Participation();
 		
 		p1.setParticipant(uMapper.findById(vUID));
 		p2.setParticipant(uMapper.findById(vUID));
+		p3.setParticipant(uMapper.findById(vUID));
 		
 		p1.setReference(c);
 		p2.setReference(cl);
+		p3.setReference(pv);
 		
 		partMapper.insertParticipation(p1);
 		partMapper.insertParticipation(p2);
+		partMapper.insertParticipation(p3);
 		
 		
 	}
@@ -267,34 +271,37 @@ public class DBTest {
 	}
 	
 	public static void deleteAll(){
-
 		
-	
-
-	
-
-		
-		
+		/*
 		User user = new User();
 		user.setGoogleID(uID);
 		
-		System.out.println("\n ############ Test Contact ################ \n");
+
+		System.out.println("\n ############ Test PopertyValue ################ \n");
 		
-		cMapper.deleteAllContactsByUser(uID);
-		
-		System.out.println("\n ############ Test Poperty ################ \n");
-		
+		pvMapper.deleteByProp(1);
+		pvMapper.deleteByContact(113);
+		pvMapper.deleteByPropValue(136);
 
 		System.out.println("\n ############ Test ContactList ################ \n");
 
 		clMapper.deleteContactListByUserId(uID);
+		clMapper.deleteContactListById(1);
 		
+		System.out.println("\n ############ Test Contact ################ \n");
 		
+		cMapper.deleteAllContactsByUser(uID);
+		//cMapper.deleteContact(cMapper.findContactById(119));
+		cMapper.deleteContactByID(113);
+		
+		*/
 		System.out.println("\n ############ Test User ################ \n");
 		
-		uMapper.delete(user);
+		//uMapper.delete(user);
+		//uMapper.deleteByID(1.9452793556627856e16);
+		uMapper.deleteAll();
 		
-		System.out.println("\n ############ Test PopertyValue ################ \n");
+		
 		
 		
 		
@@ -308,17 +315,25 @@ public class DBTest {
 		
 		User user = uMapper.findById(vUID);
 		
-		System.out.println(cMapper.findAllSharedByMe(user));
 		
-		System.out.println("\n \n \n");
-		
-		//System.out.println(pvMapper.findAllSharedByMe(user));
-		
-		System.out.println("\n \n \n");
+		System.out.println("\n ########### Contact ############## \n");
+		System.out.println("FASPV: " +cMapper.findAllSharedByMe(user));
+		System.out.println("FASBOTMPV: " +cMapper.findAllSharedByOthersToMe(user));
 		
 		
-		//System.out.println(pvMapper.findAllSharedByOthersToMe(user));
+		System.out.println("\n ######### ProptertyValue ########### \n");
 		
-		System.out.println(clMapper.findAllSharedByMe(user));
+		System.out.println("FASPV: " + pvMapper.findAllSharedByMe(user));
+		
+		System.out.println("\n \n");
+		
+		System.out.println("FASBOTMPV: " +pvMapper.findAllSharedByOthersToMe(user));
+		
+		
+		
+		System.out.println("\n ########### ContactList ############## \n");
+		
+		System.out.println("FASC: " +clMapper.findAllSharedByMe(user));
+		System.out.println("FASBOTMPV: " +clMapper.findAllSharedByOthersToMe(user));
 	}
 }
