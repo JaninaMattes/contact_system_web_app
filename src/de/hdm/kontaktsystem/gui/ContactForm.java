@@ -27,7 +27,8 @@ public class ContactForm extends VerticalPanel{
 	private TextBox TextBoxName = new TextBox();
 	private Label label = new Label("Kontakt:");
 	private Button Kontaktloeschen = new Button("Kontakt löschen");
-	private Button Kontakthinzufuegen = new Button("Kontakt hinzufügen");
+	private Button Kontaktteilen = new Button("Kontakt teilen");
+	private Button Kontaktbearbeiten = new Button("Kontakt bearbeiten");
 	
 	/**
 	 * Instanziieren der Panels
@@ -53,38 +54,49 @@ public class ContactForm extends VerticalPanel{
 		vp.add(Buttonpanel);
 		//Die Buttons werden auf dem HorizontalPanel angeordnet
 		Buttonpanel.add(Kontaktloeschen);
-		Buttonpanel.add(Kontakthinzufuegen);
+		Buttonpanel.add(Kontaktteilen);
+		Buttonpanel.add(Kontaktbearbeiten);
 		
 		//Chlickhandler
-		Kontakthinzufuegen.addClickHandler(new hinzufClickHandler());
-		
 		
 		Kontaktloeschen.addClickHandler(new loeschenClickHandler());
+		Kontaktteilen.addClickHandler(new teilenClickHandler());
+		Kontaktbearbeiten.addClickHandler(new bearbeitenClickHandler());
 		
 	}
 
 		
 		
-		private class hinzufClickHandler implements ClickHandler {
 
-			@Override
-			public void onClick(ClickEvent event) {
+	
+
+	/**
+	 * 
+	 * in ContactSystemClass hinzufügen
+	 *
+	 */
+	//private class hinzufClickHandler implements ClickHandler {
+
+	//@Override
+			//public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				//TODO: def. was passieren soll wenn man auf den Button klickt
 					//If-Abfrage um zu prüfen ob etwas in die Textbox eingegeben wurde
-				if(TextBoxName != null) {
+				//if(TextBoxName != null) {
 					
 					//Name für einen Kontakt eingeben
-					String name = TextBoxName.getText();
+					//String name = TextBoxName.getText();
 					//TODO: Verbindung
 					//angezeigterKontakt.getpropertyValue().setName(TextBoxName.getText());
 					
-				} else {
-					Window.alert("kein Kunde eingegeben");
-				}
-			}
+				//} else {
+				//	Window.alert("kein Kunde eingegeben");
+				//}
+		//	}
 			
-		}
+		//}
+	
+		//ChlickHandler um einen Kontakt zu loeschen (Bei Klick auf den "Kontakt loeschen"-Button)
 		private class loeschenClickHandler implements ClickHandler {
 
 			@Override
@@ -92,13 +104,37 @@ public class ContactForm extends VerticalPanel{
 				// TODO Auto-generated method stub
 				//TODO: def. was passieren soll wenn man auf den Button klickt
 				if (angezeigterKontakt == null) {
-					Window.alert("kein Kunde ausgewÃ¤hlt");
+					Window.alert("kein Kontakt ausgewählt");
 				} else {
 					//TODO: Verbindung
 				}
 			}
-			
 		}
-	
+			
+			//Chlickhandler um einen Kontakt zu Teilen (Bei Klick auf den "Kontakt Teilen"-Button)
+			private class teilenClickHandler implements ClickHandler {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					//TODO: def. was passieren soll wenn man auf den Button klickt
+					Window.alert("Kontakt wurde geteilt");
+						//TODO: Verbindung
+					}
+				}
+			
+			//Chlickhandler um einen Kontakt zu bearbeiten (Bei Klick auf den "Kontakt bearbeiten"-Button)
+			private class bearbeitenClickHandler implements ClickHandler {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					//TODO: def. was passieren soll wenn man auf den Button klickt
+					Window.alert("Änderungen wurden gespeichert");
+						//TODO: Verbindung
+					}
+				}
+			
+
 }
 
