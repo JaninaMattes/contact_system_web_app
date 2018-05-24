@@ -17,7 +17,19 @@ public class ContactListCell extends AbstractCell<ContactList> {
 		sb.appendHtmlConstant("<div>" + "<table>" + "<tr>" + "<td>");
 		// sb.append(cL.getName());  AUSBESSERN FEHLER
 		sb.appendHtmlConstant("<td>" + "<tr>" + "<table>" + "<div>");
-
+		
+		/**
+		 *Wenn eine Kontaktliste mit mir geteilt wurde, dann zeige das Sympbol "Teilhaberschaft". 
+		 */
+		
+		//if();  Noch zu ergänzen
+			 
+		/**
+		 * Wenn ich eine Kontaktliste geteilt habe, dann zeige das Symbol "Geteilt".
+		 */
+		
+		//if(); noch zu ergänzen
+			
 	}
 
 }
