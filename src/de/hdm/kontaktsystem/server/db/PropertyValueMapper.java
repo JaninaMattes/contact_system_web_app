@@ -377,15 +377,18 @@ public class PropertyValueMapper {
 		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 		
 		//System.out.println(participationVector);
 		
-		for (Participation part : participationVector) {
+		for (Participation part : participationVector) { 		
+			
+			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
+			 //System.out.println(bo);
 			 PropertyValue propVal = new PropertyValue();
-			 propVal = this.findByKey(part.getReferenceID());
-			 System.out.println(propVal);
-			 part.setReference(propVal);
-			 part.setParticipant(user);	 	
-			 	if(propVal != null) {
-			 		propertyResultVector.addElement(propVal);
-		     }
+			 
+			 //System.out.println(propVal); 	
+			 if(bo instanceof PropertyValue) {			 		
+				 propVal = (PropertyValue) bo;
+			 		//System.out.println("Ausprägung " + propVal.getProp());
+			 		propertyResultVector.addElement(propVal);		     
+			 }
 		}
 		return propertyResultVector;
 		
@@ -418,7 +421,7 @@ public class PropertyValueMapper {
 			 part.setReference(propVal);
 			 part.setParticipant(user);	 
 			 //System.out.println(part);		     
-			 //System.out.println(propVal);
+			 System.out.println(propVal);
 			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
 			 if(propVal != null) {
 				  propertyResultVector.addElement(propVal);
