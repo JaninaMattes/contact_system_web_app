@@ -5,7 +5,7 @@ import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
-public class DBTestContact {
+public class ContactMapperTest {
 	
 	public static void main(String args[]) {
 		
@@ -21,10 +21,7 @@ public class DBTestContact {
 		Contact c = new Contact(); 
 		PropertyValue pv = new PropertyValue();
 		
-		System.out.println(
-		
-		ContactMapper.contactMapper().findBy(pv)
-				);
+	//	System.out.println(ContactMapper.contactMapper().findBy(pv));
 		
 
 		/**
@@ -66,7 +63,7 @@ public class DBTestContact {
 		/**
 		 * Test: Alle Kontakte eines Users finden
 		 */
-		ContactMapper.contactMapper().findAllContactsByUser(0);
+		// ContactMapper.contactMapper().findAllContactsByUser(0);
 		/**
 		 * Test: Alle vorhandenen Kontakte suchen
 		 */
@@ -105,6 +102,13 @@ public class DBTestContact {
 		 */
 		//ContactMapper.contactMapper().deleteAllContacts();
 
+		
+		double id = 0;
+		
+		User user = new User();
+		user.setGoogleID(0);
+		
+		ContactMapper.contactMapper().findAllSharedByMe(user);
 		
 		
 	}

@@ -246,10 +246,9 @@ public class DBTest {
 		System.out.println("Find All: " +pMapper.findAll());
 		System.out.println("Find by ID: " +pMapper.findBy(vPVID));
 		System.out.println("Find by Desc: " +pMapper.findBy("Name"));
+
 		//System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
-		
-		
-		
+
 		
 		System.out.println("\n ############ Test PropertyValue ################ \n");
 		
@@ -266,6 +265,9 @@ public class DBTest {
 
 		double uID = 2.3862612474697788E16;
 		
+		User user = new User();
+		user.setGoogleID(uID);
+		
 		System.out.println("\n ############ Test Contact ################ \n");
 		
 		cMapper.deleteAllContactsByUser(uID);
@@ -280,7 +282,7 @@ public class DBTest {
 		
 		System.out.println("\n ############ Test User ################ \n");
 		
-		uMapper.deleteByID(uID);
+		uMapper.delete(user);
 		
 		System.out.println("\n ############ Test PopertyValue ################ \n");
 		
