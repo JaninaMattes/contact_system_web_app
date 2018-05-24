@@ -119,8 +119,16 @@ public class ContactSystem implements EntryPoint {
 				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 				cellTree.setAnimationEnabled(true);	
 				
-				RootPanel.get("Liste").add(cellTree);
+				VerticalPanel addPanel = new VerticalPanel();
+				Button addButton = new Button("Hinzufügen");
+				addPanel.add(addButton);
+				addPanel.add(cellTree);
+				
+				RootPanel.get("Liste").add(addPanel);
 			}
+			
+			//TODO: ClickHandler AddButton
+			
 		});
 		
 		//Clickhandler für ContactListButton
@@ -130,9 +138,18 @@ public class ContactSystem implements EntryPoint {
 				CellTree cellTree = new CellTree(ctvm, "Root", contactListTreeRecource);
 				cellTree.setAnimationEnabled(true);
 				
-				RootPanel.get("Liste").add(cellTree);
+				VerticalPanel addPanel = new VerticalPanel();
+				Button addButton = new Button("Hinzufügen");
+				addPanel.add(addButton);
+				addPanel.add(cellTree);
+				
+				RootPanel.get("Liste").add(addPanel);
 			}
+			
+			//TODO: ClickHandler AddButton
+			
 		});
+		
 		
 		//Clickhandler für MyParticipationsButton
 		MyParticipationsButton.addClickHandler(new ClickHandler() {
