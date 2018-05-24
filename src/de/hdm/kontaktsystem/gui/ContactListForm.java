@@ -20,7 +20,7 @@ import de.hdm.thies.bankProjekt.shared.bo.Customer;
 
 public class ContactListForm extends VerticalPanel{
 	ContactSystemAdministrationAsync contactSystem = ClientsideSettings.getContactAdministration();
-	ContactList contactListDisplay = null;
+	ContactList contactListToDisplay = null;
 	ContactListsTreeViewModel cltvm = null;
 	
 	/**
@@ -44,13 +44,16 @@ public class ContactListForm extends VerticalPanel{
 	/**
 	 * Löschenbutton um eine Kontaktliste zu löschen.
 	 */
-	
-	Button deleteButton = new Button ("Kontaktliste löschen");
+
+	Button addButton = new Button ("Kontakt der Liste inzufügen");
+	Button shareButton = new Button ("Kontaktliste teilen");
+	Button deleteButton = new Button ("Kontakt aus eine Liste löschen");
+	Button deleteClButton = new Button ("Kontaktliste löschen");
 
 	public void onLoad() {
 		super.onLoad();
 		
-		Grid contactListGrid = new Grid(5, 2);
+		Grid contactListGrid = new Grid(8, 2);
 		this.add(contactListGrid);
 		
 		contactListGrid.setWidget(0, 0, contactListLabel);
@@ -62,12 +65,24 @@ public class ContactListForm extends VerticalPanel{
 		contactListGrid.setWidget(2, 0, lastNameLabel);
 		contactListGrid.setWidget(2, 1, lastNameContact);
 		
-		//contactListGrid.setWidget(3, 0, sharedContactLabel);
+		//contactListGrid.setWidget(3, 0, sharedContactLabel);  //widget um anzuzeigen, welche Kontakte einer Liste geteilt wurden
 		//contactListGrid.setWidget(3, 1, sharedContact);
 		
-		deleteButton.addClickHandler(new DeleteClickhandler());
+		addButton.addClickHandler(new addClickHandler());
+		addButton.setEnabled(false);
+		contactListGrid.setWidget(4, 1, addButton);
+		
+		shareButton.addClickHandler(new shareClickHandler());
+		shareButton.setEnabled(false);
+		contactListGrid.setWidget(5, 1, shareButton);
+		
+		deleteButton.addClickHandler(new DeleteClickHandler());
 		deleteButton.setEnabled(false);
-		contactListGrid.setWidget(4, 1, deleteButton);
+		contactListGrid.setWidget(6, 1, deleteButton);
+		
+		deleteClButton.addClickHandler(new DeleteClClickHandler());
+		deleteClButton.setEnabled(false);
+		contactListGrid.setWidget(7, 1, deleteClButton);
 		
 	}
 }
@@ -85,30 +100,30 @@ private class DeleteClClickHandler implements ClickHandler {
 		if (contactListToDisplay == null) {
 			Window.alert("keine KontaktListe ausgewählt");
 		} else {
-			contactSystem.delete(customerToDisplay,
-					new deleteCustomerCallback(customerToDisplay));
+			contactSystemVerwaltung.delete(contactListToDisplay,
+					new deleteContactListCallback(contactListToDisplay));
 		}
 	}
 }
 
-class deleteCustomerCallback implements AsyncCallback<Void> {
+class deleteContactListCallback implements AsyncCallback<Void> {
 
-	Customer customer = null;
+	ContactList contactList = null;
 
-	deleteCustomerCallback(Customer c) {
-		customer = c;
+	deleteContactListCallback(ContactList cl) {
+		contactList = cl;
 	}
 
 	@Override
 	public void onFailure(Throwable caught) {
-		Window.alert("Das Löschen des Kunden ist fehlgeschlagen!");
+		Window.alert("Löschen einer Kontaktliste fehlgeschlagen");
 	}
 
 	@Override
 	public void onSuccess(Void result) {
-		if (customer != null) {
+		if (contactList != null) {
 			setSelected(null);
-			catvm.removeCustomer(customer);
+			cltvm.removeContactList(contactList);
 		}
 	}
 }

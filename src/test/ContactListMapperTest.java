@@ -25,23 +25,40 @@ public class ContactListMapperTest {
 
 	public static void main(String args[]) {
 
-		BusinessObjectMapper boMapper = BusinessObjectMapper.businessObjectMapper();
-		ContactListMapper clMapper = ContactListMapper.contactListMapper();
-		ContactMapper cMapper = ContactMapper.contactMapper();
-		ParticipationMapper partMapper = ParticipationMapper.participationMapper();
-		PropertyMapper propMapper = PropertyMapper.propertyMapper();
-		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
-		UserMapper uMapper = UserMapper.userMapper();
-
-		/**
-		 * Test fuer den ContactList Mapper.
-		 */
+		User u = new User();
+		u.setGoogleID(666);
 		
-		ContactList cl = new ContactList();
-		cl.setName("Kontaktliste 1");
-		cl.setOwner(uMapper.findById(325));
+		Vector<ContactList> hilfsVektor = new Vector<ContactList>();
+		hilfsVektor = ContactListMapper.contactListMapper().findAllSharedByOthersToMe(u);
 		
-		Vector<ContactList> cll = new Vector<ContactList>();
+		for (ContactList cl : hilfsVektor) {
+			
+			System.out.println(cl);
+			
+		}
+		
+		
+		
+		
+		
+		
+//		BusinessObjectMapper boMapper = BusinessObjectMapper.businessObjectMapper();
+//		ContactListMapper clMapper = ContactListMapper.contactListMapper();
+//		ContactMapper cMapper = ContactMapper.contactMapper();
+//		ParticipationMapper partMapper = ParticipationMapper.participationMapper();
+//		PropertyMapper propMapper = PropertyMapper.propertyMapper();
+//		PropertyValueMapper propValMapper = PropertyValueMapper.propertyValueMapper();
+//		UserMapper uMapper = UserMapper.userMapper();
+//
+//		/**
+//		 * Test fuer den ContactList Mapper.
+//		 */
+//		
+//		ContactList cl = new ContactList();
+//		cl.setName("Kontaktliste 1");
+//		cl.setOwner(uMapper.findById(325));
+//		
+//		Vector<ContactList> cll = new Vector<ContactList>();
 		
 		/**
 		 *Test alle Kontakte finden.
@@ -85,12 +102,12 @@ public class ContactListMapperTest {
 		//cll = clMapper.findContactListByName("KontaktListe_2");
 		//System.out.println(cll);
 		
-		int id = 0;
-		
-		User user = new User();
-		user.setGoogleID(id);
-		
-		ContactListMapper.contactListMapper().findAllSharedByMe(user);
+//		int id = 0;
+//		
+//		User user = new User();
+//		user.setGoogleID(id);
+//		
+//		ContactListMapper.contactListMapper().findAllSharedByMe(user);
 		
 	}
 
