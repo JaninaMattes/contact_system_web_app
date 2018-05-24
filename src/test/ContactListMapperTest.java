@@ -21,7 +21,7 @@ import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
-public class DBTestContactList {
+public class ContactListMapperTest {
 
 	public static void main(String args[]) {
 
@@ -85,8 +85,13 @@ public class DBTestContactList {
 		//cll = clMapper.findContactListByName("KontaktListe_2");
 		//System.out.println(cll);
 		
+		int id = 0;
 		
-	
+		User user = new User();
+		user.setGoogleID(id);
+		
+		ContactListMapper.contactListMapper().findAllSharedByMe(user);
+		
 	}
 
 }

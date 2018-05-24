@@ -248,7 +248,7 @@ int pTestID = 8;
 		System.out.println("Find All: " +pMapper.findAll());
 		System.out.println("Find by ID: " +pMapper.findBy(vPVID));
 		System.out.println("Find by Desc: " +pMapper.findBy("Name"));
-		System.out.println("Find PV: " +pMapper.findBy(pvMapper.findByKey(vPVID)));
+		//System.out.println("Find PV: " + pMapper.findBy(pvMapper.findByKey(vPVID)));
 		
 		
 		
@@ -259,7 +259,7 @@ int pTestID = 8;
 		System.out.println("Find by ID: " +pvMapper.findByKey(vPVID));
 		//System.out.println(pvMapper.findAll(pv, u));
 		System.out.println("Find by Contact: " +pvMapper.findBy(c));
-		System.out.println("Find by User: " +pvMapper.findBy(u));
+		//System.out.println("Find by User: " +pvMapper.findBy(u));
 		System.out.println("Find by Property: " +pvMapper.findBy(pMapper.findBy(vPID)));
 		//System.out.println(pvMapper.findAllShared(u, pv));
 	}

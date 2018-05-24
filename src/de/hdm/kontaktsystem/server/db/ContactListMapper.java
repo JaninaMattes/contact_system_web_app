@@ -9,6 +9,8 @@ import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
+import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 public class ContactListMapper {
@@ -184,6 +186,60 @@ public class ContactListMapper {
 
 		return cll;
 	}
+	
+	/**
+	 *  Alle fuer den Benutzer in der Applikation zugaenglichen Kontaktlisten <code>ContactList</code> - Objekte
+	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
+	 *  und die Ergebnisse zurueckgegeben
+	 */
+
+	public Vector<ContactList> findAllSharedByMe (User user) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche fÃ¼r Objekte kapseln, die von diesem geteilt wurden
+		Vector<Participation> participationVector = new Vector<Participation>();		
+		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
+		// Vector fÃ¼r die Speicherung aller BusinessObjekte erzeugen
+		Vector<ContactList> propertyResultVector = new Vector <ContactList>(); 		
+		//System.out.println(participationVector);
+		
+		for (Participation part : participationVector) {
+			 ContactList contactList = new ContactList();
+			 contactList = this.findContactListById(part.getReferenceID());
+			 part.setReference(contactList);
+			 part.setParticipant(user);	 	
+			 	if(contactList != null) {
+			 		propertyResultVector.addElement(contactList);
+			 		System.out.println("contactList id: " + contactList.getBo_Id());
+			 		System.out.println("contactList name: " + contactList.getName());
+		     }
+		}
+		return propertyResultVector;
+		
+	}
+	
+	/**
+	 * Die Methode ermöglicht das löschen aller für einen User geteilten <code>ContactListen</code>, 
+	 * sowie deren enthaltene Kontakte <code>Contact</code> und deren PropertyValue-Objekte
+	 */
+	
+	public void deleteAllSharedForMe() {
+		
+	}
+	
+	/**
+	 * Funktion zum löschen aller geteilten ContactListe - Objekte
+	 * @param user 
+	 * 
+	 */
+
+	public void deleteAllSharedByMe() {
+
+				
+
+	}
+	
+	
+	
 
 	/**
 	 * Name der Liste verï¿½ndern.
