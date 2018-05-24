@@ -217,14 +217,6 @@ public class PropertyValueMapper {
 	}
 	
 
-	/*
-	 * Funktion zum Löschen aller Auspraegungen die vom User erstellt wurden
-	 */
-
-//	public void deleteAllOwnership(User u) {
-//
-//
-//	}
 
 	/*************************************************************************************
 	 * Methode zum Leeren der PropertyValue Tabelle
@@ -237,8 +229,9 @@ public class PropertyValueMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
-			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue INNER JOIN BusinessObject "
+			PreparedStatement stmt = con.prepareStatement(
+					  "DELETE FROM PropertyValue "
+					+ "INNER JOIN BusinessObject "
 					+ "ON PropertyValue.ID = BusinessObject.bo_ID" 
 					);
 					stmt.execute();
@@ -248,8 +241,6 @@ public class PropertyValueMapper {
 		}
 	}
 		
-		
-
 	
 
 	/*
@@ -555,18 +546,26 @@ public class PropertyValueMapper {
 		return null;
 	}
 	
-
+	
 	/**
-	 * Methode um den Namen eines Kontakts zurück zu geben
+	 * Anhand der uebergegebenen ID wird das zugehoerige PropertyValue - Objekt,
+	 * welches der Eigenschaft "Name" zugewiesen werden kann, eindeutig
+	 * identifiziert und zurueckgegeben
 	 * 
-	 * @param contact
-	 * @return PropertyValue - Objekt
+	 *  @param contact
+	 *  @return PropertyValue - Objekt
 	 */
 
 	public PropertyValue findName(Contact contact) {
+		
 		PropertyValue name = new PropertyValue();
-		// TODO Auto-generated method stub
+		Vector <PropertyValue> result = new Vector <PropertyValue>();
+		for(PropertyValue val : result) {
+			System.out.println("propertyVal id: " + val.getBo_Id());
+			if(val.getProp().getDescription().equals("Name")) name = val;
+			}			
 		return name;
 	}
+
 
 }
