@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class ContactSystem implements EntryPoint {
 
 	/**
+<<<<<<< HEAD
 	 * Interface aus BankProjekt übernommen
 	 */
 	static interface TreeResources extends CellTree.Resources {
@@ -58,8 +59,8 @@ public class ContactSystem implements EntryPoint {
 
 	
 	
-	/**
-	 * Instantiieren der GWT Widgets und Panels
+
+	/** Instanziieren der GWT Widgets und Panels
 	 */
 	
 	//Panels
