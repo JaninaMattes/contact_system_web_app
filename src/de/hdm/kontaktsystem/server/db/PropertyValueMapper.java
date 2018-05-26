@@ -563,13 +563,13 @@ public class PropertyValueMapper {
 		propertyValueResult = this.findAllSharedByMe(user);
 		
 		for(PropertyValue pV : propertyValueResult) {
-			// l�schen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
+			// loeschen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
 			this.delete(pV);
 		}
 	}
 	
-	/*
+	/**
 	 * Funktion zum Löschen aller Auspraegungen die vom User geteilt wurden
 	 * 
 	 * @param User-Objekt
