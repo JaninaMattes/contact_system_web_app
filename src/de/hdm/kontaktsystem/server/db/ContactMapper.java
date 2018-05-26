@@ -267,54 +267,6 @@ public class ContactMapper {
 	}
 	
 	/**
-	 * Den eigenen Kontakt eines User, welcher bei dessen Erzeugung in 
-	 * der DB erstellt wird aufrufen. 
-	 * 
-
-	 * Wirn nur Verwendet um dem User-Objekt seine Contact-Objekt zu zuweisen.
-	 * Wird benötigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzulösen
-	 * 
-	 * @param User-Objekt
-	 * @param Contact ID
-	 */
-	
-
-	public void findOwnContact(int contact_ID, User u) {
-
-		
-		Connection con = DBConnection.connection();
-		try {
-			PreparedStatement stmt = con.prepareStatement(
-					  "SELECT c.* , bo.* " 
-					+ "FROM  Contact c "
-					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
-					+ "WHERE c.ID = ?");
-
-			stmt.setInt(1, contact_ID);
-			ResultSet rs = stmt.executeQuery();
-
-
-			if (rs.next()) {		
-				
-				Contact contact = new Contact();
-				contact.setOwner(u);
-				contact.setBo_Id(rs.getInt("bo.bo_ID"));
-				contact.setShared_status(rs.getBoolean("bo.status"));
-				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
-				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
-				u.setContact(contact);
-				
-			}
-			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
 	 * Mapper-Methode um einen Kontakt nach einer Eigenschaft zu finden
 	 * 
 	 * @param PropertyValue
@@ -394,6 +346,7 @@ public class ContactMapper {
 		
 		return findAllContactsByUser(user.getGoogleID());
 	}
+	
 
 	/**
 	 * Mapper-Methode um einen Kontakt zu bearbeiten
@@ -537,6 +490,53 @@ public class ContactMapper {
 		}
 	}
 	
+
+	/**
+	 * Den eigenen Kontakt eines User, welcher bei dessen Erzeugung in 
+	 * der DB erstellt wird aufrufen. 
+	 * 
+	 * Wirn nur Verwendet um dem User-Objekt seine Contact-Objekt zu zuweisen.
+	 * Wird benötigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzulösen
+	 * 
+	 * @param User-Objekt
+	 * @param Contact ID
+	 */
+	
+
+	public void addOwnContact(int contact_ID, User u) {
+
+		
+		Connection con = DBConnection.connection();
+		try {
+			PreparedStatement stmt = con.prepareStatement(
+					  "SELECT c.* , bo.* " 
+					+ "FROM  Contact c "
+					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
+					+ "WHERE c.ID = ?");
+
+			stmt.setInt(1, contact_ID);
+			ResultSet rs = stmt.executeQuery();
+
+
+			if (rs.next()) {		
+				
+				Contact contact = new Contact();
+				contact.setOwner(u);
+				contact.setBo_Id(rs.getInt("bo.bo_ID"));
+				contact.setShared_status(rs.getBoolean("bo.status"));
+				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
+				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				u.setContact(contact);
+				
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 
 }
