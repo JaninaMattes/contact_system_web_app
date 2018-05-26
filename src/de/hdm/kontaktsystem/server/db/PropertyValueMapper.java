@@ -26,6 +26,10 @@ public class PropertyValueMapper {
 
 	}
 
+	/**
+	 * Gibt nach dem Singelton Pattern eine Instanz des PropertyValueMppers zurück
+	 * @return PropertyValueMapper-Objekt
+	 */
 	public static PropertyValueMapper propertyValueMapper() {
 		if (propertyValueMapper == null) {
 			propertyValueMapper = new PropertyValueMapper();
@@ -37,9 +41,11 @@ public class PropertyValueMapper {
 	/*
 	 * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
 	 * 
+	 * @param PropertyValue-Objekt
+	 * @return PropertyValue-Objekt
 	 */
 	
-	public void insert(PropertyValue pv) {
+	public PropertyValue insert(PropertyValue pv) {
 
 		BusinessObjectMapper.businessObjectMapper().insert(pv);
 
@@ -58,194 +64,22 @@ public class PropertyValueMapper {
 			stmt.setString(3, pv.getValue());
 			stmt.setInt(4, pv.getContact().getBo_Id());
 			
-			stmt.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	/*
-	 * Aktualisierung der Daten fuer PropertyValue Tabelle in DB
-	 */
-
-	public PropertyValue update(PropertyValue pv) {
-
-		BusinessObjectMapper.businessObjectMapper().update(pv);
-
-		Connection con = DBConnection.connection();
-
-		try {
-			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement
-					("UPDATE PropertyValue SET value= ? WHERE ID= ?"
-					);
-			stmt.setString(1, pv.getValue());
-			stmt.setInt(2, pv.getBo_Id());
-			stmt.execute();
+			if(stmt.executeUpdate() > 0) return pv;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	/*
-	 * Loeschen der Eigenschaftsauspraegung in DB anhand des PropertyValue Objekts,
-	 * Weitergabe an deletePropertyValue(int id)
-	 */
-
-	public void delete(PropertyValue pv) {
-
-		deleteByPropValue(pv.getBo_Id());
 
 	}
 
-	/*
-	 * Loeschen der Eigenschaftsauspraegung in DB anhand der PropertyValue ID
-	 */
-
-	public void deleteByPropValue(int id) {
-
-		
-
-		Connection con = DBConnection.connection();
-
-		try {
-			// Einfügeoperation in propertyvalue erfolgt
-			PreparedStatement stmt = con.prepareStatement
-			("DELETE FROM PropertyValue WHERE id= ?"
-			);
-			stmt.setInt(1, id);
-			stmt.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
-
-	}
-
-	/*
-	 * Anhand des zugehörigen Kontakts wird eine Auspraegung gelöscht
-	 */
-
-	public void deleteBy(Contact c) {
-
-		deleteByContact(c.getBo_Id());
-
-	}
-
-	/*
-	 * Löschen der Ausprägung anhand der zugehörigen Kontakt Id
-	 * Aufruf über Contact, der PropertyValue löscht
-	 */
-
-	public void deleteByContact(int id) {
-		
-		for(PropertyValue pv : findByContactID(id)){
-			delete(pv);
-		}
-		
-	}
-
-	/*
-	 * Anhand der zugehörigen Eigenschaft wird eine Auspraegung gelöscht
-	 */
-
-	public void deleteBy(Property prop) {
-
-		deleteByProp(prop.getId());
-
-	}
-
-	/*
-	 * Anhand der übergebenen ID einer Eigenschaft wird die Zugehörigkeit zur
-	 * Ausprägung gesucht und alle Ausprägungen mitsamt ihrer Eigenschaften gelöscht
-	 */
-
-	public void deleteByProp(int property_id) {
-		
-		for(PropertyValue pv : findByPropertyID(property_id)){
-			delete(pv);
-		}
-
-	}
-
-	/**
-	 * Methode zur L�schung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
-	 * welche im System mit anderen Nutzern geteilt wurden. 
-	 * @param user
-	 */
-	
-	public void deleteAllSharedByMe(User user) {
-		
-		Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
-		propertyValueResult = this.findAllSharedByMe(user);
-		
-		for(PropertyValue pV : propertyValueResult) {
-			// l�schen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
-			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
-			this.delete(pV);
-		}
-	}
-	
-	/*
-	 * Funktion zum Löschen aller Auspraegungen die vom User geteilt wurden
-	 */
-
-	public void deleteAllSharedByOthersToMe(User u) {
-
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-				Vector<Participation> participationVector = new Vector<Participation>();		
-				//participationVector = ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
-				// Vector für die Speicherung aller BusinessObjekte erzeugen
-				Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
-				
-				
-				for (Participation part : participationVector) {
-					
-					 PropertyValue propVal = new PropertyValue();
-					 propVal = this.findByKey(part.getReferenceID());			 
-					 System.out.println("pov-id: " + propVal.getBo_Id());		     
-					 	if(propVal != null) {
-					 		propertyResultVector.addElement(propVal);
-				     }
-				}
-
-	}
-	
-
-
-	/*************************************************************************************
-	 * Methode zum Leeren der PropertyValue Tabelle
-	 * WICHTIG: In App Logik nicht anwendbar, da Namensausprägung für Contact ggf. leer
-	 *************************************************************************************/
-	
-	public void deleteAll() {
-		
-
-		Connection con = DBConnection.connection();
-		
-		try {
-			PreparedStatement stmt = con.prepareStatement(
-					  "DELETE FROM PropertyValue "
-					+ "INNER JOIN BusinessObject "
-					+ "ON PropertyValue.ID = BusinessObject.bo_ID" 
-					);
-					stmt.execute();
-					
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-		
-	
 
 	/*
 	 * Anhand der uebergegebenen ID wird das zugehoerige PropertyValue eindeutig
 	 * identifiziert und zurueckgegeben
+	 * 
+	 * @param PropertyValue ID
+	 * @return PropertyValue-Objekt
 	 */
 
 	public PropertyValue findByKey(int propvalue_id) {
@@ -287,6 +121,8 @@ public class PropertyValueMapper {
 	/*
 	 * Alle fuer Benutzer zugaenglichen PropertyValues (Participant und Ownership)
 	 * werden gesucht, in einen Vector gespeichert und zurueckgegeben
+	 * 
+	 * @return Vector<PropertyValue>
 	 */
 
 	public Vector<PropertyValue> findAll() {
@@ -366,6 +202,9 @@ public class PropertyValueMapper {
 	 *  Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen <code>PropertyValue</code> - Objekte 
 	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
 	 *  und die Ergebnisse zurueckgegeben
+	 *  
+	 *  @param User-Objekt
+	 *  @return Vector<PropertyValue>
 	 */
 
 	public Vector<PropertyValue> findAllSharedByMe (User user) {
@@ -398,7 +237,7 @@ public class PropertyValueMapper {
 	 * Alle fuer den Benutzer in der Applikation geteilte Ausprägungen <code>PropertyValue</code> Objekte
 	 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
 	 * 
-	 * @param user-Objekt
+	 * @param User-Objekt
 	 * @return Vector PropertyValue-Objekte
 	 */
 
@@ -440,15 +279,22 @@ public class PropertyValueMapper {
 		 
 	 }
 
-	 
+	 /**
+	  * Gibt alle PropertValues zurück die zu einem Contact-Objekt gehören
+	  * @param Contact-Objekt
+	  * @return Vector<PropertyValue>
+	  */
 	 public Vector<PropertyValue> findBy(Contact c) {
 		 return findByContactID(c.getBo_Id());
 	 }
 	 
 	 
-	/*
+	/**
 	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Kontakte
-	 * ContactMapper, 
+	 * ContactMapper,
+	 * 
+	 * @param Contact ID
+	 * @return Vector<PropertyValue> 
 	 */
 
 	public Vector<PropertyValue> findByContactID(int contactID) {
@@ -490,6 +336,14 @@ public class PropertyValueMapper {
 		return null;
 	}
 
+	
+	/**
+	  * Gibt alle PropertValues zurück die von einer Property sind
+	  * 
+	  * @param Property-Objekt
+	  * @return Vector<PropertyValue>
+	  */
+	
 	public Vector<PropertyValue> findBy(Property p) {
 		return findByPropertyID(p.getId());
 		
@@ -499,6 +353,8 @@ public class PropertyValueMapper {
 	/**
 	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Eigenschaft
 	 * 
+	 * @param Property ID
+	  * @return Vector<PropertyValue>
 	 */
 
 	public Vector<PropertyValue> findByPropertyID(int propertyID) {
@@ -552,7 +408,7 @@ public class PropertyValueMapper {
 	 * welches der Eigenschaft "Name" zugewiesen werden kann, eindeutig
 	 * identifiziert und zurueckgegeben
 	 * 
-	 *  @param contact
+	 *  @param Contact-Objekt
 	 *  @return PropertyValue - Objekt
 	 */
 
@@ -566,6 +422,206 @@ public class PropertyValueMapper {
 			}			
 		return name;
 	}
+	
+
+	/*
+	 * Aktualisierung der Daten fuer PropertyValue Tabelle in DB
+	 * 
+	 * @parm PropertyValue-Objekt
+	 * @return PropertyValue-Objekt
+	 */
+
+	public PropertyValue update(PropertyValue pv) {
+
+		BusinessObjectMapper.businessObjectMapper().update(pv);
+
+		Connection con = DBConnection.connection();
+
+		try {
+			// Einfügeoperation in propertyvalue erfolgt
+			PreparedStatement stmt = con.prepareStatement
+					("UPDATE PropertyValue SET value= ? WHERE ID= ?"
+					);
+			stmt.setString(1, pv.getValue());
+			stmt.setInt(2, pv.getBo_Id());
+			stmt.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/*
+	 * Loeschen der Eigenschaftsauspraegung in DB anhand des PropertyValue Objekts,
+	 * Weitergabe an deletePropertyValue(int id)
+	 * 
+	 * @parm PropertyValue-Objekt
+	 * @return PropertyValue-Objekt
+	 */
+
+	public PropertyValue delete(PropertyValue pv) {
+
+		if(deleteByPropValue(pv.getBo_Id()) > 0) return pv;
+		else return null;
+
+	}
+
+	/*
+	 * Loeschen der Eigenschaftsauspraegung in DB anhand der PropertyValue ID
+	 * 
+	 * @parm PropertyValue ID
+	 * @return Anzahl geänderter Einträge
+	 */
+
+	public int deleteByPropValue(int id) {
+
+		Connection con = DBConnection.connection();
+		int i = 0;
+
+		try {
+			// Einfügeoperation in propertyvalue erfolgt
+			PreparedStatement stmt = con.prepareStatement
+			("DELETE FROM PropertyValue WHERE id= ?"
+			);
+			stmt.setInt(1, id);
+			i = stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		return i;
+	}
+
+	/**
+	 * Anhand des zugehörigen Kontakts wird eine Auspraegung gelöscht
+	 * 
+	 * @parm Contact-Objekt
+	 * @return Contact-Objekt
+	 */
+
+	public Contact  deleteBy(Contact c) {
+
+		if(deleteByContact(c.getBo_Id()) > 0) return c;
+		else return null;	
+
+	}
+
+	/**
+	 * Löschen der Ausprägung anhand der zugehörigen Kontakt Id
+	 * Aufruf über Contact, der PropertyValue löscht
+	 * 
+	 * @parm Contact ID
+	 */
+
+	public void deleteByContact(int id) {
+		
+		for(PropertyValue pv : findByContactID(id)){
+			delete(pv);
+		}
+		
+	}
+
+	/**
+	 * Anhand der zugehörigen Eigenschaft wird eine Auspraegung gelöscht
+	 * 
+	 * @parm Property-Objekt
+	 */
+
+	public void deleteBy(Property prop) {
+
+		deleteByProp(prop.getId());
+
+	}
+
+	/**
+	 * Anhand der übergebenen ID einer Eigenschaft wird die Zugehörigkeit zur
+	 * Ausprägung gesucht und alle Ausprägungen mitsamt ihrer Eigenschaften gelöscht
+	 * 
+	 * @parm Property ID
+	 */
+
+	public void deleteByProp(int property_id) {
+		
+		for(PropertyValue pv : findByPropertyID(property_id)){
+			delete(pv);
+		}
+
+	}
+
+	/**
+	 * Methode zur L�schung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
+	 * welche im System mit anderen Nutzern geteilt wurden. 
+	 * 
+	 * @param User-Objekt
+	 */
+	
+	public void deleteAllSharedByMe(User user) {
+		
+		Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
+		propertyValueResult = this.findAllSharedByMe(user);
+		
+		for(PropertyValue pV : propertyValueResult) {
+			// l�schen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
+			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
+			this.delete(pV);
+		}
+	}
+	
+	/*
+	 * Funktion zum Löschen aller Auspraegungen die vom User geteilt wurden
+	 * 
+	 * @param User-Objekt
+	 */
+
+	public void deleteAllSharedByOthersToMe(User u) {
+
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+				Vector<Participation> participationVector = new Vector<Participation>();		
+				//participationVector = ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
+				// Vector für die Speicherung aller BusinessObjekte erzeugen
+				Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
+				
+				
+				for (Participation part : participationVector) {
+					
+					 PropertyValue propVal = new PropertyValue();
+					 propVal = this.findByKey(part.getReferenceID());			 
+					 System.out.println("pov-id: " + propVal.getBo_Id());		     
+					 	if(propVal != null) {
+					 		propertyResultVector.addElement(propVal);
+				     }
+				}
+
+	}
+	
+
+
+	/*************************************************************************************
+	 * Methode zum Leeren der PropertyValue Tabelle
+	 * WICHTIG: In App Logik nicht anwendbar, da Namensausprägung für Contact ggf. leer
+	 *************************************************************************************/
+	
+	public void deleteAll() {
+		
+
+		Connection con = DBConnection.connection();
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement(
+					  "DELETE FROM PropertyValue "
+					+ "INNER JOIN BusinessObject "
+					+ "ON PropertyValue.ID = BusinessObject.bo_ID" 
+					);
+					stmt.execute();
+					
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+		
+	
 
 
 }
