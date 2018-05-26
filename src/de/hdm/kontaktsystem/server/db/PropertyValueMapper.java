@@ -48,22 +48,14 @@ public class PropertyValueMapper {
 	public PropertyValue insert(PropertyValue pv) {
 
 		BusinessObjectMapper.businessObjectMapper().insert(pv);
-
 		Connection con = DBConnection.connection();
-		Property prop = new Property();
-		Contact contact = new Contact();
-		pv.setContact(contact);
-		pv.setProp(prop);
-
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-			"INSERT INTO PropertyValue (ID, property_ID, value, contact_ID) VALUES (?, ?, ?, ?)"
-			);
+			"INSERT INTO PropertyValue (ID, property_ID, value, contact_ID) VALUES (?, ?, ?, ?)");
 			stmt.setInt(1, pv.getBo_Id());
 			stmt.setInt(2, pv.getProp().getId());
 			stmt.setString(3, pv.getValue());
-			stmt.setInt(4, pv.getContact().getBo_Id());
-			
+			stmt.setInt(4, pv.getContact().getBo_Id());			
 			if(stmt.executeUpdate() > 0) return pv;
 
 		} catch (SQLException e) {
@@ -503,7 +495,6 @@ public class PropertyValueMapper {
 	 */
 
 	public void deleteBy(Contact c) {
-
 		deleteByContact(c.getBo_Id());	
 
 	}

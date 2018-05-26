@@ -1,5 +1,7 @@
 package test;
 
+import java.util.Vector;
+
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
@@ -11,8 +13,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 public class PropertyMapperTest {
 	
-	public static void main(String args[]) {
-		
+	public static void main(String args[]) {	
 		
 		
 		Double id = 8.914336227056141e15;
@@ -105,12 +106,18 @@ public class PropertyMapperTest {
 		//************************************************************
 		// Property Mapper Test
 		//************************************************************
-				
-		 PropertyMapper.propertyMapper().insert(property4); // -> Erfolgreich  
-		 PropertyMapper.propertyMapper().findAll(); // -> Erfolgreich 
-		 PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
-		 PropertyMapper.propertyMapper().findBy("Name"); // -> Erfolgreich 
-
-
+		
+		 Vector<Property> p = new Vector <Property>();
+		 Property p1 = new Property();
+		 p = PropertyMapper.propertyMapper().findAll();
+		 System.out.println(p);
+		 PropertyMapper.propertyMapper().insert(property3); // -> Erfolgreich 	
+		 
+		 p1 = PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
+		 System.out.println(p1);
+		 p1 = PropertyMapper.propertyMapper().findBy("Name"); // -> Erfolgreich 
+		 System.out.println(p1);
+		
+		
 	}
 }
