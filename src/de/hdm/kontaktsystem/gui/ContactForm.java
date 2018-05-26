@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.hdm.kontaktsystem.gui.MyParticipationForm.deleteParticipationCallback;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -104,7 +105,8 @@ public class ContactForm extends VerticalPanel{
 				if (angezeigterKontakt == null) {
 					Window.alert("kein Kontakt ausgewählt");
 				} else {
-					//TODO: Verbindung
+					contactSystemVerwaltung.delete(angezeigterKontakt,
+							new deleteContactCallback(angezeigterKontakt));
 				}
 			}
 		}
@@ -165,7 +167,7 @@ public class ContactForm extends VerticalPanel{
 			 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
 			 * gefüllt bzw. gelöscht.
 			*/
-				private void setSelected(Contact c) {
+				void setSelected(Contact c) {
 					// TODO Auto-generated method stub
 					if (c != null) {
 						angezeigterKontakt = c;

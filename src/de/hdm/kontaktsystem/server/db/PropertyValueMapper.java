@@ -38,8 +38,6 @@ public class PropertyValueMapper {
 	 * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
 	 * 
 	 */
-
-	// Achtung in Aufrufkette denken -> Contact ruft insert Methode auf
 	
 	public void insert(PropertyValue pv) {
 
@@ -219,14 +217,6 @@ public class PropertyValueMapper {
 	}
 	
 
-	/*
-	 * Funktion zum Löschen aller Auspraegungen die vom User erstellt wurden
-	 */
-
-//	public void deleteAllOwnership(User u) {
-//
-//
-//	}
 
 	/*************************************************************************************
 	 * Methode zum Leeren der PropertyValue Tabelle
@@ -239,8 +229,9 @@ public class PropertyValueMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
-			PreparedStatement stmt = con.prepareStatement
-					("DELETE FROM PropertyValue INNER JOIN BusinessObject "
+			PreparedStatement stmt = con.prepareStatement(
+					  "DELETE FROM PropertyValue "
+					+ "INNER JOIN BusinessObject "
 					+ "ON PropertyValue.ID = BusinessObject.bo_ID" 
 					);
 					stmt.execute();
@@ -250,8 +241,6 @@ public class PropertyValueMapper {
 		}
 	}
 		
-		
-
 	
 
 	/*
@@ -524,7 +513,7 @@ public class PropertyValueMapper {
 			// Statement ausfüllen und als Query an die DB schicken
 
 			PreparedStatement stmt = con.prepareStatement
-					("SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID, "
+					( "SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID, "
 					+ "Property.description "
 					+ "FROM PropertyValue "
 					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
@@ -556,10 +545,27 @@ public class PropertyValueMapper {
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * Anhand der uebergegebenen ID wird das zugehoerige PropertyValue - Objekt,
+	 * welches der Eigenschaft "Name" zugewiesen werden kann, eindeutig
+	 * identifiziert und zurueckgegeben
+	 * 
+	 *  @param contact
+	 *  @return PropertyValue - Objekt
+	 */
 
-	public void UpdatePropertyValueByContact(Contact contact) {
-		// TODO Auto-generated method stub
-
+	public PropertyValue findName(Contact contact) {
+		
+		PropertyValue name = new PropertyValue();
+		Vector <PropertyValue> result = new Vector <PropertyValue>();
+		for(PropertyValue val : result) {
+			System.out.println("propertyVal id: " + val.getBo_Id());
+			if(val.getProp().getDescription().equals("Name")) name = val;
+			}			
+		return name;
 	}
+
 
 }
