@@ -16,11 +16,10 @@ public class Contact extends BusinessObject {
 	/**
 	 * Eigenschaftsausprägungen des Kontakts
 	 */
+	
 	private Vector <PropertyValue> propertyValues = null;
 	
-	private PropertyValue propertyValue = null;
-
-	
+	private PropertyValue propertyValue = null;	
 	
 
 	/**
@@ -33,19 +32,20 @@ public class Contact extends BusinessObject {
 	
 	/**
 	 * Konstruktor muss mindestens das Setzen einer Eigenschaftsausprägung erzwingen.
+	 * Die erzwungene Eigenschaftsausprägung enthält mindestens den Namen eines Kontaktes.
 	 * Der Kontakt <code>Contact</code> darf nie leer angelegt werden. 
 	 * 
 	 */
 	
 
 	public Contact(PropertyValue name) {
-		this.propertyValues.add(name);
+		this.propertyValue = name;
 	}
 	
 	
 	public Contact(PropertyValue name, User owner) {
 		super.setOwner(owner);
-		this.propertyValues.addElement(name);
+		this.propertyValue = name;
 	}
 
 	
@@ -65,10 +65,20 @@ public class Contact extends BusinessObject {
 		this.propertyValues = pV;
 	}
 	
+	/**
+	 * Abruf einer PropertyValue, diese stellt den Namen des
+	 * Kontaktes dar.
+	 * @return PropertyValue - Objekt
+	 */
+	
 	public PropertyValue getPropertyValue() {
 		return propertyValue;
 	}
 
+	/*
+	 * Setzen eines PropertyValue Objektes
+	 */
+	
 	public void setPropertyValue(PropertyValue propertyValue) {
 		this.propertyValue = propertyValue;
 	}
@@ -78,9 +88,9 @@ public class Contact extends BusinessObject {
 	 * @param pv
 	 */
 	
-//	public void addPropertyValue(PropertyValue pv) {
-//		this.propertyValues.addElement(pv);
-//	}
+	public void addPropertyValue(PropertyValue pv) {
+		this.propertyValues.addElement(pv);
+	}
 
 	
 	@Override

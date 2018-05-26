@@ -79,6 +79,7 @@ public class ContactMapper {
 		return null;
 	}
 	
+	
 	/**
 	 * Mapper-Methode zur Rückgabe aller Kontakte eines bestimmten Users.
 	 * 
@@ -108,7 +109,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("bo.user_ID")));
 				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));				
 				result.addElement(contact);
 			}
@@ -266,7 +267,26 @@ public class ContactMapper {
 		return null;
 	}
 	
+	
 	/**
+<<<<<<< HEAD
+=======
+	 * Den eigenen Kontakt eines User, welcher bei dessen Erzeugung in 
+	 * der DB erstellt wird aus der DB aufrufen. 
+	 * 
+	 *  @param User - Objekt
+	 *  @return Contact - Objekt
+	 */
+	
+	public Contact findOwnContact(User u) {
+		Contact contact = new Contact();
+		return contact = this.findContactById(u.getContact().getBo_Id());
+	}
+	
+	
+
+	/**
+>>>>>>> JaninaMattes
 	 * Mapper-Methode um einen Kontakt nach einer Eigenschaft zu finden
 	 * 
 	 * @param PropertyValue
@@ -492,8 +512,9 @@ public class ContactMapper {
 	
 
 	/**
-	 * Den eigenen Kontakt eines User, welcher bei dessen Erzeugung in 
-	 * der DB erstellt wird aufrufen. 
+
+	 * Den eigenen Kontakt eines Users, welcher bei dessen Erzeugung in 
+	 * der DB erstellt wird abgerufen. 
 	 * 
 	 * Wirn nur Verwendet um dem User-Objekt seine Contact-Objekt zu zuweisen.
 	 * Wird benötigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzulösen
@@ -504,7 +525,6 @@ public class ContactMapper {
 	
 
 	public void addOwnContact(int contact_ID, User u) {
-
 		
 		Connection con = DBConnection.connection();
 		try {
@@ -517,7 +537,6 @@ public class ContactMapper {
 			stmt.setInt(1, contact_ID);
 			ResultSet rs = stmt.executeQuery();
 
-
 			if (rs.next()) {		
 				
 				Contact contact = new Contact();
@@ -528,14 +547,13 @@ public class ContactMapper {
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				u.setContact(contact);
-				
-			}
-			
+				//return contact;				
+			}			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-
+		}	
+		//return null;
 	}
 
 

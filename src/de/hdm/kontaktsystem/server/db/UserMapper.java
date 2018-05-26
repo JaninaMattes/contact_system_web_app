@@ -72,12 +72,10 @@ public class UserMapper {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM User");
 			while(rs.next()){
-				User u = new User();
-				
+				User u = new User();				
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
 				ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
-				
 				userList.add(u);
 			}
 			return userList;
@@ -104,7 +102,6 @@ public class UserMapper {
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
 				User u = new User();
-				
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));		
 				ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
@@ -122,6 +119,7 @@ public class UserMapper {
 	 * @param Email-String
 	 * @return User-Objekt
 	 */
+	
 	public User findByEmail(String email){
 		
 		Connection con = DBConnection.connection();
@@ -130,11 +128,13 @@ public class UserMapper {
 			stmt.setString(1, email);
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){				
-				
+				Contact c = new Contact();
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
-				ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
+				//ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
+				c = ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
+				u.setContact(c);
 
 				return u;
 			}
