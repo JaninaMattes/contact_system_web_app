@@ -12,7 +12,10 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
 
+import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
+import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 public class MyParticipationsTreeViewModel implements TreeViewModel {
 
@@ -20,7 +23,9 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 	
 	private Participation selectedParticipation;
 	
-	private ContactSystemAdministrationAsync contactSystemVerwaltung = null;
+	//Zu Testzwecken ausgeblendet
+//	private ContactSystemAdministrationAsync contactSystemAdmin = null;
+	
 	private ListDataProvider<Participation> participationDataProvider = null;
 	
 	
@@ -61,7 +66,9 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 	 * Variaben initialisiert.
 	 */
 	public MyParticipationsTreeViewModel() {
-		contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+		//Zu Testzwecken ausgeblendet
+//		contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+		
 		pKeyProvider = new ParticipationKeyProvider();
 		selectionModel = new SingleSelectionModel<Participation>(pKeyProvider);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
@@ -94,23 +101,39 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 			// Erzeugen eines ListDataproviders für Customerdaten
 			participationDataProvider = new ListDataProvider<Participation>();
 			//All Participations oder nur die für den User??
-			contactSystemVerwaltung.getAllParticipations(new AsyncCallback<Vector<Participation>>() {
-						@Override
-						public void onFailure(Throwable t) {
-						}
-
-						@Override
-						public void onSuccess(Vector<Participation> participations) {
-							for (Participation p : participations) {
-								participationDataProvider.getList().add(p);
-							}
-						}
-					});
-
+			
+			//Zu Testzwecken ausgeblendet
+//			contactSystemVerwaltung.getAllParticipations(new AsyncCallback<Vector<Participation>>() {
+//						@Override
+//						public void onFailure(Throwable t) {
+//						}
+//
+//						@Override
+//						public void onSuccess(Vector<Participation> participations) {
+//							for (Participation p : participations) {
+//								participationDataProvider.getList().add(p);
+//							}
+//						}
+//					});
+			
+			//Testdaten
+			Vector<Participation> participations = new Vector<Participation>();
+			Contact c1 = new Contact();
+			User u1 = new User();
+			Participation p1 = new Participation(u1, c1);
+			participations.add(p1);
+			
+			for (Participation p : participations) {
+				participationDataProvider.getList().add(p);
+			}
+			//Ende Testdaten
+			
+			
 			// Return a node info that pairs the data with a cell.
 			return new DefaultNodeInfo<Participation>(participationDataProvider,
 					new MyParticipationCell(), selectionModel, null);
 		}
+		return null;
 		
 	}
 

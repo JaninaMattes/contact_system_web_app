@@ -26,7 +26,9 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 public class MyParticipationForm extends VerticalPanel{
 	
-	ContactSystemAdministrationAsync contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+//	Zu Testzwecken ausgeblendet
+//	ContactSystemAdministrationAsync contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+	
 	Participation participationToDisplay = null;
 	MyParticipationsTreeViewModel mptvm = null;
 	
@@ -78,7 +80,6 @@ public class MyParticipationForm extends VerticalPanel{
 		deleteButton.addClickHandler(new DeleteClickHandler());
 		deleteButton.setEnabled(false);
 		participationGrid.setWidget(4, 1, deleteButton);
-
 	}
 	
 	/**
@@ -91,8 +92,12 @@ public class MyParticipationForm extends VerticalPanel{
 			if (participationToDisplay == null) {
 				Window.alert("kein Kunde ausgewählt");
 			} else {
-				contactSystemVerwaltung.delete(participationToDisplay,
-						new deleteParticipationCallback(participationToDisplay));
+//				Zu Testzwecken ausgeblendet
+//				contactSystemVerwaltung.delete(participationToDisplay,
+//						new deleteParticipationCallback(participationToDisplay));
+				
+				//Testdaten
+				Window.alert("Kunde gelöscht");
 			}
 		}
 	}
@@ -119,8 +124,8 @@ public class MyParticipationForm extends VerticalPanel{
 		}
 	}
 
-	// catvm setter
-	void setCatvm(MyParticipationsTreeViewModel mptvm) {
+	// Setzen des TreeViewModels
+	void setMptvm(MyParticipationsTreeViewModel mptvm) {
 		this.mptvm = mptvm;
 	}
 
@@ -132,21 +137,42 @@ public class MyParticipationForm extends VerticalPanel{
 		if (p != null) {
 			participationToDisplay = p;
 			deleteButton.setEnabled(true);
-			nameParticipant.setText(p.getParticipant().getContact().getpropertyValue().getName());
+//			Zu Testzwecken ausgeblendet
+//			nameParticipant.setText(p.getParticipant().getContact().getpropertyValue().getName());
+			//Testdaten
+			nameParticipant.setText("MusterTeilhaber");
 			
 			if(p.getReferencedObject() instanceof Contact) {
 		    	  Contact c = (Contact) p.getReferencedObject();
-		    	  sharedObject.setText(c.getpropertyValue().getName());
+//		    	  Zu Testzwecken ausgeblendet
+//		    	  sharedObject.setText(c.getpropertyValue().getName());
+		    	//Testdaten
+		    	  sharedObject.setText("MusterKontakt");
+		    	  
 		    	  objectType.setText("Kontakt");
 		      }else if(p.getReferencedObject() instanceof ContactList) {
 		    	  ContactList cl = (ContactList) p.getReferencedObject();
+//		    	  Zu Testzwecken ausgeblendet
+//		    	  sharedObject.setText(cl.getName());
+		    	  //Testdaten
+		    	  sharedObject.setText("MusterKontaktliste");
+		    	  
 		    	  objectType.setText("Kontaktliste");
+		    	  
+		    	  //Zugehörigen Kontakt angeben?
 		      }else if(p.getReferencedObject() instanceof PropertyValue) {
 		    	  PropertyValue pv = (PropertyValue) p.getReferencedObject();
+//		    	  Zu Testzwecken ausgeblendet
+//		    	  sharedObject.setText(pv.getValue());
+		    	//Testdaten
+		    	  sharedObject.setText("MusterEigenschaft");
+		    	  
 		    	  objectType.setText("Eigenschaftswert");
 		      }
 			
-			sharedDate.setText(p.getReferencedObject().getModifyDate().toString());
+			//Zu Testzwecken ausgeblendet
+//			sharedDate.setText(p.getReferencedObject().getModifyDate().toString());
+			sharedDate.setText("01.01.2001");
 			
 		} else {
 			nameParticipant.setText("");

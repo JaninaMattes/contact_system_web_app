@@ -48,9 +48,11 @@ public class ContactSystem implements EntryPoint {
 	/**
 	 * Link zum Asynchronen Interface
 	 */
-	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
+//	Zu Testzwecken ausgeblendet
+//	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
 	
-//	/*
+//	Aus Bankbeispiel, hier notwendig?
+	/*
 //	 * Zunächst weisen wir der BankAdministration eine Bank-Instanz zu, die
 //	 * das Kreditinstitut repräsentieren soll, für das diese Applikation
 //	 * arbeitet.
@@ -66,11 +68,10 @@ public class ContactSystem implements EntryPoint {
 //	bankVerwaltung.setBank(bank, new SetBankCallback());
 
 	
-	
 
-	/** Instanziieren der GWT Widgets und Panels
+	/** 
+	 * Instanziieren der GWT Widgets und Panels
 	 */
-	
 	//Panels
 	private VerticalPanel navigation = new VerticalPanel();
 	private HorizontalPanel header = new HorizontalPanel();
@@ -78,18 +79,18 @@ public class ContactSystem implements EntryPoint {
 	//Widgets
 	private Button ContactButton = new Button("Kontakte");
 	private Button ContactListsButton = new Button("Kontaktlisten");
-	private Button MyParticipationsButton = new Button("von mir geteilt");
-	private Button ReceivedParticipationsButton = new Button("an mich geteilt");
+	private Button MyParticipationsButton = new Button("Von mir geteilt");
+	private Button ReceivedParticipationsButton = new Button("An mich geteilt");
 
 	
 	/**
-	 * Attribute aus der Klasse Login
+	 * Attribute für den Login
 	 */
 	private User userInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private VerticalPanel root = new VerticalPanel();
 	private Label loginLabel = new Label(
-	"Melden Sie sich mit Ihrem Google Konto an um auf das Kontaktsystem zuzugreifen ");
+			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen ");
 	private Anchor signInLink = new Anchor("Login mit Google");
 	private Anchor signOutLink = new Anchor("Logout");
 	
@@ -97,40 +98,44 @@ public class ContactSystem implements EntryPoint {
 	public void onModuleLoad() {
 
 		/**
-		 * Inhalt der Klasse Login
+		 * Login-Status feststellen mit LoginService
 		 */
-			// Check login status using login service.
-			LoginServiceAsync loginService = GWT.create(LoginService.class);
-			loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
-				public void onFailure(Throwable error) {
+		LoginServiceAsync loginService = GWT.create(LoginService.class);
+		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+			public void onFailure(Throwable error) {	
+			}
 				
+			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+			public void onSuccess(User result) {
+				userInfo = result;
+				if(userInfo.isLoggedIn()){
+					loadContactSystem();
+				}else{
+					loadLogin();
 				}
-				public void onSuccess(User result) {
-					userInfo = result;
-					if(userInfo.isLoggedIn()){
-						loadContactSystem();
-					}else{
-						loadLogin();
-					}
-				}
-			});
-		
-		}
-		
-		private void loadLogin() {
-			// Assemble login panel.
-			signInLink.setHref(userInfo.getLoginUrl());
-			signInLink.setStyleName("link");
-			loginPanel.add(new HTML("<center>"));
-			loginPanel.add(loginLabel);
-			loginPanel.add(new HTML("<br /> <br /> "));
-			loginPanel.add(signInLink);
-			loginPanel.add(new HTML("</center>"));
-			root.add(loginPanel);
-		}
-		
+			}
+		});	
+	}
+	
+	
+	/**
+	 * Aufbau der Login-Seite
+	 */
+	private void loadLogin() {
+		signInLink.setHref(userInfo.getLoginUrl());
+		signInLink.setStyleName("link");
+		loginPanel.add(new HTML("<center>"));
+		loginPanel.add(loginLabel);
+		loginPanel.add(new HTML("<br /> <br /> "));
+		loginPanel.add(signInLink);
+		loginPanel.add(new HTML("</center>"));
+		root.add(loginPanel);
+	}
 		
 	
+	/**
+	 * Aufbau der Startseite des Kontaktsystems
+	 */
 	public void loadContactSystem() {
 		
 		//Header mit SignOut-Link
@@ -148,34 +153,43 @@ public class ContactSystem implements EntryPoint {
 		navigation.add(ReceivedParticipationsButton);
 		RootPanel.get("Navigator").add(navigation);
 		
-		//Die Anwendung besteht aus einem Navigationsteil in Listenform und einem Datenteil mit Formularen
-		//Formulare
-		ContactForm cf = new ContactForm();
-		ContactListForm clf = new ContactListForm();
-		MyParticipationForm mpf = new MyParticipationForm();
-		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+		
+		/**
+		 * Elemente werden in Listenform dargestellt, ausgewählte Elemente werden 
+		 * als Formulare rechts im Bildschirm aufgerufen
+		 */
 		
 		//Listen
 		ContactsTreeViewModel ctvm = new ContactsTreeViewModel();
 		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
 		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
 		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
-		
-//		Verlinkung der Formulare und der dazugehörigen Listen
+				
+		//Formulare
+		ContactForm cf = new ContactForm();
+		ContactListForm clf = new ContactListForm();
+		MyParticipationForm mpf = new MyParticipationForm();
+		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+
+		//Verlinkung der Listen und der dazugehörigen Formulare
 		ctvm.setContactForm(cf);
 		cltvm.setContactListForm(clf);
 		mptvm.setParticipationForm(mpf);
 		rptvm.setParticipationForm(rpf);
 		
 		
-		//Erzeugen der Panels und des CellTrees
+		//Erzeugen des Details-Panels und Zuordnung zu den Formularen
 		VerticalPanel detailsPanel = new VerticalPanel();
 		detailsPanel.add(cf);
 		detailsPanel.add(clf);
 		detailsPanel.add(mpf);
 		detailsPanel.add(rpf);
 		
-		
+		/**
+		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
+		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird oberhalb des 
+		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
+		 */
 		//ClickHandler für ContactButton
 		ContactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -194,6 +208,7 @@ public class ContactSystem implements EntryPoint {
 			//TODO: ClickHandler AddButton
 			
 		});
+		
 		
 		//Clickhandler für ContactListButton
 		ContactListsButton.addClickHandler(new ClickHandler() {
@@ -226,6 +241,7 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 	
+		
 		//Clickhandler für ReceivedParticipationsButton
 		ReceivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -237,7 +253,7 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 	
-		
+		//Hinzufügen des Detail-Panels zur Webseite
 		RootPanel.get("Details").add(detailsPanel);
 
 		
