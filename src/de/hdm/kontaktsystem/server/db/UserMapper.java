@@ -146,6 +146,30 @@ public class UserMapper {
 	}
 	
 	/**
+	 * Aktuallisiert die Daten eines Users in der UserTabelle
+	 * @param User
+	 * @return User
+	 */
+	public User update(User user){
+		
+		if(user.getContact() != null){
+			Connection con = DBConnection.connection();
+			try{
+				PreparedStatement stmt = con.prepareStatement("UPDATE User SET own_Contact = ? WHERE ID = ?");
+				stmt.setInt(1, user.getContact().getBo_Id());
+				stmt.setDouble(2, user.getGoogleID());
+				if(stmt.executeUpdate() > 0) return user;
+				
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+			}		
+		}
+		return null;
+	}
+	
+	
+	/**
 	 * Löscht alle einträge in der User Tabelle 
 	 */
 	public void deleteAll(){
@@ -198,28 +222,7 @@ public class UserMapper {
 		return i;
 	}
 	
-	/**
-	 * Aktuallisiert die Daten eines Users in der UserTabelle
-	 * @param User
-	 * @return User
-	 */
-	public User update(User user){
-		
-		if(user.getContact() != null){
-			Connection con = DBConnection.connection();
-			try{
-				PreparedStatement stmt = con.prepareStatement("UPDATE User SET own_Contact = ? WHERE ID = ?");
-				stmt.setInt(1, user.getContact().getBo_Id());
-				stmt.setDouble(2, user.getGoogleID());
-				if(stmt.executeUpdate() > 0) return user;
-				
-				
-			}catch(SQLException e){
-				e.printStackTrace();
-			}		
-		}
-		return null;
-}
+	
 	
 	
 }
