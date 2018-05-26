@@ -96,7 +96,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 		
 			public void onSuccess(Vector<ContactList> contactLists) {
 				for (ContactList cl : contactLists) {
-					contactListDataProvider.getList().app(cl);  //NACHPR�FEN
+					contactListDataProvider.getList().add(cl);
 				}
 			}
 		

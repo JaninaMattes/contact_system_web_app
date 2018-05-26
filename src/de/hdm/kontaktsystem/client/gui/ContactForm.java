@@ -111,7 +111,7 @@ public class ContactForm extends VerticalPanel{
 			}
 		}
 			
-			//Chlickhandler um einen Kontakt zu Teilen (Bei Klick auf den "Kontakt Teilen"-Button)
+			//Clickhandler um einen Kontakt zu Teilen (Bei Klick auf den "Kontakt Teilen"-Button)
 			private class teilenClickHandler implements ClickHandler {
 
 				@Override

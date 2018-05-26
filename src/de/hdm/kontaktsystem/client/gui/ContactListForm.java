@@ -120,21 +120,21 @@ class DeleteClickHandler implements ClickHandler {
 			Window.alert("Keinen Kontaktliste ausgew�hlt");
 		}else {
 			contactSystemVerwaltung.delete(contactListToDisplay, 
-					new deleteContactCallback(contactListToDisplay));
+					new deleteContactListCallback(contactListToDisplay));
 		}
 	}
 }
 
-class deleteContactCallback implements AsyncCallback<Void> {
+class deleteContactListCallback implements AsyncCallback<Void> {
 	
 	ContactList contactList = null;
 	
-	deleteContactCallback(ContactList cl){
+	deleteContactListCallback(ContactList cl){
 		contactList = cl;
 		}
 	
 	public void onFailure(Throwable caught) {
-		Window.alert("L�schen eines Kontaktes fehlgeschlagen");
+		Window.alert("Löschen eines Kontaktes fehlgeschlagen");
 	}
 	
 	public void onSuccess(Void result) {
@@ -184,12 +184,12 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 		}
 	}
 }
-
+}
 	/**
 	 *  cstvm setter
 	 */
 
-	void setCStvm(ContactListsTreeViewModel cltvm) {
+	void setCltvm(ContactListsTreeViewModel cltvm) {
 	this.cltvm = cltvm;
 	}
 
@@ -224,4 +224,9 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 	}
 
 }
+
+public void setSelected(Object object) {
+	// TODO Auto-generated method stub
+	
+
 }
