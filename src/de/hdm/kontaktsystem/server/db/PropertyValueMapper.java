@@ -34,36 +34,30 @@ public class PropertyValueMapper {
 		return propertyValueMapper;
 	}
 
-	/*
+	/**
 	 * Einfuegen einer neu angelegten Eigenschaftsauspraegung in die DB
+	 * @param PropertyValue - Objekt
 	 * 
 	 */
 	
-	public void insert(PropertyValue pv) {
+	public PropertyValue insert(PropertyValue pv) {
 
 		BusinessObjectMapper.businessObjectMapper().insert(pv);
-
 		Connection con = DBConnection.connection();
-		Property prop = new Property();
-		Contact contact = new Contact();
-		pv.setContact(contact);
-		pv.setProp(prop);
-
+	
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-			"INSERT INTO PropertyValue (ID, property_ID, value, contact_ID) VALUES (?, ?, ?, ?)"
-			);
+			"INSERT INTO PropertyValue (ID, property_ID, value, contact_ID) VALUES (?, ?, ?, ?)");
 			stmt.setInt(1, pv.getBo_Id());
 			stmt.setInt(2, pv.getProp().getId());
 			stmt.setString(3, pv.getValue());
-			stmt.setInt(4, pv.getContact().getBo_Id());
+			stmt.setInt(4, pv.getContact().getBo_Id());			
+			if(stmt.executeUpdate() > 1) return pv;
 			
-			stmt.execute();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		return null;
 	}
 
 	/*
@@ -79,8 +73,7 @@ public class PropertyValueMapper {
 		try {
 			// Einfügeoperation in propertyvalue erfolgt
 			PreparedStatement stmt = con.prepareStatement
-					("UPDATE PropertyValue SET value= ? WHERE ID= ?"
-					);
+					("UPDATE PropertyValue SET value= ? WHERE ID= ?");
 			stmt.setString(1, pv.getValue());
 			stmt.setInt(2, pv.getBo_Id());
 			stmt.execute();
@@ -97,9 +90,7 @@ public class PropertyValueMapper {
 	 */
 
 	public void delete(PropertyValue pv) {
-
 		deleteByPropValue(pv.getBo_Id());
-
 	}
 
 	/*
