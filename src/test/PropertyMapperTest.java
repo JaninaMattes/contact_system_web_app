@@ -2,122 +2,88 @@ package test;
 
 import java.util.Vector;
 
+import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
+import de.hdm.kontaktsystem.server.db.ContactListMapper;
+import de.hdm.kontaktsystem.server.db.ContactMapper;
+import de.hdm.kontaktsystem.server.db.ParticipationMapper;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
 import de.hdm.kontaktsystem.shared.bo.Contact;
-import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
+
 public class PropertyMapperTest {
+	
+	private final static PropertyMapper pMapper = PropertyMapper.propertyMapper(); 
+	private final static UserMapper uMapper = UserMapper.userMapper();
+	private final static PropertyValueMapper pvMapper = PropertyValueMapper.propertyValueMapper();
+	
+	// Gültige IDs zu Testen
+	private final static double vUID = 666;
+	private final static int vCID = 19;
+	private final static int vCLID = 3;
+	private final static int vPID = 1; // = Sternzeichen
+	private final static int vPVID = 20; // = Janina
+	
 	
 	public static void main(String args[]) {	
 		
+		User u = new User();
+		System.out.println("\n ############ Test User FindByMail ################ \n");
+		u = uMapper.findByEmail("NeuerUser@gmail.com");
+		System.out.println(uMapper.findByEmail("NeuerUser@gmail.com"));
 		
-		Double id = 8.914336227056141e15;
-		 
+		Contact c = new Contact();
+		c.setOwner(u);	
+		c.setBo_Id(3);
 		
-		User user = new User();	
-		Contact contact = new Contact();
+		Property p = new Property();
+		p.setDescription("Arbeitgeber");
+				
+		Property p1 = new Property();
+		p1 = pMapper.findBy("Name");
+		System.out.println("\n ############ Test Prop FindBy String ################ \n");
+		System.out.println(pMapper.findBy("Name"));
 		
-		Property property = new Property();
-		Property property0 = new Property();
-		Property property1 = new Property();
-		Property property2 = new Property();
-		Property property3 = new Property();
-		Property property4 = new Property();
+		PropertyValue pv = new PropertyValue();
+		pv.setBo_Id(6);
+		pv.setOwner(u);
+		pv.setProp(p);
+		pv.setValue("Traumfabrik AG");
+		pv.setContact(c);
 		
-		PropertyValue propertyValue = new PropertyValue();
-		PropertyValue propertyValue0 = new PropertyValue();
-		PropertyValue propertyValue1 = new PropertyValue();
-		PropertyValue propertyValue2 = new PropertyValue();
-		PropertyValue propertyValue3 = new PropertyValue();
-		PropertyValue propertyValue4 = new PropertyValue();
-		PropertyValue propertyValue5 = new PropertyValue();
+		PropertyValue pv1 = new PropertyValue();
+		pv1.setBo_Id(7);
+		pv1.setOwner(u);
+		pv1.setProp(p);
+		pv1.setValue("Blüten GmbH");
+		pv.setContact(c);
 		
-		// BusinessObject bo = new BusinessObject();
+		p.setPropertyValue(pv);
+		p.setPropertyValue(pv1);
 		
+		PropertyValue name = new PropertyValue();
+		name.setBo_Id(8);
+		name.setOwner(u);
+		name.setProp(p1);
+		name.setValue("JaninaTestKontakt");
+		name.setContact(c);
 		
-		ContactList contactList = new ContactList();
+		c.setPropertyValue(name);
+						
+		// Test insert method 
+		System.out.println("\n ############ Test Prop ################ \n");
+		pMapper.insert(p);
 		
-		user = UserMapper.userMapper().findById(id);
-	
-		contact.addPropertyValue(propertyValue);
-		
-		propertyValue.setProp(property);
-		propertyValue.setValue("Janina");
-		
-		propertyValue0.setProp(property0);
-		propertyValue0.setValue("Wonder");
-		
-		propertyValue1.setProp(property1);
-		propertyValue1.setValue("+4916666666");
-		propertyValue1.setOwner(user);
-		
-		propertyValue2.setProp(property2);
-		propertyValue2.setValue("Liststraße");
-		propertyValue2.setOwner(user);
-		
-		propertyValue3.setProp(property3);
-		propertyValue3.setValue("Daimler");
-		propertyValue3.setOwner(user);
-		
-		propertyValue4.setProp(property3);
-		propertyValue4.setValue("Porsche");
-		propertyValue4.setOwner(user);
-		propertyValue4.setBo_Id(17);
-		
-		propertyValue5.setProp(property4);
-		propertyValue5.setValue("Silberfisch");
-		propertyValue5.setOwner(user);
-		
-		// Property - Objekte befüllen
-		property.setPropertyValue(propertyValue);
-		property.setDescription("Vorname");
-		property.setId(1);
-		
-		property0.setPropertyValue(propertyValue0);
-		property0.setDescription("Nachname");
-		property0.setId(1);
-		
-		property1.setPropertyValue(propertyValue1);
-		property1.setDescription("Telefonnummer");
-		property1.setId(3);
-		
-		property2.setPropertyValue(propertyValue2);
-		property2.setDescription("Straße");
-		property2.setId(4);
-		
-		property3.setPropertyValue(propertyValue3);
-		property3.setPropertyValue(propertyValue4);
-		property3.setDescription("Arbeitgeber");
-		property3.setId(6);
-		
-		property4.setPropertyValue(propertyValue5);
-		property4.setDescription("Sternzeichen");
-		property4.setId(7);
-		
-		contactList.setContact(contact);
-		contactList.setName("Friendlist");
-		
-	
-		//************************************************************
-		// Property Mapper Test
-		//************************************************************
-		
-		 Vector<Property> p = new Vector <Property>();
-		 Property p1 = new Property();
-		 p = PropertyMapper.propertyMapper().findAll();
-		 System.out.println(p);
-		 PropertyMapper.propertyMapper().insert(property3); // -> Erfolgreich 	
-		 
-		 p1 = PropertyMapper.propertyMapper().findBy(4); // -> Erfolgreich 
-		 System.out.println(p1);
-		 p1 = PropertyMapper.propertyMapper().findBy("Name"); // -> Erfolgreich 
-		 System.out.println(p1);
-		
+		// Test insert method 
+		System.out.println("\n ############ Test PropVal ################ \n");
+		pvMapper.insert(pv);
+		pvMapper.insert(pv1);
+		pvMapper.insert(name);
 		
 	}
 }
+	

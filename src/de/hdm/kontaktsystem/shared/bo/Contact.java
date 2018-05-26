@@ -19,7 +19,7 @@ public class Contact extends BusinessObject {
 	
 	private Vector <PropertyValue> propertyValues = null;
 	
-	private PropertyValue propertyValue = null;	
+	private PropertyValue name = null;	
 	
 
 	/**
@@ -39,13 +39,13 @@ public class Contact extends BusinessObject {
 	
 
 	public Contact(PropertyValue name) {
-		this.propertyValue = name;
+		this.name = name;
 	}
 	
 	
 	public Contact(PropertyValue name, User owner) {
 		super.setOwner(owner);
-		this.propertyValue = name;
+		this.name = name;
 	}
 
 	
@@ -71,16 +71,16 @@ public class Contact extends BusinessObject {
 	 * @return PropertyValue - Objekt
 	 */
 	
-	public PropertyValue getPropertyValue() {
-		return propertyValue;
+	public PropertyValue getName() {
+		return name;
 	}
 
 	/*
 	 * Setzen eines PropertyValue Objektes
 	 */
 	
-	public void setPropertyValue(PropertyValue propertyValue) {
-		this.propertyValue = propertyValue;
+	public void setName(PropertyValue name) {
+		this.name = name;
 	}
 
 	/**
@@ -88,10 +88,20 @@ public class Contact extends BusinessObject {
 	 * @param pv
 	 */
 	
-	public void addPropertyValue(PropertyValue pv) {
+	public void setPropertyValue(PropertyValue pv) {
 		this.propertyValues.addElement(pv);
 	}
 
+	/**
+	 * Vector an PropertyValue-Objekten setzen
+	 * @param pv
+	 */
+	
+	public void setPropertyValue(Vector <PropertyValue> pv) {
+		this.propertyValues = pv;
+	}
+	
+	
 	
 	@Override
 	public String toString() {

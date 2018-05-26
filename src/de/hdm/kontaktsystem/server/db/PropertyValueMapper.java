@@ -410,10 +410,11 @@ public class PropertyValueMapper {
 		
 		PropertyValue name = new PropertyValue();
 		Vector <PropertyValue> result = new Vector <PropertyValue>();
+		result = PropertyValueMapper.propertyValueMapper().findBy(contact);
 		for(PropertyValue val : result) {
 			System.out.println("propertyVal id: " + val.getBo_Id());
 			if(val.getProp().getDescription().equals("Name")) name = val;
-			}			
+		}			
 		return name;
 	}
 	

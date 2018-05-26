@@ -144,7 +144,7 @@ public class ContactMapper {
 			 
 			 	if(bo instanceof Contact) {			 		
 			 		contact = (Contact) bo;
-			 		System.out.println("contact name " + contact.getPropertyValue());
+			 		System.out.println("contact name " + contact.getName());
 			 		contactResultVector.addElement(contact);	     
 			 }		
 		}	 	
@@ -254,7 +254,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				return contact;
 			}
 		} catch (SQLException e) {
