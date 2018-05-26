@@ -498,13 +498,11 @@ public class PropertyValueMapper {
 	 * Anhand des zugehörigen Kontakts wird eine Auspraegung gelöscht
 	 * 
 	 * @parm Contact-Objekt
-	 * @return Contact-Objekt
 	 */
 
-	public Contact  deleteBy(Contact c) {
+	public void deleteBy(Contact c) {
 
-		if(deleteByContact(c.getBo_Id()) > 0) return c;
-		else return null;	
+		deleteByContact(c.getBo_Id());	
 
 	}
 
