@@ -30,25 +30,43 @@ public class UserMapper {
 	 * @return Instanz des PropertyMapper 
 	 */			
 
-  public static UserMapper userMapper() {
-    if (userMapper == null) {
-      userMapper = new UserMapper();
-    }
+	public static UserMapper userMapper() {
+	  if (userMapper == null) {
+	    	userMapper = new UserMapper();
+    	}
 
-    return userMapper;
-  }
-
+	   return userMapper;
+	}
 	
+	 /**
+	 * Legt einen neuen User in der Datenbank an 
+	 * @param User-Objekt
+	 * @return User-Objekt
+	 */
+	
+	public User insert(User user){
+		Connection con = DBConnection.connection();
+		try{
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_mail) VALUES (?, ?)");
+			stmt.setDouble(1, user.getGoogleID());
+			stmt.setString(2, user.getGMail());
+			if(stmt.executeUpdate() > 0) return user;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	/**
-	 * Returns all <code>User</code> objects from the database table 
+	 * Gibt alle <code>User</code> Ojekte aus der Tabelle zurück
 	 * @return Vector<User>
 	 */
 	public Vector<User> findAll(){
 		
 		Connection con = DBConnection.connection();
 		try{
-			// Create Vector to save all Users from the Database
+			
 			Vector<User> userList = new Vector<User>();
 			
 			Statement stmt = con.createStatement();
@@ -69,8 +87,8 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Return a <code>User</code> object with the param id when it exist
-	 * @param id
+	 * Gibt das <code>User</code> mit der gesuchten ID zurück
+	 * @param User ID
 	 * @return User
 	 */
 	public User findById(double id){
@@ -101,10 +119,9 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Select the User which is connect to the Google Account or generate a new <code>User</code> when the email is unknown
-	 * This method is used for Login
-	 * @param email
-	 * @return User that is linked to the Google Account
+	 * Gibt das <code>User</code> mit der gesuchten Email-Adresse zurück
+	 * @param Email-String
+	 * @return User-Objekt
 	 */
 	public User findByEmail(String email){
 		
@@ -130,7 +147,7 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Delete all <code>User</code> objects from the database table 
+	 * Löscht alle einträge in der User Tabelle 
 	 */
 	public void deleteAll(){
 		
@@ -147,90 +164,66 @@ public class UserMapper {
 		
 	}
 	
+	/**
+	 * Löscht eine <code>User</code> Objekt aus der Datenbank
+	 * @param user
+	 * @return gelöschtes User-Objekt
+	 */
+	
 	public User delete(User user){
-		//deleteByID(user.getGoogleID());
-
-		ContactMapper.contactMapper().deleteAllContactsByUser(user.getGoogleID());
-		ContactListMapper.contactListMapper().deleteContactListByUserId(user.getGoogleID());
-		
-		Connection con = DBConnection.connection();
-		try{
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM User WHERE ID = ?");
-			stmt.setDouble(1, user.getGoogleID());
-			stmt.executeUpdate();
-			return user;
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return  null;
+		if(deleteByID(user.getGoogleID()) > 0) return user;
+		else return null;
 	}
 	
+	
 	/**
-	 * Delete the <code>User</code> object with the param id
+	 * Löscht ein <code>User</code> mit der übergeben ID aus der Datenbank
 	 * @param id
+	 * @return anzahl gelöschter User
 	 */
-	public void deleteByID(double id){
+	public int deleteByID(double id){
 		
 
 		ContactMapper.contactMapper().deleteAllContactsByUser(id);
 		ContactListMapper.contactListMapper().deleteContactListByUserId(id);
+		int i = 0;
 		
 		Connection con = DBConnection.connection();
 		try{
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM User WHERE ID = ?");
 			stmt.setDouble(1, id);
-			stmt.executeUpdate();
+			i = stmt.executeUpdate();
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
+		return i;
 	}
 	
 	/**
-	 * Update the User account
-	 * @param user
+	 * Aktuallisiert die Daten eines Users in der UserTabelle
+	 * @param User
+	 * @return User
 	 */
-	public void update(User user){
-		/*
-		 * There is nothing to update at this time, because the Google-Data (Email, ID) don't change.
-		 * Possible usage: Update Profile Image, use Nickname, give the User possibility to customise GUI (Color, ...)
-		 */
-		System.out.println(user);
+	public User update(User user){
+		
 		if(user.getContact() != null){
 			Connection con = DBConnection.connection();
 			try{
 				PreparedStatement stmt = con.prepareStatement("UPDATE User SET own_Contact = ? WHERE ID = ?");
 				stmt.setInt(1, user.getContact().getBo_Id());
 				stmt.setDouble(2, user.getGoogleID());
-				stmt.execute();
+				if(stmt.executeUpdate() > 0) return user;
 				
 				
 			}catch(SQLException e){
 				e.printStackTrace();
-			}	
+			}		
 		}
-	}
-	
-	/**
-	 * Generate new row in the UserTable with the data from the <code>User</code> object
-	 * @param user
-	 */
-	
-	public void insert(User user){
-		Connection con = DBConnection.connection();
-		try{
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_mail) VALUES (?, ?)");
-			stmt.setDouble(1, user.getGoogleID());
-			stmt.setString(2, user.getGMail());
-			stmt.execute();
-			
-			
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-	}
-	
-	
-	
+		return null;
+}
 	
 	
 }
+	
+	
+

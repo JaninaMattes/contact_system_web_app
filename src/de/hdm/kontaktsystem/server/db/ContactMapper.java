@@ -272,9 +272,10 @@ public class ContactMapper {
 	 * Wird benötigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzulösen
 	 * 
 	 * @param User-Objekt
+	 * @param Contact ID
 	 */
 	
-	public void findOwnContact(User u) {
+	public void findOwnContact(int contact_ID, User u) {
 		
 		Connection con = DBConnection.connection();
 		try {
@@ -284,7 +285,7 @@ public class ContactMapper {
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
 					+ "WHERE c.ID = ?");
 
-			stmt.setInt(1, u.getContact().getBo_Id());
+			stmt.setInt(1, contact_ID);
 			ResultSet rs = stmt.executeQuery();
 
 
