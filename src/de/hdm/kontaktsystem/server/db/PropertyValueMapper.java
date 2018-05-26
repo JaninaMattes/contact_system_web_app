@@ -283,6 +283,8 @@ public class PropertyValueMapper {
 		}
 		return null;
 	}
+	
+	
 
 	/*
 	 * Alle fuer Benutzer zugaenglichen PropertyValues (Participant und Ownership)

@@ -126,7 +126,7 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));				
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));				
 				result.addElement(contact);
 			}
 			return result;
@@ -157,7 +157,7 @@ public class ContactMapper {
 			    //Prüfe ob bo eine Instanz enthält von der Klasse Contact
 			 	if(bo instanceof Contact) {			 		
 			 		contact = (Contact) bo;
-			 		System.out.println("contact name " + contact.getpropertyValue());
+			 		System.out.println("contact name " + contact.getPropertyValue());
 			 		contactResultVector.addElement(contact);	     
 			 }		
 		}	 	
@@ -304,7 +304,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				result.addElement(contact);
 			}
 			return result;
@@ -340,7 +340,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				//System.out.println("contact id1 " + contact.getBo_Id());
 				return contact;
 			}
@@ -356,10 +356,10 @@ public class ContactMapper {
 	 * der DB erstellt wird aufrufen. 
 	 * 
 	 * @param id
-	 * @param u
+	 * @param id
 	 */
 	
-	public void findOwnContact(User u) {
+	public Contact findOwnContact(int id) {
 		
 		// TODO ausformulieren!! -> Check macht diese Methode so Sinn?
 		Connection con = DBConnection.connection();
@@ -377,19 +377,25 @@ public class ContactMapper {
 			if (rs.next()) {		
 				
 				Contact contact = new Contact();
-
+				User u = new User();
+				u.setGoogleID(id);
 				contact.setOwner(u);
 				contact.setBo_Id(rs.getInt("bo.bo_ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				u.setContact(contact);
+				
+				return contact;
 			}
+			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
+		return null;
 	}
 
 	/**
@@ -421,7 +427,7 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));		
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 			}			
 			return contact;
 			
@@ -480,7 +486,8 @@ public class ContactMapper {
 					  "SELECT * "
 					+ "FROM  Contact c " 
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
-					+ "WHERE description = 'Name' AND bo.status = " + shared_status);
+					+ "WHERE bo.user_ID = " + user_id 
+					+ "AND bo.status = " + shared_status);
 
 			if (rs.next()) {
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
@@ -488,7 +495,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 
 			}
 		} catch (SQLException e) {

@@ -17,8 +17,12 @@ public class Contact extends BusinessObject {
 	 * Eigenschaftsausprägungen des Kontakts
 	 */
 	private Vector <PropertyValue> propertyValues = null;
+	
+	private PropertyValue propertyValue = null;
 
 	
+	
+
 	/**
 	 * Kontruktoren
 	 * 
@@ -49,7 +53,7 @@ public class Contact extends BusinessObject {
 	 * Kontact Name auslesen
 	 */
 	
-	public Vector <PropertyValue> getpropertyValue() {
+	public Vector <PropertyValue> getpropertyValues() {
 		return this.propertyValues;
 	}
 
@@ -57,8 +61,16 @@ public class Contact extends BusinessObject {
 	 * Kontakt Name setzen
 	 */
 
-	public void setpropertyValue(Vector <PropertyValue> pV) {
+	public void setpropertyValues(Vector <PropertyValue> pV) {
 		this.propertyValues = pV;
+	}
+	
+	public PropertyValue getPropertyValue() {
+		return propertyValue;
+	}
+
+	public void setPropertyValue(PropertyValue propertyValue) {
+		this.propertyValue = propertyValue;
 	}
 
 	/**
@@ -66,17 +78,17 @@ public class Contact extends BusinessObject {
 	 * @param pv
 	 */
 	
-	public void addPropertyValue(PropertyValue pv) {
-		this.propertyValues.addElement(pv);
-	}
+//	public void addPropertyValue(PropertyValue pv) {
+//		this.propertyValues.addElement(pv);
+//	}
 
 	
 	@Override
 	public String toString() {
 
-		if(propertyValues.isEmpty()){
-			return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = leer Ausprägung = leer ]";
-		}
+//		if(propertyValues.isEmpty()){
+//			return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = leer Ausprägung = leer ]";
+//		}
 		
 		return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = "
 				+ propertyValues + "]";

@@ -1,6 +1,7 @@
 package test;
 
 import java.util.Random;
+
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
