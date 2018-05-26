@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
 
 
@@ -44,13 +44,13 @@ public class ContactListForm extends VerticalPanel{
 	//Label sharedContactLabel = new Label("X");
 	
 	/**
-	 * Löschenbutton um eine Kontaktliste zu löschen.
+	 * Lï¿½schenbutton um eine Kontaktliste zu lï¿½schen.
 	 */
 
-	Button addButton = new Button ("Kontakt der Liste hinzufügen");
+	Button addButton = new Button ("Kontakt der Liste hinzufï¿½gen");
 	Button shareButton = new Button ("Kontaktliste teilen");
-	Button deleteButton = new Button ("Kontakt aus eine Liste löschen");
-	Button deleteClButton = new Button ("Kontaktliste löschen");
+	Button deleteButton = new Button ("Kontakt aus eine Liste lï¿½schen");
+	Button deleteClButton = new Button ("Kontaktliste lï¿½schen");
 
 	public void onLoad() {
 		super.onLoad();
@@ -92,7 +92,7 @@ public class ContactListForm extends VerticalPanel{
 	class addClickHandler implements ClickHandler {
 	public void onClick(ClickEvent event) {
 		if (contactListToDisplay == null) {
-			Window.alert("Keine Kontaktliste ausgewählt");
+			Window.alert("Keine Kontaktliste ausgewï¿½hlt");
 			} else {
 				
 			}
@@ -102,7 +102,7 @@ public class ContactListForm extends VerticalPanel{
 //class shareClickHandler implements ClickHandler {
 //	public void onClick(ClickEvent event) {
 //		if (contactListToDisplay == null) {
-//			Window.alert("Keine Kontaktliste ausgewählt");
+//			Window.alert("Keine Kontaktliste ausgewï¿½hlt");
 //		} else {
 //			contactSystemVerwaltung.
 //		}
@@ -110,31 +110,31 @@ public class ContactListForm extends VerticalPanel{
 //}
 
 /**
- * ClickHandler zum Löschen eines Kontaktes in einer Kontaktliste
+ * ClickHandler zum Lï¿½schen eines Kontaktes in einer Kontaktliste
  */
 
 class DeleteClickHandler implements ClickHandler {
 	
 	public void onClick(ClickEvent event) {
 		if (contactListToDisplay == null) {
-			Window.alert("Keinen Kontaktliste ausgewählt");
+			Window.alert("Keinen Kontaktliste ausgewï¿½hlt");
 		}else {
 			contactSystemVerwaltung.delete(contactListToDisplay, 
-					new deleteContactCallback(contactListToDisplay));
+					new deleteContactListCallback(contactListToDisplay));
 		}
 	}
 }
 
-class deleteContactCallback implements AsyncCallback<Void> {
+class deleteContactListCallback implements AsyncCallback<Void> {
 	
 	ContactList contactList = null;
 	
-	deleteContactCallback(ContactList cl){
+	deleteContactListCallback(ContactList cl){
 		contactList = cl;
 		}
 	
 	public void onFailure(Throwable caught) {
-		Window.alert("Löschen eines Kontaktes fehlgeschlagen");
+		Window.alert("LÃ¶schen eines Kontaktes fehlgeschlagen");
 	}
 	
 	public void onSuccess(Void result) {
@@ -146,7 +146,7 @@ class deleteContactCallback implements AsyncCallback<Void> {
 }
 
 /**
- * Clickhandler zum Löschen einer Kontaktliste.
+ * Clickhandler zum Lï¿½schen einer Kontaktliste.
  * @author Marco
  *
  */
@@ -156,7 +156,7 @@ class DeleteClClickHandler implements ClickHandler {
 	@Override
 	public void onClick(ClickEvent event) {
 		if (contactListToDisplay == null) {
-			Window.alert("keine Kontaktliste ausgewählt");
+			Window.alert("keine Kontaktliste ausgewï¿½hlt");
 		} else {
 			ContactSystemAdministrationImpl.deleteContactList(contactListToDisplay,
 					new deleteContactListCallback(contactListToDisplay));
@@ -173,7 +173,7 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 
 	@Override
 	public void onFailure(Throwable caught) {
-		Window.alert("Löschen einer Kontaktliste fehlgeschlagen");
+		Window.alert("Lï¿½schen einer Kontaktliste fehlgeschlagen");
 	}
 
 	@Override
@@ -184,12 +184,12 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 		}
 	}
 }
-
+}
 	/**
 	 *  cstvm setter
 	 */
 
-	void setCStvm(ContactListsTreeViewModel cltvm) {
+	void setCltvm(ContactListsTreeViewModel cltvm) {
 	this.cltvm = cltvm;
 	}
 
@@ -224,4 +224,9 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 	}
 
 }
+
+public void setSelected(Object object) {
+	// TODO Auto-generated method stub
+	
+
 }

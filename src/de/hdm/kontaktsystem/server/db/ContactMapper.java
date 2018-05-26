@@ -71,7 +71,7 @@ public class ContactMapper {
 		try {		
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO Contact (ID) VALUES ( ? )");				  
 			stmt.setInt(1, contact.getBo_Id());
-			if(stmt.executeUpdate() > 1) return contact;	
+			if(stmt.executeUpdate() > 0) return contact;	
 
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -27,5 +27,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/kontaktsystem/login</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>EditorService</servlet-name>
+    <servlet-class>de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl</servlet-class>
+    
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>EditorService</servlet-name>
+    <url-pattern>/kontaktsystem/editor</url-pattern>
+  </servlet-mapping>
+  
   
 </web-app>

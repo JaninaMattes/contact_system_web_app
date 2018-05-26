@@ -20,6 +20,7 @@ public class PropertyMapperTest {
 	private final static PropertyMapper pMapper = PropertyMapper.propertyMapper(); 
 	private final static UserMapper uMapper = UserMapper.userMapper();
 	private final static PropertyValueMapper pvMapper = PropertyValueMapper.propertyValueMapper();
+	private final static ContactMapper cMapper = ContactMapper.contactMapper();
 	
 	// Gültige IDs zu Testen
 	private final static double vUID = 666;
@@ -31,14 +32,27 @@ public class PropertyMapperTest {
 	
 	public static void main(String args[]) {	
 		
+		Contact c = new Contact();	
+		c.setBo_Id(3);	
+		
 		User u = new User();
+		u.setGoogleID(126);
+		c.setOwner(u);
+		
+		PropertyValue name = new PropertyValue();
+		name.setBo_Id(8);
+		name.setOwner(u);
+		
+		name.setValue("JaninaTestKontakt");
+		name.setContact(c);	
+		
+		c.setName(name);
+		
+		System.out.println("\n ############ Test Contact insert ################ \n");
+		cMapper.insertContact(c);
 		System.out.println("\n ############ Test User FindByMail ################ \n");
 		u = uMapper.findByEmail("NeuerUser@gmail.com");
 		System.out.println(uMapper.findByEmail("NeuerUser@gmail.com"));
-		
-		Contact c = new Contact();
-		c.setOwner(u);	
-		c.setBo_Id(3);
 		
 		Property p = new Property();
 		p.setDescription("Arbeitgeber");
@@ -47,6 +61,8 @@ public class PropertyMapperTest {
 		p1 = pMapper.findBy("Name");
 		System.out.println("\n ############ Test Prop FindBy String ################ \n");
 		System.out.println(pMapper.findBy("Name"));
+		
+		name.setProp(p1);
 		
 		PropertyValue pv = new PropertyValue();
 		pv.setBo_Id(6);
@@ -65,12 +81,7 @@ public class PropertyMapperTest {
 		p.setPropertyValue(pv);
 		p.setPropertyValue(pv1);
 		
-		PropertyValue name = new PropertyValue();
-		name.setBo_Id(8);
-		name.setOwner(u);
-		name.setProp(p1);
-		name.setValue("JaninaTestKontakt");
-		name.setContact(c);
+	
 		
 		c.setPropertyValue(name);
 						

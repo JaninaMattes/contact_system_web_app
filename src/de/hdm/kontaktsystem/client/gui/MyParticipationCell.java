@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -16,6 +16,8 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  *
  */
 
+//Hinzufügen eines Symbols zum Unterscheiden der Arten? Oder Sortierung nach Arten?
+
 public class MyParticipationCell extends AbstractCell<Participation> {
 
 	@Override
@@ -31,21 +33,35 @@ public class MyParticipationCell extends AbstractCell<Participation> {
 	      		+ "<tr>"
 	      		+ "<td>");
 	      
+	      //Anzeige des geteilten Objekts auf der linken Seite
+	      //Falls das geteilte Objekt ein Kontakt ist, Anzeige des Namens
 	      if(participation.getReferencedObject() instanceof Contact) {
 	    	  Contact c = (Contact) participation.getReferencedObject();
-	    	  sb.appendEscaped(c.getpropertyValue().getName());
+//	    	  sb.appendEscaped(c.getpropertyValue().getName());
+	    	  //Testdaten
+	    	  sb.appendEscaped("MusterKontakt");
+	    	  
+	    //Falls das geteilte Objekt eine Kontaktliste ist, Anzeige des Bezeichners
 	      }else if(participation.getReferencedObject() instanceof ContactList) {
 	    	  ContactList cl = (ContactList) participation.getReferencedObject();
-	    	  sb.appendEscaped(cl.getName());
+//	    	  sb.appendEscaped(cl.getName());
+	    	//Testdaten
+	    	  sb.appendEscaped("MusterKontaktliste");
+	    	  
+	    //Falls das geteilte Objekt eine Eigenschaftsausprägung ist, Anzeige des Werts
 	      }else if(participation.getReferencedObject() instanceof PropertyValue) {
 	    	  PropertyValue pv = (PropertyValue) participation.getReferencedObject();
-	    	  sb.appendEscaped(pv.getValue());
+//	    	  sb.appendEscaped(pv.getValue());
+	    	//Testdaten
+	    	  sb.appendEscaped("MusterEigenschaft");
 	      }
 	      
 	      
 	      sb.appendHtmlConstant("</td>"
 	      		+ "<td>");
-	      sb.appendEscaped(participation.getParticipant().getContact().getpropertyValue().getName());
+//	      sb.appendEscaped(participation.getParticipant().getContact().getpropertyValue().getName());
+	      //Testdaten
+	      sb.appendEscaped("MusterTeilhaber");
 	      
 	      sb.appendHtmlConstant("</td>"
 		      	+ "</tr>"

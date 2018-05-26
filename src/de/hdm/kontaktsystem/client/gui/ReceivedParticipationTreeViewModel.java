@@ -1,7 +1,5 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -11,12 +9,13 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
+import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 
 import de.hdm.kontaktsystem.shared.bo.Participation;
 
-public class MyParticipationsTreeViewModel implements TreeViewModel {
-
-	private MyParticipationForm participationForm;
+public class ReceivedParticipationTreeViewModel implements TreeViewModel {
+	
+	private ReceivedParticipationForm participationForm;
 	
 	private Participation selectedParticipation;
 	
@@ -60,15 +59,15 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 	 * Im Konstruktor werden die für den Kunden- und Kontobaum wichtigen lokalen
 	 * Variaben initialisiert.
 	 */
-	public MyParticipationsTreeViewModel() {
+	public ReceivedParticipationTreeViewModel() {
 		contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 		pKeyProvider = new ParticipationKeyProvider();
 		selectionModel = new SingleSelectionModel<Participation>(pKeyProvider);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
 	}
 
-	void setParticipationForm(MyParticipationForm mpf) {
-		this.participationForm = mpf;
+	void setParticipationForm(ReceivedParticipationForm rpf) {
+		this.participationForm = rpf;
 	}
 	
 
@@ -118,7 +117,6 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 	public boolean isLeaf(Object value) {
 		return false;
 	}
-
 
 
 }
