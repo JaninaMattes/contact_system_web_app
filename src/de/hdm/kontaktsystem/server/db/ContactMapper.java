@@ -41,6 +41,10 @@ public class ContactMapper {
 
 	}
 
+	/**
+	 * Gibt nach dem Singelton Pattern eine Instanz des ContactMppers zurück
+	 * @return ContactMapper-Objekt
+	 */
 	public static ContactMapper contactMapper() {
 		if (contactMapper == null) {
 			contactMapper = new ContactMapper();
@@ -48,59 +52,38 @@ public class ContactMapper {
 
 		return contactMapper;
 	}
+	
 
+	
 	/**
-	 * Mapper-Methode um einen Kontakt zu loeschen
+	 * Mapper-Methode um einen Kontakt zu erstellen und
+	 * das Contact-Objekt in der DB einzufuegen. 
 	 * 
 	 * @param contact
+	 * @return Contact
 	 */
-	public void deleteContact(Contact contact) {
-		deleteContactByID(contact.getBo_Id());
-	}
 
-	/**
-	 * Mapper-Methode um einen Kontakt mit Hilfe der ID zu loeschen
-	 * 
-	 * @param id
-	 */
-	public void deleteContactByID(int id) {
-		System.out.println("Delete Contact");
-		PropertyValueMapper.propertyValueMapper().deleteByContact(id);
+	public Contact insertContact(Contact contact) {
+		
+		BusinessObjectMapper.businessObjectMapper().insert(contact);
 		Connection con = DBConnection.connection();
-		try {
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM Contact WHERE ID = ?" );
-			stmt.setInt(1, id);
-			stmt.executeUpdate();
+
+		try {		
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO Contact (ID) VALUES ( ? )");				  
+			stmt.setInt(1, contact.getBo_Id());
+			if(stmt.executeUpdate() > 1) return contact;	
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
-	}
-
-	/**
-	 * Mapper-Methode um alle Kontakte eines bestimmten Users mittels der User-ID zu
-	 * loeschen
-	 */
-
-	public void deleteAllContactsByUser(double user_id) {
-
-		Vector<Contact> result = new Vector<Contact>();		
-		//Aufrufen aller Kontakte eines bestimmten Users
-		result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
-		for (Contact c : result) {
-			deleteContactByID(c.getBo_Id());
-			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(c.getBo_Id());
-			System.out.println("contact deleted: " + c.getBo_Id());
-		}
+		}	
+		return null;
 	}
 	
-
 	/**
 	 * Mapper-Methode zur Rückgabe aller Kontakte eines bestimmten Users.
 	 * 
-	 * @param user_id
-	 * @return
+	 * @param User Id
+	 * @return Vector mit alle Contact-Objekte  eines Users
 	 */
 		
 	public Vector<Contact> findAllContactsByUser(double user_id) {
@@ -140,6 +123,9 @@ public class ContactMapper {
 	 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
 	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
 	 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
+	 *  
+	 *  @param User-Objekt
+	 *  @return Vector mit allen geteilten Contact-Objekten
 	 */
 
 	public Vector<Contact> findAllSharedByMe (User user) {
@@ -171,7 +157,7 @@ public class ContactMapper {
 	 * Alle für den Benutzer in der Applikation geteilte Kontakte <code>Contact</code> Objekte
 	 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
 	 * 
-	 * @param user-Objekt
+	 * @param User-Objekt
 	 * @return Vector Contact-Objekte
 	 */
 
@@ -190,7 +176,7 @@ public class ContactMapper {
 			 Contact contact = new Contact();
 			 
 			 System.out.println("bo gefunden: " + bo.getBo_Id());
-			    
+			    // Prüft ob das BusinessObject vom Typ Contact ist.
 			 	if(bo instanceof Contact) {				
 			 		contact = (Contact) bo;
 			 		System.out.println("contact name " + bo);
@@ -202,78 +188,6 @@ public class ContactMapper {
 	}
 	
     
-	/**
-	 * Methode zur Löschung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
-	 * welche im System mit anderen Nutzern geteilt wurden. 
-	 * @param user
-	 */
-	
-	public void deleteAllSharedByMe(User user) {
-		
-		Vector <Contact> contactResult = new Vector <Contact>();
-		contactResult = this.findAllSharedByMe(user);
-		
-		for(Contact contact : contactResult) {
-			// löschen aller Eintraege in der Teilhaberschaft Tabelle Participation
-			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
-			this.deleteContact(contact);
-			System.out.println("# shared contact deleted: " + contact.getBo_Id() );
-		}
-	}
-	
-	/**
-	 * Eine Methode zur Loeschung aller Verbindungen in der Participation Tabelle der DB.
-	 * Dies fuehrt dazu, dass urspruenglich fuer einen Nutzer geteilten Objekte
-	 * von diesem nicht mehr aufgerufen werden koennen.
-	 * 
-	 */
-	
-	public void deleteAllSharedByOthersToMe(User user) {
-		
-		Vector <Contact> contactResult = new Vector <Contact>();
-		contactResult = this.findAllSharedByOthersToMe(user);		
-
-		for(Contact contact : contactResult) {
-			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
-			System.out.println("# participation for contact deleted: " + contact.getBo_Id() );
-		}
-	}
-	
-	
-	/**
-	 * Mapper-Methode um alle Kontakte zu loeschen
-	 */
-	public void deleteAllContacts() {
-
-		Vector<Contact> result = new Vector<Contact>();
-		result = ContactMapper.contactMapper().findAllContacts();
-
-		for (Contact c : result) {
-			this.deleteContactByID(c.getBo_Id());
-		}
-	}
-	
-	/**
-	 * Mapper-Methode um einen Kontakt zu erstellen und
-	 * das Contact-Objekt in der DB einzufuegen. 
-	 * 
-	 * @param contact
-	 */
-
-	public void insertContact(Contact contact) {
-		
-		BusinessObjectMapper.businessObjectMapper().insert(contact);
-		Connection con = DBConnection.connection();
-
-		try {		
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO Contact (ID) VALUES ( ? )");				  
-			stmt.setInt(1, contact.getBo_Id());
-			stmt.executeUpdate();	
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-	}
 
 	/**
 	 * Mapper-Methode um alle vorhandenen Kontakte zu suchen.
@@ -317,8 +231,8 @@ public class ContactMapper {
 	/**
 	 * Mapper-Methode um einen Kontakt über die ID zu suchen.
 	 * 
-	 * @param id
-	 * @return
+	 * @param Contact ID
+	 * @return Contact-Objekt
 	 */
 	
 	public Contact findContactById(int id) {		
@@ -340,8 +254,9 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
-				//System.out.println("contact id1 " + contact.getBo_Id());
+
+				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+
 				return contact;
 			}
 		} catch (SQLException e) {
@@ -355,13 +270,18 @@ public class ContactMapper {
 	 * Den eigenen Kontakt eines User, welcher bei dessen Erzeugung in 
 	 * der DB erstellt wird aufrufen. 
 	 * 
-	 * @param id
-	 * @param id
+
+	 * Wirn nur Verwendet um dem User-Objekt seine Contact-Objekt zu zuweisen.
+	 * Wird benötigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzulösen
+	 * 
+	 * @param User-Objekt
+	 * @param Contact ID
 	 */
 	
-	public Contact findOwnContact(int id) {
+
+	public void findOwnContact(int contact_ID, User u) {
+
 		
-		// TODO ausformulieren!! -> Check macht diese Methode so Sinn?
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
@@ -370,15 +290,13 @@ public class ContactMapper {
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
 					+ "WHERE c.ID = ?");
 
-			stmt.setInt(1, id);
+			stmt.setInt(1, contact_ID);
 			ResultSet rs = stmt.executeQuery();
 
 
 			if (rs.next()) {		
 				
 				Contact contact = new Contact();
-				User u = new User();
-				u.setGoogleID(id);
 				contact.setOwner(u);
 				contact.setBo_Id(rs.getInt("bo.bo_ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
@@ -387,7 +305,6 @@ public class ContactMapper {
 				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				u.setContact(contact);
 				
-				return contact;
 			}
 			
 			
@@ -395,14 +312,13 @@ public class ContactMapper {
 			e.printStackTrace();
 		}
 
-		return null;
 	}
 
 	/**
-	 * Mapper-Methode um einen Kontakt durch den Namen zu finden
+	 * Mapper-Methode um einen Kontakt nach einer Eigenschaft zu finden
 	 * 
-	 * @param name
-	 * @return
+	 * @param PropertyValue
+	 * @return Contact
 	 */
 	public Contact findBy(PropertyValue pV) {
 		
@@ -437,43 +353,12 @@ public class ContactMapper {
 
 		return null;
 	}
-
+	
 	/**
-	 * Mapper-Methode um einen Kontakt zu bearbeiten
-	 * 
-	 * @param contact
-	 * @return
-	 */
-	public Contact updateContact(Contact contact) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate(
-					  "UPDATE contact SET status = " 
-					+ contact.isShared_status() 
-					+ "SET modificationDate = "
-					+ contact.getModifyDate() 
-					+ "WHERE id = " 
-					+ contact.getBo_Id());
-		
-		Vector <PropertyValue> propResult = new Vector <PropertyValue>();
-		propResult = PropertyValueMapper.propertyValueMapper().findBy(contact);
-			for(PropertyValue pV : propResult) {
-				PropertyValueMapper.propertyValueMapper().update(pV);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return contact;
-	}
-
-	/**
-	 * 
+	 * Findet alle Geteileten oder nicht geteielten 
 	 * @param user_id
 	 * @param shared_status
-	 * @return
+	 * @return Contact-Objekt
 	 */
 
 	public Contact findContactByStatus(double user_id, boolean shared_status) {
@@ -509,5 +394,149 @@ public class ContactMapper {
 		
 		return findAllContactsByUser(user.getGoogleID());
 	}
+
+	/**
+	 * Mapper-Methode um einen Kontakt zu bearbeiten
+	 * 
+	 * !! Ungültig, bitte überarbeiten oder entferen !!
+	 * 
+	 * @param Contact-Objekt
+	 * @return Contact-Objekt
+	 */
+	public Contact updateContact(Contact contact) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			/*
+			stmt.executeUpdate(
+					  "UPDATE contact SET status = " 
+					+ contact.isShared_status() 
+					+ "SET modificationDate = "
+					+ contact.getModifyDate() 
+					+ "WHERE id = " 
+					+ contact.getBo_Id());
+			
+			Vector <PropertyValue> propResult = new Vector <PropertyValue>();
+			propResult = PropertyValueMapper.propertyValueMapper().findBy(contact);
+			for(PropertyValue pV : propResult) {
+				PropertyValueMapper.propertyValueMapper().update(pV);
+			}
+			*/
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contact;
+	}
+
+
+	/**
+	 * Methode zur Löschung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
+	 * welche im System mit anderen Nutzern geteilt wurden. 
+	 * @param User-Objekt
+	 */
+	
+	public void deleteAllSharedByMe(User user) {
+		
+		Vector <Contact> contactResult = new Vector <Contact>();
+		contactResult = this.findAllSharedByMe(user);
+		
+		for(Contact contact : contactResult) {
+			// löschen aller Eintraege in der Teilhaberschaft Tabelle Participation
+			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
+			this.deleteContact(contact);
+			System.out.println("# shared contact deleted: " + contact.getBo_Id() );
+		}
+	}
+	
+	/**
+	 * Eine Methode zur Loeschung aller Verbindungen in der Participation Tabelle der DB.
+	 * Dies fuehrt dazu, dass urspruenglich fuer einen Nutzer geteilten Objekte
+	 * von diesem nicht mehr aufgerufen werden koennen.
+	 * 
+	 * @param User-Objekt
+	 */
+	
+	public void deleteAllSharedByOthersToMe(User user) {
+		
+		Vector <Contact> contactResult = new Vector <Contact>();
+		contactResult = this.findAllSharedByOthersToMe(user);		
+
+		for(Contact contact : contactResult) {
+			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
+			System.out.println("# participation for contact deleted: " + contact.getBo_Id() );
+		}
+	}
+	
+	
+	/**
+	 * Mapper-Methode um alle Kontakte zu loeschen
+	 */
+	public void deleteAllContacts() {
+
+		Vector<Contact> result = new Vector<Contact>();
+		result = ContactMapper.contactMapper().findAllContacts();
+
+		for (Contact c : result) {
+			this.deleteContactByID(c.getBo_Id());
+		}
+	}
+	
+
+	/**
+	 * Mapper-Methode um einen Kontakt zu loeschen
+	 * 
+	 * @param Contact-Objekt
+	 * @return gelöschtes Contact-Objekt
+	 */
+	public Contact deleteContact(Contact contact) {
+		if(deleteContactByID(contact.getBo_Id()) > 0) return contact;
+		else return null;
+	}
+
+	/**
+	 * Mapper-Methode um einen Kontakt mit Hilfe der ID zu loeschen
+	 * 
+	 * @param Contact ID
+	 * @return Anzahl gelöschter Elemente
+	 */
+	public int deleteContactByID(int id) {
+		System.out.println("Delete Contact");
+		int i = 0; // Anzahl der gelöschten Reihen
+		PropertyValueMapper.propertyValueMapper().deleteByContact(id);
+		Connection con = DBConnection.connection();
+		try {
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM Contact WHERE ID = ?" );
+			stmt.setInt(1, id);
+			i = stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		return i;
+	}
+
+	/**
+	 * Mapper-Methode um alle Kontakte eines bestimmten Users mittels der User-ID zu
+	 * loeschen
+	 * 
+	 * @param User ID 
+	 */
+
+	public void deleteAllContactsByUser(double user_id) {
+
+		Vector<Contact> result = new Vector<Contact>();		
+		//Aufrufen aller Kontakte eines bestimmten Users
+		result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
+		for (Contact c : result) {
+			deleteContactByID(c.getBo_Id());
+			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(c.getBo_Id());
+			System.out.println("contact deleted: " + c.getBo_Id());
+		}
+	}
+	
+
 
 }

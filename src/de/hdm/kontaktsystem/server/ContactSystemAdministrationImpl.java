@@ -139,6 +139,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public void addContactToList(Contact contact, ContactList contactList) {
 		clMapper.addContactToContactlist(contactList, contact);
 	}
+	public void removeContactToList(Contact contact, ContactList contactList) {
+		clMapper.removeContactFromContactList(contactList, contact);
+	}
 	
 	public void shareBusinessObjectWith(Participation part) {
 		partMapper.insertParticipation(part);
