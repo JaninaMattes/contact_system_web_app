@@ -332,7 +332,7 @@ public class ContactListMapper {
 		for(ContactList cl : clResult) {
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(cl);
 			this.deleteContactListById(cl.getBo_Id());
-			System.out.println("# shared contact deleted: " + cl.getBo_Id() );
+			System.out.println("# shared contactList deleted: " + cl.getBo_Id() );
 		}
 	}
 	
@@ -367,6 +367,8 @@ public class ContactListMapper {
 		if(deleteContactListById(cl.getBo_Id()) > 0) return cl;
 		else return null;
 	}
+	
+	
 	/**
 	 * Eine Kontaktliste löschen, mit der übergebenden ID.
 	 * 
@@ -396,11 +398,9 @@ public class ContactListMapper {
 	 */
 
 	public void deleteContactListByUserId(Double userId) {
-
 		
-		for(ContactList cl : findContactListByUserId(userId)){
+		for(ContactList cl : this.findContactListByUserId(userId)){
 			this.deleteContactListById(cl.getBo_Id());
-
 		}
 		
 		Vector<ContactList> clList = new Vector <ContactList>();
@@ -410,6 +410,7 @@ public class ContactListMapper {
 		}
 	}
 
+	
 	/**
 	 * Alle Kontaktlisten löschen.
 	 */
