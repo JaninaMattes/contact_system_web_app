@@ -50,11 +50,12 @@ public class PropertyValueMapper {
 		BusinessObjectMapper.businessObjectMapper().insert(pv);
 
 		Connection con = DBConnection.connection();
+		/*
 		Property prop = new Property();
 		Contact contact = new Contact();
 		pv.setContact(contact);
 		pv.setProp(prop);
-
+		*/
 		try {
 			PreparedStatement stmt = con.prepareStatement(
 			"INSERT INTO PropertyValue (ID, property_ID, value, contact_ID) VALUES (?, ?, ?, ?)"

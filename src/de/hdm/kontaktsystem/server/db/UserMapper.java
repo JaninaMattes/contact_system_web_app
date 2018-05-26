@@ -41,16 +41,22 @@ public class UserMapper {
 	 /**
 	 * Legt einen neuen User in der Datenbank an 
 	 * @param User-Objekt
+	 * @param Contact-Objekt (OwnContact)
 	 * @return User-Objekt
 	 */
 	
-	public User insert(User user){
+	public User insert(User user, Contact ownContact){
 		Connection con = DBConnection.connection();
 		try{
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_mail) VALUES (?, ?)");
 			stmt.setDouble(1, user.getGoogleID());
 			stmt.setString(2, user.getGMail());
-			if(stmt.executeUpdate() > 0) return user;
+			if(stmt.executeUpdate() > 0) {
+				
+				ownContact.setOwner(user);
+				user.setContact(ContactMapper.contactMapper().insertContact(ownContact));
+				return update(user);
+			}
 			
 		}catch(SQLException e){
 			e.printStackTrace();
