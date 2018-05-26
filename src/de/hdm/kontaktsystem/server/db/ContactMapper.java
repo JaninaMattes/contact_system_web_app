@@ -217,7 +217,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
 				result.addElement(contact);
 			}
 			return result;
@@ -246,6 +246,7 @@ public class ContactMapper {
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
 					+ "Inner JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 					+ "WHERE c.ID = ? "); 
+			
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 
@@ -256,8 +257,8 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				//contact.setName(PropertyValueMapper.propertyValueMapper().findbyValue(rs.getString("pv.value")));
 				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+				System.out.println("contact id: " + contact.getBo_Id());
 				return contact;
 			}
 		} catch (SQLException e) {
@@ -296,13 +297,13 @@ public class ContactMapper {
 
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					  "SELECT c.* , pv.*, bo.* " 
+					  "SELECT c.*, pv.*, bo.* " 
 					+ "FROM  Contact c " 
 					+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
-					+ "WHERE value = ?");
+					+ "WHERE pv.ID = ?");
 			
-			stmt.setString(1, pV.getValue());
+			stmt.setInt(1, pV.getBo_Id());
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
@@ -331,32 +332,37 @@ public class ContactMapper {
 	 * @return Contact-Objekt
 	 */
 
-	public Contact findContactByStatus(double user_id, boolean shared_status) {
-		Contact contact = new Contact();
+	public Vector <Contact> findContactByStatus(double user_id, boolean shared_status) {
+		Vector <Contact> contactResult = new Vector <Contact>();
 		Connection con = DBConnection.connection();
 
 		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(
+			PreparedStatement stmt = con.prepareStatement( 
 					  "SELECT * "
 					+ "FROM  Contact c " 
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
-					+ "WHERE bo.user_ID = " + user_id 
-					+ "AND bo.status = " + shared_status);
+					+ "WHERE bo.user_ID = ?"
+					+ "AND bo.status = ?"
+					);
+			stmt.setDouble(1, user_id);
+			stmt.setBoolean(2, shared_status);
+			ResultSet rs = stmt.executeQuery();					 
 
-			if (rs.next()) {
+			while (rs.next()) {
+				Contact contact = new Contact();
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
 				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
-
+				contactResult.addElement(contact);
 			}
+			return contactResult;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return contact;
+		return null;
 	}
 
 	public Vector<Contact> findAllContactsByUser(User user) {
@@ -376,7 +382,7 @@ public class ContactMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("UPDATE contact SET ID = ? WHERE ID= ?");			
+			PreparedStatement stmt = con.prepareStatement("UPDATE Contact SET ID = ? WHERE ID= ?");			
 			stmt.setInt(1, contact.getBo_Id());
 			stmt.setInt(2, contact.getBo_Id());
 			stmt.execute();
@@ -406,7 +412,6 @@ public class ContactMapper {
 		contactResult = this.findAllSharedByMe(user);
 		
 		for(Contact contact : contactResult) {
-			// löschen aller Eintraege in der Teilhaberschaft Tabelle Participation
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
 			this.deleteContact(contact);
 			System.out.println("# shared contact deleted: " + contact.getBo_Id() );
@@ -532,16 +537,15 @@ public class ContactMapper {
 			stmt.setInt(1, contact_ID);
 			ResultSet rs = stmt.executeQuery();
 
-			if (rs.next()) {		
-				
-				Contact contact = new Contact();
-				contact.setOwner(owner);
+			if (rs.next()) {	
+				Contact contact = new Contact();				
 				contact.setBo_Id(rs.getInt("bo.bo_ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
 				owner.setUserContact(contact);
+				contact.setOwner(owner);
 				return contact;				
 			}			
 			

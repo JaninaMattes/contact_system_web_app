@@ -113,7 +113,7 @@ public class UserMapper {
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));		
-				c = ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
+				ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
 				u.setUserContact(c);
 				return u;	
 			}

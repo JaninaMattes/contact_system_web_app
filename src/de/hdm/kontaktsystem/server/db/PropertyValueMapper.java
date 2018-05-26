@@ -303,7 +303,7 @@ public class PropertyValueMapper {
 	  */
 	
 	public Vector<PropertyValue> findBy(Property p) {
-		System.out.println("#Pv -findBy");
+		System.out.println("#PV -findBy(Property)");
 		return findByPropertyID(p.getId());
 		
 	}
@@ -362,14 +362,14 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findByPropertyID(int propertyID) {
-		System.out.println("#PV-FindBy Methode");
+		System.out.println("#PV-FindBy(id)");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 		Connection con = DBConnection.connection();
 
 		try {
 			PreparedStatement stmt = con.prepareStatement
 					( "SELECT PropertyValue.ID, PropertyValue.value, PropertyValue.property_ID, "
-					+ "Property.description "
+					+ "Property.ID, Property.description "
 					+ "FROM PropertyValue "
 					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
 					+ "WHERE PropertyValue.property_ID = ? "
@@ -411,8 +411,7 @@ public class PropertyValueMapper {
 
 	public PropertyValue findName(Contact contact) {
 		System.out.println("#PV -findName");
-		PropertyValue name = new PropertyValue();
-		
+		PropertyValue name = new PropertyValue();		
 		Vector <PropertyValue> result = new Vector <PropertyValue>();
 		result = PropertyValueMapper.propertyValueMapper().findBy(contact);
 		
@@ -420,9 +419,9 @@ public class PropertyValueMapper {
 			System.out.println("propertyVal id: " + val.getBo_Id());
 			System.out.println("propertyVal description: " + val.getProp().getDescription());
 			
-			if(val.getProp().getDescription().contains("Name")) {
+			if(val.getProp().getId() == 1) {
 				name = val; 
-				System.out.println("Contact name:" + val.getProp().getDescription());
+				System.out.println("Contact name:" + val.getProp().getPropertyValues());
 			}
 		}	
 		System.out.println("Name: " + name);

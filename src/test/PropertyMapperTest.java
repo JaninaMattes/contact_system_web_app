@@ -1,11 +1,7 @@
 package test;
 
-import java.util.Vector;
 
-import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
-import de.hdm.kontaktsystem.server.db.ContactListMapper;
 import de.hdm.kontaktsystem.server.db.ContactMapper;
-import de.hdm.kontaktsystem.server.db.ParticipationMapper;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
@@ -88,14 +84,14 @@ public class PropertyMapperTest {
 		c.setName(name);
 						
 		// Test insert method 
-		System.out.println("\n ############ Test Prop ################ \n");
-		pMapper.insert(p);
+		System.out.println("\n ############ Test Prop insert ################ \n");
+		//pMapper.insert(p);
 		
 		// Test insert method 
-		System.out.println("\n ############ Test PropVal ################ \n");
-		pvMapper.insert(pv);
-		pvMapper.insert(pv1);
-		pvMapper.insert(name);
+		System.out.println("\n ############ Test PropVal insert ################ \n");
+		//pvMapper.insert(pv);
+		//pvMapper.insert(pv1);
+		//pvMapper.insert(name);
 		
 	}
 }

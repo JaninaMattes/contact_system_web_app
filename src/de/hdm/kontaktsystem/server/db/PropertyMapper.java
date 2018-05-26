@@ -129,9 +129,7 @@ public class PropertyMapper {
   				 // Hinzufügen des neuen Objekts zum Ergebnisvektor
                 propertyResult.addElement(property);
   				
-  				}  			
-  			
-  			// Rückgabe der gefundenen Property-Werte  			
+  				}  					
   			return propertyResult;
   			
   		}catch(SQLException e){
@@ -152,7 +150,7 @@ public class PropertyMapper {
        * 
        */             
           
-     public Property findBy(Property prop ) {
+     public Property findBy(Property prop) {
     	 return findBy(prop.getId());
      }
      
@@ -224,15 +222,11 @@ public class PropertyMapper {
           try {              
              // Statement ausfüllen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
-            		 			"SELECT Property.ID, Property.description, "
-            		 		  + "PropertyValue.ID, PropertyValue.value "
-                   			  + "FROM Property "  
-                   			  + "INNER JOIN PropertyValue ON Property.ID = PropertyValue.property_ID "
-                              + "WHERE Property.description = ? " 
+            		 			"SELECT* FROM Property "
+                              + "WHERE Property.description = ?" 
                    			  );
              
              stmt.setString(1, description);
-             // Statement ausfüllen und als Query an die DB schicken
              ResultSet rs = stmt.executeQuery();           
               
              if (rs.next()) {
@@ -244,13 +238,11 @@ public class PropertyMapper {
                   System.out.println("p-id: " + property.getId());
                   System.out.println("p-description: " + property.getDescription());
                   
-                  // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
-                  // Setzen der Eigenschaftsausprägungen
-                  property.setPropertyValues(propertyValues);                 
-                }              
-              return property;
-             
+                  property.setPropertyValues(propertyValues);   
+                  return property;
+                }             
+                 
           } catch (SQLException e) {
               e.printStackTrace();
           }         

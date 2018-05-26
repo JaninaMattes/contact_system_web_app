@@ -85,22 +85,13 @@ public class ParticipationMapper {
 		}
 		return null;
 	}
-	
-//	Fällt weg, da nicht mehr Subklasse von BusinessObject, damit keine eigene ID
-//	/**
-//	 * Get Participation by the unique ID
-//	 * @return Participation-Object
-//	 */
-//	public Participation getParticipationById(int id) {
-//		//TODO Implement Method
-//		return null;
-//	}
 
 	
 	/**
 	 * Zurückgeben aller Teilhaberschaften zu Objekten eines gegebenen Users
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
+	
 	public Vector<Participation> findParticipationsByOwner(User user) {
 		Connection con = DBConnection.connection();
 		//System.out.println("Methode findParticipation..");
