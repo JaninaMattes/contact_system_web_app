@@ -39,13 +39,58 @@ public class DBTest {
 	static double uID;
 	
 	public static void main(String args[]){
+		System.out.println(pMapper.findBy(6));
+		System.out.println(pMapper.findBy(1));
 		
+		createUser();
 		//createAll();
 		//updateAll();
 		//findAll();
 		//deleteAll();
+		//findAllShared();
 		
-		findAllShared();
+	}
+	
+	public static void createUser(){
+		System.out.println("\n ############ Test User ################ \n");
+		
+		String gmail = "NeuerUser@gmail.com";
+		String nickName = "Oli";
+
+		User u = new User();
+		u.setGMail(gmail);
+		u.setGoogleID(126);
+		uID = u.getGoogleID();
+		
+		Contact c = new Contact();
+		
+		
+		uMapper.insert(u, c);
+		
+		// Setzt die propertyValues für den Kontakt
+		PropertyValue mail = new PropertyValue();
+		PropertyValue name = new PropertyValue();
+		mail.setProp(pMapper.findBy(6));
+		name.setProp(pMapper.findBy(1));
+		
+		mail.setValue(gmail);
+		mail.setContact(c);
+		mail.setOwner(c.getOwner());
+		
+		name.setValue(nickName);
+		name.setContact(c);
+		name.setOwner(c.getOwner());
+		
+		pvMapper.insert(mail);
+		pvMapper.insert(name);
+		
+		System.out.println(uMapper.findById(123));
+		System.out.println(uMapper.findByEmail(gmail));
+		System.out.println(uMapper.findAll());
+		
+		
+		
+		
 		
 	}
 	
@@ -90,7 +135,7 @@ public class DBTest {
 		pvMapper.insert(pv);
 		
 		System.out.println("Add Contact to User");
-		u.setContact(c);
+		u.setUserContact(c);
 		uMapper.update(u);
 		
 		
@@ -137,7 +182,7 @@ public class DBTest {
 		System.out.println("\n ############ Test User ################ \n");
 		
 		User u = uMapper.findById(vUID);
-		u.setContact(cMapper.findContactById(vCID));
+		u.setUserContact(cMapper.findContactById(vCID));
 		uMapper.update(u);
 		
 		
@@ -186,7 +231,7 @@ public class DBTest {
 		System.out.println("Find All: " +uMapper.findAll());
 		System.out.println("Find by EMail: " +uMapper.findByEmail("Oli@example.com"));
 		User u = uMapper.findById(vUID);
-		u.setContact(cMapper.findContactById(117));
+		u.setUserContact(cMapper.findContactById(117));
 		
 		uMapper.update(u);
 		System.out.println(u = uMapper.findById(u.getGoogleID()));

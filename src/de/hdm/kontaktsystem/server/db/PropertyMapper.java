@@ -44,6 +44,7 @@ public class PropertyMapper {
       /**
          * Hier findet die Anwendung des <code> Singleton Pattern </code> statt
          * Diese Methode gibt das einzige Objekt dieser Klasse zurück.
+         * 
          * @return Instanz des PropertyMapper
          */        
  
@@ -52,6 +53,43 @@ public class PropertyMapper {
           propertyMapper = new PropertyMapper();
         } 
         return propertyMapper;
+      }
+      
+      
+
+      /**
+       * Einfügen eines <code>Property</code>-Objekts in die Datenbank. Dabei wird
+       * auch der Primärschlüssel des übergebenen Objekts geprüft und gegebenfals
+       * berichtigt.
+       *
+       * @param property ist das zu speichernde Objekt
+       * @return das bereits übergebene Objekt, jedoch mit gegebenfals korrigierter
+       * <code>id</code>.
+       */    
+     
+      public void insert(Property property) {
+    	       	  
+          Connection con = DBConnection.connection();
+            
+          try {        	  
+              	// Die Einfügeoperation erfolgt	
+              	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
+    			stmt.setInt(1, property.getId());
+    			stmt.setString(2, property.getDescription());
+    			stmt.execute();
+    			
+    			// Die Einfügeoperation für PropertyValue
+    			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
+        	  	propertyValues = property.getPropertyValues();
+        	  
+                // Eintrag in PropertyValue erfolgt
+                for (PropertyValue pV : propertyValues){                 
+                		PropertyValueMapper.propertyValueMapper().insert(pV);
+                		System.out.println("PV-id: " + pV.getBo_Id());
+                }                  
+          	} catch(SQLException e) {
+              e.printStackTrace();
+          }          
       }
       
       
@@ -102,6 +140,8 @@ public class PropertyMapper {
   		return null;    	  
       }
    
+      
+      
      /**
        * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primärschlüssel ID.
        * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
@@ -116,6 +156,8 @@ public class PropertyMapper {
     	 return findBy(prop.getId());
      }
      
+     
+     
      /**
       * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primärschlüssel ID.
       * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
@@ -127,7 +169,7 @@ public class PropertyMapper {
       */      
      
       public Property findBy(int property_id) {       
-          
+    	  System.out.println("#Property -findcByID");
     	  Property property = new Property();
           Connection con = DBConnection.connection();          
          
@@ -148,9 +190,7 @@ public class PropertyMapper {
                   
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
-                  // Aufrufen aller zu einer Eigenschaft (Property) gehörigen Eigenschaftsausprägungen 
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
-                  // Setzen des Eigenschaftsausprägungs Vector
+                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);                  
                   property.setPropertyValues(propertyValues);            
                  
                   System.out.println("P-id: " + property.getId());
@@ -164,6 +204,7 @@ public class PropertyMapper {
           return null;
       }
          
+      
       
       /**
        * Suchen eines <code>Property</code> -Objektes innerhalb der DB anhand dessen Beschreibung.
@@ -216,6 +257,17 @@ public class PropertyMapper {
           return null;         
       }
    
+      
+      
+      /**
+       * <code>Update Methode</code>
+       * Analog zur Delete Methode wurde eine bewusste Entscheidung getroffen die CRUD Methoden 
+       * bei den Mappern für <em>Property</em>-Objekte hier nicht komplett umzusetzen. Dabei wird
+       * berücksichtigt, dass die <em>Property</em>-Objekte als statisch in der DB festgelegte
+       * Objekte existieren sollen. Eine Update Methode würde diesem Grundprinzip daher nicht 
+       * entsprechen. 
+       * 
+       */
      
       
       /**
@@ -229,52 +281,6 @@ public class PropertyMapper {
        * 
        */      
       
-      
-      /**
-       * Einfügen eines <code>Property</code>-Objekts in die Datenbank. Dabei wird
-       * auch der Primärschlüssel des übergebenen Objekts geprüft und gegebenfals
-       * berichtigt.
-       *
-       * @param property ist das zu speichernde Objekt
-       * @return das bereits übergebene Objekt, jedoch mit gegebenfals korrigierter
-       * <code>id</code>.
-       */    
-     
-      public void insert(Property property) {
-    	       	  
-          Connection con = DBConnection.connection();
-            
-          try {        	  
-              	// Die Einfügeoperation erfolgt	
-              	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
-    			stmt.setInt(1, property.getId());
-    			stmt.setString(2, property.getDescription());
-    			stmt.execute();
-    			
-    			// Die Einfügeoperation für PropertyValue
-    			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-        	  	propertyValues = property.getPropertyValues();
-        	  
-                // Eintrag in PropertyValue erfolgt
-                for (PropertyValue pV : propertyValues){                 
-                		PropertyValueMapper.propertyValueMapper().insert(pV);
-                		System.out.println("PV-id: " + pV.getBo_Id());
-                }                  
-          	} catch(SQLException e) {
-              e.printStackTrace();
-          }          
-      }
-     
-      
-      /**
-       * <code>Update Methode</code>
-       * Analog zur Delete Methode wurde eine bewusste Entscheidung getroffen die CRUD Methoden 
-       * bei den Mappern für <em>Property</em>-Objekte hier nicht komplett umzusetzen. Dabei wird
-       * berücksichtigt, dass die <em>Property</em>-Objekte als statisch in der DB festgelegte
-       * Objekte existieren sollen. Eine Update Methode würde diesem Grundprinzip daher nicht 
-       * entsprechen. 
-       * 
-       */
      
 }
          

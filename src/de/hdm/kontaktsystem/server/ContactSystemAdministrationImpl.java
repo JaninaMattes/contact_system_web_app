@@ -169,7 +169,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	
-	public Vector<ContactList> getContactListByName(String name) {
+	public Vector <ContactList> getContactListByName(String name) {
 		return clMapper.findContactListByName(name);
 		
 	}

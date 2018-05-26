@@ -39,18 +39,27 @@ public class UserMapper {
 	}
 	
 	 /**
-	 * Legt einen neuen User in der Datenbank an 
+	 * Legt einen neuen User in der Datenbank an. Analgo dazu wird
+	 * auch der eigene Kontakt eines Users in der DB angelegt. 
+	 * 
 	 * @param User-Objekt
+	 * @param Contact-Objekt (OwnContact)
 	 * @return User-Objekt
 	 */
 	
-	public User insert(User user){
+	public User insert(User user, Contact ownContact){
+		
 		Connection con = DBConnection.connection();
 		try{
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO User (ID, g_mail) VALUES (?, ?)");
 			stmt.setDouble(1, user.getGoogleID());
 			stmt.setString(2, user.getGMail());
-			if(stmt.executeUpdate() > 0) return user;
+			if(stmt.executeUpdate() > 0) {
+				
+				ownContact.setOwner(user);
+				user.setUserContact(ContactMapper.contactMapper().insertContact(ownContact));
+				return update(user);
+			}
 			
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -66,18 +75,16 @@ public class UserMapper {
 		
 		Connection con = DBConnection.connection();
 		try{
-			
-			Vector<User> userList = new Vector<User>();
-			
+			Vector<User> userList = new Vector<User>();			
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM User");
 			while(rs.next()){
-				User u = new User();
 				Contact c = new Contact();
+				User u = new User();				
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
 				c = ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
-				u.setContact(c);
+				u.setUserContact(c);
 				userList.add(u);
 			}
 			return userList;
@@ -93,9 +100,8 @@ public class UserMapper {
 	 * @param User ID
 	 * @return User
 	 */
-	public User findById(double id){
-		
-		
+	public User findById(double id){	
+		System.out.println("#User -findByID");
 		Connection con = DBConnection.connection();
 		
 		try{
@@ -103,18 +109,17 @@ public class UserMapper {
 			stmt.setDouble(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
-				User u = new User();
 				Contact c = new Contact();
-				c = ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);	
+				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
-				u.setGMail(rs.getString("g_mail"));
-				u.setContact(c);						
+				u.setGMail(rs.getString("g_mail"));		
+				c = ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
+				u.setUserContact(c);
 				return u;	
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
-		}
-		
+		}		
 		return null;
 	}
 	
@@ -123,6 +128,7 @@ public class UserMapper {
 	 * @param Email-String
 	 * @return User-Objekt
 	 */
+	
 	public User findByEmail(String email){
 		
 		Connection con = DBConnection.connection();
@@ -136,7 +142,8 @@ public class UserMapper {
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
 				c = ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
-				u.setContact(c);
+				u.setUserContact(c);
+
 				return u;
 			}
 		}catch(SQLException e){
@@ -145,6 +152,30 @@ public class UserMapper {
 		
 		return null;
 	}
+	
+	/**
+	 * Aktuallisiert die Daten eines Users in der UserTabelle
+	 * @param User
+	 * @return User
+	 */
+	public User update(User user){
+		
+		if(user.getUserContact() != null){
+			Connection con = DBConnection.connection();
+			try{
+				PreparedStatement stmt = con.prepareStatement("UPDATE User SET own_Contact = ? WHERE ID = ?");
+				stmt.setInt(1, user.getUserContact().getBo_Id());
+				stmt.setDouble(2, user.getGoogleID());
+				if(stmt.executeUpdate() > 0) return user;
+				
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+			}		
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * Löscht alle einträge in der User Tabelle 
@@ -199,28 +230,7 @@ public class UserMapper {
 		return i;
 	}
 	
-	/**
-	 * Aktuallisiert die Daten eines Users in der UserTabelle
-	 * @param User
-	 * @return User
-	 */
-	public User update(User user){
-		
-		if(user.getContact() != null){
-			Connection con = DBConnection.connection();
-			try{
-				PreparedStatement stmt = con.prepareStatement("UPDATE User SET own_Contact = ? WHERE ID = ?");
-				stmt.setInt(1, user.getContact().getBo_Id());
-				stmt.setDouble(2, user.getGoogleID());
-				if(stmt.executeUpdate() > 0) return user;
-				
-				
-			}catch(SQLException e){
-				e.printStackTrace();
-			}		
-		}
-		return null;
-}
+	
 	
 	
 }

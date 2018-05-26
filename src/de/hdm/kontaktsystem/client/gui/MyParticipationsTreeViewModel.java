@@ -1,5 +1,7 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -9,17 +11,21 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
-import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 
+import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
+import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.User;
 
-public class ReceivedParticipationTreeViewModel implements TreeViewModel {
-	
-	private ReceivedParticipationForm participationForm;
+public class MyParticipationsTreeViewModel implements TreeViewModel {
+
+	private MyParticipationForm participationForm;
 	
 	private Participation selectedParticipation;
 	
-	private ContactSystemAdministrationAsync contactSystemVerwaltung = null;
+	//Zu Testzwecken ausgeblendet
+//	private ContactSystemAdministrationAsync contactSystemAdmin = null;
+	
 	private ListDataProvider<Participation> participationDataProvider = null;
 	
 	
@@ -59,15 +65,17 @@ public class ReceivedParticipationTreeViewModel implements TreeViewModel {
 	 * Im Konstruktor werden die für den Kunden- und Kontobaum wichtigen lokalen
 	 * Variaben initialisiert.
 	 */
-	public ReceivedParticipationTreeViewModel() {
-		contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+	public MyParticipationsTreeViewModel() {
+		//Zu Testzwecken ausgeblendet
+//		contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+		
 		pKeyProvider = new ParticipationKeyProvider();
 		selectionModel = new SingleSelectionModel<Participation>(pKeyProvider);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
 	}
 
-	void setParticipationForm(ReceivedParticipationForm rpf) {
-		this.participationForm = rpf;
+	void setParticipationForm(MyParticipationForm mpf) {
+		this.participationForm = mpf;
 	}
 	
 
@@ -93,23 +101,39 @@ public class ReceivedParticipationTreeViewModel implements TreeViewModel {
 			// Erzeugen eines ListDataproviders für Customerdaten
 			participationDataProvider = new ListDataProvider<Participation>();
 			//All Participations oder nur die für den User??
-			contactSystemVerwaltung.getAllParticipations(new AsyncCallback<Vector<Participation>>() {
-						@Override
-						public void onFailure(Throwable t) {
-						}
-
-						@Override
-						public void onSuccess(Vector<Participation> participations) {
-							for (Participation p : participations) {
-								participationDataProvider.getList().add(p);
-							}
-						}
-					});
-
+			
+			//Zu Testzwecken ausgeblendet
+//			contactSystemVerwaltung.getAllParticipations(new AsyncCallback<Vector<Participation>>() {
+//						@Override
+//						public void onFailure(Throwable t) {
+//						}
+//
+//						@Override
+//						public void onSuccess(Vector<Participation> participations) {
+//							for (Participation p : participations) {
+//								participationDataProvider.getList().add(p);
+//							}
+//						}
+//					});
+			
+			//Testdaten
+			Vector<Participation> participations = new Vector<Participation>();
+			Contact c1 = new Contact();
+			User u1 = new User();
+			Participation p1 = new Participation(u1, c1);
+			participations.add(p1);
+			
+			for (Participation p : participations) {
+				participationDataProvider.getList().add(p);
+			}
+			//Ende Testdaten
+			
+			
 			// Return a node info that pairs the data with a cell.
 			return new DefaultNodeInfo<Participation>(participationDataProvider,
 					new MyParticipationCell(), selectionModel, null);
 		}
+		return null;
 		
 	}
 
@@ -117,6 +141,7 @@ public class ReceivedParticipationTreeViewModel implements TreeViewModel {
 	public boolean isLeaf(Object value) {
 		return false;
 	}
+
 
 
 }

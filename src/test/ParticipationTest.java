@@ -21,7 +21,9 @@ public class ParticipationTest {
 		participant.setGMail("mail@gmail.com");
 		participant.setGoogleID(rng.nextInt(1000)+1);
 		//insert participant in Table
-		UserMapper.userMapper().insert(participant);
+		Contact c = new Contact();
+		c = ContactMapper.contactMapper().findOwnContact(participant);
+		UserMapper.userMapper().insert(participant, c);
 		
 		//Test-Ausgabe des eingefügten Users
 		System.out.println(

@@ -72,14 +72,14 @@ public class User implements Serializable{
 	 * Returns the <code>Contact</code> that is linked to the User
 	 * @return contact
 	 */
-	public Contact getContact(){
+	public Contact getUserContact(){
 		return userContact;
 	}
 	
 	/**
 	 * Set the <code>Contact</code> that is linked to the User
 	 */
-	public void setContact(Contact contact){
+	public void setUserContact(Contact contact){
 		this.userContact = contact;
 	}
 	

@@ -68,7 +68,7 @@ public class PropertyValueTest {
 			Contact contact = cMapper.findContactById(vCID);
 			contact.setPropertyValue(pv);
 			User u = uMapper.findById(vUID);
-			u.setContact(cMapper.findContactById(22));
+			u.setUserContact(cMapper.findContactById(22));
 			
 			uMapper.update(u);
 			System.out.println(u = uMapper.findById(u.getGoogleID()));

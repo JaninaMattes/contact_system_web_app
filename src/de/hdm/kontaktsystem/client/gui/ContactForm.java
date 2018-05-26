@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.kontaktsystem.gui.MyParticipationForm.deleteParticipationCallback;
+import de.hdm.kontaktsystem.client.gui.MyParticipationForm.deleteParticipationCallback;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -111,7 +111,7 @@ public class ContactForm extends VerticalPanel{
 			}
 		}
 			
-			//Chlickhandler um einen Kontakt zu Teilen (Bei Klick auf den "Kontakt Teilen"-Button)
+			//Clickhandler um einen Kontakt zu Teilen (Bei Klick auf den "Kontakt Teilen"-Button)
 			private class teilenClickHandler implements ClickHandler {
 
 				@Override
