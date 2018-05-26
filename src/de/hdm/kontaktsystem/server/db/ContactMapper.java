@@ -79,6 +79,7 @@ public class ContactMapper {
 		return null;
 	}
 	
+	
 	/**
 	 * Mapper-Methode zur Rückgabe aller Kontakte eines bestimmten Users.
 	 * 
@@ -108,7 +109,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
+				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("bo.user_ID")));
 				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));				
 				result.addElement(contact);
 			}
@@ -266,53 +267,21 @@ public class ContactMapper {
 		return null;
 	}
 	
+	
 	/**
 	 * Den eigenen Kontakt eines User, welcher bei dessen Erzeugung in 
-	 * der DB erstellt wird aufrufen. 
+	 * der DB erstellt wird aus der DB aufrufen. 
 	 * 
-
-	 * Wirn nur Verwendet um dem User-Objekt seine Contact-Objekt zu zuweisen.
-	 * Wird benötigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzulösen
-	 * 
-	 * @param User-Objekt
-	 * @param Contact ID
+	 *  @param User - Objekt
+	 *  @return Contact - Objekt
 	 */
 	
-
-	public void findOwnContact(int contact_ID, User u) {
-
-		
-		Connection con = DBConnection.connection();
-		try {
-			PreparedStatement stmt = con.prepareStatement(
-					  "SELECT c.* , bo.* " 
-					+ "FROM  Contact c "
-					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
-					+ "WHERE c.ID = ?");
-
-			stmt.setInt(1, contact_ID);
-			ResultSet rs = stmt.executeQuery();
-
-
-			if (rs.next()) {		
-				
-				Contact contact = new Contact();
-				contact.setOwner(u);
-				contact.setBo_Id(rs.getInt("bo.bo_ID"));
-				contact.setShared_status(rs.getBoolean("bo.status"));
-				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
-				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
-				u.setContact(contact);
-				
-			}
-			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+	public Contact findOwnContact(User u) {
+		Contact contact = new Contact();
+		return contact = this.findContactById(u.getContact().getBo_Id());
 	}
+	
+	
 
 	/**
 	 * Mapper-Methode um einen Kontakt nach einer Eigenschaft zu finden
@@ -537,6 +506,53 @@ public class ContactMapper {
 		}
 	}
 	
+
+	/**
+	 * Den eigenen Kontakt eines Users, welcher bei dessen Erzeugung in 
+	 * der DB erstellt wird abgerufen. 
+	 * 
+	 * Wirn nur Verwendet um dem User-Objekt seine Contact-Objekt zu zuweisen.
+	 * Wird benötigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzulösen
+	 * 
+	 * @param User-Objekt
+	 * @param Contact ID
+	 */
+	
+
+	public Contact addOwnContact(int contact_ID, User u) {
+
+		
+		Connection con = DBConnection.connection();
+		try {
+			PreparedStatement stmt = con.prepareStatement(
+					  "SELECT c.* , bo.* " 
+					+ "FROM  Contact c "
+					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
+					+ "WHERE c.ID = ?");
+
+			stmt.setInt(1, contact_ID);
+			ResultSet rs = stmt.executeQuery();
+
+
+			if (rs.next()) {		
+				
+				Contact contact = new Contact();
+				contact.setOwner(u);
+				contact.setBo_Id(rs.getInt("bo.bo_ID"));
+				contact.setShared_status(rs.getBoolean("bo.status"));
+				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
+				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
+				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				u.setContact(contact);
+				return contact;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 
 }
