@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 
@@ -20,9 +20,9 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 	private ListDataProvider<ContactList> contactListDataProvider = null;
 	
 	/**
-	 * ContactList als eindeutige Zielobjekte, welche als Schluessel für Baumknoten
+	 * ContactList als eindeutige Zielobjekte, welche als Schluessel fï¿½r Baumknoten
 	 * dienen. 
-	 * Dadurch werden im Selektmodell alle Objekte mit der gleichen ID ausgewählt,
+	 * Dadurch werden im Selektmodell alle Objekte mit der gleichen ID ausgewï¿½hlt,
 	 * wenn eines davon selectiert wird.
 	 * ... 
 	 */
@@ -41,7 +41,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 	private SingleSelectionModel<ContactList> selectionModel = null;
 	
 	/**
-	 * Nested Class für...
+	 * Nested Class fï¿½r...
 	 */
 	
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
@@ -96,7 +96,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 		
 			public void onSuccess(Vector<ContactList> contactLists) {
 				for (ContactList cl : contactLists) {
-					contactListDataProvider.getList().app(cl);  //NACHPRÜFEN
+					contactListDataProvider.getList().app(cl);  //NACHPRï¿½FEN
 				}
 			}
 		

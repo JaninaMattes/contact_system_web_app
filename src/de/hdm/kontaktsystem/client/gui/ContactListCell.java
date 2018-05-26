@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -22,13 +22,13 @@ public class ContactListCell extends AbstractCell<ContactList> {
 		 *Wenn eine Kontaktliste mit mir geteilt wurde, dann zeige das Sympbol "Teilhaberschaft". 
 		 */
 		
-		//if();  Noch zu ergänzen
+		//if();  Noch zu ergï¿½nzen
 			 
 		/**
 		 * Wenn ich eine Kontaktliste geteilt habe, dann zeige das Symbol "Geteilt".
 		 */
 		
-		//if(); noch zu ergänzen
+		//if(); noch zu ergï¿½nzen
 			
 	}
 

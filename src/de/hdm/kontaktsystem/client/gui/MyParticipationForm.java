@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

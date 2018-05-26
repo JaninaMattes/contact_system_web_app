@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 

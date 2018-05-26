@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.gui;
+package de.hdm.kontaktsystem.client.gui;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
