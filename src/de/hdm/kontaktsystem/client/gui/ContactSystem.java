@@ -160,10 +160,11 @@ public class ContactSystem implements EntryPoint {
 		 */
 		
 		//Listen
-		ContactsTreeViewModel ctvm = new ContactsTreeViewModel();
-		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+		//Final nach fehlermeldung hinzugefügt
+		final ContactsTreeViewModel ctvm = new ContactsTreeViewModel();
+		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 				
 		//Formulare
 		ContactForm cf = new ContactForm();
