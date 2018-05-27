@@ -53,17 +53,10 @@ public class Contact extends BusinessObject {
 	 * Kontact Name auslesen
 	 */
 	
-	public Vector <PropertyValue> getpropertyValues() {
+	public Vector <PropertyValue> getPropertyValues() {
 		return this.propertyValues;
 	}
 
-	/**
-	 * Kontakt Name setzen
-	 */
-
-	public void setpropertyValues(Vector <PropertyValue> pV) {
-		this.propertyValues = pV;
-	}
 	
 	/**
 	 * Abruf einer PropertyValue, diese stellt den Namen des
@@ -97,7 +90,7 @@ public class Contact extends BusinessObject {
 	 * @param pv
 	 */
 	
-	public void setPropertyValue(Vector <PropertyValue> pv) {
+	public void setPropertyValues(Vector <PropertyValue> pv) {
 		this.propertyValues = pv;
 	}
 	

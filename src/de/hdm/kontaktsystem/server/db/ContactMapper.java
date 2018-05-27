@@ -236,7 +236,7 @@ public class ContactMapper {
 	 */
 	
 	public Contact findContactById(int id) {	
-		System.out.println("#Contact -findcontactByID");
+		//System.out.println("#Contact -findcontactByID");
 		Connection con = DBConnection.connection();
 			
 		try {			
@@ -246,7 +246,6 @@ public class ContactMapper {
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
 					+ "Inner JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 					+ "WHERE c.ID = ? "); 
-			
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 
@@ -258,7 +257,7 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
-				System.out.println("contact id: " + contact.getBo_Id());
+				//System.out.println("contact id: " + contact.getBo_Id());
 				return contact;
 			}
 		} catch (SQLException e) {
@@ -313,7 +312,7 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));		
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
 				return contact;
 			}					
 			
@@ -525,7 +524,7 @@ public class ContactMapper {
 	
 
 	public Contact addOwnContact(int contact_ID, User owner) {
-		System.out.println("#Contact -faddOwncontact");
+		//System.out.println("#Contact -faddOwncontact");
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(

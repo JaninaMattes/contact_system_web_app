@@ -85,7 +85,7 @@ public class PropertyMapper {
                 // Eintrag in PropertyValue erfolgt
                 for (PropertyValue pV : propertyValues){                 
                 		PropertyValueMapper.propertyValueMapper().insert(pV);
-                		System.out.println("PV-id: " + pV.getBo_Id());
+                		//System.out.println("PV-id: " + pV.getBo_Id());
                 }                  
           	} catch(SQLException e) {
               e.printStackTrace();
@@ -167,7 +167,7 @@ public class PropertyMapper {
       */      
      
       public Property findBy(int property_id) {       
-    	  System.out.println("#Property -findcByID");
+    	  //System.out.println("#Property -findcByID");
     	  Property property = new Property();
           Connection con = DBConnection.connection();          
          
@@ -191,8 +191,8 @@ public class PropertyMapper {
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);                  
                   property.setPropertyValues(propertyValues);            
                  
-                  System.out.println("P-id: " + property.getId());
-                  System.out.println("P-description: " + property.getDescription());
+                  //System.out.println("P-id: " + property.getId());
+                  //System.out.println("P-description: " + property.getDescription());
               }              
               return property;
               
@@ -218,7 +218,7 @@ public class PropertyMapper {
           Property property = new Property(); 
           // Verbindung zur DB herstellen
           Connection con = DBConnection.connection();
-          System.out.println("P-FindBy-Methode...");       
+          //System.out.println("P-FindBy-Methode...");       
           try {              
              // Statement ausfüllen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
@@ -235,8 +235,8 @@ public class PropertyMapper {
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
                   
-                  System.out.println("p-id: " + property.getId());
-                  System.out.println("p-description: " + property.getDescription());
+                  //System.out.println("p-id: " + property.getId());
+                  //System.out.println("p-description: " + property.getDescription());
                   
                   propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   property.setPropertyValues(propertyValues);   
