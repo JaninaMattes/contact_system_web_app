@@ -7,6 +7,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
 import de.hdm.kontaktsystem.shared.bo.*;
+import de.hdm.kontaktsystem.client.gui.ContactSystem;
 import de.hdm.kontaktsystem.server.db.*;
 
 
@@ -78,8 +79,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ***************************************************************************
 	*/
 	
-	public void createUser(User user) {
-		uMapper.insert(user);
+	public void createUser(User user, Contact contact) {
+		uMapper.insert(user, contact);
 		
 	}
 	
@@ -203,6 +204,225 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	public void deletePropertyValue(int id) {
 		propValMapper.deleteByPropValue(id);
+	}
+
+
+	@Override
+	public ContactSystem getContactSystem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setContactSystem(ContactSystem cs) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public User getUserByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Contact getContactOf() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Contact getContactById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Contact createContactForUser(User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void shareContact(User participant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public Vector<ContactList> getAllContactLists() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ContactList getContactListById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
+
+	@Override
+	public void shareContactList(User participant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void sharePropertyValueOfContact() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public PropertyValue sharePropertyValueOfContact(Contact c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public PropertyValue getPropertyValuesForContact(Contact c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public PropertyValue getPropertyValueForContactByName(String name, Contact c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Vector<Participation> getAllParticipationsByOwner(User owner) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Vector<Participation> getAllParticipationsByParticipant(User participant) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String getNameOfContact() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public User createUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Contact createContact() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ContactList createContactList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Property createProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public PropertyValue createPropertyValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Participation createParticipation(BusinessObject reference, User participant) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public User editUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Contact editContact() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ContactList editContactList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Property editProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public PropertyValue editPropertyValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void deleteProperty(Property p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void deletePropertyValue(PropertyValue pv) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void deleteParticipation(Participation p) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

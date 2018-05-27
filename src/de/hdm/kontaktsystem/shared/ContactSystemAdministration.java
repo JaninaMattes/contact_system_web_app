@@ -51,10 +51,12 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public ContactList getContactListById(int id);
 	
-	public ContactList getContactListByName(String name);
+	public Vector<ContactList> getContactListByName(String name);
 	
 	//Aufruf von createParticipation
 	public void shareContactList(User participant);
+	
+	public void sharePropertyValueOfContact();
 	
 	
 	//Aus Klassendiagramm: Kann das so stimmen?
