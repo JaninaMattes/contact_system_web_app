@@ -259,7 +259,7 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findByContactID(int contactID) {
-		System.out.println("#PV -findByContactID");
+		//System.out.println("#PV -findByContactID");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
@@ -410,21 +410,21 @@ public class PropertyValueMapper {
 	 */
 
 	public PropertyValue findName(Contact contact) {
-		System.out.println("#PV -findName");
+		//System.out.println("#PV -findName");
 		PropertyValue name = new PropertyValue();		
 		Vector <PropertyValue> result = new Vector <PropertyValue>();
 		result = PropertyValueMapper.propertyValueMapper().findBy(contact);
 		
 		for(PropertyValue val : result) {
-			System.out.println("propertyVal id: " + val.getBo_Id());
-			System.out.println("propertyVal description: " + val.getProp().getDescription());
+//			System.out.println("propertyVal id: " + val.getBo_Id());
+//			System.out.println("propertyVal description: " + val.getProp().getDescription());
 			
 			if(val.getProp().getId() == 1) {
 				name = val; 
 				System.out.println("Contact name:" + val.getProp().getPropertyValues());
 			}
 		}	
-		System.out.println("Name: " + name);
+		//System.out.println("Name: " + name);
 		return name;
 	}
 	
