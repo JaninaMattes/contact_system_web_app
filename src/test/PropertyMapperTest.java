@@ -62,19 +62,19 @@ public class PropertyMapperTest {
 		System.out.println("\n ############ Test Prop FindBy String ################ \n");
 		System.out.println(pMapper.findBy("Name"));
 		
-		name.setProp(p1);
+		name.setProperty(p1);
 		
 		PropertyValue pv = new PropertyValue();
 		pv.setBo_Id(6);
 		pv.setOwner(u);
-		pv.setProp(p);
+		pv.setProperty(p);
 		pv.setValue("Traumfabrik AG");
 		pv.setContact(c);
 		
 		PropertyValue pv1 = new PropertyValue();
 		pv1.setBo_Id(7);
 		pv1.setOwner(u);
-		pv1.setProp(p);
+		pv1.setProperty(p);
 		pv1.setValue("Blüten GmbH");
 		pv.setContact(c);
 		

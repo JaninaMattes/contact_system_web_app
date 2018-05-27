@@ -8,8 +8,16 @@ public class ContactList extends BusinessObject {
 	 * Default Serial Version ID
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/*
+	 * Benamung einer Kontaktliste
+	 */
 
 	private String name = null;
+	
+	/*
+	 * Alle Kontakte, welche zu einer Kontaktliste zugeordnet werden
+	 */
 	
 	private Vector <Contact> contacts = new Vector <Contact>();
 
@@ -19,6 +27,17 @@ public class ContactList extends BusinessObject {
 
 	public ContactList() {
 
+	}
+	
+	/**
+	 * Beim erstellen einer Kontaktliste muss mindestens
+	 * der Listenname festgelegt werden. Eine Kontaktliste
+	 * darf damit auch leer, ohne Kontakt erstellt werden,
+	 * um diese bei Bedarf zu befüllen. 
+	 */
+	
+	public ContactList(String name) {
+		this.name = name;		
 	}
 
 	/**
@@ -30,34 +49,51 @@ public class ContactList extends BusinessObject {
 		this.name = name;
 		this.contacts = new Vector<Contact>();
 		contacts.add(contact);
-
-		/**
-		 * Getter und Setter
-		 */
-
 	}
 
+	/*
+	 * Aufruf des Listen Namens
+	 */
 	public String getName() {
 		return name;
 	}
+	
+	/*
+	 * Setzen des Listen Namens
+	 */
 
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/*
+	 * Aufruf aller Kontakt-Objekte einer Liste
+	 */
 
 	public Vector<Contact> getContacts() {
 		return contacts;
 	}
+	
+	/*
+	 * Setzen aller Kontakt-Objekte einer Liste
+	 */
 
 	public void setContacts(Vector<Contact> contacts) {
 		this.contacts = contacts;
 	}
 	
+	/*
+	 * Hinzufügem eines einzelnen Kontaktes zu einer Liste
+	 */
+	
 	public void addContact(Contact contact) {
 		this.contacts.addElement(contact);
 	}
 
-	
+	/*
+	 * Die toString Methode
+	 * @see de.hdm.kontaktsystem.shared.bo.BusinessObject#toString()
+	 */
 	
 	@Override
 	public String toString() {

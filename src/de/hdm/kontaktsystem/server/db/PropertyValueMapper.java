@@ -62,7 +62,7 @@ public class PropertyValueMapper {
 			PreparedStatement stmt = con.prepareStatement(
 			"INSERT INTO PropertyValue (ID, property_ID, value, contact_ID) VALUES (?, ?, ?, ?)");
 			stmt.setInt(1, pv.getBo_Id());
-			stmt.setInt(2, pv.getProp().getId());
+			stmt.setInt(2, pv.getProperty().getId());
 			stmt.setString(3, pv.getValue());
 			stmt.setInt(4, pv.getContact().getBo_Id());			
 
@@ -108,8 +108,8 @@ public class PropertyValueMapper {
 				// Befülen eines PropertyValue-Objektes und setzen der Property-Objektes
 				pv.setBo_Id(rs.getInt("ID"));
 				pv.setValue(rs.getString("value"));
-				pv.setProp(p);
-				//System.out.println("Pv-id: " + pv.getBo_Id());
+				pv.setProperty(p);
+				System.out.println("############################ Found Pv-id: " + pv.getBo_Id());
 			}
 			return pv;
 			
@@ -152,7 +152,7 @@ public class PropertyValueMapper {
 				propValue.setBo_Id(rs.getInt("id"));
 				propValue.setValue(rs.getString("value"));
 				prop.setDescription(rs.getString("description"));
-				propValue.setProp(prop);
+				propValue.setProperty(prop);
 				// Hinzufügen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
 				
@@ -277,7 +277,7 @@ public class PropertyValueMapper {
 					
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();				
-				propValue.setProp(PropertyMapper.propertyMapper().findBy(rs.getInt("pv.property_ID")));
+				propValue.setProperty(PropertyMapper.propertyMapper().findBy(rs.getInt("pv.property_ID")));
 				propValue.setBo_Id(rs.getInt("pv.ID"));
 				propValue.setValue(rs.getString("pv.value"));
 
@@ -337,7 +337,7 @@ public class PropertyValueMapper {
 					
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();				
-				propValue.setProp(PropertyMapper.propertyMapper().findBy(rs.getInt("pv.property_ID")));
+				propValue.setProperty(PropertyMapper.propertyMapper().findBy(rs.getInt("pv.property_ID")));
 				propValue.setBo_Id(rs.getInt("pv.ID"));
 				propValue.setValue(rs.getString("pv.value"));
 
@@ -386,7 +386,7 @@ public class PropertyValueMapper {
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
 				//System.out.println("PV-id: " + propValue.getValue());
-				propValue.setProp(prop);
+				propValue.setProperty(prop);
 				
 				propValueResult.addElement(propValue);
 
@@ -417,11 +417,11 @@ public class PropertyValueMapper {
 		
 		for(PropertyValue val : result) {
 			System.out.println("propertyVal id: " + val.getBo_Id());
-			System.out.println("propertyVal description: " + val.getProp().getDescription());
+			System.out.println("propertyVal description: " + val.getProperty().getDescription());
 			
-			if(val.getProp().getId() == 1) {
+			if(val.getProperty().getId() == 1) {
 				name = val; 
-				System.out.println("Contact name:" + val.getProp().getPropertyValues());
+				System.out.println("Contact name:" + val.getProperty().getPropertyValues());
 			}
 		}	
 		System.out.println("Name: " + name);

@@ -110,7 +110,7 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("bo.user_ID")));
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));				
+				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));				
 				result.addElement(contact);
 			}
 			return result;
@@ -313,7 +313,7 @@ public class ContactMapper {
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
 				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));		
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				return contact;
 			}					
 			
@@ -355,7 +355,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
+				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				contactResult.addElement(contact);
 			}
 			return contactResult;
