@@ -42,12 +42,13 @@ public class DBTest {
 		System.out.println(pMapper.findBy(6));
 		System.out.println(pMapper.findBy(1));
 		
-		createUser();
+		//createUser();
 		//createAll();
 		//updateAll();
 		//findAll();
 		//deleteAll();
 		//findAllShared();
+		deleteParticipations();
 		
 	}
 	
@@ -382,4 +383,51 @@ public class DBTest {
 		System.out.println("FASC: " +clMapper.findAllSharedByMe(user));
 		System.out.println("FASBOTMPV: " +clMapper.findAllSharedByOthersToMe(user));
 	}
+
+	public static void addParticipations(){
+		
+		Vector<Participation> parts = new Vector<Participation>();
+		Participation p = new Participation();
+		int id = 126;
+		p.setParticipant(uMapper.findById(id));
+		p.setReference(boMapper.findBusinessObjectByID(22));
+		parts.add(p);
+		p = new Participation();
+		System.out.println("Parts: " + parts.size());
+		p.setParticipant(uMapper.findById(id));
+		p.setReference(boMapper.findBusinessObjectByID(23));
+		parts.add(p);
+		p = new Participation();
+		System.out.println("Parts: " + parts.size());
+		p.setParticipant(uMapper.findById(id));
+		p.setReference(boMapper.findBusinessObjectByID(24));
+		parts.add(p);
+		p = new Participation();
+		System.out.println("Parts: " + parts.size());
+		p.setParticipant(uMapper.findById(id));
+		p.setReference(boMapper.findBusinessObjectByID(56));
+		parts.add(p);
+		p = new Participation();
+		System.out.println("Parts: " + parts.size());
+		p.setParticipant(uMapper.findById(id));
+		p.setReference(boMapper.findBusinessObjectByID(57));
+		parts.add(p);
+		System.out.println("Parts: " + parts.size());
+		for(Participation p1 : parts){
+		
+			partMapper.insertParticipation(p1);
+		}
+	}
+	
+	public static void deleteParticipations(){
+		//partMapper.deleteParticipationForBusinessObject(cMapper.findContactById(10));
+		
+		//partMapper.deleteParticipationForOwner(uMapper.findById(666));
+		//partMapper.deleteParticipationForParticipant(uMapper.findById(126));
+		Participation p = new Participation();
+		p.setParticipant(uMapper.findById(126));
+		p.setReference(boMapper.findBusinessObjectByID(57));
+		partMapper.deleteParticipation(p);
+	}
+
 }

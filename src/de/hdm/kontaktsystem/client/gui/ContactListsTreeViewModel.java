@@ -34,7 +34,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 		if (cl == null) {
 			return null;
 		}
-		return new Integer(Integer.parseInt(String.valueOf(cl.getContacts()+ " " + cl.getReference()))); //NACHBESSERN
+		return new Integer(Integer.parseInt(String.valueOf(cl.getContacts()+ " " + cl.getReference()))); //TODO: NACHBESSERN
 	}
 }
 	

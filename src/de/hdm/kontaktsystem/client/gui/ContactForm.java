@@ -173,7 +173,7 @@ public class ContactForm extends VerticalPanel{
 					if (c != null) {
 						angezeigterKontakt = c;
 						Kontaktloeschen.setEnabled(true);
-						TextBoxName.setText(c.getpropertyValue().getName());
+						TextBoxName.setText(c.getpropertyValue().getName()); //TODO: NACHBESSERN
 					} else {
 						TextBoxName.setText("");
 						//TODO: Andere Propertys + PropertyValues füllen bzw. löschen

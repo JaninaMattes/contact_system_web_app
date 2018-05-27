@@ -10,7 +10,11 @@ import de.hdm.kontaktsystem.shared.bo.*;
 import de.hdm.kontaktsystem.client.gui.ContactSystem;
 import de.hdm.kontaktsystem.server.db.*;
 
-
+/**
+ * 
+ * @
+ *
+ */
 
 public class ContactSystemAdministrationImpl extends RemoteServiceServlet implements ContactSystemAdministration{
 
@@ -43,9 +47,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public ContactSystemAdministrationImpl() throws IllegalArgumentException {
 		
 	}
-	
-	
-	//TODO: Ausformulieren der Mapper Klassen
 	
 	public void init() throws IllegalArgumentException{
 		
