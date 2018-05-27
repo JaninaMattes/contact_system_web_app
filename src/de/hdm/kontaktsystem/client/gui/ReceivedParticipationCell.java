@@ -25,7 +25,7 @@ public class ReceivedParticipationCell extends AbstractCell<Participation> {
 		      
 	      if(participation.getReferencedObject() instanceof Contact) {
 	    	  Contact c = (Contact) participation.getReferencedObject();
-	    	  sb.appendEscaped(c.getpropertyValue().getName());
+	    	  sb.appendEscaped(c.getName());
 	      }else if(participation.getReferencedObject() instanceof ContactList) {
 	    	  ContactList cl = (ContactList) participation.getReferencedObject();
 	    	  sb.appendEscaped(cl.getName());
