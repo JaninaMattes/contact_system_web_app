@@ -35,14 +35,14 @@ public class PropertyValue extends BusinessObject {
 		
 	}
 	
-	public PropertyValue(String value, Property prop) {
+	public PropertyValue(String value, Property prop, String name) {
 		
 		this.value = value;		
 		this.prop = prop;
 		
 	}
 	
-	public PropertyValue(String value) {
+	public PropertyValue(String value, String name) {
 		
 		this.value = value;		
 		
@@ -125,9 +125,10 @@ public class PropertyValue extends BusinessObject {
 						+ "Eigenschaft = leer \n" 
 						+ "Ausprägung = " + value+ " \n";
 		  }
-		return "PropertyValue: " + "\n" 
+		  	 return "PropertyValue: " + "\n" 
 				+ "Eigenschaft = " + prop.getDescription() + " \n" 
-				+ "Ausprägung = " + value+ " \n";
+				+ "Ausprägung = " + value + " \n";
+		  	 	//+ "Contact = " + this.getName() + "\n";
 		}
 
 

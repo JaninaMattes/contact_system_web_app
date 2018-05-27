@@ -109,7 +109,7 @@ public class PropertyValueMapper {
 				pv.setBo_Id(rs.getInt("ID"));
 				pv.setValue(rs.getString("value"));
 				pv.setProp(p);
-				//System.out.println("Pv-id: " + pv.getBo_Id());
+				////System.out.println("Pv-id: " + pv.getBo_Id());
 			}
 			return pv;
 			
@@ -186,17 +186,18 @@ public class PropertyValueMapper {
 		
 		for (Participation part : participationVector) { 		
 			
-			//System.out.println(part);
+			 //System.out.println(part);
 			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
 			 //System.out.println(bo);
 			 PropertyValue propVal = new PropertyValue();	 
-			 //System.out.println(propVal); 	
+			 ////System.out.println(propVal); 	
 			 if(bo instanceof PropertyValue) {			 		
 				 propVal = (PropertyValue) bo;
-			 		//System.out.println("Ausprägung " + propVal.getProp());
+			 		System.out.println("Ausprägung " + propVal);
 			 		propertyResultVector.addElement(propVal);		     
 			 }
 		}
+		//System.out.println(propertyResultVector);
 		return propertyResultVector;		
 	}
 	
@@ -219,10 +220,10 @@ public class PropertyValueMapper {
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
 			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());	
-			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 ////System.out.println("pov-id: " + propVal.getBo_Id());		     
 			 if(bo instanceof PropertyValue) {			 		
 				 propVal = (PropertyValue) bo;
-			 		//System.out.println("Ausprägung " + propVal.getProp());
+			 		////System.out.println("Ausprägung " + propVal.getProp());
 			 		propertyResultVector.addElement(propVal);		     
 			 }
 		}
@@ -232,6 +233,7 @@ public class PropertyValueMapper {
 
 	/** TODO: 
 	 * UserMapper, ContactMapper, alle erzeugten PVs ausgeben
+	 * Benötigt???
 	 */
 
 	 public Vector <PropertyValue> findAllCreated(User u) {	
@@ -259,7 +261,7 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findByContactID(int contactID) {
-		//System.out.println("#PV -findByContactID");
+		////System.out.println("#PV -findByContactID");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
@@ -285,6 +287,7 @@ public class PropertyValueMapper {
 				propValueResult.addElement(propValue);
 
 			}
+			//System.out.println(propValueResult);
 			return propValueResult;
 
 		} catch (SQLException e) {
@@ -303,7 +306,7 @@ public class PropertyValueMapper {
 	  */
 	
 	public Vector<PropertyValue> findBy(Property p) {
-		System.out.println("#PV -findBy(Property)");
+		////System.out.println("#PV -findBy(Property)");
 		return findByPropertyID(p.getId());
 		
 	}
@@ -318,7 +321,9 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findByValue(String value) {
-		System.out.println("#PV -findByContactID");
+		
+		
+		////System.out.println("#PV -findByContactID");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
@@ -326,10 +331,9 @@ public class PropertyValueMapper {
 		try {
 			// Statement ausfüllen und als Query an die DB schicken
 			PreparedStatement stmt = con.prepareStatement
-					( "SELECT pv.*, p.*, bo.* "
+					( "SELECT pv.*, c.* "
 					+ "FROM PropertyValue pv "
-					+ "INNER JOIN BusinessObject bo ON pv.ID = bo.ID "
-					+ "INNER JOIN Property p ON pv.property_ID = p.ID "
+					+ "INNER JOIN Contact c ON pv.contact_ID = c.ID "
 					+ "WHERE pv.value = ? " 
 					);
 					stmt.setString(1, value);
@@ -339,7 +343,7 @@ public class PropertyValueMapper {
 				PropertyValue propValue = new PropertyValue();				
 				propValue.setProp(PropertyMapper.propertyMapper().findBy(rs.getInt("pv.property_ID")));
 				propValue.setBo_Id(rs.getInt("pv.ID"));
-				propValue.setValue(rs.getString("pv.value"));
+				propValue.setContact(ContactMapper.contactMapper().findBy(propValue));
 
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
@@ -362,7 +366,7 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findByPropertyID(int propertyID) {
-		System.out.println("#PV-FindBy(id)");
+		////System.out.println("#PV-FindBy(id)");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 		Connection con = DBConnection.connection();
 
@@ -378,20 +382,21 @@ public class PropertyValueMapper {
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
 
-			if (rs.next()) {
+			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();
 				Property prop = new Property();				
 				prop.setId(rs.getInt("property_ID"));	
 				prop.setDescription(rs.getString("description"));
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
-				//System.out.println("PV-id: " + propValue.getValue());
-				propValue.setProp(prop);
-				
+				////System.out.println("PV-id: " + propValue.getValue());
+				propValue.setProp(prop);			
 				propValueResult.addElement(propValue);
 
 			}
+			////System.out.println(propValueResult);
 			return propValueResult;
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -410,22 +415,23 @@ public class PropertyValueMapper {
 	 */
 
 	public PropertyValue findName(Contact contact) {
-		//System.out.println("#PV -findName");
-		PropertyValue name = new PropertyValue();		
+		////System.out.println("#PV -findName");
+		PropertyValue name = new PropertyValue();	
 		Vector <PropertyValue> result = new Vector <PropertyValue>();
 		result = PropertyValueMapper.propertyValueMapper().findBy(contact);
 		
 		for(PropertyValue val : result) {
-//			System.out.println("propertyVal id: " + val.getBo_Id());
-//			System.out.println("propertyVal description: " + val.getProp().getDescription());
+//			//System.out.println("propertyVal id: " + val.getBo_Id());
+//			//System.out.println("propertyVal description: " + val.getProp().getDescription());
 			
 			if(val.getProp().getId() == 1) {
 				name = val; 
-				System.out.println("Contact name:" + val.getProp().getPropertyValues());
+				////System.out.println("Contact name:" + val.getProp().getPropertyValues());
 			}
 		}	
-		//System.out.println("Name: " + name);
+		////System.out.println("Name: " + name);
 		return name;
+		
 	}
 	
 
@@ -553,8 +559,7 @@ public class PropertyValueMapper {
 	}
 
 	/**
-	 * Methode zur L�schung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
-	 * welche im System mit anderen Nutzern geteilt wurden. 
+	 * Methode zur L�schung aller von einem User erstellten Ausprägungen, Ownership und Participation!
 	 * 
 	 * @param User-Objekt
 	 */
@@ -580,23 +585,15 @@ public class PropertyValueMapper {
 	public void deleteAllSharedByOthersToMe(User u) {
 
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-				Vector<Participation> participationVector = new Vector<Participation>();		
-				//participationVector = ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
-				// Vector für die Speicherung aller BusinessObjekte erzeugen
-				Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
+				Vector<PropertyValue> pvVector = new Vector<PropertyValue>();		
+				pvVector = this.findAllSharedByOthersToMe(u);
+	
 				
-				
-				for (Participation part : participationVector) {
-					
-					 PropertyValue propVal = new PropertyValue();
-					 propVal = this.findByKey(part.getReferenceID());			 
-					 System.out.println("pov-id: " + propVal.getBo_Id());		     
-					 	if(propVal != null) {
-					 		propertyResultVector.addElement(propVal);
+				for (PropertyValue pv : pvVector) {
+					ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
 				     }
 				}
 
-	}
 	
 
 

@@ -333,7 +333,7 @@ public class ContactListMapper {
 		for(ContactList cl : clResult) {
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(cl);
 			this.deleteContactListById(cl.getBo_Id());
-			System.out.println("# shared contactList deleted: " + cl.getBo_Id() );
+			//System.out.println("# shared contactList deleted: " + cl.getBo_Id() );
 		}
 	}
 	
@@ -349,7 +349,7 @@ public class ContactListMapper {
 		
 		Vector <ContactList> clResult = new Vector <ContactList>();
 		clResult = this.findAllSharedByOthersToMe(user);		
-		System.out.println(clResult);
+		//System.out.println(clResult);
 
 		for(ContactList cl : clResult) {
 			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);

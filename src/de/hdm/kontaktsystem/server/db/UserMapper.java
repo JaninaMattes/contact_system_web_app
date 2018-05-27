@@ -101,7 +101,7 @@ public class UserMapper {
 	 * @return User
 	 */
 	public User findById(double id){	
-		System.out.println("#User -findByID");
+		//System.out.println("#User -findByID");
 		Connection con = DBConnection.connection();
 		
 		try{
