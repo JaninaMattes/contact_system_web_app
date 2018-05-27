@@ -39,8 +39,6 @@ public class DBTest {
 	static double uID;
 	
 	public static void main(String args[]){
-		System.out.println(pMapper.findBy(6));
-		System.out.println(pMapper.findBy(1));
 		
 		//createUser();
 		//createAll();
@@ -420,14 +418,18 @@ public class DBTest {
 	}
 	
 	public static void deleteParticipations(){
-		//partMapper.deleteParticipationForBusinessObject(cMapper.findContactById(10));
+		//partMapper.deleteParticipationForBusinessObject(cMapper.findContactById(63));
 		
-		//partMapper.deleteParticipationForOwner(uMapper.findById(666));
-		//partMapper.deleteParticipationForParticipant(uMapper.findById(126));
+		//partMapper.deleteParticipationForOwner(uMapper.findById(126));
+		partMapper.deleteParticipationForParticipant(uMapper.findById(66)); // Geht nicht !!!
+		
+		/*
 		Participation p = new Participation();
 		p.setParticipant(uMapper.findById(126));
-		p.setReference(boMapper.findBusinessObjectByID(57));
+		p.setReference(cMapper.findContactById(17));
 		partMapper.deleteParticipation(p);
+		*/
+		
 	}
 
 }
