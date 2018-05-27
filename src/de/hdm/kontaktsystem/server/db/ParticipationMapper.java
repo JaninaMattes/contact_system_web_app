@@ -314,6 +314,29 @@ public class ParticipationMapper {
 		}
 	}
 	
+	public void deleteParticipation(Participation part) {
+		Connection con = DBConnection.connection();
+		
+		try {
+			System.out.println("Delete: "+ part.getParticipantID() + " / " + part.getReferenceID());
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE User_ID = ? AND BusinessObject_ID = ?");
+			stmt.setDouble(1, part.getParticipantID());
+			stmt.setInt(2, part.getReferenceID());
+			stmt.execute();
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Prüfen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt, 
+		//wenn nicht, Status (geteilt) des Objekt auf false setzen
+		Vector<Participation> participations = findParticipationsByBusinessObject(part.getReferencedObject());
+		if(participations.isEmpty()) {
+			BusinessObjectMapper.businessObjectMapper().setStatusFalse(part.getReferenceID());
+		}
+		
+	}
+	
 	
 	/**
 	 * Löschen aller Teilhaberschaften, die sich auf ein gegebenes BusinessObject beziehen

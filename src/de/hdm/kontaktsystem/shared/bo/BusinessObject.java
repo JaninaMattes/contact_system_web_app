@@ -61,6 +61,7 @@ public class BusinessObject implements Serializable{
 		return this.bo_id;
 	}
 
+
 	/**
 	 * Setzen der ID
 	 */
