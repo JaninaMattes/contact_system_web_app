@@ -70,8 +70,8 @@ public class DBTest {
 		// Setzt die propertyValues für den Kontakt
 		PropertyValue mail = new PropertyValue();
 		PropertyValue name = new PropertyValue();
-		mail.setProp(pMapper.findBy(6));
-		name.setProp(pMapper.findBy(1));
+		mail.setProperty(pMapper.findBy(6));
+		name.setProperty(pMapper.findBy(1));
 		
 		mail.setValue(gmail);
 		mail.setContact(c);
@@ -130,7 +130,7 @@ public class DBTest {
 		PropertyValue pv = new PropertyValue();
 		pv.setContact(c);
 		pv.setOwner(c.getOwner());
-		pv.setProp(pMapper.findBy(pTestID));
+		pv.setProperty(pMapper.findBy(pTestID));
 		pv.setValue("TestUser");
 		pvMapper.insert(pv);
 		

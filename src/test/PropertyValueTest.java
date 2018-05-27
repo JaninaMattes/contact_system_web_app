@@ -66,7 +66,7 @@ public class PropertyValueTest {
 			PropertyValue pv = pvMapper.findByKey(vPVID);			
 			System.out.println(pv);
 			Contact contact = cMapper.findContactById(vCID);
-			contact.setPropertyValue(pv);
+			contact.addPropertyValue(pv);
 			User u = uMapper.findById(vUID);
 			u.setUserContact(cMapper.findContactById(22));
 			

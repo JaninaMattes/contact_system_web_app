@@ -17,8 +17,11 @@ public class Contact extends BusinessObject {
 	 * Eigenschaftsausprägungen des Kontakts
 	 */
 	
-	private Vector <PropertyValue> propertyValues = null;
+	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
+	/*
+	 * Name eines Kontaktes
+	 */
 	private PropertyValue name = null;	
 	
 
@@ -84,12 +87,12 @@ public class Contact extends BusinessObject {
 	}
 
 	/**
-	 * Einzelne PropertyValue -Objekte hinzufügen
+	 * Einzelne PropertyValue -Objekte dem Vector hinzufügen
 	 * @param pv
 	 */
 	
-	public void setPropertyValue(PropertyValue pv) {
-		this.propertyValues.addElement(pv);
+	public void addPropertyValue(PropertyValue pv) {
+		this.propertyValues.add(pv);
 	}
 
 	/**

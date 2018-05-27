@@ -28,7 +28,7 @@ public class ContactCell extends AbstractCell<Contact> {
 		    		  + "<td>" );
 		      
 		      //Name des Kontakts anzeigen
-		      sb.appendEscaped(value.getpropertyValue().getName());
+		      sb.appendEscaped(value.getName().getValue()); //TODO: @Janina Kommentar: Hier mit Logik von PV Attribut String name überprüfen
 		      sb.appendHtmlConstant("</td>"
 		    		  + "<td>");
 		      
