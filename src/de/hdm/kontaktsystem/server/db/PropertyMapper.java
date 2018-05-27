@@ -86,6 +86,7 @@ public class PropertyMapper {
                 for (PropertyValue pV : propertyValues){                 
                 		PropertyValueMapper.propertyValueMapper().insert(pV);
                 		//System.out.println("PV-id: " + pV.getBo_Id());
+
                 }                  
           	} catch(SQLException e) {
               e.printStackTrace();

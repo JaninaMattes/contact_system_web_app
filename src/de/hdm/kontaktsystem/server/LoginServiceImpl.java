@@ -5,7 +5,10 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.kontaktsystem.client.LoginService;
+import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
+import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService{
@@ -18,12 +21,14 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		UserService userService = UserServiceFactory.getUserService();
 		com.google.appengine.api.users.User guser = userService.getCurrentUser();
 		User user = new User();
+		Contact own = new Contact();
+		PropertyValue name = new PropertyValue();
+		PropertyValue email = new PropertyValue();
 		System.out.println(requestUri);
-		if (guser != null) {
+		
+		if (guser != null) {			
 			
-			
-			double id = Double.parseDouble(guser.getUserId());
-			
+			double id = Double.parseDouble(guser.getUserId());			
 			user.setGoogleID(id);
 			user.setGMail(guser.getEmail());
 			//user.setNickname(guser.getNickname()); // Not used
@@ -33,7 +38,15 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			user.setLogoutUrl(userService.createLogoutURL(requestUri));
 			if(UserMapper.userMapper().findById(id) == null){
 				System.out.println("Create new User: " + user);
-				UserMapper.userMapper().insert(user);
+				name.setValue("My Contact"); //force initial name
+				email.setValue(user.getGMail());
+			    own.setBo_Id(1); //updated in db
+				own.setOwner(user);
+				own.setName(name);
+				own.addPropertyValue(email);
+				PropertyValueMapper.propertyValueMapper().insert(name);
+				PropertyValueMapper.propertyValueMapper().insert(email);
+				UserMapper.userMapper().insert(user, own);
 			}else{
 				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
 			}

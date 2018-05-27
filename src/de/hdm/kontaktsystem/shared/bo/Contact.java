@@ -17,8 +17,11 @@ public class Contact extends BusinessObject {
 	 * Eigenschaftsausprägungen des Kontakts
 	 */
 	
-	private Vector <PropertyValue> propertyValues = null;
+	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
+	/*
+	 * Name eines Kontaktes
+	 */
 	private PropertyValue name = null;	
 	
 
@@ -77,12 +80,12 @@ public class Contact extends BusinessObject {
 	}
 
 	/**
-	 * Einzelne PropertyValue -Objekte hinzufügen
+	 * Einzelne PropertyValue -Objekte dem Vector hinzufügen
 	 * @param pv
 	 */
 	
-	public void setPropertyValue(PropertyValue pv) {
-		this.propertyValues.addElement(pv);
+	public void addPropertyValue(PropertyValue pv) {
+		this.propertyValues.add(pv);
 	}
 
 	/**
@@ -103,7 +106,7 @@ public class Contact extends BusinessObject {
 //			return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = leer Ausprägung = leer ]";
 //		}
 		
-		return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = "
+		return "Contact [owner=" + getOwner() + ", id=" + super.getBoId() + ", Eigenschaft = "
 				+ propertyValues + "]";
 	}
 
@@ -118,7 +121,7 @@ public class Contact extends BusinessObject {
  
 	@Override
 	public int hashCode(){
-		return super.getBo_Id();
+		return super.getBoId();
 	}
 	
 	
@@ -135,7 +138,7 @@ public class Contact extends BusinessObject {
 		if (getClass() != obj.getClass())
 			return false;
 		Contact other = (Contact) obj;
-		if (getBo_Id() != other.getBo_Id())
+		if (getBoId() != other.getBoId())
 			return false;
 		if (getOwner() == null) {
 			if (other.getOwner() != null)

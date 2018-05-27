@@ -197,7 +197,7 @@ public class PropertyValueTest {
 			User u = new User();
 			u.setGoogleID(777);
 			pv.setContact(contact);
-			pv.setProp(prop);
+			pv.setProperty(prop);
 			contact.setName(pvName);
 			contact.setOwner(u);
 			pvMapper.findName(contact);
@@ -215,11 +215,11 @@ public class PropertyValueTest {
 		PropertyValue pV = new PropertyValue();
 		Vector<PropertyValue> pVVector = new Vector<PropertyValue>();
 		pV.setContact(contact);
-		pV.setName("KimlysTest");
+		pV.setValue("KimlysTest");
 		contact.setName(pV);
 		pVVector.addElement(pV);
 		contact.setPropertyValues(pVVector);
-		contact.setPropertyValue(pV);
+		contact.addPropertyValue(pV);
 		Vector<PropertyValue> hilfsVector = new Vector<PropertyValue>();
 		hilfsVector = pvMapper.findByValue("KimlysTest");
 		
@@ -242,7 +242,7 @@ public class PropertyValueTest {
 		contact.setBo_Id(28);
 		prop.setId(2);
 		PropertyValue pvInsert = new PropertyValue("Bussenstraße 23", "TestUser");
-		pvInsert.setProp(prop);
+		pvInsert.setProperty(prop);
 		pvInsert.setContact(contact);
 		pvInsert.setOwner(u);
 		pvMapper.insert(pvInsert);
@@ -276,34 +276,33 @@ public class PropertyValueTest {
 		
 		public static void createAllForTesting() {
 	
-		// Insert Methode zum Befüllen der DB mit Testwerten
-		
+
 		int propName = 1;
 		double partUser = 777;
 		double sharingUser = 666;
-		
-		System.out.println("\n ############ Test Poperty ################ \n");
-		
-		Property p = new Property();
-		p.setId(propName);
-		p.setDescription("Test"+ propName);
-		//pMapper.insert(p);
-		
-		
-		System.out.println("\n ############ Test User ################ \n");
-		
+//		
+//		System.out.println("\n ############ Test Poperty ################ \n");
+//		
+//		Property p = new Property();
+//		p.setId(propName);
+//		p.setDescription("Test"+ propName);
+//		//pMapper.insert(p);
+//		
+//		
+//		System.out.println("\n ############ Test User ################ \n");
+//		
 		User u = new User();
 		u.setGMail("mail@gmail.com");
-		// Generate test User with random ID
+//		// Generate test User with random ID
 		u.setGoogleID(sharingUser);//rng.nextDouble()*100000000000000000d);
-		uID = u.getGoogleID();
+//		uID = u.getGoogleID();
 		Contact c = new Contact();
 		c.setOwner(u);
 		c.setBo_Id(28);
-		uMapper.insert(u, c);
-		u = uMapper.findById(sharingUser);
-		
-		
+//		uMapper.insert(u, c);
+//		u = uMapper.findById(sharingUser);
+//		
+//		
 		System.out.println("\n ############ Test Contact ################ \n");
 		
 		
@@ -315,7 +314,7 @@ public class PropertyValueTest {
 		PropertyValue pv = new PropertyValue();
 		pv.setContact(c);
 		pv.setOwner(c.getOwner());
-		pv.setProp(pMapper.findBy(propName));
+		pv.setProperty(pMapper.findBy(propName));
 		pv.setValue("TestUser");
 		pv.setBo_Id(32);
 		//pvMapper.insert(pv);
@@ -354,6 +353,9 @@ public class PropertyValueTest {
 		partMapper.insertParticipation(p1);
 		partMapper.insertParticipation(p2);
 		partMapper.insertParticipation(p3);
+	
+
+		
 	
 		}
 

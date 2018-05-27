@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.gui.MyParticipationForm.deleteParticipationCallback;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -172,7 +173,7 @@ public class ContactForm extends VerticalPanel{
 					if (c != null) {
 						angezeigterKontakt = c;
 						Kontaktloeschen.setEnabled(true);
-						TextBoxName.setText(c.getpropertyValue().getName());
+						TextBoxName.setText(c.getpropertyValue().getName()); //TODO: NACHBESSERN
 					} else {
 						TextBoxName.setText("");
 						//TODO: Andere Propertys + PropertyValues füllen bzw. löschen

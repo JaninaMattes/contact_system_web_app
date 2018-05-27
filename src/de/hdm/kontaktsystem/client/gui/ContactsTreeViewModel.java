@@ -11,7 +11,7 @@ import com.google.gwt.view.client.TreeViewModel;
 import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
 import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 
-
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 
 /**
@@ -40,7 +40,7 @@ public class ContactsTreeViewModel implements TreeViewModel {
 			if (c == null) {
 				return null;
 			}
-			return new Integer(Integer.parseInt(String.valueOf(c.getBo_Id())));
+			return new Integer(Integer.parseInt(String.valueOf(c.getBoId())));
 		}
 	};
 	

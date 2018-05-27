@@ -9,6 +9,7 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 
 public class ContactListsTreeViewModel implements TreeViewModel {
@@ -33,7 +34,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 		if (cl == null) {
 			return null;
 		}
-		return new Integer(Integer.parseInt(String.valueOf(cl.getContacts()+ " " + cl.getReference()))); //NACHBESSERN
+		return new Integer(Integer.parseInt(String.valueOf(cl.getContacts()+ " " + cl.getReference()))); //TODO: NACHBESSERN
 	}
 }
 	

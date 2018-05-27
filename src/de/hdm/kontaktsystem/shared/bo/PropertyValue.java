@@ -1,50 +1,57 @@
 package de.hdm.kontaktsystem.shared.bo;
 
 import java.util.Vector;
-
 import de.hdm.kontaktsystem.shared.bo.Property;
+
+/**
+ * Die Klasse <code>PropertyValue</code>... //TODO:  
+ */
+
 
 public class PropertyValue extends BusinessObject {
 
-	/**
-	 * 
+	/*
+	 * Die default SerialVersionUID
 	 */
 	private static final long serialVersionUID = 1L;
 			
-	
+	/*
+	 * Wert der Eigenschaftsausprägung
+	 */
 	private String value = null;
-	private Property prop = null;
-	private Contact contact = null;
-	private String name = null;
-	
-	//private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
 	/*
-	 * Beschreibung des Status, dieser ist entweder geteilt 
-	 * (shared) oder nicht geteilt (unshared)
-	 * Per default gilt ein neu erstelltes Property Objekt
-	 * nicht geteilt, daher wird dieser zuerst als false angegeben
-	 * 
+	 * Referenz auf zugehöriges Eigenschafts Objekt
 	 */
-		
+	private Property prop = null;
 	
-	// TODO: Überprüfen ob die Verbindung von Property/PropertyValue so sinnvoll ist
-		
+	/*
+	 * Referenz auf zugehöriges Kontakt Objekt
+	 */
+	private Contact contact = null;	
 
+	/*
+	 * Default Konstruktor 
+	 */
 	public PropertyValue() {
 		
 	}
 	
-	public PropertyValue(String value, Property prop, String name) {
-		
+
+	/*
+	 * Konstruktor 
+	 */
+	
+	public PropertyValue(String value, Property prop) {		
+
 		this.value = value;		
 		this.prop = prop;
 		
 	}
 	
-	public PropertyValue(String value, String name) {
-		
-		this.value = value;		
+
+	public PropertyValue(String value) {
+		this.value = value;			
 		
 	}
 
@@ -56,40 +63,44 @@ public class PropertyValue extends BusinessObject {
 		return value;
 	}
 
-	/**
-	   * Setzen des Ausprägungswertes.
-	   * @param value der neuen Eigenschaft
+	/*
+	 * Setzen des Ausprägungswertes.
 	   */
 	
 	public void setValue(String value) {
 		this.value = value;
 	}
 	
+	/*
+	 * Abruf des zugehörigen Eigenschaft Objektes
+	 */
 	
-	public Property getProp() {
+	public Property getProperty() {
 		return prop;
 	}
 
-	public void setProp(Property prop) {
+	/*
+	 * Setzen des zugehörigen Eigenschaft Objektes
+	 */
+	
+	public void setProperty(Property prop) {
 		this.prop = prop;
 	}
 	
+	/*
+	 * Abruf des zugehörigen Kontakt Objektes
+	 */
 	public Contact getContact() {
 		return contact;
 	}
 
+	/*
+	 * Setzen des zugehörigen Kontakt Objektes
+	 */
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
-	
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 
 	/*
 	 * <p>
@@ -119,6 +130,11 @@ public class PropertyValue extends BusinessObject {
 		  }
 
 
+	 /*
+	  * Die toString Methode 
+	  * 
+	  */
+	 
 	  public String toString() {
 		  if(prop == null){
 			  return "PropertyValue: " + "\n" 
