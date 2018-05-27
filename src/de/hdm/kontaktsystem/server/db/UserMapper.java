@@ -164,7 +164,7 @@ public class UserMapper {
 			Connection con = DBConnection.connection();
 			try{
 				PreparedStatement stmt = con.prepareStatement("UPDATE User SET own_Contact = ? WHERE ID = ?");
-				stmt.setInt(1, user.getUserContact().getBo_Id());
+				stmt.setInt(1, user.getUserContact().getBoId());
 				stmt.setDouble(2, user.getGoogleID());
 				if(stmt.executeUpdate() > 0) return user;
 				

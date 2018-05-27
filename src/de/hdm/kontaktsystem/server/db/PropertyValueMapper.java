@@ -61,10 +61,10 @@ public class PropertyValueMapper {
 		try {
 			PreparedStatement stmt = con.prepareStatement(
 			"INSERT INTO PropertyValue (ID, property_ID, value, contact_ID) VALUES (?, ?, ?, ?)");
-			stmt.setInt(1, pv.getBo_Id());
+			stmt.setInt(1, pv.getBoId());
 			stmt.setInt(2, pv.getProperty().getId());
 			stmt.setString(3, pv.getValue());
-			stmt.setInt(4, pv.getContact().getBo_Id());			
+			stmt.setInt(4, pv.getContact().getBoId());			
 
 			if(stmt.executeUpdate() > 1) return pv;
 			
@@ -109,7 +109,7 @@ public class PropertyValueMapper {
 				pv.setBo_Id(rs.getInt("ID"));
 				pv.setValue(rs.getString("value"));
 				pv.setProperty(p);
-				System.out.println("############################ Found Pv-id: " + pv.getBo_Id());
+				System.out.println("############################ Found Pv-id: " + pv.getBoId());
 			}
 			return pv;
 			
@@ -219,7 +219,7 @@ public class PropertyValueMapper {
 		for (Participation part : participationVector) {
 			 PropertyValue propVal = new PropertyValue();
 			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());	
-			 //System.out.println("pov-id: " + propVal.getBo_Id());		     
+			 //System.out.println("pov-id: " + propVal.getBoId());		     
 			 if(bo instanceof PropertyValue) {			 		
 				 propVal = (PropertyValue) bo;
 			 		//System.out.println("Ausprägung " + propVal.getProp());
@@ -246,7 +246,7 @@ public class PropertyValueMapper {
 	  */
 	 
 	 public Vector<PropertyValue> findBy(Contact c) {
-		 return findByContactID(c.getBo_Id());
+		 return findByContactID(c.getBoId());
 	 }
 	 
 	 
@@ -417,7 +417,7 @@ public class PropertyValueMapper {
 		
 		for(PropertyValue val : result) {
 
-			//System.out.println("###### propertyVal id: " + val.getBo_Id());
+			//System.out.println("###### propertyVal id: " + val.getBoId());
 			//System.out.println("###### propertyVal description: " + val.getProperty().getDescription());
 			
 			if(val.getProperty().getId() == 1) {
@@ -448,7 +448,7 @@ public class PropertyValueMapper {
 					("UPDATE PropertyValue SET value= ? WHERE ID= ?"
 					);
 			stmt.setString(1, pv.getValue());
-			stmt.setInt(2, pv.getBo_Id());
+			stmt.setInt(2, pv.getBoId());
 			stmt.execute();
 
 		} catch (SQLException e) {
@@ -468,7 +468,7 @@ public class PropertyValueMapper {
 
 	public PropertyValue delete(PropertyValue pv) {
 
-		if(deleteByPropValue(pv.getBo_Id()) > 0) return pv;
+		if(deleteByPropValue(pv.getBoId()) > 0) return pv;
 		else return null;
 
 	}
@@ -507,7 +507,7 @@ public class PropertyValueMapper {
 	 */
 
 	public void deleteBy(Contact c) {
-		deleteByContact(c.getBo_Id());	
+		deleteByContact(c.getBoId());	
 
 	}
 
@@ -591,7 +591,7 @@ public class PropertyValueMapper {
 					
 					 PropertyValue propVal = new PropertyValue();
 					 propVal = this.findByKey(part.getReferenceID());			 
-					 System.out.println("pov-id: " + propVal.getBo_Id());		     
+					 System.out.println("pov-id: " + propVal.getBoId());		     
 					 	if(propVal != null) {
 					 		propertyResultVector.addElement(propVal);
 				     }

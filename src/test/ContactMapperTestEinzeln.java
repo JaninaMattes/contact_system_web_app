@@ -38,8 +38,8 @@ public class ContactMapperTestEinzeln {
 		c = cMapper.findAllContacts();
 		System.out.println("\n ############ Test Contact findByID ################ \n");
 		for(Contact co : c) {
-			cMapper.findContactById(co.getBo_Id());
-			System.out.println("contact id: " + co.getBo_Id()); // Achtung Kontakte in DB müssen mit Name angelegt werden für Tests
+			cMapper.findContactById(co.getBoId());
+			System.out.println("contact id: " + co.getBoId()); // Achtung Kontakte in DB müssen mit Name angelegt werden für Tests
 		}		
 		
 		System.out.println("\n ############ Test Contact findAllByUser ################ \n");
@@ -56,14 +56,14 @@ public class ContactMapperTestEinzeln {
 		u.setGoogleID(vUID);
 		u.setUserContact(own);
 		own = cMapper.findOwnContact(u);
-		System.out.println("own contact id: " + own.getBo_Id());
-		cMapper.addOwnContact(own.getBo_Id(), u);
+		System.out.println("own contact id: " + own.getBoId());
+		cMapper.addOwnContact(own.getBoId(), u);
 		
 		System.out.println("\n ############ Test Contact SharedByOthersToMe ################ \n");
 		Vector <Contact> c1 = new Vector <Contact>();
 		c1 = cMapper.findAllSharedByOthersToMe(u);
 		for(Contact co : c1) {
-		System.out.println("contact id: " + co.getBo_Id());
+		System.out.println("contact id: " + co.getBoId());
 		}		
 		
 		System.out.println("\n ############ Test Contact findOwnContact ################ \n");
@@ -80,7 +80,7 @@ public class ContactMapperTestEinzeln {
 		Vector <Contact> cr = new Vector <Contact>();
 		cr = cMapper.findContactByStatus(u.getGoogleID(), true);
 		for(Contact co : cr) {
-			System.out.println("contact id: " + co.getBo_Id());
+			System.out.println("contact id: " + co.getBoId());
 		}			
 	
 		
@@ -105,7 +105,7 @@ public class ContactMapperTestEinzeln {
 		Vector <Contact> c = new Vector <Contact>();
 		c = cMapper.findAllSharedByMe(u);
 		for(Contact co : c) {
-			System.out.println("contact id: " + co.getBo_Id());
+			System.out.println("contact id: " + co.getBoId());
 		}		
 		
 		
@@ -134,7 +134,7 @@ public class ContactMapperTestEinzeln {
 		c = cMapper.findContactById(19);
 		cMapper.deleteContactByID(47);
 		Contact contact = cMapper.deleteContact(c);
-		System.out.println("contact id " + contact.getBo_Id());
+		System.out.println("contact id " + contact.getBoId());
 				
 		
 		System.out.println("\n ############ Test Contact insert ################ \n");
@@ -205,7 +205,7 @@ public class ContactMapperTestEinzeln {
 		Vector <Contact> cr = new Vector <Contact>();
 		cr = cMapper.findContactByStatus(u.getGoogleID(), true);
 		for(Contact co : cr) {
-			System.out.println("contact id: " + co.getBo_Id());
+			System.out.println("contact id: " + co.getBoId());
 		}	
 		
 		System.out.println("\n ############ Test Contact deleteByID ################ \n");
@@ -221,7 +221,7 @@ public class ContactMapperTestEinzeln {
 		Vector <Contact> c1 = new Vector <Contact>();
 		c1 = cMapper.findAllSharedByOthersToMe(u);
 		for(Contact co : c1) {
-		System.out.println("contact id: " + co.getBo_Id());
+		System.out.println("contact id: " + co.getBoId());
 		}	
 				
 		System.out.println("\n ############ Test PropertyValue findByValue ################ \n");
@@ -229,7 +229,7 @@ public class ContactMapperTestEinzeln {
 		pV = pvMapper.propertyValueMapper().findByKey(39);
 		Contact c = new Contact();
 		c = cMapper.findBy(pV);
-		System.out.println("\n ############ found Contact " + c.getBo_Id());
+		System.out.println("\n ############ found Contact " + c.getBoId());
 		*/
 		
 		System.out.println("\n ############ Test Contact byStatus ################ \n"); // Achtung Kontakte in DB müssen mit Name angelegt werden für Tests
@@ -242,7 +242,7 @@ public class ContactMapperTestEinzeln {
 		Vector <Contact> cr = new Vector <Contact>();
 		cr = cMapper.findContactByStatus(u.getGoogleID(), true);
 		for(Contact co : cr) {
-			System.out.println("contact id: " + co.getBo_Id());
+			System.out.println("contact id: " + co.getBoId());
 		}	
 		
 	}

@@ -48,7 +48,7 @@ public class ContactListMapper {
 		try {
 			PreparedStatement stmt = con
 					.prepareStatement("INSERT INTO ContactList (ID, contactList_name) VALUES (?, ?)");
-			stmt.setInt(1, cl.getBo_Id());
+			stmt.setInt(1, cl.getBoId());
 			stmt.setString(2, cl.getName());
 			if(stmt.executeUpdate() > 0) return cl;
 			
@@ -107,7 +107,7 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT Contact_ID from Contact_ContactList where ContactList_ID = ?"
 					 );
-			stmt.setInt(1, cl.getBo_Id());
+			stmt.setInt(1, cl.getBoId());
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				c.add(ContactMapper.contactMapper().findContactById(rs.getInt("Contact_ID")));				
@@ -309,7 +309,7 @@ public class ContactListMapper {
 		try {
 			PreparedStatement stmt = con.prepareStatement("UPDATE ContactList SET contactList_name = ? WHERE ID = ?");
 			stmt.setString(1, cl.getName());
-			stmt.setInt(2, cl.getBo_Id());
+			stmt.setInt(2, cl.getBoId());
 			stmt.execute();
 
 		} catch (SQLException e) {
@@ -332,8 +332,8 @@ public class ContactListMapper {
 		
 		for(ContactList cl : clResult) {
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(cl);
-			this.deleteContactListById(cl.getBo_Id());
-			System.out.println("# shared contactList deleted: " + cl.getBo_Id() );
+			this.deleteContactListById(cl.getBoId());
+			System.out.println("# shared contactList deleted: " + cl.getBoId() );
 		}
 	}
 	
@@ -365,7 +365,7 @@ public class ContactListMapper {
 	 */
 	
 	public ContactList deleteContactList(ContactList cl) {
-		if(deleteContactListById(cl.getBo_Id()) > 0) return cl;
+		if(deleteContactListById(cl.getBoId()) > 0) return cl;
 		else return null;
 	}
 	
@@ -401,13 +401,13 @@ public class ContactListMapper {
 	public void deleteContactListByUserId(Double userId) {
 		
 		for(ContactList cl : this.findContactListByUserId(userId)){
-			this.deleteContactListById(cl.getBo_Id());
+			this.deleteContactListById(cl.getBoId());
 		}
 		
 		Vector<ContactList> clList = new Vector <ContactList>();
 		clList = this.findContactListByUserId(userId);
 		for(ContactList cl : clList) {
-			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBo_Id());
+			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBoId());
 		}
 	}
 
@@ -431,7 +431,7 @@ public class ContactListMapper {
 		Vector<ContactList> clList = new Vector <ContactList>();
 		clList = this.findAllContactLists();
 		for(ContactList cl : clList) {
-			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBo_Id());
+			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBoId());
 		}
 	}
 
@@ -448,8 +448,8 @@ public class ContactListMapper {
 		try {
 			PreparedStatement stmt = con
 					.prepareStatement("INSERT INTO Contact_ContactList (Contact_ID, ContactList_ID) VALUES (?, ?)");
-			stmt.setInt(1, c.getBo_Id());
-			stmt.setInt(2, cl.getBo_Id());
+			stmt.setInt(1, c.getBoId());
+			stmt.setInt(2, cl.getBoId());
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -470,8 +470,8 @@ public class ContactListMapper {
 		try {
 			PreparedStatement stmt = con
 					.prepareStatement("DELETE FROM Contact_ContactList WHERE Contact_ID = ? AND ContactList_ID = ?");
-			stmt.setInt(1, c.getBo_Id());
-			stmt.setInt(2, cl.getBo_Id());
+			stmt.setInt(1, c.getBoId());
+			stmt.setInt(2, cl.getBoId());
 			stmt.execute();
 
 		} catch (SQLException e) {

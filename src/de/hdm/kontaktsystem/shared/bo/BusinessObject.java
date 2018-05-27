@@ -42,6 +42,10 @@ public class BusinessObject implements Serializable{
 	 */
 	private Date creationDate = null;
 	private Date modifyDate = null;
+	
+	/**
+	 * Ersteller eines BO-Objektes
+	 */
 	private User owner = null;
     
 	/**
@@ -53,15 +57,8 @@ public class BusinessObject implements Serializable{
 	/**
 	* Zurückgeben der ID.
 	*/
-	public int getBo_Id() {
+	public int getBoId() {
 		return this.bo_id;
-	}
-	
-	/**
-	* Zurückgeben der ID.
-	*/
-	public int getBo_Id(int Bo_id) {
-		return this.bo_id = Bo_id;
 	}
 
 	/**
@@ -69,8 +66,7 @@ public class BusinessObject implements Serializable{
 	 */
 	public void setBo_Id(int id) {
 		this.bo_id = id;
-	}
-		
+	}		
 	
 	/**
 	* Zurückgeben der UserID.
@@ -156,7 +152,7 @@ public class BusinessObject implements Serializable{
 	 */
 	@Override
 	public int hashCode(){
-		return this.getBo_Id();
+		return this.getBoId();
 	}
 	
 	/**

@@ -110,7 +110,7 @@ public class ContactList extends BusinessObject {
  
 	@Override
 	public int hashCode(){
-		return super.getBo_Id();
+		return super.getBoId();
 	}
 	
 

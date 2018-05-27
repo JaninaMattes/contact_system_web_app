@@ -40,7 +40,7 @@ public class ContactsTreeViewModel implements TreeViewModel {
 			if (c == null) {
 				return null;
 			}
-			return new Integer(Integer.parseInt(String.valueOf(c.getBo_Id())));
+			return new Integer(Integer.parseInt(String.valueOf(c.getBoId())));
 		}
 	};
 	

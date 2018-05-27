@@ -126,7 +126,7 @@ public class ParticipationMapper {
 				participations.add(participation);
 				
 			    System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + reference.getBo_Id());
+				System.out.println("###### Participation object id: " + reference.getBoId());
 			}
 			return participations;
 			
@@ -162,7 +162,7 @@ public class ParticipationMapper {
 				reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + reference.getBo_Id());
+				System.out.println("###### Participation object id: " + reference.getBoId());
 				participations.add(p);
 			}
 			return participations;
@@ -186,7 +186,7 @@ public class ParticipationMapper {
 			Vector<Participation> participations = new Vector<Participation>();			
 			// Get all Participations from database and store in a ResultSet-Object
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User_BusinessObject WHERE BusinessObject_ID = ?");
-			stmt.setInt(1, businessObject.getBo_Id());
+			stmt.setInt(1, businessObject.getBoId());
 			ResultSet rs = stmt.executeQuery();
 			
 			while(rs.next()) {
@@ -324,13 +324,13 @@ public class ParticipationMapper {
 		
 		try {
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE BusinessObject_ID = ?");
-			stmt.setInt(1, businessObject.getBo_Id());
+			stmt.setInt(1, businessObject.getBoId());
 			stmt.execute();
 			
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
-		BusinessObjectMapper.businessObjectMapper().setStatusFalse(businessObject.getBo_Id());
+		BusinessObjectMapper.businessObjectMapper().setStatusFalse(businessObject.getBoId());
 	}
 	
 	
