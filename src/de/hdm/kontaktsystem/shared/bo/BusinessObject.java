@@ -59,6 +59,8 @@ public class BusinessObject implements Serializable{
 	
 	/**
 	* Zurückgeben der ID.
+	* 
+	* ????????
 	*/
 	public int getBo_Id(int Bo_id) {
 		return this.bo_id = Bo_id;
