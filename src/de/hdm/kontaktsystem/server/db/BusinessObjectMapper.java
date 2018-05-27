@@ -113,10 +113,9 @@ public class BusinessObjectMapper implements Serializable {
             	 bo.setCreationDate(rs.getTimestamp("creationDate"));
             	 bo.setModifyDate(rs.getTimestamp("modificationDate"));
             	 bo.setShared_status(rs.getBoolean("status"));
-            	 bo.setOwner(user);                           
-                }              
-              
-              return bo;
+            	 bo.setOwner(user);  
+            	 return bo;
+                }          
              
           } catch (SQLException e) {
               e.printStackTrace();
@@ -196,6 +195,7 @@ public class BusinessObjectMapper implements Serializable {
 	   * Updatet das ModifizierungsDatum und den Status des BusinessBojects
 	   * @param BusinessObject
 	   */
+	  
 	  public void update(BusinessObject bo){
 		  Connection con = DBConnection.connection();
 		  try{

@@ -99,23 +99,24 @@ public class ContactListMapper {
 	 * @param ContactList-Objekt
 	 */
 
-	public void findContactFromList(ContactList cl) {
+	public Vector<Contact> findContactFromList(ContactList cl) {
 		Connection con = DBConnection.connection();
 		try {
 			Vector<Contact> c = new Vector<Contact>();
 
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt
-					.executeQuery("SELECT Contact_ID from Contact_ContactList where ContactList_ID = " + cl.getBo_Id());
+			PreparedStatement stmt = con.prepareStatement(
+					"SELECT Contact_ID from Contact_ContactList where ContactList_ID = ?"
+					 );
+			stmt.setInt(1, cl.getBo_Id());
+			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				c.add(ContactMapper.contactMapper().findContactById(rs.getInt("Contact_ID")));
-
+				c.add(ContactMapper.contactMapper().findContactById(rs.getInt("Contact_ID")));				
 			}
-			cl.setContacts(c);
+			return c;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		return null;
 	}
 
 	/**

@@ -25,7 +25,8 @@ public class ContactListMapperTestEinzeln {
 	private final static UserMapper uMapper = UserMapper.userMapper();
 	
 	// Gültige IDs zu Testen
-	private final static double vUID = 777; //666;
+	private final static double vUID = 777;
+	private final static double vUID1 = 666;
 	private final static double vUID2 = 798019057881227.4;
 	private final static int coID = 22;
 	private final static int vCID = 19;
@@ -46,6 +47,7 @@ public class ContactListMapperTestEinzeln {
 		System.out.println("\n ############ Test ContactList findContactListByID ################ \n");
 		Contact c = new Contact();
 		c = cMapper.findContactById(coID);
+		System.out.println("\n ############ Test ContactList addContactToContactList ################ \n");
 		clMapper.addContactToContactlist(cl, c);
 		
 		
@@ -84,7 +86,7 @@ public class ContactListMapperTestEinzeln {
 				
 		System.out.println("\n ############ Test ContactList deleteAllSharedByOthers ################ \n");
 		clMapper.deleteAllSharedByOthersToMe(u);
-		*/
+		
 		
 		System.out.println("\n ############ Test ContactList findAll() ################ \n");
 		Vector <ContactList> c1 = new Vector <ContactList>();
@@ -93,6 +95,67 @@ public class ContactListMapperTestEinzeln {
 			System.out.println("contactList id " + c.getBo_Id());
 		}
 		
+		
+		System.out.println("\n ############ Test ContactList findContactFromList() ################ \n");
+		ContactList cl = new ContactList();
+		Vector <Contact> c = new Vector <Contact>();
+		cl.setBo_Id(12);
+		c = clMapper.findContactFromList(cl);
+		
+		
+		System.out.println("\n ############ Test ContactList findContactListByName() ################ \n");
+		Vector <ContactList> c = new Vector <ContactList>();
+		c = clMapper.findContactListByName("666s Liste");
+		for(ContactList c1 : c) {
+			System.out.println("contactList id " + c1.getBo_Id());
+		}
+				
+		
+		System.out.println("\n ############ Test ContactList findContactListByUserId() ################ \n");
+		Vector <ContactList> c = new Vector <ContactList>();
+		c = clMapper.findContactListByUserId(vUID1);
+		for(ContactList c1 : c) {
+			System.out.println("contactList id " + c1.getBo_Id());
+		}
+				
+		
+		System.out.println("\n ############ Test ContactList findContactListByUser() ################ \n");
+		User u = new User();
+		u.setGoogleID(vUID1);
+		Vector <ContactList> c = new Vector <ContactList>();
+		c = clMapper.findContactListByUser(u);
+		for(ContactList c1 : c) {
+			System.out.println("contactList id " + c1.getBo_Id());
+		}		
+		
+		
+		System.out.println("\n ############ Test ContactList findContactListByID ################ \n");		
+		ContactList cl = new ContactList();
+		cl = clMapper.findContactListById(15);
+		System.out.println("contactList id: " + cl.getBo_Id());
+		
+		System.out.println("\n ############ Test ContactList findContactListByID ################ \n");
+		Contact c = new Contact();
+		c = cMapper.findContactById(coID);
+		
+		System.out.println("\n ############ Test ContactList addContactToContactList ################ \n");
+		clMapper.addContactToContactlist(cl, c);
+		System.out.println("contact added: " + c);
+		
+		System.out.println("\n ############ Test ContactList addContactToContactList ################ \n");
+		clMapper.removeContactFromContactList(cl, c);
+		System.out.println("contact removed: " + c);
+		
+		*/
+		
+		System.out.println("\n ############ Test ContactList findContactListByID ################ \n");		
+		ContactList cl = new ContactList();
+		cl = clMapper.findContactListById(15);
+		cl.setName("Update Liste");
+		System.out.println("contactList id: " + cl.getBo_Id());
+		
+		System.out.println("\n ############ Test ContactList update ################ \n");		
+		clMapper.updateContactList(cl);
 	}
 
 }
