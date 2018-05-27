@@ -1,12 +1,19 @@
 package de.hdm.kontaktsystem.client.gui;
 
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
+import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
+import com.google.gwt.view.client.TreeViewModel.NodeInfo;
+
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
+
 /**
  * 
  * @author Katalin
@@ -37,7 +44,7 @@ public class ContactsTreeViewModel implements TreeViewModel {
 		}
 	};
 	
-	private ContactKeyProvider pKeyProvider = null;
+	private ContactKeyProvider cKeyProvider = null;
 	private SingleSelectionModel<Contact> selectionModel = null;
 	
 	/**
@@ -54,12 +61,14 @@ public class ContactsTreeViewModel implements TreeViewModel {
 	}
 		/*
 		 * Konstruktor
+		 * Hier werden die lokalen Variablen initialisiert
 		 */
-		public ContactTreeViewModel() {
+		public ContactsTreeViewModel() {
 			contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
-			pKeyProvider = new ContactKeyProvider();
-			selectionModel = new SingleSelectionModel<Contact>(pKeyProvider);
+			cKeyProvider = new ContactKeyProvider();
+			selectionModel = new SingleSelectionModel<Contact>(cKeyProvider);
 			selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
+
 		}
 		void setContactForm(ContactForm cf) {
 			this.contactForm = cf;
@@ -71,15 +80,32 @@ public class ContactsTreeViewModel implements TreeViewModel {
 		private void setSelectedContact(Contact contact) {
 			// TODO Auto-generated method stub
 			selectedContact = contact;
-			contactForm.setSelected(contact);
-		
-			
+			contactForm.setSelected(contact);	
 		}
+		
 	
 	public <T> NodeInfo<?> getNodeInfo(T value) {
-		// TODO Auto-generated method stub
-		return null;
+
+			if(value.equals("Root")) {
+				
+				//Erzeugt eine ListDataProvider fuer Contact-Daten
+				ContactDataProvider = new ListDataProvider<Contact>();
+				contactSystemVerwaltung.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+					public void onFailure(Throwable t) {
+				}
+			
+				public void onSuccess(Vector<Contact> contacts) {
+					for (Contact c : contacts) {
+						ContactDataProvider.getList().add(c);
+					}
+				}
+			
+			});
+			return new DefaultNodeInfo<Contact>(ContactDataProvider, new ContactCell(), selectionModel, null);
+
+		}
 	}
+	
 
 	@Override
 	public boolean isLeaf(Object value) {
