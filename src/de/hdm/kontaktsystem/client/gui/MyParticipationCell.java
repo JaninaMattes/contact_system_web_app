@@ -22,7 +22,7 @@ public class MyParticipationCell extends AbstractCell<Participation> {
 
 	@Override
 	public void render(Context context, Participation participation, SafeHtmlBuilder sb) {
-	      // Value can be null, so do a null check.
+	      // Prüfung, ob der Wert von participation null ist
 	      if (participation == null) {
 	        return;
 	      }
@@ -37,7 +37,7 @@ public class MyParticipationCell extends AbstractCell<Participation> {
 	      //Falls das geteilte Objekt ein Kontakt ist, Anzeige des Namens
 	      if(participation.getReferencedObject() instanceof Contact) {
 	    	  Contact c = (Contact) participation.getReferencedObject();
-//	    	  sb.appendEscaped(c.getpropertyValue().getName());
+//	    	  sb.appendEscaped(c.getName().getValue());
 	    	  //Testdaten
 	    	  sb.appendEscaped("MusterKontakt");
 	    	  
@@ -59,7 +59,7 @@ public class MyParticipationCell extends AbstractCell<Participation> {
 	      
 	      sb.appendHtmlConstant("</td>"
 	      		+ "<td>");
-//	      sb.appendEscaped(participation.getParticipant().getContact().getpropertyValue().getName());
+//	      sb.appendEscaped(participation.getParticipant().getUserContact().getName().getValue());
 	      //Testdaten
 	      sb.appendEscaped("MusterTeilhaber");
 	      
