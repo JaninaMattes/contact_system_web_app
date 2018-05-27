@@ -11,6 +11,7 @@ import com.google.gwt.view.client.TreeViewModel;
 import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
 import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 
 public class ReceivedParticipationTreeViewModel implements TreeViewModel {
@@ -56,7 +57,7 @@ public class ReceivedParticipationTreeViewModel implements TreeViewModel {
 	}
 	
 	/*
-	 * Im Konstruktor werden die für den Kunden- und Kontobaum wichtigen lokalen
+	 * Im Konstruktor werden die für die Teilhabeschaftsliste wichtigen lokalen
 	 * Variaben initialisiert.
 	 */
 	public ReceivedParticipationTreeViewModel() {
@@ -90,7 +91,7 @@ public class ReceivedParticipationTreeViewModel implements TreeViewModel {
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
 		if (value.equals("Root")) {
-			// Erzeugen eines ListDataproviders für Customerdaten
+			// Erzeugen eines ListDataproviders für Participation-Daten
 			participationDataProvider = new ListDataProvider<Participation>();
 			//All Participations oder nur die für den User??
 			contactSystemVerwaltung.getAllParticipations(new AsyncCallback<Vector<Participation>>() {

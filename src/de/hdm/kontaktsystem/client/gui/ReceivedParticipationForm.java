@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.gui.MyParticipationForm.deleteParticipationCallback;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -18,7 +19,7 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 public class ReceivedParticipationForm extends VerticalPanel{
 
-	ContactSystemAdministrationAsync contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Participation participationToDisplay = null;
 	MyParticipationsTreeViewModel mptvm = null;
 	
@@ -83,7 +84,7 @@ public class ReceivedParticipationForm extends VerticalPanel{
 			if (participationToDisplay == null) {
 				Window.alert("kein Kunde ausgewählt");
 			} else {
-				contactSystemVerwaltung.delete(participationToDisplay,
+				contactSystemAdmin.delete(participationToDisplay,
 						new deleteParticipationCallback(participationToDisplay));
 			}
 		}
@@ -124,17 +125,19 @@ public class ReceivedParticipationForm extends VerticalPanel{
 		if (p != null) {
 			participationToDisplay = p;
 			deleteButton.setEnabled(true);
-			nameOwner.setText(p.getReferencedObject().getOwner().getContact().getpropertyValue().getName());
+			nameOwner.setText(p.getReferencedObject().getOwner().getUserContact().getName().getValue());
 			
 			if(p.getReferencedObject() instanceof Contact) {
 		    	  Contact c = (Contact) p.getReferencedObject();
-		    	  sharedObject.setText(c.getpropertyValue().getName());
+		    	  sharedObject.setText(c.getName().getValue());
 		    	  objectType.setText("Kontakt");
 		      }else if(p.getReferencedObject() instanceof ContactList) {
 		    	  ContactList cl = (ContactList) p.getReferencedObject();
+		    	  sharedObject.setText(cl.getName());
 		    	  objectType.setText("Kontaktliste");
 		      }else if(p.getReferencedObject() instanceof PropertyValue) {
 		    	  PropertyValue pv = (PropertyValue) p.getReferencedObject();
+		    	  sharedObject.setText(pv.getValue());
 		    	  objectType.setText("Eigenschaftswert");
 		      }
 			

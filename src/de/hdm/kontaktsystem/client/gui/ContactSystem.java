@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.LoginService;
 import de.hdm.kontaktsystem.client.LoginServiceAsync;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
@@ -48,8 +49,7 @@ public class ContactSystem implements EntryPoint {
 	/**
 	 * Link zum Asynchronen Interface
 	 */
-//	Zu Testzwecken ausgeblendet
-//	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
+	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
 	
 //	Aus Bankbeispiel, hier notwendig?
 	/*

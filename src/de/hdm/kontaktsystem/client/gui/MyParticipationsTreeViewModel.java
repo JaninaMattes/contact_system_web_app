@@ -13,6 +13,7 @@ import com.google.gwt.view.client.TreeViewModel;
 import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -23,8 +24,7 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 	
 	private Participation selectedParticipation;
 	
-	//Zu Testzwecken ausgeblendet
-//	private ContactSystemAdministrationAsync contactSystemAdmin = null;
+	private ContactSystemAdministrationAsync contactSystemAdmin = null;
 	
 	private ListDataProvider<Participation> participationDataProvider = null;
 	
@@ -61,14 +61,12 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 		}
 	}
 	
-	/*
-	 * Im Konstruktor werden die für den Kunden- und Kontobaum wichtigen lokalen
+	/**
+	 * Im Konstruktor werden die für die Teilhaberschaftsliste wichtigen lokalen
 	 * Variaben initialisiert.
 	 */
 	public MyParticipationsTreeViewModel() {
-		//Zu Testzwecken ausgeblendet
-//		contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
-		
+		contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 		pKeyProvider = new ParticipationKeyProvider();
 		selectionModel = new SingleSelectionModel<Participation>(pKeyProvider);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
@@ -98,12 +96,12 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
 		if (value.equals("Root")) {
-			// Erzeugen eines ListDataproviders für Customerdaten
+			// Erzeugen eines ListDataproviders für Participation-Daten
 			participationDataProvider = new ListDataProvider<Participation>();
 			//All Participations oder nur die für den User??
 			
 			//Zu Testzwecken ausgeblendet
-//			contactSystemVerwaltung.getAllParticipations(new AsyncCallback<Vector<Participation>>() {
+//			contactSystemAdmin.getAllParticipations(new AsyncCallback<Vector<Participation>>() {
 //						@Override
 //						public void onFailure(Throwable t) {
 //						}
@@ -129,7 +127,7 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 			//Ende Testdaten
 			
 			
-			// Return a node info that pairs the data with a cell.
+			// Verbindung der Daten mit den Zellen
 			return new DefaultNodeInfo<Participation>(participationDataProvider,
 					new MyParticipationCell(), selectionModel, null);
 		}

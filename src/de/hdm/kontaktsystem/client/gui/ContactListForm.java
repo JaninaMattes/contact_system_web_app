@@ -13,6 +13,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
+import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -119,7 +121,7 @@ class DeleteClickHandler implements ClickHandler {
 		if (contactListToDisplay == null) {
 			Window.alert("Keinen Kontaktliste ausgew�hlt");
 		}else {
-			contactSystemVerwaltung.delete(contactListToDisplay, 
+			contactSystem.delete(contactListToDisplay, 
 					new deleteContactListCallback(contactListToDisplay));
 		}
 	}
@@ -158,7 +160,7 @@ class DeleteClClickHandler implements ClickHandler {
 		if (contactListToDisplay == null) {
 			Window.alert("keine Kontaktliste ausgew�hlt");
 		} else {
-			ContactSystemAdministrationImpl.deleteContactList(contactListToDisplay,
+			ContactSystem.deleteContactList(contactListToDisplay,
 					new deleteContactListCallback(contactListToDisplay));
 		}
 	}

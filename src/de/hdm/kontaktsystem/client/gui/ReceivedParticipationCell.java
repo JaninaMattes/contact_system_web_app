@@ -12,7 +12,7 @@ public class ReceivedParticipationCell extends AbstractCell<Participation> {
 
 	@Override
 	public void render(Context context, Participation participation, SafeHtmlBuilder sb) {
-	      // Value can be null, so do a null check.
+	      // Prüfung, ob der Wert von participation null ist
 	      if (participation == null) {
 	        return;
 	      }
@@ -25,7 +25,7 @@ public class ReceivedParticipationCell extends AbstractCell<Participation> {
 		      
 	      if(participation.getReferencedObject() instanceof Contact) {
 	    	  Contact c = (Contact) participation.getReferencedObject();
-	    	  sb.appendEscaped(c.getName());
+	    	  sb.appendEscaped(c.getName().getValue());
 	      }else if(participation.getReferencedObject() instanceof ContactList) {
 	    	  ContactList cl = (ContactList) participation.getReferencedObject();
 	    	  sb.appendEscaped(cl.getName());
@@ -36,7 +36,7 @@ public class ReceivedParticipationCell extends AbstractCell<Participation> {
 	      
 		  sb.appendHtmlConstant("</td>"
 		      		+ "<td>");
-		  sb.appendEscaped(participation.getReferencedObject().getOwner().getContact().getpropertyValue().getName());
+		  sb.appendEscaped(participation.getReferencedObject().getOwner().getUserContact().getName().getValue());
 		      
 		  sb.appendHtmlConstant("</td>"
 				  	+ "</tr>"
