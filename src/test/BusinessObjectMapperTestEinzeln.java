@@ -46,7 +46,7 @@ public class BusinessObjectMapperTestEinzeln {
 		for(Integer i : boId) {
 			BusinessObject bo = boMapper.findBusinessObjectByID(i);
 		}		
-		*/
+		
 		
 		System.out.println("\n ############ Test BO findBOById ################ \n");
 		Vector <Integer> uId = boMapper.findBusinessObjectIDsByUserID(vUID1);
@@ -69,7 +69,7 @@ public class BusinessObjectMapperTestEinzeln {
 		
 		System.out.println("\n ############ Test BO update ################ \n");
 		//bo2.setBo_Id(100010);
-		boMapper.update(bo2);
+		boMapper.update(bo2);		
 		
 		System.out.println("\n ############ Test BO insert ################ \n");
 		User u = uMapper.findById(vUID);
@@ -78,6 +78,15 @@ public class BusinessObjectMapperTestEinzeln {
 		b.setOwner(u);
 		boMapper.insert(b);
 		
+		System.out.println("\n ############ Test BO delete ################ \n");
+		BusinessObject bo3 = boMapper.findBusinessObjectByID(23);
+		boMapper.deleteBusinessObject(bo3);
+		
+		*/
+	
+		System.out.println("\n ############ Test BO delteByUser ################ \n");
+		User u = uMapper.findById(vUID2);
+		boMapper.deleteBusinessObjectByUser(u);
 		
 	}
 

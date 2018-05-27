@@ -53,7 +53,7 @@ public class ContactList extends BusinessObject {
 		this.contacts = contacts;
 	}
 	
-	public void setContact(Contact contact) {
+	public void addContact(Contact contact) {
 		this.contacts.addElement(contact);
 	}
 
