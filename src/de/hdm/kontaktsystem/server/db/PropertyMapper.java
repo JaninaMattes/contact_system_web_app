@@ -85,7 +85,7 @@ public class PropertyMapper {
                 // Eintrag in PropertyValue erfolgt
                 for (PropertyValue pV : propertyValues){                 
                 		PropertyValueMapper.propertyValueMapper().insert(pV);
-                		System.out.println("PV-id: " + pV.getBo_Id());
+                		System.out.println("PV-id: " + pV.getBoId());
                 }                  
           	} catch(SQLException e) {
               e.printStackTrace();

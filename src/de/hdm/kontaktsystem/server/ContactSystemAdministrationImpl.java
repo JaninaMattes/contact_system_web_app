@@ -11,8 +11,22 @@ import de.hdm.kontaktsystem.client.gui.ContactSystem;
 import de.hdm.kontaktsystem.server.db.*;
 
 /**
+ * <p>
+ * Implementierungsklasse des Interface <code>ContactSystemAdministration</code>. Diese
+ * Klasse ist <em>die</em> Klasse, die neben {@link ReportGeneratorImpl}
+ * sämtliche Applikationslogik (engl. Business Logic) aggregiert. Diese sorgt
+ * für einen geordneten Ablauf und Konsistenz der Daten sowie Abläufe in der
+ * Applikation. </p>
+ * Jede dieser
+ * Jede Methode dieser Klasse bildet die Applikationslogik ab und
+ * kann als <em>Transaction Script</em> bezeichnet werden. Diese überführen das
+ * System von einem konsistenten Zustand in einen anderen über.
  * 
- * @
+ * <li> {@link RemoteServiceServlet}: Jede Server-seitig instantiierbare und
+ * Client-seitig über GWT RPC nutzbare Klasse muss die Klasse
+ * <code>RemoteServiceServlet</code> implementieren. Sie legt die funktionale
+ * Basis für die Anbindung von <code>ContactSystemImpl</code> an die Runtime
+ * des GWT RPC-Mechanismus.</li>
  *
  */
 

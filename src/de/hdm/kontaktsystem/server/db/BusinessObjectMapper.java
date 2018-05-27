@@ -201,7 +201,7 @@ public class BusinessObjectMapper implements Serializable {
 		  try{
 			  PreparedStatement stmt = con.prepareStatement("UPDATE BusinessObject SET status = ? WHERE bo_ID = ?");
 			  stmt.setBoolean(1, bo.isShared_status());
-			  stmt.setInt(2, bo.getBo_Id());
+			  stmt.setInt(2, bo.getBoId());
 			  stmt.executeUpdate();
 			  
 		  }catch(SQLException e){
@@ -251,7 +251,7 @@ public class BusinessObjectMapper implements Serializable {
 	 * @param BusinessObject
 	 */
 	public void deleteBusinessObject(BusinessObject bo) {
-		deleteBusinessObjectByID(bo.getBo_Id());
+		deleteBusinessObjectByID(bo.getBoId());
 	}
 
 	

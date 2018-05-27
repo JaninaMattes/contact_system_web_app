@@ -79,7 +79,7 @@ public class Participation implements Serializable {
 	* Zurückgeben der ID des geteilten BusinessObjects
 	*/
 	public int getReferenceID() {
-		return this.reference.getBo_Id();
+		return this.reference.getBoId();
 	}
 
 	/**
