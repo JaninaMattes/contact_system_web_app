@@ -145,8 +145,7 @@ public class ContactListMapperTestEinzeln {
 		System.out.println("\n ############ Test ContactList addContactToContactList ################ \n");
 		clMapper.removeContactFromContactList(cl, c);
 		System.out.println("contact removed: " + c);
-		
-		*/
+				
 		
 		System.out.println("\n ############ Test ContactList findContactListByID ################ \n");		
 		ContactList cl = new ContactList();
@@ -154,8 +153,31 @@ public class ContactListMapperTestEinzeln {
 		cl.setName("Update Liste");
 		System.out.println("contactList id: " + cl.getBo_Id());
 		
+		
 		System.out.println("\n ############ Test ContactList update ################ \n");		
 		clMapper.updateContactList(cl);
+		*/
+		
+		System.out.println("\n ############ Test ContactList insert ################ \n");		
+		User u = new User();
+		u = uMapper.findById(vUID);
+		Contact c = new Contact();
+		c = cMapper.findOwnContact(u);
+		
+		Contact c2 = new Contact();
+		c2 = cMapper.findContactById(vCID);
+		
+		ContactList cl = new ContactList();
+		cl.setBo_Id(57);
+		cl.setName("777s Liste");
+		cl.setOwner(u);
+		
+		//clMapper.insertContactList(cl);
+		cl.addContact(c);
+		cl.addContact(c2);
+		cl.setName("777s-Liste");
+		clMapper.updateContactList(cl);
+		
 	}
 
 }
