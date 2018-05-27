@@ -260,20 +260,17 @@ public class BusinessObjectMapper implements Serializable {
 	 * 
 	 * @param BusinessObject ID
 	 */
+	
 	public void deleteBusinessObjectByID(int bo_id) {
-		// TODO Auto-generated method stub
 		Connection con = DBConnection.connection();
 		  
 		  try {
 			  // Einfügeoperation in propertyvalue erfolgt
-		      PreparedStatement stmt = con.prepareStatement
-
-		      ("DELETE FROM BusinessObject WHERE bo_ID = ? ");
+		      PreparedStatement stmt = con.prepareStatement("DELETE FROM BusinessObject WHERE bo_ID = ? ");
 		      stmt.setInt(1, bo_id);
-
 		      stmt.execute();
 		      
-		    }
+		     }
 		    catch (SQLException e) {
 		      e.printStackTrace();
 		    }

@@ -88,16 +88,17 @@ public class ParticipationMapper {
 
 	
 	/**
-	 * Zurückgeben aller Teilhaberschaften zu Objekten eines gegebenen Users
+	 * Zurückgeben aller Teilhaberschaften zu Objekten eines gegebenen Users.
+	 * Dieser stellt den Ersteller <em>Owner</em> des BusinessObjektes dar.
+	 * 
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
 	
 	public Vector<Participation> findParticipationsByOwner(User user) {
 		Connection con = DBConnection.connection();
-		//System.out.println("Methode findParticipation..");
 		
 		try {
-			// Create Vector for all Participation-Objects
+			
 			Vector<Participation> participations = new Vector<Participation>();
 			
 			// Get all Participations from database and store in a ResultSet-Object
@@ -117,16 +118,15 @@ public class ParticipationMapper {
 				BusinessObject reference = new BusinessObject();
 				
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
-				participation.setParticipant(participant);
-				
+				participation.setParticipant(participant);				
 				reference = BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("bo_ID"));
 				//System.out.println(reference);
 				participation.setReference(reference);
 				
 				participations.add(participation);
 				
-//				System.out.println("Participant id: " + participant.getGoogleID());
-//				System.out.println("Participation object id: " + reference.getBo_Id());
+			    System.out.println("###### Participant id: " + participant.getGoogleID());
+				System.out.println("###### Participation object id: " + reference.getBo_Id());
 			}
 			return participations;
 			
@@ -159,10 +159,10 @@ public class ParticipationMapper {
 				BusinessObject reference = new BusinessObject();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
-				//System.out.println(reference);
 				reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
-				//System.out.println(p);
+				System.out.println("###### Participant id: " + participant.getGoogleID());
+				System.out.println("###### Participation object id: " + reference.getBo_Id());
 				participations.add(p);
 			}
 			return participations;
@@ -178,18 +178,17 @@ public class ParticipationMapper {
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
 	public Vector<Participation> findParticipationsByBusinessObject(BusinessObject businessObject){
+		
 		Connection con = DBConnection.connection();
 		
 		try {
 			// Create Vector for all Participation-Objects
-			Vector<Participation> participations = new Vector<Participation>();
-			
+			Vector<Participation> participations = new Vector<Participation>();			
 			// Get all Participations from database and store in a ResultSet-Object
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User_BusinessObject WHERE BusinessObject_ID = ?");
 			stmt.setInt(1, businessObject.getBo_Id());
 			ResultSet rs = stmt.executeQuery();
 			
-			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
@@ -287,12 +286,12 @@ public class ParticipationMapper {
 	}
 	
 	/**
-	 * Löschen aller Teilhaberschaften, die mit einem gegebenen User geteilt werden
+	 * Löschen aller Teilhaberschaften, die mit einem gegebenen User geteilt wurden.
+	 * 
 	 * @param participant
 	 */
 	public void deleteParticipationForParticipant(User user) {
-		Vector<Participation> participations = findParticipationsByParticipant(user);
-		
+		Vector<Participation> participations = findParticipationsByParticipant(user);		
 		Connection con = DBConnection.connection();
 		
 		for(Participation p : participations) {
