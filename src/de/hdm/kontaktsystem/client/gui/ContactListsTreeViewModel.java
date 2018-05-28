@@ -17,7 +17,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 	private ContactListForm contactListForm;
 	private ContactList selectedContactList;
 	
-	private ContactSystemAdministrationAsync contactSystemVerwaltung = null;
+	private ContactSystemAdministrationAsync contactSystemAdmin = null;
 	private ListDataProvider<ContactList> contactListDataProvider = null;
 	
 	/**
@@ -34,7 +34,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 		if (cl == null) {
 			return null;
 		}
-		return new Integer(Integer.parseInt(String.valueOf(cl.getContacts()+ " " + cl.getReference()))); //TODO: NACHBESSERN
+		return new Integer(Integer.parseInt(String.valueOf(cl.getBoId()+ "" + cl.getName()))); //TODO: Noch mit Sandra besprechen.NACHBESSERN
 	}
 }
 	
@@ -42,7 +42,8 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 	private SingleSelectionModel<ContactList> selectionModel = null;
 	
 	/**
-	 * Nested Class fï¿½r...
+	 * Nested Class
+	 * Wählt die aktuell fokusierte Kontaktlist
 	 */
 	
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
@@ -60,7 +61,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 	 */
 	
 	public ContactListsTreeViewModel() {
-		contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+		contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 		clKeyProvider = new ContactListKeyProvider();
 		selectionModel = new SingleSelectionModel<ContactList>(clKeyProvider);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
@@ -91,9 +92,9 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 			
 			//Erzeugt eine ListDataProvider fuer ContactList Daten
 			contactListDataProvider = new ListDataProvider<ContactList>();
-			contactSystemVerwaltung.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
+			contactSystemAdmin.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
 				public void onFailure(Throwable t) {
-			}
+				}
 		
 			public void onSuccess(Vector<ContactList> contactLists) {
 				for (ContactList cl : contactLists) {
@@ -105,6 +106,9 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 		return new DefaultNodeInfo<ContactList>(contactListDataProvider, new ContactListCell(), selectionModel, null);
 
 	}
+
+		return null;
+
 }
 	@Override
 	public boolean isLeaf(Object value) {

@@ -101,9 +101,10 @@ public class ContactsTreeViewModel implements TreeViewModel {
 				}
 			
 			});
-			return new DefaultNodeInfo<Contact>(ContactDataProvider, new ContactCell(), selectionModel, null);
+			
 
 		}
+			return new DefaultNodeInfo<Contact>(ContactDataProvider, new ContactCell(), selectionModel, null);
 	}
 	
 

@@ -61,9 +61,9 @@ public class ContactForm extends VerticalPanel{
 		contactGrid.setWidget(0, 1, TextBoxName);
 		
 		//TODO: While-Schleife um alle Eigenschaften eines Kontaktes anzuzeigen
-		while (angezeigterKontakt.getpropertyValue() != null) {
-				PropertyValue Eigenschaft = angezeigterKontakt.getpropertyValue();	
-			}
+		//while (angezeigterKontakt.getpropertyValue() != null) {
+		//		PropertyValue Eigenschaft = angezeigterKontakt.getpropertyValue();	
+		//	}
 	
 			
 			
@@ -106,8 +106,8 @@ public class ContactForm extends VerticalPanel{
 				if (angezeigterKontakt == null) {
 					Window.alert("kein Kontakt ausgewählt");
 				} else {
-					contactSystemVerwaltung.delete(angezeigterKontakt,
-							new deleteContactCallback(angezeigterKontakt));
+					//contactSystemVerwaltung.delete(angezeigterKontakt,
+					//		new deleteContactCallback(angezeigterKontakt));
 				}
 			}
 		}
@@ -173,7 +173,7 @@ public class ContactForm extends VerticalPanel{
 					if (c != null) {
 						angezeigterKontakt = c;
 						Kontaktloeschen.setEnabled(true);
-						TextBoxName.setText(c.getpropertyValue().getName()); //TODO: NACHBESSERN
+						//TextBoxName.setText(c.getpropertyValue().getName()); //TODO: NACHBESSERN
 					} else {
 						TextBoxName.setText("");
 						//TODO: Andere Propertys + PropertyValues füllen bzw. löschen
