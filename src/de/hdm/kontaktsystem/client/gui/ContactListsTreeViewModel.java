@@ -42,7 +42,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 	private SingleSelectionModel<ContactList> selectionModel = null;
 	
 	/**
-	 * Nested Class f�r...
+	 * Nested Class fuer...
 	 */
 	
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
@@ -105,6 +105,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 		return new DefaultNodeInfo<ContactList>(contactListDataProvider, new ContactListCell(), selectionModel, null);
 
 	}
+		return null;
 }
 	@Override
 	public boolean isLeaf(Object value) {
