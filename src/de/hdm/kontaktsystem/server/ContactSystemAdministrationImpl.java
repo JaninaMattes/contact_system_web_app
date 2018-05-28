@@ -17,7 +17,7 @@ import de.hdm.kontaktsystem.server.db.*;
  * sämtliche Applikationslogik (engl. Business Logic) aggregiert. Diese sorgt
  * für einen geordneten Ablauf und Konsistenz der Daten sowie Abläufe in der
  * Applikation. </p>
- * Jede dieser
+ * 
  * Jede Methode dieser Klasse bildet die Applikationslogik ab und
  * kann als <em>Transaction Script</em> bezeichnet werden. Diese überführen das
  * System von einem konsistenten Zustand in einen anderen über.
@@ -38,9 +38,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	private static final long serialVersionUID = 1L;
 			
-	private Contact contact = null;
+	private Contact contact = null; //?? TODO: überprüfen
 	
-	//Referenzen auf die zugehörigen DatenbankMapper
+	/*
+	 * Referenzen auf die zugehörigen DatenbankMapper
+	 */
 
 	
 	private BusinessObjectMapper boMapper = null;	
@@ -62,6 +64,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
+	/**
+	 *  Methode zur Initialisierung
+	 */
+	
 	public void init() throws IllegalArgumentException{
 		
 		this.boMapper = BusinessObjectMapper.businessObjectMapper();
@@ -70,8 +76,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		this.partMapper = ParticipationMapper.participationMapper();
 		this.propMapper = PropertyMapper.propertyMapper(); 
 		this.propValMapper = PropertyValueMapper.propertyValueMapper();
-		this.uMapper = UserMapper.userMapper();
-		
+		this.uMapper = UserMapper.userMapper();		
 	}
 	
 	/*
@@ -114,8 +119,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
-	public void saveUser(User user) {
-		//?????
+	public void saveUser(User user) { //?? TODO: Klären
+		uMapper.update(user);
 	}
 	
 	public void deleteUser(int id) {
@@ -132,6 +137,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ABSCHNITT, Beginn: Methoden 
 	* ***************************************************************************
 	*/
+	
 	public Vector<Contact> getAllContacts(){
 		return cMapper.findAllContacts();
 		
@@ -147,19 +153,24 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
-	public void createContactForUser(Contact contact) {
-		cMapper.insertContact(contact);
-		
+	public void createContactForUser(Contact contact) { //??? TOOD: Klären 
+		cMapper.insertContact(contact);		
 	}
+	
 	
 	public void addContactToList(Contact contact, ContactList contactList) {
 		clMapper.addContactToContactlist(contactList, contact);
 	}
+	
 	public void removeContactToList(Contact contact, ContactList contactList) {
 		clMapper.removeContactFromContactList(contactList, contact);
 	}
 	
-	public void shareBusinessObjectWith(Participation part) {
+	public void shareBusinessObjectWith(BusinessObject reference, User participant) {
+		Participation part = new Participation();
+		part.setParticipant(participant);
+		part.setReference(reference);
+		
 		partMapper.insertParticipation(part);
 	}
 	
@@ -177,8 +188,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public void createContactList(ContactList contactList) {
 		clMapper.insertContactList(contactList);
 			
-	}
-	
+	}	
 	
 	public void createPropertyValue(PropertyValue propertyValue) {
 		propValMapper.insert(propertyValue);
@@ -190,7 +200,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
-	public void editUser(User user) {
+	public void editUser(User user) { // TODO: Klären, doppelte Methode
 		uMapper.update(user);
 		
 	}

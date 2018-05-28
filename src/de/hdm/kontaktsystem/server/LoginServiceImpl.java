@@ -12,12 +12,18 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService{
+	
+	/**
+	 * Default SerialVersion UID
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public User login(String requestUri) {
+		
 		UserService userService = UserServiceFactory.getUserService();
 		com.google.appengine.api.users.User guser = userService.getCurrentUser();
 		User user = new User();
@@ -36,6 +42,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			user.setLoggedIn(true); // norm True
 			System.out.println(userService.createLogoutURL(requestUri));
 			user.setLogoutUrl(userService.createLogoutURL(requestUri));
+			
 			if(UserMapper.userMapper().findById(id) == null){
 				System.out.println("Create new User: " + user);
 				name.setValue("My Contact"); //force initial name
