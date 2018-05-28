@@ -61,6 +61,7 @@ public class ContactForm extends VerticalPanel{
 		contactGrid.setWidget(0, 1, TextBoxName);
 		
 		//TODO: While-Schleife um alle Eigenschaften eines Kontaktes anzuzeigen
+		// mit Vektor lösen
 		//while (angezeigterKontakt.getpropertyValue() != null) {
 		//		PropertyValue Eigenschaft = angezeigterKontakt.getpropertyValue();	
 		//	}
@@ -72,13 +73,14 @@ public class ContactForm extends VerticalPanel{
 		/**
 		 * Widgets/Panels anordnen
 		 */
-		//Die TextBox um den Kontakt einzugeben, das label und das Panel für die Buttons werden 
+		//Die TextBox um den Kontakt einzugeben, das Label und das Panel für die Buttons werden 
 		//untereinander auf dem VerticalPanel angeordnet.
 		vp.add(label);
 		vp.add(contactGrid);
 		vp.add(Buttonpanel);
 		
-		//Die Buttons werden auf dem HorizontalPanel angeordnet
+		//Die Buttons zum löschen, teilen und bearbeiten eines Kontakts 
+		//werden auf dem HorizontalPanel angeordnet.
 		
 		Kontaktloeschen.addClickHandler(new loeschenClickHandler());
 		Kontaktloeschen.setEnabled(false);
@@ -94,14 +96,13 @@ public class ContactForm extends VerticalPanel{
 
 		
 		
-		//Klassen erstellen welche die Clickhandler-Klasse implementieren
+		//Klassen welche die Clickhandler-Klasse implementieren
 	
 		//ChlickHandler um einen Kontakt zu loeschen (Bei Klick auf den "Kontakt loeschen"-Button)
 		private class loeschenClickHandler implements ClickHandler {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
 				//TODO: def. was passieren soll wenn man auf den Button klickt
 				if (angezeigterKontakt == null) {
 					Window.alert("kein Kontakt ausgewählt");
@@ -117,10 +118,9 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 					//TODO: def. was passieren soll wenn man auf den Button klickt
+					//Kontakt bei anderem User speichern und gemeinsame Bearbeitung ermöglichen
 					Window.alert("Kontakt wurde geteilt");
-						//TODO: Verbindung
 					}
 				}
 			
@@ -129,12 +129,11 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 					//TODO: def. was passieren soll wenn man auf den Button klickt
 					Window.alert("Änderungen wurden gespeichert");
-						//TODO: Verbindung
 					}
 				}
+			
 			class deleteContactCallback implements AsyncCallback<Void> {
 
 				Contact contact = null;
@@ -169,7 +168,6 @@ public class ContactForm extends VerticalPanel{
 			 * gefüllt bzw. gelöscht.
 			*/
 				void setSelected(Contact c) {
-					// TODO Auto-generated method stub
 					if (c != null) {
 						angezeigterKontakt = c;
 						Kontaktloeschen.setEnabled(true);
@@ -177,6 +175,7 @@ public class ContactForm extends VerticalPanel{
 					} else {
 						TextBoxName.setText("");
 						//TODO: Andere Propertys + PropertyValues füllen bzw. löschen
+						//evtl. Vektor + Mapperaufruf für löschen oder füllen
 
 						Kontaktloeschen.setEnabled(false);
 					}
