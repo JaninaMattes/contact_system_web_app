@@ -71,7 +71,7 @@ public class ContactForm extends VerticalPanel{
 	private VerticalPanel vp = new VerticalPanel();
 	
 	//Panel um die Buttons nebeneinander anzuordnen
-	private HorizontalPanel Buttonpanel = new HorizontalPanel();
+	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	
 	
 	
@@ -114,7 +114,7 @@ public class ContactForm extends VerticalPanel{
 		
 		editButton.addClickHandler(new EditClickHandler());
 		editButton.setEnabled(false);
-		contactGrid.setWidget(9, 1, textBoxAdresse);	
+		buttonPanel.add(editButton);
 		
 		/**
 		 * Click Handler Button zum teilen von Kontakten.
@@ -125,17 +125,9 @@ public class ContactForm extends VerticalPanel{
 		
 		shareButton.addClickHandler(new ShareClickHandler());
 		shareButton.setEnabled(false);
-		contactGrid.setWidget(10, 1, textBoxAdresse);		
+		buttonPanel.add(shareButton);		
 		
-		//Die TextBox um den Kontakt einzugeben, das Label und das Panel für die Buttons werden 
-		//untereinander auf dem VerticalPanel angeordnet.
-		vp.add(label);
-		vp.add(contactGrid);
-		vp.add(Buttonpanel);
-		
-		//Die Buttons zum löschen, teilen und bearbeiten eines Kontakts 
-		//werden auf dem HorizontalPanel angeordnet.
-		
+				
 		/**
 		 * Click Handler Button zum löschen von Kontakten.
 		 * Nach der Auswahl "editieren" wird der Button dynamisch 
@@ -145,7 +137,7 @@ public class ContactForm extends VerticalPanel{
 		
 		deleteButton.addClickHandler(new DeleteClickHandler());
 		deleteButton.setEnabled(false);
-		contactGrid.setWidget(11, 1, textBoxAdresse);
+		buttonPanel.add(deleteButton);
 		
 		/**
 		 * Click Handler Button zum speichern von Kontakten. 
@@ -153,16 +145,107 @@ public class ContactForm extends VerticalPanel{
 		
 		saveButton.addClickHandler(new SaveClickHandler());
 		saveButton.setEnabled(false);
-		contactGrid.setWidget(12, 1, textBoxAdresse);
+		buttonPanel.add(saveButton);
 		
 		/**
 		 * Click Handler Button zum abbrechen von Kontakten.
 		 */
 		cancelButton.addClickHandler(new CancelClickHandler());
 		cancelButton.setEnabled(false);
-		contactGrid.setWidget(13, 1, textBoxAdresse);
+		buttonPanel.add(cancelButton);		
 		
-	
+		
+		/**
+		 * Die TextBox um den Kontakt einzugeben, das Label und das Panel für die Buttons werden 
+		 * über das Grid Widget untereinander auf dem VerticalPanel angeordnet.
+		 * 
+		 * Ebenso werden alle Buttons auf dem HorizontalPanel für eine Button Leiste angeordnet. 
+		 */
+		
+		vp.add(label);
+		vp.add(contactGrid);
+		vp.add(buttonPanel);
+		
+		/**
+		 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
+		 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
+		 * 
+		 */
+		
+		private class ChangeClickHandler implements ClickHandler {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (customerToDisplay != null) {
+					customerToDisplay.setFirstName(firstNameTextBox.getText());
+					customerToDisplay.setLastName(lastNameTextBox.getText());
+					bankVerwaltung.save(customerToDisplay, new SaveCallback());
+				} else {
+					Window.alert("kein Kunde ausgewählt");
+				}
+			}
+		}
+		
+		
+		/**
+		 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
+		 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
+		 * 
+		 */
+		
+		private class SaveClickHandler implements ClickHandler {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (contactToDisplay != null) {
+					
+					Vector <PropertyValue> pv = new Vector <PropertyValue>();
+					pv = contactToDisplay.getPropertyValues();
+									
+					for(PropertyValue p : pv) {
+						
+						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
+						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
+						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
+						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
+						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
+						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
+						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
+						}
+					
+					contactSystemVerwaltung.save(contactToDisplay, new SaveCallback());
+				} else {
+					Window.alert("kein Kunde ausgewählt");
+				}
+			}
+		}
+		
+		
+		/*
+		 * Die Änderungen an einem Kontakt erfolgen über den 
+		 * Aufruf der Service-Methode "update"
+		 */
+
+		private class SaveCallback implements AsyncCallback<Void> {
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Die Änderungen konnten nicht gespeichert werden!");
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
+				ctvm.updateContat(contactToDisplay);
+			}
+		}
+			
+		
+		/**
+		 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
+		 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
+		 * gefüllt bzw. gelöscht.
+		*/
+		
 		public void setSelected(Contact c) {
 			
 			if (c != null) {
@@ -185,87 +268,32 @@ public class ContactForm extends VerticalPanel{
 				if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
 				if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
 				if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
-				if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());
-				
+				if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
 				}
 				
-//				firstNameTextBox.setText(customerToDisplay.getFirstName());
-//				lastNameTextBox.setText(customerToDisplay.getLastName());
-//				idValueLabel.setText("Kunde: " + Integer.toString(customerToDisplay.getId()));
-//			} else {
-//				firstNameTextBox.setText("");
-//				lastNameTextBox.setText("");
-//				idValueLabel.setText("Kunde: ");
-//				deleteButton.setEnabled(false);
-//				newButton.setEnabled(false);
-//			}
-		}
-			
-		
-		/**
-		 * Widgets/Panels anordnen
-		 */ 
-		//Die TextBox um den Kontakt einzugeben, das label und das Panel für die Buttons werden 
-		//untereinander auf dem VerticalPanel angeordnet.
-//		vp.add(label);
-//		vp.add(contactGrid);
-//		vp.add(Buttonpanel);
-//		
-//		//Die Buttons werden auf dem HorizontalPanel angeordnet
-//		
-//		Kontaktloeschen.addClickHandler(new loeschenClickHandler());
-//		Kontaktloeschen.setEnabled(false);
-//		Buttonpanel.add(Kontaktloeschen);
-//		
-//		Kontaktteilen.addClickHandler(new teilenClickHandler());
-//		Buttonpanel.add(Kontaktteilen);
-//		
-//		Kontaktbearbeiten.addClickHandler(new bearbeitenClickHandler());
-//		Buttonpanel.add(Kontaktbearbeiten);
-		
-	}
-
-		
-		
-		//Klassen welche die Clickhandler-Klasse implementieren
-	
-		//ChlickHandler um einen Kontakt zu loeschen (Bei Klick auf den "Kontakt loeschen"-Button)
-		private class loeschenClickHandler implements ClickHandler {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				//TODO: def. was passieren soll wenn man auf den Button klickt
-				if (contactToDisplay == null) {
-					Window.alert("kein Kontakt ausgewählt");
-				} else {
-					//contactSystemVerwaltung.delete(angezeigterKontakt,
-					//		new deleteContactCallback(angezeigterKontakt));
-				}
+			} else {
+				label.setText("Kontakt: ");
+				textBoxName.setText("");
+				textBoxNickName.setText("");
+				textBoxFirma.setText("");
+				textBoxTelefonnummer.setText("");
+				textBoxMobilnummer.setText("");
+				textBoxEmail.setText("");
+				textBoxGeburtsdatum.setText("");
+				textBoxAdresse.setText("");
+				
+				deleteButton.setEnabled(false);
+				editButton.setEnabled(false);
+				shareButton.setEnabled(false);
 			}
 		}
-			
-			//Clickhandler um einen Kontakt zu Teilen (Bei Klick auf den "Kontakt Teilen"-Button)
-			private class teilenClickHandler implements ClickHandler {
+		
 
-				@Override
-				public void onClick(ClickEvent event) {
-					//TODO: def. was passieren soll wenn man auf den Button klickt
-					//Kontakt bei anderem User speichern und gemeinsame Bearbeitung ermöglichen
-					Window.alert("Kontakt wurde geteilt");
-					}
-				}
+		
 			
-			//Chlickhandler um einen Kontakt zu bearbeiten (Bei Klick auf den "Kontakt bearbeiten"-Button)
-			private class bearbeitenClickHandler implements ClickHandler {
-
-				@Override
-				public void onClick(ClickEvent event) {
-					//TODO: def. was passieren soll wenn man auf den Button klickt
-					Window.alert("Änderungen wurden gespeichert");
-					}
-				}
 			
-			class deleteContactCallback implements AsyncCallback<Void> {
+			
+			private class deleteContactCallback implements AsyncCallback<Void> {
 
 				Contact contact = null;
 
@@ -281,38 +309,59 @@ public class ContactForm extends VerticalPanel{
 				@Override
 				public void onSuccess(Void result) {
 					if (contact != null) {
-						setSelected(null);
+						this.setSelected(null);
 						ctvm.removeContact(contact);
 					}
 				}
 
 
+			}	
+			
+			
+			
+
+			/**
+			 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
+			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
+			 * 
+			 */
+			private class EditClickHandler implements ClickHandler {
+				@Override
+				public void onClick(ClickEvent event) {
+					if (contactToDisplay != null) {
+						Vector <PropertyValue> pv = new Vector <PropertyValue>();
+						pv = contactToDisplay.getPropertyValues();
+						
+						for(PropertyValue p : pv) {
+						
+						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
+						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
+						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
+						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
+						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
+						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
+						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
+						}
+						bankVerwaltung.save(customerToDisplay, new SaveCallback());
+					} else {
+						Window.alert("kein Kunde ausgewählt");
+					}
+				}
 			}
-			// catvm setter
+			
+			
+			
+			
+			/*
+			 *  catvm setter
+			 */
+			
 			void setCatvm(ContactsTreeViewModel ctvm) {
 				this.ctvm = ctvm;
 			}
 			
-			/**
-			 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
-			 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
-			 * gefüllt bzw. gelöscht.
-			*/
-
-//				void setSelected(Contact c) {
-//					// TODO Auto-generated method stub
-//					if (c != null) {
-//						angezeigterKontakt = c;
-//						Kontaktloeschen.setEnabled(true);
-//						//TextBoxName.setText(c.getpropertyValue().getName()); //TODO: NACHBESSERN
-//					} else {
-//						TextBoxName.setText("");
-//						//TODO: Andere Propertys + PropertyValues füllen bzw. löschen
-//
-//						Kontaktloeschen.setEnabled(false);
-//					}
-//				}
-
 
 }
 
