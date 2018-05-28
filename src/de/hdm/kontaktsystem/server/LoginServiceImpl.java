@@ -24,7 +24,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		Contact own = new Contact();
 		PropertyValue name = new PropertyValue();
 		PropertyValue email = new PropertyValue();
-		System.out.println(requestUri);
+		System.out.println("Test: "+requestUri);
 		
 		if (guser != null) {			
 			
@@ -44,9 +44,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 				own.setOwner(user);
 				own.setName(name);
 				own.addPropertyValue(email);
-				PropertyValueMapper.propertyValueMapper().insert(name);
-				PropertyValueMapper.propertyValueMapper().insert(email);
-				UserMapper.userMapper().insert(user, own);
+				//PropertyValueMapper.propertyValueMapper().insert(name);
+				//PropertyValueMapper.propertyValueMapper().insert(email);
+				//UserMapper.userMapper().insert(user, own);
 			}else{
 				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
 			}

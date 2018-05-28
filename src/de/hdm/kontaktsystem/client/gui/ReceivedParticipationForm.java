@@ -84,8 +84,8 @@ public class ReceivedParticipationForm extends VerticalPanel{
 			if (participationToDisplay == null) {
 				Window.alert("kein Kunde ausgewählt");
 			} else {
-				contactSystemAdmin.delete(participationToDisplay,
-						new deleteParticipationCallback(participationToDisplay));
+				//contactSystemAdmin.delete(participationToDisplay,
+				//		new deleteParticipationCallback(participationToDisplay));
 			}
 		}
 	}
