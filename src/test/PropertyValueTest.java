@@ -241,7 +241,7 @@ public class PropertyValueTest {
 		u.setGoogleID(666);
 		contact.setBo_Id(28);
 		prop.setId(2);
-		PropertyValue pvInsert = new PropertyValue("Bussenstraße 23", "TestUser");
+		PropertyValue pvInsert = new PropertyValue("Bussenstraße 23");
 		pvInsert.setProperty(prop);
 		pvInsert.setContact(contact);
 		pvInsert.setOwner(u);
