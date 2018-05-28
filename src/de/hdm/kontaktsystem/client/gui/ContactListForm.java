@@ -76,7 +76,7 @@ public class ContactListForm extends VerticalPanel{
 		addButton.setEnabled(false);
 		contactListGrid.setWidget(4, 1, addButton);
 		
-		shareButton.addClickHandler(new shareClickHandler());
+		//shareButton.addClickHandler(new shareClickHandler());
 		shareButton.setEnabled(false);
 		contactListGrid.setWidget(5, 1, shareButton);
 		
@@ -121,8 +121,8 @@ class DeleteClickHandler implements ClickHandler {
 		if (contactListToDisplay == null) {
 			Window.alert("Keinen Kontaktliste ausgew�hlt");
 		}else {
-			contactSystem.delete(contactListToDisplay, 
-					new deleteContactListCallback(contactListToDisplay));
+			//contactSystem.delete(contactListToDisplay, 
+			//		new deleteContactListCallback(contactListToDisplay));
 		}
 	}
 }
@@ -160,8 +160,8 @@ class DeleteClClickHandler implements ClickHandler {
 		if (contactListToDisplay == null) {
 			Window.alert("keine Kontaktliste ausgew�hlt");
 		} else {
-			ContactSystem.deleteContactList(contactListToDisplay,
-					new deleteContactListCallback(contactListToDisplay));
+			//ContactSystem.deleteContactList(contactListToDisplay,
+			//		new deleteContactListCallback(contactListToDisplay));
 		}
 	}
 
@@ -196,7 +196,9 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 	}
 
 	void setSelected(ContactList cl) {
+		/*
 		if (cl != null) {
+			
 			contactListToDisplay = cl;
 			deleteButton.setEnabled(true);
 			nameContactList.setText(p.getParticipant().getContact().getpropertyValue().getName());
@@ -223,12 +225,14 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 
 			deleteButton.setEnabled(false);
 		}
+		*/
 	}
+		public void setSelected(Object object) {
+			// TODO Auto-generated method stub
+			
 
-}
+		}
 
-public void setSelected(Object object) {
-	// TODO Auto-generated method stub
-	
+
 
 }

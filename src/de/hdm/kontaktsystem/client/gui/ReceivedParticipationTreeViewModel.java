@@ -94,6 +94,7 @@ public class ReceivedParticipationTreeViewModel implements TreeViewModel {
 			// Erzeugen eines ListDataproviders für Participation-Daten
 			participationDataProvider = new ListDataProvider<Participation>();
 			//All Participations oder nur die für den User??
+			/*
 			contactSystemVerwaltung.getAllParticipations(new AsyncCallback<Vector<Participation>>() {
 						@Override
 						public void onFailure(Throwable t) {
@@ -106,12 +107,12 @@ public class ReceivedParticipationTreeViewModel implements TreeViewModel {
 							}
 						}
 					});
-
+			 */
 			// Return a node info that pairs the data with a cell.
-			return new DefaultNodeInfo<Participation>(participationDataProvider,
-					new MyParticipationCell(), selectionModel, null);
+			
 		}
-		
+		return new DefaultNodeInfo<Participation>(participationDataProvider,
+				new MyParticipationCell(), selectionModel, null);
 	}
 
 	@Override

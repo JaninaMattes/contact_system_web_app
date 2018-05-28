@@ -34,7 +34,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 		if (cl == null) {
 			return null;
 		}
-		return new Integer(Integer.parseInt(String.valueOf(cl.getContacts()+ " " + cl.getReference()))); //TODO: NACHBESSERN
+		return 1;//new Integer(Integer.parseInt(String.valueOf(cl.getContacts()+ " " + cl.getReference()))); //TODO: NACHBESSERN
 	}
 }
 	
@@ -102,9 +102,10 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 			}
 		
 		});
-		return new DefaultNodeInfo<ContactList>(contactListDataProvider, new ContactListCell(), selectionModel, null);
+		
 
 	}
+		return new DefaultNodeInfo<ContactList>(contactListDataProvider, new ContactListCell(), selectionModel, null);
 }
 	@Override
 	public boolean isLeaf(Object value) {

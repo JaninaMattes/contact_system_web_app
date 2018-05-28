@@ -8,6 +8,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.user.cellview.client.CellBrowser;
 import com.google.gwt.user.cellview.client.CellTree;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -96,10 +97,11 @@ public class ContactSystem implements EntryPoint {
 	
 	@Override
 	public void onModuleLoad() {
-
+		Window.alert("ModuleLoad");
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */
+		loadContactSystem();
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {	
@@ -112,6 +114,7 @@ public class ContactSystem implements EntryPoint {
 					loadContactSystem();
 				}else{
 					loadLogin();
+					
 				}
 			}
 		});	
@@ -140,7 +143,7 @@ public class ContactSystem implements EntryPoint {
 		
 		//Header mit SignOut-Link
 		//TODO: Überschrift und Logo hinzufügen
-		signOutLink.setHref(userInfo.getLogoutUrl());
+		//signOutLink.setHref(userInfo.getLogoutUrl());
 		signOutLink.setStyleName("link");
 		header.add(signOutLink);
 		RootPanel.get("Header").add(header);
