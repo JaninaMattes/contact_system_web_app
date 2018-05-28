@@ -99,13 +99,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ***************************************************************************
 	*/
 	
-	public void createUser(User user, Contact contact) {
-		uMapper.insert(user, contact);
-		
-	}
-	
-	public User getUserByEmail(String email){
-		return uMapper.findByEmail(email);
+	public User createUser(User u, Contact contact) {
+		return uMapper.insert(u, contact);
 		
 	}
 	
@@ -114,21 +109,20 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
+	// Nur für Report!
 	public Vector<User> getAllUsers(){
 		return uMapper.findAll();
 		
 	}
 	
+
 	public void saveUser(User user) { //?? TODO: Klären
 		uMapper.update(user);
 	}
 	
-	public void deleteUser(int id) {
-		uMapper.deleteByID(id);;
-	}
 	
-	public void deleteUser(User user) {
-		uMapper.delete(user);;
+	public User deleteUser(User user) {
+		return uMapper.delete(user);
 	}
 	
 	
@@ -138,6 +132,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ***************************************************************************
 	*/
 	
+
+	// Nur für Report!
 	public Vector<Contact> getAllContacts(){
 		return cMapper.findAllContacts();
 		
@@ -148,6 +144,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
+
 	public Contact getContactByID(int id) {
 		return cMapper.findContactById(id);
 		
@@ -156,15 +153,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public void createContactForUser(Contact contact) { //??? TOOD: Klären 
 		cMapper.insertContact(contact);		
 	}
-	
-	
-	public void addContactToList(Contact contact, ContactList contactList) {
-		clMapper.addContactToContactlist(contactList, contact);
-	}
-	
-	public void removeContactToList(Contact contact, ContactList contactList) {
-		clMapper.removeContactFromContactList(contactList, contact);
-	}
+
 	
 	public void shareBusinessObjectWith(BusinessObject reference, User participant) {
 		Participation part = new Participation();
@@ -172,283 +161,192 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		part.setReference(reference);
 		
 		partMapper.insertParticipation(part);
+		
 	}
-	
-	
-	public Vector<PropertyValue> getPropertyValuesOfContact(Contact contact) {
-		return propValMapper.findBy(contact);
-	}
-	
-	
-	public void createContact(Contact contact) {
-		cMapper.insertContact(contact);
+		
+	public Contact createContactForUser(User u) {
+		return cMapper.insertContact(u.getUserContact());
 		
 	}
 	
-	public void createContactList(ContactList contactList) {
-		clMapper.insertContactList(contactList);
+	public ContactList addContactToList(Contact contact, ContactList contactList) {
+		return clMapper.addContactToContactlist(contactList, contact);
+		 
+	}
+	public ContactList removeContactToList(Contact contact, ContactList contactList) {
+		return clMapper.removeContactFromContactList(contactList, contact);
+
+	}
+	
+	
+	public Contact createContact(Contact contact) {
+		return cMapper.insertContact(contact);
+		
+	}
+	
+	public ContactList createContactList(ContactList contactList) {
+		return clMapper.insertContactList(contactList);
 			
 	}	
 	
-	public void createPropertyValue(PropertyValue propertyValue) {
-		propValMapper.insert(propertyValue);
+	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
+		return propValMapper.insert(propertyValue);
 	}
 	
 	
 	public Vector <ContactList> getContactListByName(String name) {
 		return clMapper.findContactListByName(name);
 		
+	}	
+
+	public User editUser(User user) {
+		return uMapper.update(user);		
 	}
 	
-	public void editUser(User user) { // TODO: Klären, doppelte Methode
-		uMapper.update(user);
+	public Contact editContact(Contact contact) {
+		return cMapper.updateContact(contact);
 		
-	}
+	}	
 	
-	public void editContact(Contact contact) {
-		cMapper.updateContact(contact);
-		
-	}
-	
-	
-	public void editPropertyValue(PropertyValue propertyValue) {
-		propValMapper.update(propertyValue);
+	public PropertyValue editPropertyValue(PropertyValue propertyValue) {
+		return propValMapper.update(propertyValue);
 	}
 	
 	
 	
 
-	public void deleteContact(Contact contact) {
-		cMapper.deleteContact(contact);
+	public Contact deleteContact(Contact contact) {
+		return cMapper.deleteContact(contact);
 	}
 	
-	public void deleteContactList(ContactList contactList) {
-		clMapper.deleteContactList(contactList);
+	public ContactList deleteContactList(ContactList contactList) {
+		return clMapper.deleteContactList(contactList);
 	}
 	
-	
-	public void deletePropertyValue(int id) {
-		propValMapper.deleteByPropValue(id);
-	}
 
-
+	// Benötigt?
 	@Override
 	public ContactSystem getContactSystem() {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	// Kein Mapper? Rückgabewert?
+	@Override
+	public ContactSystem setContactSystem(ContactSystem cs) {
 		return null;
 	}
 
 
 	@Override
-	public void setContactSystem(ContactSystem cs) {
-		// TODO Auto-generated method stub
-		
+	public User getUserBygMail(String gMail) {
+		return uMapper.findByEmail(gMail);
 	}
 
 
-	@Override
-	public User getUserByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Contact getContactOf() {
-		// TODO Auto-generated method stub
-		return null;
+	public Contact getContactOf(User u) {
+		return cMapper.findOwnContact(u);
 	}
 
 
 	@Override
 	public Contact getContactById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return cMapper.findContactById(id);
 	}
 
 
-	@Override
-	public Contact createContactForUser(User u) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-
-	@Override
-	public void shareContact(User participant) {
-		// TODO Auto-generated method stub
+	public Participation shareContactWith(Participation part) {
+		return partMapper.insertParticipation(part);
 		
 	}
 
-
+	// Nur für Report!
 	@Override
 	public Vector<ContactList> getAllContactLists() {
-		// TODO Auto-generated method stub
-		return null;
+		return clMapper.findAllContactLists();
 	}
 
 
 	@Override
 	public ContactList getContactListById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return clMapper.findContactListById(id);
 	}
 
 
 	
 
 	@Override
-	public void shareContactList(User participant) {
-		// TODO Auto-generated method stub
+	public Participation shareContactListWith(Participation part) {
+		return partMapper.insertParticipation(part);
 		
 	}
 
 
 	@Override
-	public void sharePropertyValueOfContact() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public PropertyValue sharePropertyValueOfContact(Contact c) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public PropertyValue getPropertyValuesForContact(Contact c) {
-		// TODO Auto-generated method stub
-		return null;
+	public Participation sharePropertyValueOfContact(Contact c, Participation part) {
+		return partMapper.insertParticipation(part);
 	}
 
 
 	@Override
 	public PropertyValue getPropertyValueForContactByName(String name, Contact c) {
-		// TODO Auto-generated method stub
-		return null;
+		return propValMapper.findName(c);
 	}
 
 
 	@Override
-	public Vector<Participation> getAllParticipationsByOwner(User owner) {
-		// TODO Auto-generated method stub
-		return null;
+	public Vector<Participation> getAllParticipationsByOwner(User u) {
+		return partMapper.findParticipationsByOwner(u);
 	}
 
 
 	@Override
 	public Vector<Participation> getAllParticipationsByParticipant(User participant) {
-		// TODO Auto-generated method stub
-		return null;
+		return partMapper.findParticipationsByParticipant(participant);
 	}
 
 
 	@Override
-	public String getNameOfContact() {
-		// TODO Auto-generated method stub
-		return null;
+	public PropertyValue getNameOfContact(Contact c) {
+		return propValMapper.findName(c);
 	}
 
 
 	@Override
-	public User createUser() {
-		// TODO Auto-generated method stub
-		return null;
+	public Participation createParticipation(Participation part) {
+		return partMapper.insertParticipation(part);
 	}
 
 
 	@Override
-	public Contact createContact() {
-		// TODO Auto-generated method stub
-		return null;
+	public ContactList editContactList(ContactList cl) {
+		return clMapper.updateContactList(cl);
 	}
 
 
 	@Override
-	public ContactList createContactList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Property createProperty() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public PropertyValue createPropertyValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Participation createParticipation(BusinessObject reference, User participant) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public User editUser() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Contact editContact() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public ContactList editContactList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Property editProperty() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public PropertyValue editPropertyValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public void deleteProperty(Property p) {
-		// TODO Auto-generated method stub
+	public Participation deleteParticipation(Participation p) {
+		return partMapper.deleteParticipation(p);
 		
 	}
 
+	@Override
+	public PropertyValue deletePropertyValue(PropertyValue pv) {
+		return propValMapper.delete(pv);
+	}
 
 	@Override
-	public void deletePropertyValue(PropertyValue pv) {
-		// TODO Auto-generated method stub
-		
+	public Vector<PropertyValue> getPropertyValuesForContact(Contact c) {
+		return propValMapper.findBy(c);
+	}
+
+	@Override
+	public User saveUser(User u, Contact c) {
+		return uMapper.insert(u, c);
 	}
 
 
-	@Override
-	public void deleteParticipation(Participation p) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	
 	

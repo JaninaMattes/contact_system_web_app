@@ -82,7 +82,7 @@ public class ContactForm extends VerticalPanel{
 		
 		contactGrid.setWidget(0, 0, label);
 		contactGrid.setWidget(0, 1, labelName);
-		
+
 		contactGrid.setWidget(1, 0, textBoxName);
 		contactGrid.setWidget(1, 1, labelNickName);
 		
@@ -126,6 +126,15 @@ public class ContactForm extends VerticalPanel{
 		shareButton.addClickHandler(new ShareClickHandler());
 		shareButton.setEnabled(false);
 		contactGrid.setWidget(10, 1, textBoxAdresse);		
+		
+		//Die TextBox um den Kontakt einzugeben, das Label und das Panel für die Buttons werden 
+		//untereinander auf dem VerticalPanel angeordnet.
+		vp.add(label);
+		vp.add(contactGrid);
+		vp.add(Buttonpanel);
+		
+		//Die Buttons zum löschen, teilen und bearbeiten eines Kontakts 
+		//werden auf dem HorizontalPanel angeordnet.
 		
 		/**
 		 * Click Handler Button zum löschen von Kontakten.
@@ -218,16 +227,15 @@ public class ContactForm extends VerticalPanel{
 
 		
 		
-		//Klassen erstellen welche die Clickhandler-Klasse implementieren
+		//Klassen welche die Clickhandler-Klasse implementieren
 	
 		//ChlickHandler um einen Kontakt zu loeschen (Bei Klick auf den "Kontakt loeschen"-Button)
 		private class loeschenClickHandler implements ClickHandler {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
 				//TODO: def. was passieren soll wenn man auf den Button klickt
-				if (angezeigterKontakt == null) {
+				if (contactToDisplay == null) {
 					Window.alert("kein Kontakt ausgewählt");
 				} else {
 					//contactSystemVerwaltung.delete(angezeigterKontakt,
@@ -241,10 +249,9 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 					//TODO: def. was passieren soll wenn man auf den Button klickt
+					//Kontakt bei anderem User speichern und gemeinsame Bearbeitung ermöglichen
 					Window.alert("Kontakt wurde geteilt");
-						//TODO: Verbindung
 					}
 				}
 			
@@ -253,12 +260,11 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 					//TODO: def. was passieren soll wenn man auf den Button klickt
 					Window.alert("Änderungen wurden gespeichert");
-						//TODO: Verbindung
 					}
 				}
+			
 			class deleteContactCallback implements AsyncCallback<Void> {
 
 				Contact contact = null;
@@ -292,6 +298,7 @@ public class ContactForm extends VerticalPanel{
 			 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
 			 * gefüllt bzw. gelöscht.
 			*/
+
 //				void setSelected(Contact c) {
 //					// TODO Auto-generated method stub
 //					if (c != null) {
@@ -305,6 +312,7 @@ public class ContactForm extends VerticalPanel{
 //						Kontaktloeschen.setEnabled(false);
 //					}
 //				}
+
 
 }
 
