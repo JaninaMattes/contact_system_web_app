@@ -81,7 +81,7 @@ public class ContactListMapper {
 				cl.setName(rs.getString("contactList_name"));
 				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
-				findContactFromList(cl);
+				cl.setContacts(findContactFromList(cl));
 				contactList.add(cl);
 
 			}
@@ -142,6 +142,7 @@ public class ContactListMapper {
 				cl.setName(rs.getString("contactList_name"));
 				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
+				cl.setContacts(findContactFromList(cl));
 				return cl;
 			}
 		} catch (SQLException e) {
@@ -182,6 +183,7 @@ public class ContactListMapper {
 				cl.setName(rs.getString("contactList_name"));
 				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
+				cl.setContacts(findContactFromList(cl));
 				cll.add(cl);
 			}
 			return cll;
@@ -212,6 +214,7 @@ public class ContactListMapper {
 				cl.setName(rs.getString("contactList_name"));
 				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
+				cl.setContacts(findContactFromList(cl));
 				cll.add(cl);
 			}
 			return cll;

@@ -238,7 +238,42 @@ public class PropertyValueMapper {
 	 */
 
 	 public Vector <PropertyValue> findAllCreated(User u) {	
-		 return null; 
+
+			Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
+
+			Connection con = DBConnection.connection();
+
+			try {
+				PreparedStatement stmt = con.prepareStatement
+						("SELECT PropertyValue.ID, PropertyValue.value, Property.description, Property.ID " 
+						+ "FROM PropertyValue "
+						+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
+						+ "INNER JOIN BusinessObject ON BusinessObject.bo_ID = PropertyValue.ID "
+						+ "WHERE BusinessObject.user_ID = ? " 
+						+ "ORDER BY property_ID"
+							);
+						stmt.setDouble(1, u.getGoogleID());
+						stmt.execute();
+						ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+					PropertyValue propValue = new PropertyValue();
+					Property prop = new Property();
+					propValue.setBo_Id(rs.getInt("id"));
+					propValue.setValue(rs.getString("value"));
+					prop.setDescription(rs.getString("description"));
+					propValue.setProperty(prop);
+					// Hinzufügen des neuen Objekts zum Ergebnisvektor
+					propValueResult.addElement(propValue);
+					
+				}
+			
+			return propValueResult;
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return null; 
 		 
 	 }
 
@@ -427,7 +462,7 @@ public class PropertyValueMapper {
 			
 			if(val.getProperty().getId() == 1) {
 				name = val; 
-				System.out.println("Contact name:" + val.getProperty().getPropertyValues());
+				//System.out.println("Contact name:" + val.getProperty().getPropertyValues());
 			}
 		}	
 		////System.out.println("Name: " + name);

@@ -241,21 +241,21 @@ public class ContactMapper {
 			
 		try {			
 			PreparedStatement stmt = con.prepareStatement(
-					  "SELECT c.* , pv.*, bo.* " 
+					  "SELECT * " 
 					+ "FROM  Contact c "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
-					+ "Inner JOIN PropertyValue pv ON pv.contact_ID = c.ID "
 					+ "WHERE c.ID = ? "); 
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {						
 				Contact contact = new Contact();
-				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("bo.user_ID")));
-				contact.setBo_Id(rs.getInt("bo.bo_ID"));
-				contact.setShared_status(rs.getBoolean("bo.status"));
-				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
-				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
+				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
+				contact.setBo_Id(rs.getInt("bo_ID"));
+				contact.setShared_status(rs.getBoolean("status"));
+				contact.setCreationDate(rs.getTimestamp("creationDate"));
+				contact.setModifyDate(rs.getTimestamp("modificationDate"));
+				contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
 				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
 				//System.out.println("contact id: " + contact.getBo_Id());
 

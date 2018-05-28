@@ -133,10 +133,13 @@ public class BusinessObjectMapper implements Serializable {
 	  public BusinessObject findBusinessObjectByID(int id) {
 		  	  
 		BusinessObject bo = null;
-		 	  
+		
+		
 		if(bo == null) bo = ContactMapper.contactMapper().findContactById(id);
 		 
+		
 		if(bo == null) bo = ContactListMapper.contactListMapper().findContactListById(id);
+		
 		
 		if(bo == null) bo = PropertyValueMapper.propertyValueMapper().findByKey(id);
 		  	 
