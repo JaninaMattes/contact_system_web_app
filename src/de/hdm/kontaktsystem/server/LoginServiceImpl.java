@@ -46,7 +46,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 				own.addPropertyValue(email);
 				//PropertyValueMapper.propertyValueMapper().insert(name);
 				//PropertyValueMapper.propertyValueMapper().insert(email);
-				//UserMapper.userMapper().insert(user, own);
+				UserMapper.userMapper().insert(user, own);
 			}else{
 				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
 			}
