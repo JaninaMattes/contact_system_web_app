@@ -108,7 +108,7 @@ public class MyParticipationForm extends VerticalPanel{
 
 		Participation participation = null;
 
-		deleteParticipationCallback(Participation p) {
+		void deleteParticipationCallback(Participation p) {
 			participation = p;
 		}
 

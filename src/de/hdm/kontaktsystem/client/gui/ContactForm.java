@@ -167,21 +167,51 @@ public class ContactForm extends VerticalPanel{
 		vp.add(buttonPanel);
 		
 		/**
-		 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
+		 * Die Änderung eines Kontos bezieht sich auf seinen Vor- und/oder
 		 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
 		 * 
 		 */
 		
-		private class ChangeClickHandler implements ClickHandler {
+		private class EditClickHandler implements ClickHandler {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (customerToDisplay != null) {
-					customerToDisplay.setFirstName(firstNameTextBox.getText());
-					customerToDisplay.setLastName(lastNameTextBox.getText());
-					bankVerwaltung.save(customerToDisplay, new SaveCallback());
+					Vector <PropertyValue> pv = new Vector <PropertyValue>();
+					pv = contactToDisplay.getPropertyValues();	
+					
+					for(PropertyValue p : pv) {
+						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
+						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
+						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
+						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
+						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
+						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
+						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
+						}
+					contactSystemVerwaltung.createContact(contactToDisplay, new EditCallback());
 				} else {
-					Window.alert("kein Kunde ausgewählt");
+					Window.alert("kein Bearbeitungsfeld ausgewählt");
 				}
+			}
+		}
+		
+		/*
+		 * Die Änderungen an einem Kontakt erfolgen über den 
+		 * Aufruf der Service-Methode "update"
+		 */
+
+		private class EditCallback implements AsyncCallback<Void> {
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Die Änderungen konnten nicht gespeichert werden!");
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
+				ctvm.updateContat(contactToDisplay);
 			}
 		}
 		
@@ -192,11 +222,11 @@ public class ContactForm extends VerticalPanel{
 		 * 
 		 */
 		
-		private class SaveClickHandler implements ClickHandler {
+		// TODO: private
+		class SaveClickHandler implements ClickHandler {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (contactToDisplay != null) {
-					
+				if (contactToDisplay != null) {					
 					Vector <PropertyValue> pv = new Vector <PropertyValue>();
 					pv = contactToDisplay.getPropertyValues();
 									
@@ -215,7 +245,7 @@ public class ContactForm extends VerticalPanel{
 					
 					contactSystemVerwaltung.save(contactToDisplay, new SaveCallback());
 				} else {
-					Window.alert("kein Kunde ausgewählt");
+					Window.alert("kein Kontakt ausgewählt");
 				}
 			}
 		}
@@ -238,6 +268,153 @@ public class ContactForm extends VerticalPanel{
 				ctvm.updateContat(contactToDisplay);
 			}
 		}
+		
+		/*
+		 * Die Löschung eines Kontaktes über die Eingabefelder erfolgt über den 
+		 * Aufruf der Service-Methode "update"
+		 */
+			private class DeleteContactCallback implements AsyncCallback<Void> {
+
+				Contact contact = null;
+				public void deleteContactCallback(Contact c) {
+					contact = c;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Löschen des Kontakts ist fehlgeschlagen!");
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					if (contact != null) {
+						setSelected(null);
+						ctvm.removeContact(contact);
+					}
+				}
+			}
+			
+			/*
+			 * Die Änderungen an einem Kontakt erfolgen über den 
+			 * Aufruf der Service-Methode "update"
+			 */
+
+			private class DeleteCallback implements AsyncCallback<Void> {
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Kontkt konnte nicht gelöscht werden!");
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
+					ctvm.removeContact(contactToDisplay);
+				}
+			}
+			
+			/**
+			 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
+			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
+			 * 
+			 */
+			private class ShareClickHandler implements ClickHandler {
+				@Override
+				public void onClick(ClickEvent event) {
+					if (contactToDisplay != null) {
+						Vector <PropertyValue> pv = new Vector <PropertyValue>();
+						pv = contactToDisplay.getPropertyValues();
+						
+						for(PropertyValue p : pv) {
+						
+						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
+						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
+						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
+						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
+						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
+						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
+						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
+						}
+						
+						// TODO !!! 
+						
+						//String partMail = TextBoxShareTo.getText();
+						//if(partMail != null) -> Finde das UserObjekt aus der DB zur zugehörigen Email
+						
+						contactSystemVerwaltung.shareContactWith(participant, new ShareCallback()); ;
+					} else {
+						Window.alert("kein Kunde ausgewählt");
+					}
+				}
+			}
+			
+			/*
+			 * Die Änderungen an einem Kontakt erfolgen über den 
+			 * Aufruf der Service-Methode "update"
+			 */
+
+			private class ShareCallback implements AsyncCallback<Void> {
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Der Kontakt konnte nicht geteilt werden!");
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
+					ctvm.updateContat(contactToDisplay);
+				}
+			}
+			
+			/**
+			 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
+			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
+			 * 
+			 */
+			private class CancelClickHandler implements ClickHandler {
+				@Override
+				public void onClick(ClickEvent event) {
+					if (contactToDisplay != null) {
+						Vector <PropertyValue> pv = new Vector <PropertyValue>();
+						pv = contactToDisplay.getPropertyValues();
+						
+						for(PropertyValue p : pv) {
+						
+						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
+						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
+						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
+						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
+						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
+						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
+						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
+						}
+						//contactSystemVerwaltung.wait(); //TODO: Methode hierfür prüfen
+						//-> remove cancelButton/saveButton and show editButton/deleteButton
+					} else {
+						Window.alert("kein Kunde ausgewählt");
+					}
+				}
+			}
+			
+			/**
+			 * 
+			 */
+
+			private class CancelCallback implements AsyncCallback<Void> {
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Der Kontakt konnte nicht geteilt werden!");
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
+					ctvm.updateContat(contactToDisplay);
+				}
+			}
 			
 		
 		/**
@@ -287,73 +464,7 @@ public class ContactForm extends VerticalPanel{
 				shareButton.setEnabled(false);
 			}
 		}
-		
-
-		
-			
-			
-			
-			private class deleteContactCallback implements AsyncCallback<Void> {
-
-				Contact contact = null;
-
-				deleteContactCallback(Contact c) {
-					contact = c;
-				}
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Löschen des Kontakts ist fehlgeschlagen!");
-				}
-
-				@Override
-				public void onSuccess(Void result) {
-					if (contact != null) {
-						this.setSelected(null);
-						ctvm.removeContact(contact);
-					}
-				}
-
-
-			}	
-			
-			
-			
-
-			/**
-			 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
-			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
-			 * 
-			 */
-			private class EditClickHandler implements ClickHandler {
-				@Override
-				public void onClick(ClickEvent event) {
-					if (contactToDisplay != null) {
-						Vector <PropertyValue> pv = new Vector <PropertyValue>();
-						pv = contactToDisplay.getPropertyValues();
-						
-						for(PropertyValue p : pv) {
-						
-						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
-						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
-						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
-						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
-						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
-						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
-						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
-						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
-						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
-						}
-						bankVerwaltung.save(customerToDisplay, new SaveCallback());
-					} else {
-						Window.alert("kein Kunde ausgewählt");
-					}
-				}
-			}
-			
-			
-			
-			
+				
 			/*
 			 *  catvm setter
 			 */
