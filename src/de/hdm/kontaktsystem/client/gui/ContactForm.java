@@ -55,15 +55,6 @@ public class ContactForm extends VerticalPanel{
 	private Label labelGeburtsdatum = new Label("Geburtsdatum:");
 	private Label labelAdresse = new Label("Adresse:");
 	
-	private Label statusName = new Label("");
-	private Label statusNickName = new Label("");
-	private Label statusFirma = new Label("");
-	private Label statusTeleNr = new Label("");
-	private Label statusMobilNr = new Label("");
-	private Label statusEmail = new Label("");
-	private Label statusGeburtsdatum = new Label("");
-	private Label statusAdresse = new Label("");
-	
 	private Button deleteButton = new Button("Kontakt löschen");
 	private Button shareButton = new Button("Kontakt teilen");
 	private Button editButton = new Button("Kontakt bearbeiten");
@@ -195,7 +186,7 @@ public class ContactForm extends VerticalPanel{
 		vp.add(contactGrid);
 		vp.add(buttonPanel);
 		
-	
+	}
 		/**
 		 * Die Änderung eines Kontos bezieht sich auf seinen Vor- und/oder
 		 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
@@ -285,9 +276,8 @@ public class ContactForm extends VerticalPanel{
 		 * Aufruf der Service-Methode "update"
 		 */
 
-
 		class SaveCallback implements AsyncCallback <Contact> {
-
+			
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Die Änderungen konnten nicht gespeichert werden!");
@@ -336,7 +326,7 @@ public class ContactForm extends VerticalPanel{
 		 * Die Löschung eines Kontaktes über die Eingabefelder erfolgt über den 
 		 * Aufruf der Service-Methode "update"
 		 */
-			class DeleteContactCallback implements AsyncCallback<Contact> {
+			private class DeleteContactCallback implements AsyncCallback<Void> {
 
 				Contact contact = null;
 				public void deleteContactCallback(Contact c) {
@@ -349,7 +339,7 @@ public class ContactForm extends VerticalPanel{
 				}
 
 				@Override
-				public void onSuccess(Contact result) {
+				public void onSuccess(Void result) {
 					if (contact != null) {
 						setSelected(null);
 						ctvm.removeContact(contact);
@@ -357,43 +347,10 @@ public class ContactForm extends VerticalPanel{
 				}
 			}
 			
-			/**
-			 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
-			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "remove".
-			 * 
+			/*
+			 * Die Änderungen an einem Kontakt erfolgen über den 
+			 * Aufruf der Service-Methode "update"
 			 */
-
-			class DeleteClickHandler implements ClickHandler {
-				@Override
-				public void onClick(ClickEvent event) {
-					if (contactToDisplay != null) {
-						Vector <PropertyValue> pv = new Vector <PropertyValue>();
-						pv = contactToDisplay.getPropertyValues();
-						
-						for(PropertyValue p : pv) {
-						
-						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
-						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
-						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
-						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
-						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
-						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
-						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
-						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
-						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
-						}
-						
-						// TODO !!! 
-						
-						//String partMail = TextBoxShareTo.getText();
-						//if(partMail != null) -> Finde das UserObjekt aus der DB zur zugehörigen Email
-						
-						contactSystemVerwaltung.shareContactWith(participant, new ShareCallback()); ;
-					} else {
-						Window.alert("kein Kunde ausgewählt");
-					}
-			}		
-
 
 			class DeleteCallback implements AsyncCallback<Contact> {
 				@Override
@@ -404,7 +361,6 @@ public class ContactForm extends VerticalPanel{
 				@Override
 				public void onSuccess(Contact result) {
 					ctvm.removeContact(contactToDisplay);					
-
 				}
 			}
 			
@@ -413,8 +369,7 @@ public class ContactForm extends VerticalPanel{
 			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
 			 * 
 			 */
-			
-			class ShareClickHandler implements ClickHandler {
+			private class ShareClickHandler implements ClickHandler {
 				@Override
 				public void onClick(ClickEvent event) {
 					if (contactToDisplay != null) {
@@ -453,7 +408,6 @@ public class ContactForm extends VerticalPanel{
 			 */
 
 			private class ShareCallback implements AsyncCallback<Participation> {
-
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("Der Kontakt konnte nicht geteilt werden!");
@@ -471,7 +425,7 @@ public class ContactForm extends VerticalPanel{
 			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
 			 * 
 			 */
-			class CancelClickHandler implements ClickHandler {
+			private class CancelClickHandler implements ClickHandler {
 				@Override
 				public void onClick(ClickEvent event) {
 					if (contactToDisplay != null) {
@@ -502,7 +456,7 @@ public class ContactForm extends VerticalPanel{
 			 * 
 			 */
 
-			class CancelCallback implements AsyncCallback<Void> {
+			private class CancelCallback implements AsyncCallback<Void> {
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("Der Kontakt konnte nicht geteilt werden!");
@@ -570,13 +524,7 @@ public class ContactForm extends VerticalPanel{
 			
 			void setCatvm(ContactsTreeViewModel ctvm) {
 				this.ctvm = ctvm;
-			}		
-
-		}
-	
+			}
 			
-	}
 
 }
-
-
