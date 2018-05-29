@@ -223,7 +223,7 @@ public class ParticipationMapper {
 	 * Einfügen einer neuen Teilhaberschaft in die Datenbank
 	 * @param participation
 	 */
-	public void insertParticipation(Participation participation) {
+	public Participation insertParticipation(Participation participation) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -235,8 +235,8 @@ public class ParticipationMapper {
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
-		
 		BusinessObjectMapper.businessObjectMapper().setStatusTrue(participation.getReferenceID());
+		return null;
 	}
 	
 	
@@ -314,7 +314,7 @@ public class ParticipationMapper {
 		}
 	}
 	
-	public void deleteParticipation(Participation part) {
+	public Participation deleteParticipation(Participation part) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -334,6 +334,8 @@ public class ParticipationMapper {
 		if(participations.isEmpty()) {
 			BusinessObjectMapper.businessObjectMapper().setStatusFalse(part.getReferenceID());
 		}
+		
+		return null;
 		
 	}
 	

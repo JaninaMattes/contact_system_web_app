@@ -52,7 +52,9 @@ public class MyParticipationForm extends VerticalPanel{
 	 * Button zum Löschen der Participation
 	 */
 	Button deleteButton = new Button("Löschen");
-	
+  //Button editButton = new Button("Bearbeiten");
+  //Button saveButton = new Button("Speichern");
+  //Button cancelButton = new Button("Abbrechen");
 	
 	/**
 	 * Beim Anzeigen werden die anderen Widgets erzeugt. Alle werden in
@@ -106,7 +108,7 @@ public class MyParticipationForm extends VerticalPanel{
 
 		Participation participation = null;
 
-		deleteParticipationCallback(Participation p) {
+		void deleteParticipationCallback(Participation p) {
 			participation = p;
 		}
 

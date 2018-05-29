@@ -17,34 +17,25 @@ import de.hdm.kontaktsystem.shared.bo.User;
 @RemoteServiceRelativePath("editor")
 public interface ContactSystemAdministration extends RemoteService {
 	
-	//Wo wird das hier verwendet?
-	public ContactSystem getContactSystem();
-	
-	public void setContactSystem(ContactSystem cs);
-	
-	
 	public User getUserByID(int id);
 	
-	public User getUserByName(String name);
+	public User getUserBygMail(String gMail);
 	
 	public Vector<User> getAllUsers();
 	
 	//Aus Klassendiagramm: was genau macht diese Methode? save = update?
-	public void saveUser(User u);
+	public User saveUser(User u, Contact c);
 	
 	
-	public Vector<Contact> getAllContacts();
+	public Vector<Contact> getAllContacts(); 
 	
 	//Aus Klassendiagramm: was genau macht diese Methode?
-	public Contact getContactOf();
+	public Contact getContactOf(User u);
 	
 	public Contact getContactById(int id);
 	
 	//Erstellen des eigenen Kontakts eines Users
 	public Contact createContactForUser(User u);
-	
-	//Aufruf von createParticipation
-	public void shareContact(User participant);
 	
 	
 	public Vector<ContactList> getAllContactLists();
@@ -53,74 +44,71 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<ContactList> getContactListByName(String name);
 	
-	//Aufruf von createParticipation
-	public void shareContactList(User participant);
-	
-	public void sharePropertyValueOfContact();
-	
 	
 	//Aus Klassendiagramm: Kann das so stimmen?
-	public PropertyValue sharePropertyValueOfContact(Contact c);
-	
-	public PropertyValue getPropertyValuesForContact(Contact c);
+	public Participation sharePropertyValueOfContact(Contact c, Participation part);
 	
 	public PropertyValue getPropertyValueForContactByName(String name, Contact c);
+
 	
+	public ContactList addContactToList(Contact c, ContactList cl);
 	
-	public Vector<Participation> getAllParticipationsByOwner(User owner);
-	
-	public Vector<Participation> getAllParticipationsByParticipant(User participant);
-	
-	
-	public void addContactToList(Contact c, ContactList cl);
-	
-	public String getNameOfContact();
+	public PropertyValue getNameOfContact(Contact c);
 
 	/**
 	 * Create
 	 */
 	//Zu klären: was wird jeweils bei create übergeben?
-	public User createUser();
+	public User createUser(User u, Contact c);
 	
-	public Contact createContact();
+	public Contact createContact(Contact c);
 	
-	public ContactList createContactList();
+	public ContactList createContactList(ContactList cl);
 	
-	public Property createProperty(); //?
+	public PropertyValue createPropertyValue(PropertyValue pv);
 	
-	public PropertyValue createPropertyValue();
-	
-	public Participation createParticipation(BusinessObject reference, User participant);
+	//Rückgabe von Participation Objekt anhand GUI Eingabe?
+	public Participation createParticipation(Participation part);
 
 	/**
 	 * Update
 	 */
 	//Zu klären: was wird jeweils als Parameter übergeben?
-	public User editUser();
+	public User editUser(User u);
 	
-	public Contact editContact();
+	public Contact editContact(Contact c);
 	
-	public ContactList editContactList();
+	public ContactList editContactList(ContactList cl);
 	
-	public Property editProperty(); //?
-	
-	public PropertyValue editPropertyValue();
+	public PropertyValue editPropertyValue(PropertyValue pv);
 	
 	
 	/**
 	 * Delete
 	 */
-	public void deleteUser(User u);
+	public User deleteUser(User u);
 	
-	public void deleteContact(Contact c);
+	public Contact deleteContact(Contact c);
 	
-	public void deleteContactList(ContactList cl);
+	public ContactList deleteContactList(ContactList cl);
 	
-	public void deleteProperty(Property p); //?
+	public PropertyValue deletePropertyValue(PropertyValue pv);
 	
-	public void deletePropertyValue(PropertyValue pv);
+	public Participation deleteParticipation(Participation p);
 	
-	public void deleteParticipation(Participation p);
+	public ContactList removeContactFromList(Contact contact, ContactList contactList);
+	
+
+	public Participation shareContactWith(Participation part);
+	
+	public Participation shareContactListWith(Participation part);
+	
+	public Vector<PropertyValue> getPropertyValuesForContact(Contact c);
+	
+	public Vector<Participation> getAllParticipationsByOwner(User u);
+
+	
+	public Vector<Participation> getAllParticipationsByParticipant(User participant);
 
 
 }

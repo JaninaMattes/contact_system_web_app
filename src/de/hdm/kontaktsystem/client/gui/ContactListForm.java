@@ -19,11 +19,12 @@ import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
+import de.hdm.kontaktsystem.shared.bo.User;
 
 //Anzeige und Bearbeiten einer Kontaktliste
 
 public class ContactListForm extends VerticalPanel{
-	ContactSystemAdministrationAsync contactSystem = ClientsideSettings.getContactAdministration();
+	ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
 	ContactList contactListToDisplay = null;
 	ContactListsTreeViewModel cltvm = null;
 	
@@ -46,7 +47,7 @@ public class ContactListForm extends VerticalPanel{
 	//Label sharedContactLabel = new Label("X");
 	
 	/**
-	 * Lï¿½schenbutton um eine Kontaktliste zu lï¿½schen.
+	 * Loeschenbutton um eine Kontaktliste zu loeschen.
 	 */
 
 	Button addButton = new Button ("Kontakt der Liste hinzufï¿½gen");
@@ -56,7 +57,8 @@ public class ContactListForm extends VerticalPanel{
 
 	public void onLoad() {
 		super.onLoad();
-		
+		// Keine Tabelle sondern ein VertialPanel / ScrollPanel dem Kontaktelemente aus dem ContactVector hinzugefügt werden.
+		// ... Mit einer while oder for-each Schleife die Kontakt-Elemente erzeugen.
 		Grid contactListGrid = new Grid(8, 2);
 		this.add(contactListGrid);
 		
@@ -76,9 +78,11 @@ public class ContactListForm extends VerticalPanel{
 		addButton.setEnabled(false);
 		contactListGrid.setWidget(4, 1, addButton);
 		
-		//shareButton.addClickHandler(new shareClickHandler());
+		shareButton.addClickHandler(new shareClickHandler());
 		shareButton.setEnabled(false);
 		contactListGrid.setWidget(5, 1, shareButton);
+		
+		//deleteButton kommt in das Kontakt-Element rein. Es löscht einzelne Kontakte aus der Liste.
 		
 		deleteButton.addClickHandler(new DeleteClickHandler());
 		deleteButton.setEnabled(false);
@@ -101,54 +105,82 @@ public class ContactListForm extends VerticalPanel{
 	}
 }
 
-//class shareClickHandler implements ClickHandler {
-//	public void onClick(ClickEvent event) {
-//		if (contactListToDisplay == null) {
-//			Window.alert("Keine Kontaktliste ausgewï¿½hlt");
-//		} else {
-//			contactSystemVerwaltung.
-//		}
-//	}
-//}
+	class shareClickHandler implements ClickHandler {
+		public void onClick(ClickEvent event) {
+			if (contactListToDisplay == null) {
+				Window.alert("Keine Kontaktliste ausgewï¿½hlt");
+			} else {
+				User u = new User();
+				u.setGMail("NeuerUser@gmail.com"); // Testdaten, sollte beim Teilen über ein Popup abgefragt werden.
+				Participation part = new Participation();
+				part.setParticipant(u); 
+				part.setReference(contactListToDisplay);
+				contactSystemAdmin.shareContactListWith(part,
+						new shareContactListWithCallback(part));
+				//ALTERNATIV: contactSystemAdmin.createParticipation(contactListToDisplay, u , new AsyncCallback<Participation>() { 
+				//In andere NestedKlasse ausgliedern, wie bei "delete Clickhandler"
+			}
+		}
+	}
+	class shareContactListWithCallback implements AsyncCallback<Participation> {
+
+		Participation participation = null;
+	
+		shareContactListWithCallback(Participation part) {
+			participation = part;
+		}
+	
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			// User nicht gefunden
+		}
+	
+		//@Override
+		public void onSuccess(Participation result) {
+			// Eventuell ein Update der Liste
+			
+			Window.alert("KontaktListe wurde erfolgreich geteilt.");
+		}
+				
+	}
+		
 
 /**
- * ClickHandler zum Lï¿½schen eines Kontaktes in einer Kontaktliste
+ * ClickHandler zum Loeschen eines Kontaktes in einer Kontaktliste
  */
 
 class DeleteClickHandler implements ClickHandler {
 	
 	public void onClick(ClickEvent event) {
-		if (contactListToDisplay == null) {
-			Window.alert("Keinen Kontaktliste ausgewï¿½hlt");
+		/** Nach Erstellung der kompletten GUI, nochmals überprüfen, wie man den Kontakt übergeben kann um ihn mit einem X zu loeschen.
+		 if (contact == null) {
+			Window.alert("Keinen Kontakt ausgewï¿½hlt");
 		}else {
-			//contactSystem.delete(contactListToDisplay, 
-			//		new deleteContactListCallback(contactListToDisplay));
-		}
+			contactSystemAdmin.removeContactFromList(contact, contactListToDisplay, 
+					new deleteContactfromListCallback());
+		}*/
 	}
 }
-
-class deleteContactListCallback implements AsyncCallback<Void> {
+// NOCHMAL PRÜFEN
+class deleteContactfromListCallback implements AsyncCallback<ContactList> {
 	
-	ContactList contactList = null;
-	
-	deleteContactListCallback(ContactList cl){
-		contactList = cl;
-		}
 	
 	public void onFailure(Throwable caught) {
 		Window.alert("LÃ¶schen eines Kontaktes fehlgeschlagen");
 	}
 	
-	public void onSuccess(Void result) {
-		if (contactList != null) {
+	public void onSuccess(ContactList result) {
+		if (result != null) {
 			setSelected(null);
-			cltvm.removeContactList(contactList);
+			cltvm.removeContactList(result);
+			Window.alert("Kontakt wurde erfolgreich aus der Liste gelöscht");
 		}
 	}
 }
 
 /**
- * Clickhandler zum Lï¿½schen einer Kontaktliste.
+ * Clickhandler zum Loeschen einer Kontaktliste.
  * @author Marco
  *
  */
@@ -160,18 +192,12 @@ class DeleteClClickHandler implements ClickHandler {
 		if (contactListToDisplay == null) {
 			Window.alert("keine Kontaktliste ausgewï¿½hlt");
 		} else {
-			//ContactSystem.deleteContactList(contactListToDisplay,
-			//		new deleteContactListCallback(contactListToDisplay));
+			contactSystemAdmin.deleteContactList(contactListToDisplay,
+					new deleteContactListCallback());
 		}
 	}
 
-class deleteContactListCallback implements AsyncCallback<Void> {
-
-	ContactList contactList = null;
-
-	deleteContactListCallback(ContactList cl) {
-		contactList = cl;
-	}
+class deleteContactListCallback implements AsyncCallback<ContactList> {
 
 	@Override
 	public void onFailure(Throwable caught) {
@@ -179,10 +205,10 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 	}
 
 	@Override
-	public void onSuccess(Void result) {
-		if (contactList != null) {
+	public void onSuccess(ContactList result) {
+		if (result != null) {
 			setSelected(null);
-			cltvm.removeContactList(contactList);
+			cltvm.removeContactList(result);
 		}
 	}
 }
@@ -196,7 +222,7 @@ class deleteContactListCallback implements AsyncCallback<Void> {
 	}
 
 	void setSelected(ContactList cl) {
-		/*
+		
 		if (cl != null) {
 			
 			contactListToDisplay = cl;

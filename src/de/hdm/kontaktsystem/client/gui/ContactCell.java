@@ -13,7 +13,6 @@ public class ContactCell extends AbstractCell<Contact> {
 
 	@Override
 	public void render(Context context, Contact value, SafeHtmlBuilder sb) {
-		// TODO Auto-generated method stub
 		
 		
 	      // Value kann null sein

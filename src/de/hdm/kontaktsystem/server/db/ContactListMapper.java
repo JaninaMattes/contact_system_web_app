@@ -305,7 +305,7 @@ public class ContactListMapper {
 	 * @param ContactList-Objekt
 	 */
 
-	public void updateContactList(ContactList cl) {
+	public ContactList updateContactList(ContactList cl) {
 		BusinessObjectMapper.businessObjectMapper().update(cl);
 		Connection con = DBConnection.connection();
 
@@ -318,6 +318,8 @@ public class ContactListMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 
 	
@@ -446,7 +448,7 @@ public class ContactListMapper {
 	 * @param Contact-Objekt
 	 */
 
-	public void addContactToContactlist(ContactList cl, Contact c) {
+	public ContactList addContactToContactlist(ContactList cl, Contact c) {
 
 		Connection con = DBConnection.connection();
 		try {
@@ -459,6 +461,8 @@ public class ContactListMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return null;
+		
 	}
 
 	/**
@@ -468,7 +472,7 @@ public class ContactListMapper {
 	 * @param Contact-Objekt
 	 */
 
-	public void removeContactFromContactList(ContactList cl, Contact c) {
+	public ContactList removeContactFromContactList(ContactList cl, Contact c) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -481,6 +485,8 @@ public class ContactListMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 
 	}
 

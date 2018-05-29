@@ -86,11 +86,11 @@ public class ContactsTreeViewModel implements TreeViewModel {
 	
 	public <T> NodeInfo<?> getNodeInfo(T value) {
 
-			if(value.equals("Root")) {
-				
+			if(value.equals("Root")) {				
 				//Erzeugt eine ListDataProvider fuer Contact-Daten
 				ContactDataProvider = new ListDataProvider<Contact>();
 				contactSystemVerwaltung.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+					
 					public void onFailure(Throwable t) {
 				}
 			
@@ -115,6 +115,23 @@ public class ContactsTreeViewModel implements TreeViewModel {
 
 	public void removeContact(Contact contact) {
 		ContactDataProvider.getList().remove(contact);
+		
+	}
+	
+	 
+	public void updateContat(Contact contactToDisplay) {
+		
+		contactSystemVerwaltung.createContact(contactToDisplay, new AsyncCallback<Contact>() {			
+		public void onFailure(Throwable t) {
+			// TODO: Window Alert
+		}
+		
+		public void onSuccess(Contact contacts) {
+			ContactDataProvider.getList().add(contacts); 
+			}
+		});
+		
+	
 		
 	}
 
