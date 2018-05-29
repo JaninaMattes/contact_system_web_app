@@ -173,7 +173,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return clMapper.addContactToContactlist(contactList, contact);
 		 
 	}
-	public ContactList removeContactToList(Contact contact, ContactList contactList) {
+	public ContactList removeContactFromList(Contact contact, ContactList contactList) {
 		return clMapper.removeContactFromContactList(contactList, contact);
 
 	}

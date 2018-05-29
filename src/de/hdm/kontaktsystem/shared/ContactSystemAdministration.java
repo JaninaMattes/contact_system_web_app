@@ -101,7 +101,7 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Participation deleteParticipation(Participation p);
 	
-	public ContactList removeContactToList(Contact contact, ContactList contactList);
+	public ContactList removeContactFromList(Contact contact, ContactList contactList);
 	
 
 	public Participation shareContactWith(Participation part);
