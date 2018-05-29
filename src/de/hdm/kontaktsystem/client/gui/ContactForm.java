@@ -276,12 +276,9 @@ public class ContactForm extends VerticalPanel{
 		 * Aufruf der Service-Methode "update"
 		 */
 
-<<<<<<< HEAD
-		class SaveCallback implements AsyncCallback<Void> {
-=======
+
 		class SaveCallback implements AsyncCallback <Contact> {
-			
->>>>>>> master
+
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Die Änderungen konnten nicht gespeichert werden!");
@@ -330,7 +327,7 @@ public class ContactForm extends VerticalPanel{
 		 * Die Löschung eines Kontaktes über die Eingabefelder erfolgt über den 
 		 * Aufruf der Service-Methode "update"
 		 */
-			class DeleteContactCallback implements AsyncCallback<Void> {
+			class DeleteContactCallback implements AsyncCallback<Contact> {
 
 				Contact contact = null;
 				public void deleteContactCallback(Contact c) {
@@ -343,7 +340,7 @@ public class ContactForm extends VerticalPanel{
 				}
 
 				@Override
-				public void onSuccess(Void result) {
+				public void onSuccess(Contact result) {
 					if (contact != null) {
 						setSelected(null);
 						ctvm.removeContact(contact);
@@ -356,7 +353,7 @@ public class ContactForm extends VerticalPanel{
 			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "remove".
 			 * 
 			 */
-<<<<<<< HEAD
+
 			class DeleteClickHandler implements ClickHandler {
 				@Override
 				public void onClick(ClickEvent event) {
@@ -386,7 +383,7 @@ public class ContactForm extends VerticalPanel{
 					} else {
 						Window.alert("kein Kunde ausgewählt");
 					}
-=======
+
 
 			class DeleteCallback implements AsyncCallback<Contact> {
 				@Override
@@ -397,7 +394,7 @@ public class ContactForm extends VerticalPanel{
 				@Override
 				public void onSuccess(Contact result) {
 					ctvm.removeContact(contactToDisplay);					
->>>>>>> master
+
 				}
 			}
 			
@@ -444,11 +441,8 @@ public class ContactForm extends VerticalPanel{
 			 * Aufruf der Service-Methode "update"
 			 */
 
-<<<<<<< HEAD
-			class ShareCallback implements AsyncCallback<Void> {
-=======
 			private class ShareCallback implements AsyncCallback<Participation> {
->>>>>>> master
+
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("Der Kontakt konnte nicht geteilt werden!");
