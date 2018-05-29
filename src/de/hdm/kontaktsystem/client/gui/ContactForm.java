@@ -39,7 +39,6 @@ public class ContactForm extends VerticalPanel{
 	private TextBox textBoxName = new TextBox();
 	private TextBox textBoxNickName = new TextBox();
 	private TextBox textBoxFirma = new TextBox();
-	//private TextBox textBoxTitel = new TextBox();
 	private TextBox textBoxTelefonnummer = new TextBox();
 	private TextBox textBoxMobilnummer = new TextBox();
 	private TextBox textBoxEmail = new TextBox();
@@ -60,8 +59,8 @@ public class ContactForm extends VerticalPanel{
 	private Button deleteButton = new Button("Kontakt löschen");
 	private Button shareButton = new Button("Kontakt teilen");
 	private Button editButton = new Button("Kontakt bearbeiten");
-	private Button saveButton = new Button("Kontakt bearbeiten");
-	private Button cancelButton = new Button("Kontakt bearbeiten");
+	private Button saveButton = new Button("Kontakt speichern");
+	private Button cancelButton = new Button("Änderungen verwerfen");
 	
 	/**
 	 * Instanziieren der Panels
@@ -106,6 +105,7 @@ public class ContactForm extends VerticalPanel{
 		
 		contactGrid.setWidget(8, 0, labelAdresse);
 		contactGrid.setWidget(8, 1, textBoxAdresse);
+	
 		
 		/** 
 		 * Click Handler Button zum editieren von Inhalten
@@ -166,12 +166,13 @@ public class ContactForm extends VerticalPanel{
 		vp.add(contactGrid);
 		vp.add(buttonPanel);
 		
+	}
 		/**
 		 * Die Änderung eines Kontos bezieht sich auf seinen Vor- und/oder
 		 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
 		 * 
 		 */
-		
+	
 		private class EditClickHandler implements ClickHandler {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -268,6 +269,32 @@ public class ContactForm extends VerticalPanel{
 				ctvm.updateContat(contactToDisplay);
 			}
 		}
+		class DeleteClickHandler implements ClickHandler {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (contactToDisplay != null) {					
+					Vector <PropertyValue> pv = new Vector <PropertyValue>();
+					pv = contactToDisplay.getPropertyValues();
+									
+					for(PropertyValue p : pv) {
+						
+						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
+						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
+						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
+						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
+						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
+						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
+						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
+						}
+					
+					contactSystemVerwaltung.delete(contactToDisplay, new SaveCallback());
+				} else {
+					Window.alert("kein Kontakt ausgewählt");
+				}
+			}
+		}
 		
 		/*
 		 * Die Löschung eines Kontaktes über die Eingabefelder erfolgt über den 
@@ -342,7 +369,9 @@ public class ContactForm extends VerticalPanel{
 						//String partMail = TextBoxShareTo.getText();
 						//if(partMail != null) -> Finde das UserObjekt aus der DB zur zugehörigen Email
 						
-						contactSystemVerwaltung.shareContactWith(participant, new ShareCallback()); ;
+						Participation Participation;
+						
+						contactSystemVerwaltung.shareContactWith(Participation, new ShareCallback()); ;
 					} else {
 						Window.alert("kein Kunde ausgewählt");
 					}
