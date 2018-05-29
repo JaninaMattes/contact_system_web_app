@@ -176,7 +176,7 @@ public class ContactForm extends VerticalPanel{
 		private class EditClickHandler implements ClickHandler {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (customerToDisplay != null) {
+				if (contactToDisplay != null) {
 					Vector <PropertyValue> pv = new Vector <PropertyValue>();
 					pv = contactToDisplay.getPropertyValues();	
 					
@@ -203,15 +203,15 @@ public class ContactForm extends VerticalPanel{
 		 * Aufruf der Service-Methode "update"
 		 */
 
-		private class EditCallback implements AsyncCallback<Void> {
+		private class EditCallback implements AsyncCallback <Contact> {
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Die Änderungen konnten nicht gespeichert werden!");
 			}
 
 			@Override
-			public void onSuccess(Void result) {
-				// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
+			public void onSuccess(Contact result) {
+				// TODO Auto-generated method stub
 				ctvm.updateContat(contactToDisplay);
 			}
 		}
@@ -244,7 +244,7 @@ public class ContactForm extends VerticalPanel{
 						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
 						}
 					
-					contactSystemVerwaltung.save(contactToDisplay, new SaveCallback());
+					contactSystemVerwaltung.createContact(contactToDisplay, new SaveCallback());
 				} else {
 					Window.alert("kein Kontakt ausgewählt");
 				}
@@ -252,7 +252,7 @@ public class ContactForm extends VerticalPanel{
 		}
 		
 		
-		/*
+		/**
 		 * Die Änderungen an einem Kontakt erfolgen über den 
 		 * Aufruf der Service-Methode "update"
 		 */
@@ -265,10 +265,15 @@ public class ContactForm extends VerticalPanel{
 
 			@Override
 			public void onSuccess(Void result) {
-				// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
 				ctvm.updateContat(contactToDisplay);
 			}
 		}
+		
+		/**
+		 * 
+		 * @author janin
+		 *
+		 */
 		class DeleteClickHandler implements ClickHandler {
 			@Override
 			public void onClick(ClickEvent event) {
