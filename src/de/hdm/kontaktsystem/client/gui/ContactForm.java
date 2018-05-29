@@ -294,7 +294,7 @@ public class ContactForm extends VerticalPanel{
 						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
 						}
 					
-					contactSystemVerwaltung.delete(contactToDisplay, new SaveCallback());
+					contactSystemVerwaltung.delete(contactToDisplay, new DeleteCallback());
 				} else {
 					Window.alert("kein Kontakt ausgewählt");
 				}
@@ -334,7 +334,7 @@ public class ContactForm extends VerticalPanel{
 			private class DeleteCallback implements AsyncCallback<Void> {
 				@Override
 				public void onFailure(Throwable caught) {
-					Window.alert("Kontkt konnte nicht gelöscht werden!");
+					Window.alert("Kontakt konnte nicht gelöscht werden!");
 				}
 
 				@Override
