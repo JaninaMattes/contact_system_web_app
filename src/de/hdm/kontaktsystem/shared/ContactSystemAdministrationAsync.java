@@ -112,7 +112,7 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void deleteParticipation(Participation p, AsyncCallback<Participation> callback);
 	
-	public void removeContactToList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback);
+	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback);
 
 
 
