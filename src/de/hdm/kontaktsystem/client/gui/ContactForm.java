@@ -75,7 +75,7 @@ public class ContactForm extends VerticalPanel{
 	
 	
 	
-	public void onLoad() {
+	public void  onLoad() {
 		super.onLoad();
 		
 		Grid contactGrid = new Grid(14, 2);
