@@ -55,6 +55,15 @@ public class ContactForm extends VerticalPanel{
 	private Label labelGeburtsdatum = new Label("Geburtsdatum:");
 	private Label labelAdresse = new Label("Adresse:");
 	
+	private Label statusName = new Label("");
+	private Label statusNickName = new Label("");
+	private Label statusFirma = new Label("");
+	private Label statusTeleNr = new Label("");
+	private Label statusMobilNr = new Label("");
+	private Label statusEmail = new Label("");
+	private Label statusGeburtsdatum = new Label("");
+	private Label statusAdresse = new Label("");
+	
 	private Button deleteButton = new Button("Kontakt löschen");
 	private Button shareButton = new Button("Kontakt teilen");
 	private Button editButton = new Button("Kontakt bearbeiten");
@@ -186,7 +195,7 @@ public class ContactForm extends VerticalPanel{
 		vp.add(contactGrid);
 		vp.add(buttonPanel);
 		
-	}
+	
 		/**
 		 * Die Änderung eines Kontos bezieht sich auf seinen Vor- und/oder
 		 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
@@ -383,6 +392,7 @@ public class ContactForm extends VerticalPanel{
 					} else {
 						Window.alert("kein Kunde ausgewählt");
 					}
+			}		
 
 
 			class DeleteCallback implements AsyncCallback<Contact> {
@@ -403,6 +413,7 @@ public class ContactForm extends VerticalPanel{
 			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
 			 * 
 			 */
+			
 			class ShareClickHandler implements ClickHandler {
 				@Override
 				public void onClick(ClickEvent event) {
@@ -559,12 +570,13 @@ public class ContactForm extends VerticalPanel{
 			
 			void setCatvm(ContactsTreeViewModel ctvm) {
 				this.ctvm = ctvm;
-			}
-			
-			
+			}		
 
-}
+		}
 	
+			
+	}
+
 }
 
 
