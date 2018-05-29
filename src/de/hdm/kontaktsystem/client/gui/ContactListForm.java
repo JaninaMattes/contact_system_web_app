@@ -227,21 +227,9 @@ class deleteContactListCallback implements AsyncCallback<ContactList> {
 			
 			contactListToDisplay = cl;
 			deleteButton.setEnabled(true);
-			nameContactList.setText(p.getParticipant().getContact().getpropertyValue().getName());
+			nameContactList.setText(cl.getName());
 			
-			if(cl.getReferencedObject() instanceof Contact) {
-		    	  Contact c = (Contact) cl.getReferencedObject();
-		    	  sharedObject.setText(c.getpropertyValue().getName());
-		    	  objectType.setText("Kontakt");
-		      }else if(cl.getReferencedObject() instanceof ContactList) {
-		    	  ContactList cl = (ContactList) cl.getReferencedObject();
-		    	  objectType.setText("Kontaktliste");
-		      }else if(cl.getReferencedObject() instanceof PropertyValue) {
-		    	  PropertyValue pv = (PropertyValue) cl.getReferencedObject();
-		    	  objectType.setText("Eigenschaftswert");
-		      }
-			
-			sharedDate.setText(cl.getReferencedObject().getModifyDate().toString());
+
 			
 		} else {
 			nameContactList.setText("");
@@ -251,7 +239,7 @@ class deleteContactListCallback implements AsyncCallback<ContactList> {
 
 			deleteButton.setEnabled(false);
 		}
-		*/
+		
 	}
 		public void setSelected(Object object) {
 			// TODO Auto-generated method stub

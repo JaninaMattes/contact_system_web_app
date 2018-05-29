@@ -17,11 +17,6 @@ import de.hdm.kontaktsystem.shared.bo.User;
 @RemoteServiceRelativePath("editor")
 public interface ContactSystemAdministration extends RemoteService {
 	
-	//Wo wird das hier verwendet?
-	public ContactSystem getContactSystem();
-	
-	public ContactSystem setContactSystem(ContactSystem cs);
-	
 	public User getUserByID(int id);
 	
 	public User getUserBygMail(String gMail);
