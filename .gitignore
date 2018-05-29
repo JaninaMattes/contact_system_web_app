@@ -54,6 +54,5 @@ war/WEB-INF/classes/
 /.gwt
 /build/
 
-# Kompilierte Dateien ignorieren
-*.js
-*.png
+# Kompilierte Dateien in Kontaktsystem Ordner ignorieren
+war/kontaktsystem
