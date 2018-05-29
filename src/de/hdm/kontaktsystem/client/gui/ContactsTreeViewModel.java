@@ -125,7 +125,7 @@ public class ContactsTreeViewModel implements TreeViewModel {
 		}
 		
 		public void onSuccess(Contact contacts) {
-			ContactDataProvider.getList().add(contactToDisplay); // TODO: Überprüfen!!
+			ContactDataProvider.getList().add(contacts); 
 			}
 		});
 		
