@@ -53,3 +53,6 @@ war/WEB-INF/classes/
 /.settings
 /.gwt
 /build/
+
+# Kompilierte Dateien in Kontaktsystem Ordner ignorieren
+war/kontaktsystem

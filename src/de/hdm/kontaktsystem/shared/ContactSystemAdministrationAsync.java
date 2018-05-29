@@ -18,13 +18,7 @@ public interface ContactSystemAdministrationAsync {
 
 	public void shareContactWith(Participation part, AsyncCallback<Participation> callback);
 	
-	public void sharePropertyValueOfContact(Contact c, Participation part, AsyncCallback<Participation> callback);
-
-	//Wo wird das hier verwendet?
-	public void getContactSystem(AsyncCallback<ContactSystem> callback);
-	
-	public void setContactSystem(ContactSystem cs, AsyncCallback<ContactSystem> callback);
-	
+	public void sharePropertyValueOfContact(Contact c, Participation part, AsyncCallback<Participation> callback);	
 	
 	public void getUserByID(int id, AsyncCallback<User> callback);
 	
