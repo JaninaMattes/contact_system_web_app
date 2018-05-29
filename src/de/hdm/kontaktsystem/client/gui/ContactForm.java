@@ -256,7 +256,7 @@ public class ContactForm extends VerticalPanel{
 		 * Aufruf der Service-Methode "update"
 		 */
 
-		private class SaveCallback implements AsyncCallback<Void> {
+		class SaveCallback implements AsyncCallback<Void> {
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Die Änderungen konnten nicht gespeichert werden!");
@@ -273,7 +273,7 @@ public class ContactForm extends VerticalPanel{
 		 * Die Löschung eines Kontaktes über die Eingabefelder erfolgt über den 
 		 * Aufruf der Service-Methode "update"
 		 */
-			private class DeleteContactCallback implements AsyncCallback<Void> {
+			class DeleteContactCallback implements AsyncCallback<Void> {
 
 				Contact contact = null;
 				public void deleteContactCallback(Contact c) {
@@ -294,21 +294,40 @@ public class ContactForm extends VerticalPanel{
 				}
 			}
 			
-			/*
-			 * Die Änderungen an einem Kontakt erfolgen über den 
-			 * Aufruf der Service-Methode "update"
+			/**
+			 * Die Änderung eines Kunden bezieht sich auf seinen Vor- und/oder
+			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "remove".
+			 * 
 			 */
-
-			private class DeleteCallback implements AsyncCallback<Void> {
+			class DeleteClickHandler implements ClickHandler {
 				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Kontkt konnte nicht gelöscht werden!");
-				}
-
-				@Override
-				public void onSuccess(Void result) {
-					// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
-					ctvm.removeContact(contactToDisplay);
+				public void onClick(ClickEvent event) {
+					if (contactToDisplay != null) {
+						Vector <PropertyValue> pv = new Vector <PropertyValue>();
+						pv = contactToDisplay.getPropertyValues();
+						
+						for(PropertyValue p : pv) {
+						
+						//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
+						if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
+						if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
+						if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
+						if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
+						if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
+						if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
+						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
+						}
+						
+						// TODO !!! 
+						
+						//String partMail = TextBoxShareTo.getText();
+						//if(partMail != null) -> Finde das UserObjekt aus der DB zur zugehörigen Email
+						
+						contactSystemVerwaltung.shareContactWith(participant, new ShareCallback()); ;
+					} else {
+						Window.alert("kein Kunde ausgewählt");
+					}
 				}
 			}
 			
@@ -317,7 +336,7 @@ public class ContactForm extends VerticalPanel{
 			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
 			 * 
 			 */
-			private class ShareClickHandler implements ClickHandler {
+			class ShareClickHandler implements ClickHandler {
 				@Override
 				public void onClick(ClickEvent event) {
 					if (contactToDisplay != null) {
@@ -354,7 +373,7 @@ public class ContactForm extends VerticalPanel{
 			 * Aufruf der Service-Methode "update"
 			 */
 
-			private class ShareCallback implements AsyncCallback<Void> {
+			class ShareCallback implements AsyncCallback<Void> {
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("Der Kontakt konnte nicht geteilt werden!");
@@ -372,7 +391,7 @@ public class ContactForm extends VerticalPanel{
 			 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
 			 * 
 			 */
-			private class CancelClickHandler implements ClickHandler {
+			class CancelClickHandler implements ClickHandler {
 				@Override
 				public void onClick(ClickEvent event) {
 					if (contactToDisplay != null) {
@@ -403,7 +422,7 @@ public class ContactForm extends VerticalPanel{
 			 * 
 			 */
 
-			private class CancelCallback implements AsyncCallback<Void> {
+			class CancelCallback implements AsyncCallback<Void> {
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("Der Kontakt konnte nicht geteilt werden!");
@@ -472,6 +491,7 @@ public class ContactForm extends VerticalPanel{
 			void setCatvm(ContactsTreeViewModel ctvm) {
 				this.ctvm = ctvm;
 			}
+			
 			
 
 }

@@ -114,13 +114,11 @@ public class ContactsTreeViewModel implements TreeViewModel {
 	}
 
 	public void removeContact(Contact contact) {
-		ContactDataProvider.getList().remove(contact);
-		
+		ContactDataProvider.getList().remove(contact);		
 	}
 	
 	 
-	public void updateContat(Contact contactToDisplay) {
-		
+	public void updateContat(Contact contactToDisplay) {		
 		contactSystemVerwaltung.createContact(contactToDisplay, new AsyncCallback<Contact>() {			
 		public void onFailure(Throwable t) {
 			// TODO: Window Alert
