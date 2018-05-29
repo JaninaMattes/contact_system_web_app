@@ -1,29 +1,29 @@
 body {
-	margin: 0 auto;
+	margin: 0 auto; /*Der Wert wird horizontal zentriert */
     text-align: center;  /* Zentrierung im Internet Explorer */
-    display: block;
+    display: block; /*Block-Elemente */
     }
 
 div {
-	border: solid 2px black;
+	border: solid 2px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
 }
 
 h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 20px;
-  text-align: center;
+  font-size: 2em; /*Schriftgröße*/
+  font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+  color: #777777; /*Schriftfarbe*/
+  margin: 40px 0px 20px; /*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
+  text-align: center; /*zentriert*/
 }
 
 .link{
-    border: solid 2px black ;
-    text-decoration: none;
-    color: black;
-    padding: 10px;
-    text-shadow: 1px 1px #DCDCDC;
-    box-shadow:  2px 2px #DCDCDC;
-    background: #FAFAFA;
+    border: solid 2px black ;/*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
+    text-decoration: none; /*Links werden nicht unterstrichen dargestellt */
+    color: black; /*Textfarbe*/
+    padding: 10px; /*Abstand des Rahmens zum Inhalt*/
+    text-shadow: 1px 1px #DCDCDC; /*Text-Schatten*/
+    box-shadow:  2px 2px #DCDCDC; /*Box mit Schattenverlauf (helles grau)*/
+    background: #FAFAFA; /*Hintergrundfarbe*/
 }
 
 #TopLevelFrame{
