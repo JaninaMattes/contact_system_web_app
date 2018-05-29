@@ -224,19 +224,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 
-	// Benötigt?
-	@Override
-	public ContactSystem getContactSystem() {
-		return null;
-	}
-
-
-	// Kein Mapper? Rückgabewert?
-	@Override
-	public ContactSystem setContactSystem(ContactSystem cs) {
-		return null;
-	}
-
 
 	@Override
 	public User getUserBygMail(String gMail) {
