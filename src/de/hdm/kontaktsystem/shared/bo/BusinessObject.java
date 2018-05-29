@@ -53,6 +53,9 @@ public class BusinessObject implements Serializable{
 	 */
 	private boolean shared_status = false; 
 	
+	public BusinessObject(){
+		
+	}
 		
 	/**
 	* Zurückgeben der ID.

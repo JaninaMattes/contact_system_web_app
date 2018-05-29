@@ -97,14 +97,16 @@ public class ContactSystem implements EntryPoint {
 	
 	@Override
 	public void onModuleLoad() {
-		Window.alert("ModuleLoad");
+		//Window.alert("ModuleLoad");
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */
 		loadContactSystem();
+		/*
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
-			public void onFailure(Throwable error) {	
+			public void onFailure(Throwable error) {
+				Window.alert("Login Error :(");
 			}
 				
 			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
@@ -118,6 +120,7 @@ public class ContactSystem implements EntryPoint {
 				}
 			}
 		});	
+		*/
 	}
 	
 	
@@ -125,6 +128,7 @@ public class ContactSystem implements EntryPoint {
 	 * Aufbau der Login-Seite
 	 */
 	private void loadLogin() {
+		Window.alert("Login :D");
 		signInLink.setHref(userInfo.getLoginUrl());
 		signInLink.setStyleName("link");
 		loginPanel.add(new HTML("<center>"));
@@ -132,7 +136,7 @@ public class ContactSystem implements EntryPoint {
 		loginPanel.add(new HTML("<br /> <br /> "));
 		loginPanel.add(signInLink);
 		loginPanel.add(new HTML("</center>"));
-		root.add(loginPanel);
+		RootPanel.get().add(loginPanel);
 	}
 		
 	
@@ -140,10 +144,10 @@ public class ContactSystem implements EntryPoint {
 	 * Aufbau der Startseite des Kontaktsystems
 	 */
 	public void loadContactSystem() {
-		
+		//Window.alert("Content :D");
 		//Header mit SignOut-Link
 		//TODO: Überschrift und Logo hinzufügen
-		//signOutLink.setHref(userInfo.getLogoutUrl());
+		if(userInfo != null){ signOutLink.setHref(userInfo.getLogoutUrl());}
 		signOutLink.setStyleName("link");
 		header.add(signOutLink);
 		RootPanel.get("Header").add(header);

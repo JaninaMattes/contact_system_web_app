@@ -30,7 +30,7 @@ public class DBConnection {
 				DriverManager.registerDriver(new AppEngineDriver());
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
 					
-					//System.out.println("Load Google Driver");
+					System.out.println("Load Google Driver");
                     // Load the class that provides the new
                     // "jdbc:google:mysql://" prefix.
                     Class.forName("com.mysql.jdbc.GoogleDriver");
