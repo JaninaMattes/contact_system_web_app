@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -28,7 +29,6 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 public class ContactForm extends VerticalPanel{
 	
-	//ContactSystemAdministrationAsync muss noch erstellt werden
 	ContactSystemAdministrationAsync contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact contactToDisplay = null;
 	ContactsTreeViewModel ctvm = null;
@@ -49,7 +49,6 @@ public class ContactForm extends VerticalPanel{
 	private Label labelName = new Label("Name:");
 	private Label labelNickName = new Label("Nick-Name:");
 	private Label labelFirma = new Label("Firma:");
-	//private Label labelTitel = new Label("Titel:");
 	private Label labelTeleNr = new Label("Telefonnummer:");
 	private Label labelMobilNr = new Label("Mobilnummer:");
 	private Label labelEmail = new Label("Email:");
@@ -61,6 +60,16 @@ public class ContactForm extends VerticalPanel{
 	private Button editButton = new Button("Kontakt bearbeiten");
 	private Button saveButton = new Button("Kontakt speichern");
 	private Button cancelButton = new Button("Änderungen verwerfen");
+	
+	private CheckBox checkBox1 = new CheckBox();
+	private CheckBox checkBox2 = new CheckBox();
+	private CheckBox checkBox3 = new CheckBox();
+	private CheckBox checkBox4 = new CheckBox();
+	private CheckBox checkBox5 = new CheckBox();
+	private CheckBox checkBox6 = new CheckBox();
+	private CheckBox checkBox7 = new CheckBox();
+	private CheckBox checkBox8 = new CheckBox();
+	private CheckBox checkBox9 = new CheckBox();
 	
 	/**
 	 * Instanziieren der Panels
@@ -141,8 +150,7 @@ public class ContactForm extends VerticalPanel{
 		
 		/**
 		 * Click Handler Button zum speichern von Kontakten. 
-		 */
-		
+		 */		
 		saveButton.addClickHandler(new SaveClickHandler());
 		saveButton.setEnabled(false);
 		buttonPanel.add(saveButton);
@@ -154,14 +162,26 @@ public class ContactForm extends VerticalPanel{
 		cancelButton.setEnabled(false);
 		buttonPanel.add(cancelButton);		
 		
-		
+		/*
+		 * CheckBoxen für das Teilen einzelner Elemente einr ContactForm 
+		 * per Default auf "false" setzen.
+		 */
+		checkBox1.setEnabled(false);
+	    checkBox2.setEnabled(false);
+	    checkBox3.setEnabled(false);
+	    checkBox4.setEnabled(false);
+	    checkBox5.setEnabled(false);
+	    checkBox6.setEnabled(false);
+	    checkBox7.setEnabled(false);
+	    checkBox8.setEnabled(false);
+	    checkBox9.setEnabled(false);
+	     
 		/**
 		 * Die TextBox um den Kontakt einzugeben, das Label und das Panel für die Buttons werden 
 		 * über das Grid Widget untereinander auf dem VerticalPanel angeordnet.
 		 * 
 		 * Ebenso werden alle Buttons auf dem HorizontalPanel für eine Button Leiste angeordnet. 
-		 */
-		
+		 */		
 		vp.add(label);
 		vp.add(contactGrid);
 		vp.add(buttonPanel);
@@ -171,8 +191,7 @@ public class ContactForm extends VerticalPanel{
 		 * Die Änderung eines Kontos bezieht sich auf seinen Vor- und/oder
 		 * Nachnamen. Es erfolgt der Aufruf der Service-Methode "save".
 		 * 
-		 */
-	
+		 */	
 		private class EditClickHandler implements ClickHandler {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -257,15 +276,16 @@ public class ContactForm extends VerticalPanel{
 		 * Aufruf der Service-Methode "update"
 		 */
 
-		private class SaveCallback implements AsyncCallback<Void> {
+		class SaveCallback implements AsyncCallback <Contact> {
+			
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Die Änderungen konnten nicht gespeichert werden!");
 			}
-
+			
 			@Override
-			public void onSuccess(Void result) {
-				ctvm.updateContat(contactToDisplay);
+			public void onSuccess(Contact result) {
+				ctvm.updateContat(contactToDisplay);				
 			}
 		}
 		
@@ -275,6 +295,7 @@ public class ContactForm extends VerticalPanel{
 		 *
 		 */
 		class DeleteClickHandler implements ClickHandler {
+			
 			@Override
 			public void onClick(ClickEvent event) {
 				if (contactToDisplay != null) {					
@@ -294,7 +315,7 @@ public class ContactForm extends VerticalPanel{
 						if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
 						}
 					
-					contactSystemVerwaltung.delete(contactToDisplay, new DeleteCallback());
+					contactSystemVerwaltung.deleteContact(contactToDisplay, new DeleteCallback()); 
 				} else {
 					Window.alert("kein Kontakt ausgewählt");
 				}
@@ -331,16 +352,15 @@ public class ContactForm extends VerticalPanel{
 			 * Aufruf der Service-Methode "update"
 			 */
 
-			private class DeleteCallback implements AsyncCallback<Void> {
+			class DeleteCallback implements AsyncCallback<Contact> {
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("Kontakt konnte nicht gelöscht werden!");
 				}
-
+				
 				@Override
-				public void onSuccess(Void result) {
-					// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
-					ctvm.removeContact(contactToDisplay);
+				public void onSuccess(Contact result) {
+					ctvm.removeContact(contactToDisplay);					
 				}
 			}
 			
@@ -374,9 +394,8 @@ public class ContactForm extends VerticalPanel{
 						//String partMail = TextBoxShareTo.getText();
 						//if(partMail != null) -> Finde das UserObjekt aus der DB zur zugehörigen Email
 						
-						Participation Participation;
-						
-						contactSystemVerwaltung.shareContactWith(Participation, new ShareCallback()); ;
+						Participation Participation = new Participation();						
+						contactSystemVerwaltung.shareContactWith(Participation, new ShareCallback()); 
 					} else {
 						Window.alert("kein Kunde ausgewählt");
 					}
@@ -388,15 +407,15 @@ public class ContactForm extends VerticalPanel{
 			 * Aufruf der Service-Methode "update"
 			 */
 
-			private class ShareCallback implements AsyncCallback<Void> {
+			private class ShareCallback implements AsyncCallback<Participation> {
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("Der Kontakt konnte nicht geteilt werden!");
 				}
 
+
 				@Override
-				public void onSuccess(Void result) {
-					// Die Änderung wird zum Kunden- und Kontenbaum propagiert.
+				public void onSuccess(Participation result) {
 					ctvm.updateContat(contactToDisplay);
 				}
 			}
