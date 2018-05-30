@@ -47,7 +47,7 @@ public class UserMapper {
 	 * @return User-Objekt
 	 */
 	
-	public User insert(User user){
+	public User insert(User user, Contact ownContact){
 		
 		Connection con = DBConnection.connection();
 		try{
@@ -56,7 +56,9 @@ public class UserMapper {
 			stmt.setString(2, user.getGMail());
 			if(stmt.executeUpdate() > 0) {
 				
-				return user;
+				ownContact.setOwner(user);
+				user.setUserContact(ContactMapper.contactMapper().insertContact(ownContact));
+				return update(user);
 			}
 			
 		}catch(SQLException e){
@@ -81,7 +83,7 @@ public class UserMapper {
 				User u = new User();				
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
-				c.setBo_Id(rs.getInt("own_Contact"));
+				c = ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
 				u.setUserContact(c);
 				userList.add(u);
 			}
@@ -111,7 +113,7 @@ public class UserMapper {
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));		
-				c.setBo_Id(rs.getInt("own_Contact"));
+				ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
 				u.setUserContact(c);
 				return u;	
 			}
@@ -139,8 +141,9 @@ public class UserMapper {
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));
-				c.setBo_Id(rs.getInt("own_Contact"));
+				c = ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
 				u.setUserContact(c);
+
 				return u;
 			}
 		}catch(SQLException e){
@@ -176,7 +179,6 @@ public class UserMapper {
 	
 	/**
 	 * Löscht alle einträge in der User Tabelle 
-	 * methode wird in dem regulären ablauf der Anwendung nicht verwendet
 	 */
 	public void deleteAll(){
 		
@@ -212,6 +214,9 @@ public class UserMapper {
 	 */
 	public int deleteByID(double id){
 		
+
+		ContactMapper.contactMapper().deleteAllContactsByUser(id);
+		ContactListMapper.contactListMapper().deleteContactListByUserId(id);
 		int i = 0;
 		
 		Connection con = DBConnection.connection();

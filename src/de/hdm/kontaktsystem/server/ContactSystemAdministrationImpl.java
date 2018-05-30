@@ -102,10 +102,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	*/
 	
 	public User createUser(User u, Contact contact) {
-		User user = uMapper.insert(u);
-		contact.setOwner(user);
-		user.setUserContact(ContactMapper.contactMapper().insertContact(contact));
-		return UserMapper.userMapper().update(user);
+		return uMapper.insert(u, contact);
 		
 	}
 	
@@ -120,26 +117,33 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		User user = uMapper.findByEmail(email);
 		user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
 		return user;
+
 		
 	}
 	
 	// Nur für Report!
 	public Vector<User> getAllUsers(){
-		Vector<User> userVector = uMapper.findAll();
-		for(User user : userVector){
-			user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
-		}
-		return userVector;
+		return uMapper.findAll();
 		
 	}
+
+	
+
+	public void saveUser(User user) { //?? TODO: Klären
+		uMapper.update(user);
+=======
 		
 	public User editUser(User user) {
 		return uMapper.update(user);		
+
 	}
 	
+	
 	public User deleteUser(User user) {
+
 		ContactMapper.contactMapper().deleteAllContactsByUser(user.getGoogleID());
 		deleteContactListByUserId(user.getGoogleID());
+
 		return uMapper.delete(user);
 	}
 	
@@ -313,10 +317,49 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	
+
+	public Vector <ContactList> getContactListByName(String name) {
+		return clMapper.findContactListByName(name);
+		
+	}	
+
+	public User editUser(User user) {
+		return uMapper.update(user);		
+	}
+	
+	public Contact editContact(Contact contact) {
+		return cMapper.updateContact(contact);
+		
+	}	
+	
+
 	public PropertyValue editPropertyValue(PropertyValue propertyValue) {
 		return propValMapper.update(propertyValue);
 	}
+		
 	
+
+	public Contact deleteContact(Contact contact) {
+		return cMapper.deleteContact(contact);
+	}
+	
+	public ContactList deleteContactList(ContactList contactList) {
+		return clMapper.deleteContactList(contactList);
+	}
+	
+
+
+	@Override
+	public User getUserBygMail(String gMail) {
+		return uMapper.findByEmail(gMail);
+	}
+
+
+	public Contact getContactOf(User u) {
+		return cMapper.findOwnContact(u);
+	}
+
+
 
 	@Override
 	public PropertyValue deletePropertyValue(PropertyValue pv) {
@@ -360,7 +403,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 
 
-	
+	@Override
+	public User saveUser(User u, Contact c) {
+		return uMapper.insert(u, c);
+	}
 
 
 	

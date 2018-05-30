@@ -22,7 +22,12 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getAllUsers(AsyncCallback<Vector<User>> callback);
 	
+<<<<<<< HEAD
+	//Aus Klassendiagramm: was genau macht diese Methode? save = update?
+	public void saveUser(User u, Contact c, AsyncCallback<User> callback);
+=======
 	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback);
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 	
 	public void getAllContacts(AsyncCallback<Vector<Contact>> callback);
 	

@@ -23,7 +23,14 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<User> getAllUsers();
 	
+<<<<<<< HEAD
+	//Aus Klassendiagramm: was genau macht diese Methode? save = update?
+	public User saveUser(User u, Contact c);
+	
+	
+=======
 	public Vector<Contact> getAllContactsFromUser(); 
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 	public Vector<Contact> getAllContacts(); 
 	
 	

@@ -74,7 +74,8 @@ public class ParticipationMapper {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
-				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
+				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
+						.findBy(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}
@@ -114,16 +115,18 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation participation = new Participation();
+				BusinessObject reference = new BusinessObject();
 				
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
-				participation.setParticipant(participant);	
+				participation.setParticipant(participant);				
+				reference = BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("bo_ID"));
 				//System.out.println(reference);
-				participation.setReference(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("bo_ID")));
+				participation.setReference(reference);
 				
 				participations.add(participation);
 				
 			    System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + participation.getReferencedObject().getBoId());
+				System.out.println("###### Participation object id: " + reference.getBoId());
 			}
 			return participations;
 			
@@ -153,11 +156,13 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
+				BusinessObject reference = new BusinessObject();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
-				p.setReference(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID")));
+				reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
+				p.setReference(reference);
 				System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + p.getReferencedObject().getBoId());
+				System.out.println("###### Participation object id: " + reference.getBoId());
 				participations.add(p);
 			}
 			return participations;
@@ -188,7 +193,7 @@ public class ParticipationMapper {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
-				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
+				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}

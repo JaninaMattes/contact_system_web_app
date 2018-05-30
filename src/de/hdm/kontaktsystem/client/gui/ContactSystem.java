@@ -316,6 +316,33 @@ public class ContactSystem implements EntryPoint {
 				
 				//TODO: Funktionalität
 				
+			    /**
+			     * Contact-Buttons (CSS)
+			     * 
+			     * Der Name, mit welchem der Add-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    addContactButton.addStyleName("AddContact");
+			    
+			    /**
+			     * Der Name, mit welchem der Edit-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    editContactButton.addStyleName("EditContact");
+			    
+			    /**
+			     * Der Name, mit welchem der Share-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    shareContactButton.addStyleName("ShareContact");
+			    
+			    /**
+			     * Der Name, mit welchem der Delete-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    deleteContactButton.addStyleName("DeleteContact");
+			    
+			    /**
+			     * Der Name, mit welchem der Search-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    searchContactButton.addStyleName("SearchContact");
+				
 				/**
 				 * Hinzufügen der Buttons zum modifyPanel
 				 */
