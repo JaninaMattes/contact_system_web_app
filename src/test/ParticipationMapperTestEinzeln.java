@@ -92,7 +92,7 @@ public class ParticipationMapperTestEinzeln {
 		*/
 		
 		System.out.println("\n ############ Test Participation deleteByBo ################ \n");		
-		BusinessObject b = boMapper.findBy(44);
+		BusinessObject b = boMapper.findBusinessObjectByID(44);
 		partMapper.deleteParticipationForBusinessObject(b);		
 	
 	}

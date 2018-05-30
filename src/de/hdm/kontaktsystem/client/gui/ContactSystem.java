@@ -1,27 +1,31 @@
 package de.hdm.kontaktsystem.client.gui;
 
+import java.util.Vector;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
-import com.google.gwt.user.cellview.client.CellBrowser;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HeaderPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.LoginService;
 import de.hdm.kontaktsystem.client.LoginServiceAsync;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
+import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
@@ -52,57 +56,89 @@ public class ContactSystem implements EntryPoint {
 	 */
 	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
 	
-//	Aus Bankbeispiel, hier notwendig?
-	/*
-//	 * Zunächst weisen wir der BankAdministration eine Bank-Instanz zu, die
-//	 * das Kreditinstitut repräsentieren soll, für das diese Applikation
-//	 * arbeitet.
-//	 */
-//	if (bankVerwaltung == null) {
-//		bankVerwaltung = ClientsideSettings.getBankVerwaltung();
-//	}
-//	Bank bank = new Bank();
-//	bank.setName("HdM Bank");
-//	bank.setStreet("Nobelstr. 10");
-//	bank.setZip(70569);
-//	bank.setCity("Stuttgart");
-//	bankVerwaltung.setBank(bank, new SetBankCallback());
-
-	
 
 	/** 
 	 * Instanziieren der GWT Widgets und Panels
 	 */
-	//Panels
-	private VerticalPanel navigation = new VerticalPanel();
-	private HorizontalPanel header = new HorizontalPanel();
 	
-	//Widgets
-	private Button ContactButton = new Button("Kontakte");
-	private Button ContactListsButton = new Button("Kontaktlisten");
-	private Button MyParticipationsButton = new Button("Von mir geteilt");
-	private Button ReceivedParticipationsButton = new Button("An mich geteilt");
+	//Buttons Menü links
+	private Button contactButton = new Button("Kontakte");
+	private Button contactListsButton = new Button("Kontaktlisten");
+	private Button myParticipationsButton = new Button("Von mir geteilt");
+	private Button receivedParticipationsButton = new Button("An mich geteilt");
+	//Trailer Text
+	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen	
+	private Label headerLabel = new Label ("Kontaktsystem");
+	private Image logo = new Image();
+			
+	//Symbole für Modify-Buttons
+	private Image createSymbol = new Image();
+	private Image updateSymbol = new Image();
+	private Image deleteSymbol = new Image();
+	private Image shareSymbol = new Image();
+		
+//	private Image saveSymbol = new Image();
+//	private Image cancelSymbol = new Image();
+//	//Symbole für ContactForm und ContactListForm
+//	private Image oneContactSymbol = new Image();
+//	private Image ContactListSymbol = new Image();
+//		
+//	//Symbole für Navigationsmenü-Buttons
+//	private Image contactsSymbol = new Image();
+//	private Image listSymbol = new Image(); //Alternatives Symbol für Kontaktliste
+	
+	private Image searchSymbol = new Image();
+			
+		
+	//Symbol für Cells (in Cell-Klasse verschieben?)
+	private Image chainSymbol = new Image(); //Symbol für Status geteilt/nicht geteilt
+	
+	//DockPanel als Root
+	DockPanel root = new DockPanel();
+	
+	//HeaderPanel
+	HorizontalPanel header = new HorizontalPanel();
+	
+	//Suchfunktion
+	TextBox search = new TextBox();
+	Button searchButton = new Button("Suche");
 
-	
+	//CellTree Model
+	ContactsTreeViewModel ctvm = new ContactsTreeViewModel();
+	ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+	MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+	ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+					
+	//Formulare
+	ContactForm cf = new ContactForm();
+	ContactListForm clf = new ContactListForm();
+	MyParticipationForm mpf = new MyParticipationForm();
+	ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+			
 	/**
 	 * Attribute für den Login
 	 */
 	private User userInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private VerticalPanel root = new VerticalPanel();
 	private Label loginLabel = new Label(
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen ");
 	private Anchor signInLink = new Anchor("Login mit Google");
 	private Anchor signOutLink = new Anchor("Logout");
 	
+	
+	/**
+	 * EntryPoint
+	 */
+	
 	@Override
 	public void onModuleLoad() {
-		//Window.alert("ModuleLoad");
+		
+		// Test -> loadContactSystem();
+		
 		/**
 		 * Login-Status feststellen mit LoginService
-		 */
-		loadContactSystem();
-		/*
+		 */		
+		
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
@@ -115,14 +151,12 @@ public class ContactSystem implements EntryPoint {
 				if(userInfo.isLoggedIn()){
 					loadContactSystem();
 				}else{
-					loadLogin();
-					
+					loadLogin();					
 				}
 			}
 		});	
-		*/
-	}
-	
+		
+	}	
 	
 	/**
 	 * Aufbau der Login-Seite
@@ -141,57 +175,83 @@ public class ContactSystem implements EntryPoint {
 		
 	
 	/**
-	 * Aufbau der Startseite des Kontaktsystems
+	 * Aufbau der Startseite des Kontaktsystems. Elemente werden in Listenform dargestellt, 
+	 * ausgewählte Elemente werden als Formulare rechts im Bildschirm aufgerufen
 	 */
+
+
 	public void loadContactSystem() {
-		//Window.alert("Content :D");
+		
+		//Logo
+		logo.setWidth("100px");
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+		
+		//RootPanel		
+		root.setSpacing(4);
+	    root.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
+	    
+	    //Header
+	    header.add(signOutLink);
+	    header.add(headerLabel);
+	    header.add(logo);
+	    
+	    //Suchfunktion
+  		Grid sg = new Grid(1,2);
+  		sg.setWidget(0, 1, search);
+  		sg.setWidget(1, 1, searchButton);
+  		
+	    //Navigation
+	    VerticalPanel navigation = new VerticalPanel();	  
+	  
+	  	navigation.add(sg);
+	  	navigation.add(contactButton);
+	  	navigation.add(contactListsButton);
+	  	navigation.add(myParticipationsButton);
+	  	navigation.add(receivedParticipationsButton);  			
+	  	
+	  	//Default 
+	  	VerticalPanel dp = new VerticalPanel();
+	  	root.add(dp, DockPanel.EAST);
+		
+	    //Trailer
+	    HorizontalPanel trailer = new HorizontalPanel();
+	    trailer.add(trailerText);
+	    
 		//Header mit SignOut-Link
-		//TODO: Überschrift und Logo hinzufügen
 		if(userInfo != null){ signOutLink.setHref(userInfo.getLogoutUrl());}
 		signOutLink.setStyleName("link");
-		header.add(signOutLink);
-		RootPanel.get("Header").add(header);
+		root.add(header, DockPanel.NORTH);
+		root.add(trailer, DockPanel.SOUTH);		
+		root.add(navigation, DockPanel.WEST);		
 		
 		
-		//Navigation in HTML-Seite einbinden
-		navigation.add(ContactButton);
-		navigation.add(ContactListsButton);
-		navigation.add(MyParticipationsButton);
-		navigation.add(ReceivedParticipationsButton);
-		RootPanel.get("Navigator").add(navigation);
+		// Füllen der Image-Objekte mit Symbolen
+		createSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_add_black_18dp.png");
+		updateSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_create_black_18dp.png");
+		deleteSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_delete_black_18dp.png");
+		shareSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_share_black_18dp.png");	
+		searchSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_search_black_18dp.png");
 		
-		
-		/**
-		 * Elemente werden in Listenform dargestellt, ausgewählte Elemente werden 
-		 * als Formulare rechts im Bildschirm aufgerufen
-		 */
-		
-		//Listen
-		//final nach Fehlermeldung hinzugefügt
-		final ContactsTreeViewModel ctvm = new ContactsTreeViewModel();
-		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
-				
-		//Formulare
-		ContactForm cf = new ContactForm();
-		ContactListForm clf = new ContactListForm();
-		MyParticipationForm mpf = new MyParticipationForm();
-		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
-
 		//Verlinkung der Listen und der dazugehörigen Formulare
 		ctvm.setContactForm(cf);
+		cf.setCatvm(ctvm);
+		
 		cltvm.setContactListForm(clf);
+		clf.setCltvm(cltvm);
+		
 		mptvm.setParticipationForm(mpf);
-		rptvm.setParticipationForm(rpf);
+		mpf.setMptvm(mptvm);
 		
+		//Zuordnung zur GUI 
+		//-> ToDo: Test & Korrigieren, erst zugeordnet, wenn Cell im CellTree ausgewählt wurde
+		root.add(cf, DockPanel.EAST);
+		root.add(clf, DockPanel.EAST);
+		root.add(mpf, DockPanel.EAST);
+		root.add(rpf, DockPanel.EAST);	
 		
-		//Erzeugen des Details-Panels und Zuordnung zu den Formularen
-		VerticalPanel detailsPanel = new VerticalPanel();
-		detailsPanel.add(cf);
-		detailsPanel.add(clf);
-		detailsPanel.add(mpf);
-		detailsPanel.add(rpf);
+		searchButton.addClickHandler(new SearchClickHandler());
+		searchButton.setEnabled(true);
+		
 		
 		/**
 		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
@@ -199,103 +259,106 @@ public class ContactSystem implements EntryPoint {
 		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
 		 */
 		//ClickHandler für ContactButton
-		ContactButton.addClickHandler(new ClickHandler() {
+		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird und
+				 * Hinzufügen zur Webseite
+				 */
 				CellTree.Resources contactTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 				cellTree.setAnimationEnabled(true);	
-				
-				VerticalPanel addPanel = new VerticalPanel();
-				Button addButton = new Button("Hinzufügen");
-				addPanel.add(addButton);
-				addPanel.add(cellTree);
-				
-				RootPanel.get("Liste").add(addPanel);
+				root.add(cellTree, DockPanel.CENTER);			
 			}
-			
-			//TODO: ClickHandler AddButton
 			
 		});
 		
 		
 		//Clickhandler für ContactListButton
-		ContactListsButton.addClickHandler(new ClickHandler() {
+		contactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources contactListTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactListTreeRecource);
 				cellTree.setAnimationEnabled(true);
-				
-				VerticalPanel addPanel = new VerticalPanel();
-				Button addButton = new Button("Hinzufügen");
-				addPanel.add(addButton);
-				addPanel.add(cellTree);
-				
-				RootPanel.get("Liste").add(addPanel);
+				root.add(cellTree, DockPanel.CENTER);		
 			}
-			
-			//TODO: ClickHandler AddButton
 			
 		});
 		
 		
 		//Clickhandler für MyParticipationsButton
-		MyParticipationsButton.addClickHandler(new ClickHandler() {
+		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources myParticipationTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", myParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);
-				
-				RootPanel.get("Liste").add(cellTree);
+				root.add(cellTree, DockPanel.CENTER);			
 			}
 		});
 	
 		
 		//Clickhandler für ReceivedParticipationsButton
-		ReceivedParticipationsButton.addClickHandler(new ClickHandler() {
+		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources receivedParticipationTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", receivedParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);	
-				
-				RootPanel.get("Liste").add(cellTree);
+				root.add(cellTree, DockPanel.CENTER);		
 			}
 		});
+			
+		RootPanel.get("ContactSystem").add(root);	
 	
-		//Hinzufügen des Detail-Panels zur Webseite
-		RootPanel.get("Details").add(detailsPanel);
-
-		
-		
-		
-//		/**
-//		 * Diese Nested Class wird als Callback für das Setzen des Bank-Objekts bei
-//		 * der BankAdministration und bei dem ReportGenerator benötigt.
-//		 * 
-//		 * @author thies
-//		 * @version 1.0
-//		 */
-//		class SetBankCallback implements AsyncCallback<Void> {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				/*
-//				 * Wenn ein Fehler auftritt, dann geben wir eine kurze Log Message
-//				 * aus.
-//				 */
-//				ClientsideSettings.getLogger().severe(
-//						"Setzen der Bank fehlgeschlagen!");
-//			}
-//
-//			@Override
-//			public void onSuccess(Void result) {
-//				/*
-//				 * Wir erwarten diesen Ausgang, wollen aber keine Notifikation
-//				 * ausgeben.
-//				 */
-//			}
-//
-//		}
 	}
+	
+	//Clickhandler für Suchfeld Button -> TODO: Methode überprüfen
+	private class SearchClickHandler implements ClickHandler {
+		@Override
+		public void onClick(ClickEvent event) {
+			if (search.getText().equals("")) {
+				Window.alert("Nichts zur Suche ausgewählt");
+			} else {
+			 String s = search.getText();
+			// contactSystemVerwaltung.getPropertyValuesByValue(s, new SearchCallback(Vector<Contact>));
+			}
+		}
+	}
+
+	class SearchCallback implements AsyncCallback<Vector<Contact>> {
+
+		Vector <Contact> contacts = null;
+		SearchCallback(Vector<Contact> c) {
+			contacts = c;
+		}
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Die Suche ist fehlgeschlagen!");
+		}
+
+		@Override
+		public void onSuccess(Vector<Contact> result) {
+			if (contacts != null) {
+				for(Contact c : contacts) {
+				ctvm.updateContact(c);
+				// TODO: 
+				}
+			}
+		}
+	}
+	
+	
+			
 	
 
 }

@@ -1,4 +1,4 @@
-package de.hdm.kontaktsystem.server.db;
+  package de.hdm.kontaktsystem.server.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

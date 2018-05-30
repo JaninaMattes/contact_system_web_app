@@ -12,6 +12,7 @@ import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 //import com.mysql.jdbc.Connection;
 
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -280,6 +281,32 @@ public class ContactMapper {
 	public Contact findOwnContact(User u) {
 		Contact contact = new Contact();
 		return contact = this.findContactById(u.getUserContact().getBoId());
+	}
+	
+	/**
+	 * Fügte dem ContactList-Objekt einen Vektor mit allen enthaltenen Contact-Objekten hinzu
+	 * 
+	 * @param ContactList-Objekt
+	 */
+
+	public Vector<Contact> findContactFromList(ContactList cl) {
+		Connection con = DBConnection.connection();
+		try {
+			Vector<Contact> c = new Vector<Contact>();
+
+			PreparedStatement stmt = con.prepareStatement(
+					"SELECT Contact_ID from Contact_ContactList where ContactList_ID = ?"
+					 );
+			stmt.setInt(1, cl.getBoId());
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				c.add(ContactMapper.contactMapper().findContactById(rs.getInt("Contact_ID")));				
+			}
+			return c;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

@@ -66,7 +66,7 @@ public class DBTest {
 		Contact c = new Contact();
 		
 		
-		uMapper.insert(u, c);
+		//uMapper.insert(u);
 		
 		// Setzt die propertyValues für den Kontakt
 		PropertyValue mail = new PropertyValue();
