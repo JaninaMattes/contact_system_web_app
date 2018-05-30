@@ -74,8 +74,7 @@ public class ParticipationMapper {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
-				BusinessObject reference = BusinessObjectMapper.businessObjectMapper()
-						.findBy(rs.getInt("BusinessObject_ID"));
+				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}
@@ -119,7 +118,7 @@ public class ParticipationMapper {
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				participation.setParticipant(participant);	
 				//System.out.println(reference);
-				participation.setReference(BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("bo_ID")));
+				participation.setReference(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("bo_ID")));
 				
 				participations.add(participation);
 				
@@ -189,7 +188,7 @@ public class ParticipationMapper {
 				Participation p = new Participation();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
-				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("BusinessObject_ID"));
+				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
 				p.setReference(reference);
 				participations.add(p);
 			}

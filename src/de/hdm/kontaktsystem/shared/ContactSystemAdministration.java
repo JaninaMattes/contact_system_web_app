@@ -28,8 +28,6 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<User> getAllUsers();
 	
-	//Aus Klassendiagramm: was genau macht diese Methode? save = update?
-	public User saveUser(User u, Contact c);
 	
 	
 	public Vector<Contact> getAllContacts(); 
