@@ -95,6 +95,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		this.contact = contact;
 	}
 	
+	public double getCurrentUser(){
+		return Double.parseDouble(userService.getCurrentUser().getUserId());
+	}
+	
 	/*
 	* ***************************************************************************
 	* ABSCHNITT, User 
@@ -157,7 +161,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	// Nur für Report!
 	public Vector<Contact> getAllContacts(){
-		return cMapper.findAllContacts();
+		Vector<Contact> cv = cMapper.findAllContacts();
+		for(Contact contact : cv){
+			contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
+			contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+			contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
+		}
+		return cv;
 		
 	}
 	
@@ -173,28 +183,71 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	public Contact editContact(Contact contact) {
-		return cMapper.updateContact(contact);
+		Contact con = cMapper.updateContact(contact);
+		Vector <PropertyValue> propResult = new Vector <PropertyValue>();
+		propResult = PropertyValueMapper.propertyValueMapper().findBy(con);
+		for(PropertyValue pV : propResult) {
+			PropertyValueMapper.propertyValueMapper().update(pV);
+		}	
+		return con;
 		
 	}	
 	
+	public Contact getContactByPropertyValue(PropertyValue pv){
+		Contact contact = cMapper.findBy(pv);
+		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));		
+		contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+		contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
+		return contact;
+	}
+	
 	public Vector<Contact> getContactsFromUser(User user) {
-		return cMapper.findAllContactsByUser(user);
+		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
+		for(Contact contact : cv){
+			contact.setOwner(user);
+			contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
+			contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+		}
+		return cv;
+		
+	}
+	
+	public Vector<Contact> getContactsByStatus(Boolean status) {
+		Vector<Contact> cv = cMapper.findContactByStatus(this.getCurrentUser(), status);
+		for(Contact contact : cv){
+			contact.setOwner(this.getUserByID(this.getCurrentUser()));
+			contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
+			contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+		}
+		return cv;
 		
 	}
 	
 	public Vector<Contact> getContactsFromList(ContactList cl) {
-		return cMapper.findContactFromList(cl);
+		Vector<Integer> iv = cMapper.findContactFromList(cl);
+		Vector<Contact> cv = new Vector<Contact>();
+		if(iv != null){
+			for(int i : iv){
+				cv.add(getContactById(i));
+			}
+		}
+		return cv;
 		
 	}
 	
 	@Override
 	public Contact getContactById(int id) {
+
+		contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
+		contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 		return cMapper.findContactById(id);
 	}
 	
 	
 	
 	public Contact createContact(Contact contact) {
+		BusinessObjectMapper.businessObjectMapper().insert(contact);
 		return cMapper.insertContact(contact);
 		
 	}
@@ -358,9 +411,34 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 
+	/*
+	* ***************************************************************************
+	* ABSCHNITT, BusinessObject
+	* ***************************************************************************
+	*/
 
-
-	
+	/**
+	   * Gibt ein BusinessObject vom Typ Contact, ContctList oder PropertyValue zurück
+	   * 
+	   * @param BusinessObject ID
+	   * @return Contact, ContactList, PropertyValue
+	   */
+	  
+	  public BusinessObject findBusinessObjectByID(int id) {
+		  	  
+		BusinessObject bo = null;
+		
+		
+		if(bo == null) bo = getContactById(id);
+		 
+		
+		if(bo == null) bo = getContactListById(id);
+		
+		
+		if(bo == null) bo = this.getPropertyValueById(id);
+		  	 
+		return bo;
+	  }
 
 
 	

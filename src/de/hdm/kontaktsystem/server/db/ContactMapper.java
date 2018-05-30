@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.sql.ResultSet;
 
+import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 
 //import com.mysql.jdbc.Connection;
@@ -66,7 +67,7 @@ public class ContactMapper {
 
 	public Contact insertContact(Contact contact) {
 		
-		BusinessObjectMapper.businessObjectMapper().insert(contact);
+		
 		Connection con = DBConnection.connection();
 
 		try {		
@@ -109,9 +110,7 @@ public class ContactMapper {
 				contact.setBo_Id(rs.getInt("c.ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
-				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("bo.user_ID")));
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));				
+				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));				
 				result.addElement(contact);
 			}
 			return result;
@@ -213,12 +212,12 @@ public class ContactMapper {
 
 			while (rs.next()) {
 				Contact contact = new Contact();
-				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
+				User u = new User();
+				u.setGoogleID(rs.getDouble("user_ID"));
 				contact.setBo_Id(rs.getInt("ID"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
 				result.addElement(contact);
 			}
 			return result;
@@ -251,13 +250,12 @@ public class ContactMapper {
 
 			if (rs.next()) {						
 				Contact contact = new Contact();
-				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
+				User u = new User();
+				u.setGoogleID(rs.getDouble("user_ID"));
 				contact.setBo_Id(rs.getInt("bo_ID"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
 				//System.out.println("contact id: " + contact.getBo_Id());
 
 				return contact;
@@ -289,10 +287,10 @@ public class ContactMapper {
 	 * @param ContactList-Objekt
 	 */
 
-	public Vector<Contact> findContactFromList(ContactList cl) {
+	public Vector<Integer> findContactFromList(ContactList cl) {
 		Connection con = DBConnection.connection();
 		try {
-			Vector<Contact> c = new Vector<Contact>();
+			Vector<Integer> c = new Vector<Integer>();
 
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT Contact_ID from Contact_ContactList where ContactList_ID = ?"
@@ -300,7 +298,7 @@ public class ContactMapper {
 			stmt.setInt(1, cl.getBoId());
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				c.add(ContactMapper.contactMapper().findContactById(rs.getInt("Contact_ID")));				
+				c.add(rs.getInt("Contact_ID"));				
 			}
 			return c;
 		} catch (SQLException e) {
@@ -335,12 +333,12 @@ public class ContactMapper {
 
 			if (rs.next()) {
 				Contact contact = new Contact();
+				User u = new User();
+				u.setGoogleID(rs.getDouble("user_ID"));
 				contact.setBo_Id(rs.getInt("bo.bo_ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));		
-				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
 
 				return contact;
 			}					
@@ -378,12 +376,12 @@ public class ContactMapper {
 
 			while (rs.next()) {
 				Contact contact = new Contact();
-				contact.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
+				User u = new User();
+				u.setGoogleID(rs.getDouble("user_ID"));
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				contact.addPropertyValue(PropertyValueMapper.propertyValueMapper().findName(contact));
 				contactResult.addElement(contact);
 			}
 			return contactResult;
@@ -414,12 +412,7 @@ public class ContactMapper {
 			stmt.setInt(1, contact.getBoId());
 			stmt.setInt(2, contact.getBoId());
 			stmt.execute();
-			
-			Vector <PropertyValue> propResult = new Vector <PropertyValue>();
-			propResult = PropertyValueMapper.propertyValueMapper().findBy(contact);
-			for(PropertyValue pV : propResult) {
-				PropertyValueMapper.propertyValueMapper().update(pV);
-			}			
+					
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
