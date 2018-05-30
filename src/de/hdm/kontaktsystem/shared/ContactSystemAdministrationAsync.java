@@ -41,9 +41,6 @@ public interface ContactSystemAdministrationAsync {
 	public void getContactListByName(String name, AsyncCallback<Vector<ContactList>> callback);
 	
 	
-	public void getPropertyValueForContactByName(String name, Contact c, AsyncCallback<PropertyValue> callback);
-	
-	
 	public void getAllParticipationsByOwner(User owner, AsyncCallback<Vector<Participation>> callback);
 	
 	public void getAllParticipationsByParticipant(User gMail, AsyncCallback<Vector<Participation>> callback);

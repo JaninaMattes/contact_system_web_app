@@ -48,7 +48,6 @@ public class PropertyValueMapper {
 	
 	public PropertyValue insert(PropertyValue pv) {
 
-		BusinessObjectMapper.businessObjectMapper().insert(pv);
 		Connection con = DBConnection.connection();
 
 		/*
@@ -533,13 +532,7 @@ public class PropertyValueMapper {
 	 * @parm Contact ID
 	 */
 
-	public void deleteByContact(int id) {
-		
-		for(PropertyValue pv : findByContactID(id)){
-			delete(pv);
-		}
-		
-	}
+	
 
 	/**
 	 * Anhand der zugehörigen Eigenschaft wird eine Auspraegung gelöscht

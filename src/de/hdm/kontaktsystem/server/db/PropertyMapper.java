@@ -64,6 +64,9 @@ public class PropertyMapper {
        *
        * @param property ist das zu speichernde Objekt
        * @return das bereits übergebene Objekt, jedoch mit gegebenfals korrigierter
+       * 
+       * @warning Nicht Verwendet
+       * 
        * <code>id</code>.
        */    
      
@@ -189,7 +192,7 @@ public class PropertyMapper {
                   
                   property.setId(rs.getInt("ID"));
                   property.setDescription(rs.getString("description"));
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);                  
+                  //propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);                  
                   property.setPropertyValues(propertyValues);            
                  
                   //System.out.println("P-id: " + property.getId());
@@ -239,7 +242,7 @@ public class PropertyMapper {
                   //System.out.println("p-id: " + property.getId());
                   //System.out.println("p-description: " + property.getDescription());
                   
-                  propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
+                  //propertyValues = PropertyValueMapper.propertyValueMapper().findBy(property);
                   property.setPropertyValues(propertyValues);   
                   return property;
                 }             

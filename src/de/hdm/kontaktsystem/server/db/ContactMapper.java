@@ -497,7 +497,6 @@ public class ContactMapper {
 	public int deleteContactByID(int id) {
 		System.out.println("Delete Contact");
 		int i = 0; // Anzahl der gelöschten Reihen
-		PropertyValueMapper.propertyValueMapper().deleteByContact(id);
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM Contact WHERE ID = ?" );
@@ -507,29 +506,11 @@ public class ContactMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		
 		return i;
 	}
 	
 
-	/**
-	 * Mapper-Methode um alle Kontakte eines bestimmten Users mittels der User-ID zu
-	 * loeschen
-	 * 
-	 * @param User ID 
-	 */
-
-	public void deleteAllContactsByUser(double user_id) {
-
-		Vector<Contact> result = new Vector<Contact>();		
-		//Aufrufen aller Kontakte eines bestimmten Users
-		result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
-		for (Contact c : result) {
-			deleteContactByID(c.getBoId());
-			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(c.getBoId());
-			System.out.println("contact deleted: " + c.getBoId());
-		}
-	}
 	
 
 	/**

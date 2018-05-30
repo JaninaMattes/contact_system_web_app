@@ -43,12 +43,10 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	
 	
-	public PropertyValue getPropertyValueForContactByName(String name, Contact c);
+	public PropertyValue getNameOfContact(Contact c);
 
 	
 	public ContactList addContactToList(Contact c, ContactList cl);
-	
-	public PropertyValue getNameOfContact(Contact c);
 
 	/**
 	 * Create

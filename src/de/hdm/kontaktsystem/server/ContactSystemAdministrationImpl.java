@@ -108,21 +108,21 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public User createUser(User u, Contact contact) {
 		User user = uMapper.insert(u);
 		contact.setOwner(user);
-		user.setUserContact(ContactMapper.contactMapper().insertContact(contact));
-		return UserMapper.userMapper().update(user);
+		user.setUserContact(this.createContact(contact));
+		return this.editUser(user);
 		
 	}
 	
 	public User getUserByID(double id) {
 		User user = uMapper.findById(id);
-		user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
+		user.setUserContact(this.getOwnContact(user));
 		return user;
 		
 	}
 	
 	public User getUserBygMail(String email) {
 		User user = uMapper.findByEmail(email);
-		user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
+		user.setUserContact(this.getOwnContact(user));
 		return user;
 		
 	}
@@ -131,7 +131,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Vector<User> getAllUsers(){
 		Vector<User> userVector = uMapper.findAll();
 		for(User user : userVector){
-			user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
+			user.setUserContact(this.getOwnContact(user));
 		}
 		return userVector;
 		
@@ -142,8 +142,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	public User deleteUser(User user) {
-		ContactMapper.contactMapper().deleteAllContactsByUser(user.getGoogleID());
-		deleteContactListByUserId(user.getGoogleID());
+		this.deleteAllContactsByUser(user.getGoogleID());
+		this.deleteContactListByUserId(user.getGoogleID());
 		return uMapper.delete(user);
 	}
 	
@@ -154,18 +154,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ***************************************************************************
 	*/
 	
-	@Override
-	public PropertyValue getNameOfContact(Contact c) {
-		return propValMapper.findName(c);
-	}
-
+	
 	// Nur für Report!
 	public Vector<Contact> getAllContacts(){
 		Vector<Contact> cv = cMapper.findAllContacts();
 		for(Contact contact : cv){
 			contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
-			contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
-			contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
+			contact.setName(this.getNameOfContact(contact));
+			contact.setPropertyValues(this.getPropertyValueForContact(contact));
 		}
 		return cv;
 		
@@ -173,21 +169,21 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	// Nur für Report!
 	public Vector<Contact> getAllContactsFromUser(){
-		return cMapper.findAllContactsByUser(Double.parseDouble(userService.getCurrentUser().getUserId()));
+		return cMapper.findAllContactsByUser(this.getCurrentUser());
 		
 	}
 	
 	// Nur Intern Verwendet
-	public Contact getContactOf(User u) {
+	public Contact getOwnContact(User u) {
 		return cMapper.findOwnContact(u);
 	}
 	
 	public Contact editContact(Contact contact) {
 		Contact con = cMapper.updateContact(contact);
 		Vector <PropertyValue> propResult = new Vector <PropertyValue>();
-		propResult = PropertyValueMapper.propertyValueMapper().findBy(con);
+		propResult = this.getPropertyValueForContact(con);
 		for(PropertyValue pV : propResult) {
-			PropertyValueMapper.propertyValueMapper().update(pV);
+			this.editPropertyValue(pV);
 		}	
 		return con;
 		
@@ -196,8 +192,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Contact getContactByPropertyValue(PropertyValue pv){
 		Contact contact = cMapper.findBy(pv);
 		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));		
-		contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
-		contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
+		contact.setName(this.getNameOfContact(contact));
+		contact.setPropertyValues(this.getPropertyValueForContact(contact));
 		return contact;
 	}
 	
@@ -205,8 +201,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
 		for(Contact contact : cv){
 			contact.setOwner(user);
-			contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
-			contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+			contact.setPropertyValues(this.getPropertyValueForContact(contact));
+			contact.setName(this.getNameOfContact(contact));
 		}
 		return cv;
 		
@@ -216,8 +212,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<Contact> cv = cMapper.findContactByStatus(this.getCurrentUser(), status);
 		for(Contact contact : cv){
 			contact.setOwner(this.getUserByID(this.getCurrentUser()));
-			contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
-			contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+			contact.setPropertyValues(this.getPropertyValueForContact(contact));
+			contact.setName(this.getNameOfContact(contact));
 		}
 		return cv;
 		
@@ -238,23 +234,46 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public Contact getContactById(int id) {
 
-		contact.setPropertyValues(PropertyValueMapper.propertyValueMapper().findBy(contact));
-		contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
+		contact.setPropertyValues(this.getPropertyValueForContact(contact));
+		contact.setName(this.getNameOfContact(contact));
 		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
-		return cMapper.findContactById(id);
+		return this.getContactById(id);
 	}
 	
 	
 	
 	public Contact createContact(Contact contact) {
-		BusinessObjectMapper.businessObjectMapper().insert(contact);
+		boMapper.insert(contact);
 		return cMapper.insertContact(contact);
 		
 	}
 	
 
-	public Contact deleteContact(Contact contact) {
-		return cMapper.deleteContact(contact);
+	public Contact deleteContact(Contact contact) {	
+		for(PropertyValue pv : this.getPropertyValueForContact(contact)){
+			this.deletePropertyValue(pv);
+		}
+		Contact c = cMapper.deleteContact(contact);
+		if(c != null) boMapper.deleteBusinessObjectByID(c.getBoId());
+		return c;
+	}
+	
+
+	/**
+	 * Mapper-Methode um alle Kontakte eines bestimmten Users mittels der User-ID zu
+	 * loeschen
+	 * 
+	 * @param User ID 
+	 */
+
+	public void deleteAllContactsByUser(double user_id) {
+
+		Vector<Contact> result = new Vector<Contact>();		
+		//Aufrufen aller Kontakte eines bestimmten Users
+		result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
+		for (Contact c : result) {
+			deleteContact(c);
+		}
 	}
 	
 	/*
@@ -265,14 +284,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	public ContactList createContactList(ContactList contactList) {
 
-		BusinessObjectMapper.businessObjectMapper().insert(contactList);
+		boMapper.insert(contactList);
 		return clMapper.insertContactList(contactList);
 			
 	}	
 
 	@Override
 	public ContactList editContactList(ContactList cl) {
-		BusinessObjectMapper.businessObjectMapper().update(cl);
+		boMapper.update(cl);
 		return clMapper.updateContactList(cl);
 	}
 	
@@ -281,8 +300,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<ContactList> contactListVector = clMapper.findContactListByName(name);
 		
 		for(ContactList cl : contactListVector){
-			cl.setOwner(getUserByID(cl.getOwner().getGoogleID()));
-			cl.setContacts(getContactsFromList(cl));
+			cl.setOwner(this.getUserByID(cl.getOwner().getGoogleID()));
+			cl.setContacts(this.getContactsFromList(cl));
 		}
 		return contactListVector;
 		
@@ -294,8 +313,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<ContactList> contactListVector = clMapper.findAllContactLists();
 		
 		for(ContactList cl : contactListVector){
-			cl.setOwner(getUserByID(cl.getOwner().getGoogleID()));
-			cl.setContacts(getContactsFromList(cl));
+			cl.setOwner(this.getUserByID(cl.getOwner().getGoogleID()));
+			cl.setContacts(this.getContactsFromList(cl));
 		}
 		return contactListVector;
 	}
@@ -304,12 +323,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		@Override
 		public Vector<ContactList> getAllContactListsFromUser() {
 			
-			Vector<ContactList> contactListVector = clMapper.findContactListByUserId(
-													Double.parseDouble(userService.getCurrentUser().getUserId()));
+			Vector<ContactList> contactListVector = clMapper.findContactListByUserId(this.getCurrentUser());
 			
 			for(ContactList cl : contactListVector){
-				cl.setOwner(getUserByID(cl.getOwner().getGoogleID()));
-				cl.setContacts(getContactsFromList(cl));
+				cl.setOwner(this.getUserByID(cl.getOwner().getGoogleID()));
+				cl.setContacts(this.getContactsFromList(cl));
 			}
 			return contactListVector;
 		}
@@ -328,7 +346,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	public ContactList deleteContactList(ContactList contactList) {
 		ContactList cl = clMapper.deleteContactList(contactList);
-		if(cl != null) BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBoId());
+		if(cl != null) boMapper.deleteBusinessObjectByID(cl.getBoId());
 		return cl;
 	}
 	
@@ -362,12 +380,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ***************************************************************************
 	*/
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
+		boMapper.insert(propertyValue);
 		return propValMapper.insert(propertyValue);
 	}
 	
 	
 	public PropertyValue editPropertyValue(PropertyValue propertyValue) {
-		BusinessObjectMapper.businessObjectMapper().update(propertyValue);
+		boMapper.update(propertyValue);
 		return propValMapper.update(propertyValue);
 	}
 	
@@ -375,28 +394,30 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public PropertyValue deletePropertyValue(PropertyValue propertyValue) {
 		PropertyValue pv = propValMapper.delete(propertyValue);
-		if(pv != null) BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(pv.getBoId());
+		if(pv != null) boMapper.deleteBusinessObjectByID(pv.getBoId());
+		return pv;
 	}
 	
-	@Override
-	public PropertyValue getPropertyValueForContactByName(String name, Contact c) {
-		return this.findName(c);
-	}
+	
 	
 	public Vector<PropertyValue> getPropertyValueForContact(Contact c) {
 		Vector<PropertyValue> pvv = propValMapper.findBy(c);
 		
 		for(PropertyValue pv : pvv){
-			pv.setProperty(PropertyMapper.propertyMapper().findBy(pv.getProperty().getId()));
+			pv.setProperty(propMapper.findBy(pv.getProperty().getId()));
 		}
 		return pvv;
+	}
+	
+	public PropertyValue getPropertyValueById(int id) {
+		return propValMapper.findByKey(id);
 	}
 	
 	public Vector<PropertyValue> getPropertyValueByValue(String value) {
 		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
 		
 		for(PropertyValue pv : pvv){
-			pv.setContact(ContactMapper.contactMapper().findBy(pv));
+			pv.setContact(this.getContactByPropertyValue(pv));
 			pv.setProperty(PropertyMapper.propertyMapper().findBy(pv.getProperty().getId()));
 		}
 		return pvv;
@@ -412,7 +433,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 *  @return PropertyValue - Objekt
 	 */
 
-	public PropertyValue findName(Contact contact) {
+	public PropertyValue getNameOfContact(Contact contact) {
 		////System.out.println("#PV -findName");
 		PropertyValue name = new PropertyValue();	
 		Vector <PropertyValue> result = new Vector <PropertyValue>();
@@ -481,10 +502,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		BusinessObject bo = null;
 		
 		
-		if(bo == null) bo = getContactById(id);
+		if(bo == null) bo = this.getContactById(id);
 		 
 		
-		if(bo == null) bo = getContactListById(id);
+		if(bo == null) bo = this.getContactListById(id);
 		
 		
 		if(bo == null) bo = this.getPropertyValueById(id);
