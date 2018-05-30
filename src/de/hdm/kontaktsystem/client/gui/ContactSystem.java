@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HeaderPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.LoginService;
@@ -51,45 +52,38 @@ public class ContactSystem implements EntryPoint {
 	 * Link zum Asynchronen Interface
 	 */
 	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
-	
-//	Aus Bankbeispiel, hier notwendig?
-	/*
-//	 * Zunächst weisen wir der BankAdministration eine Bank-Instanz zu, die
-//	 * das Kreditinstitut repräsentieren soll, für das diese Applikation
-//	 * arbeitet.
-//	 */
-//	if (bankVerwaltung == null) {
-//		bankVerwaltung = ClientsideSettings.getBankVerwaltung();
-//	}
-//	Bank bank = new Bank();
-//	bank.setName("HdM Bank");
-//	bank.setStreet("Nobelstr. 10");
-//	bank.setZip(70569);
-//	bank.setCity("Stuttgart");
-//	bankVerwaltung.setBank(bank, new SetBankCallback());
 
-	
 
 	/** 
 	 * Instanziieren der GWT Widgets und Panels
 	 */
-	//Panels
-	private VerticalPanel navigation = new VerticalPanel();
-	private HorizontalPanel header = new HorizontalPanel();
+	private VerticalPanel root = new VerticalPanel();
+	private HorizontalPanel header = new HorizontalPanel(); //Logo, Logout, Report-Link
+	private HorizontalPanel content = new HorizontalPanel(); //Menü, Liste/cellTree und Buttons+Suche, Forms
+	private VerticalPanel navigation = new VerticalPanel(); //Menü links mit 4 Buttons
 	
-	//Widgets
+	//Buttons Menü links
 	private Button ContactButton = new Button("Kontakte");
 	private Button ContactListsButton = new Button("Kontaktlisten");
 	private Button MyParticipationsButton = new Button("Von mir geteilt");
 	private Button ReceivedParticipationsButton = new Button("An mich geteilt");
-
+	
+ 
+	private VerticalPanel addPanel = new VerticalPanel(); //Umfasst Liste/cellTree, Buttons+Suche und Forms
+	private HorizontalPanel listAndForm = new HorizontalPanel(); //Liste/cellTree und Forms
+	private VerticalPanel detailsPanel = new VerticalPanel(); //Enthält Formulare
+	private HorizontalPanel modifyPanel = new HorizontalPanel(); //Enthält Buttons zum bearbeiten und Suchfunktion
+	private HorizontalPanel searchPanel = new HorizontalPanel(); //enthält Suchfeld und Button
+	
+	private VerticalPanel trailer = new VerticalPanel();
+	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen
+	
 	
 	/**
 	 * Attribute für den Login
 	 */
 	private User userInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private VerticalPanel root = new VerticalPanel();
 	private Label loginLabel = new Label(
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen ");
 	private Anchor signInLink = new Anchor("Login mit Google");
@@ -150,7 +144,7 @@ public class ContactSystem implements EntryPoint {
 		if(userInfo != null){ signOutLink.setHref(userInfo.getLogoutUrl());}
 		signOutLink.setStyleName("link");
 		header.add(signOutLink);
-		RootPanel.get("Header").add(header);
+		root.add(header);
 		
 		
 		//Navigation in HTML-Seite einbinden
@@ -158,7 +152,7 @@ public class ContactSystem implements EntryPoint {
 		navigation.add(ContactListsButton);
 		navigation.add(MyParticipationsButton);
 		navigation.add(ReceivedParticipationsButton);
-		RootPanel.get("Navigator").add(navigation);
+		content.add(navigation);
 		
 		
 		/**
@@ -174,24 +168,30 @@ public class ContactSystem implements EntryPoint {
 		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 				
 		//Formulare
-		ContactForm cf = new ContactForm();
-		ContactListForm clf = new ContactListForm();
-		MyParticipationForm mpf = new MyParticipationForm();
-		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+		final ContactForm cf = new ContactForm();
+		final ContactListForm clf = new ContactListForm();
+		final MyParticipationForm mpf = new MyParticipationForm();
+		final ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 
 		//Verlinkung der Listen und der dazugehörigen Formulare
 		ctvm.setContactForm(cf);
+		cf.setCatvm(ctvm);
+		
 		cltvm.setContactListForm(clf);
+		clf.setCltvm(cltvm);
+		
 		mptvm.setParticipationForm(mpf);
+		mpf.setMptvm(mptvm);
+		
 		rptvm.setParticipationForm(rpf);
+		rpf.setMptvm(mptvm);
 		
-		
-		//Erzeugen des Details-Panels und Zuordnung zu den Formularen
-		VerticalPanel detailsPanel = new VerticalPanel();
+		//Erzeugen des Details-Panels und Zuordnung zur GUI
 		detailsPanel.add(cf);
 		detailsPanel.add(clf);
 		detailsPanel.add(mpf);
 		detailsPanel.add(rpf);
+		
 		
 		/**
 		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
@@ -201,39 +201,138 @@ public class ContactSystem implements EntryPoint {
 		//ClickHandler für ContactButton
 		ContactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird und
+				 * Hinzufügen zur Webseite
+				 */
 				CellTree.Resources contactTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 				cellTree.setAnimationEnabled(true);	
+				listAndForm.add(cellTree);
 				
-				VerticalPanel addPanel = new VerticalPanel();
-				Button addButton = new Button("Hinzufügen");
-				addPanel.add(addButton);
-				addPanel.add(cellTree);
 				
-				RootPanel.get("Liste").add(addPanel);
+				/**
+				 * Definition der Buttons und der Suchfunktion, die sich auf Kontakte beziehen
+				 */
+				Button addContactButton = new Button("Add");
+				Button editContactButton = new Button("Edit");
+				Button shareContactButton = new Button("Share");
+				Button deleteContactButton = new Button("Delete");
+				TextBox searchContactText = new TextBox();
+				Button searchContactButton = new Button("Search");
+				
+				//TODO: Funktionalität, Symbole statt Schrift
+				
+			    /**
+			     * Contact-Buttons (CSS)
+			     * 
+			     * Der Name, mit welchem der Add-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    addContactButton.addStyleName("AddContact");
+			    
+			    /**
+			     * Der Name, mit welchem der Edit-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    editContactButton.addStyleName("EditContact");
+			    
+			    /**
+			     * Der Name, mit welchem der Share-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    shareContactButton.addStyleName("ShareContact");
+			    
+			    /**
+			     * Der Name, mit welchem der Delete-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    deleteContactButton.addStyleName("DeleteContact");
+			    
+			    /**
+			     * Der Name, mit welchem der Search-Contact-Button in CSS formatiert werden kann, wird festgelegt.
+			     */
+			    searchContactButton.addStyleName("SearchContact");
+				
+				/**
+				 * Hinzufügen der Buttons zum modifyPanel
+				 */
+				modifyPanel.add(addContactButton);
+				modifyPanel.add(editContactButton);
+				modifyPanel.add(shareContactButton);
+				modifyPanel.add(deleteContactButton);
+				
+				/**
+				 * Aufbau des Suchfeldes
+				 */
+				searchPanel.add(searchContactText);
+				searchPanel.add(searchContactButton);
+
+				modifyPanel.add(searchPanel);
 			}
 			
-			//TODO: ClickHandler AddButton
-			
 		});
+		
+		/**
+		 * Menu-Buttons (CSS)
+		 * 
+	     * Der Name, mit welchem der Menubutton "Kontakt" in CSS formatiert werden kann, wird festgelegt.
+	     */
+	    ContactButton.addStyleName("Contact-Menubutton");
+	    
+		/**
+	     * Der Name, mit welchem der Menübutton "Kontaktliste" in CSS formatiert werden kann, wird festgelegt.
+	     */
+	    ContactListsButton.addStyleName("Contactlist-Menubutton");
+	    
+		/**
+	     * Der Name, mit welchem der Menübutton "Von mir geteilt" in CSS formatiert werden kann, wird festgelegt.
+	     */
+	    MyParticipationsButton.addStyleName("MyParticipations-Menubutton");
+		
+	    /**
+	     * Der Name, mit welchem der Menübutton "An mich geteilt" in CSS formatiert werden kann, wird festgelegt.
+	     */
+	    ReceivedParticipationsButton.addStyleName("ReceivedParticipations-Menubutton");
+	    
+	    
 		
 		
 		//Clickhandler für ContactListButton
 		ContactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources contactListTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactListTreeRecource);
 				cellTree.setAnimationEnabled(true);
+				listAndForm.add(cellTree);	
 				
-				VerticalPanel addPanel = new VerticalPanel();
-				Button addButton = new Button("Hinzufügen");
-				addPanel.add(addButton);
-				addPanel.add(cellTree);
+				/**
+				 * Definition der Buttons und der Suchfunktion, die sich auf Kontaktlisten beziehen
+				 */
+				Button addContactListButton = new Button("Add");
+				Button editContactListButton = new Button("Edit");
+				Button shareContactListButton = new Button("Share");
+				Button deleteContactListButton = new Button("Delete");
+				TextBox searchContactListText = new TextBox();
+				Button searchContactListButton = new Button("Search");
 				
-				RootPanel.get("Liste").add(addPanel);
+				//TODO: Funktionalität, Symbole statt Schrift
+				
+				/**
+				 * Hinzufügen der Buttons zum modifyPanel
+				 */
+				modifyPanel.add(addContactListButton);
+				modifyPanel.add(editContactListButton);
+				modifyPanel.add(shareContactListButton);
+				modifyPanel.add(deleteContactListButton);
+				
+				/**
+				 * Aufbau des Suchfeldes
+				 */
+				searchPanel.add(searchContactListText);
+				searchPanel.add(searchContactListButton);
+
+				modifyPanel.add(searchPanel);
 			}
-			
-			//TODO: ClickHandler AddButton
 			
 		});
 		
@@ -241,11 +340,37 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		MyParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources myParticipationTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", myParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);
+				listAndForm.add(cellTree);				
 				
-				RootPanel.get("Liste").add(cellTree);
+				/**
+				 * Definition der Buttons und der Suchfunktion, die sich auf Teilhaberschaften beziehen, die mir gehören
+				 */
+				Button deleteParticipationButton = new Button("Delete");
+				//Suche anhand des Users, mit dem geteilt wurde
+				TextBox searchParticicipationByParticipantText = new TextBox();
+				Button searchParticicipationByParticipantButton = new Button("Search");
+				
+				//TODO: Funktionalität, Symbole statt Schrift
+				
+				/**
+				 * Hinzufügen der Buttons zum modifyPanel
+				 */
+
+				modifyPanel.add(deleteParticipationButton);
+				
+				/**
+				 * Aufbau des Suchfeldes
+				 */
+				searchPanel.add(searchParticicipationByParticipantText);
+				searchPanel.add(searchParticicipationByParticipantButton);
+
+				modifyPanel.add(searchPanel);
 			}
 		});
 	
@@ -253,48 +378,58 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		ReceivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources receivedParticipationTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", receivedParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);	
+				listAndForm.add(cellTree);				
 				
-				RootPanel.get("Liste").add(cellTree);
+				/**
+				 * Definition der Buttons und der Suchfunktion, die sich auf Teilhaberschaften beziehen, die mit mir geteilt wurden
+				 */
+				Button deleteParticipationButton = new Button("Delete");
+				//Suche anhand des Users, von dem Objekte erhalten wurden
+				TextBox searchParticicipationByOwnerText = new TextBox();
+				Button searchParticicipationByOwnerButton = new Button("Search");
+				
+				//TODO: Funktionalität, Symbole statt Schrift
+				
+				/**
+				 * Hinzufügen der Buttons zum modifyPanel
+				 */
+
+				modifyPanel.add(deleteParticipationButton);
+				
+				/**
+				 * Aufbau des Suchfeldes
+				 */
+				searchPanel.add(searchParticicipationByOwnerText);
+				searchPanel.add(searchParticicipationByOwnerButton);
+
+				modifyPanel.add(searchPanel);
 			}
 		});
 	
-		//Hinzufügen des Detail-Panels zur Webseite
-		RootPanel.get("Details").add(detailsPanel);
-
+		//Hinzufügen des Detail-Panels zum Content
+		listAndForm.add(detailsPanel);	
 		
+		//Aufbau der restlichen Webseite
+		addPanel.add(listAndForm);
+		addPanel.add(modifyPanel);
 		
+		content.add(addPanel);
 		
-//		/**
-//		 * Diese Nested Class wird als Callback für das Setzen des Bank-Objekts bei
-//		 * der BankAdministration und bei dem ReportGenerator benötigt.
-//		 * 
-//		 * @author thies
-//		 * @version 1.0
-//		 */
-//		class SetBankCallback implements AsyncCallback<Void> {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				/*
-//				 * Wenn ein Fehler auftritt, dann geben wir eine kurze Log Message
-//				 * aus.
-//				 */
-//				ClientsideSettings.getLogger().severe(
-//						"Setzen der Bank fehlgeschlagen!");
-//			}
-//
-//			@Override
-//			public void onSuccess(Void result) {
-//				/*
-//				 * Wir erwarten diesen Ausgang, wollen aber keine Notifikation
-//				 * ausgeben.
-//				 */
-//			}
-//
-//		}
+		root.add(content);
+		
+		trailer.add(trailerText);
+		root.add(trailer);
+		
+		RootPanel.get("Editor").add(root);
+		
+	
 	}
 	
 
