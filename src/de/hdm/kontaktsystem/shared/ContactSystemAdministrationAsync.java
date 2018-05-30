@@ -14,31 +14,27 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 public interface ContactSystemAdministrationAsync {
+		
 	
-
-	public void shareContactWith(Participation part, AsyncCallback<Participation> callback);
-	
-	public void sharePropertyValueOfContact(Contact c, Participation part, AsyncCallback<Participation> callback);	
-	
-	public void getUserByID(int id, AsyncCallback<User> callback);
+	public void getUserByID(double id, AsyncCallback<User> callback);
 	
 	public void getUserBygMail(String gMail, AsyncCallback<User> callback);
 	
 	public void getAllUsers(AsyncCallback<Vector<User>> callback);
 	
+<<<<<<< HEAD
 	//Aus Klassendiagramm: was genau macht diese Methode? save = update?
 	public void saveUser(User u, Contact c, AsyncCallback<User> callback);
+=======
+	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback);
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 	
 	public void getAllContacts(AsyncCallback<Vector<Contact>> callback);
 	
-	//Aus Klassendiagramm: was genau macht diese Methode?
-	public void getContactOf(User u, AsyncCallback<Contact> callback);
 	
 	public void getContactById(int id, AsyncCallback<Contact> callback);
 	
-	//Erstellen des eigenen Kontakts eines Users
-	public void createContactForUser(User u, AsyncCallback<Contact> callback);
-	
+	public void getAllContactListsFromUser(AsyncCallback<Vector<ContactList>> callback);
 	
 	public void getAllContactLists(AsyncCallback<Vector<ContactList>> callback);
 	
@@ -46,13 +42,6 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getContactListByName(String name, AsyncCallback<Vector<ContactList>> callback);
 	
-	//Aufruf von createParticipation
-	public void shareContactListWith(Participation part, AsyncCallback<Participation> callback);
-	
-	
-	//Aus Klassendiagramm: Kann das so stimmen?
-	
-	public void getPropertyValuesForContact(Contact c, AsyncCallback<Vector<PropertyValue>> callback);
 	
 	public void getPropertyValueForContactByName(String name, Contact c, AsyncCallback<PropertyValue> callback);
 	
@@ -62,7 +51,6 @@ public interface ContactSystemAdministrationAsync {
 	public void getAllParticipationsByParticipant(User gMail, AsyncCallback<Vector<Participation>> callback);
 	
 	
-	public void addContactToList(Contact c, ContactList cl, AsyncCallback<ContactList> callback);
 	
 	public void getNameOfContact(Contact c, AsyncCallback<PropertyValue> callback);
 
@@ -79,6 +67,8 @@ public interface ContactSystemAdministrationAsync {
 	public void createPropertyValue(PropertyValue pv, AsyncCallback<PropertyValue> callback);
 	
 	public void createParticipation(Participation part, AsyncCallback<Participation> callback);
+	
+	public void addContactToList(Contact c, ContactList cl, AsyncCallback<ContactList> callback);
 
 	/**
 	 * Update
