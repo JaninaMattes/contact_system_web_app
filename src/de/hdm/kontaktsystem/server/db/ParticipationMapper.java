@@ -115,18 +115,16 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation participation = new Participation();
-				BusinessObject reference = new BusinessObject();
 				
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
-				participation.setParticipant(participant);				
-				reference = BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("bo_ID"));
+				participation.setParticipant(participant);	
 				//System.out.println(reference);
-				participation.setReference(reference);
+				participation.setReference(BusinessObjectMapper.businessObjectMapper().findBy(rs.getInt("bo_ID")));
 				
 				participations.add(participation);
 				
 			    System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + reference.getBoId());
+				System.out.println("###### Participation object id: " + participation.getReferencedObject().getBoId());
 			}
 			return participations;
 			
@@ -156,13 +154,11 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation p = new Participation();
-				BusinessObject reference = new BusinessObject();
 				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
 				p.setParticipant(participant);
-				reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
-				p.setReference(reference);
+				p.setReference(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID")));
 				System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + reference.getBoId());
+				System.out.println("###### Participation object id: " + p.getReferencedObject().getBoId());
 				participations.add(p);
 			}
 			return participations;
