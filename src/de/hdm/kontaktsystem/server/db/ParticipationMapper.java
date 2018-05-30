@@ -8,7 +8,9 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
+import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
@@ -57,6 +59,7 @@ public class ParticipationMapper {
 	/**
 	 * Zurückgeben aller Teilhaberschaften in der Datenbank
 	 * @return alle Teilhaberschaften als Participation-Objekte in einem Vector
+	 * @note only used in Report Generator
 	 */
 	public Vector<Participation> findAllParticipations(){
 		Connection con = DBConnection.connection();
@@ -70,13 +73,15 @@ public class ParticipationMapper {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM User_BusinessObject");
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
+				Participation participation = new Participation();
+				User participant = new User();
+				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
+				participant.setGoogleID(rs.getDouble("User_ID"));
+				participation.setParticipant(participant);	
+				bo.setBo_Id(rs.getInt("bo_ID"));
+				participation.setReference(bo);
 				
-				Participation p = new Participation();
-				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
-				p.setParticipant(participant);
-				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
-				p.setReference(reference);
-				participations.add(p);
+				participations.add(participation);
 			}
 			return participations;
 		} catch(SQLException e){
@@ -115,10 +120,12 @@ public class ParticipationMapper {
 			while(rs.next()) {
 				Participation participation = new Participation();
 				
-				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
+				User participant = new User();
+				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
+				participant.setGoogleID(rs.getDouble("User_ID"));
 				participation.setParticipant(participant);	
-				//System.out.println(reference);
-				participation.setReference(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("bo_ID")));
+				bo.setBo_Id(rs.getInt("bo_ID"));
+				participation.setReference(bo);
 				
 				participations.add(participation);
 				
@@ -152,13 +159,15 @@ public class ParticipationMapper {
 			
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
-				Participation p = new Participation();
-				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
-				p.setParticipant(participant);
-				p.setReference(BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID")));
-				System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + p.getReferencedObject().getBoId());
-				participations.add(p);
+				Participation participation = new Participation();
+				User participant = new User();
+				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
+				participant.setGoogleID(rs.getDouble("User_ID"));
+				participation.setParticipant(participant);	
+				bo.setBo_Id(rs.getInt("bo_ID"));
+				participation.setReference(bo);
+				
+				participations.add(participation);
 			}
 			return participations;
 			
@@ -185,12 +194,15 @@ public class ParticipationMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				Participation p = new Participation();
-				User participant = UserMapper.userMapper().findById(rs.getDouble("User_ID"));
-				p.setParticipant(participant);
-				BusinessObject reference = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(rs.getInt("BusinessObject_ID"));
-				p.setReference(reference);
-				participations.add(p);
+				Participation participation = new Participation();
+				User participant = new User();
+				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
+				participant.setGoogleID(rs.getDouble("User_ID"));
+				participation.setParticipant(participant);	
+				bo.setBo_Id(rs.getInt("bo_ID"));
+				participation.setReference(bo);
+				
+				participations.add(participation);
 			}
 			return participations;
 			
@@ -226,17 +238,18 @@ public class ParticipationMapper {
 			stmt.setInt(1, participation.getReferenceID());
 			stmt.setDouble(2, participation.getParticipantID());
 			stmt.execute();
-			
+			return participation;
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
-		BusinessObjectMapper.businessObjectMapper().setStatusTrue(participation.getReferenceID());
+		
 		return null;
 	}
 	
 	
 	/**
 	 * Löschen aller Teilhaberschaften
+	 *  @note in GUI Nicht Verwendet
 	 */
 	public void deleteAllParticipations() {
 		Connection con = DBConnection.connection();
@@ -261,6 +274,7 @@ public class ParticipationMapper {
 	/**
 	 * Löschen aller Teilhaberschaften zu Objekten eines gegebenen Users
 	 * @param owner
+	 * @note in GUI Nicht Verwendet
 	 */
 	public void deleteParticipationForOwner(User user) {
 		Vector<Participation> participations = this.findParticipationsByOwner(user);
@@ -284,6 +298,7 @@ public class ParticipationMapper {
 	 * Löschen aller Teilhaberschaften, die mit einem gegebenen User geteilt wurden.
 	 * 
 	 * @param participant
+	 *  @note in GUI Nicht Verwendet
 	 */
 	public void deleteParticipationForParticipant(User user) {
 		Vector<Participation> participations = findParticipationsByParticipant(user);		
@@ -300,12 +315,7 @@ public class ParticipationMapper {
 				e.printStackTrace();
 			}
 			
-			//Prüfen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt, 
-			//wenn nicht, Status (geteilt) des Objekt auf false setzen
-			Vector<Participation> part = findParticipationsByParticipant(p.getParticipant());
-			if(part.isEmpty()) {
-				BusinessObjectMapper.businessObjectMapper().setStatusFalse(p.getReferenceID());
-			}
+			
 		}
 	}
 	
@@ -323,14 +333,7 @@ public class ParticipationMapper {
 			e.printStackTrace();
 		}
 		
-		//Prüfen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt, 
-		//wenn nicht, Status (geteilt) des Objekt auf false setzen
-		Vector<Participation> participations = findParticipationsByBusinessObject(part.getReferencedObject());
-		if(participations.isEmpty()) {
-			BusinessObjectMapper.businessObjectMapper().setStatusFalse(part.getReferenceID());
-		}
-		
-		return null;
+		return part;
 		
 	}
 	
@@ -338,6 +341,7 @@ public class ParticipationMapper {
 	/**
 	 * Löschen aller Teilhaberschaften, die sich auf ein gegebenes BusinessObject beziehen
 	 * @param businessObject
+	 *  @note in GUI Nicht Verwendet
 	 */
 	public void deleteParticipationForBusinessObject(BusinessObject businessObject) {
 		Connection con = DBConnection.connection();

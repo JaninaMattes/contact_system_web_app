@@ -161,7 +161,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for(Contact contact : cv){
 			contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 			contact.setName(this.getNameOfContact(contact));
-			contact.setPropertyValues(this.getPropertyValueForContact(contact));
+			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		}
 		return cv;
 		
@@ -175,13 +175,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	// Nur Intern Verwendet
 	public Contact getOwnContact(User u) {
-		return cMapper.findOwnContact(u);
+		Contact contact = cMapper.findOwnContact(u);
+		contact.setName(this.getNameOfContact(contact));
+		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
+		return contact;
 	}
 	
 	public Contact editContact(Contact contact) {
 		Contact con = cMapper.updateContact(contact);
 		Vector <PropertyValue> propResult = new Vector <PropertyValue>();
-		propResult = this.getPropertyValueForContact(con);
+		propResult = this.getPropertyValuesForContact(con);
 		for(PropertyValue pV : propResult) {
 			this.editPropertyValue(pV);
 		}	
@@ -193,7 +196,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Contact contact = cMapper.findBy(pv);
 		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));		
 		contact.setName(this.getNameOfContact(contact));
-		contact.setPropertyValues(this.getPropertyValueForContact(contact));
+		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		return contact;
 	}
 	
@@ -201,7 +204,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
 		for(Contact contact : cv){
 			contact.setOwner(user);
-			contact.setPropertyValues(this.getPropertyValueForContact(contact));
+			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 			contact.setName(this.getNameOfContact(contact));
 		}
 		return cv;
@@ -212,7 +215,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<Contact> cv = cMapper.findContactByStatus(this.getCurrentUser(), status);
 		for(Contact contact : cv){
 			contact.setOwner(this.getUserByID(this.getCurrentUser()));
-			contact.setPropertyValues(this.getPropertyValueForContact(contact));
+			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 			contact.setName(this.getNameOfContact(contact));
 		}
 		return cv;
@@ -234,12 +237,29 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public Contact getContactById(int id) {
 
-		contact.setPropertyValues(this.getPropertyValueForContact(contact));
+		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		contact.setName(this.getNameOfContact(contact));
 		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 		return this.getContactById(id);
 	}
 	
+	/**
+	 * Gibt alle Contact-Objekte zurück die eine PropertyValue Besitzen, welche der Sucheingabe entspricht.
+	 * @param Sucheingabe
+	 * @return Vector<Contact>
+	 */
+	
+	public Vector<Contact> searchContacts(String value) {
+		Vector<Contact> cv = new Vector<Contact>();
+		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
+		
+		for(PropertyValue pv : pvv){
+			Contact c = this.getContactByPropertyValue(pv);
+			if(!cv.contains(c)) cv.add(c);
+			
+		}
+		return cv;
+	}
 	
 	
 	public Contact createContact(Contact contact) {
@@ -250,7 +270,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 
 	public Contact deleteContact(Contact contact) {	
-		for(PropertyValue pv : this.getPropertyValueForContact(contact)){
+		for(PropertyValue pv : this.getPropertyValuesForContact(contact)){
 			this.deletePropertyValue(pv);
 		}
 		Contact c = cMapper.deleteContact(contact);
@@ -400,7 +420,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	
 	
-	public Vector<PropertyValue> getPropertyValueForContact(Contact c) {
+	public Vector<PropertyValue> getPropertyValuesForContact(Contact c) {
 		Vector<PropertyValue> pvv = propValMapper.findBy(c);
 		
 		for(PropertyValue pv : pvv){
@@ -413,15 +433,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return propValMapper.findByKey(id);
 	}
 	
-	public Vector<PropertyValue> getPropertyValueByValue(String value) {
-		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
-		
-		for(PropertyValue pv : pvv){
-			pv.setContact(this.getContactByPropertyValue(pv));
-			pv.setProperty(PropertyMapper.propertyMapper().findBy(pv.getProperty().getId()));
-		}
-		return pvv;
-	}
+	
 
 
 	/**
@@ -437,7 +449,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		////System.out.println("#PV -findName");
 		PropertyValue name = new PropertyValue();	
 		Vector <PropertyValue> result = new Vector <PropertyValue>();
-		result = this.getPropertyValueForContact(contact);
+		result = this.getPropertyValuesForContact(contact);
 		
 		for(PropertyValue val : result) {
 
@@ -464,24 +476,66 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	@Override
 	public Participation createParticipation(Participation part) {
-		return partMapper.insertParticipation(part);
+		Participation participation = partMapper.insertParticipation(part);
+		boMapper.setStatusTrue(participation.getReferenceID());
+		return participation;
+		
 	}
-
+// Report
+	public Vector<Participation> getAllParticipations(){
+		Vector<Participation> partV = partMapper.findAllParticipations();
+		for(Participation part : partV){
+			part.setParticipant(this.getUserByID(part.getParticipantID()));
+			part.setReference(this.findBusinessObjectByID(part.getReferenceID()));
+		}
+		return partV;
+	}
+	
 	@Override
 	public Vector<Participation> getAllParticipationsByOwner(User u) {
-		return partMapper.findParticipationsByOwner(u);
+		Vector<Participation> partV = partMapper.findParticipationsByOwner(u);
+		for(Participation part : partV){
+			part.setParticipant(this.getUserByID(part.getParticipantID()));
+			part.setReference(this.findBusinessObjectByID(part.getReferenceID()));
+		}
+		return partV;
 	}
 
 	@Override
 	public Vector<Participation> getAllParticipationsByParticipant(User participant) {
-		return partMapper.findParticipationsByParticipant(participant);
+		Vector<Participation> partV = partMapper.findParticipationsByParticipant(participant);
+		for(Participation part : partV){
+			part.setParticipant(this.getUserByID(part.getParticipantID()));
+			part.setReference(this.findBusinessObjectByID(part.getReferenceID()));
+		}
+		return partV;
+	}
+	
+	public Vector<Participation> getAllParticipationsByBusinessObject(BusinessObject bo) {
+		Vector<Participation> partV = partMapper.findParticipationsByBusinessObject(bo);
+		for(Participation part : partV){
+			part.setParticipant(this.getUserByID(part.getParticipantID()));
+			part.setReference(this.findBusinessObjectByID(part.getReferenceID()));
+		}
+		return partV;
 	}
 
 	@Override
 	public Participation deleteParticipation(Participation p) {
-		return partMapper.deleteParticipation(p);
+		Participation part = partMapper.deleteParticipation(p);
+		//Prüfen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt, 
+		//wenn nicht, Status (geteilt) des Objekt auf false setzen
+		Vector<Participation> participations = this.getAllParticipationsByBusinessObject(part.getReferencedObject());
+		if(participations.isEmpty()) {
+			BusinessObjectMapper.businessObjectMapper().setStatusFalse(part.getReferenceID());
+		}
+		return part;
+				
 		
 	}
+	
+	
+		
 	
 
 	/*
@@ -513,8 +567,333 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return bo;
 	  }
 
-
+	  /*
+		* ***************************************************************************
+		* ABSCHNITT, Find All Shared
+		* ***************************************************************************
+		*/
 	
+	  
+	  /**
+		 * Alle fuer den Benutzer in der Applikation geteilte Ausprägungen <code>PropertyValue</code> Objekte
+		 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
+		 * 
+		 * @param User-Objekt
+		 * @return Vector PropertyValue-Objekte
+		 */
+
+		public Vector<PropertyValue> findAllPVSharedByOthersToMe (User user) {
+
+			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+			Vector<Participation> participationVector = new Vector<Participation>();		
+			participationVector = this.getAllParticipationsByParticipant(user);
+			// Vector für die Speicherung aller BusinessObjekte erzeugen
+			Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
+			
+			for (Participation part : participationVector) {
+				 PropertyValue propVal = new PropertyValue();
+				 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());	
+				 ////System.out.println("pov-id: " + propVal.getBo_Id());		     
+
+				 if(bo instanceof PropertyValue) {			 		
+					 propVal = (PropertyValue) bo;
+				 		////System.out.println("Ausprägung " + propVal.getProp());
+				 		propertyResultVector.addElement(propVal);		     
+				 }
+			}
+			return propertyResultVector;
+			
+		}
+		
+		/**
+		 * Alle für den Benutzer in der Applikation geteilte Kontakte <code>Contact</code> Objekte
+		 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
+		 * 
+		 * @param User-Objekt
+		 * @return Vector Contact-Objekte
+		 */
+
+		public Vector<Contact> findAllCSharedByOthersToMe (User user) {
+
+			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+			Vector<Participation> participationVector = new Vector<Participation>();		
+			participationVector = this.getAllParticipationsByParticipant(user);
+			Vector<Contact> contactResultVector = new Vector <Contact>(); 
+			
+			for (Participation part : participationVector) {
+				 System.out.println("part id:" + part.getReferenceID());			 
+				 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
+				 System.out.println(bo.getClass());
+				 Contact contact = new Contact();			 
+				 System.out.println("bo gefunden: " + bo.getBoId());
+				 
+				 	if(bo instanceof Contact) {				
+				 		contact = (Contact) bo;
+				 		System.out.println("contact name " + bo);
+				 		contactResultVector.addElement(contact);
+				 	}
+			}		
+			if(contactResultVector.isEmpty()) System.out.println("# no contacts found");		
+			return contactResultVector;		
+		}
+		
+		/**
+		 * Alle für den Benutzer in der Applikation geteilte Kontaktelisten <code>ContactList</code> -Objekte
+		 * künnen über den Aufruf dieser Methode aus der DB zur�ck gegeben werden.
+		 * 
+		 * @param User-Objekt
+		 * @return Vector ContactList-Objekte
+		 */
+
+		public Vector<ContactList> findAllCLSharedByOthersToMe(User user) {
+
+			Vector<Participation> participationVector = new Vector<Participation>();		
+			participationVector = this.getAllParticipationsByParticipant(user);
+			Vector<ContactList> clResultVector = new Vector <ContactList>(); 		
+			
+			for (Participation part : participationVector) {
+				 //System.out.println("part id:" + part.getReferenceID());	
+				 
+				 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
+				 //System.out.println(bo.getClass());
+				 ContactList cl = new ContactList();			 
+				 //System.out.println("bo gefunden: " + bo.getBo_Id());
+
+				 
+				 	if(bo instanceof ContactList) {			 		
+				 		cl = (ContactList) bo;
+				 		//System.out.println("contactList name " + bo);
+				 		clResultVector.addElement(cl);
+				 	}
+				}
+			
+			if(clResultVector.isEmpty()) System.out.println("# no contactList found");	
+			
+			return clResultVector;		
+		}
+		
+		
+		
+		/**
+		 *  Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen <code>PropertyValue</code> - Objekte 
+		 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
+		 *  und die Ergebnisse zurueckgegeben
+		 *  
+		 *  @param User-Objekt
+		 *  @return Vector<PropertyValue>
+		 */
+
+		public Vector<PropertyValue> findAllPVSharedByMe (User user) {
+
+			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+			Vector<Participation> participationVector = new Vector<Participation>();		
+			participationVector = this.getAllParticipationsByOwner(user);
+			// Vector für die Speicherung aller BusinessObjekte erzeugen
+			Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 		
+			//System.out.println(participationVector);
+			
+			for (Participation part : participationVector) { 		
+				
+				 //System.out.println(part);
+				 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
+				 //System.out.println(bo);
+				 PropertyValue propVal = new PropertyValue();	 
+				 ////System.out.println(propVal); 	
+				 if(bo instanceof PropertyValue) {			 		
+					 propVal = (PropertyValue) bo;
+				 		System.out.println("Ausprägung " + propVal);
+				 		propertyResultVector.addElement(propVal);		     
+				 }
+			}
+			//System.out.println(propertyResultVector);
+			return propertyResultVector;		
+		}
+		
+		/**
+		 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
+		 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
+		 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
+		 *  
+		 *  @param User-Objekt
+		 *  @return Vector mit allen geteilten Contact-Objekten
+		 */
+
+		public Vector<Contact> findAllCSharedByMe (User user) {
+
+			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+			Vector<Participation> participationVector = new Vector<Participation>();		
+			participationVector = this.getAllParticipationsByOwner(user);		
+			Vector<Contact> contactResultVector = new Vector <Contact>(); 		
+					
+			for (Participation part : participationVector) {
+				 System.out.println("part id:" + part.getReferenceID());			 
+				 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
+				 Contact contact = new Contact();
+				 
+				 	if(bo instanceof Contact) {			 		
+				 		contact = (Contact) bo;
+				 		System.out.println("contact name " + contact.getName());
+				 		contactResultVector.addElement(contact);	     
+				 }		
+			}	 	
+			if(contactResultVector.isEmpty()) System.out.println("# no contacts found");			
+			
+			return contactResultVector;
+			
+		}
+		
+		/**
+		 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
+		 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
+		 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
+		 *  
+		 *  @param User-Objekt
+		 *  @return Vector<ContactList>
+		 */
+
+		public Vector<ContactList> findAllCLSharedByMe (User user) {
+
+			Vector<Participation> participationVector = new Vector<Participation>();		
+			participationVector = this.getAllParticipationsByOwner(user);
+					// Vector für die Speicherung aller BusinessObjekte erzeugen
+					Vector<ContactList> contactListVector = new Vector <ContactList>(); 		
+					//System.out.println(participationVector);
+					
+					for (Participation part : participationVector) { 		
+						
+						//System.out.println(part);
+						 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
+						 //System.out.println(bo);
+						 ContactList contactList = new ContactList();	 
+						 //System.out.println(propVal); 	
+						 if(bo instanceof ContactList) {			 		
+							 contactList = (ContactList) bo;
+						 		//System.out.println("Ausprägung " + propVal.getProp());
+							 contactListVector.addElement(contactList);		     
+						 }
+					}
+					return contactListVector;
+					
+				}
+		
+		
+		/**
+		 * Methode zur L�schung aller von einem User erstellten Ausprägungen, Ownership und Participation!
+		 * 
+		 * @param User-Objekt
+		 */
+		
+		public void deleteAllPVSharedByMe(User user) {
+			
+			Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
+			propertyValueResult = this.findAllPVSharedByMe(user);
+			
+			for(PropertyValue pV : propertyValueResult) {
+				// loeschen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
+				ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
+				this.deletePropertyValue(pV);
+			}
+		}
+		
+		
+		/**
+		 * Methode zur Löschung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
+		 * welche im System mit anderen Nutzern geteilt wurden. 
+		 * @param User-Objekt
+		 */
+		
+		public void deleteAllCSharedByMe(User user) {
+			
+			Vector <Contact> contactResult = new Vector <Contact>();
+			contactResult = this.findAllCSharedByMe(user);
+			
+			for(Contact contact : contactResult) {
+				ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
+				this.deleteContact(contact);
+				System.out.println("# shared contact deleted: " + contact.getBoId() );
+			}
+			
+		}
+		
+		/**
+		 * Methode zur Löschung aller von einem User erstellten Kontaktlisten <code>ContactList</code> -Objekte,
+		 * welche im System mit anderen Nutzern geteilt wurden. 
+		 * @param User
+		 */
+		
+		public void deleteAllCLSharedByMe(User user) {
+			
+			Vector <ContactList> clResult = new Vector <ContactList>();
+			clResult = this.findAllCLSharedByMe(user);
+			
+			for(ContactList cl : clResult) {
+				ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(cl);
+				this.deleteContactList(cl);
+				//System.out.println("# shared contactList deleted: " + cl.getBo_Id() );
+
+			}
+		}
+		
+		
+
+		/**
+		 * Funktion zum Löschen aller Auspraegungen die vom User geteilt wurden
+		 * 
+		 * @param User-Objekt
+		 */
+
+		public void deleteAllPVSharedByOthersToMe(User u) {
+
+			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+					Vector<PropertyValue> pvVector = new Vector<PropertyValue>();		
+					pvVector = this.findAllPVSharedByOthersToMe(u);
+					for (PropertyValue pv : pvVector) {
+						ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
+					     }
+					}
+
+		
+		
+		/**
+		 * Eine Methode zur Loeschung aller Verbindungen in der Participation Tabelle der DB.
+		 * Dies fuehrt dazu, dass urspruenglich fuer einen Nutzer geteilten Objekte
+		 * von diesem nicht mehr aufgerufen werden koennen.
+		 * 
+		 * @param User-Objekt
+		 */
+		
+		public void deleteAllCSharedByOthersToMe(User user) {
+			
+			Vector <Contact> contactResult = new Vector <Contact>();
+			contactResult = this.findAllCSharedByOthersToMe(user);		
+
+			for(Contact contact : contactResult) {
+				ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
+				System.out.println("# participation for contact deleted: " + contact.getBoId() );
+			}
+		}
+		
+		
+		/**
+		 * Eine Methode zur Löschung aller Verbindungen in der Participation Tabelle der DB.
+		 * Dies führt dazu, dass die für einen Nutzer geteilten Objekte nicht mehr aufgerufen werden können.
+		 * Die Teilhaberschaft ist damit beendet. 
+		 * 
+		 * @param User-Objekt
+		 */
+		
+		public void deleteAllCLSharedByOthersToMe(User user) {
+			
+			Vector <ContactList> clResult = new Vector <ContactList>();
+			clResult = this.findAllCLSharedByOthersToMe(user);		
+			//System.out.println(clResult);
+
+			for(ContactList cl : clResult) {
+				ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
+				//System.out.println("# participation for contact deleted: " + cl.getBo_Id() );
+
+			}
+		}	
 	
 	
 }

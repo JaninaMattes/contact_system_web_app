@@ -121,71 +121,10 @@ public class ContactMapper {
 	}
 	
 	
-	/**
-	 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
-	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
-	 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
-	 *  
-	 *  @param User-Objekt
-	 *  @return Vector mit allen geteilten Contact-Objekten
-	 */
-
-	public Vector<Contact> findAllSharedByMe (User user) {
-
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-		Vector<Participation> participationVector = new Vector<Participation>();		
-		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);		
-		Vector<Contact> contactResultVector = new Vector <Contact>(); 		
-				
-		for (Participation part : participationVector) {
-			 System.out.println("part id:" + part.getReferenceID());			 
-			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
-			 Contact contact = new Contact();
-			 
-			 	if(bo instanceof Contact) {			 		
-			 		contact = (Contact) bo;
-			 		System.out.println("contact name " + contact.getName());
-			 		contactResultVector.addElement(contact);	     
-			 }		
-		}	 	
-		if(contactResultVector.isEmpty()) System.out.println("# no contacts found");			
-		
-		return contactResultVector;
-		
-	}
 	
 	
-	/**
-	 * Alle für den Benutzer in der Applikation geteilte Kontakte <code>Contact</code> Objekte
-	 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
-	 * 
-	 * @param User-Objekt
-	 * @return Vector Contact-Objekte
-	 */
-
-	public Vector<Contact> findAllSharedByOthersToMe (User user) {
-
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-		Vector<Participation> participationVector = new Vector<Participation>();		
-		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
-		Vector<Contact> contactResultVector = new Vector <Contact>(); 
-		
-		for (Participation part : participationVector) {
-			 System.out.println("part id:" + part.getReferenceID());			 
-			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
-			 System.out.println(bo.getClass());
-			 Contact contact = new Contact();			 
-			 System.out.println("bo gefunden: " + bo.getBoId());
-			 
-			 	if(bo instanceof Contact) {				
-			 		contact = (Contact) bo;
-			 		System.out.println("contact name " + bo);
-			 		contactResultVector.addElement(contact);
-			 	}
-		}		
-		if(contactResultVector.isEmpty()) System.out.println("# no contacts found");		
-		return contactResultVector;		
-	}
+	
+	
 	
 
 	/**
@@ -421,47 +360,16 @@ public class ContactMapper {
 	}
 
 
-	/**
-	 * Methode zur Löschung aller von einem User erstellten Kontakte <code>Contact</code> Objekte,
-	 * welche im System mit anderen Nutzern geteilt wurden. 
-	 * @param User-Objekt
-	 */
-	
-	public void deleteAllSharedByMe(User user) {
-		
-		Vector <Contact> contactResult = new Vector <Contact>();
-		contactResult = this.findAllSharedByMe(user);
-		
-		for(Contact contact : contactResult) {
-			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
-			this.deleteContact(contact);
-			System.out.println("# shared contact deleted: " + contact.getBoId() );
-		}
-	}
 	
 	
-	/**
-	 * Eine Methode zur Loeschung aller Verbindungen in der Participation Tabelle der DB.
-	 * Dies fuehrt dazu, dass urspruenglich fuer einen Nutzer geteilten Objekte
-	 * von diesem nicht mehr aufgerufen werden koennen.
-	 * 
-	 * @param User-Objekt
-	 */
 	
-	public void deleteAllSharedByOthersToMe(User user) {
-		
-		Vector <Contact> contactResult = new Vector <Contact>();
-		contactResult = this.findAllSharedByOthersToMe(user);		
-
-		for(Contact contact : contactResult) {
-			ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
-			System.out.println("# participation for contact deleted: " + contact.getBoId() );
-		}
-	}
+	
 	
 	
 	/**
 	 * Mapper-Methode um alle Kontakte zu loeschen
+	 * 
+	 * @note  Nicht verwendet
 	 */
 	
 	public void deleteAllContacts() {
@@ -546,7 +454,6 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				contact.setName(PropertyValueMapper.propertyValueMapper().findName(contact));
 				owner.setUserContact(contact);
 				contact.setOwner(owner);
 				return contact;				

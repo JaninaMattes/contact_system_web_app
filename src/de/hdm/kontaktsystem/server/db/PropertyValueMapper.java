@@ -165,71 +165,9 @@ public class PropertyValueMapper {
 		return null;
 	}
 	
-	/**
-	 *  Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen <code>PropertyValue</code> - Objekte 
-	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
-	 *  und die Ergebnisse zurueckgegeben
-	 *  
-	 *  @param User-Objekt
-	 *  @return Vector<PropertyValue>
-	 */
-
-	public Vector<PropertyValue> findAllSharedByMe (User user) {
-
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-		Vector<Participation> participationVector = new Vector<Participation>();		
-		participationVector = ParticipationMapper.participationMapper().findParticipationsByOwner(user);
-		// Vector für die Speicherung aller BusinessObjekte erzeugen
-		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 		
-		//System.out.println(participationVector);
-		
-		for (Participation part : participationVector) { 		
-			
-			 //System.out.println(part);
-			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());
-			 //System.out.println(bo);
-			 PropertyValue propVal = new PropertyValue();	 
-			 ////System.out.println(propVal); 	
-			 if(bo instanceof PropertyValue) {			 		
-				 propVal = (PropertyValue) bo;
-			 		System.out.println("Ausprägung " + propVal);
-			 		propertyResultVector.addElement(propVal);		     
-			 }
-		}
-		//System.out.println(propertyResultVector);
-		return propertyResultVector;		
-	}
 	
-	/**
-	 * Alle fuer den Benutzer in der Applikation geteilte Ausprägungen <code>PropertyValue</code> Objekte
-	 * können über den Aufruf dieser Methode aus der DB zurück gegeben werden.
-	 * 
-	 * @param User-Objekt
-	 * @return Vector PropertyValue-Objekte
-	 */
-
-	public Vector<PropertyValue> findAllSharedByOthersToMe (User user) {
-
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-		Vector<Participation> participationVector = new Vector<Participation>();		
-		participationVector = ParticipationMapper.participationMapper().findParticipationsByParticipant(user);
-		// Vector für die Speicherung aller BusinessObjekte erzeugen
-		Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
-		
-		for (Participation part : participationVector) {
-			 PropertyValue propVal = new PropertyValue();
-			 BusinessObject bo = BusinessObjectMapper.businessObjectMapper().findBusinessObjectByID(part.getReferenceID());	
-			 ////System.out.println("pov-id: " + propVal.getBo_Id());		     
-
-			 if(bo instanceof PropertyValue) {			 		
-				 propVal = (PropertyValue) bo;
-			 		////System.out.println("Ausprägung " + propVal.getProp());
-			 		propertyResultVector.addElement(propVal);		     
-			 }
-		}
-		return propertyResultVector;
-		
-	}
+	
+	
 
 	/** TODO: 
 	 * UserMapper, ContactMapper, alle erzeugten PVs ausgeben
@@ -373,7 +311,7 @@ public class PropertyValueMapper {
 					+ "INNER JOIN Contact c ON pv.contact_ID = c.ID "
 					+ "WHERE pv.value LIKE  ? " 
 					);
-					stmt.setString(1, value);
+					stmt.setString(1, "%"+value+"%");
 					ResultSet rs = stmt.executeQuery();
 					
 			while (rs.next()) {
@@ -514,24 +452,6 @@ public class PropertyValueMapper {
 		return i;
 	}
 
-	/**
-	 * Anhand des zugehörigen Kontakts wird eine Auspraegung gelöscht
-	 * 
-	 * @parm Contact-Objekt
-	 */
-
-	public void deleteBy(Contact c) {
-		deleteByContact(c.getBoId());	
-
-	}
-
-	/**
-	 * Löschen der Ausprägung anhand der zugehörigen Kontakt Id
-	 * Aufruf über Contact, der PropertyValue löscht
-	 * 
-	 * @parm Contact ID
-	 */
-
 	
 
 	/**
@@ -561,40 +481,7 @@ public class PropertyValueMapper {
 
 	}
 
-	/**
-	 * Methode zur L�schung aller von einem User erstellten Ausprägungen, Ownership und Participation!
-	 * 
-	 * @param User-Objekt
-	 */
 	
-	public void deleteAllSharedByMe(User user) {
-		
-		Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
-		propertyValueResult = this.findAllSharedByMe(user);
-		
-		for(PropertyValue pV : propertyValueResult) {
-			// loeschen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
-			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
-			this.delete(pV);
-		}
-	}
-	
-	/**
-	 * Funktion zum Löschen aller Auspraegungen die vom User geteilt wurden
-	 * 
-	 * @param User-Objekt
-	 */
-
-	public void deleteAllSharedByOthersToMe(User u) {
-
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-				Vector<PropertyValue> pvVector = new Vector<PropertyValue>();		
-				pvVector = this.findAllSharedByOthersToMe(u);
-				for (PropertyValue pv : pvVector) {
-					ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
-				     }
-				}
-
 	
 
 
