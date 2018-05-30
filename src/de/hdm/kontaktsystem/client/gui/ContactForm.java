@@ -5,6 +5,7 @@ import java.util.Vector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
@@ -18,7 +19,8 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 /**
  * 
  * @author Katalin
- *Formular für die Darstellung und Anzeige eines Kontaktes
+ * Formular für die Darstellung und Anzeige eines Kontaktes
+ * 
  */
 
 public class ContactForm extends VerticalPanel{
@@ -49,20 +51,10 @@ public class ContactForm extends VerticalPanel{
 	private Label labelGeburtsdatum = new Label("Geburtsdatum:");
 	private Label labelAdresse = new Label("Adresse:");
 	
-	private Label statusName = new Label("");
-	private Label statusNickName = new Label("");
-	private Label statusFirma = new Label("");
-	private Label statusTeleNr = new Label("");
-	private Label statusMobilNr = new Label("");
-	private Label statusEmail = new Label("");
-	private Label statusGeburtsdatum = new Label("");
-	private Label statusAdresse = new Label("");
-	
-	//private Button deleteButton = new Button("Kontakt löschen");
-	//private Button shareButton = new Button("Kontakt teilen");
-	//private Button editButton = new Button("Kontakt bearbeiten");
-	//private Button saveButton = new Button("Kontakt speichern");
-	//private Button cancelButton = new Button("Änderungen verwerfen");
+	private Label contactStatus = new Label("");
+		
+	private Button deleteButton = new Button("Kontakt löschen");
+	private Button saveButton = new Button("Kontakt speichern");
 	
 	private CheckBox checkBox1 = new CheckBox();
 	private CheckBox checkBox2 = new CheckBox();
@@ -72,18 +64,17 @@ public class ContactForm extends VerticalPanel{
 	private CheckBox checkBox6 = new CheckBox();
 	private CheckBox checkBox7 = new CheckBox();
 	private CheckBox checkBox8 = new CheckBox();
-	//private CheckBox checkBox9 = new CheckBox();
 	
 	/**
 	 * Instanziieren der Panels
 	 */
 	
-	/*
-	 * Hauptpanel
+	/**
+	 * HauptPanel
 	 */
 	private VerticalPanel vp = new VerticalPanel();
 	
-	/*
+	/**
 	 * Startpunkt
 	 */
 	
@@ -94,49 +85,43 @@ public class ContactForm extends VerticalPanel{
 		 * Anordnung der einzelnen Inhalte für ContactForm.
 		 * 
 		 */
-		Grid contactGrid = new Grid(9, 4);
+		Grid contactGrid = new Grid(9, 3);
 		
 		contactGrid.setWidget(0, 0, label);
+		contactGrid.setWidget(0, 1, contactStatus);
 		
 		contactGrid.setWidget(1, 0, labelName);
 		contactGrid.setWidget(1, 1, textBoxName);
 		contactGrid.setWidget(1, 2, checkBox1);
-		contactGrid.setWidget(1, 3, statusName);
-		
+				
 		contactGrid.setWidget(2, 0, labelNickName);
 		contactGrid.setWidget(2, 1, textBoxNickName);
 		contactGrid.setWidget(2, 2, checkBox2);
-		contactGrid.setWidget(2, 3, statusNickName);
-		
+				
 		contactGrid.setWidget(3, 0, labelFirma);
 		contactGrid.setWidget(3, 1, textBoxFirma);
 		contactGrid.setWidget(3, 2, checkBox3);
-		contactGrid.setWidget(3, 3, statusFirma);
-		
+				
 		contactGrid.setWidget(4, 0, labelTeleNr);
 		contactGrid.setWidget(4, 1, textBoxTelefonnummer);
 		contactGrid.setWidget(4, 2, checkBox4);
-		contactGrid.setWidget(4, 3, statusTeleNr);
 		
 		contactGrid.setWidget(5, 0, labelMobilNr);
 		contactGrid.setWidget(5, 1, textBoxMobilnummer);
 		contactGrid.setWidget(5, 2, checkBox5);
-		contactGrid.setWidget(5, 3, statusMobilNr);
 		
 		contactGrid.setWidget(6, 0, labelEmail);
 		contactGrid.setWidget(6, 1, textBoxEmail);
 		contactGrid.setWidget(6, 2, checkBox6);
-		contactGrid.setWidget(6, 3, statusEmail);
 		
 		contactGrid.setWidget(7, 0, labelGeburtsdatum);
 		contactGrid.setWidget(7, 1, textBoxGeburtsdatum);
 		contactGrid.setWidget(7, 2, checkBox7);
-		contactGrid.setWidget(7, 3, statusGeburtsdatum);
 		
 		contactGrid.setWidget(8, 0, labelAdresse);
 		contactGrid.setWidget(8, 1, textBoxAdresse);
 		contactGrid.setWidget(8, 2, checkBox8);
-		contactGrid.setWidget(8, 3, statusAdresse);	
+	
 		
 		/*
 		 * CheckBoxen für das Teilen einzelner Elemente einer ContactForm 
@@ -176,7 +161,7 @@ public class ContactForm extends VerticalPanel{
 	      public void onClick(ClickEvent event) {
 	    	  String contactNickName = textBoxName.getText();
 	    	  if(contactNickName.equals("")) Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  else pv = getValue()
+	    	  //else pv = getValue()
 	      }
 	    });
 	    	  
@@ -282,13 +267,15 @@ public class ContactForm extends VerticalPanel{
 		public void setSelected(Contact c) {
 			
 			if (c != null) {
-				contactToDisplay = c;				
+				contactToDisplay = c;		
+				if(c.isShared_status()) contactStatus.setText("Geteilt");
+				label.setText("Kontakt: " + c.getBoId());
+				
 				Vector <PropertyValue> pv = new Vector <PropertyValue>();
 				pv = contactToDisplay.getPropertyValues();
 				
-				for(PropertyValue p : pv) {				
-					//-> Dynamische Erzeugung
-				//if(p.getProperty().getId() == 1) label.setText("Kontakt: " + ...);
+				for(PropertyValue p : pv) {	
+					
 				if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
 				if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
 				if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
@@ -300,6 +287,7 @@ public class ContactForm extends VerticalPanel{
 			}
 				
 			} else {
+				contactStatus.setText("Nicht geteilt");
 				label.setText("Kontakt: ");
 				textBoxName.setText("");
 				textBoxNickName.setText("");

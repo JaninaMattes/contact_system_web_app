@@ -178,6 +178,7 @@ public class ContactListForm extends VerticalPanel{
 			}
 		}
 	}
+	
 	class shareContactListWithCallback implements AsyncCallback<Participation> {
 
 		Participation participation = null;
