@@ -214,7 +214,6 @@ public class ContactSystem implements EntryPoint {
 				 * Definition der Buttons und der Suchfunktion, die sich auf Kontakte beziehen
 				 */
 				Button addContactButton = new Button("Add");
-				Button addContactToListButton = new Button("Add to List");
 				Button editContactButton = new Button("Edit");
 				Button shareContactButton = new Button("Share");
 				Button deleteContactButton = new Button("Delete");
@@ -227,7 +226,6 @@ public class ContactSystem implements EntryPoint {
 				 * Hinzufügen der Buttons zum modifyPanel
 				 */
 				modifyPanel.add(addContactButton);
-				modifyPanel.add(addContactToListButton);
 				modifyPanel.add(editContactButton);
 				modifyPanel.add(shareContactButton);
 				modifyPanel.add(deleteContactButton);
@@ -238,6 +236,7 @@ public class ContactSystem implements EntryPoint {
 				searchPanel.add(searchContactText);
 				searchPanel.add(searchContactButton);
 
+				modifyPanel.add(searchPanel);
 			}
 			
 		});
@@ -254,6 +253,33 @@ public class ContactSystem implements EntryPoint {
 				cellTree.setAnimationEnabled(true);
 				listAndForm.add(cellTree);	
 				
+				/**
+				 * Definition der Buttons und der Suchfunktion, die sich auf Kontaktlisten beziehen
+				 */
+				Button addContactListButton = new Button("Add");
+				Button editContactListButton = new Button("Edit");
+				Button shareContactListButton = new Button("Share");
+				Button deleteContactListButton = new Button("Delete");
+				TextBox searchContactListText = new TextBox();
+				Button searchContactListButton = new Button("Search");
+				
+				//TODO: Funktionalität, Symbole statt Schrift
+				
+				/**
+				 * Hinzufügen der Buttons zum modifyPanel
+				 */
+				modifyPanel.add(addContactListButton);
+				modifyPanel.add(editContactListButton);
+				modifyPanel.add(shareContactListButton);
+				modifyPanel.add(deleteContactListButton);
+				
+				/**
+				 * Aufbau des Suchfeldes
+				 */
+				searchPanel.add(searchContactListText);
+				searchPanel.add(searchContactListButton);
+
+				modifyPanel.add(searchPanel);
 			}
 			
 		});
@@ -270,6 +296,29 @@ public class ContactSystem implements EntryPoint {
 				cellTree.setAnimationEnabled(true);
 				listAndForm.add(cellTree);				
 				
+				/**
+				 * Definition der Buttons und der Suchfunktion, die sich auf Teilhaberschaften beziehen, die mir gehören
+				 */
+				Button deleteParticipationButton = new Button("Delete");
+				//Suche anhand des Users, mit dem geteilt wurde
+				TextBox searchParticicipationByParticipantText = new TextBox();
+				Button searchParticicipationByParticipantButton = new Button("Search");
+				
+				//TODO: Funktionalität, Symbole statt Schrift
+				
+				/**
+				 * Hinzufügen der Buttons zum modifyPanel
+				 */
+
+				modifyPanel.add(deleteParticipationButton);
+				
+				/**
+				 * Aufbau des Suchfeldes
+				 */
+				searchPanel.add(searchParticicipationByParticipantText);
+				searchPanel.add(searchParticicipationByParticipantButton);
+
+				modifyPanel.add(searchPanel);
 			}
 		});
 	
@@ -286,14 +335,34 @@ public class ContactSystem implements EntryPoint {
 				cellTree.setAnimationEnabled(true);	
 				listAndForm.add(cellTree);				
 				
+				/**
+				 * Definition der Buttons und der Suchfunktion, die sich auf Teilhaberschaften beziehen, die mit mir geteilt wurden
+				 */
+				Button deleteParticipationButton = new Button("Delete");
+				//Suche anhand des Users, von dem Objekte erhalten wurden
+				TextBox searchParticicipationByOwnerText = new TextBox();
+				Button searchParticicipationByOwnerButton = new Button("Search");
+				
+				//TODO: Funktionalität, Symbole statt Schrift
+				
+				/**
+				 * Hinzufügen der Buttons zum modifyPanel
+				 */
+
+				modifyPanel.add(deleteParticipationButton);
+				
+				/**
+				 * Aufbau des Suchfeldes
+				 */
+				searchPanel.add(searchParticicipationByOwnerText);
+				searchPanel.add(searchParticicipationByOwnerButton);
+
+				modifyPanel.add(searchPanel);
 			}
 		});
 	
 		//Hinzufügen des Detail-Panels zum Content
 		listAndForm.add(detailsPanel);	
-		
-		//Suche Hinzufügen
-		modifyPanel.add(searchPanel);
 		
 		//Aufbau der restlichen Webseite
 		addPanel.add(listAndForm);
