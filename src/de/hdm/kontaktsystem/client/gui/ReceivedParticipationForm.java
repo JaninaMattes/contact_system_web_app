@@ -112,8 +112,8 @@ public class ReceivedParticipationForm extends VerticalPanel{
 		}
 	}
 
-	// catvm setter
-	void setCatvm(MyParticipationsTreeViewModel mptvm) {
+	// mptvm setter
+	void setMptvm(MyParticipationsTreeViewModel mptvm) {
 		this.mptvm = mptvm;
 	}
 

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HeaderPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.LoginService;
@@ -56,23 +57,32 @@ public class ContactSystem implements EntryPoint {
 	/** 
 	 * Instanziieren der GWT Widgets und Panels
 	 */
-	//Panels
-	private VerticalPanel navigation = new VerticalPanel();
-	private HorizontalPanel header = new HorizontalPanel();
+	private VerticalPanel root = new VerticalPanel();
+	private HorizontalPanel header = new HorizontalPanel(); //Logo, Logout, Report-Link
+	private HorizontalPanel content = new HorizontalPanel(); //Menü, Liste/cellTree und Buttons+Suche, Forms
+	private VerticalPanel navigation = new VerticalPanel(); //Menü links mit 4 Buttons
 	
-	//Widgets
+	//Buttons Menü links
 	private Button ContactButton = new Button("Kontakte");
 	private Button ContactListsButton = new Button("Kontaktlisten");
 	private Button MyParticipationsButton = new Button("Von mir geteilt");
 	private Button ReceivedParticipationsButton = new Button("An mich geteilt");
-
+	
+	private VerticalPanel addPanel = new VerticalPanel(); //Umfasst Liste/cellTree, Buttons+Suche und Forms
+	private HorizontalPanel listAndForm = new HorizontalPanel(); //Liste/cellTree und Forms
+	private VerticalPanel detailsPanel = new VerticalPanel(); //Enthält Formulare
+	private HorizontalPanel modifyPanel = new HorizontalPanel(); //Enthält Buttons zum bearbeiten und Suchfunktion
+	private HorizontalPanel searchPanel = new HorizontalPanel(); //enthält Suchfeld und Button
+	
+	private VerticalPanel trailer = new VerticalPanel();
+	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen
+	
 	
 	/**
 	 * Attribute für den Login
 	 */
 	private User userInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private VerticalPanel root = new VerticalPanel();
 	private Label loginLabel = new Label(
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen ");
 	private Anchor signInLink = new Anchor("Login mit Google");
@@ -133,7 +143,7 @@ public class ContactSystem implements EntryPoint {
 		if(userInfo != null){ signOutLink.setHref(userInfo.getLogoutUrl());}
 		signOutLink.setStyleName("link");
 		header.add(signOutLink);
-		RootPanel.get("Header").add(header);
+		root.add(header);
 		
 		
 		//Navigation in HTML-Seite einbinden
@@ -141,7 +151,7 @@ public class ContactSystem implements EntryPoint {
 		navigation.add(ContactListsButton);
 		navigation.add(MyParticipationsButton);
 		navigation.add(ReceivedParticipationsButton);
-		RootPanel.get("Navigator").add(navigation);
+		content.add(navigation);
 		
 		
 		/**
@@ -157,24 +167,30 @@ public class ContactSystem implements EntryPoint {
 		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 				
 		//Formulare
-		ContactForm cf = new ContactForm();
-		ContactListForm clf = new ContactListForm();
-		MyParticipationForm mpf = new MyParticipationForm();
-		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+		final ContactForm cf = new ContactForm();
+		final ContactListForm clf = new ContactListForm();
+		final MyParticipationForm mpf = new MyParticipationForm();
+		final ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 
 		//Verlinkung der Listen und der dazugehörigen Formulare
 		ctvm.setContactForm(cf);
+		cf.setCatvm(ctvm);
+		
 		cltvm.setContactListForm(clf);
+		clf.setCltvm(cltvm);
+		
 		mptvm.setParticipationForm(mpf);
+		mpf.setMptvm(mptvm);
+		
 		rptvm.setParticipationForm(rpf);
+		rpf.setMptvm(mptvm);
 		
-		
-		//Erzeugen des Details-Panels und Zuordnung zu den Formularen
-		VerticalPanel detailsPanel = new VerticalPanel();
+		//Erzeugen des Details-Panels und Zuordnung zur GUI
 		detailsPanel.add(cf);
 		detailsPanel.add(clf);
 		detailsPanel.add(mpf);
 		detailsPanel.add(rpf);
+		
 		
 		/**
 		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
@@ -184,19 +200,45 @@ public class ContactSystem implements EntryPoint {
 		//ClickHandler für ContactButton
 		ContactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird und
+				 * Hinzufügen zur Webseite
+				 */
 				CellTree.Resources contactTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 				cellTree.setAnimationEnabled(true);	
+				listAndForm.add(cellTree);
 				
-				VerticalPanel addPanel = new VerticalPanel();
-				Button addButton = new Button("Hinzufügen");
-				addPanel.add(addButton);
-				addPanel.add(cellTree);
 				
-				RootPanel.get("Liste").add(addPanel);
+				/**
+				 * Definition der Buttons und der Suchfunktion, die sich auf Kontakte beziehen
+				 */
+				Button addContactButton = new Button("Add");
+				Button addContactToListButton = new Button("Add to List");
+				Button editContactButton = new Button("Edit");
+				Button shareContactButton = new Button("Share");
+				Button deleteContactButton = new Button("Delete");
+				TextBox searchContactText = new TextBox();
+				Button searchContactButton = new Button("Search");
+				
+				//TODO: Funktionalität, Symbole statt Schrift
+				
+				/**
+				 * Hinzufügen der Buttons zum modifyPanel
+				 */
+				modifyPanel.add(addContactButton);
+				modifyPanel.add(addContactToListButton);
+				modifyPanel.add(editContactButton);
+				modifyPanel.add(shareContactButton);
+				modifyPanel.add(deleteContactButton);
+				
+				/**
+				 * Aufbau des Suchfeldes
+				 */
+				searchPanel.add(searchContactText);
+				searchPanel.add(searchContactButton);
+
 			}
-			
-			//TODO: ClickHandler AddButton
 			
 		});
 		
@@ -204,19 +246,15 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ContactListButton
 		ContactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources contactListTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactListTreeRecource);
 				cellTree.setAnimationEnabled(true);
+				listAndForm.add(cellTree);	
 				
-				VerticalPanel addPanel = new VerticalPanel();
-				Button addButton = new Button("Hinzufügen");
-				addPanel.add(addButton);
-				addPanel.add(cellTree);
-				
-				RootPanel.get("Liste").add(addPanel);
 			}
-			
-			//TODO: ClickHandler AddButton
 			
 		});
 		
@@ -224,11 +262,14 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		MyParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources myParticipationTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", myParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);
+				listAndForm.add(cellTree);				
 				
-				RootPanel.get("Liste").add(cellTree);
 			}
 		});
 	
@@ -236,17 +277,36 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		ReceivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
 				CellTree.Resources receivedParticipationTreeRecource = GWT.create(TreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", receivedParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);	
+				listAndForm.add(cellTree);				
 				
-				RootPanel.get("Liste").add(cellTree);
 			}
 		});
 	
-		//Hinzufügen des Detail-Panels zur Webseite
-		RootPanel.get("Details").add(detailsPanel);
-
+		//Hinzufügen des Detail-Panels zum Content
+		listAndForm.add(detailsPanel);	
+		
+		//Suche Hinzufügen
+		modifyPanel.add(searchPanel);
+		
+		//Aufbau der restlichen Webseite
+		addPanel.add(listAndForm);
+		addPanel.add(modifyPanel);
+		
+		content.add(addPanel);
+		
+		root.add(content);
+		
+		trailer.add(trailerText);
+		root.add(trailer);
+		
+		RootPanel.get("Editor").add(root);
 		
 	
 	}
