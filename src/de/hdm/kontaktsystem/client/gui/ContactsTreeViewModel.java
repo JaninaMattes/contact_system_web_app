@@ -119,19 +119,9 @@ public class ContactsTreeViewModel implements TreeViewModel {
 	}
 	
 	 
-	public void updateContat(Contact contactToDisplay) {
+	public void updateContact(Contact contact) {		
+			ContactDataProvider.getList().add(contact); 	
 		
-		contactSystemVerwaltung.createContact(contactToDisplay, new AsyncCallback<Contact>() {			
-		public void onFailure(Throwable t) {
-			// TODO: Window Alert
-		}
-		
-		public void onSuccess(Contact contacts) {
-			ContactDataProvider.getList().add(contacts); 
-			}
-		});
-		
-	
 		
 	}
 

@@ -5,6 +5,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.kontaktsystem.client.gui.ContactSystem;
+import de.hdm.kontaktsystem.client.gui.ContactSystem.SearchCallback;
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
@@ -105,6 +106,8 @@ public interface ContactSystemAdministrationAsync {
 	public void deleteParticipation(Participation p, AsyncCallback<Participation> callback);
 	
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback);
+
+	public void getPropertyValueByValue(String s, AsyncCallback<Vector <Contact>> callback);
 
 
 

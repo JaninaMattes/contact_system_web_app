@@ -1,7 +1,5 @@
 package de.hdm.kontaktsystem.client.gui;
 
-
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -13,13 +11,20 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
-import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
-import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
-import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
+//import com.smartgwt.client.types.Alignment;  
+//import com.smartgwt.client.types.DragDataAction;  
+//import com.smartgwt.client.widgets.Canvas;  
+//import com.smartgwt.client.widgets.TransferImgButton;  
+//import com.smartgwt.client.widgets.events.ClickEvent;  
+//import com.smartgwt.client.widgets.events.ClickHandler;  
+//import com.smartgwt.client.widgets.layout.HStack;  
+//import com.smartgwt.client.widgets.layout.VStack;  
+//import com.smartgwt.sample.showcase.client.data.PartData;  
+
 
 //Anzeige und Bearbeiten einer Kontaktliste
 
@@ -57,7 +62,7 @@ public class ContactListForm extends VerticalPanel{
 
 	public void onLoad() {
 		super.onLoad();
-		// Keine Tabelle sondern ein VertialPanel / ScrollPanel dem Kontaktelemente aus dem ContactVector hinzugefügt werden.
+		// Keine Tabelle sondern ein VertialPanel / ScrollPanel dem Kontaktelemente aus dem ContactVector hinzugefï¿½gt werden.
 		// ... Mit einer while oder for-each Schleife die Kontakt-Elemente erzeugen.
 		Grid contactListGrid = new Grid(8, 2);
 		this.add(contactListGrid);
@@ -82,7 +87,7 @@ public class ContactListForm extends VerticalPanel{
 		shareButton.setEnabled(false);
 		contactListGrid.setWidget(5, 1, shareButton);
 		
-		//deleteButton kommt in das Kontakt-Element rein. Es löscht einzelne Kontakte aus der Liste.
+		//deleteButton kommt in das Kontakt-Element rein. Es lï¿½scht einzelne Kontakte aus der Liste.
 		
 		deleteButton.addClickHandler(new DeleteClickHandler());
 		deleteButton.setEnabled(false);
@@ -92,6 +97,57 @@ public class ContactListForm extends VerticalPanel{
 		deleteClButton.setEnabled(false);
 		contactListGrid.setWidget(7, 1, deleteClButton);
 		
+		
+		/*
+		 * Drag Liste TODO: Smart GWT Lizenz + Test 
+		 * Eventuelle LÃ¶sung, da ComboBox nicht mÃ¶glich war
+		 * Quelle: https://www.smartclient.com/smartgwt/showcase/#effects_dd_move_list
+		 */
+//		
+//		HStack hStack = new HStack(10);  
+//        hStack.setHeight(160);  
+//  
+//        final PartsListGrid myList1 = new PartsListGrid();  
+//        myList1.setCanDragRecordsOut(true);  
+//        myList1.setCanAcceptDroppedRecords(true);  
+//        myList1.setCanReorderFields(true);  
+//        myList1.setDragDataAction(DragDataAction.MOVE);  
+//        myList1.setData(PartData.getRecords());  
+//        hStack.addMember(myList1);  
+//  
+//        final PartsListGrid myList2 = new PartsListGrid();  
+//        myList2.setCanDragRecordsOut(true);  
+//        myList2.setCanAcceptDroppedRecords(true);  
+//        myList2.setCanReorderRecords(true);  
+//  
+//        VStack vStack = new VStack(10);  
+//        vStack.setWidth(32);  
+//        vStack.setHeight(74);  
+//        vStack.setLayoutAlign(Alignment.CENTER);  
+//  
+//        TransferImgButton rightImg = new TransferImgButton(TransferImgButton.RIGHT);  
+//        rightImg.addClickHandler(new ClickHandler() {  
+//            public void onClick(ClickEvent event) {  
+//                myList2.transferSelectedData(myList1);  
+//            }  
+//        });  
+//        vStack.addMember(rightImg);  
+//  
+//        TransferImgButton leftImg = new TransferImgButton(TransferImgButton.LEFT);  
+//        leftImg.addClickHandler(new ClickHandler() {  
+//            public void onClick(ClickEvent event) {  
+//                myList1.transferSelectedData(myList2);  
+//            }  
+//        });  
+//        vStack.addMember(leftImg);  
+//  
+//        hStack.addMember(vStack);  
+//        hStack.addMember(myList2);  
+//  
+//        hStack.draw();  
+//    }  
+//  
+//}  
 	}
 
 
@@ -111,7 +167,7 @@ public class ContactListForm extends VerticalPanel{
 				Window.alert("Keine Kontaktliste ausgewï¿½hlt");
 			} else {
 				User u = new User();
-				u.setGMail("NeuerUser@gmail.com"); // Testdaten, sollte beim Teilen über ein Popup abgefragt werden.
+				u.setGMail("NeuerUser@gmail.com"); // Testdaten, sollte beim Teilen ï¿½ber ein Popup abgefragt werden.
 				Participation part = new Participation();
 				part.setParticipant(u); 
 				part.setReference(contactListToDisplay);
@@ -153,7 +209,7 @@ public class ContactListForm extends VerticalPanel{
 class DeleteClickHandler implements ClickHandler {
 	
 	public void onClick(ClickEvent event) {
-		/** Nach Erstellung der kompletten GUI, nochmals überprüfen, wie man den Kontakt übergeben kann um ihn mit einem X zu loeschen.
+		/** Nach Erstellung der kompletten GUI, nochmals ï¿½berprï¿½fen, wie man den Kontakt ï¿½bergeben kann um ihn mit einem X zu loeschen.
 		 if (contact == null) {
 			Window.alert("Keinen Kontakt ausgewï¿½hlt");
 		}else {
@@ -162,7 +218,7 @@ class DeleteClickHandler implements ClickHandler {
 		}*/
 	}
 }
-// NOCHMAL PRÜFEN
+// NOCHMAL PRï¿½FEN
 class deleteContactfromListCallback implements AsyncCallback<ContactList> {
 	
 	
@@ -174,7 +230,7 @@ class deleteContactfromListCallback implements AsyncCallback<ContactList> {
 		if (result != null) {
 			setSelected(null);
 			cltvm.removeContactList(result);
-			Window.alert("Kontakt wurde erfolgreich aus der Liste gelöscht");
+			Window.alert("Kontakt wurde erfolgreich aus der Liste gelï¿½scht");
 		}
 	}
 }
