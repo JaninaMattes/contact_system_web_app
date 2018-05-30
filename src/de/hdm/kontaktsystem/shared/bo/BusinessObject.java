@@ -25,7 +25,7 @@ import java.util.Date;
  */
 
 
-public class BusinessObject implements Serializable{
+public abstract class BusinessObject implements Serializable{
 	
 	/**
 	 * Seriennummer, vorgegeben durch das Interface {@link Serializable}
@@ -53,10 +53,6 @@ public class BusinessObject implements Serializable{
 	 */
 	private boolean shared_status = false; 
 	
-	public BusinessObject(){
-		
-	}
-		
 	/**
 	* Zurückgeben der ID.
 	*/

@@ -100,28 +100,44 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	*/
 	
 	public User createUser(User u, Contact contact) {
-		return uMapper.insert(u, contact);
+		User user = uMapper.insert(u);
+		contact.setOwner(user);
+		user.setUserContact(ContactMapper.contactMapper().insertContact(contact));
+		return UserMapper.userMapper().update(user);
 		
 	}
 	
 	public User getUserByID(int id) {
-		return uMapper.findById(id);
+		User user = uMapper.findById(id);
+		user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
+		return user;
+		
+	}
+	
+	public User getUserBygMail(String email) {
+		User user = uMapper.findByEmail(email);
+		user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
+		return user;
 		
 	}
 	
 	// Nur für Report!
 	public Vector<User> getAllUsers(){
-		return uMapper.findAll();
+		Vector<User> userVector = uMapper.findAll();
+		for(User user : userVector){
+			user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
+		}
+		return userVector;
 		
 	}
 	
-
-	public void saveUser(User user) { //?? TODO: Klären
-		uMapper.update(user);
+	public User editUser(User user) {
+		return uMapper.update(user);		
 	}
 	
-	
 	public User deleteUser(User user) {
+		ContactMapper.contactMapper().deleteAllContactsByUser(user.getGoogleID());
+		ContactListMapper.contactListMapper().deleteContactListByUserId(user.getGoogleID());
 		return uMapper.delete(user);
 	}
 	
@@ -199,9 +215,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}	
 
-	public User editUser(User user) {
-		return uMapper.update(user);		
-	}
+	
 	
 	public Contact editContact(Contact contact) {
 		return cMapper.updateContact(contact);
@@ -225,10 +239,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 
 
-	@Override
-	public User getUserBygMail(String gMail) {
-		return uMapper.findByEmail(gMail);
-	}
+	
 
 
 	public Contact getContactOf(User u) {
@@ -328,10 +339,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return propValMapper.findBy(c);
 	}
 
-	@Override
-	public User saveUser(User u, Contact c) {
-		return uMapper.insert(u, c);
-	}
+	
 
 
 	

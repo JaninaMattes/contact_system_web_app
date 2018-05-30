@@ -525,8 +525,9 @@ public class ContactMapper {
 	 */
 	
 
-	public Contact addOwnContact(int contact_ID, User owner) {
+	public Contact addOwnContact(User owner) {
 		//System.out.println("#Contact -faddOwncontact");
+		int contact_ID = owner.getUserContact().getBoId();
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
