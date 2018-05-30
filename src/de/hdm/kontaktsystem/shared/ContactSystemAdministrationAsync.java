@@ -4,12 +4,9 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import de.hdm.kontaktsystem.client.gui.ContactSystem;
-import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
-import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
@@ -22,7 +19,9 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getAllUsers(AsyncCallback<Vector<User>> callback);
 	
+
 	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback);
+
 	
 	public void getAllContacts(AsyncCallback<Vector<Contact>> callback);
 	
@@ -93,6 +92,7 @@ public interface ContactSystemAdministrationAsync {
 	public void deleteParticipation(Participation p, AsyncCallback<Participation> callback);
 	
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback);
+
 
 
 

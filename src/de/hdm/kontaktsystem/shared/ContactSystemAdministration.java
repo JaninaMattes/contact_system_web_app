@@ -23,8 +23,9 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<User> getAllUsers();
 	
+
 	public Vector<Contact> getAllContactsFromUser(); 
-	
+
 	public Vector<Contact> getAllContacts(); 
 	
 	public Contact getContactByPropertyValue(PropertyValue pv);

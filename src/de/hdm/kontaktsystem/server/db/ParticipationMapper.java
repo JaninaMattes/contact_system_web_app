@@ -80,7 +80,7 @@ public class ParticipationMapper {
 				participation.setParticipant(participant);	
 				bo.setBo_Id(rs.getInt("bo_ID"));
 				participation.setReference(bo);
-				
+		
 				participations.add(participation);
 			}
 			return participations;
@@ -119,6 +119,7 @@ public class ParticipationMapper {
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
 				Participation participation = new Participation();
+				BusinessObject reference = new BusinessObject();
 				
 				User participant = new User();
 				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
@@ -130,7 +131,7 @@ public class ParticipationMapper {
 				participations.add(participation);
 				
 			    System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + participation.getReferencedObject().getBoId());
+				System.out.println("###### Participation object id: " + reference.getBoId());
 			}
 			return participations;
 			
@@ -159,6 +160,7 @@ public class ParticipationMapper {
 			
 			//Transfer all Participations from database to Participation-Objects
 			while(rs.next()) {
+
 				Participation participation = new Participation();
 				User participant = new User();
 				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
@@ -168,6 +170,7 @@ public class ParticipationMapper {
 				participation.setReference(bo);
 				
 				participations.add(participation);
+
 			}
 			return participations;
 			
@@ -203,6 +206,7 @@ public class ParticipationMapper {
 				participation.setReference(bo);
 				
 				participations.add(participation);
+
 			}
 			return participations;
 			

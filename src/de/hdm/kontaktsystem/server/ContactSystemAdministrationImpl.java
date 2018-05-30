@@ -108,6 +108,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	@Override
 	public User createUser(User u, Contact contact) {
+
 		User user = uMapper.insert(u);
 		contact.setOwner(user);
 		user.setUserContact(this.createContact(contact));
@@ -128,6 +129,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		User user = uMapper.findByEmail(email);
 		user.setUserContact(this.getOwnContact(user));
 		return user;
+
 		
 	}
 	
@@ -141,9 +143,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
-	@Override	
+	
 	public User editUser(User user) {
 		return uMapper.update(user);		
+
 	}
 	
 	@Override
@@ -419,11 +422,20 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	
+	
+	
+
 	public PropertyValue editPropertyValue(PropertyValue propertyValue) {
 		boMapper.update(propertyValue);
 		return propValMapper.update(propertyValue);
 	}
-	
+		
+	//?
+	public Contact getContactOf(User u) {
+		return cMapper.findOwnContact(u);
+	}
+
+
 
 	@Override
 	public PropertyValue deletePropertyValue(PropertyValue propertyValue) {
@@ -550,10 +562,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				
 		
 	}
-	
-	
-		
-	
 
 	/*
 	* ***************************************************************************

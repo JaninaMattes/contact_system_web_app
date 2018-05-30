@@ -56,7 +56,7 @@ public class UserMapper {
 			stmt.setString(2, user.getGMail());
 			if(stmt.executeUpdate() > 0) {
 				
-				return user;
+				return update(user);
 			}
 			
 		}catch(SQLException e){
@@ -111,7 +111,7 @@ public class UserMapper {
 				User u = new User();
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));		
-				c.setBo_Id(rs.getInt("own_Contact"));
+				ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
 				u.setUserContact(c);
 				return u;	
 			}
@@ -141,7 +141,8 @@ public class UserMapper {
 				u.setGMail(rs.getString("g_mail"));
 				c.setBo_Id(rs.getInt("own_Contact"));
 				u.setUserContact(c);
-				return u;
+				return u;	
+
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -176,7 +177,8 @@ public class UserMapper {
 	
 	/**
 	 * Löscht alle einträge in der User Tabelle 
-	 * methode wird in dem regulären ablauf der Anwendung nicht verwendet
+	 * 
+	 * @note Nicht Verwendet
 	 */
 	public void deleteAll(){
 		
@@ -212,6 +214,7 @@ public class UserMapper {
 	 */
 	public int deleteByID(double id){
 		
+
 		int i = 0;
 		
 		Connection con = DBConnection.connection();
