@@ -26,8 +26,6 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getAllUsers(AsyncCallback<Vector<User>> callback);
 	
-	//Aus Klassendiagramm: was genau macht diese Methode? save = update?
-	public void saveUser(User u, Contact c, AsyncCallback<User> callback);
 	
 	public void getAllContacts(AsyncCallback<Vector<Contact>> callback);
 	
