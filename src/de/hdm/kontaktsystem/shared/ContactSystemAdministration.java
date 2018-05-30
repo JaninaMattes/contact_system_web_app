@@ -17,24 +17,19 @@ import de.hdm.kontaktsystem.shared.bo.User;
 @RemoteServiceRelativePath("editor")
 public interface ContactSystemAdministration extends RemoteService {
 	
-	public User getUserByID(int id);
+	public User getUserByID(double id);
 	
 	public User getUserBygMail(String gMail);
 	
 	public Vector<User> getAllUsers();
 	
-	
-	
+	public Vector<Contact> getAllContactsFromUser(); 
 	public Vector<Contact> getAllContacts(); 
 	
-	//Aus Klassendiagramm: was genau macht diese Methode?
-	public Contact getContactOf(User u);
 	
 	public Contact getContactById(int id);
 	
-	//Erstellen des eigenen Kontakts eines Users
-	public Contact createContactForUser(User u);
-	
+	public Vector<ContactList> getAllContactListsFromUser();
 	
 	public Vector<ContactList> getAllContactLists();
 	
@@ -43,8 +38,6 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<ContactList> getContactListByName(String name);
 	
 	
-	//Aus Klassendiagramm: Kann das so stimmen?
-	public Participation sharePropertyValueOfContact(Contact c, Participation part);
 	
 	public PropertyValue getPropertyValueForContactByName(String name, Contact c);
 
@@ -95,13 +88,6 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Participation deleteParticipation(Participation p);
 	
 	public ContactList removeContactFromList(Contact contact, ContactList contactList);
-	
-
-	public Participation shareContactWith(Participation part);
-	
-	public Participation shareContactListWith(Participation part);
-	
-	public Vector<PropertyValue> getPropertyValuesForContact(Contact c);
 	
 	public Vector<Participation> getAllParticipationsByOwner(User u);
 
