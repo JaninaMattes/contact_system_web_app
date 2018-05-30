@@ -51,24 +51,7 @@ public class ContactSystem implements EntryPoint {
 	 * Link zum Asynchronen Interface
 	 */
 	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
-	
-//	Aus Bankbeispiel, hier notwendig?
-	/*
-//	 * Zunächst weisen wir der BankAdministration eine Bank-Instanz zu, die
-//	 * das Kreditinstitut repräsentieren soll, für das diese Applikation
-//	 * arbeitet.
-//	 */
-//	if (bankVerwaltung == null) {
-//		bankVerwaltung = ClientsideSettings.getBankVerwaltung();
-//	}
-//	Bank bank = new Bank();
-//	bank.setName("HdM Bank");
-//	bank.setStreet("Nobelstr. 10");
-//	bank.setZip(70569);
-//	bank.setCity("Stuttgart");
-//	bankVerwaltung.setBank(bank, new SetBankCallback());
 
-	
 
 	/** 
 	 * Instanziieren der GWT Widgets und Panels
@@ -265,36 +248,7 @@ public class ContactSystem implements EntryPoint {
 		RootPanel.get("Details").add(detailsPanel);
 
 		
-		
-		
-//		/**
-//		 * Diese Nested Class wird als Callback für das Setzen des Bank-Objekts bei
-//		 * der BankAdministration und bei dem ReportGenerator benötigt.
-//		 * 
-//		 * @author thies
-//		 * @version 1.0
-//		 */
-//		class SetBankCallback implements AsyncCallback<Void> {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				/*
-//				 * Wenn ein Fehler auftritt, dann geben wir eine kurze Log Message
-//				 * aus.
-//				 */
-//				ClientsideSettings.getLogger().severe(
-//						"Setzen der Bank fehlgeschlagen!");
-//			}
-//
-//			@Override
-//			public void onSuccess(Void result) {
-//				/*
-//				 * Wir erwarten diesen Ausgang, wollen aber keine Notifikation
-//				 * ausgeben.
-//				 */
-//			}
-//
-//		}
+	
 	}
 	
 
