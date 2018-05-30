@@ -306,7 +306,7 @@ public class PropertyValueMapper {
 		try {
 			// Statement ausfüllen und als Query an die DB schicken
 			PreparedStatement stmt = con.prepareStatement
-					( "SELECT *"
+					( "SELECT * "
 					+ "FROM PropertyValue pv "
 					+ "INNER JOIN Contact c ON pv.contact_ID = c.ID "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = pv.ID "
