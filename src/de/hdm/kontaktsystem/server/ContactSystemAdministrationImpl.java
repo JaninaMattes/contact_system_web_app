@@ -367,20 +367,71 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	
 	public PropertyValue editPropertyValue(PropertyValue propertyValue) {
+		BusinessObjectMapper.businessObjectMapper().update(propertyValue);
 		return propValMapper.update(propertyValue);
 	}
 	
 
 	@Override
-	public PropertyValue deletePropertyValue(PropertyValue pv) {
-		return propValMapper.delete(pv);
+	public PropertyValue deletePropertyValue(PropertyValue propertyValue) {
+		PropertyValue pv = propValMapper.delete(propertyValue);
+		if(pv != null) BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(pv.getBoId());
 	}
 	
 	@Override
 	public PropertyValue getPropertyValueForContactByName(String name, Contact c) {
-		return propValMapper.findName(c);
+		return this.findName(c);
+	}
+	
+	public Vector<PropertyValue> getPropertyValueForContact(Contact c) {
+		Vector<PropertyValue> pvv = propValMapper.findBy(c);
+		
+		for(PropertyValue pv : pvv){
+			pv.setProperty(PropertyMapper.propertyMapper().findBy(pv.getProperty().getId()));
+		}
+		return pvv;
+	}
+	
+	public Vector<PropertyValue> getPropertyValueByValue(String value) {
+		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
+		
+		for(PropertyValue pv : pvv){
+			pv.setContact(ContactMapper.contactMapper().findBy(pv));
+			pv.setProperty(PropertyMapper.propertyMapper().findBy(pv.getProperty().getId()));
+		}
+		return pvv;
 	}
 
+
+	/**
+	 * Anhand der uebergegebenen ID wird das zugehoerige PropertyValue - Objekt,
+	 * welches der Eigenschaft "Name" zugewiesen werden kann, eindeutig
+	 * identifiziert und zurueckgegeben
+	 * 
+	 *  @param Contact-Objekt
+	 *  @return PropertyValue - Objekt
+	 */
+
+	public PropertyValue findName(Contact contact) {
+		////System.out.println("#PV -findName");
+		PropertyValue name = new PropertyValue();	
+		Vector <PropertyValue> result = new Vector <PropertyValue>();
+		result = this.getPropertyValueForContact(contact);
+		
+		for(PropertyValue val : result) {
+
+			//System.out.println("propertyVal id: " + val.getBo_Id());
+			//System.out.println("propertyVal description: " + val.getProp().getDescription());
+			
+			if(val.getProperty().getId() == 1) {
+				name = val; 
+				//System.out.println("Contact name:" + val.getProperty().getPropertyValues());
+			}
+		}	
+		////System.out.println("Name: " + name);
+		return name;
+		
+	}
 	
 
 	/*
@@ -410,6 +461,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return partMapper.deleteParticipation(p);
 		
 	}
+	
 
 	/*
 	* ***************************************************************************

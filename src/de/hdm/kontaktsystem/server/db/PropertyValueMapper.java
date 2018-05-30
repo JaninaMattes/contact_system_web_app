@@ -315,7 +315,9 @@ public class PropertyValueMapper {
 					
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();				
-				propValue.setProperty(PropertyMapper.propertyMapper().findBy(rs.getInt("pv.property_ID")));
+				Property p = new Property();
+				p.setId(rs.getInt("pv.property_ID"));
+				propValue.setProperty(p);
 				propValue.setBo_Id(rs.getInt("pv.ID"));
 				propValue.setValue(rs.getString("pv.value"));
 
@@ -370,16 +372,18 @@ public class PropertyValueMapper {
 					( "SELECT pv.*, c.* "
 					+ "FROM PropertyValue pv "
 					+ "INNER JOIN Contact c ON pv.contact_ID = c.ID "
-					+ "WHERE pv.value = ? " 
+					+ "WHERE pv.value LIKE  ? " 
 					);
 					stmt.setString(1, value);
 					ResultSet rs = stmt.executeQuery();
 					
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();				
-				propValue.setProperty(PropertyMapper.propertyMapper().findBy(rs.getInt("pv.property_ID")));
+				Property p = new Property();
+				p.setId(rs.getInt("pv.property_ID"));
+				propValue.setProperty(p);
 				propValue.setBo_Id(rs.getInt("pv.ID"));
-				propValue.setContact(ContactMapper.contactMapper().findBy(propValue));
+				propValue.setValue(rs.getString("pv.value"));
 
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
@@ -440,36 +444,6 @@ public class PropertyValueMapper {
 	}
 	
 	
-	/**
-	 * Anhand der uebergegebenen ID wird das zugehoerige PropertyValue - Objekt,
-	 * welches der Eigenschaft "Name" zugewiesen werden kann, eindeutig
-	 * identifiziert und zurueckgegeben
-	 * 
-	 *  @param Contact-Objekt
-	 *  @return PropertyValue - Objekt
-	 */
-
-	public PropertyValue findName(Contact contact) {
-		////System.out.println("#PV -findName");
-		PropertyValue name = new PropertyValue();	
-		Vector <PropertyValue> result = new Vector <PropertyValue>();
-		result = PropertyValueMapper.propertyValueMapper().findBy(contact);
-		
-		for(PropertyValue val : result) {
-
-			//System.out.println("propertyVal id: " + val.getBo_Id());
-			//System.out.println("propertyVal description: " + val.getProp().getDescription());
-			
-			if(val.getProperty().getId() == 1) {
-				name = val; 
-				//System.out.println("Contact name:" + val.getProperty().getPropertyValues());
-			}
-		}	
-		////System.out.println("Name: " + name);
-		return name;
-		
-	}
-	
 
 	/*
 	 * Aktualisierung der Daten fuer PropertyValue Tabelle in DB
@@ -480,7 +454,7 @@ public class PropertyValueMapper {
 
 	public PropertyValue update(PropertyValue pv) {
 
-		BusinessObjectMapper.businessObjectMapper().update(pv);
+		
 		Connection con = DBConnection.connection();
 
 		try {
@@ -537,7 +511,7 @@ public class PropertyValueMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
+		
 		return i;
 	}
 
