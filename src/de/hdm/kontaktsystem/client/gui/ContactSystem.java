@@ -68,7 +68,10 @@ public class ContactSystem implements EntryPoint {
 	private Button MyParticipationsButton = new Button("Von mir geteilt");
 	private Button ReceivedParticipationsButton = new Button("An mich geteilt");
 	
+<<<<<<< HEAD
  
+=======
+>>>>>>> refs/heads/master
 	private VerticalPanel addPanel = new VerticalPanel(); //Umfasst Liste/cellTree, Buttons+Suche und Forms
 	private HorizontalPanel listAndForm = new HorizontalPanel(); //Liste/cellTree und Forms
 	private VerticalPanel detailsPanel = new VerticalPanel(); //Enthält Formulare
@@ -250,6 +253,7 @@ public class ContactSystem implements EntryPoint {
 			     */
 			    searchContactButton.addStyleName("SearchContact");
 				
+
 				/**
 				 * Hinzufügen der Buttons zum modifyPanel
 				 */
