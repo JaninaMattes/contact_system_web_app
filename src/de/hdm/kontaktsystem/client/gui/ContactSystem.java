@@ -15,7 +15,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HeaderPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -59,6 +61,8 @@ public class ContactSystem implements EntryPoint {
 	 */
 	private VerticalPanel root = new VerticalPanel();
 	private HorizontalPanel header = new HorizontalPanel(); //Logo, Logout, Report-Link
+	private Button reportLinkButton = new Button("zum Report"); //führt zur Report-Seite
+	
 	private HorizontalPanel content = new HorizontalPanel(); //Menü, Liste/cellTree und Buttons+Suche, Forms
 	private VerticalPanel navigation = new VerticalPanel(); //Menü links mit 4 Buttons
 	
@@ -76,6 +80,36 @@ public class ContactSystem implements EntryPoint {
 	
 	private VerticalPanel trailer = new VerticalPanel();
 	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen
+	
+	
+	/**
+	 * Erstellen aller Image-Widgets für Logo und Symbole
+	 */
+	private Image logo = new Image();
+	
+	//Symbole für ContactForm und ContactListForm
+	private Image oneContactSymbol = new Image();
+	private Image ContactListSymbol = new Image();
+	
+	//Symbole für Navigationsmenü-Buttons
+	private Image contactsSymbol = new Image();
+	private Image listSymbol = new Image(); //Alternatives Symbol für Kontaktliste
+	
+	//Symbole für Modify-Buttons
+	private Image createSymbol = new Image();
+	private Image updateSymbol = new Image();
+	private Image deleteSymbol = new Image();
+	private Image shareSymbol = new Image();
+	
+	private Image saveSymbol = new Image();
+	private Image cancelSymbol = new Image();
+
+	private Image searchSymbol = new Image();
+	
+	private Image addContactToListSymbol = new Image(); //notwendig?		
+	
+	//Symbol für Cells (in Cell-Klasse verschieben?)
+	private Image chainSymbol = new Image(); //Symbol für Status geteilt/nicht geteilt
 	
 	
 	/**
@@ -137,12 +171,28 @@ public class ContactSystem implements EntryPoint {
 	 * Aufbau der Startseite des Kontaktsystems
 	 */
 	public void loadContactSystem() {
+		//Logo in Header einfügen
+		logo.setWidth("100px");
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+		header.add(logo);
+		
+//		//Test zusammengefügte Buttons
+//		createSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_add_black_18dp.png");		
+//		final PushButton addContactButton = new PushButton(createSymbol);
+////		//Sollte nebeneinader angeordnete Elemente realisieren, funktioniert aber nicht
+////		addContactButton.getElement().setInnerHTML("<Table cellspacing=2><tr>"
+////					+ "<td>" + addContactButton.getElement().getInnerHTML() + "</td>"
+////					+ "<td align=middle>" + "Neu" + "</td>"
+////					+ "</tr></Table>");
+	
+		
 		//Window.alert("Content :D");
 		//Header mit SignOut-Link
-		//TODO: Überschrift und Logo hinzufügen
 		if(userInfo != null){ signOutLink.setHref(userInfo.getLogoutUrl());}
 		signOutLink.setStyleName("link");
 		header.add(signOutLink);
+		
+		header.add(reportLinkButton);
 		root.add(header);
 		
 		
@@ -153,6 +203,14 @@ public class ContactSystem implements EntryPoint {
 		navigation.add(ReceivedParticipationsButton);
 		content.add(navigation);
 		
+		/**
+		 * Füllen der Image-Objekte mit Symbolen
+		 */
+		createSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_add_black_18dp.png");
+		updateSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_create_black_18dp.png");
+		deleteSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_delete_black_18dp.png");
+		shareSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_share_black_18dp.png");	
+		searchSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_search_black_18dp.png");
 		
 		/**
 		 * Elemente werden in Listenform dargestellt, ausgewählte Elemente werden 
@@ -160,7 +218,6 @@ public class ContactSystem implements EntryPoint {
 		 */
 		
 		//Listen
-		//final nach Fehlermeldung hinzugefügt
 		final ContactsTreeViewModel ctvm = new ContactsTreeViewModel();
 		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
 		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
@@ -211,24 +268,62 @@ public class ContactSystem implements EntryPoint {
 				
 				
 				/**
-				 * Definition der Buttons und der Suchfunktion, die sich auf Kontakte beziehen
+				 * Definition der Buttons und der Suchfunktion, die sich auf Kontakte beziehen. 
+				 * Zum Erzeugen von Buttons mit Text und Symbol wird ein PushButton verwendet, dem 
+				 * zunächst das Symbol als Image-Objekt hinzugefügt wird. Anschließend wird der Text 
+				 * in HTML-Form dem Button hinzugefügt.
+				 * Vorgehen angelehnt an: https://stackoverflow.com/a/23647860
 				 */
-				Button addContactButton = new Button("Add");
-				Button editContactButton = new Button("Edit");
-				Button shareContactButton = new Button("Share");
-				Button deleteContactButton = new Button("Delete");
-				TextBox searchContactText = new TextBox();
-				Button searchContactButton = new Button("Search");
+				/*
+				 * Button: Kontakt erzeugen
+				 */				
+				final PushButton addContactButton = new PushButton(createSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				addContactButton.getElement().setInnerHTML("<div><center>"
+							+ addContactButton.getElement().getInnerHTML()
+							+ "</center><label><center>Neu</center></label></div>");
 				
-				//TODO: Funktionalität, Symbole statt Schrift
+				/*
+				 * Button: Kontakt bearbeiten
+				 */				
+				final PushButton editContactButton = new PushButton(updateSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				editContactButton.getElement().setInnerHTML("<div><center>"
+							+ editContactButton.getElement().getInnerHTML()
+							+ "</center><label><center>Bearbeiten</center></label></div>");
+				
+				/*
+				 * Button: Kontakt löschen
+				 */			
+				final PushButton deleteContactButton = new PushButton(deleteSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				deleteContactButton.getElement().setInnerHTML("<div><center>"
+							+ deleteContactButton.getElement().getInnerHTML()
+							+ "</center><label><center>Löschen</center></label></div>");
+				
+				/*
+				 * Button: Kontakt teilen
+				 */			
+				final PushButton shareContactButton = new PushButton(shareSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				shareContactButton.getElement().setInnerHTML("<div><center>"
+							+ shareContactButton.getElement().getInnerHTML()
+							+ "</center><label><center>Teilen</center></label></div>");
+	
+				
+				TextBox searchContactText = new TextBox();
+				final PushButton searchContactButton = new PushButton(searchSymbol);
+				
+				//TODO: Funktionalität
 				
 				/**
 				 * Hinzufügen der Buttons zum modifyPanel
 				 */
 				modifyPanel.add(addContactButton);
 				modifyPanel.add(editContactButton);
-				modifyPanel.add(shareContactButton);
 				modifyPanel.add(deleteContactButton);
+				modifyPanel.add(shareContactButton);
+
 				
 				/**
 				 * Aufbau des Suchfeldes
@@ -254,24 +349,63 @@ public class ContactSystem implements EntryPoint {
 				listAndForm.add(cellTree);	
 				
 				/**
-				 * Definition der Buttons und der Suchfunktion, die sich auf Kontaktlisten beziehen
+				 * Definition der Buttons und der Suchfunktion, die sich auf Kontaktlisten beziehen. 
+				 * Zum Erzeugen von Buttons mit Text und Symbol wird ein PushButton verwendet, dem 
+				 * zunächst das Symbol als Image-Objekt hinzugefügt wird. Anschließend wird der Text 
+				 * in HTML-Form dem Button hinzugefügt.
+				 * Vorgehen angelehnt an: https://stackoverflow.com/a/23647860
 				 */
-				Button addContactListButton = new Button("Add");
-				Button editContactListButton = new Button("Edit");
-				Button shareContactListButton = new Button("Share");
-				Button deleteContactListButton = new Button("Delete");
-				TextBox searchContactListText = new TextBox();
-				Button searchContactListButton = new Button("Search");
+				/*
+				 * Button: Kontaktliste erzeugen
+				 */				
+				final PushButton addContactListButton = new PushButton(createSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				addContactListButton.getElement().setInnerHTML("<div><center>"
+							+ addContactListButton.getElement().getInnerHTML()
+							+ "</center><label><center>Neu</center></label></div>");
 				
-				//TODO: Funktionalität, Symbole statt Schrift
+				/*
+				 * Button: Kontaktliste bearbeiten
+				 */				
+				final PushButton editContactListButton = new PushButton(updateSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				editContactListButton.getElement().setInnerHTML("<div><center>"
+							+ editContactListButton.getElement().getInnerHTML()
+							+ "</center><label><center>Bearbeiten</center></label></div>");
+				
+				/*
+				 * Button: Kontaktliste löschen
+				 */				
+				final PushButton deleteContactListButton = new PushButton(deleteSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				deleteContactListButton.getElement().setInnerHTML("<div><center>"
+							+ deleteContactListButton.getElement().getInnerHTML()
+							+ "</center><label><center>Löschen</center></label></div>");
+				
+				/*
+				 * Button: Kontaktliste teilen
+				 */			
+				final PushButton shareContactListButton = new PushButton(shareSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				shareContactListButton.getElement().setInnerHTML("<div><center>"
+							+ shareContactListButton.getElement().getInnerHTML()
+							+ "</center><label><center>Teilen</center></label></div>");
+	
+				
+				TextBox searchContactListText = new TextBox();
+				final PushButton searchContactListButton = new PushButton(searchSymbol);
+				
+				
+				//TODO: Funktionalität
 				
 				/**
 				 * Hinzufügen der Buttons zum modifyPanel
 				 */
 				modifyPanel.add(addContactListButton);
 				modifyPanel.add(editContactListButton);
-				modifyPanel.add(shareContactListButton);
 				modifyPanel.add(deleteContactListButton);
+				modifyPanel.add(shareContactListButton);
+
 				
 				/**
 				 * Aufbau des Suchfeldes
@@ -299,12 +433,20 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition der Buttons und der Suchfunktion, die sich auf Teilhaberschaften beziehen, die mir gehören
 				 */
-				Button deleteParticipationButton = new Button("Delete");
+				/*
+				 * Button: Teilhaberschaft löschen
+				 */				
+				final PushButton deleteParticipationButton = new PushButton(deleteSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				deleteParticipationButton.getElement().setInnerHTML("<div><center>"
+							+ deleteParticipationButton.getElement().getInnerHTML()
+							+ "</center><label><center>Löschen</center></label></div>");
+				
 				//Suche anhand des Users, mit dem geteilt wurde
 				TextBox searchParticicipationByParticipantText = new TextBox();
 				Button searchParticicipationByParticipantButton = new Button("Search");
 				
-				//TODO: Funktionalität, Symbole statt Schrift
+				//TODO: Funktionalität
 				
 				/**
 				 * Hinzufügen der Buttons zum modifyPanel
@@ -338,7 +480,15 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition der Buttons und der Suchfunktion, die sich auf Teilhaberschaften beziehen, die mit mir geteilt wurden
 				 */
-				Button deleteParticipationButton = new Button("Delete");
+				/*
+				 * Button: Teilhaberschaft löschen
+				 */				
+				final PushButton deleteParticipationButton = new PushButton(deleteSymbol);
+				//Beschriftung wird über das Symbol gesetzt
+				deleteParticipationButton.getElement().setInnerHTML("<div><center>"
+							+ deleteParticipationButton.getElement().getInnerHTML()
+							+ "</center><label><center>Löschen</center></label></div>");
+				
 				//Suche anhand des Users, von dem Objekte erhalten wurden
 				TextBox searchParticicipationByOwnerText = new TextBox();
 				Button searchParticicipationByOwnerButton = new Button("Search");
