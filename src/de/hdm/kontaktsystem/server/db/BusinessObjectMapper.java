@@ -86,7 +86,7 @@ public class BusinessObjectMapper implements Serializable {
 	   * @param BusinessObject ID
 	   * @return BusinessObject
 	   */
-	  /*
+	  
 	  public BusinessObject findBy(int bo_id) {
 		
 		  BusinessObject bo = new BusinessObject();
@@ -122,7 +122,7 @@ public class BusinessObjectMapper implements Serializable {
           }       
 		 return null;
 	  }
-	  */
+	  
 	  /**
 	   * Gibt ein BusinessObject vom Typ Contact, ContctList oder PropertyValue zurück
 	   * 

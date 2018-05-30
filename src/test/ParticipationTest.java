@@ -23,7 +23,7 @@ public class ParticipationTest {
 		//insert participant in Table
 		Contact c = new Contact();
 		c = ContactMapper.contactMapper().findOwnContact(participant);
-		UserMapper.userMapper().insert(participant);
+//		UserMapper.userMapper().insert(participant);
 		
 		//Test-Ausgabe des eingefügten Users
 		System.out.println(

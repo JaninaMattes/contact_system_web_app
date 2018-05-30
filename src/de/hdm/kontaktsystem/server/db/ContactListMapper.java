@@ -41,8 +41,6 @@ public class ContactListMapper {
 	 */
 
 	public ContactList insertContactList(ContactList cl) {
-			
-		BusinessObjectMapper.businessObjectMapper().insert(cl);
 		Connection con = DBConnection.connection();
 
 		try {
@@ -77,11 +75,12 @@ public class ContactListMapper {
 					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID");
 			while (rs.next()) {
 				ContactList cl = new ContactList();
+				User owner = new User();
+				owner.setGoogleID(rs.getDouble("user_ID"));
+				cl.setOwner(owner);
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
-				cl.setContacts(findContactFromList(cl));
 				contactList.add(cl);
 
 			}
@@ -93,31 +92,7 @@ public class ContactListMapper {
 		return null;
 	}
 
-	/**
-	 * Fügte dem ContactList-Objekt einen Vektor mit allen enthaltenen Contact-Objekten hinzu
-	 * 
-	 * @param ContactList-Objekt
-	 */
-
-	public Vector<Contact> findContactFromList(ContactList cl) {
-		Connection con = DBConnection.connection();
-		try {
-			Vector<Contact> c = new Vector<Contact>();
-
-			PreparedStatement stmt = con.prepareStatement(
-					"SELECT Contact_ID from Contact_ContactList where ContactList_ID = ?"
-					 );
-			stmt.setInt(1, cl.getBoId());
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				c.add(ContactMapper.contactMapper().findContactById(rs.getInt("Contact_ID")));				
-			}
-			return c;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	
 
 	/**
 	 * Eine Kontaktliste über ihre ID finden
@@ -133,16 +108,19 @@ public class ContactListMapper {
 		try {
 
 			PreparedStatement stmt = con.prepareStatement(
-					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE id = ?");
+					"SELECT * FROM ContactList "
+					+ "LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  "
+					+ "WHERE id = ?");
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				ContactList cl = new ContactList();
+				User owner = new User();
+				owner.setGoogleID(rs.getDouble("user_ID"));
+				cl.setOwner(owner);
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
-				cl.setContacts(findContactFromList(cl));
 				return cl;
 			}
 		} catch (SQLException e) {
@@ -179,11 +157,12 @@ public class ContactListMapper {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				ContactList cl = new ContactList();
+				User owner = new User();
+				owner.setGoogleID(rs.getDouble("user_ID"));
+				cl.setOwner(owner);
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
-				cl.setContacts(findContactFromList(cl));
 				cll.add(cl);
 			}
 			return cll;
@@ -210,11 +189,12 @@ public class ContactListMapper {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				ContactList cl = new ContactList();
+				User owner = new User();
+				owner.setGoogleID(rs.getDouble("user_ID"));
+				cl.setOwner(owner);
 				cl.setBo_Id(rs.getInt("ID"));
 				cl.setName(rs.getString("contactList_name"));
-				cl.setOwner(UserMapper.userMapper().findById(rs.getDouble("user_ID")));
 				cl.setShared_status(rs.getBoolean("status"));
-				cl.setContacts(findContactFromList(cl));
 				cll.add(cl);
 			}
 			return cll;
@@ -306,7 +286,7 @@ public class ContactListMapper {
 	 */
 
 	public ContactList updateContactList(ContactList cl) {
-		BusinessObjectMapper.businessObjectMapper().update(cl);
+		
 		Connection con = DBConnection.connection();
 
 		try {
@@ -393,33 +373,16 @@ public class ContactListMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(id);
 		return i;
 	}
 
 	
-	/**
-	 * Es löscht alle Kontakte, welche zu einer User ID gehören.
-	 * 
-	 * @param User Id
-	 */
-
-	public void deleteContactListByUserId(Double userId) {
-		
-		for(ContactList cl : this.findContactListByUserId(userId)){
-			this.deleteContactListById(cl.getBoId());
-		}
-		
-		Vector<ContactList> clList = new Vector <ContactList>();
-		clList = this.findContactListByUserId(userId);
-		for(ContactList cl : clList) {
-			BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBoId());
-		}
-	}
 
 	
 	/**
 	 * Alle Kontaktlisten löschen.
+	 * Nicht genutzt
+	 * 
 	 */
 	
 	public void deleteAllContactLists() {

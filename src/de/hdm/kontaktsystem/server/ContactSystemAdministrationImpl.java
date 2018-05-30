@@ -2,12 +2,13 @@ package de.hdm.kontaktsystem.server;
 
 import java.util.Vector;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
 import de.hdm.kontaktsystem.shared.bo.*;
-import de.hdm.kontaktsystem.client.gui.ContactSystem;
 import de.hdm.kontaktsystem.server.db.*;
 
 /**
@@ -52,7 +53,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	private PropertyMapper propMapper = null;
 	private PropertyValueMapper propValMapper = null;
 	private UserMapper uMapper = null;
-	
+	private UserService userService = null;
 	
 	/*
 	* ***************************************************************************
@@ -76,7 +77,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		this.partMapper = ParticipationMapper.participationMapper();
 		this.propMapper = PropertyMapper.propertyMapper(); 
 		this.propValMapper = PropertyValueMapper.propertyValueMapper();
-		this.uMapper = UserMapper.userMapper();		
+		this.uMapper = UserMapper.userMapper();	
+		this.userService = UserServiceFactory.getUserService();
 	}
 	
 	/*
@@ -100,14 +102,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	*/
 	
 	public User createUser(User u, Contact contact) {
-		User user = uMapper.insert(u);
-		contact.setOwner(user);
-		user.setUserContact(ContactMapper.contactMapper().insertContact(contact));
-		return UserMapper.userMapper().update(user);
+		return uMapper.insert(u, contact);
 		
 	}
 	
-	public User getUserByID(int id) {
+	public User getUserByID(double id) {
 		User user = uMapper.findById(id);
 		user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
 		return user;
@@ -118,36 +117,47 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		User user = uMapper.findByEmail(email);
 		user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
 		return user;
+
 		
 	}
 	
 	// Nur für Report!
 	public Vector<User> getAllUsers(){
-		Vector<User> userVector = uMapper.findAll();
-		for(User user : userVector){
-			user.setUserContact(ContactMapper.contactMapper().addOwnContact(user));
-		}
-		return userVector;
+		return uMapper.findAll();
 		
 	}
+
 	
+
+	public void saveUser(User user) { //?? TODO: Klären
+		uMapper.update(user);
+=======
+		
 	public User editUser(User user) {
 		return uMapper.update(user);		
+
 	}
 	
+	
 	public User deleteUser(User user) {
+
 		ContactMapper.contactMapper().deleteAllContactsByUser(user.getGoogleID());
-		ContactListMapper.contactListMapper().deleteContactListByUserId(user.getGoogleID());
+		deleteContactListByUserId(user.getGoogleID());
+
 		return uMapper.delete(user);
 	}
 	
 	
 	/*
 	* ***************************************************************************
-	* ABSCHNITT, Beginn: Methoden 
+	* ABSCHNITT, Contact
 	* ***************************************************************************
 	*/
 	
+	@Override
+	public PropertyValue getNameOfContact(Contact c) {
+		return propValMapper.findName(c);
+	}
 
 	// Nur für Report!
 	public Vector<Contact> getAllContacts(){
@@ -155,34 +165,136 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
-	public Vector<Contact> getContactFromUser(User user) {
+	// Nur für Report!
+	public Vector<Contact> getAllContactsFromUser(){
+		return cMapper.findAllContactsByUser(Double.parseDouble(userService.getCurrentUser().getUserId()));
+		
+	}
+	
+	// Nur Intern Verwendet
+	public Contact getContactOf(User u) {
+		return cMapper.findOwnContact(u);
+	}
+	
+	public Contact editContact(Contact contact) {
+		return cMapper.updateContact(contact);
+		
+	}	
+	
+	public Vector<Contact> getContactsFromUser(User user) {
 		return cMapper.findAllContactsByUser(user);
 		
 	}
 	
-
-	public Contact getContactByID(int id) {
+	public Vector<Contact> getContactsFromList(ContactList cl) {
+		return cMapper.findContactFromList(cl);
+		
+	}
+	
+	@Override
+	public Contact getContactById(int id) {
 		return cMapper.findContactById(id);
+	}
+	
+	
+	
+	public Contact createContact(Contact contact) {
+		return cMapper.insertContact(contact);
 		
 	}
 	
-	public void createContactForUser(Contact contact) { //??? TOOD: Klären 
-		cMapper.insertContact(contact);		
-	}
 
+	public Contact deleteContact(Contact contact) {
+		return cMapper.deleteContact(contact);
+	}
 	
-	public void shareBusinessObjectWith(BusinessObject reference, User participant) {
-		Participation part = new Participation();
-		part.setParticipant(participant);
-		part.setReference(reference);
+	/*
+	* ***************************************************************************
+	* ABSCHNITT, ContactList
+	* ***************************************************************************
+	*/
+	
+	public ContactList createContactList(ContactList contactList) {
+
+		BusinessObjectMapper.businessObjectMapper().insert(contactList);
+		return clMapper.insertContactList(contactList);
+			
+	}	
+
+	@Override
+	public ContactList editContactList(ContactList cl) {
+		BusinessObjectMapper.businessObjectMapper().update(cl);
+		return clMapper.updateContactList(cl);
+	}
+	
+	public Vector <ContactList> getContactListByName(String name) {
 		
-		partMapper.insertParticipation(part);
+		Vector<ContactList> contactListVector = clMapper.findContactListByName(name);
+		
+		for(ContactList cl : contactListVector){
+			cl.setOwner(getUserByID(cl.getOwner().getGoogleID()));
+			cl.setContacts(getContactsFromList(cl));
+		}
+		return contactListVector;
 		
 	}
+	
+	// Nur für Report!
+	@Override
+	public Vector<ContactList> getAllContactLists() {
+		Vector<ContactList> contactListVector = clMapper.findAllContactLists();
 		
-	public Contact createContactForUser(User u) {
-		return cMapper.insertContact(u.getUserContact());
+		for(ContactList cl : contactListVector){
+			cl.setOwner(getUserByID(cl.getOwner().getGoogleID()));
+			cl.setContacts(getContactsFromList(cl));
+		}
+		return contactListVector;
+	}
+	
+	// Nur für Report!
+		@Override
+		public Vector<ContactList> getAllContactListsFromUser() {
+			
+			Vector<ContactList> contactListVector = clMapper.findContactListByUserId(
+													Double.parseDouble(userService.getCurrentUser().getUserId()));
+			
+			for(ContactList cl : contactListVector){
+				cl.setOwner(getUserByID(cl.getOwner().getGoogleID()));
+				cl.setContacts(getContactsFromList(cl));
+			}
+			return contactListVector;
+		}
+
+
+	@Override
+	public ContactList getContactListById(int id) {
+		ContactList contactList = clMapper.findContactListById(id);
 		
+		contactList.setOwner(getUserByID(contactList.getOwner().getGoogleID()));
+		contactList.setContacts(getContactsFromList(contactList));
+		
+		return contactList;
+	}
+	
+	
+	public ContactList deleteContactList(ContactList contactList) {
+		ContactList cl = clMapper.deleteContactList(contactList);
+		if(cl != null) BusinessObjectMapper.businessObjectMapper().deleteBusinessObjectByID(cl.getBoId());
+		return cl;
+	}
+	
+
+	/**
+	 * Es löscht alle Kontakte, welche zu einer User ID gehören.
+	 * 
+	 * @param User Id
+	 */
+
+	public void deleteContactListByUserId(Double userId) {
+		
+		for(ContactList cl : this.getAllContactListsFromUser()){
+			this.deleteContactList(cl);
+		}
 	}
 	
 	public ContactList addContactToList(Contact contact, ContactList contactList) {
@@ -195,38 +307,36 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	
-	public Contact createContact(Contact contact) {
-		return cMapper.insertContact(contact);
-		
-	}
-	
-	public ContactList createContactList(ContactList contactList) {
-		return clMapper.insertContactList(contactList);
-			
-	}	
-	
+	/*
+	* ***************************************************************************
+	* ABSCHNITT, PropertyValue
+	* ***************************************************************************
+	*/
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
 		return propValMapper.insert(propertyValue);
 	}
 	
 	
+
 	public Vector <ContactList> getContactListByName(String name) {
 		return clMapper.findContactListByName(name);
 		
 	}	
 
-	
+	public User editUser(User user) {
+		return uMapper.update(user);		
+	}
 	
 	public Contact editContact(Contact contact) {
 		return cMapper.updateContact(contact);
 		
 	}	
 	
+
 	public PropertyValue editPropertyValue(PropertyValue propertyValue) {
 		return propValMapper.update(propertyValue);
 	}
-	
-	
+		
 	
 
 	public Contact deleteContact(Contact contact) {
@@ -239,7 +349,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 
 
-	
+	@Override
+	public User getUserBygMail(String gMail) {
+		return uMapper.findByEmail(gMail);
+	}
 
 
 	public Contact getContactOf(User u) {
@@ -247,81 +360,40 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 
-	@Override
-	public Contact getContactById(int id) {
-		return cMapper.findContactById(id);
-	}
-
-
-
-	public Participation shareContactWith(Participation part) {
-		return partMapper.insertParticipation(part);
-		
-	}
-
-	// Nur für Report!
-	@Override
-	public Vector<ContactList> getAllContactLists() {
-		return clMapper.findAllContactLists();
-	}
-
 
 	@Override
-	public ContactList getContactListById(int id) {
-		return clMapper.findContactListById(id);
+	public PropertyValue deletePropertyValue(PropertyValue pv) {
+		return propValMapper.delete(pv);
 	}
-
-
 	
-
-	@Override
-	public Participation shareContactListWith(Participation part) {
-		return partMapper.insertParticipation(part);
-		
-	}
-
-
-	@Override
-	public Participation sharePropertyValueOfContact(Contact c, Participation part) {
-		return partMapper.insertParticipation(part);
-	}
-
-
 	@Override
 	public PropertyValue getPropertyValueForContactByName(String name, Contact c) {
 		return propValMapper.findName(c);
 	}
 
+	
 
-	@Override
-	public Vector<Participation> getAllParticipationsByOwner(User u) {
-		return partMapper.findParticipationsByOwner(u);
-	}
-
-
-	@Override
-	public Vector<Participation> getAllParticipationsByParticipant(User participant) {
-		return partMapper.findParticipationsByParticipant(participant);
-	}
-
-
-	@Override
-	public PropertyValue getNameOfContact(Contact c) {
-		return propValMapper.findName(c);
-	}
-
+	/*
+	* ***************************************************************************
+	* ABSCHNITT, Participation
+	* ***************************************************************************
+	*/
+	
 
 	@Override
 	public Participation createParticipation(Participation part) {
 		return partMapper.insertParticipation(part);
 	}
 
-
 	@Override
-	public ContactList editContactList(ContactList cl) {
-		return clMapper.updateContactList(cl);
+	public Vector<Participation> getAllParticipationsByOwner(User u) {
+		return partMapper.findParticipationsByOwner(u);
 	}
 
+	@Override
+	public Vector<Participation> getAllParticipationsByParticipant(User participant) {
+		return partMapper.findParticipationsByParticipant(participant);
+	}
 
 	@Override
 	public Participation deleteParticipation(Participation p) {
@@ -329,17 +401,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 
-	@Override
-	public PropertyValue deletePropertyValue(PropertyValue pv) {
-		return propValMapper.delete(pv);
-	}
+
 
 	@Override
-	public Vector<PropertyValue> getPropertyValuesForContact(Contact c) {
-		return propValMapper.findBy(c);
+	public User saveUser(User u, Contact c) {
+		return uMapper.insert(u, c);
 	}
-
-	
 
 
 	

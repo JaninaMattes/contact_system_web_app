@@ -70,6 +70,28 @@ public class ContactSystem implements EntryPoint {
 	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen	
 	private Label headerLabel = new Label ("Kontaktsystem");
 	private Image logo = new Image();
+			
+	//Symbole für Modify-Buttons
+	private Image createSymbol = new Image();
+	private Image updateSymbol = new Image();
+	private Image deleteSymbol = new Image();
+	private Image shareSymbol = new Image();
+		
+//	private Image saveSymbol = new Image();
+//	private Image cancelSymbol = new Image();
+//	//Symbole für ContactForm und ContactListForm
+//	private Image oneContactSymbol = new Image();
+//	private Image ContactListSymbol = new Image();
+//		
+//	//Symbole für Navigationsmenü-Buttons
+//	private Image contactsSymbol = new Image();
+//	private Image listSymbol = new Image(); //Alternatives Symbol für Kontaktliste
+	
+	private Image searchSymbol = new Image();
+			
+		
+	//Symbol für Cells (in Cell-Klasse verschieben?)
+	private Image chainSymbol = new Image(); //Symbol für Status geteilt/nicht geteilt
 	
 	//DockPanel als Root
 	DockPanel root = new DockPanel();
@@ -160,6 +182,10 @@ public class ContactSystem implements EntryPoint {
 
 	public void loadContactSystem() {
 		
+		//Logo
+		logo.setWidth("100px");
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+		
 		//RootPanel		
 		root.setSpacing(4);
 	    root.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
@@ -198,6 +224,14 @@ public class ContactSystem implements EntryPoint {
 		root.add(trailer, DockPanel.SOUTH);		
 		root.add(navigation, DockPanel.WEST);		
 		
+		
+		// Füllen der Image-Objekte mit Symbolen
+		createSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_add_black_18dp.png");
+		updateSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_create_black_18dp.png");
+		deleteSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_delete_black_18dp.png");
+		shareSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_share_black_18dp.png");	
+		searchSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_search_black_18dp.png");
+		
 		//Verlinkung der Listen und der dazugehörigen Formulare
 		ctvm.setContactForm(cf);
 		cf.setCatvm(ctvm);
@@ -208,9 +242,6 @@ public class ContactSystem implements EntryPoint {
 		mptvm.setParticipationForm(mpf);
 		mpf.setMptvm(mptvm);
 		
-		rptvm.setParticipationForm(rpf);
-		rpf.setMptvm(mptvm);
-
 		//Zuordnung zur GUI 
 		//-> ToDo: Test & Korrigieren, erst zugeordnet, wenn Cell im CellTree ausgewählt wurde
 		root.add(cf, DockPanel.EAST);
@@ -290,7 +321,7 @@ public class ContactSystem implements EntryPoint {
 	
 	}
 	
-	//Clickhandler für Suchfeld Button -> TODO: Check private class
+	//Clickhandler für Suchfeld Button -> TODO: Methode überprüfen
 	private class SearchClickHandler implements ClickHandler {
 		@Override
 		public void onClick(ClickEvent event) {
@@ -298,7 +329,7 @@ public class ContactSystem implements EntryPoint {
 				Window.alert("Nichts zur Suche ausgewählt");
 			} else {
 			 String s = search.getText();
-			 contactSystemVerwaltung.getPropertyValuesByValue(s, new SearchCallback(s));
+			// contactSystemVerwaltung.getPropertyValuesByValue(s, new SearchCallback(Vector<Contact>));
 			}
 		}
 	}
