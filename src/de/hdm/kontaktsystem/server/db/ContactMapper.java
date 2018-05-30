@@ -107,6 +107,9 @@ public class ContactMapper {
 
 			while (rs.next()) {
 				Contact contact = new Contact();
+				User u = new User();
+				u.setGoogleID(user_id);
+				contact.setOwner(u);
 				contact.setBo_Id(rs.getInt("c.ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
@@ -153,6 +156,7 @@ public class ContactMapper {
 				Contact contact = new Contact();
 				User u = new User();
 				u.setGoogleID(rs.getDouble("user_ID"));
+				contact.setOwner(u);
 				contact.setBo_Id(rs.getInt("ID"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
@@ -191,6 +195,7 @@ public class ContactMapper {
 				Contact contact = new Contact();
 				User u = new User();
 				u.setGoogleID(rs.getDouble("user_ID"));
+				contact.setOwner(u);
 				contact.setBo_Id(rs.getInt("bo_ID"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
@@ -274,11 +279,11 @@ public class ContactMapper {
 				Contact contact = new Contact();
 				User u = new User();
 				u.setGoogleID(rs.getDouble("user_ID"));
+				contact.setOwner(u);
 				contact.setBo_Id(rs.getInt("bo.bo_ID"));
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-
 				return contact;
 			}					
 			
@@ -317,6 +322,7 @@ public class ContactMapper {
 				Contact contact = new Contact();
 				User u = new User();
 				u.setGoogleID(rs.getDouble("user_ID"));
+				contact.setOwner(u);
 				contact.setBo_Id(rs.getInt("id"));
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));

@@ -28,6 +28,8 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getContactByPropertyValue(PropertyValue pv, AsyncCallback<Contact> callback);
 	
+	public void getContactsFromUser(AsyncCallback<Vector<Contact>> callback);
+	
 	public void getContactsByStatus(Boolean status, AsyncCallback<Vector<Contact>> callback);
 	
 	public void getContactById(int id, AsyncCallback<Contact> callback);
@@ -40,14 +42,13 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getContactListByName(String name, AsyncCallback<Vector<ContactList>> callback);
 	
-	
 	public void getAllParticipationsByOwner(User owner, AsyncCallback<Vector<Participation>> callback);
 	
 	public void getAllParticipationsByParticipant(User gMail, AsyncCallback<Vector<Participation>> callback);
 	
-	
-	
 	public void getNameOfContact(Contact c, AsyncCallback<PropertyValue> callback);
+	
+	public void searchContacts(String value, AsyncCallback<Vector<Contact>> callback);
 
 	/**
 	 * Create

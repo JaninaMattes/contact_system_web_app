@@ -298,7 +298,7 @@ public class PropertyValueMapper {
 	public Vector<PropertyValue> findByValue(String value) {
 		
 		
-		////System.out.println("#PV -findByContactID");
+		System.out.println("#PV -findByContactID");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
@@ -306,22 +306,24 @@ public class PropertyValueMapper {
 		try {
 			// Statement ausfüllen und als Query an die DB schicken
 			PreparedStatement stmt = con.prepareStatement
-					( "SELECT pv.*, c.* "
+					( "SELECT *"
 					+ "FROM PropertyValue pv "
 					+ "INNER JOIN Contact c ON pv.contact_ID = c.ID "
+					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = pv.ID "
 					+ "WHERE pv.value LIKE  ? " 
 					);
-					stmt.setString(1, "%"+value+"%");
+					stmt.setString(1, "%" + value + "%");
 					ResultSet rs = stmt.executeQuery();
-					
 			while (rs.next()) {
 				PropertyValue propValue = new PropertyValue();				
 				Property p = new Property();
+				User u = new User();
+				u.setGoogleID(rs.getInt("bo.user_ID"));
 				p.setId(rs.getInt("pv.property_ID"));
 				propValue.setProperty(p);
 				propValue.setBo_Id(rs.getInt("pv.ID"));
 				propValue.setValue(rs.getString("pv.value"));
-
+				propValue.setOwner(u);
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
 

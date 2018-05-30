@@ -104,7 +104,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ABSCHNITT, User 
 	* ***************************************************************************
 	*/
+	//Login
 	
+	@Override
 	public User createUser(User u, Contact contact) {
 		User user = uMapper.insert(u);
 		contact.setOwner(user);
@@ -113,6 +115,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
+	@Override
 	public User getUserByID(double id) {
 		User user = uMapper.findById(id);
 		user.setUserContact(this.getOwnContact(user));
@@ -120,6 +123,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
+	@Override
 	public User getUserBygMail(String email) {
 		User user = uMapper.findByEmail(email);
 		user.setUserContact(this.getOwnContact(user));
@@ -136,11 +140,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return userVector;
 		
 	}
-		
+	
+	@Override	
 	public User editUser(User user) {
 		return uMapper.update(user);		
 	}
 	
+	@Override
 	public User deleteUser(User user) {
 		this.deleteAllContactsByUser(user.getGoogleID());
 		this.deleteContactListByUserId(user.getGoogleID());
@@ -181,6 +187,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contact;
 	}
 	
+	@Override
 	public Contact editContact(Contact contact) {
 		Contact con = cMapper.updateContact(contact);
 		Vector <PropertyValue> propResult = new Vector <PropertyValue>();
@@ -200,7 +207,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contact;
 	}
 	
-	public Vector<Contact> getContactsFromUser(User user) {
+	@Override
+	public Vector<Contact> getContactsFromUser() {
+		User user = this.getUserByID(getCurrentUser());
 		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
 		for(Contact contact : cv){
 			contact.setOwner(user);
@@ -210,7 +219,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return cv;
 		
 	}
-	
+	@Override
 	public Vector<Contact> getContactsByStatus(Boolean status) {
 		Vector<Contact> cv = cMapper.findContactByStatus(this.getCurrentUser(), status);
 		for(Contact contact : cv){
@@ -236,7 +245,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	@Override
 	public Contact getContactById(int id) {
-
+		System.out.println(id);
 		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		contact.setName(this.getNameOfContact(contact));
 		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
@@ -248,11 +257,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * @param Sucheingabe
 	 * @return Vector<Contact>
 	 */
-	
+	@Override
 	public Vector<Contact> searchContacts(String value) {
+	
 		Vector<Contact> cv = new Vector<Contact>();
-		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
 		
+		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
 		for(PropertyValue pv : pvv){
 			Contact c = this.getContactByPropertyValue(pv);
 			if(!cv.contains(c)) cv.add(c);
@@ -261,14 +271,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return cv;
 	}
 	
-	
+	@Override
 	public Contact createContact(Contact contact) {
 		boMapper.insert(contact);
 		return cMapper.insertContact(contact);
 		
 	}
 	
-
+	@Override
 	public Contact deleteContact(Contact contact) {	
 		for(PropertyValue pv : this.getPropertyValuesForContact(contact)){
 			this.deletePropertyValue(pv);
@@ -301,7 +311,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ABSCHNITT, ContactList
 	* ***************************************************************************
 	*/
-	
+	@Override
 	public ContactList createContactList(ContactList contactList) {
 
 		boMapper.insert(contactList);
@@ -315,6 +325,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return clMapper.updateContactList(cl);
 	}
 	
+	@Override
 	public Vector <ContactList> getContactListByName(String name) {
 		
 		Vector<ContactList> contactListVector = clMapper.findContactListByName(name);
@@ -363,7 +374,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contactList;
 	}
 	
-	
+	@Override
 	public ContactList deleteContactList(ContactList contactList) {
 		ContactList cl = clMapper.deleteContactList(contactList);
 		if(cl != null) boMapper.deleteBusinessObjectByID(cl.getBoId());
@@ -384,10 +395,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 	}
 	
+	@Override
 	public ContactList addContactToList(Contact contact, ContactList contactList) {
 		return clMapper.addContactToContactlist(contactList, contact);
 		 
 	}
+	
+	@Override
 	public ContactList removeContactFromList(Contact contact, ContactList contactList) {
 		return clMapper.removeContactFromContactList(contactList, contact);
 
@@ -421,6 +435,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	
 	public Vector<PropertyValue> getPropertyValuesForContact(Contact c) {
+		
 		Vector<PropertyValue> pvv = propValMapper.findBy(c);
 		
 		for(PropertyValue pv : pvv){
@@ -428,6 +443,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 		return pvv;
 	}
+	
+	
 	
 	public PropertyValue getPropertyValueById(int id) {
 		return propValMapper.findByKey(id);
