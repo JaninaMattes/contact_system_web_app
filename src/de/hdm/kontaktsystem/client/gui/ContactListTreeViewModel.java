@@ -1,7 +1,10 @@
 package de.hdm.kontaktsystem.client.gui;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -13,7 +16,8 @@ import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
-
+import de.hdm.kontaktsystem.shared.bo.ContactList;
+import de.hdm.thies.bankProjekt.shared.bo.Customer;
 /**
  * 
  * @author Katalin
@@ -26,7 +30,8 @@ public class ContactListTreeViewModel implements TreeViewModel {
 	private Contact selectedContact;
 	
 	private ContactSystemAdministrationAsync contactSystemVerwaltung = null;
-	private ListDataProvider<Contact> ContactDataProvider = null;
+	private ListDataProvider<Contact> contactDataProvider = null;
+	
 	
 	/**
 	 * Bildet Contacts auf eindeutige Zahlenobjekte ab, die als Schlüssel
@@ -88,7 +93,7 @@ public class ContactListTreeViewModel implements TreeViewModel {
 
 			if(value.equals("Root")) {				
 				//Erzeugt eine ListDataProvider fuer Contact-Daten
-				ContactDataProvider = new ListDataProvider<Contact>();
+				contactDataProvider = new ListDataProvider<Contact>();
 				contactSystemVerwaltung.getAllContacts(new AsyncCallback<Vector<Contact>>() {
 					
 					public void onFailure(Throwable t) {
@@ -96,7 +101,7 @@ public class ContactListTreeViewModel implements TreeViewModel {
 			
 				public void onSuccess(Vector<Contact> contacts) {
 					for (Contact c : contacts) {
-						ContactDataProvider.getList().add(c);
+						contactDataProvider.getList().add(c);
 					}
 				}
 			
@@ -104,7 +109,7 @@ public class ContactListTreeViewModel implements TreeViewModel {
 			
 
 		}
-			return new DefaultNodeInfo<Contact>(ContactDataProvider, new ContactCell(), selectionModel, null);
+			return new DefaultNodeInfo<Contact>(contactDataProvider, new ContactCell(), selectionModel, null);
 	}
 	
 
@@ -114,15 +119,18 @@ public class ContactListTreeViewModel implements TreeViewModel {
 	}
 
 	public void removeContact(Contact contact) {
-		ContactDataProvider.getList().remove(contact);		
+		contactDataProvider.getList().remove(contact);		
 	}
 	
 	 
-
-	public void updateContact(Contact contact) {		
-			ContactDataProvider.getList().add(contact); 	
-
-		
+	/*
+	 * Kontakt hinzufügen.
+	 */
+	void addContact(Contact c) {
+		contactDataProvider.getList().add(c);
+		selectionModel.setSelected(c, true);
 	}
+	
+
 
 }

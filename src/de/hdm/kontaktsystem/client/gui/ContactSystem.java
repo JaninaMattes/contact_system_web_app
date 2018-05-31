@@ -37,7 +37,7 @@ public class ContactSystem implements EntryPoint {
 	/**
 	 * Interface aus BankProjekt übernommen
 	 */
-	static interface TreeResources extends CellTree.Resources {
+	static interface ContactSystemTreeResources extends CellTree.Resources {
 		@Override
 		@Source("cellTreeClosedItem.gif")
 	    ImageResource cellTreeClosedItem();
@@ -114,7 +114,7 @@ public class ContactSystem implements EntryPoint {
 	ContactListForm clf = new ContactListForm();
 	MyParticipationForm mpf = new MyParticipationForm();
 	ReceivedParticipationForm rpf = new ReceivedParticipationForm();
-			
+	
 	/**
 	 * Attribute für den Login
 	 */
@@ -123,7 +123,8 @@ public class ContactSystem implements EntryPoint {
 	private Label loginLabel = new Label(
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
 	private Anchor signInLink = new Anchor("Login");
-	private Anchor signOutLink = new Anchor("Logout");	
+	private Anchor signOutLink = new Anchor("Logout");
+
 	
 	/**
 	 * EntryPoint
@@ -160,7 +161,8 @@ public class ContactSystem implements EntryPoint {
 	/**
 	 * Aufbau der Login-Seite
 	 */
-	private void loadLogin() {
+	private void loadLogin() {	
+		
 		Window.alert("Login :D");
 		signInLink.setHref(userInfo.getLoginUrl());
 		signInLink.setStyleName("link");
@@ -264,7 +266,7 @@ public class ContactSystem implements EntryPoint {
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird und
 				 * Hinzufügen zur Webseite
 				 */
-				CellTree.Resources contactTreeRecource = GWT.create(TreeResources.class);
+				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 				cellTree.setAnimationEnabled(true);	
 				root.add(cellTree, DockPanel.CENTER);			
@@ -279,7 +281,7 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
-				CellTree.Resources contactListTreeRecource = GWT.create(TreeResources.class);
+				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", contactListTreeRecource);
 				cellTree.setAnimationEnabled(true);
 				root.add(cellTree, DockPanel.CENTER);		
@@ -294,7 +296,7 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
-				CellTree.Resources myParticipationTreeRecource = GWT.create(TreeResources.class);
+				CellTree.Resources myParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", myParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);
 				root.add(cellTree, DockPanel.CENTER);			
@@ -309,7 +311,7 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
-				CellTree.Resources receivedParticipationTreeRecource = GWT.create(TreeResources.class);
+				CellTree.Resources receivedParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
 				CellTree cellTree = new CellTree(ctvm, "Root", receivedParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);	
 				root.add(cellTree, DockPanel.CENTER);		
@@ -322,22 +324,26 @@ public class ContactSystem implements EntryPoint {
 	
 	//Clickhandler für Suchfeld Button -> TODO: Methode überprüfen
 	private class SearchClickHandler implements ClickHandler {
+		
 		@Override
 		public void onClick(ClickEvent event) {
 			if (search.getText().equals("")) {
-				Window.alert("Nichts zur Suche ausgewählt");
+				Window.alert("Das Suchfeld ist leer!");
 			} else {
 			 String s = search.getText();
-			// contactSystemVerwaltung.getPropertyValuesByValue(s, new SearchCallback(Vector<Contact>));
+			 // Suche der Kontakte
+			 contactSystemVerwaltung.searchContacts(s, 
+					 new SearchCallback(s));
 			}
 		}
 	}
 
 	class SearchCallback implements AsyncCallback<Vector<Contact>> {
 
-		Vector <Contact> contacts = null;
-		SearchCallback(Vector<Contact> c) {
-			contacts = c;
+		String search = null;
+		
+		SearchCallback(String s){
+			this.search = s;
 		}
 
 		@Override
@@ -347,10 +353,11 @@ public class ContactSystem implements EntryPoint {
 
 		@Override
 		public void onSuccess(Vector<Contact> result) {
-			if (contacts != null) {
-				for(Contact c : contacts) {
-				ctvm.updateContact(c);
-				// TODO: 
+			if (result != null) {
+				//Kontakt Objekt der Liste hinzufügen
+				for(Contact c : result) {
+				ctvm.addContact(c);
+				
 				}
 			}
 		}
