@@ -244,7 +244,19 @@ public class ContactForm extends VerticalPanel{
 	      }
 	    });
 	
+	    /** Buttons in CSS
+	     * 
+	     * Der Name, mit welchem der Delete-Button in CSS formatiert werden kann, wird festgelegt. 
+	     */ 
 
+	    deleteButton.addStyleName("DeleteContact"); 
+	    
+	    /** 
+	     * Der Name, mit welchem der save-Button in CSS formatiert werden kann, wird festgelegt. 
+	     */ 
+
+	    saveButton.addStyleName("saveContact"); 
+	    
 	     
 		/**
 		 * Die TextBox um den Kontakt einzugeben, das Label und das Panel für die Buttons werden 
