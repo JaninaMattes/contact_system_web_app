@@ -53,6 +53,7 @@ public class ContactForm extends VerticalPanel{
 	private Label labelGeburtsdatum = new Label("Geburtsdatum:");
 	private Label labelAdresse = new Label("Adresse:");
 	
+	private Label isShared = new Label("Geteilt: ");
 	private Label labelShare = new Label("Teilen mit: ");
 	private Label contactStatus = new Label("");
 		
@@ -99,6 +100,7 @@ public class ContactForm extends VerticalPanel{
 		
 		contactGrid.setWidget(0, 0, label);
 		contactGrid.setWidget(0, 1, contactStatus);
+		contactGrid.setWidget(0, 2, isShared);
 		
 		contactGrid.setWidget(1, 0, labelName);
 		contactGrid.setWidget(1, 1, textBoxName);
@@ -133,7 +135,7 @@ public class ContactForm extends VerticalPanel{
 		contactGrid.setWidget(8, 2, checkBox8);
 		
 		
-		Grid shareGrid = new Grid (2, 1);
+		Grid shareGrid = new Grid (2, 2);
 		shareGrid.setWidget(0, 0, labelShare);
 		shareGrid.setWidget(0, 1, shareUser);
 		
@@ -161,13 +163,16 @@ public class ContactForm extends VerticalPanel{
 	     */
 	    
 	    checkBox1.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;
-	      
+	      PropertyValue pv = null;	      
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactName = textBoxName.getText();
-	    	  if(contactName.equals("")) Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  else pv = contactToDisplay.getName();
+	    	  if(contactName.equals("")) {
+	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
+	    	  }
+	    	  else {
+	    		  pv = contactToDisplay.getName();
+	    	  }
 	    	  
 	      }
 	    });
@@ -179,7 +184,9 @@ public class ContactForm extends VerticalPanel{
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactNickName = textBoxName.getText();
-	    	  if(contactNickName.equals("")) Window.alert("Das gewählte Feld enthält keinen Wert.");
+	    	  if(contactNickName.equals("")) {
+	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
+	    	  }
 	    	  //else pv = getValue()
 	      }
 	    });
@@ -271,29 +278,106 @@ public class ContactForm extends VerticalPanel{
 				
 	}		
 		
-	  /**
-	   * Methode um die Informationen aus den Checkboxen als PropertyValue
+	  
+	/**
+	   * Methode um die Informationen aus den Checkboxen als PropertyValue Objekt
 	   * einzusammeln und als Vector zur weiteren Verarbeitung durch den 
 	   * entsprechenden Button Aufruf in der Menü Leiste zurück zugeben. 
 	   * 
 	   * @return Vector <PropertyValue>
 	   */
-	
-	   public Vector <PropertyValue> getCheckedValues() {
+/*	
+
+	public Vector <PropertyValue> getAllCheckedValues() {
 		   Vector <PropertyValue> result = null;
 		   Vector <PropertyValue> pvList = null;
-		   
 		   PropertyValue pv = null;
-		   
-		   if(contactToDisplay!=null && contactToDisplay.isShared_status() == true) {
-			   if(checkBox1.isChecked()) {
-				  //pvList = 
-				 // pv = new PropertyValue();
-			   }
+		  		   
+		   if(contactToDisplay!=null && contactToDisplay.isShared_status() == true) {	
+			   pvList = contactToDisplay.getPropertyValues();			
+			   //Checkbox 1 prüfen und Objekt abrufen
+			   if(checkBox1.isChecked()) {		
+			   for(PropertyValue p : pvList) {
+			   if(p.getValue().equals(textBoxName.getText())) {
+				   pv = new PropertyValue();
+				   result.add(pv);
+			   		}
+			   	  }
+			   } //Checkbox 2 prüfen und Objekt abrufen				   
+				if(checkBox2.isChecked()) {		
+				for(PropertyValue p : pvList) {
+				if(p.getValue().equals(textBoxNickName.getText())) {
+					pv = new PropertyValue();
+					result.add(pv);	
+					}
+			   	  }
+			   } //Checkbox 3 prüfen und Objekt abrufen					
+				if(checkBox3.isChecked()) {		
+					for(PropertyValue p : pvList) {
+					if(p.getValue().equals(textBoxFirma.getText())) {
+						pv = new PropertyValue();
+						result.add(pv);	
+						}
+				   	  }
+				   } 	
+				//Checkbox 4 prüfen und Objekt abrufen
+				if(checkBox3.isChecked()) {		
+					for(PropertyValue p : pvList) {
+					if(p.getValue().equals(textBoxFirma.getText())) {
+						pv = new PropertyValue();
+						result.add(pv);
+						}
+				   	  }
+				   } 	
+				//Checkbox 5 prüfen und Objekt abrufen
+				if(checkBox4.isChecked()) {		
+					for(PropertyValue p : pvList) {
+					if(p.getValue().equals(textBoxTelefonnummer.getText())) {
+						pv = new PropertyValue();
+						result.add(pv);
+						}
+				   	  }
+				   } 	
+				//Checkbox 6 prüfen und Objekt abrufen
+				if(checkBox5.isChecked()) {		
+					for(PropertyValue p : pvList) {
+					if(p.getValue().equals(textBoxMobilnummer.getText())) {
+						pv = new PropertyValue();
+						result.add(pv);
+						}
+				   	  }
+				   }
+				//Checkbox 7 prüfen und Objekt abrufen
+				if(checkBox6.isChecked()) {		
+					for(PropertyValue p : pvList) {
+					if(p.getValue().equals(textBoxEmail.getText())) {
+						pv = new PropertyValue();
+						result.add(pv);
+						}
+				   	  }
+				   } 
+				//Checkbox 8 prüfen und Objekt abrufen
+				if(checkBox7.isChecked()) {		
+					for(PropertyValue p : pvList) {
+					if(p.getValue().equals(textBoxGeburtsdatum.getText())) {
+						pv = new PropertyValue();
+						result.add(pv);
+						}
+				   	  }
+				   } 
+				//Checkbox 9 prüfen und Objekt abrufen
+				if(checkBox8.isChecked()) {		
+					for(PropertyValue p : pvList) {
+					if(p.getValue().equals(textBoxAdresse.getText())) {
+						pv = new PropertyValue();
+						result.add(pv);
+						}
+				   	  }
+				   } 
 		   }
 		   return result;
-	   }
-	   
+	}
+*/   
 	   
 		/**
 		 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
@@ -308,6 +392,16 @@ public class ContactForm extends VerticalPanel{
 				if(c.isShared_status()) contactStatus.setText("Geteilt");
 				label.setText("Kontakt: " + c.getBoId());
 				
+				//Enable Checkboxen
+				checkBox1.setEnabled(true);
+			    checkBox2.setEnabled(true);
+			    checkBox3.setEnabled(true);
+			    checkBox4.setEnabled(true);
+			    checkBox5.setEnabled(true);
+			    checkBox6.setEnabled(true);
+			    checkBox7.setEnabled(true);
+			    checkBox8.setEnabled(true);
+				
 				Vector <PropertyValue> pv = new Vector <PropertyValue>();
 				pv = contactToDisplay.getPropertyValues();
 				
@@ -321,6 +415,9 @@ public class ContactForm extends VerticalPanel{
 				if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
 				if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
 				if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
+				
+				
+			    
 			}
 				
 			} else {

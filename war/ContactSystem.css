@@ -9,9 +9,9 @@ div {
 }
 
 h1 {
-  font-size: 2em; /*Schriftgr��e*/
+  font-size: 3em; /*Schriftgr��e*/
   font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
-  color: #777777; /*Schriftfarbe*/
+  color: #0080c0; /*Schriftfarbe*/
   margin: 40px 0px 20px; /*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
   text-align: center; /*zentriert*/
 }
@@ -26,7 +26,24 @@ h1 {
     background: #FAFAFA; /*Hintergrundfarbe*/
 }
 
+.gwt-ListBox {
+}
+
 #ContactSystem{
+}
+
+#Contact-Menuebutton{
+	width: 110px;
+	height: 30px;
+	text-align: center;
+	background-color:lightblue;
+	
+}
+
+#Logo{
+    height: 10vh;
+    width: 15vw;
+    align-content: left;
 }
 
 #TopLevelFrame{
@@ -35,8 +52,13 @@ h1 {
 }
 
 #Header{
+	width: 10px;
+    padding: 0px;
+    margin: 0px;
 	height: 15vh;
-    width: 100vw;
+    width: 100%;    
+    display: flex;
+    justify-content: center;
 }
 
 #Content{
@@ -44,22 +66,37 @@ h1 {
     width: 100vw;
 }
 
-#Navigator{
+#Navigation{
     height: 79vh;
     width: 33vw;
+    padding: 0px;
+    margin: 0px;
+    background-color:lightblue;
+    border: solid 1px black ;
+    align-content: left;
 }
 
-#Liste{
-     height: 79vh;
+#List{
+    height: 79vh;
     width: 33vw;
+    border: solid 1px black ;
+}
+
+#Form{
+    height: 79vh;
+    width: 33vw;
+    border: solid 1px black ;
 }
 
 #Details{
-     height: 79vh;
+    height: 79vh;
     width: 33vw;
 }
 
 #Trailer{
 	height: 15vh;
-    /* width: 100vw; */
+    width: 100vw; 
+    display: flex;
+    justify-content: center;
+    border: solid 1px black ;
 }

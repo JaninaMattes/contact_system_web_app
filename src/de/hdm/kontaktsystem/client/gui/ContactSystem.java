@@ -65,7 +65,6 @@ public class ContactSystem implements EntryPoint {
 	//Suchfunktion
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
-
 	
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
@@ -75,8 +74,7 @@ public class ContactSystem implements EntryPoint {
 	//Trailer Text
 	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen	
 	private Label headerLabel = new Label ("Kontaktsystem");
-	private Image logo = new Image();
-			
+				
 	//Symbole für Modify-Buttons
 	private Image createSymbol = new Image();
 	private Image updateSymbol = new Image();
@@ -97,7 +95,7 @@ public class ContactSystem implements EntryPoint {
 			
 		
 	//Symbol für Cells (in Cell-Klasse verschieben?)
-	private Image chainSymbol = new Image(); //Symbol für Status geteilt/nicht geteilt
+	private Image chainSymbolLogo = new Image(); //Symbol für Status geteilt/nicht geteilt
 	
 	/**
 	 * Attribute für den Login
@@ -108,6 +106,7 @@ public class ContactSystem implements EntryPoint {
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
 	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
+	private Anchor reportLink = new Anchor("Report");
 	
 
 	//CellTree Model
@@ -186,20 +185,18 @@ public class ContactSystem implements EntryPoint {
 		//HeaderPanel
 		HorizontalPanel header = new HorizontalPanel();
 				
-		//Logo
-		logo.setWidth("100px");
-		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+		//Logo 
+		chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
 		
 		//RootPanel		
 		root.setSpacing(4);
-	    root.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
-	    
+	    root.setHorizontalAlignment(DockPanel.ALIGN_CENTER);	   
+	       
 	    //Header
-	    header.add(signOutLink);
-	    headerLabel.setWidth("400px");
-	    
+	    header.add(chainSymbolLogo);
 	    header.add(headerLabel);
-	    header.add(logo);
+	    header.add(reportLink);
+	    header.add(signOutLink);
 	    
 	    searchButton.addClickHandler(new SearchClickHandler());
 		searchButton.setEnabled(true);
@@ -212,6 +209,7 @@ public class ContactSystem implements EntryPoint {
 	    //Navigation
 	    VerticalPanel navigation = new VerticalPanel();	  
 	    
+	    //TODO: Button Style CSS!!
 	    contactButton.setPixelSize(110, 30);
 	    contactButton.setEnabled(true);
 	    contactListsButton.setPixelSize(110, 30);
@@ -251,38 +249,33 @@ public class ContactSystem implements EntryPoint {
 		
 		mptvm.setParticipationForm(mpf);
 		mpf.setMptvm(mptvm);
-		
-		//Zuordnung zur GUI 
-		//-> ToDo: Test & Korrigieren, erst zugeordnet, wenn Cell im CellTree ausgewählt wurde
-		//root.add(cf, DockPanel.EAST);
-		//root.add(clf, DockPanel.EAST);
-		//root.add(mpf, DockPanel.EAST);
-		//root.add(rpf, DockPanel.EAST);
-			
+				
 		/**
 		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
 		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird oberhalb des 
 		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
 		 */
+		
+		
 		//ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird und
-				 * Hinzufügen zur Webseite
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird 
 				 */
 //				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
 //				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 //				cellTree.setAnimationEnabled(true);
 //				root.add(cellTree, DockPanel.CENTER);		
 				
-				// Zwecks Test auskommentiert -> Verbindung zu ContactForm
-				
+				// Zwecks Test auskommentiert -> Verbindung zu ContactForm						
+				root.remove(dp);
+				//root.add(cf);
 				root.add(cf, DockPanel.EAST);
 			}
 			
 		});
-		
+	
 		
 		//Clickhandler für ContactListButton
 		contactListsButton.addClickHandler(new ClickHandler() {
@@ -328,49 +321,52 @@ public class ContactSystem implements EntryPoint {
 		});
 		
 
-/** 
- * Menu-Buttons (CSS) 
- * 
- * Der Name, mit welchem der Menubutton "Kontakt" in CSS formatiert werden kann, wird festgelegt. 
-*/ 
- contactButton.addStyleName("Contact-Menubutton"); 
-
-
-/** 
-  * Der Name, mit welchem der Menübutton "Kontaktliste" in CSS formatiert werden kann, wird festgelegt. 
-  */ 
-
-contactListsButton.addStyleName("Contactlist-Menubutton"); 
-
-
-/** 
- * Der Name, mit welchem der Menübutton "Von mir geteilt" in CSS formatiert werden kann, wird festgelegt. 
- */
-myParticipationsButton.addStyleName("MyParticipations-Menubutton");
-
-
- /**
- * Der Name, mit welchem der Menübutton "An mich geteilt" in CSS formatiert werden kann, wird festgelegt. 
- */ 
-receivedParticipationsButton.addStyleName("ReceivedParticipations-Menubutton"); 
-
-
-/** Search-Box und Button (CSS)
- * 
- * Der Name, mit welchem der Search-Contact-Button in CSS formatiert werden kann, wird festgelegt. 
- */
-searchButton.addStyleName("SearchContact-Button"); 
-
-/** 
- * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
- */
-search.addStyleName("SearchText"); 
+		/** 
+		 * Menu-Buttons (CSS) 
+		 * 
+		 * Der Name, mit welchem der Menubutton "Kontakt" in CSS formatiert werden kann, wird festgelegt. 
+		 */ 
+		contactButton.addStyleName("Contact-Menubutton"); 
+		/** 
+		 * Der Name, mit welchem der Menübutton "Kontaktliste" in CSS formatiert werden kann, wird festgelegt. 
+		 */ 
+		contactListsButton.addStyleName("Contactlist-Menubutton"); 
+		/** 
+		 * Der Name, mit welchem der Menübutton "Von mir geteilt" in CSS formatiert werden kann, wird festgelegt. 
+		 */
+		myParticipationsButton.addStyleName("MyParticipations-Menubutton");
+		/**
+		 * Der Name, mit welchem der Menübutton "An mich geteilt" in CSS formatiert werden kann, wird festgelegt. 
+		 */ 
+		receivedParticipationsButton.addStyleName("ReceivedParticipations-Menubutton"); 
+		/** Search-Box und Button (CSS)
+		 * 
+		 * Der Name, mit welchem der Search-Contact-Button in CSS formatiert werden kann, wird festgelegt. 
+		 */
+		searchButton.addStyleName("SearchContact-Button"); 
+		/** 
+		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
+		 */
+		search.addStyleName("SearchText"); 		
+		/**
+		 * CSS Identifier für das Logo
+		 */
+		chainSymbolLogo.addStyleName("Logo"); 
 		
-
-
-		//Auslagern in CSS?
-		navigation.setCellHeight(sg, "200px");
+		/**
+		 * CSS Identifier für Elemente
+		 */		
+		header.addStyleName("Header");
+		trailer.addStyleName("Trailer");
+		navigation.addStyleName("Navigation");
 		
+		dp.setStyleName("Form");
+		cf.addStyleName("Form");
+		clf.addStyleName("Form");
+		mpf.addStyleName("Form");
+		rpf.addStyleName("Form");
+		
+		//Menu Leiste
 	  	navigation.add(sg);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
@@ -382,16 +378,9 @@ search.addStyleName("SearchText");
 		root.add(trailer, DockPanel.SOUTH);		
 		root.add(navigation, DockPanel.WEST);
 		
-//		//Ids für Dom Tree Element
-//		dp.getElement().setId("Placeholder");
-//		navigation.getElement().setId("Navigation");
-//		header.getElement().setId("Header");
-//		trailer.getElement().setId("Trailer");
-//		
-//		//root.getElement().setId("DocPanel");
 		
 		root.setCellVerticalAlignment(header, HasAlignment.ALIGN_TOP);
-		root.setCellVerticalAlignment(trailer, HasAlignment.ALIGN_BOTTOM);
+		//root.setCellVerticalAlignment(trailer, HasAlignment.ALIGN_BOTTOM);
 		root.setCellHorizontalAlignment(navigation, HasAlignment.ALIGN_LEFT);
 			
 
