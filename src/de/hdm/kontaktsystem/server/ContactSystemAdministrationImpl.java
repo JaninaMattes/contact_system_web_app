@@ -96,7 +96,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	public double getCurrentUser(){
-		return Double.parseDouble(userService.getCurrentUser().getUserId());
+		return 521d;//Double.parseDouble(userService.getCurrentUser().getUserId());
 	}
 	
 	/*
@@ -111,6 +111,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		User user = uMapper.insert(u);
 		contact.setOwner(user);
+
 		user.setUserContact(this.createContact(contact));
 		return this.editUser(user);
 		
@@ -204,7 +205,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	public Contact getContactByPropertyValue(PropertyValue pv){
 		Contact contact = cMapper.findBy(pv);
-		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));		
+		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 		contact.setName(this.getNameOfContact(contact));
 		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		return contact;
@@ -236,10 +237,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	public Vector<Contact> getContactsFromList(ContactList cl) {
 		Vector<Integer> iv = cMapper.findContactFromList(cl);
+		
 		Vector<Contact> cv = new Vector<Contact>();
 		if(iv != null){
 			for(int i : iv){
-				cv.add(getContactById(i));
+				cv.add(this.getContactById(i));
 			}
 		}
 		return cv;
@@ -248,11 +250,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	@Override
 	public Contact getContactById(int id) {
-		System.out.println(id);
+		Contact contact = cMapper.findContactById(id);
+		
 		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		contact.setName(this.getNameOfContact(contact));
 		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
-		return this.getContactById(id);
+		System.out.println(contact);
+		return contact;
 	}
 	
 	/**
@@ -267,6 +271,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
 		for(PropertyValue pv : pvv){
+			//pv.setProperty(propMapper.findBy(pv.getProperty().getId()));
 			Contact c = this.getContactByPropertyValue(pv);
 			if(!cv.contains(c)) cv.add(c);
 			
@@ -276,6 +281,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	@Override
 	public Contact createContact(Contact contact) {
+
 		boMapper.insert(contact);
 		return cMapper.insertContact(contact);
 		
@@ -417,6 +423,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ***************************************************************************
 	*/
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
+		// Da Property immer fest zu einem Contact-Objekt gehört hat es auch den selben Besitzer
+		propertyValue.setOwner(propertyValue.getContact().getOwner());
 		boMapper.insert(propertyValue);
 		return propValMapper.insert(propertyValue);
 	}
@@ -429,11 +437,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		boMapper.update(propertyValue);
 		return propValMapper.update(propertyValue);
 	}
-		
-	//?
-	public Contact getContactOf(User u) {
-		return cMapper.findOwnContact(u);
-	}
+	
 
 
 
@@ -454,6 +458,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			pv.setProperty(propMapper.findBy(pv.getProperty().getId()));
 		}
 		return pvv;
+		
 	}
 	
 	

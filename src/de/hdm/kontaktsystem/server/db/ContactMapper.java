@@ -200,7 +200,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("status"));
 				contact.setCreationDate(rs.getTimestamp("creationDate"));
 				contact.setModifyDate(rs.getTimestamp("modificationDate"));
-				//System.out.println("contact id: " + contact.getBo_Id());
+				
 
 				return contact;
 			}
@@ -212,18 +212,7 @@ public class ContactMapper {
 	}
 	
 	
-	/**
-	 * Den eigenen Kontakt eines User, welcher bei dessen Erzeugung in 
-	 * der DB erstellt wird aus der DB aufrufen. 
-	 * 
-	 *  @param User - Objekt
-	 *  @return Contact - Objekt
-	 */
 	
-	public Contact findOwnContact(User u) {
-		Contact contact = new Contact();
-		return contact = this.findContactById(u.getUserContact().getBoId());
-	}
 	
 	/**
 	 * Fügte dem ContactList-Objekt einen Vektor mit allen enthaltenen Contact-Objekten hinzu
@@ -261,7 +250,6 @@ public class ContactMapper {
 	 */
 	
 	public Contact findBy(PropertyValue pV) {
-		
 		Connection con = DBConnection.connection();
 
 		try {
@@ -284,6 +272,7 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
+				
 				return contact;
 			}					
 			
@@ -440,7 +429,7 @@ public class ContactMapper {
 	 */
 	
 
-	public Contact addOwnContact(int contact_ID, User owner) {
+	public Contact findOwnContact(User owner) {
 		//System.out.println("#Contact -faddOwncontact");
 		Connection con = DBConnection.connection();
 		try {
@@ -450,7 +439,7 @@ public class ContactMapper {
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID " 
 					+ "WHERE c.ID = ?");
 
-			stmt.setInt(1, contact_ID);
+			stmt.setInt(1, owner.getUserContact().getBoId());
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {	
@@ -459,7 +448,6 @@ public class ContactMapper {
 				contact.setShared_status(rs.getBoolean("bo.status"));
 				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
 				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));
-				owner.setUserContact(contact);
 				contact.setOwner(owner);
 				return contact;				
 			}			
