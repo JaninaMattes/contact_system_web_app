@@ -56,7 +56,7 @@ public class UserMapper {
 			stmt.setString(2, user.getGMail());
 			if(stmt.executeUpdate() > 0) {
 				
-				return update(user);
+				return user;
 			}
 			
 		}catch(SQLException e){
@@ -109,9 +109,9 @@ public class UserMapper {
 			if(rs.next()){
 				Contact c = new Contact();
 				User u = new User();
+				c.setBo_Id(rs.getInt("own_Contact"));
 				u.setGoogleID(rs.getDouble("ID"));
 				u.setGMail(rs.getString("g_mail"));		
-				ContactMapper.contactMapper().addOwnContact(rs.getInt("own_Contact"), u);
 				u.setUserContact(c);
 				return u;	
 			}

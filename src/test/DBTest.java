@@ -34,9 +34,9 @@ public class DBTest {
 	
 	public static void main(String[] args){
 		csa.init();
-		System.out.println("Suche nach Taxi: " + csa.searchContacts("Taxi"));
-		System.out.println("User: " + csa.getUserByID(170));
-		System.out.println("Alle KontaktListe: " + csa.getAllContactLists());
+		csa.searchContacts("Test");
+		csa.getUserByID(170);
+		csa.getAllContactLists();
 		
 		csa.getUserBygMail("user@gmail.com");
 		
@@ -46,13 +46,13 @@ public class DBTest {
 		
 		csa.getAllContacts(); 
 		
-		//csa.getContactByPropertyValue(PropertyValue pv);
+		csa.getContactByPropertyValue(csa.getPropertyValueById(90));
 		
 		csa.getContactsFromUser();
 		
 		csa.getContactsByStatus(true);
 		
-		csa.getContactById(106);
+		csa.getContactById(69);
 		
 		csa.getAllContactListsFromUser();
 		
@@ -62,44 +62,63 @@ public class DBTest {
 		
 		csa.getContactListByName("Olis Liste");
 		
-		//csa.getNameOfContact(Contact c);
+		csa.getNameOfContact(csa.getContactById(69));
 
-		//csa.addContactToList(Contact c, ContactList cl);
+		//csa.addContactToList(csa.getContactById(10), csa.getContactListById(105));
 
 
 		/**
 		 * Create
-		 *
+		 */
 		//Zu klären: was wird jeweils bei create übergeben?
-		createUser(User u, Contact c);
+		User u = new User();
+		u.setGoogleID(170);
+		u.setGMail("oli@test.de");
 		
-		createContact(Contact c);
+		Contact c = new Contact();
 		
-		createContactList(ContactList cl);
+		//System.out.println(csa.createUser(u, c));
 		
-		createPropertyValue(PropertyValue pv);
+		//csa.createContact(c);
 		
-		//Rückgabe von Participation Objekt anhand GUI Eingabe?
-		createParticipation(Participation part);
+		ContactList cl = new ContactList();
+		cl.setName("DB Test");
+		cl.setOwner(csa.getUserByID(170));
+		
+		//csa.createContactList(cl);
+		PropertyValue pv = new PropertyValue();
+		pv.setValue("DBTest");
+		//pv.setContact(csa.getContactById(107));
+		pv.setProperty(PropertyMapper.propertyMapper().findBy(1));
+		//csa.createPropertyValue(pv);
+		
+		Participation part = new Participation();
+		part.setParticipant(csa.getUserByID(170));
+		//part.setReference(csa.findBusinessObjectByID(95));
+		
+		// csa.createParticipation(part);
 
 		/**
 		 * Update
-		 *
+		 */
 		//Zu klären: was wird jeweils als Parameter übergeben?
-		csa.editUser(User u);
+		//csa.editUser(User u);
 		
-		csa.editContact(Contact c);
+		//csa.editContact(Contact c);
 		
-		csa.editContactList(ContactList cl);
+		//ContactList cl2 = csa.getContactListById(108);
+		//cl2.setName("DBTest 2");
+		//csa.editContactList(cl2);
 		
-		csa.editPropertyValue(PropertyValue pv);
+		//csa.editPropertyValue(PropertyValue pv);
 		
 		
 		/**
 		 * Delete
-		 *
-		deleteUser(User u);
+		 */
 		
+		//csa.deleteUser(csa.getUserByID(521));
+		/*
 		deleteContact(Contact c);
 		
 		deleteContactList(ContactList cl);
