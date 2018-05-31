@@ -275,8 +275,8 @@ public class ContactForm extends VerticalPanel{
 		   
 		   if(contactToDisplay!=null && contactToDisplay.isShared_status() == true) {
 			   if(checkBox1.isChecked()) {
-				  pvList = 
-				  pv = new PropertyValue();
+				  //pvList = 
+				 // pv = new PropertyValue();
 			   }
 		   }
 		   return result;
