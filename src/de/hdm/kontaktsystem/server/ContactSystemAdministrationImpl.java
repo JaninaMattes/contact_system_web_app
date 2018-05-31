@@ -96,7 +96,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	public double getCurrentUser(){
-		return 170d;//Double.parseDouble(userService.getCurrentUser().getUserId());
+		return 521d;//Double.parseDouble(userService.getCurrentUser().getUserId());
 	}
 	
 	/*
@@ -111,6 +111,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		User user = uMapper.insert(u);
 		contact.setOwner(user);
+
 		user.setUserContact(this.createContact(contact));
 		return this.editUser(user);
 		
@@ -184,9 +185,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	// Nur Intern Verwendet
 	public Contact getOwnContact(User u) {
-		System.out.println(u);
 		Contact contact = cMapper.findOwnContact(u);
-		System.out.println(contact);
 		contact.setName(this.getNameOfContact(contact));
 		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		return contact;
@@ -252,11 +251,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public Contact getContactById(int id) {
 		Contact contact = cMapper.findContactById(id);
-		System.out.println(contact);
+		
 		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		contact.setName(this.getNameOfContact(contact));
 		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
-		
+		System.out.println(contact);
 		return contact;
 	}
 	
@@ -282,6 +281,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	@Override
 	public Contact createContact(Contact contact) {
+
 		boMapper.insert(contact);
 		return cMapper.insertContact(contact);
 		
@@ -423,6 +423,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	* ***************************************************************************
 	*/
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
+		// Da Property immer fest zu einem Contact-Objekt gehört hat es auch den selben Besitzer
+		propertyValue.setOwner(propertyValue.getContact().getOwner());
 		boMapper.insert(propertyValue);
 		return propValMapper.insert(propertyValue);
 	}
@@ -456,6 +458,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			pv.setProperty(propMapper.findBy(pv.getProperty().getId()));
 		}
 		return pvv;
+		
 	}
 	
 	

@@ -56,7 +56,7 @@ public class UserMapper {
 			stmt.setString(2, user.getGMail());
 			if(stmt.executeUpdate() > 0) {
 				
-				return update(user);
+				return user;
 			}
 			
 		}catch(SQLException e){
