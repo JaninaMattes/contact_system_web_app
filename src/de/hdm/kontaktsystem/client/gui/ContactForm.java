@@ -8,7 +8,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -25,7 +27,7 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 public class ContactForm extends VerticalPanel{
 	
-	ContactSystemAdministrationAsync contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact contactToDisplay = null;
 	ContactListTreeViewModel ctvm = null;
 	
@@ -51,6 +53,7 @@ public class ContactForm extends VerticalPanel{
 	private Label labelGeburtsdatum = new Label("Geburtsdatum:");
 	private Label labelAdresse = new Label("Adresse:");
 	
+	private Label labelShare = new Label("Teilen mit: ");
 	private Label contactStatus = new Label("");
 		
 	private Button deleteButton = new Button("Kontakt löschen");
@@ -65,6 +68,8 @@ public class ContactForm extends VerticalPanel{
 	private CheckBox checkBox7 = new CheckBox();
 	private CheckBox checkBox8 = new CheckBox();
 	
+	private ListBox shareUser = new ListBox();
+	
 	/**
 	 * Instanziieren der Panels
 	 */
@@ -73,6 +78,11 @@ public class ContactForm extends VerticalPanel{
 	 * HauptPanel
 	 */
 	private VerticalPanel vp = new VerticalPanel();
+	
+	/**
+	 * Panel für Anordnung der Button
+	 */
+	private HorizontalPanel btnPanel = new HorizontalPanel();
 	
 	/**
 	 * Startpunkt
@@ -121,7 +131,17 @@ public class ContactForm extends VerticalPanel{
 		contactGrid.setWidget(8, 0, labelAdresse);
 		contactGrid.setWidget(8, 1, textBoxAdresse);
 		contactGrid.setWidget(8, 2, checkBox8);
-	
+		
+		
+		Grid shareGrid = new Grid (2, 1);
+		shareGrid.setWidget(0, 0, labelShare);
+		shareGrid.setWidget(0, 1, shareUser);
+		
+		deleteButton.setPixelSize(110, 30);
+		saveButton.setPixelSize(110, 30);
+		 
+		btnPanel.add(deleteButton);
+		btnPanel.add(saveButton);
 		
 		/*
 		 * CheckBoxen für das Teilen einzelner Elemente einer ContactForm 
@@ -135,7 +155,6 @@ public class ContactForm extends VerticalPanel{
 	    checkBox6.setEnabled(false);
 	    checkBox7.setEnabled(false);
 	    checkBox8.setEnabled(false);
-	    //checkBox9.setEnabled(false);
 	    
 	    /*
 	     * ClickHandler Verbindung zu CheckBoxen
@@ -225,22 +244,19 @@ public class ContactForm extends VerticalPanel{
 	      }
 	    });
 	
-//	    checkBox9.addClickHandler(new ClickHandler() {
-//	      @Override
-//	      public void onClick(ClickEvent event) {
-//	    	  String contactName = textBoxName.getText();
-//	      }
-//	    });
+
 	     
 		/**
 		 * Die TextBox um den Kontakt einzugeben, das Label und das Panel für die Buttons werden 
 		 * über das Grid Widget untereinander auf dem VerticalPanel angeordnet.
 		 * 
 		 */		
+	    
 		vp.add(label);
 		vp.add(contactGrid);
-		//vp.add(buttonPanel);
-		
+		vp.add(shareGrid);
+		vp.add(btnPanel);
+				
 	}		
 		
 	  /**
@@ -253,7 +269,16 @@ public class ContactForm extends VerticalPanel{
 	
 	   public Vector <PropertyValue> getCheckedValues() {
 		   Vector <PropertyValue> result = null;
+		   Vector <PropertyValue> pvList = null;
 		   
+		   PropertyValue pv = null;
+		   
+		   if(contactToDisplay!=null && contactToDisplay.isShared_status() == true) {
+			   if(checkBox1.isChecked()) {
+				  pvList = 
+				  pv = new PropertyValue();
+			   }
+		   }
 		   return result;
 	   }
 	   

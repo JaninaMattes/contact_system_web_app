@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -183,7 +184,7 @@ public class ContactSystem implements EntryPoint {
 		
 		//HeaderPanel
 		HorizontalPanel header = new HorizontalPanel();
-		
+				
 		//Logo
 		logo.setWidth("100px");
 		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
@@ -194,6 +195,8 @@ public class ContactSystem implements EntryPoint {
 	    
 	    //Header
 	    header.add(signOutLink);
+	    headerLabel.setWidth("400px");
+	    
 	    header.add(headerLabel);
 	    header.add(logo);
 	    
@@ -208,9 +211,13 @@ public class ContactSystem implements EntryPoint {
 	    //Navigation
 	    VerticalPanel navigation = new VerticalPanel();	  
 	    
+	    contactButton.setPixelSize(110, 30);
 	    contactButton.setEnabled(true);
+	    contactListsButton.setPixelSize(110, 30);
 	    contactListsButton.setEnabled(true);
+	    myParticipationsButton.setPixelSize(110, 30);
 	    myParticipationsButton.setEnabled(true);
+	    receivedParticipationsButton.setPixelSize(110, 30);
 	    receivedParticipationsButton.setEnabled(true);
 	  				
 	  	//Default 
@@ -244,6 +251,12 @@ public class ContactSystem implements EntryPoint {
 		mptvm.setParticipationForm(mpf);
 		mpf.setMptvm(mptvm);
 		
+		//Zuordnung zur GUI 
+		//-> ToDo: Test & Korrigieren, erst zugeordnet, wenn Cell im CellTree ausgewählt wurde
+		//root.add(cf, DockPanel.EAST);
+		//root.add(clf, DockPanel.EAST);
+		//root.add(mpf, DockPanel.EAST);
+		//root.add(rpf, DockPanel.EAST);
 			
 		/**
 		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
@@ -257,10 +270,14 @@ public class ContactSystem implements EntryPoint {
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird und
 				 * Hinzufügen zur Webseite
 				 */
-				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-				cellTree.setAnimationEnabled(true);	
-				root.add(cellTree, DockPanel.CENTER);			
+//				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
+//				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
+//				cellTree.setAnimationEnabled(true);
+//				root.add(cellTree, DockPanel.CENTER);		
+				
+				// Zwecks Test auskommentiert -> Verbindung zu ContactForm
+				
+				root.add(cf, DockPanel.EAST);
 			}
 			
 		});
@@ -273,7 +290,7 @@ public class ContactSystem implements EntryPoint {
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
 				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(ctvm, "Root", contactListTreeRecource);
+				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
 				cellTree.setAnimationEnabled(true);
 				root.add(cellTree, DockPanel.CENTER);		
 			}
@@ -288,7 +305,7 @@ public class ContactSystem implements EntryPoint {
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
 				CellTree.Resources myParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(ctvm, "Root", myParticipationTreeRecource);
+				CellTree cellTree = new CellTree(mptvm, "Root", myParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);
 				root.add(cellTree, DockPanel.CENTER);			
 			}
@@ -303,13 +320,15 @@ public class ContactSystem implements EntryPoint {
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
 				CellTree.Resources receivedParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(ctvm, "Root", receivedParticipationTreeRecource);
+				CellTree cellTree = new CellTree(rptvm, "Root", receivedParticipationTreeRecource);
 				cellTree.setAnimationEnabled(true);	
 				root.add(cellTree, DockPanel.CENTER);		
 			}
 		});
 		
-
+		//Auslagern in CSS?
+		navigation.setCellHeight(sg, "200px");
+		
 	  	navigation.add(sg);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
@@ -321,14 +340,20 @@ public class ContactSystem implements EntryPoint {
 		root.add(trailer, DockPanel.SOUTH);		
 		root.add(navigation, DockPanel.WEST);
 		
-		//Zuordnung zur GUI 
-		//-> ToDo: Test & Korrigieren, erst zugeordnet, wenn Cell im CellTree ausgewählt wurde
-		root.add(cf, DockPanel.EAST);
-		root.add(clf, DockPanel.EAST);
-		//root.add(mpf, DockPanel.EAST);
-		//root.add(rpf, DockPanel.EAST);
+//		//Ids für Dom Tree Element
+//		dp.getElement().setId("Placeholder");
+//		navigation.getElement().setId("Navigation");
+//		header.getElement().setId("Header");
+//		trailer.getElement().setId("Trailer");
+//		
+//		//root.getElement().setId("DocPanel");
 		
-		RootPanel.get("ContactSystem").add(root);	
+		root.setCellVerticalAlignment(header, HasAlignment.ALIGN_TOP);
+		root.setCellVerticalAlignment(trailer, HasAlignment.ALIGN_BOTTOM);
+		root.setCellHorizontalAlignment(navigation, HasAlignment.ALIGN_LEFT);
+			
+
+		RootPanel.get("ContactSystem").add(root);
 	
 	}
 	

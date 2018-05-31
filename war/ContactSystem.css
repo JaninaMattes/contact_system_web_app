@@ -9,7 +9,7 @@ div {
 }
 
 h1 {
-  font-size: 2em; /*Schriftgröße*/
+  font-size: 2em; /*Schriftgrï¿½ï¿½e*/
   font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
   color: #777777; /*Schriftfarbe*/
   margin: 40px 0px 20px; /*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
@@ -24,6 +24,9 @@ h1 {
     text-shadow: 1px 1px #DCDCDC; /*Text-Schatten*/
     box-shadow:  2px 2px #DCDCDC; /*Box mit Schattenverlauf (helles grau)*/
     background: #FAFAFA; /*Hintergrundfarbe*/
+}
+
+#ContactSystem{
 }
 
 #TopLevelFrame{
