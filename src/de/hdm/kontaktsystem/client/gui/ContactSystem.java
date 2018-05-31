@@ -65,7 +65,8 @@ public class ContactSystem implements EntryPoint {
 	//Suchfunktion
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
-			
+
+	
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
@@ -326,6 +327,47 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 		
+
+/** 
+ * Menu-Buttons (CSS) 
+ * 
+ * Der Name, mit welchem der Menubutton "Kontakt" in CSS formatiert werden kann, wird festgelegt. 
+*/ 
+ contactButton.addStyleName("Contact-Menubutton"); 
+
+
+/** 
+  * Der Name, mit welchem der Menübutton "Kontaktliste" in CSS formatiert werden kann, wird festgelegt. 
+  */ 
+
+contactListsButton.addStyleName("Contactlist-Menubutton"); 
+
+
+/** 
+ * Der Name, mit welchem der Menübutton "Von mir geteilt" in CSS formatiert werden kann, wird festgelegt. 
+ */
+myParticipationsButton.addStyleName("MyParticipations-Menubutton");
+
+
+ /**
+ * Der Name, mit welchem der Menübutton "An mich geteilt" in CSS formatiert werden kann, wird festgelegt. 
+ */ 
+receivedParticipationsButton.addStyleName("ReceivedParticipations-Menubutton"); 
+
+
+/** Search-Box und Button (CSS)
+ * 
+ * Der Name, mit welchem der Search-Contact-Button in CSS formatiert werden kann, wird festgelegt. 
+ */
+searchButton.addStyleName("SearchContact-Button"); 
+
+/** 
+ * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
+ */
+search.addStyleName("SearchText"); 
+		
+
+
 		//Auslagern in CSS?
 		navigation.setCellHeight(sg, "200px");
 		

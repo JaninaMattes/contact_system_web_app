@@ -59,6 +59,7 @@ public class ContactListForm extends VerticalPanel{
 	Button shareButton = new Button ("Kontaktliste teilen");
 	Button deleteButton = new Button ("Kontakt aus eine Liste l�schen");
 	Button deleteClButton = new Button ("Kontaktliste l�schen");
+	
 
 	public void onLoad() {
 		super.onLoad();
@@ -97,7 +98,32 @@ public class ContactListForm extends VerticalPanel{
 		deleteClButton.setEnabled(false);
 		contactListGrid.setWidget(7, 1, deleteClButton);
 		
-		
+	    /** Buttons in CSS
+	     * 
+	     * Der Name, mit welchem der Delete-Button in CSS formatiert werden kann, wird festgelegt. 
+	     */ 
+
+	    deleteButton.addStyleName("DeleteContactfromCL"); 
+	    
+	    /** 
+	     * Der Name, mit welchem der Teilen-Button in CSS formatiert werden kann, wird festgelegt. 
+	     */ 
+
+	    shareButton.addStyleName("shareCL"); 
+	    
+	    /**
+	     * Der Name, mit welchem der hinzufügen-Button in CSS formatiert werden kann, wird festgelegt. 
+	     */ 
+
+	    addButton.addStyleName("addContacttoCL"); 
+	    
+	    /** 
+	     * Der Name, mit welchem der löschen-Button in CSS formatiert werden kann, wird festgelegt. 
+	     */ 
+
+	    deleteClButton.addStyleName("deleteCL"); 
+	    
+	    
 		/*
 		 * Drag Liste TODO: Smart GWT Lizenz + Test 
 		 * Eventuelle Lösung, da ComboBox nicht möglich war
@@ -254,6 +280,7 @@ class DeleteClClickHandler implements ClickHandler {
 		}
 	}
 
+
 class deleteContactListCallback implements AsyncCallback<ContactList> {
 
 	@Override
@@ -303,6 +330,7 @@ class deleteContactListCallback implements AsyncCallback<ContactList> {
 			
 
 		}
+	    
 
 
 
