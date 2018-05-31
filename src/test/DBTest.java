@@ -34,9 +34,9 @@ public class DBTest {
 	
 	public static void main(String[] args){
 		csa.init();
-		System.out.println("Suche nach Taxi: " + csa.searchContacts("Taxi"));
-		System.out.println("User: " + csa.getUserByID(170));
-		System.out.println("Alle KontaktListe: " + csa.getAllContactLists());
+		csa.searchContacts("Test");
+		csa.getUserByID(170);
+		csa.getAllContactLists();
 		
 		csa.getUserBygMail("user@gmail.com");
 		
@@ -46,7 +46,7 @@ public class DBTest {
 		
 		csa.getAllContacts(); 
 		
-		//csa.getContactByPropertyValue(PropertyValue pv);
+		csa.getContactByPropertyValue(csa.getPropertyValueById(100));
 		
 		csa.getContactsFromUser();
 		
@@ -62,9 +62,9 @@ public class DBTest {
 		
 		csa.getContactListByName("Olis Liste");
 		
-		//csa.getNameOfContact(Contact c);
+		csa.getNameOfContact(csa.getContactById(10));
 
-		//csa.addContactToList(Contact c, ContactList cl);
+		csa.addContactToList(csa.getContactById(10), csa.getContactListById(105));
 
 
 		/**
