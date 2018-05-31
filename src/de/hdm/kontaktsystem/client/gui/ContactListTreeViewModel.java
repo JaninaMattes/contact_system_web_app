@@ -19,7 +19,7 @@ import de.hdm.kontaktsystem.shared.bo.Contact;
  * @author Katalin
  *
  */
-public class ContactsTreeViewModel implements TreeViewModel {
+public class ContactListTreeViewModel implements TreeViewModel {
 
 	private ContactForm contactForm;
 	
@@ -63,7 +63,7 @@ public class ContactsTreeViewModel implements TreeViewModel {
 		 * Konstruktor
 		 * Hier werden die lokalen Variablen initialisiert
 		 */
-		public ContactsTreeViewModel() {
+		public ContactListTreeViewModel() {
 			contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 			cKeyProvider = new ContactKeyProvider();
 			selectionModel = new SingleSelectionModel<Contact>(cKeyProvider);

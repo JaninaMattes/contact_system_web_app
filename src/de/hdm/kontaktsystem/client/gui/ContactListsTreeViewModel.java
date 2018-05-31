@@ -2,6 +2,7 @@ package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -12,7 +13,7 @@ import com.google.gwt.view.client.TreeViewModel;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 
-public class ContactListsTreeViewModel implements TreeViewModel {
+public class ContactListsTreeViewModel implements TreeViewModel{
 
 	private ContactListForm contactListForm;
 	private ContactList selectedContactList;
@@ -43,7 +44,7 @@ public class ContactListsTreeViewModel implements TreeViewModel {
 	
 	/**
 	 * Nested Class
-	 * Wählt die aktuell fokusierte Kontaktlist
+	 * Wï¿½hlt die aktuell fokusierte Kontaktlist
 	 */
 	
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {

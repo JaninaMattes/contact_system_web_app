@@ -14,7 +14,8 @@ import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
-@RemoteServiceRelativePath("editor")
+//TODO -> eiditor oder contactsystem?
+@RemoteServiceRelativePath("ContactSystem")
 public interface ContactSystemAdministration extends RemoteService {
 	
 	public User getUserByID(double id);
@@ -26,7 +27,7 @@ public interface ContactSystemAdministration extends RemoteService {
 
 	public Vector<Contact> getAllContactsFromUser(); 
 
-	public Vector<Contact> getAllContacts(); 
+	public Vector<Contact> getAllContacts(); 	
 	
 	public Contact getContactByPropertyValue(PropertyValue pv);
 	
@@ -53,7 +54,6 @@ public interface ContactSystemAdministration extends RemoteService {
 	/**
 	 * Create
 	 */
-	//Zu klären: was wird jeweils bei create übergeben?
 	public User createUser(User u, Contact c);
 	
 	public Contact createContact(Contact c);
@@ -62,13 +62,11 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public PropertyValue createPropertyValue(PropertyValue pv);
 	
-	//Rückgabe von Participation Objekt anhand GUI Eingabe?
 	public Participation createParticipation(Participation part);
 
 	/**
 	 * Update
 	 */
-	//Zu klären: was wird jeweils als Parameter übergeben?
 	public User editUser(User u);
 	
 	public Contact editContact(Contact c);
@@ -94,7 +92,6 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList removeContactFromList(Contact contact, ContactList contactList);
 	
 	public Vector<Participation> getAllParticipationsByOwner(User u);
-
 	
 	public Vector<Participation> getAllParticipationsByParticipant(User participant);
 

@@ -34,12 +34,12 @@ import de.hdm.kontaktsystem.server.db.*;
 public class ContactSystemAdministrationImpl extends RemoteServiceServlet implements ContactSystemAdministration{
 
 	/**
-	 * 
+	 * Default SerialVersionUID
 	 */
 	
 	private static final long serialVersionUID = 1L;
 			
-	private Contact contact = null; //?? TODO: überprüfen
+	private Contact contact = null; //?? TODO: überprüfen -> Analog zu BankProjekt
 	
 	/*
 	 * Referenzen auf die zugehörigen DatenbankMapper

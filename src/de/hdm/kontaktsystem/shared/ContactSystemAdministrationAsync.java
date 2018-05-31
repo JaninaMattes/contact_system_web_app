@@ -21,7 +21,6 @@ public interface ContactSystemAdministrationAsync {
 	
 
 	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback);
-
 	
 	public void getAllContacts(AsyncCallback<Vector<Contact>> callback);
 	
@@ -47,12 +46,18 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getNameOfContact(Contact c, AsyncCallback<PropertyValue> callback);
 	
+	/**
+	 * Methode für die Suchfunktion
+	 * @param value
+	 * @param callback
+	 */
+	
 	public void searchContacts(String value, AsyncCallback<Vector<Contact>> callback);
 
 	/**
 	 * Create
 	 */
-	//Zu klären: was wird jeweils bei create übergeben?
+	
 	public void createUser(User u, Contact c, AsyncCallback<User> callback);
 	
 	public void createContact(Contact c, AsyncCallback<Contact> callback);
@@ -68,7 +73,7 @@ public interface ContactSystemAdministrationAsync {
 	/**
 	 * Update
 	 */
-	//Zu klären: was wird jeweils als Parameter übergeben?
+	
 	public void editUser(User u, AsyncCallback<User> callback);
 	
 	public void editContact(Contact c, AsyncCallback<Contact> callback);

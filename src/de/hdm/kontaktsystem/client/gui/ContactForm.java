@@ -27,7 +27,7 @@ public class ContactForm extends VerticalPanel{
 	
 	ContactSystemAdministrationAsync contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact contactToDisplay = null;
-	ContactsTreeViewModel ctvm = null;
+	ContactListTreeViewModel ctvm = null;
 	
 	/**
 	 * Instanziieren der Widgets
@@ -306,7 +306,7 @@ public class ContactForm extends VerticalPanel{
 			 *  catvm setter
 			 */
 			
-			void setCatvm(ContactsTreeViewModel ctvm) {
+			void setCatvm(ContactListTreeViewModel ctvm) {
 				this.ctvm = ctvm;
 			}
 			

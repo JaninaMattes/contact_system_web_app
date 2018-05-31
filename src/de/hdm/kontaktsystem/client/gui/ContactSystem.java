@@ -104,7 +104,7 @@ public class ContactSystem implements EntryPoint {
 	Button searchButton = new Button("Suche");
 
 	//CellTree Model
-	ContactsTreeViewModel ctvm = new ContactsTreeViewModel();
+	ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
 	ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
 	MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
 	ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
@@ -121,10 +121,9 @@ public class ContactSystem implements EntryPoint {
 	private User userInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label(
-			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen ");
-	private Anchor signInLink = new Anchor("Login mit Google");
-	private Anchor signOutLink = new Anchor("Logout");
-	
+			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
+	private Anchor signInLink = new Anchor("Login");
+	private Anchor signOutLink = new Anchor("Logout");	
 	
 	/**
 	 * EntryPoint
@@ -133,12 +132,12 @@ public class ContactSystem implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
-		// Test -> loadContactSystem();
+		loadContactSystem(); // für Test 
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
-		
+		/*
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
@@ -154,7 +153,7 @@ public class ContactSystem implements EntryPoint {
 					loadLogin();					
 				}
 			}
-		});	
+		});	*/
 		
 	}	
 	

@@ -171,8 +171,8 @@ public class ContactListForm extends VerticalPanel{
 				Participation part = new Participation();
 				part.setParticipant(u); 
 				part.setReference(contactListToDisplay);
-				contactSystemAdmin.shareContactListWith(part,
-						new shareContactListWithCallback(part));
+				// TODO:
+				//contactSystemAdmin.shareContactListWith(part, new shareContactListWithCallback(part));
 				//ALTERNATIV: contactSystemAdmin.createParticipation(contactListToDisplay, u , new AsyncCallback<Participation>() { 
 				//In andere NestedKlasse ausgliedern, wie bei "delete Clickhandler"
 			}

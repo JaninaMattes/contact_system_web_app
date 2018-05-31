@@ -20,7 +20,7 @@ public class ContactMapperTest {
 		
 		
 		//System.out.println(ContactMapper.contactMapper().findAllSharedByOthersToMe(u));
-		ContactMapper.contactMapper().deleteAllSharedByOthersToMe(u);
+//		ContactMapper.contactMapper().deleteAllSharedByOthersToMe(u);
 		
 //		User u = new User();
 //		u.setGoogleID(3);
