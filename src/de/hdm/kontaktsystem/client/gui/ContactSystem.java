@@ -61,6 +61,10 @@ public class ContactSystem implements EntryPoint {
 	 * Instanziieren der GWT Widgets und Panels
 	 */
 	
+	//Suchfunktion
+	private TextBox search = new TextBox();
+	private Button searchButton = new Button("Suche");
+			
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
@@ -93,15 +97,16 @@ public class ContactSystem implements EntryPoint {
 	//Symbol für Cells (in Cell-Klasse verschieben?)
 	private Image chainSymbol = new Image(); //Symbol für Status geteilt/nicht geteilt
 	
-	//DockPanel als Root
-	DockPanel root = new DockPanel();
+	/**
+	 * Attribute für den Login
+	 */
+	private User userInfo = null;
+	private VerticalPanel loginPanel = new VerticalPanel();
+	private Label loginLabel = new Label(
+			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
+	private Anchor signInLink = new Anchor("Login");
+	private Anchor signOutLink = new Anchor("Logout");
 	
-	//HeaderPanel
-	HorizontalPanel header = new HorizontalPanel();
-	
-	//Suchfunktion
-	TextBox search = new TextBox();
-	Button searchButton = new Button("Suche");
 
 	//CellTree Model
 	ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
@@ -114,16 +119,6 @@ public class ContactSystem implements EntryPoint {
 	ContactListForm clf = new ContactListForm();
 	MyParticipationForm mpf = new MyParticipationForm();
 	ReceivedParticipationForm rpf = new ReceivedParticipationForm();
-	
-	/**
-	 * Attribute für den Login
-	 */
-	private User userInfo = null;
-	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label(
-			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
-	private Anchor signInLink = new Anchor("Login");
-	private Anchor signOutLink = new Anchor("Logout");
 
 	
 	/**
@@ -171,7 +166,7 @@ public class ContactSystem implements EntryPoint {
 		loginPanel.add(new HTML("<br /> <br /> "));
 		loginPanel.add(signInLink);
 		loginPanel.add(new HTML("</center>"));
-		RootPanel.get().add(loginPanel);
+		RootPanel.get("ContactSystem").add(loginPanel); //TODO: prüfen ob richtige HTML
 	}
 		
 	
@@ -182,6 +177,12 @@ public class ContactSystem implements EntryPoint {
 
 
 	public void loadContactSystem() {
+		
+		//DockPanel als Root
+		DockPanel root = new DockPanel();
+		
+		//HeaderPanel
+		HorizontalPanel header = new HorizontalPanel();
 		
 		//Logo
 		logo.setWidth("100px");
@@ -196,35 +197,35 @@ public class ContactSystem implements EntryPoint {
 	    header.add(headerLabel);
 	    header.add(logo);
 	    
+	    searchButton.addClickHandler(new SearchClickHandler());
+		searchButton.setEnabled(true);
+		
 	    //Suchfunktion
   		Grid sg = new Grid(1,2);
-  		sg.setWidget(0, 1, search);
-  		sg.setWidget(1, 1, searchButton);
+  		sg.setWidget(0, 0, search);
+  		sg.setWidget(0, 1, searchButton);
   		
 	    //Navigation
 	    VerticalPanel navigation = new VerticalPanel();	  
-	  
-	  	navigation.add(sg);
-	  	navigation.add(contactButton);
-	  	navigation.add(contactListsButton);
-	  	navigation.add(myParticipationsButton);
-	  	navigation.add(receivedParticipationsButton);  			
-	  	
+	    
+	    contactButton.setEnabled(true);
+	    contactListsButton.setEnabled(true);
+	    myParticipationsButton.setEnabled(true);
+	    receivedParticipationsButton.setEnabled(true);
+	  				
 	  	//Default 
 	  	VerticalPanel dp = new VerticalPanel();
-	  	root.add(dp, DockPanel.EAST);
-		
+	  			
 	    //Trailer
 	    HorizontalPanel trailer = new HorizontalPanel();
 	    trailer.add(trailerText);
 	    
 		//Header mit SignOut-Link
-		if(userInfo != null){ signOutLink.setHref(userInfo.getLogoutUrl());}
-		signOutLink.setStyleName("link");
-		root.add(header, DockPanel.NORTH);
-		root.add(trailer, DockPanel.SOUTH);		
-		root.add(navigation, DockPanel.WEST);		
+		if(userInfo != null){ 
+			signOutLink.setHref(userInfo.getLogoutUrl());
+		}
 		
+		signOutLink.setStyleName("link");
 		
 		// Füllen der Image-Objekte mit Symbolen
 		createSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_add_black_18dp.png");
@@ -243,17 +244,7 @@ public class ContactSystem implements EntryPoint {
 		mptvm.setParticipationForm(mpf);
 		mpf.setMptvm(mptvm);
 		
-		//Zuordnung zur GUI 
-		//-> ToDo: Test & Korrigieren, erst zugeordnet, wenn Cell im CellTree ausgewählt wurde
-		root.add(cf, DockPanel.EAST);
-		root.add(clf, DockPanel.EAST);
-		root.add(mpf, DockPanel.EAST);
-		root.add(rpf, DockPanel.EAST);	
-		
-		searchButton.addClickHandler(new SearchClickHandler());
-		searchButton.setEnabled(true);
-		
-		
+			
 		/**
 		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
 		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird oberhalb des 
@@ -317,7 +308,26 @@ public class ContactSystem implements EntryPoint {
 				root.add(cellTree, DockPanel.CENTER);		
 			}
 		});
-			
+		
+
+	  	navigation.add(sg);
+	  	navigation.add(contactButton);
+	  	navigation.add(contactListsButton);
+	  	navigation.add(myParticipationsButton);
+	  	navigation.add(receivedParticipationsButton); 
+		
+		root.add(dp, DockPanel.EAST);
+		root.add(header, DockPanel.NORTH);
+		root.add(trailer, DockPanel.SOUTH);		
+		root.add(navigation, DockPanel.WEST);
+		
+		//Zuordnung zur GUI 
+		//-> ToDo: Test & Korrigieren, erst zugeordnet, wenn Cell im CellTree ausgewählt wurde
+		root.add(cf, DockPanel.EAST);
+		root.add(clf, DockPanel.EAST);
+		//root.add(mpf, DockPanel.EAST);
+		//root.add(rpf, DockPanel.EAST);
+		
 		RootPanel.get("ContactSystem").add(root);	
 	
 	}

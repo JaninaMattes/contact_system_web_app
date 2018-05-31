@@ -17,7 +17,7 @@ import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
-import de.hdm.thies.bankProjekt.shared.bo.Customer;
+
 /**
  * 
  * @author Katalin
