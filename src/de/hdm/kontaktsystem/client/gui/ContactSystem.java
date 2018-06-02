@@ -19,9 +19,11 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.TreeViewModel;
 
 import de.hdm.kontaktsystem.client.LoginService;
 import de.hdm.kontaktsystem.client.LoginServiceAsync;
@@ -126,10 +128,23 @@ public class ContactSystem implements EntryPoint {
 	 * EntryPoint
 	 */
 	
+	public void loadTree() {
+		TreeViewModel tvm = new TreeViewModelTest();
+		
+		CellTree ct = new CellTree(tvm, "Liste");
+		
+		RootPanel.get().add(ct);
+		
+	}
+	
+	
 	@Override
 	public void onModuleLoad() {
 		
-		loadContactSystem(); // für Test 
+		loadTree();
+		
+		
+		//loadContactSystem(); // für Test 
 		
 		/**
 		 * Login-Status feststellen mit LoginService
@@ -180,7 +195,7 @@ public class ContactSystem implements EntryPoint {
 	public void loadContactSystem() {
 		
 		//DockPanel als Root
-		DockPanel root = new DockPanel();
+		final DockPanel root = new DockPanel();
 		
 		//HeaderPanel
 		HorizontalPanel header = new HorizontalPanel();
@@ -269,7 +284,7 @@ public class ContactSystem implements EntryPoint {
 //				root.add(cellTree, DockPanel.CENTER);		
 				
 				// Zwecks Test auskommentiert -> Verbindung zu ContactForm						
-				root.remove(dp);
+				//root.remove(dp);
 				//root.add(cf);
 				root.add(cf, DockPanel.EAST);
 			}
