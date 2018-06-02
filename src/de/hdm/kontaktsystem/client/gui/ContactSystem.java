@@ -18,9 +18,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
+import com.google.gwt.view.client.TreeViewModel;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
@@ -108,18 +109,23 @@ public class ContactSystem implements EntryPoint {
 	 */
 	
 	public void loadTree() {
-		//TreeViewModel tvm = new TreeViewModelTest();
-		//CellTree ct = new CellTree(tvm, "Liste");
-		//RootPanel.get("Lists").add(ct);
+		ScrollPanel sp = new ScrollPanel();
+		TreeViewModel tvm = new TreeViewModelTest();
+		CellTree ct = new CellTree(tvm, "Liste");
+		sp.setHeight("80vh");
+		sp.add(ct);
+		
+		RootPanel.get("Lists").add(sp);
 		
 	}
 	
 	public void onModuleLoad() {
 		
-		loadTree();
-		//this.loadContactSystem(); // für Test 
-
-		this.loadContactSystem(); // für Test 		
+		loadTree(); // für Test
+		
+		this.loadContactSystem(); // für Test
+		
+		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
