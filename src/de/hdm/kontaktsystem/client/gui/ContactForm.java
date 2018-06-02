@@ -387,7 +387,7 @@ public class ContactForm extends VerticalPanel{
 			
 			if (c != null) {
 				contactToDisplay = c;		
-				if(c.isShared_status()) contactStatus.setText("Geteilt");
+				if(c.isShared_status()) contactStatus.setText("Status: Geteilt");
 				label.setText("Kontakt: " + c.getBoId());
 				
 				//Enable Checkboxen
@@ -405,6 +405,7 @@ public class ContactForm extends VerticalPanel{
 				
 				for(PropertyValue p : pv) {	
 					
+					//TODO: Überprüfen ob geteilt wurde -> dann checkboxen anhacken
 				if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
 				if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
 				if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
@@ -413,13 +414,11 @@ public class ContactForm extends VerticalPanel{
 				if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
 				if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
 				if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
-				
-				
 			    
 			}
 				
 			} else {
-				contactStatus.setText("Nicht geteilt");
+				contactStatus.setText("Status: Nicht geteilt");
 				label.setText("Kontakt: ");
 				textBoxName.setText("");
 				textBoxNickName.setText("");

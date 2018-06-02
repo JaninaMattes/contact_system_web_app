@@ -198,7 +198,7 @@ public class ContactSystem implements EntryPoint {
 		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
 		//Logo 
-		chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
+		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
 				    
 	    searchButton.addClickHandler(new SearchClickHandler());
 		searchButton.setEnabled(true);
@@ -224,12 +224,13 @@ public class ContactSystem implements EntryPoint {
 		
 
 		/** Siehe aus BankingProjekt Hinweis: -> Set ids using widget.getElement().setId("idOfElement") */
-		signOutLink.setStyleName("Log-Out-Button");		
-		contactButton.setStyleName("Menue-Button"); 	
-		contactListsButton.setStyleName("Menue-Button"); 
-		myParticipationsButton.setStyleName("Menue-Button"); 
-		receivedParticipationsButton.setStyleName("Menue-Button"); 
-		searchButton.setStyleName("Search-Button");  
+		reportLink.getElement().setId("Report-Button");
+		signOutLink.getElement().setId("Log-Out-Button");		
+		contactButton.getElement().setId("Menue-Button"); 	
+		contactListsButton.getElement().setId("Menue-Button"); 
+		myParticipationsButton.getElement().setId("Menue-Button"); 
+		receivedParticipationsButton.getElement().setId("Menue-Button"); 
+		searchButton.getElement().setId("Search-Button");  
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
@@ -266,15 +267,24 @@ public class ContactSystem implements EntryPoint {
 		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
 		 */
 		
-		//ClickHandler für ContactButton
+//		//ClickHandler für ContactButton
+//		contactButton.addClickHandler(new ClickHandler() {
+//			public void onClick(ClickEvent event) {
+//				/**
+//				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird 
+//				 */
+//				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
+//				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
+//				cellTree.setAnimationEnabled(true);				
+//			}
+//			
+//		});
+	
+		//TEST -> ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird 
-				 */
-				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-				cellTree.setAnimationEnabled(true);				
+				detailsPanel.add(cf);
+				RootPanel.get("Details").add(detailsPanel);
 			}
 			
 		});
@@ -332,14 +342,14 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
  	  	
-	  	detailsPanel.add(cf);
+//	  	detailsPanel.add(cf);
 //	  	detailsPanel.add(clf);
 //	  	detailsPanel.add(mpf );
 //	  	detailsPanel.add(rpf);
 	  		  	
-		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-		cellTree.setAnimationEnabled(true);
+//		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
+//		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
+//		cellTree.setAnimationEnabled(true);
 		
 	  	
 	  	RootPanel.get("Header").add(header);
