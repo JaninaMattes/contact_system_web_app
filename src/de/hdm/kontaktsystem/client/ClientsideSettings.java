@@ -64,7 +64,7 @@ public class ClientsideSettings extends CommonSettings {
     
     if ( contactSystemAdministration == null) {
       // Instanziierung von ContactSystemAdministrationAsync
-    	//contactSystemAdministration = GWT.create(ContactSystemAdministration.class);
+    	contactSystemAdministration = GWT.create(ContactSystemAdministration.class);
     }
     return contactSystemAdministration;
   }

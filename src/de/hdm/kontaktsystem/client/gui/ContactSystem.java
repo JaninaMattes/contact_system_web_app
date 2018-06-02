@@ -114,9 +114,10 @@ public class ContactSystem implements EntryPoint {
 		
 	}
 	
-	
-	@Override
-	public void onModuleLoad() {		
+	public void onModuleLoad() {
+		
+		loadTree();
+		//this.loadContactSystem(); // für Test 
 
 		this.loadContactSystem(); // für Test 		
 		/**
@@ -164,7 +165,10 @@ public class ContactSystem implements EntryPoint {
 	 * ausgewählte Elemente werden als Formulare rechts im Bildschirm aufgerufen
 	 */
 	public void loadContactSystem() {
-		
+
+		//Root
+		final VerticalPanel root = new VerticalPanel();
+	
 		//List
 		VerticalPanel listPanel = new VerticalPanel();
 				

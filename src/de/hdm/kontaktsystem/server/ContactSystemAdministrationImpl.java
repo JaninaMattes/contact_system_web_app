@@ -350,6 +350,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	// Nur für Report!
 	@Override
 	public Vector<ContactList> getAllContactLists() {
+		System.out.println("getAllContacts");
 		Vector<ContactList> contactListVector = clMapper.findAllContactLists();
 		
 		for(ContactList cl : contactListVector){
