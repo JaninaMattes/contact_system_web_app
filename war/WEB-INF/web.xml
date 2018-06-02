@@ -19,7 +19,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <servlet>
     <servlet-name>LoginService</servlet-name>
     <servlet-class>de.hdm.kontaktsystem.server.LoginServiceImpl</servlet-class>
-    
   </servlet>
 
   <servlet-mapping>
@@ -28,7 +27,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
   
   
-  <!--
+  
   <servlet>
     <servlet-name>EditorService</servlet-name>
     <servlet-class>de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl</servlet-class>
@@ -39,7 +38,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>EditorService</servlet-name>
     <url-pattern>/kontaktsystem/*</url-pattern>
   </servlet-mapping>
-  -->
+  
   
   <servlet>
     <servlet-name>Report</servlet-name>

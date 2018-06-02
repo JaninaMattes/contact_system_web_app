@@ -168,12 +168,10 @@ public class ContactSystem implements EntryPoint {
 
 		//Root
 		final VerticalPanel root = new VerticalPanel();
-	
-		//List
-		VerticalPanel listPanel = new VerticalPanel();
+
 				
 		//Detail
-		VerticalPanel detailsPanel = new VerticalPanel();
+		final VerticalPanel detailsPanel = new VerticalPanel();
 			
 		//Header
 		HorizontalPanel header = new HorizontalPanel();				
@@ -186,16 +184,16 @@ public class ContactSystem implements EntryPoint {
 	    
 		//Formulare
 
-		ContactForm cf = new ContactForm();
+		final ContactForm cf = new ContactForm();
 		ContactListForm clf = new ContactListForm();
 		MyParticipationForm mpf = new MyParticipationForm();
 		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 		
 		//CellTree Model
 		ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
 		//Logo 
 		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
@@ -341,22 +339,15 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
- 	  	
-//	  	detailsPanel.add(cf);
-//	  	detailsPanel.add(clf);
-//	  	detailsPanel.add(mpf );
-//	  	detailsPanel.add(rpf);
-	  		  	
-//		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-//		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-//		cellTree.setAnimationEnabled(true);
-		
+
 	  	
-	  	RootPanel.get("Header").add(header);
-	  	RootPanel.get("Navigator").add(navigation);
-	  	//RootPanel.get("Lists").add(listPanel);
-	  	RootPanel.get("Details").add(detailsPanel);
-	  	RootPanel.get("Trailer").add(trailer);
+//	  	RootPanel.get("Header").add(header);
+//	  	RootPanel.get("Navigator").add(navigation);
+//	  	RootPanel.get("Lists").add(dv2);
+	  	RootPanel.get("Details").add(clf);
+	  	//RootPanel.get("Trailer").add(trailer);
+
+ 	  	
 		
 	}
 	

@@ -9,6 +9,8 @@ import de.hdm.kontaktsystem.server.db.ParticipationMapper;
 import de.hdm.kontaktsystem.server.db.PropertyMapper;
 import de.hdm.kontaktsystem.server.db.PropertyValueMapper;
 import de.hdm.kontaktsystem.server.db.UserMapper;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
+import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -25,7 +27,7 @@ public class ContactListMapperTestEinzeln {
 	private final static UserMapper uMapper = UserMapper.userMapper();
 	
 	// Gültige IDs zu Testen
-	private final static double vUID = 777;
+	private final static double vUID = 126;
 	private final static double vUID1 = 666;
 	private final static double vUID2 = 798019057881227.4;
 	private final static int coID = 22;
@@ -158,25 +160,38 @@ public class ContactListMapperTestEinzeln {
 		clMapper.updateContactList(cl);
 		*/
 		
-		System.out.println("\n ############ Test ContactList insert ################ \n");		
-		User u = new User();
-		u = uMapper.findById(vUID);
-		Contact c = new Contact();
-		c = cMapper.findOwnContact(u);
+//		System.out.println("\n ############ Test ContactList insert ################ \n");		
+//		User u = new User();
+//		u = uMapper.findById(vUID);
+////		Contact c = new Contact();
+////		c = cMapper.findOwnContact(u);
+////		
+////		Contact c2 = new Contact();
+////		c2 = cMapper.findContactById(vCID);
+//		
+//		ContactList cl = new ContactList();
+//		cl.setBo_Id(57);
+//		cl.setName("777s Liste");
+//		cl.setOwner(u);
+//		
+//		//clMapper.insertContactList(cl);
+//		cl.addContact(c);
+//		cl.addContact(c2);
+//		cl.setName("777s-Liste");
+//		clMapper.updateContactList(cl);
 		
-		Contact c2 = new Contact();
-		c2 = cMapper.findContactById(vCID);
 		
+		String clName = "hallo";
 		ContactList cl = new ContactList();
-		cl.setBo_Id(57);
-		cl.setName("777s Liste");
+		User u = new User();
+		u.setGoogleID(126);
+		cl.setName(clName);	
 		cl.setOwner(u);
-		
-		//clMapper.insertContactList(cl);
-		cl.addContact(c);
-		cl.addContact(c2);
-		cl.setName("777s-Liste");
-		clMapper.updateContactList(cl);
+		ContactSystemAdministrationImpl test = new ContactSystemAdministrationImpl();
+
+		test.init();
+		test.createContactList(cl);
+		System.out.println(cl);
 		
 	}
 

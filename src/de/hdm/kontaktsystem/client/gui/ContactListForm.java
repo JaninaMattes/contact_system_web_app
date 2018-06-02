@@ -57,6 +57,7 @@ public class ContactListForm extends VerticalPanel {
 	Button deleteButton = new Button("Kontakt aus eine Liste löschen");
 	Button deleteClButton = new Button("KontaktLliste löschen");
 	Button saveButton = new Button("Kontakt Liste speichern");
+	Button shareButton = new Button("Teilen");
 	
 	Label labelShare = new Label("Teilen mit: ");
 	Label contactStatus = new Label("");
@@ -97,6 +98,7 @@ public class ContactListForm extends VerticalPanel {
 		
 		contactListGrid.setWidget(4, 0, labelShare);
 		contactListGrid.setWidget(4, 1, shareUser);
+		contactListGrid.setWidget(4, 2, shareButton);	
 		
 		contactListGrid.setWidget(5, 1, btnPanel);
 
@@ -109,6 +111,7 @@ public class ContactListForm extends VerticalPanel {
 		deleteButton.setPixelSize(110, 30);
 		saveButton.setPixelSize(110, 30);
 		btnPanel.add(saveButton);
+		saveButton.addClickHandler(new saveClickHandler());
 		btnPanel.add(deleteButton);
 		
 		
@@ -122,91 +125,62 @@ public class ContactListForm extends VerticalPanel {
 		checkBox3.setEnabled(false);
 		checkBox4.setEnabled(false);
 		
-
-		/**
-		 * Buttons in CSS
-		 * 
-		 * Zusammenlauf? Vgl. BankProjekt
-		 */
-
-		deleteButton.addStyleName("DeleteContactfromCL");
-
-
-		/**
-		 * Der Name, mit welchem der löschen-Button in CSS formatiert werden kann, wird
-		 * festgelegt.
-		 */
-
-		deleteClButton.addStyleName("deleteCL");
 		
-		
-
-		/*
-		 * Drag Liste TODO: Smart GWT Lizenz + Test Eventuelle Lösung, da ComboBox nicht
-		 * möglich war Quelle:
-		 * https://www.smartclient.com/smartgwt/showcase/#effects_dd_move_list
-		 */
-		//
-		// HStack hStack = new HStack(10);
-		// hStack.setHeight(160);
-		//
-		// final PartsListGrid myList1 = new PartsListGrid();
-		// myList1.setCanDragRecordsOut(true);
-		// myList1.setCanAcceptDroppedRecords(true);
-		// myList1.setCanReorderFields(true);
-		// myList1.setDragDataAction(DragDataAction.MOVE);
-		// myList1.setData(PartData.getRecords());
-		// hStack.addMember(myList1);
-		//
-		// final PartsListGrid myList2 = new PartsListGrid();
-		// myList2.setCanDragRecordsOut(true);
-		// myList2.setCanAcceptDroppedRecords(true);
-		// myList2.setCanReorderRecords(true);
-		//
-		// VStack vStack = new VStack(10);
-		// vStack.setWidth(32);
-		// vStack.setHeight(74);
-		// vStack.setLayoutAlign(Alignment.CENTER);
-		//
-		// TransferImgButton rightImg = new TransferImgButton(TransferImgButton.RIGHT);
-		// rightImg.addClickHandler(new ClickHandler() {
-		// public void onClick(ClickEvent event) {
-		// myList2.transferSelectedData(myList1);
-		// }
-		// });
-		// vStack.addMember(rightImg);
-		//
-		// TransferImgButton leftImg = new TransferImgButton(TransferImgButton.LEFT);
-		// leftImg.addClickHandler(new ClickHandler() {
-		// public void onClick(ClickEvent event) {
-		// myList1.transferSelectedData(myList2);
-		// }
-		// });
-		// vStack.addMember(leftImg);
-		//
-		// hStack.addMember(vStack);
-		// hStack.addMember(myList2);
-		//
-		// hStack.draw();
-		// }
-		//
-		// }
 	}
+	
+	/**
+	 * ClickHandelr zum Speichern der KontaktListe 
+	 * @author Kim-Ly
+	 *
+	 */
 
-	private class addClickHandler implements ClickHandler {
+	private class saveClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
-			if (contactListToDisplay == null) {
-				Window.alert("Keine Kontaktliste ausgew�hlt");
-			} else {
-
-			}
+			String clName = nameContactList.getText();
+			ContactList cl = new ContactList();
+			User u = new User();
+			u.setGoogleID(126);
+			cl.setName(clName);	
+			cl.setOwner(u);
+//			if (cl == null) {
+//				Window.alert("Keine Kontaktliste ausgewählt");
+//			} else {
+				Window.alert(cl.toString());
+				contactSystemAdmin.createContactList
+				(cl, new CreateClCallback());
+			//}
 		}
 	}
+	
+	private class CreateClCallback implements AsyncCallback<ContactList> {
 
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Anlegen einer neuen KontaktListe ist fehlgeschlagen!");
+			
+		}
+
+		@Override
+		public void onSuccess(ContactList cl) {
+			if (cl != null) {
+				Window.alert("Neue Kontaktliste gespeichert!");
+			}
+			
+		}
+		
+	}
+
+	/**
+	 * ClickHandler zum Teilen der KontaktListe mit dem ausgewählten User
+	 * @author Kim-Ly
+	 *
+	 */
+	
 	private class shareClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 			if (contactListToDisplay == null) {
-				Window.alert("Keine Kontaktliste ausgew�hlt");
+				Window.alert("Keine Kontaktliste ausgewählt");
 			} else {
 				User u = new User();
 				u.setGMail("NeuerUser@gmail.com"); // Testdaten, sollte beim Teilen �ber ein Popup abgefragt werden.
@@ -222,8 +196,15 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 	}
+	
+	/**
+	 * Callback Methode für das Teilen von Kontaktliste
+	 * @author Kim-Ly
+	 *
+	 */
 
-	private class shareContactListWithCallback implements AsyncCallback<Participation> {
+	private class shareContactListWithCallback 
+	implements AsyncCallback<Participation> {
 
 		Participation participation = null;
 
@@ -246,25 +227,14 @@ public class ContactListForm extends VerticalPanel {
 
 	}
 
+
 	/**
-	 * ClickHandler zum Loeschen eines Kontaktes in einer Kontaktliste
+	 * ClickHandler zum Löschen von Kontakten aus Kontaktliste
+	 * @author Kim-Ly
+	 *
 	 */
-
-	private class DeleteClickHandler implements ClickHandler {
-
-		public void onClick(ClickEvent event) {
-			/**
-			 * Nach Erstellung der kompletten GUI, nochmals �berpr�fen, wie man den Kontakt
-			 * �bergeben kann um ihn mit einem X zu loeschen. if (contact == null) {
-			 * Window.alert("Keinen Kontakt ausgew�hlt"); }else {
-			 * contactSystemAdmin.removeContactFromList(contact, contactListToDisplay, new
-			 * deleteContactfromListCallback()); }
-			 */
-		}
-	}
-
-	// NOCHMAL PR�FEN
-	private class deleteContactfromListCallback implements AsyncCallback<ContactList> {
+	private class deleteContactfromListCallback 
+	implements AsyncCallback<ContactList> {
 
 		public void onFailure(Throwable caught) {
 			Window.alert("Löschen eines Kontaktes fehlgeschlagen");
@@ -274,7 +244,7 @@ public class ContactListForm extends VerticalPanel {
 			if (result != null) {
 				setSelected(null);
 				cltvm.removeContactList(result);
-				Window.alert("Kontakt wurde erfolgreich aus der Liste gel�scht");
+				Window.alert("Kontakt wurde erfolgreich aus der Liste gelöscht");
 			}
 		}
 	}
@@ -282,7 +252,7 @@ public class ContactListForm extends VerticalPanel {
 	/**
 	 * Clickhandler zum Loeschen einer Kontaktliste.
 	 * 
-	 * @author Marco
+	 * @author Kim-Ly
 	 *
 	 */
 
@@ -297,11 +267,12 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 
-		private class deleteContactListCallback implements AsyncCallback<ContactList> {
+		private class deleteContactListCallback 
+		implements AsyncCallback<ContactList> {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("L�schen einer Kontaktliste fehlgeschlagen");
+				Window.alert("Löschen der Kontaktliste fehlgeschlagen");
 			}
 
 			@Override
