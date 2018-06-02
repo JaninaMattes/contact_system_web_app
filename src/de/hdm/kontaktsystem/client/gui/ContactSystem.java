@@ -117,7 +117,7 @@ public class ContactSystem implements EntryPoint {
 					
 	//Formulare
 	ContactForm cf = new ContactForm();
-	ContactListForm clf = new ContactListForm();
+	
 	MyParticipationForm mpf = new MyParticipationForm();
 	ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 
@@ -180,10 +180,13 @@ public class ContactSystem implements EntryPoint {
 	public void loadContactSystem() {
 		
 		//DockPanel als Root
-		DockPanel root = new DockPanel();
+		final DockPanel root = new DockPanel();
 		
 		//HeaderPanel
 		HorizontalPanel header = new HorizontalPanel();
+		
+		// ContactList Form erzeugen
+		ContactListForm clf = new ContactListForm();
 				
 		//Logo 
 		chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
@@ -220,7 +223,7 @@ public class ContactSystem implements EntryPoint {
 	    receivedParticipationsButton.setEnabled(true);
 	  				
 	  	//Default 
-	  	VerticalPanel dp = new VerticalPanel();
+	  	final VerticalPanel dp = new VerticalPanel();
 	  			
 	    //Trailer
 	    HorizontalPanel trailer = new HorizontalPanel();
@@ -373,7 +376,8 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
 		
-		root.add(dp, DockPanel.EAST);
+		//root.add(dp, DockPanel.EAST);
+		root.add(clf, DockPanel.EAST);
 		root.add(header, DockPanel.NORTH);
 		root.add(trailer, DockPanel.SOUTH);		
 		root.add(navigation, DockPanel.WEST);
