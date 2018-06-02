@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.TreeViewModel;
 
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
@@ -126,10 +127,22 @@ public class ContactSystem implements EntryPoint {
 	 * EntryPoint
 	 */
 	
+	public void loadTree() {
+		TreeViewModel tvm = new TreeViewModelTest();
+		
+		CellTree ct = new CellTree(tvm, "Liste");
+		
+		RootPanel.get().add(ct);
+		
+	}
+	
+	
 	@Override
 	public void onModuleLoad() {
 		
+
 		this.loadContactSystem(); // für Test 
+
 		
 		/**
 		 * Login-Status feststellen mit LoginService
@@ -176,10 +189,10 @@ public class ContactSystem implements EntryPoint {
 	 * ausgewählte Elemente werden als Formulare rechts im Bildschirm aufgerufen
 	 */
 	public void loadContactSystem() {
-		
 
 		//Root
 		VerticalPanel root = new VerticalPanel();
+
 		
 		//List
 		VerticalPanel dv2 = new VerticalPanel();
@@ -286,6 +299,7 @@ public class ContactSystem implements EntryPoint {
 				cellTree.setAnimationEnabled(true);
 				root.add(cellTree);		
 				
+
 			}
 			
 		});
