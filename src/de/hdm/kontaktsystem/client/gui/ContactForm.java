@@ -19,8 +19,6 @@ import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 /**
- * 
- * @author Katalin
  * Formular für die Darstellung und Anzeige eines Kontaktes
  * 
  */
@@ -34,42 +32,42 @@ public class ContactForm extends VerticalPanel{
 	/**
 	 * Instanziieren der Widgets
 	 */
-	private TextBox textBoxName = new TextBox();
-	private TextBox textBoxNickName = new TextBox();
-	private TextBox textBoxFirma = new TextBox();
-	private TextBox textBoxTelefonnummer = new TextBox();
-	private TextBox textBoxMobilnummer = new TextBox();
-	private TextBox textBoxEmail = new TextBox();
-	private TextBox textBoxGeburtsdatum = new TextBox();
-	private TextBox textBoxAdresse = new TextBox();
+	TextBox textBoxName = new TextBox();
+	TextBox textBoxNickName = new TextBox();
+	TextBox textBoxFirma = new TextBox();
+	TextBox textBoxTelefonnummer = new TextBox();
+	TextBox textBoxMobilnummer = new TextBox();
+	TextBox textBoxEmail = new TextBox();
+	TextBox textBoxGeburtsdatum = new TextBox();
+	TextBox textBoxAdresse = new TextBox();
 	
-	private Label label = new Label("Kontakt:");
-	private Label labelName = new Label("Name:");
-	private Label labelNickName = new Label("Nick-Name:");
-	private Label labelFirma = new Label("Firma:");
-	private Label labelTeleNr = new Label("Telefonnummer:");
-	private Label labelMobilNr = new Label("Mobilnummer:");
-	private Label labelEmail = new Label("Email:");
-	private Label labelGeburtsdatum = new Label("Geburtsdatum:");
-	private Label labelAdresse = new Label("Adresse:");
+	Label label = new Label("Kontakt:");
+	Label labelName = new Label("Name:");
+	Label labelNickName = new Label("Nick-Name:");
+	Label labelFirma = new Label("Firma:");
+	Label labelTeleNr = new Label("Telefonnummer:");
+	Label labelMobilNr = new Label("Mobilnummer:");
+	Label labelEmail = new Label("Email:");
+	Label labelGeburtsdatum = new Label("Geburtsdatum:");
+	Label labelAdresse = new Label("Adresse:");
 	
-	private Label isShared = new Label("Geteilt: ");
-	private Label labelShare = new Label("Teilen mit: ");
-	private Label contactStatus = new Label("");
+	Label isShared = new Label("Geteilt: ");
+	Label labelShare = new Label("Teilen mit: ");
+	Label contactStatus = new Label("");
 		
-	private Button deleteButton = new Button("Kontakt löschen");
-	private Button saveButton = new Button("Kontakt speichern");
+	Button deleteButton = new Button("Kontakt löschen");
+	Button saveButton = new Button("Kontakt speichern");
 	
-	private CheckBox checkBox1 = new CheckBox();
-	private CheckBox checkBox2 = new CheckBox();
-	private CheckBox checkBox3 = new CheckBox();
-	private CheckBox checkBox4 = new CheckBox();
-	private CheckBox checkBox5 = new CheckBox();
-	private CheckBox checkBox6 = new CheckBox();
-	private CheckBox checkBox7 = new CheckBox();
-	private CheckBox checkBox8 = new CheckBox();
+	CheckBox checkBox1 = new CheckBox();
+	CheckBox checkBox2 = new CheckBox();
+	CheckBox checkBox3 = new CheckBox();
+	CheckBox checkBox4 = new CheckBox();
+	CheckBox checkBox5 = new CheckBox();
+	CheckBox checkBox6 = new CheckBox();
+	CheckBox checkBox7 = new CheckBox();
+	CheckBox checkBox8 = new CheckBox();
 	
-	private ListBox shareUser = new ListBox();
+	ListBox shareUser = new ListBox();
 	
 	/**
 	 * Instanziieren der Panels
@@ -389,7 +387,7 @@ public class ContactForm extends VerticalPanel{
 			
 			if (c != null) {
 				contactToDisplay = c;		
-				if(c.isShared_status()) contactStatus.setText("Geteilt");
+				if(c.isShared_status()) contactStatus.setText("Status: Geteilt");
 				label.setText("Kontakt: " + c.getBoId());
 				
 				//Enable Checkboxen
@@ -407,6 +405,7 @@ public class ContactForm extends VerticalPanel{
 				
 				for(PropertyValue p : pv) {	
 					
+					//TODO: Überprüfen ob geteilt wurde -> dann checkboxen anhacken
 				if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
 				if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
 				if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
@@ -415,13 +414,11 @@ public class ContactForm extends VerticalPanel{
 				if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
 				if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
 				if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());				
-				
-				
 			    
 			}
 				
 			} else {
-				contactStatus.setText("Nicht geteilt");
+				contactStatus.setText("Status: Nicht geteilt");
 				label.setText("Kontakt: ");
 				textBoxName.setText("");
 				textBoxNickName.setText("");
