@@ -179,7 +179,7 @@ public class ContactSystem implements EntryPoint {
 		
 
 		//Root
-		VerticalPanel root = new VerticalPanel();
+		final VerticalPanel root = new VerticalPanel();
 		
 		//List
 		VerticalPanel dv2 = new VerticalPanel();
@@ -349,16 +349,17 @@ public class ContactSystem implements EntryPoint {
 	  	content.add(dv1);
 	  	content.add(dv2);
 	  	content.add(navigation);	
+	  	//dv1.add(clf);
 	  	
 	  	root.add(header);
 	  	root.add(content);
 	  	root.add(trailer);
 	  	
-	  	RootPanel.get("Header").add(header);
-	  	RootPanel.get("Navigator").add(navigation);
-	  	RootPanel.get("Lists").add(dv2);
-	  	RootPanel.get("Details").add(dv1);
-	  	RootPanel.get("Trailer").add(trailer);
+//	  	RootPanel.get("Header").add(header);
+//	  	RootPanel.get("Navigator").add(navigation);
+//	  	RootPanel.get("Lists").add(dv2);
+	  	RootPanel.get("Details").add(clf);
+	  	//RootPanel.get("Trailer").add(trailer);
 		
 	}
 	

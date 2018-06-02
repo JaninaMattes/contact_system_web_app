@@ -323,6 +323,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public ContactList createContactList(ContactList contactList) {
 
+		System.out.println(contactList);
 		boMapper.insert(contactList);
 		return clMapper.insertContactList(contactList);
 			

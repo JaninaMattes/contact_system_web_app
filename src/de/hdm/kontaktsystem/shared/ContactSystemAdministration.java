@@ -15,7 +15,7 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 //TODO -> eiditor oder contactsystem?
-@RemoteServiceRelativePath("ContactSystem")
+@RemoteServiceRelativePath("editor")
 public interface ContactSystemAdministration extends RemoteService {
 	
 	public User getUserByID(double id);
