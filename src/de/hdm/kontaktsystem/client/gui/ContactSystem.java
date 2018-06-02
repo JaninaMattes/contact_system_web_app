@@ -116,11 +116,11 @@ public class ContactSystem implements EntryPoint {
 	private ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 					
 	//Formulare
+
 	private ContactForm cf = new ContactForm();
 	private ContactListForm clf = new ContactListForm();
 	private MyParticipationForm mpf = new MyParticipationForm();
 	private ReceivedParticipationForm rpf = new ReceivedParticipationForm();
-
 	
 	/**
 	 * EntryPoint
@@ -177,6 +177,7 @@ public class ContactSystem implements EntryPoint {
 	 */
 	public void loadContactSystem() {
 		
+
 		//Root
 		VerticalPanel root = new VerticalPanel();
 		
@@ -188,6 +189,9 @@ public class ContactSystem implements EntryPoint {
 			
 		//HeaderPanel
 		HorizontalPanel header = new HorizontalPanel();
+		
+		// ContactList Form erzeugen
+		ContactListForm clf = new ContactListForm();
 				
 		//Content
 		HorizontalPanel content = new HorizontalPanel();
@@ -355,7 +359,7 @@ public class ContactSystem implements EntryPoint {
 	  	RootPanel.get("Lists").add(dv2);
 	  	RootPanel.get("Details").add(dv1);
 	  	RootPanel.get("Trailer").add(trailer);
-	
+		
 	}
 	
 	//Clickhandler für Suchfeld Button 

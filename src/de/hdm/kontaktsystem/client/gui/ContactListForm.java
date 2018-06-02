@@ -28,7 +28,6 @@ import de.hdm.kontaktsystem.shared.bo.User;
 //import com.smartgwt.client.widgets.layout.VStack;  
 //import com.smartgwt.sample.showcase.client.data.PartData;  
 
-//Anzeige und Bearbeiten einer Kontaktliste
 
 public class ContactListForm extends VerticalPanel {
 	ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
@@ -39,40 +38,37 @@ public class ContactListForm extends VerticalPanel {
 	 * Widgets mit variablen Inhalten.
 	 */
 
-	private TextBox nameContactList = new TextBox();
-	private TextBox firstNameContact = new TextBox();
-	private TextBox lastNameContact = new TextBox();
+	TextBox nameContactList = new TextBox();
+	TextBox contactName = new TextBox();
+	TextBox firstNameContact = new TextBox();
+	TextBox lastNameContact = new TextBox();
 	// TextBoox sharedContact = new TextBox();
 
 	/**
-	 * WIdgets um die Attributte einer Kontaktliste anzuzeigen.
+	 * WIdgets um die Attribute einer Kontaktliste anzuzeigen.
 	 */
 
-	private Label contactListLabel = new Label("Kontaktliste: ");
-	private Label firstNameLabel = new Label("Vorname: ");
-	private Label lastNameLabel = new Label("Nachname: ");
-
-	private Button deleteButton = new Button("Kontakt aus eine Liste l�schen");
-	private Button deleteClButton = new Button("Kontaktliste l�schen");
+	Label contactListLabel = new Label("Kontaktliste: ");
+	Label contactLabel = new Label("Kontakte: "); 
+	Label firstNameLabel = new Label("Vorname: ");
+	Label lastNameLabel = new Label("Nachname: ");
 	
-	private Label labelShare = new Label("Teilen mit: ");
-	private Label contactStatus = new Label("");
-	private Button saveButton = new Button("KontaktListe speichern");
-
-	private CheckBox checkBox1 = new CheckBox();
-	private CheckBox checkBox2 = new CheckBox();
-
-	private ListBox shareUser = new ListBox();
-
-	/**
-	 * Main Panel
-	 */
-	private VerticalPanel clvp = new VerticalPanel();
+	HorizontalPanel btnPanel = new HorizontalPanel();
+	Button deleteButton = new Button("Kontakt aus eine Liste löschen");
+	Button deleteClButton = new Button("KontaktLliste löschen");
+	Button saveButton = new Button("Kontakt Liste speichern");
 	
-	/**
-	 * Panel für Anordnung der Button
-	 */
-	private HorizontalPanel btnPanel = new HorizontalPanel();
+	Label labelShare = new Label("Teilen mit: ");
+	Label contactStatus = new Label("");
+	
+
+	CheckBox checkBox1 = new CheckBox();
+	CheckBox checkBox2 = new CheckBox();
+	CheckBox checkBox3 = new CheckBox();
+	CheckBox checkBox4 = new CheckBox();
+
+	ListBox shareUser = new ListBox();
+
 	
 
 	public void onLoad() {
@@ -80,44 +76,57 @@ public class ContactListForm extends VerticalPanel {
 		// Keine Tabelle sondern ein VertialPanel / ScrollPanel dem Kontaktelemente aus
 		// dem ContactVector hinzugef�gt werden.
 		// ... Mit einer while oder for-each Schleife die Kontakt-Elemente erzeugen.
-		Grid contactListGrid = new Grid(8, 2);
-		
+		Grid contactListGrid = new Grid(8, 3);
+		this.add(contactListGrid);
 
 		contactListGrid.setWidget(0, 0, contactListLabel);
 		contactListGrid.setWidget(0, 1, nameContactList);
+		contactListGrid.setWidget(0, 2, checkBox1);
+		
+		contactListGrid.setWidget(1, 0, contactLabel);
+		contactListGrid.setWidget(1, 1, contactName);
+		contactListGrid.setWidget(1, 2, checkBox2);
 
-		contactListGrid.setWidget(1, 0, firstNameLabel);
-		contactListGrid.setWidget(1, 1, firstNameContact);
+		contactListGrid.setWidget(2, 0, firstNameLabel);
+		contactListGrid.setWidget(2, 1, firstNameContact);
+		contactListGrid.setWidget(2, 2, checkBox3);
 
-		contactListGrid.setWidget(2, 0, lastNameLabel);
-		contactListGrid.setWidget(2, 1, lastNameContact);
+		contactListGrid.setWidget(3, 0, lastNameLabel);
+		contactListGrid.setWidget(3, 1, lastNameContact);
+		contactListGrid.setWidget(3, 2, checkBox4);
+		
+		contactListGrid.setWidget(4, 0, labelShare);
+		contactListGrid.setWidget(4, 1, shareUser);
+		
+		contactListGrid.setWidget(5, 1, btnPanel);
 
-		/*
-		 * Checkboxen die Status anzeigen per default auf False setzen 
+		 
+		
+		/**
+		 * Panel für Anordnung der Button
 		 */
-		
-		Grid shareGrid = new Grid (2, 1);
-		shareGrid.setWidget(0, 0, labelShare);
-		shareGrid.setWidget(0, 1, shareUser);
-		
+
 		deleteButton.setPixelSize(110, 30);
 		saveButton.setPixelSize(110, 30);
-		 
-		btnPanel.add(deleteButton);
 		btnPanel.add(saveButton);
+		btnPanel.add(deleteButton);
+		
 		
 		/*
 		 * CheckBoxen für das Teilen einer ContactList Form
 		 * per Default auf "false" setzen.
+		 * -> Anordnung neben TextBoxen der Form?
 		 */
 		checkBox1.setEnabled(false);
-	    checkBox2.setEnabled(false);
+		checkBox2.setEnabled(false);
+		checkBox3.setEnabled(false);
+		checkBox4.setEnabled(false);
+		
 
 		/**
 		 * Buttons in CSS
 		 * 
-		 * Der Name, mit welchem der Delete-Button in CSS formatiert werden kann, wird
-		 * festgelegt.
+		 * Zusammenlauf? Vgl. BankProjekt
 		 */
 
 		deleteButton.addStyleName("DeleteContactfromCL");
@@ -130,11 +139,7 @@ public class ContactListForm extends VerticalPanel {
 
 		deleteClButton.addStyleName("deleteCL");
 		
-		// Hinzufügen der Widgets zu Main Panel
 		
-		clvp.add(contactListLabel);
-		clvp.add(contactListGrid);
-		clvp.add(btnPanel);
 
 		/*
 		 * Drag Liste TODO: Smart GWT Lizenz + Test Eventuelle Lösung, da ComboBox nicht
@@ -188,7 +193,7 @@ public class ContactListForm extends VerticalPanel {
 		// }
 	}
 
-	class addClickHandler implements ClickHandler {
+	private class addClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgew�hlt");
@@ -198,7 +203,7 @@ public class ContactListForm extends VerticalPanel {
 		}
 	}
 
-	class shareClickHandler implements ClickHandler {
+	private class shareClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgew�hlt");
@@ -218,7 +223,7 @@ public class ContactListForm extends VerticalPanel {
 		}
 	}
 
-	class shareContactListWithCallback implements AsyncCallback<Participation> {
+	private class shareContactListWithCallback implements AsyncCallback<Participation> {
 
 		Participation participation = null;
 
@@ -245,7 +250,7 @@ public class ContactListForm extends VerticalPanel {
 	 * ClickHandler zum Loeschen eines Kontaktes in einer Kontaktliste
 	 */
 
-	class DeleteClickHandler implements ClickHandler {
+	private class DeleteClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
 			/**
@@ -259,7 +264,7 @@ public class ContactListForm extends VerticalPanel {
 	}
 
 	// NOCHMAL PR�FEN
-	class deleteContactfromListCallback implements AsyncCallback<ContactList> {
+	private class deleteContactfromListCallback implements AsyncCallback<ContactList> {
 
 		public void onFailure(Throwable caught) {
 			Window.alert("Löschen eines Kontaktes fehlgeschlagen");
@@ -281,7 +286,7 @@ public class ContactListForm extends VerticalPanel {
 	 *
 	 */
 
-	class deleteClClickHandler implements ClickHandler {
+	private class deleteClClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
@@ -292,7 +297,7 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 
-		class deleteContactListCallback implements AsyncCallback<ContactList> {
+		private class deleteContactListCallback implements AsyncCallback<ContactList> {
 
 			@Override
 			public void onFailure(Throwable caught) {
