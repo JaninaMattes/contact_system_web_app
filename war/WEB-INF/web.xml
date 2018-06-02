@@ -37,7 +37,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
   <servlet-mapping>
     <servlet-name>EditorService</servlet-name>
-    <url-pattern>/kontaktsystem/editor</url-pattern>
+    <url-pattern>/kontaktsystem/*</url-pattern>
   </servlet-mapping>
   -->
   

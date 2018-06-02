@@ -140,8 +140,8 @@ public class ContactSystem implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
-
-		this.loadContactSystem(); // für Test 
+		loadTree();
+		//this.loadContactSystem(); // für Test 
 
 		
 		/**
@@ -191,7 +191,7 @@ public class ContactSystem implements EntryPoint {
 	public void loadContactSystem() {
 
 		//Root
-		VerticalPanel root = new VerticalPanel();
+		final VerticalPanel root = new VerticalPanel();
 
 		
 		//List
