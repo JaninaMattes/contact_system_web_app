@@ -19,12 +19,12 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.kontaktsystem.client.LoginService;
-import de.hdm.kontaktsystem.client.LoginServiceAsync;
+
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -110,16 +110,16 @@ public class ContactSystem implements EntryPoint {
 	
 
 	//CellTree Model
-	ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-	ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-	MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-	ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+	private ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
+	private ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+	private MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+	private ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 					
 	//Formulare
-	ContactForm cf = new ContactForm();
-	ContactListForm clf = new ContactListForm();
-	MyParticipationForm mpf = new MyParticipationForm();
-	ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+	private ContactForm cf = new ContactForm();
+	private ContactListForm clf = new ContactListForm();
+	private MyParticipationForm mpf = new MyParticipationForm();
+	private ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 
 	
 	/**
@@ -129,7 +129,7 @@ public class ContactSystem implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
-		loadContactSystem(); // für Test 
+		this.loadContactSystem(); // für Test 
 		
 		/**
 		 * Login-Status feststellen mit LoginService
@@ -175,26 +175,48 @@ public class ContactSystem implements EntryPoint {
 	 * Aufbau der Startseite des Kontaktsystems. Elemente werden in Listenform dargestellt, 
 	 * ausgewählte Elemente werden als Formulare rechts im Bildschirm aufgerufen
 	 */
-
-
 	public void loadContactSystem() {
 		
-		//DockPanel als Root
-		DockPanel root = new DockPanel();
+		//Root
+		VerticalPanel root = new VerticalPanel();
+		
+		//List
+		VerticalPanel dv2 = new VerticalPanel();
+		dv2.setStyleName("List");
+		dv2.setSize("350px", "400px");
+		
+		//Detail
+		VerticalPanel dv1 = new VerticalPanel();
+		dv1.setStyleName("Detail");
+		dv1.setSize("350px", "400px");
 		
 		//HeaderPanel
 		HorizontalPanel header = new HorizontalPanel();
+		header.setSize("100%", "60px");
+		header.setTitle("Kontakt System");
+		
+		//Content
+		HorizontalPanel content = new HorizontalPanel();
+		content.setSize("100%", "700px");
+		
+		//Navigation
+	    VerticalPanel navigation = new VerticalPanel();	
+	    navigation.setSize("100%", "200px");
+
+	    //Trailer
+	    HorizontalPanel trailer = new HorizontalPanel();
+	    trailerText.setStyleName("trailerText");
+	    trailer.getElement().getStyle().setProperty("trailerText", "center");
+	    trailer.setSize("100%", "30px"); 
 				
 		//Logo 
 		chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+	    
+		headerLabel.setStyleName("gwt-Label-HeaderBox");
 		
-		//RootPanel		
-		root.setSpacing(4);
-	    root.setHorizontalAlignment(DockPanel.ALIGN_CENTER);	   
-	       
 	    //Header
 	    header.add(chainSymbolLogo);
-	    header.add(headerLabel);
+ 		header.add(headerLabel);
 	    header.add(reportLink);
 	    header.add(signOutLink);
 	    
@@ -206,25 +228,15 @@ public class ContactSystem implements EntryPoint {
   		sg.setWidget(0, 0, search);
   		sg.setWidget(0, 1, searchButton);
   		
-	    //Navigation
-	    VerticalPanel navigation = new VerticalPanel();	  
-	    
-	    //TODO: Button Style CSS!!
-	    contactButton.setPixelSize(110, 30);
+  		//Enable Buttons
 	    contactButton.setEnabled(true);
-	    contactListsButton.setPixelSize(110, 30);
 	    contactListsButton.setEnabled(true);
-	    myParticipationsButton.setPixelSize(110, 30);
 	    myParticipationsButton.setEnabled(true);
-	    receivedParticipationsButton.setPixelSize(110, 30);
 	    receivedParticipationsButton.setEnabled(true);
-	  				
-	  	//Default 
-	  	VerticalPanel dp = new VerticalPanel();
 	  			
 	    //Trailer
-	    HorizontalPanel trailer = new HorizontalPanel();
-	    trailer.add(trailerText);
+	    //trailer.add(trailerText);
+	    trailer.setTitle("Copyright Hochschule der Meiden Team 9");
 	    
 		//Header mit SignOut-Link
 		if(userInfo != null){ 
@@ -232,95 +244,6 @@ public class ContactSystem implements EntryPoint {
 		}
 		
 		signOutLink.setStyleName("link");
-		
-		// Füllen der Image-Objekte mit Symbolen
-		createSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_add_black_18dp.png");
-		updateSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_create_black_18dp.png");
-		deleteSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_delete_black_18dp.png");
-		shareSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_share_black_18dp.png");	
-		searchSymbol.setUrl(GWT.getHostPageBaseURL() + "images/baseline_search_black_18dp.png");
-		
-		//Verlinkung der Listen und der dazugehörigen Formulare
-		ctvm.setContactForm(cf);
-		cf.setCatvm(ctvm);
-		
-		cltvm.setContactListForm(clf);
-		clf.setCltvm(cltvm);
-		
-		mptvm.setParticipationForm(mpf);
-		mpf.setMptvm(mptvm);
-				
-		/**
-		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
-		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird oberhalb des 
-		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
-		 */
-		
-		
-		//ClickHandler für ContactButton
-		contactButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird 
-				 */
-//				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-//				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-//				cellTree.setAnimationEnabled(true);
-//				root.add(cellTree, DockPanel.CENTER);		
-				
-				// Zwecks Test auskommentiert -> Verbindung zu ContactForm						
-				root.remove(dp);
-				//root.add(cf);
-				root.add(cf, DockPanel.EAST);
-			}
-			
-		});
-	
-		
-		//Clickhandler für ContactListButton
-		contactListsButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
-				 */
-				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
-				cellTree.setAnimationEnabled(true);
-				root.add(cellTree, DockPanel.CENTER);		
-			}
-			
-		});
-		
-		
-		//Clickhandler für MyParticipationsButton
-		myParticipationsButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
-				 */
-				CellTree.Resources myParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(mptvm, "Root", myParticipationTreeRecource);
-				cellTree.setAnimationEnabled(true);
-				root.add(cellTree, DockPanel.CENTER);			
-			}
-		});
-	
-		
-		//Clickhandler für ReceivedParticipationsButton
-		receivedParticipationsButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
-				 */
-				CellTree.Resources receivedParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(rptvm, "Root", receivedParticipationTreeRecource);
-				cellTree.setAnimationEnabled(true);	
-				root.add(cellTree, DockPanel.CENTER);		
-			}
-		});
-		
-
 		/** 
 		 * Menu-Buttons (CSS) 
 		 * 
@@ -356,15 +279,95 @@ public class ContactSystem implements EntryPoint {
 		/**
 		 * CSS Identifier für Elemente
 		 */		
-		header.addStyleName("Header");
-		trailer.addStyleName("Trailer");
+		header.addStyleName("Header");		
 		navigation.addStyleName("Navigation");
+		trailer.addStyleName("Trailer");
 		
-		dp.setStyleName("Form");
-		cf.addStyleName("Form");
-		clf.addStyleName("Form");
-		mpf.addStyleName("Form");
-		rpf.addStyleName("Form");
+		cf.addStyleName("Detail");
+		clf.addStyleName("Detail");
+		mpf.addStyleName("Detail");
+		rpf.addStyleName("Detail");
+		
+		/**
+		 * Verlinkung der Listen und der dazugehörigen Formulare
+		 */
+		ctvm.setContactForm(cf);
+		cf.setCatvm(ctvm);
+		
+		cltvm.setContactListForm(clf);
+		clf.setCltvm(cltvm);
+		
+		mptvm.setParticipationForm(mpf);
+		mpf.setMptvm(mptvm);
+				
+		/**
+		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
+		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird oberhalb des 
+		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
+		 */
+		
+		
+		//ClickHandler für ContactButton
+		contactButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird 
+				 */
+//				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
+//				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
+//				cellTree.setAnimationEnabled(true);
+//				root.add(cellTree, DockPanel.CENTER);	
+				 				
+				
+			}
+			
+		});
+	
+		
+		//Clickhandler für ContactListButton
+		contactListsButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
+				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
+				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
+				cellTree.setAnimationEnabled(true);
+				//root.remove(root.getWidgetIndex(clf));
+				//root.add(cellTree, DockPanel.CENTER);	
+			}
+			
+		});
+		
+		
+		//Clickhandler für MyParticipationsButton
+		myParticipationsButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
+				CellTree.Resources myParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
+				CellTree cellTree = new CellTree(mptvm, "Root", myParticipationTreeRecource);
+				cellTree.setAnimationEnabled(true);
+				//root.add(cellTree, DockPanel.CENTER);	
+			}
+		});
+	
+		
+		//Clickhandler für ReceivedParticipationsButton
+		receivedParticipationsButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
+				CellTree.Resources receivedParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
+				CellTree cellTree = new CellTree(rptvm, "Root", receivedParticipationTreeRecource);
+				cellTree.setAnimationEnabled(true);	
+				//root.add(cellTree, DockPanel.CENTER);		
+			}
+		});
+			
 		
 		//Menu Leiste
 	  	navigation.add(sg);
@@ -372,23 +375,24 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
-		
-		root.add(dp, DockPanel.EAST);
-		root.add(header, DockPanel.NORTH);
-		root.add(trailer, DockPanel.SOUTH);		
-		root.add(navigation, DockPanel.WEST);
-		
-		
-		root.setCellVerticalAlignment(header, HasAlignment.ALIGN_TOP);
-		//root.setCellVerticalAlignment(trailer, HasAlignment.ALIGN_BOTTOM);
-		root.setCellHorizontalAlignment(navigation, HasAlignment.ALIGN_LEFT);
-			
-
-		RootPanel.get("ContactSystem").add(root);
+ 
+	  	content.add(dv1);
+	  	content.add(dv2);
+	  	content.add(navigation);	
+	  	
+	  	root.add(header);
+	  	root.add(content);
+	  	root.add(trailer);
+//
+//	  	root.setCellVerticalAlignment(header, HasAlignment.ALIGN_TOP);
+//	  	root.setCellVerticalAlignment(trailer, HasAlignment.ALIGN_BOTTOM);
+//	  	root.setCellHorizontalAlignment(navigation, HasAlignment.ALIGN_LEFT);
+	  	
+	  	RootPanel.get("ContactSystem").add(root);
 	
 	}
 	
-	//Clickhandler für Suchfeld Button -> TODO: Methode überprüfen
+	//Clickhandler für Suchfeld Button 
 	private class SearchClickHandler implements ClickHandler {
 		
 		@Override
@@ -422,9 +426,10 @@ public class ContactSystem implements EntryPoint {
 			if (result != null) {
 				//Kontakt Objekt der Liste hinzufügen
 				for(Contact c : result) {
-				ctvm.addContact(c);
-				
+				ctvm.addContact(c);				
 				}
+			} else {
+				Window.alert("Keine Kontakte gefunden :(");
 			}
 		}
 	}
