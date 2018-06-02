@@ -5,114 +5,212 @@ body {
     }
 
 div {
-	border: solid 2px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
+	border: solid 1px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
 }
 
 h1 {
-  font-size: 3em; /*Schriftgr��e*/
+  font-family: "Arial", Arial, sans-serif;
+  font-size: 2em; /*Schriftgr��e*/
   font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
-  color: #0080c0; /*Schriftfarbe*/
+  color: white; /*Schriftfarbe*/
   margin: 40px 0px 20px; /*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
   text-align: center; /*zentriert*/
 }
 
-.link{
-    border: solid 2px black ;/*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
+#Link{
+	font-family: "Arial", Arial, sans-serif;
+    /*border: solid 2px black; Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
     text-decoration: none; /*Links werden nicht unterstrichen dargestellt */
     color: black; /*Textfarbe*/
     padding: 10px; /*Abstand des Rahmens zum Inhalt*/
     text-shadow: 1px 1px #DCDCDC; /*Text-Schatten*/
     box-shadow:  2px 2px #DCDCDC; /*Box mit Schattenverlauf (helles grau)*/
     background: #FAFAFA; /*Hintergrundfarbe*/
-}
-
-.gwt-ListBox {
-}
-
-
-.gwt-Button { 
-   font-size: 150%; 
-   font-weight: bold;
-   width:100px;
-   height:100px;
+    margin: 4px 2px;
+    align-content: right;
 }
 
 
-gwt-Label-HeaderBox { 
-	font-size: 150%; 
-	font-size: large;
-	text-align: center;
-	font-family: verdana, sans-serif;
+#Menue-Button:hover {
+    background-color: #1f2942; /* Green */
+    color: white;
 }
 
-#ContactSystem{
-}
-
-#Contact-Menuebutton{
-	width: 110px;
-	height: 30px;
-	text-align: center;
-	background-color:lightblue;
+#Menue-Button{
+	height: 25px;
+    width: 200px;
+    
+    font-family: "Arial", Arial, sans-serif;
+	border: solid 1px white; 
+	background-color: #0c101a;
+    border: none;
+    color: #0c101a;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
 	
 }
 
+#Search-Button{
+	height: 10px;
+    width: 15px;
+    
+    font-family: "Arial", Arial, sans-serif;
+	border: solid 1px white; 
+	background-color: #506bae;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+	
+}
+
+#Save-Button{
+	height: 25px;
+    width: 100px;
+    
+ font-family: "Arial", Arial, sans-serif;    
+	border: solid 1px white; 
+	background-color: #8598c7;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+	
+}
+
+#Cancel-Button{
+	height: 25px;
+    width: 100px;
+
+ font-family: "Arial", Arial, sans-serif;    
+	border: solid 1px white; 
+	background-color: #480607 ;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;	
+}
+
+#Log-Out-Button{
+	height: 10px;
+    width: 15px;
+
+ font-family: "Arial", Arial, sans-serif;    
+	border: solid 1px white; 
+	background-color: #0c101a;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;	
+    align-content: right;
+}
+
+#Report-Button{
+	height: 10px;
+    width: 15px;
+
+ font-family: "Arial", Arial, sans-serif;    
+	border: solid 1px white; 
+	background-color: #0c101a;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;	
+    align-content: right;
+}
+
 #Logo{
-    height: 10vh;
-    width: 15vw;
+    height: 10px;
+    width: 15px;
+    margin: 4px 2px;
     align-content: left;
 }
 
-#TopLevelFrame{
-    height: 100vh;
-    width: 100vw;
+div#TopLevelFrame {
+	height: 100%;
+	max-width: 100%;
+	min-width: 300px;
+	font-family: "Arial", Arial, sans-serif;	
+	text-align: center;
+	background: #0c101a;
+	align-content: center;
+ } 
+
+div#Header {
+	height: 100px;
+    width: 100%;
+	margin: 5px; 	
+	 font-family: "Arial", Arial, sans-serif;
+	background: linear-gradient(to bottom right, #0c101a, #506bae); /*Color gradien siehe W3School*/
+	text-align: center;
+	color: white;
 }
 
-#Header{
-	width: 10px;
-    padding: 0px;
-    margin: 0px;
-	height: 15vh;
-    width: 100%;    
-    display: flex;
-    justify-content: center;
+div#Navigator {
+	max-width: 300px;
+	height: 100%;
+	overflow:scroll;
+	padding: 1em 1em;	
+	margin: auto 0;
+	background-color: #0c101a;
+	align-content: left;
 }
 
-#Content{
-    height: 80vh;
-    width: 100vw;
+div#Lists {
+	max-width: 500px;
+	padding: 4em 1em;	
+	margin: auto 0;
+	background: #fefeff;
+	align-content: center;
 }
 
-#Navigation{
-    height: 79vh;
-    width: 33vw;
-    padding: 0px;
-    margin: 0px;
-    background-color:lightblue;
-    border: solid 1px black ;
-    align-content: left;
+div#Details {
+	max-width: 500px;
+	padding: 4em 1em;
+	margin: auto 0;	
+	background: #fefeff;
+	align-content: center;
 }
 
-#List{
-    height: 79vh;
-    width: 33vw;
-    border: solid 1px black ;
-}
-
-#Form{
-    height: 79vh;
-    width: 33vw;
-    border: solid 1px black ;
-}
-
-#Details{
-    height: 79vh;
-    width: 33vw;
-}
-
-#Trailer{
-	height: 15vh;
-    width: 100vw; 
-    display: flex;
-    justify-content: center;
-    border: solid 1px black ;
+div#Trailer {
+	clear: both;
+	padding: 10px 0;
+	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
+	border-top: 1px white;
+	font-size: 80%;
+	color: white;
+	font-family: "Arial", Arial, sans-serif;
+	text-align: center;	
+	align-content: center;
+	background: #0c101a;
 }
