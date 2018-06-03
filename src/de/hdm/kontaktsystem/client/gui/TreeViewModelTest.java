@@ -26,32 +26,38 @@ public class TreeViewModelTest implements TreeViewModel {
 	
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
+		final ListDataProvider<BusinessObject> dataProvider = new ListDataProvider<BusinessObject>();
+		log("NodeInfo: "+ value);
 		
-		//((ContactList) value).getContacts()
-		
-		//log("NodeInfo: "+ value);
-		ListDataProvider<BusinessObject> dataProvider = new ListDataProvider<BusinessObject>();
-		
-		csa.getAllContactLists(new AsyncCallback<Vector<ContactList>>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				log("Keine Listen gefunden");
+		if(value instanceof ContactList){
+			for(Contact c : ((ContactList) value).getContacts()){
+				dataProvider.getList().add(c);
 			}
+		}else{
+			csa.getAllContactLists(new AsyncCallback<Vector<ContactList>>(){
 
-			@Override
-			public void onSuccess(Vector<ContactList> result) {
-				// TODO Auto-generated method stub
-				log("Es wurden "+ result.size() +" Listen gefunden");
-				for (ContactList cl : result) {
-					//dataProvider.getList().add(cl);
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub
+					log("Keine Listen gefunden");
 				}
-			}
-			
-		});
+
+				@Override
+				public void onSuccess(Vector<ContactList> result) {
+					// TODO Auto-generated method stub
+					log("Es wurden "+ result.size() +" Listen gefunden");
+					for (ContactList cl : result) {
+						dataProvider.getList().add(cl);
+						
+					}
+				}
+				
+			});
+		}
 		
 		
+		
+		/*
 		//Anzahl der Elemente
 		for (int i = 0; i < 2; i++) {
 			ContactList cl = new ContactList();
@@ -69,12 +75,13 @@ public class TreeViewModelTest implements TreeViewModel {
 			dataProvider.getList().add(cl);
 			log(cl.getName()); 
 		}
+		*/
 		return new DefaultNodeInfo<BusinessObject>(dataProvider, new DataCell());
 	}
 
 	@Override
 	public boolean isLeaf(Object value) {
-		log(value.toString());
+		//log(value.toString());
 		// Anzahl der Ebenen
 		return (value instanceof Contact ); //value.toString().length() > 8;
 	}
@@ -93,7 +100,14 @@ class DataCell extends AbstractCell<BusinessObject>{
 
 	@Override
 	public void render(Context context, BusinessObject value, SafeHtmlBuilder sb) {
-		sb.appendHtmlConstant("<p>" + value.getBoId() + "</p>" );
+		if (value instanceof ContactList ){
+			sb.appendHtmlConstant("<p>" + ((ContactList) value).getName() + "</p>" );
+		}
+		else if(value instanceof Contact ){
+			sb.appendHtmlConstant("<p>" + ((Contact) value).getName().getValue() + "</p>" );
+		}else{
+			sb.appendHtmlConstant("<p>" + value.getBoId() + "</p>" );
+		}
 		
 		
 	}

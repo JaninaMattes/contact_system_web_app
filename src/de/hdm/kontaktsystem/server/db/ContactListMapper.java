@@ -45,7 +45,8 @@ public class ContactListMapper {
 
 		try {
 			PreparedStatement stmt = con
-					.prepareStatement("INSERT INTO ContactList (ID, contactList_name) VALUES (?, ?)");
+					.prepareStatement
+					("INSERT INTO ContactList (ID, contactList_name) VALUES (?, ?)");
 			stmt.setInt(1, cl.getBoId());
 			stmt.setString(2, cl.getName());
 			if(stmt.executeUpdate() > 0) return cl;

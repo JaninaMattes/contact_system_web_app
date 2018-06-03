@@ -18,9 +18,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
+import com.google.gwt.view.client.TreeViewModel;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
@@ -108,18 +109,23 @@ public class ContactSystem implements EntryPoint {
 	 */
 	
 	public void loadTree() {
-		//TreeViewModel tvm = new TreeViewModelTest();
-		//CellTree ct = new CellTree(tvm, "Liste");
-		//RootPanel.get("Lists").add(ct);
+		ScrollPanel sp = new ScrollPanel();
+		TreeViewModel tvm = new TreeViewModelTest();
+		CellTree ct = new CellTree(tvm, "Liste");
+		sp.setHeight("80vh");
+		sp.add(ct);
+		
+		RootPanel.get("Lists").add(sp);
 		
 	}
 	
 	public void onModuleLoad() {
 		
-		loadTree();
-		//this.loadContactSystem(); // für Test 
-
-		this.loadContactSystem(); // für Test 		
+		loadTree(); // für Test
+		
+		this.loadContactSystem(); // für Test
+		
+		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
@@ -168,12 +174,10 @@ public class ContactSystem implements EntryPoint {
 
 		//Root
 		final VerticalPanel root = new VerticalPanel();
-	
-		//List
-		VerticalPanel listPanel = new VerticalPanel();
+
 				
 		//Detail
-		VerticalPanel detailsPanel = new VerticalPanel();
+		final VerticalPanel detailsPanel = new VerticalPanel();
 			
 		//Header
 		HorizontalPanel header = new HorizontalPanel();				
@@ -186,16 +190,16 @@ public class ContactSystem implements EntryPoint {
 	    
 		//Formulare
 
-		ContactForm cf = new ContactForm();
+		final ContactForm cf = new ContactForm();
 		ContactListForm clf = new ContactListForm();
 		MyParticipationForm mpf = new MyParticipationForm();
 		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 		
 		//CellTree Model
 		ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
 		//Logo 
 		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
@@ -343,12 +347,14 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
- 	  	
+
+	  	//Detail Panel
 	  	detailsPanel.add(cf);
 	  	detailsPanel.add(clf);
 	  	detailsPanel.add(mpf );
 	  	detailsPanel.add(rpf);
-	  		  	
+	  	
+	  	//Contact Cell Tree
 		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
 		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 		cellTree.setAnimationEnabled(true);
