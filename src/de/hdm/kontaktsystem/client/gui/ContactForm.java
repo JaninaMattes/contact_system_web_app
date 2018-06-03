@@ -135,6 +135,7 @@ public class ContactForm extends VerticalPanel{
 		contactGrid.setWidget(8, 1, textBoxAdresse);
 		contactGrid.setWidget(8, 2, checkBox8);
 		
+		shareUser.getElement().setId("ListBox");
 		
 		Grid shareGrid = new Grid (2, 2);
 		shareGrid.setWidget(0, 0, labelShare);
@@ -399,7 +400,7 @@ public class ContactForm extends VerticalPanel{
 				}
 				
 				//Befüllen der Listbox mit Usern aus dem System
-//     			Vector <User> u = contactSystemAdmin.getAllUsers(new AsyncCallback Vector<User> {
+//       			Vector <User> u = contactSystemAdmin.getAllUsers(new AsyncCallback Vector<User> {
 //     						public void onFailure(Throwable error) {
 //     							Window.alert("Login Error :(");
 //     						}
@@ -407,6 +408,7 @@ public class ContactForm extends VerticalPanel{
 //     							for (User user: u) {
 //     								shareUser.addItem(user.getUserContact().getName().getValue());
 //     								}
+//								shareUser.setVisibleItemCount(u.getSize());
 //     						}
 //     			}
 	
@@ -450,30 +452,47 @@ public class ContactForm extends VerticalPanel{
 			 
 				 /*Überprüfen des Status und der Gleichheit der Werte*/
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) checkBox1.setValue(true);
+						 && p.isShared_status()) {
+					 checkBox1.setValue(true);
+				 }
 			 }
 		 }
 		 
 			/*
 			 *  ctvm setter
-			 */
-			
+			 */			
 			void setCtvm(ContactListTreeViewModel ctvm) {
 				this.ctvm = ctvm;
 			}

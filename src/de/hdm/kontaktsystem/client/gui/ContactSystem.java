@@ -402,7 +402,7 @@ public class ContactSystem implements EntryPoint {
 			if (result != null) {
 				//Kontakt Objekt der Liste hinzufügen
 				for(Contact c : result) {
-				//ctvm.addContact(c);				
+				//ctvm.addContact(c); -> TODO
 				}
 			} else {
 				Window.alert("Keine Kontakte gefunden :(");
