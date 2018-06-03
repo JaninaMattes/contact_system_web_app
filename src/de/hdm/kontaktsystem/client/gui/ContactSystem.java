@@ -257,10 +257,11 @@ public class ContactSystem implements EntryPoint {
 		 * Verlinkung der Listen und der dazugehörigen Formulare
 		 */
 		ctvm.setContactForm(cf);
-		cf.setCatvm(ctvm);
+		cf.setCtvm(ctvm);
 		
 		cltvm.setContactListForm(clf);
 		clf.setCltvm(cltvm);
+		cf.setCltvm(cltvm);
 		
 		mptvm.setParticipationForm(mpf);
 		mpf.setMptvm(mptvm);
@@ -288,6 +289,7 @@ public class ContactSystem implements EntryPoint {
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				detailsPanel.add(cf);
+				RootPanel.get("Details").clear();
 				RootPanel.get("Details").add(detailsPanel);
 			}
 			
@@ -346,14 +348,23 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
 
+	  	//Detail Panel
+	  	detailsPanel.add(cf);
+	  	detailsPanel.add(clf);
+	  	detailsPanel.add(mpf );
+	  	detailsPanel.add(rpf);
 	  	
-//	  	RootPanel.get("Header").add(header);
-//	  	RootPanel.get("Navigator").add(navigation);
-//	  	RootPanel.get("Lists").add(dv2);
-	  	RootPanel.get("Details").add(clf);
-	  	//RootPanel.get("Trailer").add(trailer);
-
- 	  	
+	  	//Contact Cell Tree
+		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
+		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
+		cellTree.setAnimationEnabled(true);
+		
+	  	
+	  	RootPanel.get("Header").add(header);
+	  	RootPanel.get("Navigator").add(navigation);
+	  	RootPanel.get("Lists").add(cellTree);
+	  	RootPanel.get("Details").add(detailsPanel);
+	  	RootPanel.get("Trailer").add(trailer);
 		
 	}
 	
@@ -391,7 +402,7 @@ public class ContactSystem implements EntryPoint {
 			if (result != null) {
 				//Kontakt Objekt der Liste hinzufügen
 				for(Contact c : result) {
-				//ctvm.addContact(c);				
+				//ctvm.addContact(c); -> TODO
 				}
 			} else {
 				Window.alert("Keine Kontakte gefunden :(");
