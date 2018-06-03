@@ -5,6 +5,16 @@ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
+<<<<<<< HEAD
+=======
+<!-- Servlets -->
+
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>ContactSystem.html</welcome-file>
+    <welcome-file>ReportGenerator.html</welcome-file>
+  </welcome-file-list>
+>>>>>>> f732716c838973aff9dab43f5b46c5a4c0a4fec3
 
 <!-- Servlets -->  
   <servlet>
@@ -17,6 +27,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/kontaktsystem/login</url-pattern>
   </servlet-mapping>
   
+<<<<<<< HEAD
   <servlet>
     <servlet-name>EditorService</servlet-name>
     <servlet-class>de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl</servlet-class>   
@@ -30,6 +41,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <servlet>
     <servlet-name>Report</servlet-name>
     <servlet-class>de.hdm.kontaktsystem.server.report.ReportGeneratorImpl</servlet-class>  
+=======
+  
+    <servlet>
+    <servlet-name>Report</servlet-name>
+    <servlet-class>de.hdm.kontaktsystem.server.report.ReportGeneratorImpl</servlet-class>
+    
   </servlet>
 
   <servlet-mapping>
@@ -37,6 +54,20 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/kontaktsystem/reportgenerator</url-pattern>
   </servlet-mapping>
   
+  
+  <servlet>
+    <servlet-name>EditorService</servlet-name>
+    <servlet-class>de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl</servlet-class>
+    
+>>>>>>> f732716c838973aff9dab43f5b46c5a4c0a4fec3
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>EditorService</servlet-name>
+    <url-pattern>/kontaktsystem/*</url-pattern>
+  </servlet-mapping>
+  
+
   
   <!-- Default page to serve -->
   <welcome-file-list>

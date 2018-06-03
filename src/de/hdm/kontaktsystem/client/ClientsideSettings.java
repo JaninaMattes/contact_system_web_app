@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.hdm.kontaktsystem.shared.CommonSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
+import de.hdm.kontaktsystem.shared.ReportGenerator;
 import de.hdm.kontaktsystem.shared.ReportGeneratorAsync;
 
 
@@ -72,10 +73,7 @@ public class ClientsideSettings extends CommonSettings {
  
   
   
-  /*
-   
-   /
-    
+  /**
    * <p>
    * Anlegen und Auslesen des applikationsweit eindeutigen ReportGenerators.
    * Diese Methode erstellt den ReportGenerator, sofern dieser noch nicht
@@ -86,11 +84,8 @@ public class ClientsideSettings extends CommonSettings {
    * <p>
    * Der Aufruf dieser Methode erfolgt im Client z.B. durch
    * <code>ReportGeneratorAsync reportGenerator = ClientSideSettings.getReportGenerator()</code>.
-   * </p> 
-   * 
-   *
-  
-  // TODO: ReportGenerator ausformulieren und Klassen erzeugen 
+   * </p>
+   */
   
   public static ReportGeneratorAsync getReportGenerator() {
     // Gab es bislang noch keine ReportGenerator-Instanz, dann...
@@ -114,7 +109,5 @@ public class ClientsideSettings extends CommonSettings {
     
     return reportGenerator;
   }
-
-  */
   
 }
