@@ -41,6 +41,9 @@ h1 {
     height: 80vh;
 }
 
+.gwt-ListBox {
+	
+} 
 
 #Link{
 	font-family: "Arial", Arial, sans-serif;
@@ -117,7 +120,7 @@ h1 {
 	
 }
 
-#Cancel-Button{
+#Delete-Button{
 	height: 30px;
     width: 50px;
 

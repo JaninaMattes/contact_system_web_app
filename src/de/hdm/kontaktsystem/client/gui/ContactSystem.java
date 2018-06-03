@@ -253,10 +253,11 @@ public class ContactSystem implements EntryPoint {
 		 * Verlinkung der Listen und der dazugehörigen Formulare
 		 */
 		ctvm.setContactForm(cf);
-		cf.setCatvm(ctvm);
+		cf.setCtvm(ctvm);
 		
 		cltvm.setContactListForm(clf);
 		clf.setCltvm(cltvm);
+		cf.setCltvm(cltvm);
 		
 		mptvm.setParticipationForm(mpf);
 		mpf.setMptvm(mptvm);
@@ -343,19 +344,19 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
  	  	
-//	  	detailsPanel.add(cf);
-//	  	detailsPanel.add(clf);
-//	  	detailsPanel.add(mpf );
-//	  	detailsPanel.add(rpf);
+	  	detailsPanel.add(cf);
+	  	detailsPanel.add(clf);
+	  	detailsPanel.add(mpf );
+	  	detailsPanel.add(rpf);
 	  		  	
-//		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-//		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-//		cellTree.setAnimationEnabled(true);
+		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
+		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
+		cellTree.setAnimationEnabled(true);
 		
 	  	
 	  	RootPanel.get("Header").add(header);
 	  	RootPanel.get("Navigator").add(navigation);
-	  	//RootPanel.get("Lists").add(listPanel);
+	  	RootPanel.get("Lists").add(cellTree);
 	  	RootPanel.get("Details").add(detailsPanel);
 	  	RootPanel.get("Trailer").add(trailer);
 		
