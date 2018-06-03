@@ -7,13 +7,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
 <!-- Servlets -->
 
- <!--  TODO: Ausformulieren der Servlets muss noch erledigt werden -->
-
   <!-- Default page to serve -->
-  
-  
   <welcome-file-list>
     <welcome-file>ContactSystem.html</welcome-file>
+    <welcome-file>ReportGenerator.html</welcome-file>
   </welcome-file-list>
 
   <servlet>
@@ -27,6 +24,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
   
   
+    <servlet>
+    <servlet-name>Report</servlet-name>
+    <servlet-class>de.hdm.kontaktsystem.server.report.ReportGeneratorImpl</servlet-class>
+    
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Report</servlet-name>
+    <url-pattern>/kontaktsystem/reportgenerator</url-pattern>
+  </servlet-mapping>
+  
   
   <servlet>
     <servlet-name>EditorService</servlet-name>
@@ -39,17 +47,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/kontaktsystem/*</url-pattern>
   </servlet-mapping>
   
-  
-  <servlet>
-    <servlet-name>Report</servlet-name>
-    <servlet-class>de.hdm.kontaktsystem.server.report.ReportGeneratorImpl</servlet-class>
-    
-  </servlet>
 
-  <servlet-mapping>
-    <servlet-name>Report</servlet-name>
-    <url-pattern>/kontaktsystem/reportgenerator</url-pattern>
-  </servlet-mapping>
-  
   
 </web-app>
