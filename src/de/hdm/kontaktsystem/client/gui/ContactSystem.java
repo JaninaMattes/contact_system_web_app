@@ -284,6 +284,7 @@ public class ContactSystem implements EntryPoint {
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				detailsPanel.add(cf);
+				RootPanel.get("Details").clear();
 				RootPanel.get("Details").add(detailsPanel);
 			}
 			

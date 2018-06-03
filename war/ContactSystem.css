@@ -61,8 +61,8 @@ h1 {
 }
 
 #Menue-Button{
-	height: 25px;
-    width: 200px;
+	height: 30px;
+    width: 240px;
     
     font-family: "Arial", Arial, sans-serif;
 	border: solid 1px white; 
@@ -81,7 +81,7 @@ h1 {
 
 #Search-Button{
 	height: 30px;
-    width: 50px;
+    width: 53px;
     
     font-family: "Arial", Arial, sans-serif;
 	border: solid 1px white; 
@@ -174,9 +174,10 @@ h1 {
 }
 
 #Logo{
-    height: 50px;
-    width: 100px;
+    height: 100px;
+    width: 200px;
     margin: 4px 2px;
+    padding: 2px;
     align-content: left;
 }
 
