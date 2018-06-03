@@ -47,14 +47,13 @@ public class ContactListForm extends VerticalPanel {
 	/**
 	 * WIdgets um die Attribute einer Kontaktliste anzuzeigen.
 	 */
-
 	Label contactListLabel = new Label("Kontaktliste: ");
 	Label contactLabel = new Label("Kontakte: "); 
 	Label firstNameLabel = new Label("Vorname: ");
 	Label lastNameLabel = new Label("Nachname: ");
 	
 	HorizontalPanel btnPanel = new HorizontalPanel();
-	Button deleteButton = new Button("Kontakt aus eine Liste löschen");
+	Button deleteButton = new Button("Kontakt aus einer Liste löschen");
 	Button deleteClButton = new Button("KontaktLliste löschen");
 	Button saveButton = new Button("Kontakt Liste speichern");
 	Button shareButton = new Button("Teilen");

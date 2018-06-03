@@ -17,6 +17,7 @@ import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 /**
  * 
@@ -29,7 +30,7 @@ public class ContactListTreeViewModel implements TreeViewModel {
 	
 	private Contact selectedContact;
 	
-	private ContactSystemAdministrationAsync contactSystemVerwaltung = null;
+	private ContactSystemAdministrationAsync contactSystemAdmin = null;
 	private ListDataProvider<Contact> contactDataProvider = null;
 	
 	
@@ -69,7 +70,7 @@ public class ContactListTreeViewModel implements TreeViewModel {
 		 * Hier werden die lokalen Variablen initialisiert
 		 */
 		public ContactListTreeViewModel() {
-			contactSystemVerwaltung = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+			contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 			cKeyProvider = new ContactKeyProvider();
 			selectionModel = new SingleSelectionModel<Contact>(cKeyProvider);
 			selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
@@ -94,7 +95,7 @@ public class ContactListTreeViewModel implements TreeViewModel {
 			if(value.equals("Root")) {				
 				//Erzeugt eine ListDataProvider fuer Contact-Daten
 				contactDataProvider = new ListDataProvider<Contact>();
-				contactSystemVerwaltung.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+				contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
 					
 					public void onFailure(Throwable t) {
 				}
@@ -118,10 +119,9 @@ public class ContactListTreeViewModel implements TreeViewModel {
 		return false;
 	}
 
-	public void removeContact(Contact contact) {
-		contactDataProvider.getList().remove(contact);		
-	}
-	
+	public void removeContact(Contact c) {
+		contactDataProvider.getList().remove(c);		
+	}	
 	 
 	/*
 	 * Kontakt hinzufügen.
@@ -130,6 +130,24 @@ public class ContactListTreeViewModel implements TreeViewModel {
 		contactDataProvider.getList().add(c);
 		selectionModel.setSelected(c, true);
 	}
+	
+	/*
+	 * Kontakt updaten.
+	 */	
+	public void updateContact(Contact c) {
+		List<Contact> contactList = contactDataProvider.getList();
+		int i = 0;
+		for (Contact con : contactList) {
+			if (con.getBoId() == c.getBoId()) {
+				contactList.set(i, c);
+				break;
+			} else {
+				i++;
+			}
+		}
+		contactDataProvider.refresh();
+	}
+	
 	
 
 

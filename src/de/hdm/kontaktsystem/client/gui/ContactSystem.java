@@ -123,8 +123,7 @@ public class ContactSystem implements EntryPoint {
 		
 		loadTree(); // für Test
 		
-		this.loadContactSystem(); // für Test
-		
+		this.loadContactSystem(); // für Test		
 		
 		/**
 		 * Login-Status feststellen mit LoginService
@@ -172,12 +171,8 @@ public class ContactSystem implements EntryPoint {
 	 */
 	public void loadContactSystem() {
 
-		//Root
-		final VerticalPanel root = new VerticalPanel();
-
-				
 		//Detail
-		final VerticalPanel detailsPanel = new VerticalPanel();
+		VerticalPanel detailsPanel = new VerticalPanel();
 			
 		//Header
 		HorizontalPanel header = new HorizontalPanel();				
@@ -190,16 +185,16 @@ public class ContactSystem implements EntryPoint {
 	    
 		//Formulare
 
-		final ContactForm cf = new ContactForm();
+		ContactForm cf = new ContactForm();
 		ContactListForm clf = new ContactListForm();
 		MyParticipationForm mpf = new MyParticipationForm();
 		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 		
 		//CellTree Model
 		ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
 		//Logo 
 		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
@@ -271,25 +266,19 @@ public class ContactSystem implements EntryPoint {
 		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird oberhalb des 
 		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
 		 */
-		
-//		//ClickHandler für ContactButton
-//		contactButton.addClickHandler(new ClickHandler() {
-//			public void onClick(ClickEvent event) {
-//				/**
-//				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird 
-//				 */
-//				CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-//				CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-//				cellTree.setAnimationEnabled(true);				
-//			}
-//			
-//		});
 	
 		//TEST -> ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/**
+				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
+				 */
+				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
+				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
+				cellTree.setAnimationEnabled(true);		
+				// Für Test->
 				detailsPanel.add(cf);
-				RootPanel.get("Details").clear();
+				RootPanel.get("Details").clear(); /*Alle Widgets von Parent entfernen*/
 				RootPanel.get("Details").add(detailsPanel);
 			}
 			
@@ -384,7 +373,7 @@ public class ContactSystem implements EntryPoint {
 		}
 	}
 
-	class SearchCallback implements AsyncCallback<Vector<Contact>> {
+	private class SearchCallback implements AsyncCallback<Vector<Contact>> {
 
 		String search = null;
 		

@@ -5,6 +5,7 @@ import java.util.Vector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Grid;
@@ -31,10 +32,13 @@ public class ContactForm extends VerticalPanel{
 	Contact contactToDisplay = null;
 	ContactListTreeViewModel ctvm = null;
 	ContactListsTreeViewModel cltvm = null; /*Kann von beiden TreeViewModeln aufgerufen werden*/
+	MyParticipationsTreeViewModel mptvm = null;
+	ReceivedParticipationTreeViewModel rptvm = null;
 	
 	/**
 	 * Widgets, deren Inhalte variable sind, werden als Attribute angelegt.
 	 */
+	
 	TextBox textBoxName = new TextBox();
 	TextBox textBoxNickName = new TextBox();
 	TextBox textBoxFirma = new TextBox();
@@ -56,10 +60,13 @@ public class ContactForm extends VerticalPanel{
 	
 	Label isShared = new Label("Geteilt: ");
 	Label labelShare = new Label("Teilen mit: ");
+	Label labelSharedWith = new Label("Geteilt mit: ");
+	Label labelReceiedFrom = new Label("Geteilt von: ");
 	Label contactStatus = new Label("");
 		
-	Button deleteButton = new Button("Kontakt löschen");
-	Button saveButton = new Button("Kontakt speichern");
+	Button deleteButton = new Button("Löschen");
+	Button saveButton = new Button("Speichern");
+	Button shareButton = new Button("Teilen");
 	
 	CheckBox checkBox1 = new CheckBox();
 	CheckBox checkBox2 = new CheckBox();
@@ -71,20 +78,8 @@ public class ContactForm extends VerticalPanel{
 	CheckBox checkBox8 = new CheckBox();
 	
 	ListBox shareUser = new ListBox();
-	
-	/**
-	 * Instanziieren der Panels
-	 */
-	
-	/**
-	 * HauptPanel
-	 */
-	private VerticalPanel vp = new VerticalPanel();
-	
-	/**
-	 * Panel für Anordnung der Button
-	 */
-	private HorizontalPanel btnPanel = new HorizontalPanel();
+	ListBox sharedWithUser = new ListBox();
+	TextBox receivedFrom = new TextBox();
 	
 	/**
 	 * Startpunkt
@@ -92,13 +87,18 @@ public class ContactForm extends VerticalPanel{
 	
 	public void  onLoad() {
 		super.onLoad();
+				
+		/**
+		 * Panel für Anordnung der Button
+		 */
+		HorizontalPanel btnPanel = new HorizontalPanel(); 
 		
 		/**
 		 * Anordnung der einzelnen Inhalte für ContactForm.
 		 * 
 		 */
 		Grid contactGrid = new Grid(9, 3);
-		
+				
 		contactGrid.setWidget(0, 0, label);
 		contactGrid.setWidget(0, 1, contactStatus);
 		contactGrid.setWidget(0, 2, isShared);
@@ -136,10 +136,8 @@ public class ContactForm extends VerticalPanel{
 		contactGrid.setWidget(8, 2, checkBox8);
 		
 		shareUser.getElement().setId("ListBox");
-		
-		Grid shareGrid = new Grid (2, 2);
-		shareGrid.setWidget(0, 0, labelShare);
-		shareGrid.setWidget(0, 1, shareUser);
+		/*TextBox kann nur Informationen darstellen, verhindert aber deren Bearbeitung*/
+		receivedFrom.setEnabled(false);
 		
 		/*id für CSS*/
 		deleteButton.getElement().setId("Delete-Button");
@@ -148,6 +146,28 @@ public class ContactForm extends VerticalPanel{
 		saveButton.getElement().setId("Save-Button");
 		saveButton.addClickHandler(new SaveClickHandler());
 		
+		shareButton.getElement().setId("Share-Button");
+		shareButton.addClickHandler(new ShareClickHandler());
+		
+		/**
+		 * Anordnung der einzelnen Inhalte für ContactForm.
+		 * Abhandlung der Teilhaberschaft.
+		 */
+		Grid shareGrid = new Grid (4, 2);
+		shareGrid.setWidget(0, 0, labelShare);
+		
+		shareGrid.setWidget(1, 0, shareUser);
+		shareGrid.setWidget(1, 1, shareButton);
+	
+		shareGrid.setWidget(1, 0, labelSharedWith);
+		shareGrid.setWidget(1, 1, sharedWithUser);
+		
+		shareGrid.setWidget(1, 0, labelReceiedFrom);
+		shareGrid.setWidget(1, 1, receivedFrom);		
+		
+		/**
+		 * Anordnung der Buttons auf einem Button Panel
+		 */
 		btnPanel.add(deleteButton);
 		btnPanel.add(saveButton);
 		
@@ -165,7 +185,11 @@ public class ContactForm extends VerticalPanel{
 	    checkBox8.setEnabled(false);
 	
 	    /**
-	     * Clickhandler zum Überprüfen ob TextBox abgeklickt wurde
+	     * Clickhandler zum Überprüfen ob TextBox angeklickt wurde.
+	     * Unterstützt darin herauszufinden, ob eine Veränderung in 
+	     * TextBox vorgenommen wurde und updated deren Inhalt.
+	     * 
+	     * @author janina
 	     */	
 		
 		textBoxName.addClickHandler(new ClickHandler() {	        
@@ -241,10 +265,12 @@ public class ContactForm extends VerticalPanel{
 			}
 	    });
 		
-	    /*
-	     * ClickHandler Verbindung zu CheckBoxen
+	    /**
+	     * ClickHandler Verbindung zu CheckBoxen.
+	     * @author janina
 	     */
 	    
+		//TODO: Prüfen ob Abruf hier sinnvoll ist oder in einer einzigen Methode
 	    checkBox1.addClickHandler(new ClickHandler() {
 	      PropertyValue pv = null;	      
 	      @Override
@@ -260,75 +286,99 @@ public class ContactForm extends VerticalPanel{
 	    });	    
 	    
 	    checkBox2.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;
-	    	
+	      PropertyValue pv = null;	    	
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactNickName = textBoxName.getText();
 	    	  if(contactNickName.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
-	    	  //else pv = getValue()
+	    	  else {
+	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    	  }
 	      }
 	    });
 	    	  
 	    checkBox3.addClickHandler(new ClickHandler() {
+	      PropertyValue pv = null;	
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactFirma = textBoxFirma.getText();
 	    	  if(contactFirma.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
+	    	  else {
+	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    	  }
 	      }
 	    });
 
 	    checkBox4.addClickHandler(new ClickHandler() {
+	      PropertyValue pv = null;	
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactPhone = textBoxTelefonnummer.getText();
 	    	  if(contactPhone.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
+	    	  else {
+	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    	  }
 	      }
 	    });
 	    
 	    checkBox5.addClickHandler(new ClickHandler() {
+	      PropertyValue pv = null;	
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactMobile = textBoxMobilnummer.getText();
 	    	  if(contactMobile.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
+	    	  else {
+	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    	  }
 	      }
 	    });
 	    
 	    checkBox6.addClickHandler(new ClickHandler() {
+	      PropertyValue pv = null;	
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactEmail = textBoxEmail.getText();
 	    	  if(contactEmail.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
+	    	  else {
+	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    	  }
 	      }
 	    });
 	 
 	    checkBox7.addClickHandler(new ClickHandler() {
+	      PropertyValue pv = null;	
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactGebuDatum = textBoxGeburtsdatum.getText();
 	    	  if(contactGebuDatum.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
+	    	  else {
+	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    	  }
 	      }
 	    });
 	    
 	    checkBox8.addClickHandler(new ClickHandler() {
+	      PropertyValue pv = null;	
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactAdresse = textBoxAdresse.getText();
 	    	  if(contactAdresse.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    		  
+	    	  }
+	    	  else {
+	    		  pv = findCorrectPv(textBoxNickName.getText());
 	    	  }
 	      }
 	    });
@@ -340,17 +390,36 @@ public class ContactForm extends VerticalPanel{
 		 * 
 		 */		
 	    
-	    Grid content = new Grid(4, 1);
+	    //Grid content = new Grid(4, 2);
 	    
-		vp.add(label);
-		vp.add(contactGrid);
-		vp.add(shareGrid);
-		vp.add(btnPanel);
+		this.add(label);
+		this.add(contactGrid);
+		this.add(shareGrid);
+		this.add(btnPanel);
 				
 	}		
 		
-	  
+	  /**
+	   * Übergabe eines Wertes aus dem Textfeld mit Typ String
+	   * und Rückgabe eines dem entsprechend gefundenen PropertyValue Objektes
+	   * aus dem übergebenen KontaktObjekt. 
+	   * @param string
+	   * @return propertyValue
+	   * @author janina
+	   */
 	
+	
+	    public PropertyValue findCorrectPv(String s) {
+	    	PropertyValue pv = new PropertyValue();
+	    	Vector<PropertyValue> result = new Vector<PropertyValue>();
+	    	if(s!=null) {
+	    		for(PropertyValue p: result) {
+	    			if(p.getValue().equals(s)) {
+	    				pv = p;
+	    			}
+	    		}
+	    	} return pv;
+	    }
 	   
 		/**
 		 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
@@ -399,18 +468,19 @@ public class ContactForm extends VerticalPanel{
 				
 				}
 				
-				//Befüllen der Listbox mit Usern aus dem System
-//       			Vector <User> u = contactSystemAdmin.getAllUsers(new AsyncCallback Vector<User> {
-//     						public void onFailure(Throwable error) {
-//     							Window.alert("Login Error :(");
-//     						}
-//     						public void onSuccess(Vector<User>) {
-//     							for (User user: u) {
-//     								shareUser.addItem(user.getUserContact().getName().getValue());
-//     								}
-//								shareUser.setVisibleItemCount(u.getSize());
-//     						}
-//     			}
+				//TODO: Überprüfen!! ->> 
+				User myself = new User();
+				myself.setGoogleID(170);
+				
+				
+				//Befüllen der Listbox mit allen User Objekten aus dem System
+       			Vector <User> u = new Vector<User>();
+       			contactSystemAdmin.getAllUsers(new UserCallback(u));
+       		//	contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
+       			ListBox shareUser = new ListBox();
+       			ListBox sharedWithUser = new ListBox();
+       			TextBox receivedFrom = new TextBox();
+       			
 	
 			} else {
 				//Löschen eines Kontaktes
@@ -502,6 +572,20 @@ public class ContactForm extends VerticalPanel{
 			 */
 			void setCltvm(ContactListsTreeViewModel cltvm) {
 				this.cltvm = cltvm;
+			}
+			
+			/*
+			 * mpvtm setter
+			 */	
+			void setMptvm(MyParticipationsTreeViewModel mptvm) {
+				this.mptvm = mptvm;
+			}
+			
+			/*
+			 * mpvtm setter
+			 */			
+			void setRptvm(ReceivedParticipationTreeViewModel rptvm) {
+				this.rptvm = rptvm;
 			}
 			
 			
@@ -669,38 +753,200 @@ public class ContactForm extends VerticalPanel{
 			/**
 			 * Zum Löschen eines Kontaktes wird zunächst der Eigentümer abgefragt, bevor im
 			 * Callback eine Löschung durchgeführt wird.
-			 * 
+			 * @author janina
 			 */
 			private class DeleteClickHandler implements ClickHandler {
-				
+				Vector <Participation> part = new Vector <Participation>();
 				Vector <PropertyValue> p = new Vector<PropertyValue>();
 
 				@Override
 				public void onClick(ClickEvent event) {
 					if (contactToDisplay == null) {
-						Window.alert("Kein Kontakt ausgewählt");
+						Window.alert("Kein Kontakt ausgewählt!");
 					}
 					if (contactToDisplay!= null && getAllCheckedValues()!= null){
 						p = getAllCheckedValues();
 						/*Löschen aller über CheckBoxen ausgewählten Werte*/
 						for(PropertyValue pv : p) {
-//						contactSystemAdmin.deletePropertyValue(pv, new AsyncCallback(pv));
-						Window.alert("Die ausgewählten Werte wurden gelöscht");
-						//Refresh-> setSelected(Contact c)?
+							contactSystemAdmin.deletePropertyValue(pv, new DeleteCallback(pv));
+						Window.alert("Die ausgewählten Werte wurden gelöscht.");
+						//TODO: Refresh-> setSelected(Contact c)?
 						}
 					}
 					else {
-						/*Überprüfen ob Owner*/
-						if(isOwnedByMe(contactToDisplay)) {
-							Participation p = new Participation();
-//							contactSystemAdmin.deleteContact(contactToDisplay, new AsyncCallback(contactToDisplay));
-//							contactSystemAdmin.deleteParticipation(p, new AsyncCallback(p));
+						/*Überprüfen ob Ersteller (Owner)*/
+						if(isOwnedByMe(contactToDisplay)) {							
+							contactSystemAdmin.deleteContact(contactToDisplay, 
+									new DeleteContactCallback(contactToDisplay));
+							for(Participation p : part) {
+							contactSystemAdmin.deleteParticipation(p, 
+									new DeleteMyParticipationCallback(p));
+							}
+							Window.alert("Der Kontakt" + contactToDisplay.getName() + " wurde gelöscht.");
+							/*Wenn nur Teilhaber, dann nur Teilhaberschaft löschen*/
+						} else {
+							for(Participation p : part) {
+								contactSystemAdmin.deleteParticipation(p, 
+										new  DeleteReceivedParticipationCallback(p));
+								}
+							Window.alert("Deine Teilhaberschaft zum Kontakt" 
+										+ contactToDisplay.getName() + " wurde gelöscht.");
 						}
 					}
 				}
 			}
 			
+			/**
+			 * DeleteCallback Klasse
+			 * @author janina
+			 *
+			 */
+			private class DeleteCallback implements AsyncCallback<PropertyValue> {
+				
+				PropertyValue pv = null;				
+				DeleteCallback(PropertyValue pv){
+					this.pv = pv;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Löschen der Werte ist fehlgeschlagen! :(");
+				}
+
+				@Override
+				public void onSuccess(PropertyValue result) {
+					if (result != null) {
+						//PropertyValues von Kontakt in Liste entfernen
+						Vector <PropertyValue> pv = contactToDisplay.getPropertyValues();
+						for(PropertyValue p: pv) {
+							if(p.equals(result)) pv.remove(p);
+						}
+						contactSystemAdmin.editContact(contactToDisplay, new EditCallback(contactToDisplay));											
+					} else {
+						Window.alert("Keine Kontakte gefunden :(");
+					}
+				}
+			}
 			
+			/**
+			 * Callback für Editieren eines Kontaktes
+			 * @author janina
+			 *
+			 */
+			
+			private class EditCallback implements AsyncCallback<Contact>{
+				
+				Contact c = null;				
+				EditCallback(Contact c){
+					this.c = c;
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Editieren des Kontaktes ist fehlgeschlagen! :(");
+				}
+
+				@Override
+				public void onSuccess(Contact result) {
+					if (result != null) {
+						//Kontakt Objekt aus der Liste löschen
+						ctvm.updateContact(contactToDisplay);
+					} else {
+						Window.alert("Keine Kontakte gefunden :(");
+					}
+				}
+			}
+			
+			/**
+			 * DeleteContactCallback Klasse
+			 * @author janina
+			 *
+			 */
+			private class DeleteContactCallback implements AsyncCallback<Contact> {
+
+				Contact c = null;				
+				DeleteContactCallback(Contact c){
+					this.c = c;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Löschen des Kontaktes ist fehlgeschlagen! :(");
+				}
+
+				@Override
+				public void onSuccess(Contact result) {
+					if (result != null) {
+						//Kontakt Objekt aus der Liste löschen
+						ctvm.removeContact(result);
+					} else {
+						Window.alert("Keine Kontakte gefunden :(");
+					}
+				}
+			}
+			
+			/**
+			 * Callback Methode zur Löschung meiner Teilhaberschaft
+			 * @author janina
+			 *
+			 */
+			private class DeleteMyParticipationCallback implements AsyncCallback<Participation> {
+
+				Participation p = null;				
+				DeleteMyParticipationCallback(Participation p){
+					this.p = p;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Löschen der Teilhaberschft ist fehlgeschlagen! :(");
+				}
+
+				@Override
+				public void onSuccess(Participation result) {
+					if (result != null) {
+						//KontaktObjekt aus Teilhaberliste löschen
+						mptvm.removeParticipation(result);
+						rptvm.removeParticipation(result);
+					} else {
+						Window.alert("Keine Teilhaberschaft gefunden :(");
+					}
+				}
+			}
+			
+			/**
+			 * Callback Methode zur Löschung der erhaltener Teilhaberschaft
+			 * @author janina
+			 *
+			 */
+			private class DeleteReceivedParticipationCallback implements AsyncCallback<Participation> {
+
+				Participation p = null;				
+				DeleteReceivedParticipationCallback(Participation p){
+					this.p = p;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Löschen der Teilhaberschft ist fehlgeschlagen! :(");
+				}
+
+				@Override
+				public void onSuccess(Participation result) {
+					if (result != null) {
+						//KontaktObjekt aus Teilhaberliste löschen
+						rptvm.removeParticipation(result);
+					} else {
+						Window.alert("Keine Teilhaberschaft gefunden :(");
+					}
+				}
+			}
+			
+			/**
+			 * SaveClickHandler zum Speichern eines Kontaktes oder dessen Update.
+			 * @author janin
+			 *
+			 */
 			private class SaveClickHandler implements ClickHandler {
 				
 				Vector <PropertyValue> p = new Vector<PropertyValue>();
@@ -713,10 +959,127 @@ public class ContactForm extends VerticalPanel{
 					if (contactToDisplay!= null && getAllCheckedValues()!= null){
 						p = getAllUpdatedValues();
 						contactToDisplay.setPropertyValues(p);
-//						contactSystemAdmin.editContact(contactToDisplay, new AsyncCallback(contactToDisplay));						
+						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback(contactToDisplay));						
 				}
 				
 			}
 			}
+			
+			/**
+			 * Callback Methode zur Speicherung eines Kontaktes oder dessen Update. 
+			 * @author janina
+			 *
+			 */
+			private class SaveCallback implements AsyncCallback<Contact> {
+
+				Contact c = null;				
+				SaveCallback(Contact c){
+					this.c = c;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Speichern des Kontaktes ist fehlgeschlagen! :(");
+				}
+
+				@Override
+				public void onSuccess(Contact result) {
+					if (result != null) {
+						//KontaktObjekt updaten
+						ctvm.updateContact(result);
+					} else {
+						Window.alert("Kein Kontakt gefunden :(");
+					}
+				}
+			}
+			
+			/**
+			 * UserCallnack Klasse zum befüllen der ListBox mit User -Objekten 
+			 * aus dem System. 
+			 * @author janina
+			 *
+			 */
+			
+			private class UserCallback implements AsyncCallback<Vector<User>>{
+				Vector <User> user = null;				
+				UserCallback(Vector<User> user){
+					this.user = user;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Der Aufruf der Nutzer ist misglückt! :(");
+				}
+
+				@Override
+				public void onSuccess(Vector <User> result) {
+					int count = 0;
+					if (result != null) {
+						for(User user: result) {						
+						//User Liste updaten
+						shareUser.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
+						++count;
+						}
+					//Genug Platz schaffen für alle Elemente
+					shareUser.setVisibleItemCount(count);
+					} else {
+						Window.alert("Kein Nutzer gefunden :(");
+					}
+				}
+			}
+			
+			
+			/**
+			 * ShareClickHandler zum Teilen eines Kontaktes und/oder einer Eigenschaft
+			 * zu dem bereits geteilten Kontakt mit einem bestimmten Nutzer.
+			 * @author janina
+			 *
+			 */
+			private class ShareClickHandler implements ClickHandler {
+				
+				Vector <PropertyValue> p = new Vector<PropertyValue>();
+
+				@Override
+				public void onClick(ClickEvent event) {
+					if (contactToDisplay == null) {
+						Window.alert("Kein Kontakt ausgewählt");
+					} 
+					if (contactToDisplay!= null && getAllCheckedValues()!= null){
+						p = getAllUpdatedValues();
+						contactToDisplay.setPropertyValues(p);
+						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback(contactToDisplay));						
+				}
+				
+			}
+			}
+			
+			/**
+			 * Callback Methode zur Speicherung eines Kontaktes oder dessen Update. 
+			 * @author janina
+			 *
+			 */
+			private class ShareCallback implements AsyncCallback<Contact> {
+
+				Contact c = null;				
+				ShareCallback(Contact c){
+					this.c = c;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Das Speichern des Kontaktes ist fehlgeschlagen! :(");
+				}
+
+				@Override
+				public void onSuccess(Contact result) {
+					if (result != null) {
+						//KontaktObjekt updaten
+						//ctvm.updateContact(result);
+					} else {
+						Window.alert("Kein Kontakt gefunden :(");
+					}
+				}
+			}
+			
 		  
 }
