@@ -29,7 +29,8 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 
 /**
- *
+ * Die Klasse ContactSystem
+ *@author Janina
  */
 public class ContactSystem implements EntryPoint {
 
@@ -53,8 +54,7 @@ public class ContactSystem implements EntryPoint {
 	/**
 	 * Link zum Asynchronen Interface
 	 */
-	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
-	
+	ContactSystemAdministrationAsync contactSystemVerwaltung = null;	
 
 	/** 
 	 * Instanziieren der GWT Widgets und Panels
