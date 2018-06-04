@@ -96,6 +96,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	public double getCurrentUser(){
+		// Test
 		return 170d;//Double.parseDouble(userService.getCurrentUser().getUserId());
 	}
 	
