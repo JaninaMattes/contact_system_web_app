@@ -61,6 +61,7 @@ public class ContactListForm extends VerticalPanel {
 	Label labelShare = new Label("Teilen mit: ");
 	Label contactStatus = new Label("");
 	
+	
 
 	CheckBox checkBox1 = new CheckBox();
 	CheckBox checkBox2 = new CheckBox();

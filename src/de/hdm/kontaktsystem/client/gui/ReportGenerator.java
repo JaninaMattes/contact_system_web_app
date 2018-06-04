@@ -57,6 +57,7 @@ public class ReportGenerator implements EntryPoint {
 	TextBox findByValueText = new TextBox();
 	Button findByValueButton = new Button("Suche"); //TODO: Symbol statt Text einfügen
 	
+
 	
 	/**
 	 * Attribute für den Login
@@ -180,6 +181,22 @@ public class ReportGenerator implements EntryPoint {
 		RootPanel.get("Navigator").add(findByParticipantPanel);
 		
 		
+		/**
+		 * CSS
+		 */
+		
+		findByParticipantLabel.setStyleName("findbylabel");
+		findByParticipantText.setStyleName("findbytext");
+		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
+		findByParticipantButton.setStyleName("search-Button");
+
+		findByValueLabel.setStyleName("filtern");
+		findByValueText.setStyleName("findByText");
+		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
+		findByValueButton.setStyleName("search-button");
+		
+		
+		
 		/*
 		 * Aufbau der DropDown-Liste
 		 */
@@ -188,7 +205,6 @@ public class ReportGenerator implements EntryPoint {
 		/*
 		 * Funktionalität des FindByValue-Buttons
 		 */
-		findByValueButton.setStylePrimaryName(""); //TODO CSS Style-Namen anpassen
 		
 		findByValueButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -212,6 +228,7 @@ public class ReportGenerator implements EntryPoint {
 		
 		
 	}
+	
 	
 	/**
 	 * Nested Class zum Setzen der User-Informationen auf dem Server
