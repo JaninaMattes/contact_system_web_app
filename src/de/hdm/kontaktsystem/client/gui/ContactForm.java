@@ -181,9 +181,6 @@ public class ContactForm extends VerticalPanel{
 		textBoxGeburtsdatum.setStyleName("Textbox");
 		textBoxAdresse.setStyleName("Textbox");
 
-
-
-
 		
 		/**
 		 * Anordnung der einzelnen Inhalte für ContactForm.
@@ -311,7 +308,7 @@ public class ContactForm extends VerticalPanel{
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactName = textBoxName.getText();
-	    	  if(contactName.equals("")) {
+	    	  if(contactName.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
@@ -472,6 +469,39 @@ public class ContactForm extends VerticalPanel{
 				} else { contactStatus.setText("Status: Nicht geteilt");}
 				
 				label.setText("Kontakt: " + c.getBoId());
+												
+				Vector <PropertyValue> pv = new Vector <PropertyValue>();
+				pv = contactToDisplay.getPropertyValues();
+				
+				for(PropertyValue p : pv) {	
+					if(p!=null) {
+						switch(p.getProperty().getId()) {
+						case(1):
+							textBoxName.setText(p.getValue()); 
+							break;
+						case(2):
+							textBoxNickName.setText(p.getValue()); 
+							break;
+						case(3):
+							textBoxFirma.setText(p.getValue()); 
+							break;
+						case(4):
+							textBoxTelefonnummer.setText(p.getValue()); 
+							break;
+						case(5):
+							textBoxMobilnummer.setText(p.getValue()); 
+						 	break;
+						case(6):
+							textBoxEmail.setText(p.getValue()); 
+							break;
+						case(7):
+							textBoxGeburtsdatum.setText(p.getValue()); 
+							break;
+						case(8):
+							textBoxAdresse.setText(p.getValue()); 
+							break;
+					}
+				}
 				
 				//Enable Checkboxen
 				if(!textBoxName.getText().isEmpty()) checkBox1.setEnabled(true);		
@@ -483,25 +513,8 @@ public class ContactForm extends VerticalPanel{
 				if(!textBoxGeburtsdatum.getText().isEmpty()) checkBox7.setEnabled(true);
 				if(!textBoxAdresse.getText().isEmpty()) checkBox8.setEnabled(true);
 				
-				//Status überprüfen, ob PropertyValue bereits geteilt wurde
+				//Status überprüfen, ob PropertyValues bereits geteilt wurden
 				this.setUpCheckBoxValues();
-								
-				Vector <PropertyValue> pv = new Vector <PropertyValue>();
-				pv = contactToDisplay.getPropertyValues();
-				
-				for(PropertyValue p : pv) {	
-					
-				//Setzen der PropertyValue Werte aus Kontakt-Objekt
-				if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
-				if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
-				if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
-				if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
-				if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
-				if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
-				if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
-				if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());	
-				
-				}
 				
 				//TODO: Überprüfen!! ->> 
 				User myself = new User();
@@ -516,7 +529,8 @@ public class ContactForm extends VerticalPanel{
 //       			ListBox sharedWithUser = new ListBox();
 //       			TextBox receivedFrom = new TextBox();
        				
-			} else {
+				}
+				} else {
 				//Löschen eines Kontaktes
 			    checkBox2.setEnabled(false);
 			    checkBox3.setEnabled(false);

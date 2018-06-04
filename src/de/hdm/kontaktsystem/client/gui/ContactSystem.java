@@ -23,9 +23,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.TreeViewModel;
 
-import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
@@ -55,7 +56,7 @@ public class ContactSystem implements EntryPoint {
 	/**
 	 * Link zum Asynchronen Interface
 	 */
-	ContactSystemAdministrationAsync contactSystemVerwaltung = null;	
+	ContactSystemAdministrationAsync contactSystemAdmin = null;	
 
 	/** 
 	 * Instanziieren der GWT Widgets und Panels
@@ -115,16 +116,16 @@ public class ContactSystem implements EntryPoint {
     
 	//Formulare
 
-	private ContactForm cf = new ContactForm();
-	private ContactListForm clf = new ContactListForm();
-	private MyParticipationForm mpf = new MyParticipationForm();
-	private ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+	ContactForm cf = new ContactForm();
+	ContactListForm clf = new ContactListForm();
+	MyParticipationForm mpf = new MyParticipationForm();
+	ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 	
 	//CellTree Model
-	private ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-	private ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-	private MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-	private ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+	ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
+	ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+	MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+	ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	
 	/**
 	 * EntryPoint
@@ -355,11 +356,10 @@ public class ContactSystem implements EntryPoint {
 		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
 		cellTree.setAnimationEnabled(true);
 		
-	  	
 	  	RootPanel.get("Header").add(header);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Lists").add(cellTree);
-	  	RootPanel.get("Details").add(cf);
+	  	RootPanel.get("Details").add(cf); //Für Tests
 	  	RootPanel.get("Trailer").add(trailer);
 		
 	}
@@ -374,7 +374,7 @@ public class ContactSystem implements EntryPoint {
 			} else {
 			 String s = search.getText();
 			 // Suche der Kontakte
-			 contactSystemVerwaltung.searchContacts(s, 
+			 contactSystemAdmin.searchContacts(s, 
 					 new SearchCallback(s));
 			}
 		}
