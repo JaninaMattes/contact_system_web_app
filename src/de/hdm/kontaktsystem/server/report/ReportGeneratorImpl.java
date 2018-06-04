@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.server.report;
 
+import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -9,11 +10,20 @@ import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
 import de.hdm.kontaktsystem.shared.ReportGenerator;
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 import de.hdm.kontaktsystem.shared.report.AllContactsForParticipantReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsForPropertyReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
+import de.hdm.kontaktsystem.shared.report.Column;
+import de.hdm.kontaktsystem.shared.report.CompositeParagraph;
+import de.hdm.kontaktsystem.shared.report.Paragraph;
+import de.hdm.kontaktsystem.shared.report.Report;
+import de.hdm.kontaktsystem.shared.report.Row;
+import de.hdm.kontaktsystem.shared.report.SimpleParagraph;
+import de.hdm.kontaktsystem.shared.report.SingleContact;
 
 /**
  * Implementierung des <code>ReportGenerator</code>-Interface.
@@ -32,6 +42,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	private ContactSystemAdministration administration = null;
 	
 	private User currentUser = null;
+	
 	
 	/**
 	 * No-Argument-Konstruktor. Dieser wird bei der Client-seitigen Erzeugung mittels
@@ -72,6 +83,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		this.currentUser = userInfo;
 	}
 
+	/**
+	 * Rückgabe des aktuellen Users (über Login)
+	 * @return 
+	 */
+	public User getCurrentUser(){
+		// Test
+		return administration.getUserByID(170d);//Double.parseDouble(userService.getCurrentUser());
+	}
 	
 	/**
 	 * Zurückgeben der zugehörigen ContactSystemAdministration
@@ -89,13 +108,119 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		this.administration = administration;
 	}
 
+	/**
+	 * Erzeugt "Zelle" für einen einzelnen Kontakt. Wird von den anderen Methoden aufgerufen,
+	 * die daraus die Reports zusammensetzen.
+	 */
+	protected void addSingleContact(Contact contact, Report report) {
+		SingleContact contactElement = new SingleContact();
+		Vector<PropertyValue> allPropertyValues = administration.getPropertyValuesForContact(contact); //TODO: in Interfaces ergänzen
+		
+		for(PropertyValue singleProperty : allPropertyValues) {
+			Row row = new Row();
+			Column property = new Column(singleProperty.getProperty().getDescription());
+			Column propertyValue = new Column(singleProperty.getValue());
+			row.addColumn(property);
+			row.addColumn(propertyValue);
+			contactElement.addPropertyRow(row);
+		}
+		
+		/**
+		 * Name des Eigentümers zur Liste der Eigenschaften hinzufügen
+		 */
+		Row ownerRow = new Row();
+		Column ownerProperty = new Column("Eigentümer");
+		Column ownerPropertyValue = new Column(contact.getOwner().getUserContact().getName().getValue());
+		ownerRow.addColumn(ownerProperty);
+		ownerRow.addColumn(ownerPropertyValue);
+		contactElement.addPropertyRow(ownerRow);
+		
+		/**
+		 * Status hinzufügen
+		 */
+		Row statusRow = new Row();
+		Column statusProperty = new Column("Status");
+		String status = "";
+		if(contact.isShared_status()) {
+			status = "geteilt";
+		}else {
+			status = "nicht geteilt";
+		}
+		Column statusPropertyValue = new Column(contact.getOwner().getUserContact().getName().getValue());
+		statusRow.addColumn(statusProperty);
+		statusRow.addColumn(statusPropertyValue);
+		contactElement.addPropertyRow(statusRow);
+		
+		/**
+		 * Liste mit Teilhabern erstellen
+		 */
+		if(contact.isShared_status()) {
+			Vector<Participation> participations = administration.getAllParticipationsByBusinessObject(contact); //TODO: in Interfaces ergänzen
+			for(Participation singleParticipation : participations) {
+				String name = singleParticipation.getParticipant().getUserContact().getName().getValue();
+				SimpleParagraph singleParticipant = new SimpleParagraph(name);
+				contactElement.addElementToParticipantList(singleParticipant);
+			}
+		}else {
+			SimpleParagraph noParticipant = new SimpleParagraph("Keine Teilhaber");
+		}
+				
+		//Hinzufügen des erstellten Elements zum Report
+		report.addContactElement(contactElement);
+	}
 	
+	/**
+	 * Erzeugt Paragraph mit den User-Daten, für den der Report erstellt wird.
+	 * Aus den Report-Methoden ausgelagert.
+	 */
+	protected void addUserParagraph(User user, Report report) {
+		SimpleParagraph userName = new SimpleParagraph(user.getUserContact().getName().getValue());
+		SimpleParagraph userMail = new SimpleParagraph(user.getGMail());
+		
+		CompositeParagraph userInfo = new CompositeParagraph();
+		userInfo.addSubParagraph(userName);
+		userInfo.addSubParagraph(userMail);
+
+		report.setUserData(userInfo);
+	}
 	
+	/**
+	 * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte
+	 * eines Users dar.
+	 * 
+	 * @return Das fertige Reportobjekt
+	 * @throws IllegalArgumentException
+	 * @see AllContactsOfUserReport
+	 */
 	@Override
 	public AllContactsOfUserReport createAllContactsReport() throws IllegalArgumentException {
+		
+		//Erstellen des noch leeren Reports
+		AllContactsOfUserReport report = new AllContactsOfUserReport();
+		
+		//Titel des Reports
+		report.setTitle("Alle Kontakte des Nutzers");
+		
+		//Daten des Benutzers, für den der Report erstellt wird
+		this.addUserParagraph(getCurrentUser(), report);
+		
+		//Datum der Erstellung
+		report.setCreated(new Date()); //TODO: aktuelles Datum setzen
+		
+		//Hinzufügen der einzelnen Kontakt-Elemente
 		Vector<Contact> allContacts = administration.getAllContactsFromUser();
-		// TODO Auto-generated method stub
-		return null;
+		if(allContacts.isEmpty()) {
+			//TODO: Fehlerbehandlung
+		}else {
+			for(Contact singleContact : allContacts) {
+				this.addSingleContact(singleContact, report);
+			}
+		}
+		
+		/**
+		 * Zurückgeben des erstellten Reports
+		 */
+		return report;
 	}
 
 	@Override
@@ -114,7 +239,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 	@Override
 	public Vector<Property> getAllProperties() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		return administration.getAllProperties();
 	}
 	
