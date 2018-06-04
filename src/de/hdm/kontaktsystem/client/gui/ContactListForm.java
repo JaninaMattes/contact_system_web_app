@@ -125,8 +125,33 @@ public class ContactListForm extends VerticalPanel {
 		checkBox3.setEnabled(false);
 		checkBox4.setEnabled(false);
 		
+		/**
+		 * CSS
+		 */
+		
+		nameContactList.setStyleName("Textbox");
+		contactName.setStyleName("Textbox");
+		//Für die Eingabe des Vornamens und Nachnamens gleicher StyleName
+		firstNameContact.setStyleName("NameContactTextbox");
+		lastNameContact.setStyleName("NameContactTextbox");
+		
+		contactListLabel.setStyleName("contactListlabel");
+		contactLabel.setStyleName("contactLabel");
+		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
+		firstNameLabel.setStyleName("namelabel");
+		lastNameLabel.setStyleName("namelabel");
+		
+	//delete + share + save-Buttons müssen jeweils auch gleich sein
+		deleteButton.setStyleName("deleteButton");
+		deleteClButton.setStyleName("deleteButton");
+		saveButton.setStyleName("saveButton");
+		shareButton.setStyleName("shareButton");
+		
+		labelShare.setStyleName("labelshare");
+		contactStatus.setStyleName("contactStatus");
 		
 	}
+	
 	
 	/**
 	 * ClickHandelr zum Speichern der KontaktListe 
