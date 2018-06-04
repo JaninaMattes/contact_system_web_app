@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
@@ -45,6 +46,8 @@ public interface ContactSystemAdministrationAsync {
 	public void getAllParticipationsByParticipant(User gMail, AsyncCallback<Vector<Participation>> callback);
 	
 	public void getNameOfContact(Contact c, AsyncCallback<PropertyValue> callback);
+	
+	public void getAllProperties(AsyncCallback<Vector<Property>> callback);
 	
 	/**
 	 * Methode für die Suchfunktion

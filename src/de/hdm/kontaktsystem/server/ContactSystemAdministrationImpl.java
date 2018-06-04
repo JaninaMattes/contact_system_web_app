@@ -224,16 +224,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	
-	public Vector<Contact> getContactsForUser(User user) {
-		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
-		for(Contact contact : cv){
-			contact.setOwner(user);
-			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
-			contact.setName(this.getNameOfContact(contact));
-		}
-		return cv;		
-	}
-	
 	
 	@Override
 	public Vector<Contact> getContactsByStatus(Boolean status) {
