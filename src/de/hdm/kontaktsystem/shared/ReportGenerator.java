@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.User;
 import de.hdm.kontaktsystem.shared.report.AllContactsForParticipantReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsForPropertyReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
@@ -28,6 +29,13 @@ public interface ReportGenerator extends RemoteService {
 	   * @throws IllegalArgumentException
 	   */
 	  public void init() throws IllegalArgumentException;
+	  
+	  /**
+	   * Setzen der User-Informationen auf dem Server.
+	   * @param userInfo
+	   */
+	  public void setUserInfo(User userInfo);
+	  
 	  
 	  /**
 	   * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte

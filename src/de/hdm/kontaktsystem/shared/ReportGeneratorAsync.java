@@ -5,6 +5,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.User;
 import de.hdm.kontaktsystem.shared.report.AllContactsForParticipantReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsForPropertyReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
@@ -29,5 +30,7 @@ public interface ReportGeneratorAsync {
 			AsyncCallback<AllContactsForPropertyReport> callback);
 	
 	void getAllProperties(AsyncCallback<Vector<Property>> callback);
+
+	void setUserInfo(User userInfo, AsyncCallback<Void> callback);
 
 }
