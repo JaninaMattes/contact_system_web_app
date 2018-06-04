@@ -13,7 +13,8 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 public interface ContactSystemAdministrationAsync {
 		
-	
+	public void login(String requestUri, AsyncCallback<User> callback);
+		
 	public void getUserByID(double id, AsyncCallback<User> callback);
 	
 	public void getUserBygMail(String gMail, AsyncCallback<User> callback);
@@ -47,6 +48,8 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getNameOfContact(Contact c, AsyncCallback<PropertyValue> callback);
 	
+	public void getPropertyValuesForContact(Contact c, AsyncCallback<Vector<PropertyValue>> callback);
+
 	public void getAllProperties(AsyncCallback<Vector<Property>> callback);
 	
 	/**
@@ -100,6 +103,10 @@ public interface ContactSystemAdministrationAsync {
 	public void deleteParticipation(Participation p, AsyncCallback<Participation> callback);
 	
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback);
+
+	
+
+	
 
 
 

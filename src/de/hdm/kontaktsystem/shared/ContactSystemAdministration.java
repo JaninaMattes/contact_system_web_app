@@ -14,9 +14,13 @@ import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
-//TODO -> eiditor oder contactsystem?
+
 @RemoteServiceRelativePath("editor")
 public interface ContactSystemAdministration extends RemoteService {
+	
+	
+	
+	public User login(String requestUri);
 	
 	public User getUserByID(double id);
 	
@@ -51,6 +55,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<Contact> searchContacts(String value);
 	
+	public Vector<PropertyValue> getPropertyValuesForContact(Contact c); 
+
 	public Vector<Property> getAllProperties();
 
 	/**
