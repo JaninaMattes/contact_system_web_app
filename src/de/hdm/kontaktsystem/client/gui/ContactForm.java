@@ -30,8 +30,8 @@ public class ContactForm extends VerticalPanel{
 	
 	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact contactToDisplay = null;
-	ContactListTreeViewModel ctvm = null;
-	ContactListsTreeViewModel cltvm = null; /*Kann von beiden TreeViewModeln aufgerufen werden*/
+	ContactTreeViewModel ctvm = null;
+	ContactListTreeViewModel cltvm = null; /*Kann von beiden TreeViewModeln aufgerufen werden*/
 	MyParticipationsTreeViewModel mptvm = null;
 	ReceivedParticipationTreeViewModel rptvm = null;
 	
@@ -601,14 +601,14 @@ public class ContactForm extends VerticalPanel{
 			/*
 			 *  ctvm setter
 			 */			
-			void setCtvm(ContactListTreeViewModel ctvm) {
+			void setCtvm(ContactTreeViewModel ctvm) {
 				this.ctvm = ctvm;
 			}
 			
 			/*
 			 * cltvm setter
 			 */
-			void setCltvm(ContactListsTreeViewModel cltvm) {
+			void setCltvm(ContactListTreeViewModel cltvm) {
 				this.cltvm = cltvm;
 			}
 			
