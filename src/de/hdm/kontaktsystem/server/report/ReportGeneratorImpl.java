@@ -293,7 +293,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	}
 
 	@Override
-	public AllContactsForPropertyReport createAllContactsForPropertyReport(String property, String propertyvalue)
+	public AllContactsForPropertyReport createAllContactsForPropertyReport(int propertyId, String propertyvalue)
 			throws IllegalArgumentException {
 		
 		// TODO Auto-generated method stub

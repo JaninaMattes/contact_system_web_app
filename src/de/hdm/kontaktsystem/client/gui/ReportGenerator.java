@@ -171,7 +171,7 @@ public class ReportGenerator implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(usersDropDownList.getSelectedValue() == null) {
-					Window.alert("Kein Teilhaber eingegeben!");
+					Window.alert("Kein Teilhaber ausgewählt!");
 				} else {
 					int participantId = Integer.parseInt(usersDropDownList.getSelectedValue());
 					reportGenerator.createAllContactsForParticipantReport(participantId,
@@ -220,14 +220,20 @@ public class ReportGenerator implements EntryPoint {
 		findByValueButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				String property = propertiesDropDownList.getSelectedItemText();
+				int propertyId = Integer.parseInt(propertiesDropDownList.getSelectedValue());
 				String propertyvalue = findByValueText.getValue();
-				if(propertyvalue.equals("")) {
-					Window.alert("Keine Ausprägung eingegeben");
-					return;
-				}
-				reportGenerator.createAllContactsForPropertyReport(property, propertyvalue,
-						new CreateAllContactsForPropertyReportCallback(property, propertyvalue));
+				
+				if(usersDropDownList.getSelectedValue() == null) {
+					Window.alert("Keine Eigenschaft ausgewählt!");
+				} else {
+					if(propertyvalue.equals("")) {
+						Window.alert("Keine Ausprägung eingegeben");
+						return;
+					} else {
+						reportGenerator.createAllContactsForPropertyReport(propertyId, propertyvalue,
+								new CreateAllContactsForPropertyReportCallback(propertyId, propertyvalue));
+					}
+				}	
 			}		
 		});		
 		
@@ -316,11 +322,11 @@ public class ReportGenerator implements EntryPoint {
 	class CreateAllContactsForPropertyReportCallback 
 	implements AsyncCallback<AllContactsForPropertyReport> {
 
-		String searchedProperty = null;
+		int searchedPropertyId = 0;
 		String searchedValue = null;
 		
-		public CreateAllContactsForPropertyReportCallback(String p, String pv) {
-			this.searchedProperty = p;
+		public CreateAllContactsForPropertyReportCallback(int p, String pv) {
+			this.searchedPropertyId = p;
 			this.searchedValue = pv;
 		}
 		
@@ -357,7 +363,8 @@ public class ReportGenerator implements EntryPoint {
 		public void onSuccess(Vector<Property> result) {
 			if(! result.isEmpty()) {
 				for(Property element : result) {
-					propertiesDropDownList.addItem(element.getDescription());
+					String idAsString = String.valueOf(element.getId());
+					propertiesDropDownList.addItem(element.getDescription(), idAsString);
 				}
 				propertiesDropDownList.setVisibleItemCount(result.size());
 				

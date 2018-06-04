@@ -26,7 +26,7 @@ public interface ReportGeneratorAsync {
 	void createAllContactsForParticipantReport(int participantId, 
 			AsyncCallback<AllContactsForParticipantReport> callback);
 	
-	void createAllContactsForPropertyReport(String property, String propertyvalue,
+	void createAllContactsForPropertyReport(int propertyId, String propertyvalue,
 			AsyncCallback<AllContactsForPropertyReport> callback);
 	
 	void getAllProperties(AsyncCallback<Vector<Property>> callback);

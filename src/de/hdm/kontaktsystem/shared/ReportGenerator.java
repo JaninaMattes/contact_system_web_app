@@ -68,7 +68,7 @@ public interface ReportGenerator extends RemoteService {
 	   * @return AllContactsForPropertyReport
 	   * @throws IllegalArgumentException
 	   */
-	  public AllContactsForPropertyReport createAllContactsForPropertyReport(String property, String propertyvalue) 
+	  public AllContactsForPropertyReport createAllContactsForPropertyReport(int propertyId, String propertyvalue) 
 			  throws IllegalArgumentException;
 	  
 	  /**
