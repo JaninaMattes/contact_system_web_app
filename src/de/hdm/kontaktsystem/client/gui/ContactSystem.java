@@ -23,13 +23,15 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.TreeViewModel;
 
+import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
 /**
- *
+ * Die Klasse <code>ContactSystem</code>
+ *@author Janina
  */
 public class ContactSystem implements EntryPoint {
 
@@ -53,8 +55,7 @@ public class ContactSystem implements EntryPoint {
 	/**
 	 * Link zum Asynchronen Interface
 	 */
-	ContactSystemAdministrationAsync contactSystemVerwaltung = null;
-	
+	ContactSystemAdministrationAsync contactSystemVerwaltung = null;	
 
 	/** 
 	 * Instanziieren der GWT Widgets und Panels
@@ -121,16 +122,16 @@ public class ContactSystem implements EntryPoint {
 	
 	public void onModuleLoad() {
 		
-		loadTree(); // für Test
+		//loadTree(); // für Test
 		
-		this.loadContactSystem(); // für Test		
+		//this.loadContactSystem(); // für Test		
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
-		/*
-		LoginServiceAsync loginService = GWT.create(LoginService.class);
-		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+		
+		contactSystemVerwaltung = ClientsideSettings.getContactAdministration();
+		contactSystemVerwaltung.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
 				Window.alert("Login Error :(");
 			}
@@ -139,12 +140,14 @@ public class ContactSystem implements EntryPoint {
 			public void onSuccess(User result) {
 				userInfo = result;
 				if(userInfo.isLoggedIn()){
-					loadContactSystem();
+					loadTree(); // für Test
+					
+					loadContactSystem(); // für Test	
 				}else{
 					loadLogin();					
 				}
 			}
-		});	*/
+		});	
 		
 	}	
 	
@@ -161,7 +164,7 @@ public class ContactSystem implements EntryPoint {
 		loginPanel.add(new HTML("<br /> <br /> "));
 		loginPanel.add(signInLink);
 		loginPanel.add(new HTML("</center>"));
-		RootPanel.get("TopLevelFrame").add(loginPanel); //TODO: prüfen ob richtige HTML
+		RootPanel.get("Lists").add(loginPanel); //TODO: prüfen ob richtige HTML
 	}
 		
 	
@@ -171,9 +174,7 @@ public class ContactSystem implements EntryPoint {
 	 */
 	public void loadContactSystem() {
 
-		//Detail
-		final VerticalPanel detailsPanel = new VerticalPanel();
-			
+					
 		//Header
 		HorizontalPanel header = new HorizontalPanel();				
 				
@@ -185,16 +186,16 @@ public class ContactSystem implements EntryPoint {
 	    
 		//Formulare
 
-		final ContactForm cf = new ContactForm();
+		ContactForm cf = new ContactForm();
 		ContactListForm clf = new ContactListForm();
 		MyParticipationForm mpf = new MyParticipationForm();
 		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 		
 		//CellTree Model
 		ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
 		//Logo 
 		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
@@ -222,31 +223,39 @@ public class ContactSystem implements EntryPoint {
 		}
 		
 
-		/** Siehe aus BankingProjekt Hinweis: -> Set ids using widget.getElement().setId("idOfElement") */
-		reportLink.getElement().setId("Report-Button");
-		signOutLink.getElement().setId("Log-Out-Button");		
-		contactButton.getElement().setId("Menue-Button"); 	
-		contactListsButton.getElement().setId("Menue-Button"); 
-		myParticipationsButton.getElement().setId("Menue-Button"); 
-		receivedParticipationsButton.getElement().setId("Menue-Button"); 
-		searchButton.getElement().setId("Search-Button");  
+		/** 
+		 * Namen für CSS festlegen 
+		 */
+
+		reportLink.setStyleName("report-button");
+		signOutLink.setStyleName("log-out-button");
+		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
+		searchButton.setStyleName("search-button"); 
+		
+		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
+		contactButton.setStyleName("menue-button");
+		contactListsButton.setStyleName("menue-button");
+		myParticipationsButton.setStyleName("menue-button");
+		receivedParticipationsButton.setStyleName("menue-button");
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
 		 */
-		search.getElement().setId("Search-Text"); 		
+		search.setStyleName("search-textfeld");
+
 		/**
 		 * CSS Identifier für das Logo
 		 */
-		chainSymbolLogo.getElement().setId("Logo"); 
+		chainSymbolLogo.setStyleName("logo");
 		
 		/**
-		 * CSS Identifier für Elemente
+		 * CSS Identifier für die Elemente
 		 */		
-		header.setStyleName("Header");		
-		navigation.setStyleName("Navigation");
-		detailsPanel.setStyleName("Details");
-		trailer.setStyleName("Trailer");
+
+		header.setStyleName("header");		
+		navigation.setStyleName("navigation");
+		trailer.setStyleName("trailer");
+
 		
 		/**
 		 * Verlinkung der Listen und der dazugehörigen Formulare
@@ -273,15 +282,14 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
-				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
-				cellTree.setAnimationEnabled(true);		
+//				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
+//				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
+//				cellTree.setAnimationEnabled(true);		
 				// Für Test->
-				detailsPanel.add(cf);
-				RootPanel.get("Details").clear(); /*Alle Widgets von Parent entfernen*/
-				RootPanel.get("Details").add(detailsPanel);
+				log("COntactForm: "+cf.toString());
+				RootPanel.get("Details").remove(clf); /*Alle Child-Widgets von Parent entfernen*/
+				RootPanel.get("Details").add(cf);
 			}
-			
 		});
 	
 		
@@ -294,6 +302,7 @@ public class ContactSystem implements EntryPoint {
 				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
 				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
 				cellTree.setAnimationEnabled(true);				
+				log("Load ContactList");
 			}
 			
 		});
@@ -338,10 +347,10 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(receivedParticipationsButton); 
 
 	  	//Detail Panel
-	  	detailsPanel.add(cf);
-	  	detailsPanel.add(clf);
-	  	detailsPanel.add(mpf );
-	  	detailsPanel.add(rpf);
+//	  	detailsPanel.add(cf);
+//	  	detailsPanel.add(clf);
+//	  	detailsPanel.add(mpf );
+//	  	detailsPanel.add(rpf);
 	  	
 	  	//Contact Cell Tree
 		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
@@ -352,7 +361,7 @@ public class ContactSystem implements EntryPoint {
 	  	RootPanel.get("Header").add(header);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Lists").add(cellTree);
-	  	RootPanel.get("Details").add(detailsPanel);
+	  	RootPanel.get("Details").add(cf);
 	  	RootPanel.get("Trailer").add(trailer);
 		
 	}
@@ -400,6 +409,9 @@ public class ContactSystem implements EntryPoint {
 	}
 	
 	
+	native void log(String s)/*-{
+	console.log(s);
+	}-*/;
 			
 	
 

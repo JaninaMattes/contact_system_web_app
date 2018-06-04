@@ -107,6 +107,59 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	*/
 	//Login
 	
+public User login(String requestUri) {
+		
+		UserService userService = UserServiceFactory.getUserService();
+		com.google.appengine.api.users.User guser = userService.getCurrentUser();
+		User user = new User();
+		Contact own = new Contact();
+		PropertyValue name = new PropertyValue();
+		PropertyValue email = new PropertyValue();
+		System.out.println("Test: "+requestUri);
+		
+		if (guser != null) {			
+			
+			double id = Double.parseDouble(guser.getUserId());			
+			user.setGoogleID(id);
+			user.setGMail(guser.getEmail());
+			//user.setNickname(guser.getNickname()); // Not used
+			
+			user.setLoggedIn(true); // norm True
+			user.setLogoutUrl(userService.createLogoutURL(requestUri));
+			
+			if(UserMapper.userMapper().findById(id) == null){
+				System.out.println("Create new User: " + user);
+				
+			    own.setBo_Id(1); //updated in db
+				own.setOwner(user);
+				own.setName(name);
+				user = this.createUser(user, own);
+				
+				name.setContact(user.getUserContact());
+				email.setContact(user.getUserContact());
+				name.setProperty(this.getPropertyByID(1));
+				email.setProperty(this.getPropertyByID(6));
+				name.setValue(guser.getNickname()); //force initial name
+				email.setValue(user.getGMail());
+				this.createPropertyValue(name);
+				this.createPropertyValue(email);
+				
+			}else{
+				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
+			}
+			
+		} else {
+			
+			user.setLoggedIn(false);
+			user.setLoginUrl(userService.createLoginURL(requestUri));
+			
+		}
+			
+		
+		return user;
+		
+	}
+	
 	@Override
 	public User createUser(User u, Contact contact) {
 
@@ -153,8 +206,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	@Override
 	public User deleteUser(User user) {
-		this.deleteAllContactsByUser(user.getGoogleID());
-		this.deleteContactListByUserId(user.getGoogleID());
+		this.deleteAllContactsByUser();
+		this.deleteContactListByUserId();
 		return uMapper.delete(user);
 	}
 	
@@ -257,7 +310,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		contact.setName(this.getNameOfContact(contact));
 		contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
-		System.out.println(contact);
 		return contact;
 	}
 	
@@ -307,11 +359,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * @param User ID 
 	 */
 
-	public void deleteAllContactsByUser(double user_id) {
+	public void deleteAllContactsByUser() {
 
 		Vector<Contact> result = new Vector<Contact>();		
 		//Aufrufen aller Kontakte eines bestimmten Users
-		result = ContactMapper.contactMapper().findAllContactsByUser(user_id);
+		result = this.getAllContactsFromUser();
 		for (Contact c : result) {
 			deleteContact(c);
 		}
@@ -401,7 +453,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * @param User Id
 	 */
 
-	public void deleteContactListByUserId(Double userId) {
+	public void deleteContactListByUserId() {
 		
 		for(ContactList cl : this.getAllContactListsFromUser()){
 			this.deleteContactList(cl);
@@ -428,6 +480,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	*/
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
 		// Da Property immer fest zu einem Contact-Objekt gehört hat es auch den selben Besitzer
+		System.out.println("Eingenschaft: "+propertyValue.getValue());
 		propertyValue.setOwner(propertyValue.getContact().getOwner());
 		boMapper.insert(propertyValue);
 		return propValMapper.insert(propertyValue);
@@ -459,7 +512,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<PropertyValue> pvv = propValMapper.findBy(c);
 		
 		for(PropertyValue pv : pvv){
-			pv.setProperty(propMapper.findBy(pv.getProperty().getId()));
+			pv.setProperty(this.getPropertyByID(pv.getProperty().getId()));
 		}
 		return pvv;
 		
@@ -512,6 +565,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	public Vector<Property> getAllProperties(){
 		return propMapper.findAll();
+	}
+	
+	public Property getPropertyByID(int id){
+		return propMapper.findBy(id);
 	}
 
 	
