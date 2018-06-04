@@ -18,6 +18,8 @@ import de.hdm.kontaktsystem.shared.bo.User;
 @RemoteServiceRelativePath("editor")
 public interface ContactSystemAdministration extends RemoteService {
 	
+	
+	
 	public User login(String requestUri);
 	
 	public User getUserByID(double id);
@@ -52,6 +54,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList addContactToList(Contact c, ContactList cl);
 	
 	public Vector<Contact> searchContacts(String value);
+	
+	public Vector<PropertyValue> getPropertyValuesForContact(Contact c); 
 
 	/**
 	 * Create

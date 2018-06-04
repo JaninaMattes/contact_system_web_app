@@ -47,6 +47,8 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getNameOfContact(Contact c, AsyncCallback<PropertyValue> callback);
 	
+	public void getPropertyValuesForContact(Contact c, AsyncCallback<Vector<PropertyValue>> callback);
+	
 	/**
 	 * Methode für die Suchfunktion
 	 * @param value
