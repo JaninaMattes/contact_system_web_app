@@ -32,7 +32,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class ContactListForm extends VerticalPanel {
 	ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
 	ContactList contactListToDisplay = null;
-	ContactListsTreeViewModel cltvm = null;
+	ContactListTreeViewModel cltvm = null;
 
 	/**
 	 * Widgets mit variablen Inhalten.
@@ -318,7 +318,7 @@ public class ContactListForm extends VerticalPanel {
 	 * cstvm setter
 	 */
 
-	void setCltvm(ContactListsTreeViewModel cltvm) {
+	void setCltvm(ContactListTreeViewModel cltvm) {
 		this.cltvm = cltvm;
 	}
 
