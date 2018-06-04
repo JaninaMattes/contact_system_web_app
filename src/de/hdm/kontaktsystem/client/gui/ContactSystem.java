@@ -104,6 +104,27 @@ public class ContactSystem implements EntryPoint {
 	private Anchor signOutLink = new Anchor("Logout");
 	private Anchor reportLink = new Anchor("Report");				
 
+	//Header
+	private HorizontalPanel header = new HorizontalPanel();				
+			
+	//Navigator
+    private VerticalPanel navigation = new VerticalPanel();	
+ 
+    //Trailer
+    private HorizontalPanel trailer = new HorizontalPanel();
+    
+	//Formulare
+
+	private ContactForm cf = new ContactForm();
+	private ContactListForm clf = new ContactListForm();
+	private MyParticipationForm mpf = new MyParticipationForm();
+	private ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+	
+	//CellTree Model
+	private ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
+	private ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+	private MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+	private ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	
 	/**
 	 * EntryPoint
@@ -124,30 +145,30 @@ public class ContactSystem implements EntryPoint {
 		
 		//loadTree(); // für Test
 		
-		//this.loadContactSystem(); // für Test		
+		loadContactSystem(); // für Test		
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
 		
-		contactSystemVerwaltung = ClientsideSettings.getContactAdministration();
-		contactSystemVerwaltung.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
-			public void onFailure(Throwable error) {
-				Window.alert("Login Error :(");
-			}
-				
-			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
-			public void onSuccess(User result) {
-				userInfo = result;
-				if(userInfo.isLoggedIn()){
-					loadTree(); // für Test
-					
-					loadContactSystem(); // für Test	
-				}else{
-					loadLogin();					
-				}
-			}
-		});	
+//		contactSystemVerwaltung = ClientsideSettings.getContactAdministration();
+//		contactSystemVerwaltung.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+//			public void onFailure(Throwable error) {
+//				Window.alert("Login Error :(");
+//			}
+//				
+//			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+//			public void onSuccess(User result) {
+//				userInfo = result;
+//				if(userInfo.isLoggedIn()){
+//					loadTree(); // für Test
+//					
+//					loadContactSystem(); // für Test	
+//				}else{
+//					loadLogin();					
+//				}
+//			}
+//		});	
 		
 	}	
 	
@@ -173,29 +194,6 @@ public class ContactSystem implements EntryPoint {
 	 * ausgewählte Elemente werden als Formulare rechts im Bildschirm aufgerufen
 	 */
 	public void loadContactSystem() {
-
-					
-		//Header
-		HorizontalPanel header = new HorizontalPanel();				
-				
-		//Navigator
-	    VerticalPanel navigation = new VerticalPanel();	
-	 
-	    //Trailer
-	    HorizontalPanel trailer = new HorizontalPanel();
-	    
-		//Formulare
-
-		ContactForm cf = new ContactForm();
-		ContactListForm clf = new ContactListForm();
-		MyParticipationForm mpf = new MyParticipationForm();
-		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
-		
-		//CellTree Model
-		ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
 		//Logo 
 		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
@@ -277,8 +275,8 @@ public class ContactSystem implements EntryPoint {
 //				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
 //				cellTree.setAnimationEnabled(true);		
 				// Für Test->
-				log("COntactForm: "+cf.toString());
-				RootPanel.get("Details").remove(clf); /*Alle Child-Widgets von Parent entfernen*/
+				log("COntactForm: " + cf.toString());
+				RootPanel.get("Details").removeFromParent(); /*Alle Child-Widgets von Parent entfernen*/
 				RootPanel.get("Details").add(cf);
 			}
 		});
@@ -391,7 +389,7 @@ public class ContactSystem implements EntryPoint {
 			if (result != null) {
 				//Kontakt Objekt der Liste hinzufügen
 				for(Contact c : result) {
-				//ctvm.addContact(c); -> TODO
+				ctvm.addContact(c); 			   
 				}
 			} else {
 				Window.alert("Keine Kontakte gefunden :(");

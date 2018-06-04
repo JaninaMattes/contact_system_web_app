@@ -87,7 +87,7 @@ public class ContactForm extends VerticalPanel{
 	
 	public void  onLoad() {
 		super.onLoad();
-				
+		
 		/**
 		 * Panel für Anordnung der Button
 		 */
@@ -153,17 +153,16 @@ public class ContactForm extends VerticalPanel{
 		 * Anordnung der einzelnen Inhalte für ContactForm.
 		 * Abhandlung der Teilhaberschaft.
 		 */
-		Grid shareGrid = new Grid (4, 2);
-		shareGrid.setWidget(0, 0, labelShare);
-		
-		shareGrid.setWidget(1, 0, shareUser);
-		shareGrid.setWidget(1, 1, shareButton);
+		Grid shareGrid = new Grid (4, 3);
+		shareGrid.setWidget(0, 0, labelShare);		
+		shareGrid.setWidget(0, 1, shareUser);
+		shareGrid.setWidget(0, 2, shareButton);
 	
 		shareGrid.setWidget(1, 0, labelSharedWith);
 		shareGrid.setWidget(1, 1, sharedWithUser);
-		
-		shareGrid.setWidget(1, 0, labelReceiedFrom);
-		shareGrid.setWidget(1, 1, receivedFrom);		
+			
+		shareGrid.setWidget(2, 0, labelReceiedFrom);
+		shareGrid.setWidget(2, 1, receivedFrom);		
 		
 		/**
 		 * Anordnung der Buttons auf einem Button Panel
@@ -396,7 +395,7 @@ public class ContactForm extends VerticalPanel{
 		this.add(contactGrid);
 		this.add(shareGrid);
 		this.add(btnPanel);
-				
+					
 	}		
 		
 	  /**
@@ -476,12 +475,11 @@ public class ContactForm extends VerticalPanel{
 				//Befüllen der Listbox mit allen User Objekten aus dem System
        			Vector <User> u = new Vector<User>();
        			contactSystemAdmin.getAllUsers(new UserCallback(u));
-       		//	contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
-       			ListBox shareUser = new ListBox();
-       			ListBox sharedWithUser = new ListBox();
-       			TextBox receivedFrom = new TextBox();
-       			
-	
+//       			contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
+//       			ListBox shareUser = new ListBox();
+//       			ListBox sharedWithUser = new ListBox();
+//       			TextBox receivedFrom = new TextBox();
+       				
 			} else {
 				//Löschen eines Kontaktes
 			    checkBox2.setEnabled(false);
@@ -511,18 +509,21 @@ public class ContactForm extends VerticalPanel{
 			    text.setText(s);
 			  }
 		 
-		 /*Alle CheckBoxen anhacken, wenn diese mit der ausgewählten Person bereits geteilt wurden*/
+		 /**
+		  * Alle CheckBoxen anhacken, wenn diese mit der ausgewählten Person 
+		  * bereits geteilt wurden
+		  * 
+		  */
 		 private void setUpCheckBoxValues() {
 			 
 			 //User u = this.getSharedTo();
 			 
 			 Vector<PropertyValue> result = new Vector<PropertyValue>();
-			 for(PropertyValue p : result) {
-				 
+			 for(PropertyValue p : result) {				 
 			 
 				 /*Überprüfen des Status und der Gleichheit der Werte*/
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
+						 && contactToDisplay.isShared_status()) { //Name muss immer mitgeteilt werden
 					 checkBox1.setValue(true);
 				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
@@ -1035,8 +1036,7 @@ public class ContactForm extends VerticalPanel{
 			 * @author janina
 			 *
 			 */
-			private class ShareClickHandler implements ClickHandler {
-				
+			private class ShareClickHandler implements ClickHandler {				
 				Vector <PropertyValue> p = new Vector<PropertyValue>();
 
 				@Override
@@ -1048,8 +1048,7 @@ public class ContactForm extends VerticalPanel{
 						p = getAllUpdatedValues();
 						contactToDisplay.setPropertyValues(p);
 						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback(contactToDisplay));						
-				}
-				
+				}				
 			}
 			}
 			
