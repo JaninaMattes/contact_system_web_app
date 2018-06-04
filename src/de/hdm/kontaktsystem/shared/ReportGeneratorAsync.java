@@ -23,14 +23,16 @@ public interface ReportGeneratorAsync {
 	
 	void createAllContactsReport(AsyncCallback<AllContactsOfUserReport> callback);
 	
-	void createAllContactsForParticipantReport(String participant, 
+	void createAllContactsForParticipantReport(int participantId, 
 			AsyncCallback<AllContactsForParticipantReport> callback);
 	
-	void createAllContactsForPropertyReport(String property, String propertyvalue,
+	void createAllContactsForPropertyReport(int propertyId, String propertyvalue,
 			AsyncCallback<AllContactsForPropertyReport> callback);
 	
 	void getAllProperties(AsyncCallback<Vector<Property>> callback);
 
 	void setUserInfo(User userInfo, AsyncCallback<Void> callback);
+	
+	void getAllUsers(AsyncCallback<Vector<User>> callback);
 
 }

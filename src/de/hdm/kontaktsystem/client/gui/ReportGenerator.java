@@ -48,7 +48,7 @@ public class ReportGenerator implements EntryPoint {
 	
 	Label findByParticipantLabel = new Label("Nach Teilhaber filtern");
 	HorizontalPanel findByParticipantPanel = new HorizontalPanel();
-	TextBox findByParticipantText = new TextBox();
+	ListBox usersDropDownList = new ListBox();
 	Button findByParticipantButton = new Button("Suche"); //TODO: Symbol statt Text einfügen
 	
 	Label findByValueLabel = new Label("Nach Eigenschaftsausprägung filtern");
@@ -156,6 +156,11 @@ public class ReportGenerator implements EntryPoint {
 		});
 		
 		RootPanel.get("Navigator").add(showAllButton);
+		/*
+		 * Aufbau der DropDown-Liste für alle User
+		 */
+		reportGenerator.getAllUsers(new getAllUsersCallback());
+		
 		
 		/*
 		 * Funktionalität des FindByParticipant-Buttons
@@ -165,18 +170,20 @@ public class ReportGenerator implements EntryPoint {
 		findByParticipantButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				String participant = findByParticipantText.getValue();
-				if(participant.equals("")) {
-					Window.alert("Kein Teilhaber eingegeben!");
-					return;
+				if(usersDropDownList.getSelectedValue() == null) {
+					Window.alert("Kein Teilhaber ausgewählt!");
+				} else {
+					int participantId = Integer.parseInt(usersDropDownList.getSelectedValue());
+					reportGenerator.createAllContactsForParticipantReport(participantId,
+							new CreateAllContactsForParticipantReportCallback(participantId));
 				}
-				reportGenerator.createAllContactsForParticipantReport(participant,
-						new CreateAllContactsForParticipantReportCallback(participant));
+
+				
 			}
 		});
 		
 		RootPanel.get("Navigator").add(findByParticipantLabel);
-		findByParticipantPanel.add(findByParticipantText);
+		findByParticipantPanel.add(usersDropDownList);
 		findByParticipantPanel.add(findByParticipantButton);
 		RootPanel.get("Navigator").add(findByParticipantPanel);
 		
@@ -185,20 +192,32 @@ public class ReportGenerator implements EntryPoint {
 		 * CSS
 		 */
 		
+		//Labels in CSS
 		findByParticipantLabel.setStyleName("findbylabel");
-		findByParticipantText.setStyleName("findbytext");
-		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
-		findByParticipantButton.setStyleName("search-Button");
-
 		findByValueLabel.setStyleName("filtern");
-		findByValueText.setStyleName("findByText");
+		loginLabel.setStyleName("loginlabel");
+		
+		//Textbox in CSS
+
+		findByValueText.setStyleName("findByTextbox");
+		
+		//DropDownList in CSS
+		propertiesDropDownList.setStyleName("DropDownList");
+
+		//Button in CSS
+		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
+		findByParticipantButton.setStyleName("searchButton");
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
-		findByValueButton.setStyleName("search-button");
-		
-		
+		findByValueButton.setStyleName("searchButton");
+	
+		//Links
+		signInLink.setStyleName("link");
+		signOutLink.setStyleName("link");
+		reportLink.setStyleName("link");
+
 		
 		/*
-		 * Aufbau der DropDown-Liste
+		 * Aufbau der DropDown-Liste für Eigenschaften
 		 */
 		reportGenerator.getAllProperties(new GetAllPropertiesCallback());
 		
@@ -209,14 +228,20 @@ public class ReportGenerator implements EntryPoint {
 		findByValueButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				String property = propertiesDropDownList.getSelectedItemText();
+				int propertyId = Integer.parseInt(propertiesDropDownList.getSelectedValue());
 				String propertyvalue = findByValueText.getValue();
-				if(propertyvalue.equals("")) {
-					Window.alert("Keine Ausprägung eingegeben");
-					return;
-				}
-				reportGenerator.createAllContactsForPropertyReport(property, propertyvalue,
-						new CreateAllContactsForPropertyReportCallback(property, propertyvalue));
+				
+				if(usersDropDownList.getSelectedValue() == null) {
+					Window.alert("Keine Eigenschaft ausgewählt!");
+				} else {
+					if(propertyvalue.equals("")) {
+						Window.alert("Keine Ausprägung eingegeben");
+						return;
+					} else {
+						reportGenerator.createAllContactsForPropertyReport(propertyId, propertyvalue,
+								new CreateAllContactsForPropertyReportCallback(propertyId, propertyvalue));
+					}
+				}	
 			}		
 		});		
 		
@@ -276,10 +301,10 @@ public class ReportGenerator implements EntryPoint {
 	class CreateAllContactsForParticipantReportCallback 
 	implements AsyncCallback<AllContactsForParticipantReport> {
 		
-		String searchedParticipant = null;
+		int searchedParticipant = 0;
 		
-		public CreateAllContactsForParticipantReportCallback(String participant) {
-			this.searchedParticipant = participant;
+		public CreateAllContactsForParticipantReportCallback(int participantId) {
+			this.searchedParticipant = participantId;
 		}
 		
 		@Override
@@ -305,11 +330,11 @@ public class ReportGenerator implements EntryPoint {
 	class CreateAllContactsForPropertyReportCallback 
 	implements AsyncCallback<AllContactsForPropertyReport> {
 
-		String searchedProperty = null;
+		int searchedPropertyId = 0;
 		String searchedValue = null;
 		
-		public CreateAllContactsForPropertyReportCallback(String p, String pv) {
-			this.searchedProperty = p;
+		public CreateAllContactsForPropertyReportCallback(int p, String pv) {
+			this.searchedPropertyId = p;
 			this.searchedValue = pv;
 		}
 		
@@ -346,7 +371,8 @@ public class ReportGenerator implements EntryPoint {
 		public void onSuccess(Vector<Property> result) {
 			if(! result.isEmpty()) {
 				for(Property element : result) {
-					propertiesDropDownList.addItem(element.getDescription());
+					String idAsString = String.valueOf(element.getId());
+					propertiesDropDownList.addItem(element.getDescription(), idAsString);
 				}
 				propertiesDropDownList.setVisibleItemCount(result.size());
 				
@@ -354,6 +380,33 @@ public class ReportGenerator implements EntryPoint {
 				Window.alert("Keine Eigenschaften vorhanden!");
 			}			
 		}
+	}
+	
+	/**
+	 * Nested Class zum Befüllen der DropDown-Liste mit den Namen der aktuellen User
+	 * @author Sandra
+	 */
+	class getAllUsersCallback implements AsyncCallback<Vector<User>> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Abruf der User fehlgeschlagen!");			
+		}
+
+		@Override
+		public void onSuccess(Vector<User> result) {
+			if(result.isEmpty()) {
+				Window.alert("Keine User vorhanden!");				
+			} else {
+				for(User element : result) {
+					String name = element.getUserContact().getName().getValue();
+					String userIdAsString = String.valueOf(element.getGoogleID());
+					usersDropDownList.addItem(name, userIdAsString);
+				}
+				usersDropDownList.setVisibleItemCount(result.size());
+			}						
+		}
+		
 	}
 	
 }

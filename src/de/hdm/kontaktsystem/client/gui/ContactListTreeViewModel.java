@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
@@ -11,144 +12,168 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
-import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
-import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
-import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
-/**
- * 
- * @author Katalin
- *
- */
-public class ContactListTreeViewModel implements TreeViewModel {
+public class ContactListTreeViewModel implements TreeViewModel{
 
-	private ContactForm contactForm;
-	
-	private Contact selectedContact;
+	private ContactListForm contactListForm;
+	private ContactList selectedContactList;
 	
 	private ContactSystemAdministrationAsync contactSystemAdmin = null;
-	private ListDataProvider<Contact> contactDataProvider = null;
-	
-	
-	/**
-	 * Bildet Contacts auf eindeutige Zahlenobjekte ab, die als Schlüssel
-	 * für Baumknoten dienen. Dadurch werden im Selektionsmodell alle Objekte
-	 * mit derselben id selektiert, wenn eines davon selektiert wird.
-	 * 
-	*/
-	private class ContactKeyProvider implements ProvidesKey<Contact> {
-		
-		public Integer getKey(Contact c) {
-			if (c == null) {
-				return null;
-			}
-			return new Integer(Integer.parseInt(String.valueOf(c.getBoId())));
-		}
-	};
-	
-	private ContactKeyProvider cKeyProvider = null;
-	private SingleSelectionModel<Contact> selectionModel = null;
-	
-	/**
-	 * Nested Class für die Reaktion auf Selektionsereignisse. Als Folge einer
-	 * Baumknotenauswahl wird das Attribut "selectedContacts" gesetzt.
+	private ListDataProvider<ContactList> contactListDataProvider = null;
+	/*
+	 * In dieser Map werden die ListDataProviders für die Kontaktlisten
+	 * der im Kontaktlisten- und Kontatktbaum expandierten Kontaktknoten gespeichert.
 	 */
-	private class SelectionChangeEventHandler implements
-			SelectionChangeEvent.Handler {
-		@Override
+	private Map<Contact, ListDataProvider<ContactList>> contactListDataProviders = null;
+	
+	
+	/**
+	 * ContactList als eindeutige Zielobjekte, welche als Schluessel f�r Baumknoten
+	 * dienen. 
+	 * Dadurch werden im Selektmodell alle Objekte mit der gleichen ID ausgew�hlt,
+	 * wenn eines davon selectiert wird.
+	 * ... 
+	 */
+	
+	private class ContactListKeyProvider implements ProvidesKey<ContactList> {
+		
+	public Integer getKey(ContactList cl) {
+		if (cl == null) {
+			return null;
+		}
+		return new Integer(Integer.parseInt(String.valueOf(cl.getBoId()+ "" + cl.getName()))); //TODO: Noch mit Sandra besprechen.NACHBESSERN
+	}
+}
+	
+	private ContactListKeyProvider clKeyProvider = null;
+	private SingleSelectionModel<ContactList> selectionModel = null;
+	
+	/**
+	 * Nested Class
+	 * W�hlt die aktuell fokusierte Kontaktlist
+	 */
+	
+	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
+		
 		public void onSelectionChange(SelectionChangeEvent event) {
-			Contact selection = selectionModel.getSelectedObject();
-			setSelectedContact((Contact) selection);
+			ContactList selection = selectionModel.getSelectedObject();
+			setSelectedContactList((ContactList) selection);
 		}
+		
 	}
-		/*
-		 * Konstruktor
-		 * Hier werden die lokalen Variablen initialisiert
-		 */
-		public ContactListTreeViewModel() {
-			contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
-			cKeyProvider = new ContactKeyProvider();
-			selectionModel = new SingleSelectionModel<Contact>(cKeyProvider);
-			selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
-
-		}
-		void setContactForm(ContactForm cf) {
-			this.contactForm = cf;
-		}
-		Contact getSelectedContact() {
-			return selectedContact;
-		}
-		
-		private void setSelectedContact(Contact contact) {
-			// TODO Auto-generated method stub
-			selectedContact = contact;
-			contactForm.setSelected(contact);	
-		}
-		
 	
+	/**
+	 * In diesem Kontruktor wird fuer die Kontaktliste die
+	 * lokalen Variablen initialisiert.
+	 */
+	
+	public ContactListTreeViewModel() {
+		contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+		clKeyProvider = new ContactListKeyProvider();
+		selectionModel = new SingleSelectionModel<ContactList>(clKeyProvider);
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
+	}
+	
+	void setContactListForm(ContactListForm clf) {
+		this.contactListForm = clf;
+	}
+	
+	ContactList getSelectedContactList() {
+		return selectedContactList;
+	}
+	
+	void setSelectedContactList(ContactList cl) {
+		selectedContactList = cl;
+		contactListForm.setSelected(cl);
+	}
+	
+	void removeContactList(ContactList cl) {
+		contactListDataProvider.getList().remove(cl);
+	}
+	
+	
+	
+	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
-
-			if(value.equals("Root")) {				
-				//Erzeugt eine ListDataProvider fuer Contact-Daten
-				contactDataProvider = new ListDataProvider<Contact>();
-				contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
-					
-					public void onFailure(Throwable t) {
+		if(value.equals("Root")) {
+			
+			//Erzeugt eine ListDataProvider fuer ContactList Daten
+			contactListDataProvider = new ListDataProvider<ContactList>();
+			contactSystemAdmin.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
+				public void onFailure(Throwable t) {
 				}
-			
-				public void onSuccess(Vector<Contact> contacts) {
-					for (Contact c : contacts) {
-						contactDataProvider.getList().add(c);
-					}
+		
+			public void onSuccess(Vector<ContactList> contactLists) {
+				for (ContactList cl : contactLists) {
+					contactListDataProvider.getList().add(cl);
 				}
-			
-			});
-			
+			}
+		
+		});
+		return new DefaultNodeInfo<ContactList>(contactListDataProvider, new ContactListCell(), selectionModel, null);
 
-		}
-			return new DefaultNodeInfo<Contact>(contactDataProvider, new ContactCell(), selectionModel, null);
 	}
-	
 
+		return null;
+
+}
 	@Override
 	public boolean isLeaf(Object value) {
-		return false;
-	}
-
-	public void removeContact(Contact c) {
-		contactDataProvider.getList().remove(c);		
-	}	
-	 
-	/*
-	 * Kontakt hinzufügen.
-	 */
-	void addContact(Contact c) {
-		contactDataProvider.getList().add(c);
-		selectionModel.setSelected(c, true);
+		// value is type of ContactList
+		return (value instanceof ContactList);
 	}
 	
 	/*
-	 * Kontakt updaten.
-	 */	
-	public void updateContact(Contact c) {
-		List<Contact> contactList = contactDataProvider.getList();
-		int i = 0;
-		for (Contact con : contactList) {
-			if (con.getBoId() == c.getBoId()) {
-				contactList.set(i, c);
-				break;
-			} else {
-				i++;
+	 * Ein Kontakt in der Baumstruktur soll ersetzt werden durch einen Kontakt mit derselben id.
+	 * Dies ist sinnvoll, wenn sich die Eigenschaften eines Kontakts z.B. durch <em>editieren</em> 
+	 * geändert haben und in der Baumstruktur noch ein "veraltetes" Kontakt - Objekt enthalten ist.
+	 */
+	void updateContact(ContactList clist) {
+		contactSystemAdmin.getContactById(clist.getBoId(), new UpdateContactCallback(clist));
+	
+	}
+
+	private class UpdateContactCallback implements AsyncCallback<Contact> {
+
+		ContactList cl = null;
+
+		@SuppressWarnings("unused")
+		UpdateContactCallback (ContactList list) {
+			this.cl = list;
+		}
+
+		@Override
+		public void onFailure(Throwable t) {
+			Window.alert("Update nicht durchgeführt.");
+		}
+
+		@Override
+		public void onSuccess(Contact c) {
+			List<ContactList> contactList = contactListDataProviders.get(c)
+					.getList();
+			for (int i=0; i<contactList.size(); i++) {
+				if (cl.getBoId() == contactList.get(i).getBoId()) {
+					contactList.set(i, cl);
+					break;
+				}
 			}
 		}
-		contactDataProvider.refresh();
 	}
-	
-	
 
+	
+	/**
+	 * Verwendung der Methode um Contact Objekte, welche über die Sucheingabe
+	 * gefunden wurden im CellTree anzeigen zu können.
+	 * @param contact
+	 */
+	
+	public void addContact(Contact contact) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

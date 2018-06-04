@@ -32,7 +32,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class ContactListForm extends VerticalPanel {
 	ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
 	ContactList contactListToDisplay = null;
-	ContactListsTreeViewModel cltvm = null;
+	ContactListTreeViewModel cltvm = null;
 
 	/**
 	 * Widgets mit variablen Inhalten.
@@ -129,26 +129,30 @@ public class ContactListForm extends VerticalPanel {
 		 * CSS
 		 */
 		
+		//Textboxen in CSS
 		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
 		nameContactList.setStyleName("Textbox");
 		contactName.setStyleName("Textbox");
 		firstNameContact.setStyleName("Textbox");
 		lastNameContact.setStyleName("Textbox");
 		
-		contactListLabel.setStyleName("contactListlabel");
-		contactLabel.setStyleName("contactLabel");
+		//Labels in CSS
+		contactListLabel.setStyleName("contactlistlabel");
+		contactLabel.setStyleName("contactlabel");
 		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
 		firstNameLabel.setStyleName("namelabel");
 		lastNameLabel.setStyleName("namelabel");
 		
-	//delete + share + save-Buttons müssen jeweils auch gleich sein
+		labelShare.setStyleName("teilenlabel");
+		contactStatus.setStyleName("contactstatus");
+		
+		//Buttons in CSS
+		//delete + share + save-Buttons müssen jeweils auch gleich sein
 		deleteButton.setStyleName("deleteButton");
 		deleteClButton.setStyleName("deleteButton");
 		saveButton.setStyleName("saveButton");
 		shareButton.setStyleName("shareButton");
 		
-		labelShare.setStyleName("labelshare");
-		contactStatus.setStyleName("contactStatus");
 		
 	}
 	
@@ -314,7 +318,7 @@ public class ContactListForm extends VerticalPanel {
 	 * cstvm setter
 	 */
 
-	void setCltvm(ContactListsTreeViewModel cltvm) {
+	void setCltvm(ContactListTreeViewModel cltvm) {
 		this.cltvm = cltvm;
 	}
 

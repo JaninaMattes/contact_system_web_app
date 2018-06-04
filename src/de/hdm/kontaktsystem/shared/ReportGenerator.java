@@ -56,7 +56,7 @@ public interface ReportGenerator extends RemoteService {
 	   * @throws IllegalArgumentException
 	   * @see AllContactsForParticipantReport
 	   */
-	  public AllContactsForParticipantReport createAllContactsForParticipantReport(String participant) 
+	  public AllContactsForParticipantReport createAllContactsForParticipantReport(int participantId) 
 			  throws IllegalArgumentException;
 	  
 	  /**
@@ -68,7 +68,7 @@ public interface ReportGenerator extends RemoteService {
 	   * @return AllContactsForPropertyReport
 	   * @throws IllegalArgumentException
 	   */
-	  public AllContactsForPropertyReport createAllContactsForPropertyReport(String property, String propertyvalue) 
+	  public AllContactsForPropertyReport createAllContactsForPropertyReport(int propertyId, String propertyvalue) 
 			  throws IllegalArgumentException;
 	  
 	  /**
@@ -80,8 +80,13 @@ public interface ReportGenerator extends RemoteService {
 	  public Vector<Property> getAllProperties() throws IllegalArgumentException;
 	  
 	  
-	  
-	  
+	  /**
+	   * Abrufen aller aktuell vorhandenen User
+	   * 
+	   * @return Vector mit allen Usern
+	   * @throws IllegalArgumentException
+	   */
+	  public Vector<User> getAllUsers() throws IllegalArgumentException;
 	  
 
 }

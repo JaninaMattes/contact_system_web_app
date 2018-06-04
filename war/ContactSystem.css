@@ -66,41 +66,34 @@ h1 {
     align-content: right;
 }
 
-#Menue-Button:hover {
-    background-color: #0c101a; 
-    color: white;
-}
+/*Buttons*/
 
-#Menue-Button{
-	height: 30px;
-    width: 240px;
-    
-    font-family: "Arial", Arial, sans-serif;
-	border: solid 1px white; 
-	background-color: #0c101a;
-    border: none;
-    border-radius: 0;
-    color: #0c101a;
-    padding: 0px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-	
-}
-
-#Search-Button{
+#shareButton{
 	height: 30px;
     width: 53px;
+    font-size: 16px;
+    border: none;
+    font-family: "Arial", Arial, sans-serif;
+	background-color: #0080ff;
+	color: white;
+    padding: 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
     
+}
+
+#menue-button{
+	height: 30px;
+    width: 240px;
     font-family: "Arial", Arial, sans-serif;
 	border: solid 1px white; 
-	background-color: #506bae;
+	background-color: #727272;
     border: none;
     border-radius: 0;
-    color: black;
+    color: #ffffff;
     padding: 0px;
     text-align: center;
     text-decoration: none;
@@ -111,16 +104,12 @@ h1 {
 	
 }
 
-#Save-Button{
+#searchButton{
 	height: 30px;
-    width: 50px;
-    
-    font-family: "Arial", Arial, sans-serif;    
-	border: solid 1px white; 
-	background-color: #8598c7;
+    width: 53px;
+    font-family: "Arial", Arial, sans-serif;
+	background-color: #FFFFFF;
     border: none;
-    border-radius: 0;
-    color: white;
     padding: 0px;
     text-align: center;
     text-decoration: none;
@@ -131,16 +120,30 @@ h1 {
 	
 }
 
-#Delete-Button{
+#saveButton{
+	height: 30px;
+    width: 50px; 
+    font-family: "Arial", Arial, sans-serif;     
+	background-color: #3cbb35;
+	color: white;
+    border: none;
+    padding: 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+	
+}
+
+#deleteButton{
 	height: 30px;
     width: 50px;
-
-    font-family: "Arial", Arial, sans-serif;    
-	border: solid 1px white; 
-	background-color: #480607 ;
+    font-family: "Arial", Arial, sans-serif;     
+	background-color: #d32016;
+	color: white;
     border: none;
-    border-radius: 0;
-    color: white;
     padding: 0px;
     text-align: center;
     text-decoration: none;
@@ -150,16 +153,15 @@ h1 {
     cursor: pointer;	
 }
 
-#Log-Out-Button{
+#log-out-button{
 	height: 30px;
     width: 50px;
-	
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
-	border: solid 1px white;
     border: none;
     border-radius: 0;
-    color: white;
+    color: #727272;
+    background-color: black;
     padding: 25px 25px 25px 30px;
     text-align: center;
     text-decoration: none;
@@ -170,16 +172,16 @@ h1 {
     align: right;
 }
 
-#Report-Button{
+#report-button{
 	height: 30px;
     width: 50px;
-
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
 	border: solid 1px white; 
     border: none;
     border-radius: 0;
     color: white;
+    background-color: #727272;
     /*padding: 25px 25px 25px 600px;*/
     text-align: center;
     text-decoration: none;
@@ -190,13 +192,77 @@ h1 {
     align-content: right;
 }
 
-#Logo{
+/* Das Logo */
+
+#logo{
     height: 100px;
     width: 200px;
     margin: 4px 2px;
     padding: 2px;
     align-content: left;
 }
+
+/* DropDown-Liste */
+/*TODO: weiter ausschreiben, wenn ReportGenerator fertig */
+
+#DropDownList{
+	
+}
+
+/* Textboxen */
+/*TODO: weiter ausschreiben, wenn ReportGenerator fertig */
+
+#TextBox{
+	
+}
+
+#findByTextBox{
+	
+}
+
+#search-Textfeld{
+	
+}
+
+/* Labels */
+
+#namelabel{
+	
+}
+
+#eigenschaftlabel{
+	
+}
+
+#teilenlabel{
+	
+}
+
+#contactlabel{
+	
+}
+
+#contactlistlabel{
+	
+}
+
+#contactstatus{
+	
+}
+
+#findbylabel{
+	
+}
+
+#filtern{
+	
+}
+
+#loginlabel{
+	
+}]
+
+/*Div´s*/
 
 div#TopLevelFrame {
 	width: 100%;
@@ -207,17 +273,18 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-	background: linear-gradient(to bottom right, #0c101a, #506bae); /*Color gradien siehe W3School*/
+	/*background: linear-gradient(to bottom right, #0c101a, #506bae); /*Color gradien siehe W3School*/
 	text-align: center;
+	background-color: #000080;
 }
 
 div#Navigator {	
-	background-color: #0c101a;
+	background-color: #000080;
 	align-content: left;
 }
 
 div#Lists {	
-	background: #fefeff;
+	background: #d9d9d9;
 	align-content: center;
 }
 
@@ -238,5 +305,5 @@ div#Trailer {
 	
 	text-align: center;	
 	align-content: center;
-	background: #0c101a;
+	background-color: #000080;
 }

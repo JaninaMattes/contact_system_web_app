@@ -103,7 +103,7 @@ public class ContactSystem implements EntryPoint {
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
 	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
-	private Anchor reportLink = new Anchor("Report");				
+	private Anchor reportLink = new Anchor("Report");		
 
 	//Header
 	private HorizontalPanel header = new HorizontalPanel();				
@@ -123,7 +123,7 @@ public class ContactSystem implements EntryPoint {
 	
 	//CellTree Model
 	ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-	ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+	//ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
 	MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
 	ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	
@@ -133,7 +133,9 @@ public class ContactSystem implements EntryPoint {
 	
 	public void loadTree() {
 		ScrollPanel sp = new ScrollPanel();
-		TreeViewModel tvm = new TreeViewModelTest();
+		TreeViewModelTest tvm = new TreeViewModelTest();
+		tvm.setClForm(clf);
+		tvm.setCForm(cf);
 		CellTree ct = new CellTree(tvm, "Liste");
 		sp.setHeight("80vh");
 		sp.add(ct);
@@ -144,13 +146,14 @@ public class ContactSystem implements EntryPoint {
 	
 	public void onModuleLoad() {
 		
-		//loadTree(); // für Test
-		
+		loadTree(); // für Test
 		loadContactSystem(); // für Test		
+
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
+
 		
 //		contactSystemVerwaltung = ClientsideSettings.getContactAdministration();
 //		contactSystemVerwaltung.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
@@ -195,7 +198,16 @@ public class ContactSystem implements EntryPoint {
 	 * ausgewählte Elemente werden als Formulare rechts im Bildschirm aufgerufen
 	 */
 	public void loadContactSystem() {
-	  				
+					
+		//Header
+		HorizontalPanel header = new HorizontalPanel();				
+				
+		//Navigator
+	    VerticalPanel navigation = new VerticalPanel();	
+	 
+	    //Trailer
+	    HorizontalPanel trailer = new HorizontalPanel();
+
 		//Logo 
 		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
 				    
@@ -225,7 +237,6 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
-
 		reportLink.setStyleName("report-button");
 		signOutLink.setStyleName("log-out-button");
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
@@ -259,6 +270,7 @@ public class ContactSystem implements EntryPoint {
 		/**
 		 * Verlinkung der Listen und der dazugehörigen Formulare
 		 */
+		/**
 		ctvm.setContactForm(cf);
 		cf.setCtvm(ctvm);
 		
@@ -268,7 +280,7 @@ public class ContactSystem implements EntryPoint {
 		
 		mptvm.setParticipationForm(mpf);
 		mpf.setMptvm(mptvm);
-				
+		*/	
 		/**
 		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
 		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird oberhalb des 
@@ -298,9 +310,9 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
-				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
-				cellTree.setAnimationEnabled(true);				
+			//	CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
+			//	CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
+			//	cellTree.setAnimationEnabled(true);				
 				log("Load ContactList");
 			}
 			
@@ -313,9 +325,9 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
-				CellTree.Resources myParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(mptvm, "Root", myParticipationTreeRecource);
-				cellTree.setAnimationEnabled(true);				
+			//	CellTree.Resources myParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
+			//	CellTree cellTree = new CellTree(mptvm, "Root", myParticipationTreeRecource);
+			//	cellTree.setAnimationEnabled(true);				
 			}
 		});
 	
@@ -327,9 +339,9 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
-				CellTree.Resources receivedParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(rptvm, "Root", receivedParticipationTreeRecource);
-				cellTree.setAnimationEnabled(true);				
+			//	CellTree.Resources receivedParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
+			//	CellTree cellTree = new CellTree(rptvm, "Root", receivedParticipationTreeRecource);
+			//	cellTree.setAnimationEnabled(true);				
 			}
 		});
 		
@@ -345,26 +357,23 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
 
-	  	//Detail Panel
-//	  	detailsPanel.add(cf);
-//	  	detailsPanel.add(clf);
-//	  	detailsPanel.add(mpf );
-//	  	detailsPanel.add(rpf);
-	  	
-	  	//Contact Cell Tree
-		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-		CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-		cellTree.setAnimationEnabled(true);
+//	    CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
+//	    CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
+//	    cellTree.setAnimationEnabled(true);
 		
 	  	RootPanel.get("Header").add(header);
 	  	RootPanel.get("Navigator").add(navigation);
-	  	RootPanel.get("Lists").add(cellTree);
+//	    RootPanel.get("Lists").add(cellTree);
 	  	RootPanel.get("Details").add(cf); //Für Tests
 	  	RootPanel.get("Trailer").add(trailer);
 		
 	}
 	
-	//Clickhandler für Suchfeld Button 
+	/**
+	 * Clickhandler für Search-Button.
+	 * @author janina
+	 *
+	 */
 	private class SearchClickHandler implements ClickHandler {
 		
 		@Override
@@ -380,6 +389,11 @@ public class ContactSystem implements EntryPoint {
 		}
 	}
 
+	/**
+	 * SearchCallback
+	 * @author janin
+	 *
+	 */
 	private class SearchCallback implements AsyncCallback<Vector<Contact>> {
 
 		String search = null;
@@ -396,7 +410,6 @@ public class ContactSystem implements EntryPoint {
 		@Override
 		public void onSuccess(Vector<Contact> result) {
 			if (result != null) {
-				//Kontakt Objekt der Liste hinzufügen
 				for(Contact c : result) {
 				ctvm.addContact(c); 			   
 				}

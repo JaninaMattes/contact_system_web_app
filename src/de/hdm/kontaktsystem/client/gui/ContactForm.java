@@ -30,8 +30,8 @@ public class ContactForm extends VerticalPanel{
 	
 	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact contactToDisplay = null;
-	ContactListTreeViewModel ctvm = null;
-	ContactListsTreeViewModel cltvm = null; /*Kann von beiden TreeViewModeln aufgerufen werden*/
+	ContactTreeViewModel ctvm = null;
+	ContactListTreeViewModel cltvm = null; /*Kann von beiden TreeViewModeln aufgerufen werden*/
 	MyParticipationsTreeViewModel mptvm = null;
 	ReceivedParticipationTreeViewModel rptvm = null;
 	
@@ -139,8 +139,11 @@ public class ContactForm extends VerticalPanel{
 		/*TextBox kann nur Informationen darstellen, verhindert aber deren Bearbeitung*/
 		receivedFrom.setEnabled(false);
 		
-		/*id für CSS*/
+		/**
+		 * id für CSS
+		 */
 		
+		//Buttons in CSS
 		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
 		deleteButton.setStyleName("deleteButton");
 		deleteButton.addClickHandler(new DeleteClickHandler());
@@ -152,10 +155,9 @@ public class ContactForm extends VerticalPanel{
 		shareButton.addClickHandler(new ShareClickHandler());
 		
 		//Labels in CSS
-		
 		label.setStyleName("contactlabel");
 		labelName.setStyleName("namelabel");
-		labelNickName.setStyleName("nicknamelabel");
+		labelNickName.setStyleName("namelabel");
 		
 		//Hinzufügbare Eigenschaften gleicher StyleName
 		labelFirma.setStyleName("eigenschaftlabel");
@@ -164,11 +166,11 @@ public class ContactForm extends VerticalPanel{
 		labelGeburtsdatum.setStyleName("eigenschaftlabel");
 		labelAdresse.setStyleName("eigenschaftlabel");
 
-		isShared.setStyleName("geteiltlabel");
-		labelShare.setStyleName("teilenmitlabel");
-		labelSharedWith.setStyleName("geteiltmitlabel");
-		labelReceiedFrom.setStyleName("geteiltvonLabel");
-		contactStatus.setStyleName("contactStatusLabel");
+		isShared.setStyleName("teilenlabel");
+		labelShare.setStyleName("teilenlabel");
+		labelSharedWith.setStyleName("teilenlabel");
+		labelReceiedFrom.setStyleName("teilenlabel");
+		contactStatus.setStyleName("contactstatus");
 		
 		//Textboxen in CSS
 		//bekommen alle den gleichen StyleName (wie in ContactLIstForm.java)
@@ -614,14 +616,14 @@ public class ContactForm extends VerticalPanel{
 			/*
 			 *  ctvm setter
 			 */			
-			void setCtvm(ContactListTreeViewModel ctvm) {
+			void setCtvm(ContactTreeViewModel ctvm) {
 				this.ctvm = ctvm;
 			}
 			
 			/*
 			 * cltvm setter
 			 */
-			void setCltvm(ContactListsTreeViewModel cltvm) {
+			void setCltvm(ContactListTreeViewModel cltvm) {
 				this.cltvm = cltvm;
 			}
 			
