@@ -29,7 +29,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 
 /**
- * Die Klasse ContactSystem
+ * Die Klasse <code>ContactSystem</code>
  *@author Janina
  */
 public class ContactSystem implements EntryPoint {
@@ -171,9 +171,7 @@ public class ContactSystem implements EntryPoint {
 	 */
 	public void loadContactSystem() {
 
-		//Detail
-		final VerticalPanel detailsPanel = new VerticalPanel();
-			
+					
 		//Header
 		HorizontalPanel header = new HorizontalPanel();				
 				
@@ -185,16 +183,16 @@ public class ContactSystem implements EntryPoint {
 	    
 		//Formulare
 
-		final ContactForm cf = new ContactForm();
+		ContactForm cf = new ContactForm();
 		ContactListForm clf = new ContactListForm();
 		MyParticipationForm mpf = new MyParticipationForm();
 		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 		
 		//CellTree Model
 		ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
 		//Logo 
 		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
@@ -245,7 +243,6 @@ public class ContactSystem implements EntryPoint {
 		 */		
 		header.setStyleName("Header");		
 		navigation.setStyleName("Navigation");
-		detailsPanel.setStyleName("Details");
 		trailer.setStyleName("Trailer");
 		
 		/**
@@ -273,13 +270,13 @@ public class ContactSystem implements EntryPoint {
 				/**
 				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
 				 */
-				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
-				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
-				cellTree.setAnimationEnabled(true);		
+//				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
+//				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
+//				cellTree.setAnimationEnabled(true);		
 				// Für Test->
-				detailsPanel.add(cf);
-				RootPanel.get("Details").clear(); /*Alle Widgets von Parent entfernen*/
-				RootPanel.get("Details").add(detailsPanel);
+				
+				RootPanel.get("Details").remove(clf); /*Alle Child-Widgets von Parent entfernen*/
+				RootPanel.get("Details").add(cf);
 			}
 			
 		});
@@ -338,10 +335,10 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(receivedParticipationsButton); 
 
 	  	//Detail Panel
-	  	detailsPanel.add(cf);
-	  	detailsPanel.add(clf);
-	  	detailsPanel.add(mpf );
-	  	detailsPanel.add(rpf);
+//	  	detailsPanel.add(cf);
+//	  	detailsPanel.add(clf);
+//	  	detailsPanel.add(mpf );
+//	  	detailsPanel.add(rpf);
 	  	
 	  	//Contact Cell Tree
 		CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
@@ -352,7 +349,7 @@ public class ContactSystem implements EntryPoint {
 	  	RootPanel.get("Header").add(header);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Lists").add(cellTree);
-	  	RootPanel.get("Details").add(detailsPanel);
+	  	RootPanel.get("Details").add(cf);
 	  	RootPanel.get("Trailer").add(trailer);
 		
 	}
