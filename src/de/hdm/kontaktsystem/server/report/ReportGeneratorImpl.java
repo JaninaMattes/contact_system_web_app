@@ -8,6 +8,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
 import de.hdm.kontaktsystem.shared.ReportGenerator;
+import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.User;
 import de.hdm.kontaktsystem.shared.report.AllContactsForParticipantReport;
@@ -92,6 +93,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 	@Override
 	public AllContactsOfUserReport createAllContactsReport() throws IllegalArgumentException {
+		Vector<Contact> allContacts = administration.getAllContactsFromUser();
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -113,7 +115,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	@Override
 	public Vector<Property> getAllProperties() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return 
+		return administration.getAllProperties();
 	}
 	
 }

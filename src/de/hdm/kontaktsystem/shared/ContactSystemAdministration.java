@@ -50,6 +50,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList addContactToList(Contact c, ContactList cl);
 	
 	public Vector<Contact> searchContacts(String value);
+	
+	public Vector<Property> getAllProperties();
 
 	/**
 	 * Create
