@@ -139,8 +139,11 @@ public class ContactForm extends VerticalPanel{
 		/*TextBox kann nur Informationen darstellen, verhindert aber deren Bearbeitung*/
 		receivedFrom.setEnabled(false);
 		
-		/*id für CSS*/
+		/**
+		 * id für CSS
+		 */
 		
+		//Buttons in CSS
 		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
 		deleteButton.setStyleName("deleteButton");
 		deleteButton.addClickHandler(new DeleteClickHandler());
@@ -152,7 +155,6 @@ public class ContactForm extends VerticalPanel{
 		shareButton.addClickHandler(new ShareClickHandler());
 		
 		//Labels in CSS
-		
 		label.setStyleName("contactlabel");
 		labelName.setStyleName("namelabel");
 		labelNickName.setStyleName("nicknamelabel");
