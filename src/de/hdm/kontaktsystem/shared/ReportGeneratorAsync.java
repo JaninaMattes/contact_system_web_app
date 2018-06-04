@@ -32,5 +32,7 @@ public interface ReportGeneratorAsync {
 	void getAllProperties(AsyncCallback<Vector<Property>> callback);
 
 	void setUserInfo(User userInfo, AsyncCallback<Void> callback);
+	
+	void getAllUsers(AsyncCallback<Vector<User>> callback);
 
 }

@@ -80,8 +80,13 @@ public interface ReportGenerator extends RemoteService {
 	  public Vector<Property> getAllProperties() throws IllegalArgumentException;
 	  
 	  
-	  
-	  
+	  /**
+	   * Abrufen aller aktuell vorhandenen User
+	   * 
+	   * @return Vector mit allen Usern
+	   * @throws IllegalArgumentException
+	   */
+	  public Vector<User> getAllUsers() throws IllegalArgumentException;
 	  
 
 }

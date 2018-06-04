@@ -156,6 +156,11 @@ public class ReportGenerator implements EntryPoint {
 		});
 		
 		RootPanel.get("Navigator").add(showAllButton);
+		/*
+		 * Aufbau der DropDown-Liste für alle User
+		 */
+		reportGenerator.getAllUsers(new getAllUsersCallback());
+		
 		
 		/*
 		 * Funktionalität des FindByParticipant-Buttons
@@ -178,7 +183,7 @@ public class ReportGenerator implements EntryPoint {
 		});
 		
 		RootPanel.get("Navigator").add(findByParticipantLabel);
-		findByParticipantPanel.add(propertiesDropDownList);
+		findByParticipantPanel.add(usersDropDownList);
 		findByParticipantPanel.add(findByParticipantButton);
 		RootPanel.get("Navigator").add(findByParticipantPanel);
 		
@@ -192,7 +197,7 @@ public class ReportGenerator implements EntryPoint {
 		findByValueLabel.setStyleName("filtern");
 		
 		//Textbox in CSS
-		propertiesDropDownList.setStyleName("findbytext"); //TODO: anpassen (jetzt DropDown)
+		usersDropDownList.setStyleName("findbytext"); //TODO: anpassen (jetzt DropDown)
 		findByValueText.setStyleName("findByText");
 		
 		//Button in CSS
@@ -204,7 +209,7 @@ public class ReportGenerator implements EntryPoint {
 
 		
 		/*
-		 * Aufbau der DropDown-Liste
+		 * Aufbau der DropDown-Liste für Eigenschaften
 		 */
 		reportGenerator.getAllProperties(new GetAllPropertiesCallback());
 		

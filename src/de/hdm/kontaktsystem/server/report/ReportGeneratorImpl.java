@@ -304,5 +304,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	public Vector<Property> getAllProperties() throws IllegalArgumentException {
 		return administration.getAllProperties();
 	}
+
+	@Override
+	public Vector<User> getAllUsers() throws IllegalArgumentException {
+		return administration.getAllUsers();
+	}
 	
 }
