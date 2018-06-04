@@ -37,7 +37,6 @@ import de.hdm.kontaktsystem.shared.report.HTMLReportWriter;
  * @author Sandra
  *
  */
-//TODO: Drop-Down-List für Users, Rückgabe: User-ID
 public class ReportGenerator implements EntryPoint {
 
 	ReportGeneratorAsync reportGenerator = null;
@@ -188,17 +187,21 @@ public class ReportGenerator implements EntryPoint {
 		 * CSS
 		 */
 		
+		//Labels in CSS
 		findByParticipantLabel.setStyleName("findbylabel");
+		findByValueLabel.setStyleName("filtern");
+		
+		//Textbox in CSS
 		propertiesDropDownList.setStyleName("findbytext"); //TODO: anpassen (jetzt DropDown)
+		findByValueText.setStyleName("findByText");
+		
+		//Button in CSS
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
 		findByParticipantButton.setStyleName("search-Button");
-
-		findByValueLabel.setStyleName("filtern");
-		findByValueText.setStyleName("findByText");
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
 		findByValueButton.setStyleName("search-button");
-		
-		
+	
+
 		
 		/*
 		 * Aufbau der DropDown-Liste
