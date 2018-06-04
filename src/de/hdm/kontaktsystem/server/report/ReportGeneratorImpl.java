@@ -296,7 +296,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	public AllContactsForPropertyReport createAllContactsForPropertyReport(int propertyId, String propertyvalue)
 			throws IllegalArgumentException {
 		//Property-Objekt zu Id suchen
-		Property searchedProperty = null; //Methode in ContactSysAdmin hinzufügen: findPropertyById
+		Property searchedProperty = administration.getPropertyByID(propertyId);
 		
 		//Erstellen des noch leeren Reports
 		AllContactsForPropertyReport report = new AllContactsForPropertyReport();
@@ -312,15 +312,49 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Datum der Erstellung
 		report.setCreated(new Date()); //TODO: aktuelles Datum setzen
 		
-		Vector<PropertyValue> allPVforString = administration.getP
+		//Alle PropertyValues, die dem Suchtext entsprechen, ermitteln
+		Vector<PropertyValue> allPVforString = administration.searchPropertyValues(propertyvalue);
+		Vector<PropertyValue> allPropertyValuesForProperty = new Vector<PropertyValue>();
+		//Alle PropertyValues, denen die richtige Property zugeordnet ist, ermitteln
+		if(allPVforString.isEmpty()) {
+			//TODO: Was keine passenden PropertyValues vorhanden
+		} else {
+			for(PropertyValue propertyValue : allPVforString) {
+				if(propertyValue.getProperty().equals(searchedProperty)) {
+					allPropertyValuesForProperty.add(propertyValue);
+				}
+			}
+		}
 		
+		//Alle Kontakte für die gefundenen Property-Values finden
+		Vector<Contact> allContacts = new Vector<Contact>();
+		if(allPropertyValuesForProperty.isEmpty()) {
+			//TODO: Was keine passenden PropertyValues vorhanden
+		} else {
+			for(PropertyValue propertyValue : allPropertyValuesForProperty) {
+				Contact c = administration.getContactByPropertyValue(propertyValue);
+				allContacts.add(c);
+			}
+		}
 		
-		//Hinzufügen der einzelnen Kontakt-Elemente
-		Vector<Contact> allContacts = administration.getAllContactsFromUser();
+		//Gefundene Kontakte nach dem Eigentümer (currentUser) filtern
+		Vector<Contact> foundContacts = new Vector<Contact>();
 		if(allContacts.isEmpty()) {
+			//TODO
+		} else {
+			for(Contact contact : allContacts) {
+				if(contact.getOwner().equals(this.getCurrentUser())) {
+					foundContacts.add(contact);
+				}
+			}
+		}
+				
+		//Hinzufügen der einzelnen Kontakt-Elemente
+		
+		if(foundContacts.isEmpty()) {
 			//TODO: Fehlerbehandlung
 		}else {
-			for(Contact singleContact : allContacts) {
+			for(Contact singleContact : foundContacts) {
 				this.addSingleContact(singleContact, report);
 			}
 		}
