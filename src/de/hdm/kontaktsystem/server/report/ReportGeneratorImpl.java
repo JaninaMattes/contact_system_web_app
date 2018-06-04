@@ -2,12 +2,14 @@ package de.hdm.kontaktsystem.server.report;
 
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
 import de.hdm.kontaktsystem.shared.ReportGenerator;
 import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.User;
 import de.hdm.kontaktsystem.shared.report.AllContactsForParticipantReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsForPropertyReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
@@ -27,6 +29,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * für die Koexistenz von Datenobjekten (vgl. bo-Package) bietet.
 	 */
 	private ContactSystemAdministration administration = null;
+	
+	private User currentUser = null;
 	
 	/**
 	 * No-Argument-Konstruktor. Dieser wird bei der Client-seitigen Erzeugung mittels
@@ -53,6 +57,20 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		this.setAdministration(systemImpl);
 	}
 	
+	/**
+	 * Zurückgeben des aktuellen Users
+	 */
+	public User getUserInfo() {
+		return this.currentUser;
+	}
+	
+	/**
+	 * Setzen des aktuell eingeloggten Users
+	 */
+	public void setUserInfo(User userInfo) {
+		this.currentUser = userInfo;
+	}
+
 	
 	/**
 	 * Zurückgeben der zugehörigen ContactSystemAdministration
@@ -95,7 +113,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	@Override
 	public Vector<Property> getAllProperties() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return null;
+		return 
 	}
 	
 }

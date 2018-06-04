@@ -96,6 +96,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	public double getCurrentUser(){
+		// Test
 		return 170d;//Double.parseDouble(userService.getCurrentUser().getUserId());
 	}
 	
@@ -179,8 +180,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	// Nur für Report!
 	public Vector<Contact> getAllContactsFromUser(){
-		return cMapper.findAllContactsByUser(this.getCurrentUser());
-		
+		return cMapper.findAllContactsByUser(this.getCurrentUser());		
 	}
 	
 	// Nur Intern Verwendet
@@ -220,9 +220,21 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 			contact.setName(this.getNameOfContact(contact));
 		}
-		return cv;
-		
+		return cv;				
 	}
+	
+	
+	public Vector<Contact> getContactsForUser(User user) {
+		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
+		for(Contact contact : cv){
+			contact.setOwner(user);
+			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
+			contact.setName(this.getNameOfContact(contact));
+		}
+		return cv;		
+	}
+	
+	
 	@Override
 	public Vector<Contact> getContactsByStatus(Boolean status) {
 		Vector<Contact> cv = cMapper.findContactByStatus(this.getCurrentUser(), status);
@@ -469,7 +481,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return propValMapper.findByKey(id);
 	}
 	
-	
 
 
 	/**
@@ -502,7 +513,18 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		
 	}
 	
+	
+	/*
+	* ***************************************************************************
+	* ABSCHNITT, Property
+	* ***************************************************************************
+	*/	
+	
+	public Vector<Property> getAllProperties(){
+		return propMapper.findAll();
+	}
 
+	
 	/*
 	* ***************************************************************************
 	* ABSCHNITT, Participation

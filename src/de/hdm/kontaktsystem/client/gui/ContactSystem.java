@@ -172,7 +172,7 @@ public class ContactSystem implements EntryPoint {
 	public void loadContactSystem() {
 
 		//Detail
-		VerticalPanel detailsPanel = new VerticalPanel();
+		final VerticalPanel detailsPanel = new VerticalPanel();
 			
 		//Header
 		HorizontalPanel header = new HorizontalPanel();				
@@ -185,16 +185,16 @@ public class ContactSystem implements EntryPoint {
 	    
 		//Formulare
 
-		ContactForm cf = new ContactForm();
+		final ContactForm cf = new ContactForm();
 		ContactListForm clf = new ContactListForm();
 		MyParticipationForm mpf = new MyParticipationForm();
 		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 		
 		//CellTree Model
 		ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-		ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-		MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-		ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
+		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
+		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
 		//Logo 
 		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    

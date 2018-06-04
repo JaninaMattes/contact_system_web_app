@@ -3,10 +3,12 @@ package de.hdm.kontaktsystem.client.gui;
 import java.util.Vector;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -14,10 +16,14 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
+import de.hdm.kontaktsystem.client.LoginService;
+import de.hdm.kontaktsystem.client.LoginServiceAsync;
 import de.hdm.kontaktsystem.shared.ReportGeneratorAsync;
 import de.hdm.kontaktsystem.shared.bo.Property;
+import de.hdm.kontaktsystem.shared.bo.User;
 import de.hdm.kontaktsystem.shared.report.AllContactsForParticipantReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsForPropertyReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
@@ -51,6 +57,19 @@ public class ReportGenerator implements EntryPoint {
 	TextBox findByValueText = new TextBox();
 	Button findByValueButton = new Button("Suche"); //TODO: Symbol statt Text einfügen
 	
+	
+	/**
+	 * Attribute für den Login
+	 */
+	private User userInfo = null;
+	private VerticalPanel loginPanel = new VerticalPanel();
+	private Label loginLabel = new Label(
+			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
+	private Anchor signInLink = new Anchor("Login");
+	private Anchor signOutLink = new Anchor("Logout");
+	private Anchor reportLink = new Anchor("Report");				
+
+	
 	/**
 	 * Da diese Klasse die Implementierung des Interface <code>EntryPoint</code>
 	 * zusichert, benötigen wir eine Methode
@@ -60,6 +79,51 @@ public class ReportGenerator implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
+		loadReportGenerator(); //Test, solange Login nicht funktioniert
+		
+//		/**
+//		 * Login-Status feststellen mit LoginService
+//		 */		
+//		LoginServiceAsync loginService = GWT.create(LoginService.class);
+//		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+//			public void onFailure(Throwable error) {
+//				Window.alert("Login Error :(");
+//			}
+//				
+//			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+//			public void onSuccess(User result) {
+//				userInfo = result;
+//				if(userInfo.isLoggedIn()){
+//					loadReportGenerator();
+//				}else{
+//					loadLogin();					
+//				}
+//			}
+//		});
+	}
+		
+	/**
+	 * Aufbau der Login-Seite
+	 */
+	private void loadLogin() {	
+			
+		Window.alert("Login :D");
+		signInLink.setHref(userInfo.getLoginUrl());
+		signInLink.getElement().setId("link");
+		loginPanel.add(new HTML("<center>"));
+		loginPanel.add(loginLabel);
+		loginPanel.add(new HTML("<br /> <br /> "));
+		loginPanel.add(signInLink);
+		loginPanel.add(new HTML("</center>"));
+		RootPanel.get("TopLevelFrame").add(loginPanel); //TODO: prüfen ob richtige HTML
+	}
+	
+	
+	/**
+	 * Aufbau der Startseite des Report-Generators
+	 */
+	public void loadReportGenerator() {
+		
 		/**
 		 * Zuweisung Asynchrones Interface
 		 */
@@ -67,6 +131,13 @@ public class ReportGenerator implements EntryPoint {
 			reportGenerator = ClientsideSettings.getReportGenerator();
 		}
 
+		
+		/**
+		 * Setzen der User-Informationen im Server
+		 */
+		reportGenerator.setUserInfo(userInfo, new SetUserInfoCallback());
+		
+		
 		/**
 		 * Die Reportanwendung besteht aus einem "Navigationsteil" mit den
 		 * Schaltflächen zum Auslösen der Reportgenerierung und einem "Datenteil"
@@ -139,6 +210,23 @@ public class ReportGenerator implements EntryPoint {
 		findByValuePanel.add(findByValueButton);
 		RootPanel.get("Navigator").add(findByValuePanel);
 		
+		
+	}
+	
+	/**
+	 * Nested Class zum Setzen der User-Informationen auf dem Server
+	 */
+	class SetUserInfoCallback implements AsyncCallback<Void> {
+
+		User userInfo;
+		
+		@Override
+		public void onFailure(Throwable caught) {			
+		}
+
+		@Override
+		public void onSuccess(Void result) {			
+		}
 		
 	}
 	
