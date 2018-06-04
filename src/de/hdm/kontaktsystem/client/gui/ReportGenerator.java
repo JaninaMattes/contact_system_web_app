@@ -203,7 +203,6 @@ public class ReportGenerator implements EntryPoint {
 		//DropDownList in CSS
 		propertiesDropDownList.setStyleName("DropDownList");
 
-		
 		//Button in CSS
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
 		findByParticipantButton.setStyleName("searchButton");
