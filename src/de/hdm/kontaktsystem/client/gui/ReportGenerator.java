@@ -348,6 +348,8 @@ public class ReportGenerator implements EntryPoint {
 				for(Property element : result) {
 					propertiesDropDownList.addItem(element.getDescription());
 				}
+				propertiesDropDownList.setVisibleItemCount(result.size());
+				
 			} else {
 				Window.alert("Keine Eigenschaften vorhanden!");
 			}			
