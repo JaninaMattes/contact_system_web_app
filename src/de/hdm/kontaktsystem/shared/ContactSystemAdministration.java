@@ -58,6 +58,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<PropertyValue> getPropertyValuesForContact(Contact c); 
 
 	public Vector<Property> getAllProperties();
+	
+	
 
 	/**
 	 * Create
@@ -102,6 +104,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<Participation> getAllParticipationsByOwner(User u);
 	
 	public Vector<Participation> getAllParticipationsByParticipant(User participant);
+	
+	public Vector<Participation> getAllParticipationsByBusinessObject(BusinessObject bo);
 
 
 }
