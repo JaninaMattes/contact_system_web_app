@@ -190,14 +190,14 @@ public class ReportGenerator implements EntryPoint {
 		findByValueLabel.setStyleName("filtern");
 		
 		//Textbox in CSS
-		findByParticipantText.setStyleName("findbytext");
-		findByValueText.setStyleName("findByText");
+		findByParticipantText.setStyleName("findByTextbox");
+		findByValueText.setStyleName("findByTextbox");
 		
 		//Button in CSS
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
-		findByParticipantButton.setStyleName("search-Button");
+		findByParticipantButton.setStyleName("searchButton");
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
-		findByValueButton.setStyleName("search-button");
+		findByValueButton.setStyleName("searchButton");
 	
 
 		
