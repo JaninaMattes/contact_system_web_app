@@ -61,6 +61,7 @@ public class ContactListForm extends VerticalPanel {
 	Label labelShare = new Label("Teilen mit: ");
 	Label contactStatus = new Label("");
 	
+	
 
 	CheckBox checkBox1 = new CheckBox();
 	CheckBox checkBox2 = new CheckBox();
@@ -124,8 +125,37 @@ public class ContactListForm extends VerticalPanel {
 		checkBox3.setEnabled(false);
 		checkBox4.setEnabled(false);
 		
+		/**
+		 * CSS
+		 */
+		
+		//Textboxen in CSS
+		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
+		nameContactList.setStyleName("Textbox");
+		contactName.setStyleName("Textbox");
+		firstNameContact.setStyleName("Textbox");
+		lastNameContact.setStyleName("Textbox");
+		
+		//Labels in CSS
+		contactListLabel.setStyleName("contactListlabel");
+		contactLabel.setStyleName("contactLabel");
+		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
+		firstNameLabel.setStyleName("namelabel");
+		lastNameLabel.setStyleName("namelabel");
+		
+		labelShare.setStyleName("labelshare");
+		contactStatus.setStyleName("contactStatus");
+		
+		//Buttons in CSS
+		//delete + share + save-Buttons müssen jeweils auch gleich sein
+		deleteButton.setStyleName("deleteButton");
+		deleteClButton.setStyleName("deleteButton");
+		saveButton.setStyleName("saveButton");
+		shareButton.setStyleName("shareButton");
+		
 		
 	}
+	
 	
 	/**
 	 * ClickHandelr zum Speichern der KontaktListe 
