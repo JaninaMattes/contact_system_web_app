@@ -12,6 +12,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 public interface ContactSystemAdministrationAsync {
 		
+	public void login(String requestUri, AsyncCallback<User> callback);
 	
 	public void getUserByID(double id, AsyncCallback<User> callback);
 	

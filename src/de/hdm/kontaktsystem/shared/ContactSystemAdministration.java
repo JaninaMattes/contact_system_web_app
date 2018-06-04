@@ -18,6 +18,8 @@ import de.hdm.kontaktsystem.shared.bo.User;
 @RemoteServiceRelativePath("editor")
 public interface ContactSystemAdministration extends RemoteService {
 	
+	public User login(String requestUri);
+	
 	public User getUserByID(double id);
 	
 	public User getUserBygMail(String gMail);
