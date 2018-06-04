@@ -195,6 +195,7 @@ public class ReportGenerator implements EntryPoint {
 		//Labels in CSS
 		findByParticipantLabel.setStyleName("findbylabel");
 		findByValueLabel.setStyleName("filtern");
+		loginLabel.setStyleName("loginlabel");
 		
 		//Textbox in CSS
 
@@ -209,6 +210,10 @@ public class ReportGenerator implements EntryPoint {
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
 		findByValueButton.setStyleName("searchButton");
 	
+		//Links
+		signInLink.setStyleName("link");
+		signOutLink.setStyleName("link");
+		reportLink.setStyleName("link");
 
 		
 		/*
