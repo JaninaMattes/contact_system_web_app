@@ -194,8 +194,8 @@ public class ContactSystem implements EntryPoint {
 		ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 		
 		//CellTree Model
-		ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-		final ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
+		ContactTreeViewModel ctvm = new ContactTreeViewModel();
+		final ContactListTreeViewModel cltvm = new ContactListTreeViewModel();
 		final MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
 		final ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	  				
