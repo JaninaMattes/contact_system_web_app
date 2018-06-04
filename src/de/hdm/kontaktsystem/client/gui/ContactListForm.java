@@ -129,11 +129,11 @@ public class ContactListForm extends VerticalPanel {
 		 * CSS
 		 */
 		
+		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
 		nameContactList.setStyleName("Textbox");
 		contactName.setStyleName("Textbox");
-		//Für die Eingabe des Vornamens und Nachnamens gleicher StyleName
-		firstNameContact.setStyleName("NameContactTextbox");
-		lastNameContact.setStyleName("NameContactTextbox");
+		firstNameContact.setStyleName("Textbox");
+		lastNameContact.setStyleName("Textbox");
 		
 		contactListLabel.setStyleName("contactListlabel");
 		contactLabel.setStyleName("contactLabel");
