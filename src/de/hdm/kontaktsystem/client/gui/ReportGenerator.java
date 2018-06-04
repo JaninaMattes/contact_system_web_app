@@ -79,25 +79,27 @@ public class ReportGenerator implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
-		/**
-		 * Login-Status feststellen mit LoginService
-		 */		
-		LoginServiceAsync loginService = GWT.create(LoginService.class);
-		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
-			public void onFailure(Throwable error) {
-				Window.alert("Login Error :(");
-			}
-				
-			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
-			public void onSuccess(User result) {
-				userInfo = result;
-				if(userInfo.isLoggedIn()){
-					loadReportGenerator();
-				}else{
-					loadLogin();					
-				}
-			}
-		});
+		loadReportGenerator(); //Test, solange Login nicht funktioniert
+		
+//		/**
+//		 * Login-Status feststellen mit LoginService
+//		 */		
+//		LoginServiceAsync loginService = GWT.create(LoginService.class);
+//		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+//			public void onFailure(Throwable error) {
+//				Window.alert("Login Error :(");
+//			}
+//				
+//			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+//			public void onSuccess(User result) {
+//				userInfo = result;
+//				if(userInfo.isLoggedIn()){
+//					loadReportGenerator();
+//				}else{
+//					loadLogin();					
+//				}
+//			}
+//		});
 	}
 		
 	/**

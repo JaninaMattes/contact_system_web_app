@@ -57,9 +57,20 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		this.setAdministration(systemImpl);
 	}
 	
+	/**
+	 * Zurückgeben des aktuellen Users
+	 */
+	public User getUserInfo() {
+		return this.currentUser;
+	}
+	
+	/**
+	 * Setzen des aktuell eingeloggten Users
+	 */
 	public void setUserInfo(User userInfo) {
 		this.currentUser = userInfo;
 	}
+
 	
 	/**
 	 * Zurückgeben der zugehörigen ContactSystemAdministration
@@ -102,7 +113,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	@Override
 	public Vector<Property> getAllProperties() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return null;
+		return 
 	}
 	
 }
