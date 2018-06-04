@@ -22,7 +22,7 @@ import de.hdm.kontaktsystem.shared.bo.ContactList;
 public class TreeViewModelTest implements TreeViewModel {
 
 	private ContactSystemAdministrationAsync csa = ClientsideSettings.getContactAdministration();
-	private final ListDataProvider<BusinessObject> dataProvider = new ListDataProvider<BusinessObject>();
+	private ListDataProvider<BusinessObject> dataProvider = null;
 	private BusinessObject selectedContactContactlist;
 	private ContactListForm clForm;
 	private ContactForm cForm;
@@ -51,8 +51,8 @@ public class TreeViewModelTest implements TreeViewModel {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			
-			selectedContactContactlist = selectionModel.getSelectedObject();
-			
+			setSelectedContactContactlist(selectionModel.getSelectedObject());
+			log("event" + event.toDebugString());
 			
 			
 			
@@ -111,7 +111,7 @@ public class TreeViewModelTest implements TreeViewModel {
 
 
 
-	public ContactForm getcForm() {
+	public ContactForm getCForm() {
 		return cForm;
 	}
 
@@ -119,7 +119,7 @@ public class TreeViewModelTest implements TreeViewModel {
 
 
 
-	public void setcForm(ContactForm cForm) {
+	public void setCForm(ContactForm cForm) {
 		this.cForm = cForm;
 	}
 
@@ -135,7 +135,8 @@ public class TreeViewModelTest implements TreeViewModel {
 	public <T> NodeInfo<?> getNodeInfo(T value) {
 
 		log("NodeInfo: " + value);
-
+		dataProvider = new ListDataProvider<BusinessObject>();
+		
 		if (value instanceof ContactList) {
 			for (Contact c : ((ContactList) value).getContacts()) {
 				dataProvider.getList().add(c);
@@ -171,7 +172,7 @@ public class TreeViewModelTest implements TreeViewModel {
 		 * 
 		 * dataProvider.getList().add(cl); log(cl.getName()); }
 		 */
-		return new DefaultNodeInfo<BusinessObject>(dataProvider, new DataCell());
+		return new DefaultNodeInfo<BusinessObject>(dataProvider, new DataCell(), selectionModel, null);
 	}
 
 	@Override
@@ -191,6 +192,7 @@ class DataCell extends AbstractCell<BusinessObject> {
 
 	@Override
 	public void render(Context context, BusinessObject value, SafeHtmlBuilder sb) {
+		if (value != null) {
 		if (value instanceof ContactList) {
 			sb.appendHtmlConstant("<p>" + ((ContactList) value).getName() + "</p>");
 		} else if (value instanceof Contact) {
@@ -198,6 +200,6 @@ class DataCell extends AbstractCell<BusinessObject> {
 		} else {
 			sb.appendHtmlConstant("<p>" + value.getBoId() + "</p>");
 		}
-
+		}
 	}
 }
