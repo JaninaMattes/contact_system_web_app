@@ -57,6 +57,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<PropertyValue> getPropertyValuesForContact(Contact c); 
 
+	public Vector<Property> getAllProperties();
+
 	/**
 	 * Create
 	 */
