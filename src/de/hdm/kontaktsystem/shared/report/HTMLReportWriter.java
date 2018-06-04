@@ -73,7 +73,7 @@ public class HTMLReportWriter extends ReportWriter {
 	 */
 	public String getHeader() {
 		StringBuffer result = new StringBuffer();
-	    result.append("<html><head><title></title></head><body>");
+	    result.append("<html><head><title>Report</title></head><body>");
 	    return result.toString();
 	}
 	

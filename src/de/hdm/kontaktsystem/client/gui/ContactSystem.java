@@ -221,30 +221,39 @@ public class ContactSystem implements EntryPoint {
 		}
 		
 
-		/** Siehe aus BankingProjekt Hinweis: -> Set ids using widget.getElement().setId("idOfElement") */
-		reportLink.getElement().setId("Report-Button");
-		signOutLink.getElement().setId("Log-Out-Button");		
-		contactButton.getElement().setId("Menue-Button"); 	
-		contactListsButton.getElement().setId("Menue-Button"); 
-		myParticipationsButton.getElement().setId("Menue-Button"); 
-		receivedParticipationsButton.getElement().setId("Menue-Button"); 
-		searchButton.getElement().setId("Search-Button");  
+		/** 
+		 * Namen für CSS festlegen 
+		 */
+
+		reportLink.setStyleName("report-button");
+		signOutLink.setStyleName("log-out-button");
+		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
+		searchButton.setStyleName("search-button"); 
+		
+		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
+		contactButton.setStyleName("menue-button");
+		contactListsButton.setStyleName("menue-button");
+		myParticipationsButton.setStyleName("menue-button");
+		receivedParticipationsButton.setStyleName("menue-button");
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
 		 */
-		search.getElement().setId("Search-Text"); 		
+		search.setStyleName("search-textfeld");
+
 		/**
 		 * CSS Identifier für das Logo
 		 */
-		chainSymbolLogo.getElement().setId("Logo"); 
+		chainSymbolLogo.setStyleName("logo");
 		
 		/**
-		 * CSS Identifier für Elemente
+		 * CSS Identifier für die Elemente
 		 */		
-		header.setStyleName("Header");		
-		navigation.setStyleName("Navigation");
-		trailer.setStyleName("Trailer");
+
+		header.setStyleName("header");		
+		navigation.setStyleName("navigation");
+		trailer.setStyleName("trailer");
+
 		
 		/**
 		 * Verlinkung der Listen und der dazugehörigen Formulare

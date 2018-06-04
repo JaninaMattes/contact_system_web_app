@@ -140,14 +140,50 @@ public class ContactForm extends VerticalPanel{
 		receivedFrom.setEnabled(false);
 		
 		/*id für CSS*/
-		deleteButton.getElement().setId("Delete-Button");
+		
+		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
+		deleteButton.setStyleName("deleteButton");
 		deleteButton.addClickHandler(new DeleteClickHandler());
 		
-		saveButton.getElement().setId("Save-Button");
+		saveButton.setStyleName("saveButton");
 		saveButton.addClickHandler(new SaveClickHandler());
 		
-		shareButton.getElement().setId("Share-Button");
+		shareButton.setStyleName("shareButton");
 		shareButton.addClickHandler(new ShareClickHandler());
+		
+		//Labels in CSS
+		
+		label.setStyleName("contactlabel");
+		labelName.setStyleName("namelabel");
+		labelNickName.setStyleName("nicknamelabel");
+		
+		//Hinzufügbare Eigenschaften gleicher StyleName
+		labelFirma.setStyleName("eigenschaftlabel");
+		labelTeleNr.setStyleName("eigenschaftlabel");
+		labelEmail.setStyleName("eigenschaftlabel");
+		labelGeburtsdatum.setStyleName("eigenschaftlabel");
+		labelAdresse.setStyleName("eigenschaftlabel");
+
+		isShared.setStyleName("geteiltlabel");
+		labelShare.setStyleName("teilenmitlabel");
+		labelSharedWith.setStyleName("geteiltmitlabel");
+		labelReceiedFrom.setStyleName("geteiltvonLabel");
+		contactStatus.setStyleName("contactStatusLabel");
+		
+		//Textboxen in CSS
+		//bekommen alle den gleichen StyleName (wie in ContactLIstForm.java)
+		textBoxName.setStyleName("Textbox");
+		textBoxNickName.setStyleName("Textbox");
+		textBoxFirma.setStyleName("Textbox");
+		textBoxTelefonnummer.setStyleName("Textbox");
+		textBoxMobilnummer.setStyleName("Textbox");
+		textBoxEmail.setStyleName("Textbox");
+		textBoxGeburtsdatum.setStyleName("Textbox");
+		textBoxAdresse.setStyleName("Textbox");
+
+
+
+
 		
 		/**
 		 * Anordnung der einzelnen Inhalte für ContactForm.
