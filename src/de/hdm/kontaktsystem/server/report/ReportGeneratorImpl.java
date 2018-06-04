@@ -295,9 +295,40 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	@Override
 	public AllContactsForPropertyReport createAllContactsForPropertyReport(int propertyId, String propertyvalue)
 			throws IllegalArgumentException {
+		//Property-Objekt zu Id suchen
+		Property searchedProperty = null; //Methode in ContactSysAdmin hinzufügen: findPropertyById
 		
-		// TODO Auto-generated method stub
-		return null;
+		//Erstellen des noch leeren Reports
+		AllContactsForPropertyReport report = new AllContactsForPropertyReport();
+				
+		//Titel des Reports
+		report.setTitle("Alle Kontakte des Nutzers mit der Eigenschaftsausprägung "
+				+ searchedProperty.getDescription() + " = "
+				+ propertyvalue);
+				
+		//Daten des Benutzers, für den der Report erstellt wird
+		this.addUserParagraph(getCurrentUser(), report);
+				
+		//Datum der Erstellung
+		report.setCreated(new Date()); //TODO: aktuelles Datum setzen
+		
+		Vector<PropertyValue> allPVforString = administration.getP
+		
+		
+		//Hinzufügen der einzelnen Kontakt-Elemente
+		Vector<Contact> allContacts = administration.getAllContactsFromUser();
+		if(allContacts.isEmpty()) {
+			//TODO: Fehlerbehandlung
+		}else {
+			for(Contact singleContact : allContacts) {
+				this.addSingleContact(singleContact, report);
+			}
+		}
+				
+		/**
+		 * Zurückgeben des erstellten Reports
+		 */
+		return report;
 	}
 
 	@Override

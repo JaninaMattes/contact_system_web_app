@@ -556,6 +556,19 @@ public User login(String requestUri) {
 		
 	}
 	
+	/**
+	 * Anhand des übergebenen Strings werden alle PropertyValue - Objekte
+	 * identifiziert, deren Wert dem Suchtext entspricht und zurückgegeben.
+	 * 
+	 * @param suchtext Gesuchter Wert
+	 * @return Vector mit PropertyValue - Objekten
+	 */
+	public Vector<PropertyValue> searchPropertyValues(String suchtext){
+		Vector<PropertyValue> pvv = propValMapper.findByValue(suchtext);
+		return pvv;
+	}
+	
+	
 	
 	/*
 	* ***************************************************************************

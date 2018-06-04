@@ -56,10 +56,12 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<Contact> searchContacts(String value);
 	
 	public Vector<PropertyValue> getPropertyValuesForContact(Contact c); 
-
+	
+	public Vector<PropertyValue> searchPropertyValues(String suchtext);
+	
 	public Vector<Property> getAllProperties();
 	
-	
+	public Property getPropertyByID(int id);
 
 	/**
 	 * Create
