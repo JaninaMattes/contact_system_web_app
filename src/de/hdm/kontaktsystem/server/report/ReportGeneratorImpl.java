@@ -41,6 +41,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 */
 	private ContactSystemAdministration administration = null;
 	
+	/**
+	 * TODO: Klären, ob überflüssig
+	 */
 	private User currentUser = null;
 	
 	
@@ -71,6 +74,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 	/**
 	 * Zurückgeben des aktuellen Users
+	 * TODO: Klären, ob überflüssig
 	 */
 	public User getUserInfo() {
 		return this.currentUser;
@@ -78,18 +82,19 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 	/**
 	 * Setzen des aktuell eingeloggten Users
+	 * TODO: Klären, ob überflüssig
 	 */
 	public void setUserInfo(User userInfo) {
 		this.currentUser = userInfo;
 	}
 
 	/**
-	 * Rückgabe des aktuellen Users (über Login)
-	 * @return 
+	 * Rückgabe des aktuellen Users (über Login-Service)
+	 * @return User-Objekt des aktuell eingeloggten Users
 	 */
 	public User getCurrentUser(){
 		// Test
-		return administration.getUserByID(170d);//Double.parseDouble(userService.getCurrentUser());
+		return administration.getUserByID(170d);//userService.getCurrentUser();
 	}
 	
 	/**
@@ -187,6 +192,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte
 	 * eines Users dar.
+	 * TODO: Alle mit dem User geteilte Kontakte mit aufnehmen
 	 * 
 	 * @return Das fertige Reportobjekt
 	 * @throws IllegalArgumentException
@@ -223,16 +229,73 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return report;
 	}
 
+	//TODO: DropDown-Liste in der GUI
 	@Override
-	public AllContactsForParticipantReport createAllContactsForParticipantReport(String participant)
+	public AllContactsForParticipantReport createAllContactsForParticipantReport(int participantId)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		//User-Objekt zu Namen zuordnen
+		User searchedParticipant = administration.getUserByID(participantId);
+		
+		//Erstellen des noch leeren Reports
+		AllContactsForParticipantReport report = new AllContactsForParticipantReport();
+				
+		//Titel des Reports
+		report.setTitle("Alle mit "
+				+ administration.getNameOfContact(searchedParticipant.getUserContact()) 
+				+ " geteilten Kontakte des Nutzers");
+				
+		//Daten des Benutzers, für den der Report erstellt wird
+		this.addUserParagraph(getCurrentUser(), report);
+				
+		//Datum der Erstellung
+		report.setCreated(new Date()); //TODO: aktuelles Datum setzen
+		
+		//Alle Teilhaberschaften, die der aktuelle User hat, ermitteln
+		Vector<Participation> allParticipations = administration.getAllParticipationsByOwner(currentUser);
+		//Alle Teilhaberschaften mit dem gesuchten Teilhaber ermitteln
+		Vector<Participation> allParticipationsToParticipant = new Vector<Participation>();
+		if(allParticipations.isEmpty()) {
+			//TODO: Was wenn Nutzer keine Teilhaberschaften hat
+		}else {
+			for(Participation participation : allParticipations) {
+				if(participation.getParticipant().equals(searchedParticipant)) {
+					allParticipationsToParticipant.add(participation);
+				}
+			}
+		}
+		
+		//Alle Teilhaberschaften von Kontakten ermitteln
+		Vector<Contact> allContacts = new Vector<Contact>();
+		if(allParticipationsToParticipant.isEmpty()) {
+			//TODO: Was wenn Nutzer keine Teilhaberschaften mit Teilhaber hat
+		} else {
+			for(Participation participation : allParticipationsToParticipant) {
+				if(participation.getReferencedObject() instanceof Contact) {
+					Contact contact = (Contact) participation.getReferencedObject();
+					allContacts.add(contact);
+				}
+			}
+		}
+		
+		//Hinzufügen der einzelnen Kontakt-Elemente
+		if(allContacts.isEmpty()) {
+			//TODO: Fehlerbehandlung
+		}else {
+			for(Contact singleContact : allContacts) {
+				this.addSingleContact(singleContact, report);
+			}
+		}
+				
+		/**
+		 * Zurückgeben des erstellten Reports
+		 */
+		return report;
 	}
 
 	@Override
 	public AllContactsForPropertyReport createAllContactsForPropertyReport(String property, String propertyvalue)
 			throws IllegalArgumentException {
+		
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -56,7 +56,7 @@ public interface ReportGenerator extends RemoteService {
 	   * @throws IllegalArgumentException
 	   * @see AllContactsForParticipantReport
 	   */
-	  public AllContactsForParticipantReport createAllContactsForParticipantReport(String participant) 
+	  public AllContactsForParticipantReport createAllContactsForParticipantReport(int participantId) 
 			  throws IllegalArgumentException;
 	  
 	  /**
