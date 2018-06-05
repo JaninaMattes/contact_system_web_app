@@ -121,22 +121,25 @@ public class ContactListForm extends VerticalPanel {
 		
 		//Textboxen in CSS
 		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
-		nameContactList.setStyleName("Textbox");
-		//contactNames.setStyleName("");
+
+		nameContactList.getElement().setId("Textbox");
+		contactNames.getElement().setId("Listbox");
+
 		
 		//Labels in CSS
-		contactListLabel.setStyleName("ueberschriftlabel");
-		contactLabel.setStyleName("contactlabel");
+		contactListLabel.getElement().setId("ueberschriftlabel");
+		contactLabel.getElement().setId("contactlabel");
+
 		
-		labelShare.setStyleName("teilenlabel");
-		contactStatus.setStyleName("contactstatus");
+		labelShare.getElement().setId("teilenlabel");
+		contactStatus.getElement().setId("contactstatus");
 		
 		//Buttons in CSS
 		//delete + share + save-Buttons müssen jeweils auch gleich sein
-		deleteButton.setStyleName("deleteButton");
-		deleteClButton.setStyleName("deleteButton");
-		saveButton.setStyleName("saveButton");
-		shareButton.setStyleName("shareButton");
+		deleteButton.getElement().setId("deleteButton");
+		deleteClButton.getElement().setId("deleteButton");
+		saveButton.getElement().setId("saveButton");
+		shareButton.getElement().setId("shareButton");
 		
 		
 	}

@@ -145,43 +145,44 @@ public class ContactForm extends VerticalPanel{
 		
 		//Buttons in CSS
 		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
-		deleteButton.setStyleName("deleteButton");
+		deleteButton.getElement().setId("deleteButton");
 		deleteButton.addClickHandler(new DeleteClickHandler());
 		
-		saveButton.setStyleName("saveButton");
+		saveButton.getElement().setId("saveButton");
 		saveButton.addClickHandler(new SaveClickHandler());
 		
-		shareButton.setStyleName("shareButton");
+		shareButton.getElement().setId("shareButton");
 		shareButton.addClickHandler(new ShareClickHandler());
 		
 		//Labels in CSS
-		label.setStyleName("ueberschriftlabel");
-		labelName.setStyleName("namelabel");
-		labelNickName.setStyleName("namelabel");
+		label.getElement().setId("ueberschriftlabel");
+		labelName.getElement().setId("namelabel");
+		labelNickName.getElement().setId("namelabel");
 		
 		//Hinzufügbare Eigenschaften gleicher StyleName
-		labelFirma.setStyleName("eigenschaftlabel");
-		labelTeleNr.setStyleName("eigenschaftlabel");
-		labelEmail.setStyleName("eigenschaftlabel");
-		labelGeburtsdatum.setStyleName("eigenschaftlabel");
-		labelAdresse.setStyleName("eigenschaftlabel");
+		labelFirma.getElement().setId("eigenschaftlabel");
+		labelTeleNr.getElement().setId("eigenschaftlabel");
+		labelMobilNr.getElement().setId("eigenschaftlabel");
+		labelEmail.getElement().setId("eigenschaftlabel");
+		labelGeburtsdatum.getElement().setId("eigenschaftlabel");
+		labelAdresse.getElement().setId("eigenschaftlabel");
 
-		isShared.setStyleName("teilenlabel");
-		labelShare.setStyleName("teilenlabel");
-		labelSharedWith.setStyleName("teilenlabel");
-		labelReceiedFrom.setStyleName("teilenlabel");
-		contactStatus.setStyleName("contactstatus");
+		isShared.getElement().setId("teilenlabel");
+		labelShare.getElement().setId("teilenlabel");
+		labelSharedWith.getElement().setId("teilenlabel");
+		labelReceiedFrom.getElement().setId("teilenlabel");
+		contactStatus.getElement().setId("contactstatus");
 		
 		//Textboxen in CSS
 		//bekommen alle den gleichen StyleName (wie in ContactLIstForm.java)
-		textBoxName.setStyleName("Textbox");
-		textBoxNickName.setStyleName("Textbox");
-		textBoxFirma.setStyleName("Textbox");
-		textBoxTelefonnummer.setStyleName("Textbox");
-		textBoxMobilnummer.setStyleName("Textbox");
-		textBoxEmail.setStyleName("Textbox");
-		textBoxGeburtsdatum.setStyleName("Textbox");
-		textBoxAdresse.setStyleName("Textbox");
+		textBoxName.getElement().setId("Textbox");
+		textBoxNickName.getElement().setId("Textbox");
+		textBoxFirma.getElement().setId("Textbox");
+		textBoxTelefonnummer.getElement().setId("Textbox");
+		textBoxMobilnummer.getElement().setId("Textbox");
+		textBoxEmail.getElement().setId("Textbox");
+		textBoxGeburtsdatum.getElement().setId("Textbox");
+		textBoxAdresse.getElement().setId("Textbox");
 
 		
 		/**
@@ -529,6 +530,11 @@ public class ContactForm extends VerticalPanel{
 				//Befüllen der Listbox mit allen User Objekten aus dem System
        			Vector <User> u = new Vector<User>();
        			contactSystemAdmin.getAllUsers(new UserCallback(u));
+       			//Befüllen der ListBox mit User Objekten, welche eine Teilhaberschaft haben
+       			Vector <Participation> part = new Vector<Participation>();
+       			//if(myself.isOwner) { -> TODO Dummy Code ausformulieren
+       			contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new ParticipantCallback(part));
+       			//}
 //       			contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
 //       			ListBox shareUser = new ListBox();
 //       			ListBox sharedWithUser = new ListBox();
@@ -1077,7 +1083,7 @@ public class ContactForm extends VerticalPanel{
 					if (result != null) {
 						for(User user: result) {						
 						//User Liste updaten
-						shareUser.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
+						shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());	
 						++count;
 						}
 					//Genug Platz schaffen für alle Elemente
@@ -1088,6 +1094,35 @@ public class ContactForm extends VerticalPanel{
 				}
 			}
 			
+		
+			private class ParticipantCallback implements AsyncCallback<Vector<Participation>>{
+				
+				Vector <Participation> part = null;				
+				ParticipantCallback(Vector<Participation> part){
+					this.part = part;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Der Aufruf der Teilhaber ist misglückt! :(");
+				}
+
+				@Override
+				public void onSuccess(Vector<Participation> result) {
+					int count = 0;
+					if (result != null) {
+						for(Participation p: result) {						
+						//User Liste updaten
+						shareUser.addItem(p.getParticipant().getUserContact().getName().getValue() + " , " + p.getParticipant().getGMail());	
+						++count;
+						}
+					//Genug Platz schaffen für alle Elemente
+					shareUser.setVisibleItemCount(count);
+					} else {
+						Window.alert("Kein Teilhaber gefunden :(");
+					}
+				}
+			}
 			
 			/**
 			 * ShareClickHandler zum Teilen eines Kontaktes und/oder einer Eigenschaft

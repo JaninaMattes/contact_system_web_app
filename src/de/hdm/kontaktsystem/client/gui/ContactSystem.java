@@ -237,26 +237,26 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
-		reportLink.setStyleName("report-button");
-		signOutLink.setStyleName("log-out-button");
+		reportLink.getElement().setId("report-button");
+		signOutLink.getElement().setId("log-out-button");
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
-		searchButton.setStyleName("search-button"); 
+		searchButton.getElement().setId("searchButton"); 
 		
 		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
-		contactButton.setStyleName("menue-button");
-		contactListsButton.setStyleName("menue-button");
-		myParticipationsButton.setStyleName("menue-button");
-		receivedParticipationsButton.setStyleName("menue-button");
+		contactButton.getElement().setId("menue-button");
+		contactListsButton.getElement().setId("menue-button");
+		myParticipationsButton.getElement().setId("menue-button");
+		receivedParticipationsButton.getElement().setId("menue-button");
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
 		 */
-		search.setStyleName("search-textfeld");
+		search.getElement().setId("search-textfeld");
 
 		/**
 		 * CSS Identifier für das Logo
 		 */
-		chainSymbolLogo.setStyleName("logo");
+		chainSymbolLogo.getElement().setId("logo");
 		
 		/**
 		 * CSS Identifier für die Elemente

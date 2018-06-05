@@ -43,7 +43,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   
   <servlet-mapping>
     <servlet-name>Report</servlet-name>
-    <url-pattern>/kontaktsystem/reportgenerator</url-pattern>
+    <url-pattern>/reportgenerator/reportgenerator</url-pattern>
   </servlet-mapping>
   
   
