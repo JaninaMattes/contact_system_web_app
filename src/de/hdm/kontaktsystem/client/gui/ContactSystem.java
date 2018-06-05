@@ -297,7 +297,6 @@ public class ContactSystem implements EntryPoint {
 //				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
 //				cellTree.setAnimationEnabled(true);		
 				// Für Test->
-				log("COntactForm: " + cf.toString());
 				RootPanel.get("Details").removeFromParent(); /*Alle Child-Widgets von Parent entfernen*/
 				RootPanel.get("Details").add(cf);
 			}

@@ -12,6 +12,7 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
+import com.mysql.jdbc.log.Log;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
@@ -140,6 +141,7 @@ public class TreeViewModelTest implements TreeViewModel {
 		if (value instanceof ContactList) {
 			for (Contact c : ((ContactList) value).getContacts()) {
 				dataProvider.getList().add(c);
+				log(c.getCreationDate().toString());
 			}
 		} else {
 			csa.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
@@ -194,16 +196,16 @@ class DataCell extends AbstractCell<BusinessObject> {
 	public void render(Context context, BusinessObject value, SafeHtmlBuilder sb) {
 		if (value != null) {
 		if (value instanceof ContactList) {
-
-			sb.appendHtmlConstant("<p>" + "<img src=http://www.biochemie.uni-freiburg.de/de/pfanner/pfeil.jpg/ height=\"80px\" width=\"80px\">" + ((ContactList) value).getName() + "</p>");
+			
+			sb.appendHtmlConstant("<p>" + "<img src='/images/group.png' height='22px' width='22px' >" + ((ContactList) value).getName() + "</p>");
 
 		} else if (value instanceof Contact) {
-
-			sb.appendHtmlConstant("<p>" + "<img src=http://www.biochemie.uni-freiburg.de/de/pfanner/pfeil.jpg/ height=\"80px\" width=\"80px\">" + ((Contact) value).getName().getValue() + "</p>");
+			
+			sb.appendHtmlConstant("<p>" + "<img src='/images/person.png' height='22px' width='22px'>" + ((Contact) value).getName().getValue() + "</p>");
 
 		} else {
 
-			sb.appendHtmlConstant("<p>" + "<img src=http://www.biochemie.uni-freiburg.de/de/pfanner/pfeil.jpg/ height=\"80px\" width=\"80px\">" + value.getBoId() + "</p>");
+			sb.appendHtmlConstant("<p>" + value.getBoId() + "</p>");
 
 		}
 		}
