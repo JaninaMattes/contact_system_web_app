@@ -137,7 +137,7 @@ public class ContactListForm extends VerticalPanel {
 		lastNameContact.setStyleName("Textbox");
 		
 		//Labels in CSS
-		contactListLabel.setStyleName("contactlistlabel");
+		contactListLabel.setStyleName("ueberschriftlabel");
 		contactLabel.setStyleName("contactlabel");
 		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
 		firstNameLabel.setStyleName("namelabel");
