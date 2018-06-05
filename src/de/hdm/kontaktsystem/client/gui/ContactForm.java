@@ -2,6 +2,7 @@ package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 
+import com.google.api.client.http.MultipartContent.Part;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -27,6 +28,11 @@ import de.hdm.kontaktsystem.shared.bo.User;
  */
 
 public class ContactForm extends VerticalPanel{
+	
+	private User owner = new User();
+	private User sharedFor = new User();
+	private User sharedFrom = new User();
+	
 	
 	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact contactToDisplay = null;
@@ -441,8 +447,7 @@ public class ContactForm extends VerticalPanel{
 	   * @return propertyValue
 	   * @author janina
 	   */
-	
-	
+		
 	    public PropertyValue findCorrectPv(String s) {
 	    	PropertyValue pv = new PropertyValue();
 	    	Vector<PropertyValue> result = new Vector<PropertyValue>();
@@ -528,12 +533,13 @@ public class ContactForm extends VerticalPanel{
 				
 				//Befüllen der Listbox mit allen User Objekten aus dem System
        			Vector <User> u = new Vector<User>();
-       			contactSystemAdmin.getAllUsers(new UserCallback(u));
+       			contactSystemAdmin.getAllUsers(new ShareUserCallback(u));
        			//Befüllen der ListBox mit User Objekten, welche eine Teilhaberschaft haben
        			Vector <Participation> part = new Vector<Participation>();
-       			//if(myself.isOwner) { -> TODO Dummy Code ausformulieren
-       			contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new ParticipantCallback(part));
+       			//if(myself is owner) {
+       			contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new ParticipantUserCallback(part));
        			//}
+       			
 //       			contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
 //       			ListBox shareUser = new ListBox();
 //       			ListBox sharedWithUser = new ListBox();
@@ -807,9 +813,9 @@ public class ContactForm extends VerticalPanel{
 				   return result;
 			}
 			
-			
+			//TODO: 
 			public boolean isOwnedByMe(Contact c) {				
-			    User owner = new User();
+			    owner = new User();
 //			   // owner = userInfo
 //			   contactSystemAdmin.getAllParticipationsByOwner(owner, new AsyncCallback (owner));
 			   return false;
@@ -1065,9 +1071,9 @@ public class ContactForm extends VerticalPanel{
 			 *
 			 */
 			
-			private class UserCallback implements AsyncCallback<Vector<User>>{
+			private class ShareUserCallback implements AsyncCallback<Vector<User>>{
 				Vector <User> user = null;				
-				UserCallback(Vector<User> user){
+				ShareUserCallback(Vector<User> user){
 					this.user = user;
 				}
 
@@ -1094,10 +1100,10 @@ public class ContactForm extends VerticalPanel{
 			}
 			
 		
-			private class ParticipantCallback implements AsyncCallback<Vector<Participation>>{
+			private class ParticipantUserCallback implements AsyncCallback<Vector<Participation>>{
 				
 				Vector <Participation> part = null;				
-				ParticipantCallback(Vector<Participation> part){
+				ParticipantUserCallback(Vector<Participation> part){
 					this.part = part;
 				}
 
@@ -1130,17 +1136,32 @@ public class ContactForm extends VerticalPanel{
 			 *
 			 */
 			private class ShareClickHandler implements ClickHandler {				
-				Vector <PropertyValue> p = new Vector<PropertyValue>();
-
+				Vector <PropertyValue> pv = new Vector<PropertyValue>();				
+				int index = shareUser.getSelectedIndex();
+				
 				@Override
 				public void onClick(ClickEvent event) {
-					if (contactToDisplay == null) {
-						Window.alert("Kein Kontakt ausgewählt");
+					if (shareUser.getSelectedIndex() == -1) { //gibt -1 zurück, wenn nichts ausgewaehlt wurde
+						Window.alert("Kein Nutzer zum teilen ausgewählt :( ...");
 					} 
-					if (contactToDisplay!= null && getAllCheckedValues()!= null){
-						p = getAllUpdatedValues();
-						contactToDisplay.setPropertyValues(p);
-						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback(contactToDisplay));						
+					if (getAllCheckedValues()== null) { 
+						Window.alert("Keine Werte zum teilen ausgewählt :( ...");
+					} 
+					
+					if((shareUser.getSelectedIndex() == -1) & (getAllCheckedValues()!= null)){
+						pv = getAllCheckedValues();
+						String s = shareUser.getItemText(index);
+						String [] email = s.split(",", 2); //Email als eindeutiger Identifier aus String auslesen
+						contactToDisplay.setPropertyValues(pv); //Geänderte Werte abrufen
+						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback(contactToDisplay));
+						
+						User share = new User();
+						contactSystemAdmin.getUserBygMail(email[1], new UserCallback(share));
+						share = sharedFor;
+						Participation part = new Participation();
+						part.setParticipant(share);
+						part.setReference(contactToDisplay);
+						contactSystemAdmin.createParticipation(part, new ParticipationCallback(part));
 				}				
 			}
 			}
@@ -1166,12 +1187,59 @@ public class ContactForm extends VerticalPanel{
 				public void onSuccess(Contact result) {
 					if (result != null) {
 						//KontaktObjekt updaten
-						//ctvm.updateContact(result);
+						ctvm.updateContact(result);
 					} else {
 						Window.alert("Kein Kontakt gefunden :(");
 					}
 				}
 			}
 			
+			
+			private class UserCallback implements AsyncCallback<User> {
+
+				User u = null;				
+				UserCallback(User u){
+					this.u = u;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Oups ein Fehler ist aufgetreten! :(");
+				}
+
+				@Override
+				public void onSuccess(User result) {
+					if (result != null) {
+						sharedFor = result;
+					} else {
+						Window.alert("Kein Nutzer wurde gefunden :(");
+					}
+				}
+			}
+			
+			
+			private class ParticipationCallback implements AsyncCallback<Participation>{
+				
+				Participation part = null;				
+				ParticipationCallback(Participation part){
+					this.part = part;
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Oups ein Fehler ist aufgetreten! :(");					
+				}
+
+				@Override
+				public void onSuccess(Participation result) {
+					if (result != null) {
+						Window.alert("Du hast hast " + result.getParticipant().getUserContact().getName().getValue() + 
+								" erfolgreich zum Teilhaber gemacht.");	
+						//TODO: zur ListBox hinzufügen
+					}
+					
+				}
+				
+			}
 		  
 }
