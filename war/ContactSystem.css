@@ -81,7 +81,7 @@ h1 {
 /*Buttons*/
 
 #shareButton{
-.gwt-Button{
+	.gwt-Button{
 	height: 30px;
     width: 53px;
     font-size: 16px;
@@ -98,7 +98,7 @@ h1 {
 }
 }
 #menue-button{
-	height: 30px;
+	height: 40px;
     width: 240px;
     font-family: "Arial", Arial, sans-serif;
 	border: solid 1px white; 
@@ -111,25 +111,27 @@ h1 {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+   	margin: 4px 2px;
     cursor: pointer;
 	
 }
 
 #searchButton{
-	height: 30px;
+	/*.gwt-Button{*/
+	height: 25px;
     width: 53px;
     font-family: "Arial", Arial, sans-serif;
-	background-color: #FFFFFF;
+	background-color: #c0c0c0;
     border: none;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    /*margin: 4px 2px;*/
+    margin-bottom: 30px;
     cursor: pointer;
-	
+
 }
 
 #saveButton{
@@ -174,12 +176,14 @@ h1 {
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
     border: none;
-    border-radius: 0;
+    border-radius: 5px;
     color: #ffffff;
     background-color: black;
-    padding: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     text-align: center;
     text-decoration: none;
+    text-transform: uppercase;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
@@ -188,25 +192,25 @@ h1 {
     display: table-cell;
     vertical-align: middle;
 }
-
 #report-button{
 	height: 30px;
     width: 90px;
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
-	border: solid 1px white; 
-    border: none;
-    border-radius: 0;
+	border: solid 1px #727272; 
     color: white;
     background-color: #727272;
-    /*padding: 25px 25px 25px 600px;*/
     text-align: center;
     text-decoration: none;
+    text-transform: uppercase;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;	
     align-content: right;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 
@@ -238,8 +242,10 @@ h1 {
 	
 }
 
-#search-Textfeld{
-	
+#search-textfeld{
+	width: 187px;
+	hight: 30px;
+	margin-bottom: 30px;
 }
 
 /* Labels */
@@ -299,13 +305,12 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-	/*background: linear-gradient(to bottom right, #0c101a, #506bae); /*Color gradien siehe W3School*/
+	background: linear-gradient(to bottom right, #0000ff, white);/*W3School*/
 	text-align: center;
-	background-color: #34BFFF;
 }
 
 div#Navigator {	
-	background-color: #0c145c;
+	background: #0c145c;
 
 }
 
@@ -325,12 +330,12 @@ div#Trailer {
 	clear: both;
 	padding: 10px 0;
 	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
-	border-top: 1px white;
+	border-top: 1px #000000;
 	font-size: 80%;
 	color: white;
 	text-align: center;	
 	align-content: center;
-	background-color: #400000;
+	background-color: #01010e;
 
 }
 
