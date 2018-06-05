@@ -23,10 +23,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.TreeViewModel;
 
+import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
+import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
@@ -71,6 +74,11 @@ public class ContactSystem implements EntryPoint {
 //	//Symbole für Navigationsmenü-Buttons
 //	private Image contactsSymbol = new Image();
 //	private Image listSymbol = new Image(); //Alternatives Symbol für Kontaktliste
+	
+	//TreeView
+	ScrollPanel treeScrollPanel = new ScrollPanel();
+	final TreeViewModelTest tvm = new TreeViewModelTest();
+	CellTree ct = null;
 	
 	//Suchfunktion
 	private TextBox search = new TextBox();
@@ -132,19 +140,37 @@ public class ContactSystem implements EntryPoint {
 	 */
 	
 	public void loadTree() {
-		ScrollPanel sp = new ScrollPanel();
-		TreeViewModelTest tvm = new TreeViewModelTest();
+		
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
-		CellTree ct = new CellTree(tvm, "Liste");
-		sp.setHeight("80vh");
-		sp.add(ct);
+		treeScrollPanel.setHeight("80vh");
+		contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				log("Keine Listen gefunden");
+			}
+
+			@Override
+			public void onSuccess(Vector<Contact> result) {
+				// TODO Auto-generated method stub
+				log("Es wurden " + result.size() + " Listen gefunden");
+				ct = new CellTree(tvm, result);
+				treeScrollPanel.add(ct);
+				
+			}
+
+		});
 		
-		RootPanel.get("Lists").add(sp);
+		RootPanel.get("Lists").add(treeScrollPanel);
+		
 		
 	}
 	
 	public void onModuleLoad() {
+		
+		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 		
 		loadTree(); // für Test
 		loadContactSystem(); // für Test		
@@ -291,14 +317,31 @@ public class ContactSystem implements EntryPoint {
 		//TEST -> ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
-				 */
-//				CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
-//				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
-//				cellTree.setAnimationEnabled(true);		
+			contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						log("Keine Listen gefunden");
+					}
+
+					@Override
+					public void onSuccess(Vector<Contact> result) {
+						// TODO Auto-generated method stub
+						log("Es wurden " + result.size() + " Listen gefunden");
+						Vector<BusinessObject> vbo = new Vector<BusinessObject>();
+						for(Contact cl : result){
+							vbo.add(cl);
+						}
+						
+						tvm.updateData(vbo);
+					}
+
+				});			
+			
 				// Für Test->
 				RootPanel.get("Details").removeFromParent(); /*Alle Child-Widgets von Parent entfernen*/
+
 				RootPanel.get("Details").add(cf);
 			}
 		});
@@ -307,12 +350,27 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ContactListButton
 		contactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
-				 */
-			//	CellTree.Resources contactListTreeRecource = GWT.create(ContactSystemTreeResources.class);
-			//	CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
-			//	cellTree.setAnimationEnabled(true);				
+				contactSystemAdmin.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						log("Keine Listen gefunden");
+					}
+
+					@Override
+					public void onSuccess(Vector<ContactList> result) {
+						// TODO Auto-generated method stub
+						log("Es wurden " + result.size() + " Listen gefunden");
+						Vector<BusinessObject> vbo = new Vector<BusinessObject>();
+						for(ContactList cl : result){
+							vbo.add(cl);
+						}
+						
+						tvm.updateData(vbo);
+					}
+
+				});			
 				log("Load ContactList");
 			}
 			

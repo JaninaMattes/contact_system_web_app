@@ -12,7 +12,6 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
-import com.mysql.jdbc.log.Log;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
@@ -29,6 +28,7 @@ public class TreeViewModelTest implements TreeViewModel {
 	private ContactForm cForm;
 	private BoKeyProvider boKey = null;
 	private SingleSelectionModel<BusinessObject> selectionModel;
+	private Vector<BusinessObject> serverData = null;
 	
 	/**
 	 * Gibt eindeutigen Schluessel f�r das BusinessObject zur�ck.
@@ -124,9 +124,26 @@ public class TreeViewModelTest implements TreeViewModel {
 		this.cForm = cForm;
 	}
 
+	
+	public void updateData(Vector<BusinessObject> vbo){
+		log("Update Data");
+		dataProvider.getList().clear();
+		for (BusinessObject bo : vbo) {
+			dataProvider.getList().add(bo);
 
+		}
+		//getNodeInfo(vbo);
+	}
+	
+	public void addBusinessObject(BusinessObject bo){
+		dataProvider.getList().add(bo);
+	}
+	
+	public void removeBusinessObject(BusinessObject bo){
+		dataProvider.getList().remove(bo);
+	}
 
-
+	
 
 	/**
 	 * Hier wird die Baumstruktur getestet.
@@ -135,45 +152,36 @@ public class TreeViewModelTest implements TreeViewModel {
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
 
-		log("NodeInfo: " + value);
+		log("NodeInfo: " + value.getClass());
 		dataProvider = new ListDataProvider<BusinessObject>();
-		
-		if (value instanceof ContactList) {
+
+		if (value instanceof Vector) {
+			log("NodeInfo: is Vector" );
+			Vector v = (Vector) value;
+			if (v.get(0) instanceof Contact) {
+				log("NodeInfo: is Contact " + v.size());
+				Vector<Contact> cv = v;
+				for (Contact c : cv) {
+					log("Add: " + c.getName().getValue());
+					dataProvider.getList().add(c);
+				}
+			} else 
+			if (v.get(0) instanceof ContactList) {
+				log("NodeInfo: is ContactList " + v.size());
+				Vector<ContactList> clv = v;	
+				for (ContactList cl : clv) {
+					dataProvider.getList().add(cl);
+	
+				}
+			}
+		}if(value instanceof ContactList){
 			for (Contact c : ((ContactList) value).getContacts()) {
 				dataProvider.getList().add(c);
 				log(c.getCreationDate().toString());
 			}
-		} else {
-			csa.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					// TODO Auto-generated method stub
-					log("Keine Listen gefunden");
-				}
-
-				@Override
-				public void onSuccess(Vector<ContactList> result) {
-					// TODO Auto-generated method stub
-					log("Es wurden " + result.size() + " Listen gefunden");
-					for (ContactList cl : result) {
-						dataProvider.getList().add(cl);
-
-					}
-				}
-
-			});
 		}
+		
 
-		/*
-		 * //Anzahl der Elemente for (int i = 0; i < 2; i++) { ContactList cl = new
-		 * ContactList(); Vector<Contact> cv = new Vector<Contact>(); for(int j = 0; j <
-		 * 5; j++) { Contact c = new Contact(); c.setBo_Id(j); cv.add(c); }
-		 * 
-		 * cl.setContacts(cv); cl.setName("Liste " + i); cl.setBo_Id(i);
-		 * 
-		 * dataProvider.getList().add(cl); log(cl.getName()); }
-		 */
 		return new DefaultNodeInfo<BusinessObject>(dataProvider, new DataCell(), selectionModel, null);
 	}
 
@@ -187,6 +195,12 @@ public class TreeViewModelTest implements TreeViewModel {
 	native void log(String s)/*-{
 								console.log(s);
 								}-*/;
+
+
+
+
+
+	
 
 }
 
