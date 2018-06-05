@@ -1,5 +1,7 @@
 package de.hdm.kontaktsystem.client.gui;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -12,9 +14,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.mysql.jdbc.log.Log;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
+import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -39,21 +43,17 @@ public class ContactListForm extends VerticalPanel {
 	 */
 
 	TextBox nameContactList = new TextBox();
-	TextBox contactName = new TextBox();
-	TextBox firstNameContact = new TextBox();
-	TextBox lastNameContact = new TextBox();
-	// TextBoox sharedContact = new TextBox();
+	ListBox contactNames = new ListBox();
+
 
 	/**
 	 * WIdgets um die Attribute einer Kontaktliste anzuzeigen.
 	 */
 	Label contactListLabel = new Label("Kontaktliste: ");
-	Label contactLabel = new Label("Kontakte: "); 
-	Label firstNameLabel = new Label("Name: ");
-	Label lastNameLabel = new Label("Nick-Name: ");
+	Label contactLabel = new Label("Kontakt: "); 
 	
 	HorizontalPanel btnPanel = new HorizontalPanel();
-	Button deleteButton = new Button("Kontakt aus einer Liste löschen");
+	Button deleteButton = new Button("Kontakt löschen");
 	Button deleteClButton = new Button("Kontaktliste löschen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
@@ -61,14 +61,11 @@ public class ContactListForm extends VerticalPanel {
 	Label labelShare = new Label("Teilen mit: ");
 	Label contactStatus = new Label("");
 	
-	
 
 	CheckBox checkBox1 = new CheckBox();
 	CheckBox checkBox2 = new CheckBox();
-	CheckBox checkBox3 = new CheckBox();
-	CheckBox checkBox4 = new CheckBox();
 
-	ListBox shareUser = new ListBox();
+	ListBox shareUser = new ListBox();	
 
 	
 
@@ -85,24 +82,18 @@ public class ContactListForm extends VerticalPanel {
 		contactListGrid.setWidget(0, 2, checkBox1);
 		
 		contactListGrid.setWidget(1, 0, contactLabel);
-		contactListGrid.setWidget(1, 1, contactName);
-		contactListGrid.setWidget(1, 2, checkBox2);
-
-		contactListGrid.setWidget(2, 0, firstNameLabel);
-		contactListGrid.setWidget(2, 1, firstNameContact);
-		contactListGrid.setWidget(2, 2, checkBox3);
-
-		contactListGrid.setWidget(3, 0, lastNameLabel);
-		contactListGrid.setWidget(3, 1, lastNameContact);
-		contactListGrid.setWidget(3, 2, checkBox4);
+		contactListGrid.setWidget(1, 1, contactNames);
+		contactListGrid.setWidget(1, 2, deleteButton);
+		//contactListGrid.setWidget(1, 3, checkBox2);
 		
-		contactListGrid.setWidget(4, 0, labelShare);
-		contactListGrid.setWidget(4, 1, shareUser);
-		contactListGrid.setWidget(4, 2, shareButton);	
+		contactListGrid.setWidget(2, 0, labelShare);
+		contactListGrid.setWidget(2, 1, shareUser);
+		contactListGrid.setWidget(2, 2, shareButton);	
 		
-		contactListGrid.setWidget(5, 1, btnPanel);
+		contactListGrid.setWidget(3, 1, btnPanel);
 
-		 
+		contactNames.getElement().setId("ListBox");
+		shareUser.getElement().setId("ListBox");
 		
 		/**
 		 * Panel für Anordnung der Button
@@ -110,10 +101,10 @@ public class ContactListForm extends VerticalPanel {
 
 		deleteButton.setPixelSize(110, 30);
 		saveButton.setPixelSize(110, 30);
+		deleteClButton.setPixelSize(110, 30);
 		btnPanel.add(saveButton);
 		saveButton.addClickHandler(new saveClickHandler());
-		btnPanel.add(deleteButton);
-		
+		btnPanel.add(deleteClButton);
 		
 		/*
 		 * CheckBoxen für das Teilen einer ContactList Form
@@ -122,8 +113,7 @@ public class ContactListForm extends VerticalPanel {
 		 */
 		checkBox1.setEnabled(false);
 		checkBox2.setEnabled(false);
-		checkBox3.setEnabled(false);
-		checkBox4.setEnabled(false);
+
 		
 		/**
 		 * CSS
@@ -132,16 +122,11 @@ public class ContactListForm extends VerticalPanel {
 		//Textboxen in CSS
 		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
 		nameContactList.setStyleName("Textbox");
-		contactName.setStyleName("Textbox");
-		firstNameContact.setStyleName("Textbox");
-		lastNameContact.setStyleName("Textbox");
+		//contactNames.setStyleName("");
 		
 		//Labels in CSS
 		contactListLabel.setStyleName("ueberschriftlabel");
 		contactLabel.setStyleName("contactlabel");
-		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
-		firstNameLabel.setStyleName("namelabel");
-		lastNameLabel.setStyleName("namelabel");
 		
 		labelShare.setStyleName("teilenlabel");
 		contactStatus.setStyleName("contactstatus");
@@ -325,25 +310,71 @@ public class ContactListForm extends VerticalPanel {
 	void setSelected(ContactList cl) {
 
 		if (cl != null) {
-
+			int count = 0;
 			contactListToDisplay = cl;
-			deleteButton.setEnabled(true);
+			deleteClButton.setEnabled(true);
 			nameContactList.setText(cl.getName());
+			Vector<Contact> conVec = cl.getContacts();
+
+				for (Contact con : conVec) {	
+					contactNames.addItem(con.getName().getValue());
+					++count;
+				}
+			contactNames.setVisibleItemCount(count);
 
 		} else {
 			nameContactList.setText("");
-			firstNameContact.setText("");
-			lastNameContact.setText("");
-			// sharedContact.setText("");
-
+			deleteClButton.setEnabled(false);
+			contactNames.addItem("Keine Kontakte vorhanden");
 			deleteButton.setEnabled(false);
 		}
 
 	}
+	
+	/**
+	 * UserCallback Klasse zum befüllen der ListBox mit User -Objekten 
+	 * aus dem System. 
+	 * @author janina
+	 *
+	 */
+	
+	private class UserCallback implements AsyncCallback<Vector<User>> {
+		Vector <User> user = null;				
+		UserCallback(Vector<User> user){
+			this.user = user;
+		}
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Der Aufruf der Nutzer ist misglückt! :( ");
+		}
+
+		@Override
+		public void onSuccess(Vector <User> result) {
+			int count = 0;
+			if (result != null) {
+				for(User user: result) {						
+				//User Liste updaten
+				shareUser.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
+				++count;
+				}
+			//Genug Platz schaffen für alle Elemente
+			shareUser.setVisibleItemCount(count);
+			} else {
+				Window.alert("Kein Nutzer gefunden :(");
+			}
+		}
+	}
+	
+	
 
 	public void setSelected(Object object) {
 		// TODO Auto-generated method stub
 
 	}
+	
+	native void log(String s)/*-{
+	console.log(s);
+	}-*/;
 
 }
