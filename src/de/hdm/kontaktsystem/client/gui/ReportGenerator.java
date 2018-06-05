@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -44,6 +45,10 @@ public class ReportGenerator implements EntryPoint {
 	/**
 	 * Definition der grundlegenden Widgets des Report-Generators
 	 */
+	HorizontalPanel headerPanel = new HorizontalPanel();
+	Label headerText = new Label("Report Generator");
+	Image logo = new Image();
+	VerticalPanel navigationPanel = new VerticalPanel();
 	Button showAllButton = new Button("Alle Kontakte");
 	
 	Label findByParticipantLabel = new Label("Nach Teilhaber filtern");
@@ -68,7 +73,7 @@ public class ReportGenerator implements EntryPoint {
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
 	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
-	private Anchor reportLink = new Anchor("Report");				
+	private Anchor editorLink = new Anchor("Editor");				
 
 	
 	/**
@@ -140,55 +145,6 @@ public class ReportGenerator implements EntryPoint {
 		
 		
 		/**
-		 * Die Reportanwendung besteht aus einem "Navigationsteil" mit den
-		 * Schaltflächen zum Auslösen der Reportgenerierung und einem "Datenteil"
-		 * für die HTML-Version des Reports.
-		 */
-		/*
-		 * Funktionalität des ShowAll-Buttons
-		 */
-		showAllButton.setStylePrimaryName(""); //TODO CSS Style-Namen anpassen
-		showAllButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				reportGenerator.createAllContactsReport(new CreateAllContactsReportCallback());
-			}
-		});
-		
-		RootPanel.get("Navigator").add(showAllButton);
-		/*
-		 * Aufbau der DropDown-Liste für alle User
-		 */
-		reportGenerator.getAllUsers(new getAllUsersCallback());
-		
-		
-		/*
-		 * Funktionalität des FindByParticipant-Buttons
-		 */
-		findByParticipantButton.setStylePrimaryName(""); //TODO CSS Style-Namen anpassen
-		
-		findByParticipantButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				if(usersDropDownList.getSelectedValue() == null) {
-					Window.alert("Kein Teilhaber ausgewählt!");
-				} else {
-					int participantId = Integer.parseInt(usersDropDownList.getSelectedValue());
-					reportGenerator.createAllContactsForParticipantReport(participantId,
-							new CreateAllContactsForParticipantReportCallback(participantId));
-				}
-
-				
-			}
-		});
-		
-		RootPanel.get("Navigator").add(findByParticipantLabel);
-		findByParticipantPanel.add(usersDropDownList);
-		findByParticipantPanel.add(findByParticipantButton);
-		RootPanel.get("Navigator").add(findByParticipantPanel);
-		
-		
-		/**
 		 * CSS
 		 */
 		
@@ -213,18 +169,97 @@ public class ReportGenerator implements EntryPoint {
 		//Links
 		signInLink.setStyleName("link");
 		signOutLink.setStyleName("link");
-		reportLink.setStyleName("link");
+		editorLink.setStyleName("link");
 
+		/**
+		 * Aufbau der Oberfläche.
+		 * Die Reportanwendung besteht aus einem "Navigationsteil" mit den
+		 * Schaltflächen zum Auslösen der Reportgenerierung und einem "Datenteil"
+		 * für die HTML-Version des Reports.
+		 */
+		
+		/**
+		 * Aufbau des Headers
+		 */
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+		logo.setHeight("50px");
+		logo.setAltText("Logo");
+		headerPanel.add(logo);
+		headerPanel.add(headerText); //TODO: Durch Logo ersetzen
+		headerPanel.add(signOutLink);		
+		headerPanel.add(editorLink);		
+		
+		RootPanel.get("Header").add(headerPanel);
+		
+		/**
+		 * Aufbau der Navigation und der Detail-Ansicht
+		 */
+		/*
+		 * Anfangsansicht des Detail-Fensters (rechte Bildschirmseite)
+		 */
+		Label noDetails = new Label("Kein Report ausgewählt");
+		RootPanel.get("Details").add(noDetails);;
+		
+		/**
+		 * Funktion: alle Kontakte anzeigen
+		 */
+		/*
+		 * ShowAll-Button
+		 */
+		navigationPanel.add(showAllButton);
+		
+		showAllButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				reportGenerator.createAllContactsReport(new CreateAllContactsReportCallback());
+			}
+		});
+		
+		/**
+		 * Funktion: nach Teilhaber filtern
+		 */
+		/*
+		 * DropDown-Liste für alle User
+		 */
+		reportGenerator.getAllUsers(new getAllUsersCallback());
 		
 		/*
-		 * Aufbau der DropDown-Liste für Eigenschaften
+		 * FindByParticipant-Button
+		 */
+		
+		findByParticipantButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if(usersDropDownList.getSelectedValue() == null) {
+					Window.alert("Kein Teilhaber ausgewählt!");
+				} else {
+					int participantId = Integer.parseInt(usersDropDownList.getSelectedValue());
+					reportGenerator.createAllContactsForParticipantReport(participantId,
+							new CreateAllContactsForParticipantReportCallback(participantId));
+				}		
+			}
+		});
+		
+		/*
+		 * Hinzufügen zur Oberfläche
+		 */
+		navigationPanel.add(findByParticipantLabel);
+		findByParticipantPanel.add(usersDropDownList);
+		findByParticipantPanel.add(findByParticipantButton);
+		navigationPanel.add(findByParticipantPanel);
+		
+		
+		/**
+		 * Funktion: nach Eigenschaft und Ausprägung filtern
+		 */
+		/*
+		 * DropDown-Liste für Eigenschaften
 		 */
 		reportGenerator.getAllProperties(new GetAllPropertiesCallback());
 		
 		/*
-		 * Funktionalität des FindByValue-Buttons
-		 */
-		
+		 * FindByValue-Button
+		 */		
 		findByValueButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -245,13 +280,22 @@ public class ReportGenerator implements EntryPoint {
 			}		
 		});		
 		
-		RootPanel.get("Navigator").add(findByValueLabel);
-		RootPanel.get("Navigator").add(propertiesDropDownList);
+		/*
+		 * Hinzufügen zur Oberfläche
+		 */
+		navigationPanel.add(findByValueLabel);
+		navigationPanel.add(propertiesDropDownList);
 		findByValuePanel.add(findByValueText);
 		findByValuePanel.add(findByValueButton);
-		RootPanel.get("Navigator").add(findByValuePanel);
+		navigationPanel.add(findByValuePanel);
+		
+		/**
+		 * Hinzufügen der gesamten Navigation zur Benutzungsoberfläche
+		 */
+		RootPanel.get("Navigation").add(navigationPanel);
 		
 		
+				
 	}
 	
 	

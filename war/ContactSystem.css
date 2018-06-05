@@ -41,6 +41,18 @@ h1 {
     height: 80vh;
 }
 
+.report-left {
+	float: left;
+    width: 20%;
+    height: 80vh;
+}
+
+.report-right {
+	float: right;
+	width: 80%;
+	height: 80vh;
+}
+
 #ListBox {
    background: transparent;
    width: 268px;
