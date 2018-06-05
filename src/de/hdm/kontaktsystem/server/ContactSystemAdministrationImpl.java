@@ -687,6 +687,17 @@ public User login(String requestUri) {
 		* ***************************************************************************
 		*/
 	
+	  public Vector<BusinessObject> getAllSharedByOthersToMe () {
+		  Vector<BusinessObject> vbo = new Vector<BusinessObject>();
+		  for(Contact c : this.findAllCSharedByOthersToMe()){
+			  vbo.add(c);
+		  }
+		  for(ContactList cl : this.findAllCLSharedByOthersToMe()){
+			  vbo.add(cl);
+		  }
+		  return vbo;
+			  
+	  }
 	  
 	  /**
 		 * Alle fuer den Benutzer in der Applikation geteilte Ausprägungen <code>PropertyValue</code> Objekte
@@ -695,12 +706,14 @@ public User login(String requestUri) {
 		 * @param User-Objekt
 		 * @return Vector PropertyValue-Objekte
 		 */
+	  
+	 
 
-		public Vector<PropertyValue> findAllPVSharedByOthersToMe (User user) {
+		public Vector<PropertyValue> findAllPVSharedByOthersToMe () {
 
 			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 			Vector<Participation> participationVector = new Vector<Participation>();		
-			participationVector = this.getAllParticipationsByParticipant(user);
+			participationVector = this.getAllParticipationsByParticipant(this.getUserByID(this.getCurrentUser()));
 			// Vector für die Speicherung aller BusinessObjekte erzeugen
 			Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 
 			
@@ -727,11 +740,11 @@ public User login(String requestUri) {
 		 * @return Vector Contact-Objekte
 		 */
 
-		public Vector<Contact> findAllCSharedByOthersToMe (User user) {
+		public Vector<Contact> findAllCSharedByOthersToMe () {
 
 			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 			Vector<Participation> participationVector = new Vector<Participation>();		
-			participationVector = this.getAllParticipationsByParticipant(user);
+			participationVector = this.getAllParticipationsByParticipant(this.getUserByID(this.getCurrentUser()));
 			Vector<Contact> contactResultVector = new Vector <Contact>(); 
 			
 			for (Participation part : participationVector) {
@@ -759,10 +772,10 @@ public User login(String requestUri) {
 		 * @return Vector ContactList-Objekte
 		 */
 
-		public Vector<ContactList> findAllCLSharedByOthersToMe(User user) {
+		public Vector<ContactList> findAllCLSharedByOthersToMe() {
 
 			Vector<Participation> participationVector = new Vector<Participation>();		
-			participationVector = this.getAllParticipationsByParticipant(user);
+			participationVector = this.getAllParticipationsByParticipant(this.getUserByID(this.getCurrentUser()));
 			Vector<ContactList> clResultVector = new Vector <ContactList>(); 		
 			
 			for (Participation part : participationVector) {
@@ -786,7 +799,17 @@ public User login(String requestUri) {
 			return clResultVector;		
 		}
 		
-		
+		public Vector<BusinessObject> getAllSharedByMe () {
+			 Vector<BusinessObject> vbo = new Vector<BusinessObject>();
+			  for(Contact c : this.findAllCSharedByMe()){
+				  vbo.add(c);
+			  }
+			  for(ContactList cl : this.findAllCLSharedByMe()){
+				  vbo.add(cl);
+			  }
+			  return vbo;
+			  
+		  }
 		
 		/**
 		 *  Alle fuer den Benutzer in der Applikation zugaenglichen Auspraegungen <code>PropertyValue</code> - Objekte 
@@ -797,11 +820,11 @@ public User login(String requestUri) {
 		 *  @return Vector<PropertyValue>
 		 */
 
-		public Vector<PropertyValue> findAllPVSharedByMe (User user) {
+		public Vector<PropertyValue> findAllPVSharedByMe () {
 
 			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 			Vector<Participation> participationVector = new Vector<Participation>();		
-			participationVector = this.getAllParticipationsByOwner(user);
+			participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
 			// Vector für die Speicherung aller BusinessObjekte erzeugen
 			Vector<PropertyValue> propertyResultVector = new Vector <PropertyValue>(); 		
 			//System.out.println(participationVector);
@@ -832,11 +855,11 @@ public User login(String requestUri) {
 		 *  @return Vector mit allen geteilten Contact-Objekten
 		 */
 
-		public Vector<Contact> findAllCSharedByMe (User user) {
+		public Vector<Contact> findAllCSharedByMe () {
 
 			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 			Vector<Participation> participationVector = new Vector<Participation>();		
-			participationVector = this.getAllParticipationsByOwner(user);		
+			participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));		
 			Vector<Contact> contactResultVector = new Vector <Contact>(); 		
 					
 			for (Participation part : participationVector) {
@@ -865,10 +888,10 @@ public User login(String requestUri) {
 		 *  @return Vector<ContactList>
 		 */
 
-		public Vector<ContactList> findAllCLSharedByMe (User user) {
+		public Vector<ContactList> findAllCLSharedByMe () {
 
 			Vector<Participation> participationVector = new Vector<Participation>();		
-			participationVector = this.getAllParticipationsByOwner(user);
+			participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
 					// Vector für die Speicherung aller BusinessObjekte erzeugen
 					Vector<ContactList> contactListVector = new Vector <ContactList>(); 		
 					//System.out.println(participationVector);
@@ -897,10 +920,10 @@ public User login(String requestUri) {
 		 * @param User-Objekt
 		 */
 		
-		public void deleteAllPVSharedByMe(User user) {
+		public void deleteAllPVSharedByMe() {
 			
 			Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
-			propertyValueResult = this.findAllPVSharedByMe(user);
+			propertyValueResult = this.findAllPVSharedByMe();
 			
 			for(PropertyValue pV : propertyValueResult) {
 				// loeschen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
@@ -919,7 +942,7 @@ public User login(String requestUri) {
 		public void deleteAllCSharedByMe(User user) {
 			
 			Vector <Contact> contactResult = new Vector <Contact>();
-			contactResult = this.findAllCSharedByMe(user);
+			contactResult = this.findAllCSharedByMe();
 			
 			for(Contact contact : contactResult) {
 				ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
@@ -938,7 +961,7 @@ public User login(String requestUri) {
 		public void deleteAllCLSharedByMe(User user) {
 			
 			Vector <ContactList> clResult = new Vector <ContactList>();
-			clResult = this.findAllCLSharedByMe(user);
+			clResult = this.findAllCLSharedByMe();
 			
 			for(ContactList cl : clResult) {
 				ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(cl);
@@ -960,7 +983,7 @@ public User login(String requestUri) {
 
 			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
 					Vector<PropertyValue> pvVector = new Vector<PropertyValue>();		
-					pvVector = this.findAllPVSharedByOthersToMe(u);
+					pvVector = this.findAllPVSharedByOthersToMe();
 					for (PropertyValue pv : pvVector) {
 						ParticipationMapper.participationMapper().deleteParticipationForParticipant(u);
 					     }
@@ -979,7 +1002,7 @@ public User login(String requestUri) {
 		public void deleteAllCSharedByOthersToMe(User user) {
 			
 			Vector <Contact> contactResult = new Vector <Contact>();
-			contactResult = this.findAllCSharedByOthersToMe(user);		
+			contactResult = this.findAllCSharedByOthersToMe();		
 
 			for(Contact contact : contactResult) {
 				ParticipationMapper.participationMapper().deleteParticipationForParticipant(user);
@@ -999,7 +1022,7 @@ public User login(String requestUri) {
 		public void deleteAllCLSharedByOthersToMe(User user) {
 			
 			Vector <ContactList> clResult = new Vector <ContactList>();
-			clResult = this.findAllCLSharedByOthersToMe(user);		
+			clResult = this.findAllCLSharedByOthersToMe();		
 			//System.out.println(clResult);
 
 			for(ContactList cl : clResult) {

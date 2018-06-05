@@ -157,7 +157,9 @@ public class ContactSystem implements EntryPoint {
 				// TODO Auto-generated method stub
 				log("Es wurden " + result.size() + " Listen gefunden");
 				ct = new CellTree(tvm, result);
+				ct.setAnimationEnabled(true);
 				treeScrollPanel.add(ct);
+				
 				
 			}
 
@@ -339,10 +341,6 @@ public class ContactSystem implements EntryPoint {
 
 				});			
 			
-				// Für Test->
-				RootPanel.get("Details").removeFromParent(); /*Alle Child-Widgets von Parent entfernen*/
-
-				RootPanel.get("Details").add(cf);
 			}
 		});
 	
@@ -380,12 +378,25 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
-				 */
-			//	CellTree.Resources myParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
-			//	CellTree cellTree = new CellTree(mptvm, "Root", myParticipationTreeRecource);
-			//	cellTree.setAnimationEnabled(true);				
+				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						log("Keine Listen gefunden");
+					}
+
+					@Override
+					public void onSuccess(Vector<BusinessObject> result) {
+						// TODO Auto-generated method stub
+						log("Es wurden " + result.size() + " SharedObjects gefunden");
+						
+						
+						tvm.updateData(result);
+					}
+
+				});		
+					log("Load Shared By Me");
 			}
 		});
 	
@@ -394,12 +405,26 @@ public class ContactSystem implements EntryPoint {
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				
-				/**
-				 * Definition des CellTrees, der durch das TreeViewModel aufgebaut wird
-				 */
-			//	CellTree.Resources receivedParticipationTreeRecource = GWT.create(ContactSystemTreeResources.class);
-			//	CellTree cellTree = new CellTree(rptvm, "Root", receivedParticipationTreeRecource);
-			//	cellTree.setAnimationEnabled(true);				
+				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						log("Keine Listen gefunden");
+					}
+
+					@Override
+					public void onSuccess(Vector<BusinessObject> result) {
+						// TODO Auto-generated method stub
+						log("Es wurden " + result.size() + " SharedObjects gefunden");
+						
+						
+						tvm.updateData(result);
+					}
+
+				});		
+				log("Load Shared With Me");
+				
 			}
 		});
 		
@@ -418,8 +443,6 @@ public class ContactSystem implements EntryPoint {
 		
 	  	RootPanel.get("Header").add(header);
 	  	RootPanel.get("Navigator").add(navigation);
-	  	RootPanel.get("Details").add(cf); //Für Tests
-	  	RootPanel.get("Details").add(clf);
 	  	RootPanel.get("Trailer").add(trailer);
 		
 	}
