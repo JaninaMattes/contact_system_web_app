@@ -297,7 +297,6 @@ public class ContactSystem implements EntryPoint {
 //				CellTree cellTree = new CellTree(cltvm, "Root", contactListTreeRecource);
 //				cellTree.setAnimationEnabled(true);		
 				// Für Test->
-				log("COntactForm: " + cf.toString());
 				RootPanel.get("Details").removeFromParent(); /*Alle Child-Widgets von Parent entfernen*/
 				RootPanel.get("Details").add(cf);
 			}
@@ -357,14 +356,11 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
 
-//	    CellTree.Resources contactTreeRecource = GWT.create(ContactSystemTreeResources.class);
-//	    CellTree cellTree = new CellTree(ctvm, "Root", contactTreeRecource);
-//	    cellTree.setAnimationEnabled(true);
 		
 	  	RootPanel.get("Header").add(header);
 	  	RootPanel.get("Navigator").add(navigation);
-//	    RootPanel.get("Lists").add(cellTree);
 	  	RootPanel.get("Details").add(cf); //Für Tests
+	  	RootPanel.get("Details").add(clf);
 	  	RootPanel.get("Trailer").add(trailer);
 		
 	}

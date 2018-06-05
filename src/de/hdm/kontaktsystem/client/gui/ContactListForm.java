@@ -49,13 +49,13 @@ public class ContactListForm extends VerticalPanel {
 	 */
 	Label contactListLabel = new Label("Kontaktliste: ");
 	Label contactLabel = new Label("Kontakte: "); 
-	Label firstNameLabel = new Label("Vorname: ");
-	Label lastNameLabel = new Label("Nachname: ");
+	Label firstNameLabel = new Label("Name: ");
+	Label lastNameLabel = new Label("Nick-Name: ");
 	
 	HorizontalPanel btnPanel = new HorizontalPanel();
 	Button deleteButton = new Button("Kontakt aus einer Liste löschen");
-	Button deleteClButton = new Button("KontaktLliste löschen");
-	Button saveButton = new Button("Kontakt Liste speichern");
+	Button deleteClButton = new Button("Kontaktliste löschen");
+	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
 	
 	Label labelShare = new Label("Teilen mit: ");
@@ -137,7 +137,7 @@ public class ContactListForm extends VerticalPanel {
 		lastNameContact.setStyleName("Textbox");
 		
 		//Labels in CSS
-		contactListLabel.setStyleName("contactlistlabel");
+		contactListLabel.setStyleName("ueberschriftlabel");
 		contactLabel.setStyleName("contactlabel");
 		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
 		firstNameLabel.setStyleName("namelabel");

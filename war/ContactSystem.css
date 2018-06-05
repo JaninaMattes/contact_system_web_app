@@ -239,23 +239,30 @@ h1 {
 /* Labels */
 
 #namelabel{
-	
+    border: none;
+    background-color: white;
+	 	
 }
 
 #eigenschaftlabel{
-	
+ 	border: none;
+ 	background-color: white;
 }
 
 #teilenlabel{
-	
+	border: none;
+	background-color: white;
 }
 
-#contactlabel{
-	
-}
-
-#contactlistlabel{
-	
+/* Label von Überschrift "Kontakt:" und "Kontaktliste:"*/
+#ueberschriftlabel{
+	 border: none;
+	 font-size: 20px;
+	 color: black;
+	 font-weight: bold;
+	 font-family: "Arial", Arial, sans-serif; 
+	 background-color: white;
+	 
 }
 
 #contactstatus{
@@ -291,7 +298,11 @@ div#Header {
 }
 
 div#Navigator {	
+<<<<<<< HEAD
+	background-color: #0c145c;
+=======
 	background-color: #051117;
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 	align-content: left;
 }
 
@@ -316,7 +327,11 @@ div#Trailer {
 	color: white;
 	text-align: center;	
 	align-content: center;
+<<<<<<< HEAD
+	background-color: #3939fd;
+=======
 	background-color: #051117;
+>>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
 }
 
 .Cell{

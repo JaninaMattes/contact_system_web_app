@@ -78,7 +78,7 @@ public class ParticipationMapper {
 				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
 				participant.setGoogleID(rs.getDouble("User_ID"));
 				participation.setParticipant(participant);	
-				bo.setBo_Id(rs.getInt("bo_ID"));
+				bo.setBo_Id(rs.getInt("BusinessObject_ID"));
 				participation.setReference(bo);
 		
 				participations.add(participation);
@@ -125,7 +125,7 @@ public class ParticipationMapper {
 				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
 				participant.setGoogleID(rs.getDouble("User_ID"));
 				participation.setParticipant(participant);	
-				bo.setBo_Id(rs.getInt("bo_ID"));
+				bo.setBo_Id(rs.getInt("BusinessObject_ID"));
 				participation.setReference(bo);
 				
 				participations.add(participation);
@@ -166,7 +166,7 @@ public class ParticipationMapper {
 				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
 				participant.setGoogleID(rs.getDouble("User_ID"));
 				participation.setParticipant(participant);	
-				bo.setBo_Id(rs.getInt("bo_ID"));
+				bo.setBo_Id(rs.getInt("BusinessObject_ID"));
 				participation.setReference(bo);
 				
 				participations.add(participation);
@@ -202,12 +202,12 @@ public class ParticipationMapper {
 				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
 				participant.setGoogleID(rs.getDouble("User_ID"));
 				participation.setParticipant(participant);	
-				bo.setBo_Id(rs.getInt("bo_ID"));
+				bo.setBo_Id(rs.getInt("BusinessObject_ID"));
 				participation.setReference(bo);
 				
 				participations.add(participation);
-
 			}
+			
 			return participations;
 			
 		} catch(SQLException e){

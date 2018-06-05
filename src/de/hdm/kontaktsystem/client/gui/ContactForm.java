@@ -155,7 +155,7 @@ public class ContactForm extends VerticalPanel{
 		shareButton.addClickHandler(new ShareClickHandler());
 		
 		//Labels in CSS
-		label.setStyleName("contactlabel");
+		label.setStyleName("ueberschriftlabel");
 		labelName.setStyleName("namelabel");
 		labelNickName.setStyleName("namelabel");
 		
