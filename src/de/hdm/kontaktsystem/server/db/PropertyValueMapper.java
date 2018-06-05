@@ -318,7 +318,7 @@ public class PropertyValueMapper {
 				PropertyValue propValue = new PropertyValue();				
 				Property p = new Property();
 				User u = new User();
-				u.setGoogleID(rs.getInt("bo.user_ID"));
+				u.setGoogleID(rs.getDouble("bo.user_ID"));
 				p.setId(rs.getInt("pv.property_ID"));
 				propValue.setProperty(p);
 				propValue.setBo_Id(rs.getInt("pv.ID"));

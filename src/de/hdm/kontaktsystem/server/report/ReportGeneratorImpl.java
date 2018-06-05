@@ -263,7 +263,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		report.setCreated(new Date()); //TODO: aktuelles Datum setzen
 		
 		//Alle Teilhaberschaften, die der aktuelle User hat, ermitteln
-		Vector<Participation> allParticipations = administration.getAllParticipationsByOwner(currentUser);
+		Vector<Participation> allParticipations = administration.getAllParticipationsByOwner(this.getCurrentUser());
 		//Alle Teilhaberschaften mit dem gesuchten Teilhaber ermitteln
 		Vector<Participation> allParticipationsToParticipant = new Vector<Participation>();
 		if(allParticipations.isEmpty()) {
@@ -297,7 +297,11 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				this.addSingleContact(singleContact, report);
 			}
 		}
+		
+		//TEST
+		System.out.println("Report fertig erstellt.");
 				
+		
 		/**
 		 * Zurückgeben des erstellten Reports
 		 */
@@ -370,7 +374,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				this.addSingleContact(singleContact, report);
 			}
 		}
-				
+		
+		//TEST
+		System.out.println("Report fertig erstellt.");			
+		
 		/**
 		 * Zurückgeben des erstellten Reports
 		 */
