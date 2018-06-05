@@ -81,22 +81,22 @@ h1 {
 /*Buttons*/
 
 #shareButton{
+.gwt-Button{
 	height: 30px;
     width: 53px;
     font-size: 16px;
     border: none;
     font-family: "Arial", Arial, sans-serif;
-	background-color: #0080ff;
-	color: white;
+	background-color: blue;
+	color: black;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     margin: 4px 2px;
     cursor: pointer;
-    
 }
-
+}
 #menue-button{
 	height: 30px;
     width: 240px;
@@ -105,7 +105,7 @@ h1 {
 	background-color: #727272;
     border: none;
     border-radius: 0;
-    color: #ffffff;
+    color: #000000;
     padding: 0px;
     text-align: center;
     text-decoration: none;
@@ -133,6 +133,7 @@ h1 {
 }
 
 #saveButton{
+	.gwt-Button{
 	height: 30px;
     width: 50px; 
     font-family: "Arial", Arial, sans-serif;     
@@ -146,10 +147,11 @@ h1 {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-	
+}
 }
 
 #deleteButton{
+	.gwt-Button{
 	height: 30px;
     width: 50px;
     font-family: "Arial", Arial, sans-serif;     
@@ -164,17 +166,18 @@ h1 {
     margin: 4px 2px;
     cursor: pointer;	
 }
+}
 
 #log-out-button{
 	height: 30px;
-    width: 50px;
+    width: 90px;
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
     border: none;
     border-radius: 0;
-    color: #727272;
+    color: #ffffff;
     background-color: black;
-    padding: 25px 25px 25px 30px;
+    padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -182,11 +185,13 @@ h1 {
     margin: 4px 2px;
     cursor: pointer;	
     align: right;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 #report-button{
 	height: 30px;
-    width: 50px;
+    width: 90px;
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
 	border: solid 1px white; 
@@ -203,6 +208,7 @@ h1 {
     cursor: pointer;	
     align-content: right;
 }
+
 
 /* Das Logo */
 
@@ -239,24 +245,25 @@ h1 {
 /* Labels */
 
 #namelabel{
-    border: none;
+    border-style: none;
     background-color: white;
 	 	
 }
 
 #eigenschaftlabel{
- 	border: none;
+ 	border-style: none;
  	background-color: white;
 }
 
 #teilenlabel{
-	border: none;
+	border-style: none;
 	background-color: white;
 }
 
 /* Label von Überschrift "Kontakt:" und "Kontaktliste:"*/
 #ueberschriftlabel{
-	 border: none;
+	 border-style: none;
+	 border-color:white;
 	 font-size: 20px;
 	 color: black;
 	 font-weight: bold;
@@ -298,16 +305,12 @@ div#Header {
 }
 
 div#Navigator {	
-<<<<<<< HEAD
 	background-color: #0c145c;
-=======
-	background-color: #051117;
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
-	align-content: left;
+
 }
 
 div#Lists {	
-	background: #d9d9d9;
+	background: #ffffff;
 	align-content: center;
 }
 
@@ -327,11 +330,8 @@ div#Trailer {
 	color: white;
 	text-align: center;	
 	align-content: center;
-<<<<<<< HEAD
-	background-color: #3939fd;
-=======
-	background-color: #051117;
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
+	background-color: #400000;
+
 }
 
 .Cell{

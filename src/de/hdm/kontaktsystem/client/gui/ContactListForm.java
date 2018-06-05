@@ -131,27 +131,27 @@ public class ContactListForm extends VerticalPanel {
 		
 		//Textboxen in CSS
 		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
-		nameContactList.setStyleName("Textbox");
-		contactName.setStyleName("Textbox");
-		firstNameContact.setStyleName("Textbox");
-		lastNameContact.setStyleName("Textbox");
+		nameContactList.getElement().setId("Textbox");
+		contactName.getElement().setId("Textbox");
+		firstNameContact.getElement().setId("Textbox");
+		lastNameContact.getElement().setId("Textbox");
 		
 		//Labels in CSS
-		contactListLabel.setStyleName("ueberschriftlabel");
-		contactLabel.setStyleName("contactlabel");
+		contactListLabel.getElement().setId("ueberschriftlabel");
+		contactLabel.getElement().setId("contactlabel");
 		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
-		firstNameLabel.setStyleName("namelabel");
-		lastNameLabel.setStyleName("namelabel");
+		firstNameLabel.getElement().setId("namelabel");
+		lastNameLabel.getElement().setId("namelabel");
 		
-		labelShare.setStyleName("teilenlabel");
-		contactStatus.setStyleName("contactstatus");
+		labelShare.getElement().setId("teilenlabel");
+		contactStatus.getElement().setId("contactstatus");
 		
 		//Buttons in CSS
 		//delete + share + save-Buttons müssen jeweils auch gleich sein
-		deleteButton.setStyleName("deleteButton");
-		deleteClButton.setStyleName("deleteButton");
-		saveButton.setStyleName("saveButton");
-		shareButton.setStyleName("shareButton");
+		deleteButton.getElement().setId("deleteButton");
+		deleteClButton.getElement().setId("deleteButton");
+		saveButton.getElement().setId("saveButton");
+		shareButton.getElement().setId("shareButton");
 		
 		
 	}

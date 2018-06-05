@@ -145,43 +145,44 @@ public class ContactForm extends VerticalPanel{
 		
 		//Buttons in CSS
 		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
-		deleteButton.setStyleName("deleteButton");
+		deleteButton.getElement().setId("deleteButton");
 		deleteButton.addClickHandler(new DeleteClickHandler());
 		
-		saveButton.setStyleName("saveButton");
+		saveButton.getElement().setId("saveButton");
 		saveButton.addClickHandler(new SaveClickHandler());
 		
-		shareButton.setStyleName("shareButton");
+		shareButton.getElement().setId("shareButton");
 		shareButton.addClickHandler(new ShareClickHandler());
 		
 		//Labels in CSS
-		label.setStyleName("ueberschriftlabel");
-		labelName.setStyleName("namelabel");
-		labelNickName.setStyleName("namelabel");
+		label.getElement().setId("ueberschriftlabel");
+		labelName.getElement().setId("namelabel");
+		labelNickName.getElement().setId("namelabel");
 		
 		//Hinzufügbare Eigenschaften gleicher StyleName
-		labelFirma.setStyleName("eigenschaftlabel");
-		labelTeleNr.setStyleName("eigenschaftlabel");
-		labelEmail.setStyleName("eigenschaftlabel");
-		labelGeburtsdatum.setStyleName("eigenschaftlabel");
-		labelAdresse.setStyleName("eigenschaftlabel");
+		labelFirma.getElement().setId("eigenschaftlabel");
+		labelTeleNr.getElement().setId("eigenschaftlabel");
+		labelMobilNr.getElement().setId("eigenschaftlabel");
+		labelEmail.getElement().setId("eigenschaftlabel");
+		labelGeburtsdatum.getElement().setId("eigenschaftlabel");
+		labelAdresse.getElement().setId("eigenschaftlabel");
 
-		isShared.setStyleName("teilenlabel");
-		labelShare.setStyleName("teilenlabel");
-		labelSharedWith.setStyleName("teilenlabel");
-		labelReceiedFrom.setStyleName("teilenlabel");
-		contactStatus.setStyleName("contactstatus");
+		isShared.getElement().setId("teilenlabel");
+		labelShare.getElement().setId("teilenlabel");
+		labelSharedWith.getElement().setId("teilenlabel");
+		labelReceiedFrom.getElement().setId("teilenlabel");
+		contactStatus.getElement().setId("contactstatus");
 		
 		//Textboxen in CSS
 		//bekommen alle den gleichen StyleName (wie in ContactLIstForm.java)
-		textBoxName.setStyleName("Textbox");
-		textBoxNickName.setStyleName("Textbox");
-		textBoxFirma.setStyleName("Textbox");
-		textBoxTelefonnummer.setStyleName("Textbox");
-		textBoxMobilnummer.setStyleName("Textbox");
-		textBoxEmail.setStyleName("Textbox");
-		textBoxGeburtsdatum.setStyleName("Textbox");
-		textBoxAdresse.setStyleName("Textbox");
+		textBoxName.getElement().setId("Textbox");
+		textBoxNickName.getElement().setId("Textbox");
+		textBoxFirma.getElement().setId("Textbox");
+		textBoxTelefonnummer.getElement().setId("Textbox");
+		textBoxMobilnummer.getElement().setId("Textbox");
+		textBoxEmail.getElement().setId("Textbox");
+		textBoxGeburtsdatum.getElement().setId("Textbox");
+		textBoxAdresse.getElement().setId("Textbox");
 
 		
 		/**
