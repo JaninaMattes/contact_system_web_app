@@ -22,6 +22,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.client.LoginService;
 import de.hdm.kontaktsystem.client.LoginServiceAsync;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
+import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.ReportGeneratorAsync;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -41,6 +43,9 @@ import de.hdm.kontaktsystem.shared.report.HTMLReportWriter;
 public class ReportGenerator implements EntryPoint {
 
 	ReportGeneratorAsync reportGenerator = null;
+	
+	//TEST
+//	ContactSystemAdministrationAsync contactSysAdmin = null;
 	
 	/**
 	 * Definition der grundlegenden Widgets des Report-Generators
@@ -133,10 +138,15 @@ public class ReportGenerator implements EntryPoint {
 		/**
 		 * Zuweisung Asynchrones Interface
 		 */
-		if (reportGenerator == null) {
+		if(reportGenerator == null) {
 			reportGenerator = ClientsideSettings.getReportGenerator();
 		}
 
+		//TEST
+//		if(contactSysAdmin == null) {
+//			contactSysAdmin = ClientsideSettings.getContactAdministration();
+//		}
+		
 		
 		/**
 		 * Setzen der User-Informationen im Server
@@ -220,7 +230,7 @@ public class ReportGenerator implements EntryPoint {
 		 */
 		/*
 		 * DropDown-Liste für alle User
-		 */
+		 */		
 		reportGenerator.getAllUsers(new getAllUsersCallback());
 		
 		/*
@@ -292,7 +302,7 @@ public class ReportGenerator implements EntryPoint {
 		/**
 		 * Hinzufügen der gesamten Navigation zur Benutzungsoberfläche
 		 */
-		RootPanel.get("Navigation").add(navigationPanel);
+		RootPanel.get("Navigator").add(navigationPanel);
 		
 		
 				

@@ -72,13 +72,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		this.setAdministration(systemImpl);
 	}
 	
-	/**
-	 * Zurückgeben des aktuellen Users
-	 * TODO: Klären, ob überflüssig
-	 */
-	public User getUserInfo() {
-		return this.currentUser;
-	}
+	
+//	/**
+//	 * Zurückgeben des aktuellen Users
+//	 * TODO: Klären, ob überflüssig
+//	 */
+//	public User getUserInfo() {
+//		return this.currentUser;
+//	}
 	
 	/**
 	 * Setzen des aktuell eingeloggten Users
@@ -87,6 +88,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	public void setUserInfo(User userInfo) {
 		this.currentUser = userInfo;
 	}
+	
 
 	/**
 	 * Rückgabe des aktuellen Users (über Login-Service)
@@ -135,7 +137,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		 */
 		Row ownerRow = new Row();
 		Column ownerProperty = new Column("Eigentümer");
-		Column ownerPropertyValue = new Column(contact.getOwner().getUserContact().getName().getValue());
+		//TEST
+		Column ownerPropertyValue = new Column("Testname");
+//		Column ownerPropertyValue = new Column(contact.getOwner().getUserContact().getName().getValue());
+		
 		ownerRow.addColumn(ownerProperty);
 		ownerRow.addColumn(ownerPropertyValue);
 		contactElement.addPropertyRow(ownerRow);
@@ -151,16 +156,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		}else {
 			status = "nicht geteilt";
 		}
-		Column statusPropertyValue = new Column(contact.getOwner().getUserContact().getName().getValue());
+		Column statusPropertyValue = new Column(status);
 		statusRow.addColumn(statusProperty);
 		statusRow.addColumn(statusPropertyValue);
 		contactElement.addPropertyRow(statusRow);
 		
 		/**
 		 * Liste mit Teilhabern erstellen
-		 */
+		 */	
 		if(contact.isShared_status()) {
-			Vector<Participation> participations = administration.getAllParticipationsByBusinessObject(contact); //TODO: in Interfaces ergänzen
+			Vector<Participation> participations = administration.getAllParticipationsByBusinessObject(contact);
 			for(Participation singleParticipation : participations) {
 				String name = singleParticipation.getParticipant().getUserContact().getName().getValue();
 				SimpleParagraph singleParticipant = new SimpleParagraph(name);
@@ -172,6 +177,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				
 		//Hinzufügen des erstellten Elements zum Report
 		report.addContactElement(contactElement);
+		
+		//TEST
+		System.out.println("Kontakt " + contact.getBoId() + " hinzugefügt");
 	}
 	
 	/**
@@ -216,12 +224,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Hinzufügen der einzelnen Kontakt-Elemente
 		Vector<Contact> allContacts = administration.getAllContactsFromUser();
 		if(allContacts.isEmpty()) {
-			//TODO: Fehlerbehandlung
+			System.out.println("Keine Kontakte gefunden");
 		}else {
+			//TEST
+			System.out.println("Alle Kontakte abgerufen");
 			for(Contact singleContact : allContacts) {
 				this.addSingleContact(singleContact, report);
 			}
 		}
+		//TEST
+		System.out.println("Report fertig erstellt.");
 		
 		/**
 		 * Zurückgeben des erstellten Reports
