@@ -138,7 +138,7 @@ public class ContactListForm extends VerticalPanel {
 		
 		//Labels in CSS
 		contactListLabel.getElement().setId("ueberschriftlabel");
-		contactLabel.getElement().setId("contactlabel");
+		contactLabel.getElement().setId("namelabel");
 		//Anzeige des Labels fÃ¼r Vorname und Nachname gleicher StyleName
 		firstNameLabel.getElement().setId("namelabel");
 		lastNameLabel.getElement().setId("namelabel");
@@ -148,9 +148,14 @@ public class ContactListForm extends VerticalPanel {
 		
 		//Buttons in CSS
 		//delete + share + save-Buttons mÃ¼ssen jeweils auch gleich sein
+		
+		deleteButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
 		deleteButton.getElement().setId("deleteButton");
+		deleteClButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
 		deleteClButton.getElement().setId("deleteButton");
+		saveButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
 		saveButton.getElement().setId("saveButton");
+		shareButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
 		shareButton.getElement().setId("shareButton");
 		
 		

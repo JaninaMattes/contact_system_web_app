@@ -145,14 +145,19 @@ public class ContactForm extends VerticalPanel{
 		
 		//Buttons in CSS
 		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
+		
+		deleteButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
 		deleteButton.getElement().setId("deleteButton");
 		deleteButton.addClickHandler(new DeleteClickHandler());
-		
+
+		saveButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
 		saveButton.getElement().setId("saveButton");
 		saveButton.addClickHandler(new SaveClickHandler());
 		
+		shareButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
 		shareButton.getElement().setId("shareButton");
 		shareButton.addClickHandler(new ShareClickHandler());
+		
 		
 		//Labels in CSS
 		label.getElement().setId("ueberschriftlabel");
@@ -167,7 +172,7 @@ public class ContactForm extends VerticalPanel{
 		labelGeburtsdatum.getElement().setId("eigenschaftlabel");
 		labelAdresse.getElement().setId("eigenschaftlabel");
 
-		isShared.getElement().setId("teilenlabel");
+		isShared.getElement().setId("geteiltlabel");
 		labelShare.getElement().setId("teilenlabel");
 		labelSharedWith.getElement().setId("teilenlabel");
 		labelReceiedFrom.getElement().setId("teilenlabel");
@@ -183,6 +188,24 @@ public class ContactForm extends VerticalPanel{
 		textBoxEmail.getElement().setId("Textbox");
 		textBoxGeburtsdatum.getElement().setId("Textbox");
 		textBoxAdresse.getElement().setId("Textbox");
+		receivedFrom.getElement().setId("geteiltvontextfeld");
+		
+		//ListBox CSS
+		shareUser.getElement().setId("geteiltmitlistbox");
+		sharedWithUser.getElement().setId("teilenmitlistbox");
+		ListBox shareUser = new ListBox();
+		ListBox sharedWithUser = new ListBox();
+		TextBox receivedFrom = new TextBox();
+		
+		//Checkboxen CSS
+		checkBox1.getElement().setId("checkBox");
+		checkBox2.getElement().setId("checkBox");
+		checkBox3.getElement().setId("checkBox");
+		checkBox4.getElement().setId("checkBox");
+		checkBox5.getElement().setId("checkBox");
+		checkBox6.getElement().setId("checkBox");
+		checkBox7.getElement().setId("checkBox");
+		checkBox8.getElement().setId("checkBox");
 
 		
 		/**

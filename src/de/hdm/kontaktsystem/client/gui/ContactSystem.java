@@ -239,6 +239,7 @@ public class ContactSystem implements EntryPoint {
 		 */
 		reportLink.getElement().setId("report-button");
 		signOutLink.getElement().setId("log-out-button");
+		
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
 		searchButton.getElement().setId("searchButton"); 
 		

@@ -1,3 +1,5 @@
+/*TODO: ReportGenerator, Checkboxen, Textboxen,Listboxen, allgemein anpassen */
+
 body {
 	margin: 0 auto; /*Der Wert wird horizontal zentriert */
     text-align: center;  /* Zentrierung im Internet Explorer */
@@ -81,13 +83,12 @@ h1 {
 /*Buttons*/
 
 #shareButton{
-	.gwt-Button{
 	height: 30px;
     width: 53px;
-    font-size: 16px;
+    font-size: 14px;
     border: none;
     font-family: "Arial", Arial, sans-serif;
-	background-color: blue;
+	background-color: #0080ff;
 	color: black;
     padding: 0px;
     text-align: center;
@@ -95,7 +96,8 @@ h1 {
     display: inline-block;
     margin: 4px 2px;
     cursor: pointer;
-}
+	border-radius: 5px; /*abgerundete Ecken*/
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 #menue-button{
 	height: 40px;
@@ -117,7 +119,6 @@ h1 {
 }
 
 #searchButton{
-	/*.gwt-Button{*/
 	height: 25px;
     width: 53px;
     font-family: "Arial", Arial, sans-serif;
@@ -131,43 +132,42 @@ h1 {
     /*margin: 4px 2px;*/
     margin-bottom: 30px;
     cursor: pointer;
-
 }
 
 #saveButton{
-	.gwt-Button{
 	height: 30px;
-    width: 50px; 
+    width: 80px; 
     font-family: "Arial", Arial, sans-serif;     
 	background-color: #3cbb35;
-	color: white;
+	color: black;
     border: none;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     margin: 4px 2px;
     cursor: pointer;
-}
+    border-radius: 5px; /*abgerundete Ecken*/
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
 #deleteButton{
-	.gwt-Button{
 	height: 30px;
-    width: 50px;
+    width: 70px;
     font-family: "Arial", Arial, sans-serif;     
 	background-color: #d32016;
-	color: white;
+	color: black;
     border: none;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     margin: 4px 2px;
-    cursor: pointer;	
-}
+    cursor: pointer;	/*Mauszeiger verändert sich, wenn man auf dem Button ist*/
+	border-radius: 5px; /*abgerundete Ecken*/
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
 #log-out-button{
@@ -176,8 +176,8 @@ h1 {
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
     border: none;
-    border-radius: 5px;
-    color: #ffffff;
+    border-radius: 5px; /*abgerundete Ecken*/
+    color: red;
     background-color: black;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -191,6 +191,8 @@ h1 {
     align: right;
     display: table-cell;
     vertical-align: middle;
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
+  
 }
 #report-button{
 	height: 30px;
@@ -211,6 +213,7 @@ h1 {
     border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
 
@@ -248,7 +251,22 @@ h1 {
 	margin-bottom: 30px;
 }
 
+#geteiltvontextfeld{
+	
+}
+
+/*Listboxen*/
+
+#teilenmitlistbox{
+	
+}
+
+#geteiltmitlistbox{
+	
+}
+
 /* Labels */
+
 
 #namelabel{
     border-style: none;
@@ -278,6 +296,11 @@ h1 {
 	 
 }
 
+#geteiltlabel{
+	font-style: italic;
+	border: none;
+}
+
 #contactstatus{
 	
 }
@@ -293,6 +316,10 @@ h1 {
 #loginlabel{
 	
 }]
+
+#checkbox{
+	margin-left: 10px;
+}
 
 /*Divï¿½s*/
 
@@ -322,6 +349,8 @@ div#Lists {
 div#Details {
 	background: #fefeff;
 	align-content: center;
+	padding-left: 20px;
+	padding-top: 10px;
 }
 
 div#Trailer {
