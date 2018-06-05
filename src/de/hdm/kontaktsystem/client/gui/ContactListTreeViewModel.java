@@ -164,4 +164,16 @@ public class ContactListTreeViewModel implements TreeViewModel{
 		}
 	}
 
+	
+	/**
+	 * Verwendung der Methode um Contact Objekte, welche über die Sucheingabe
+	 * gefunden wurden im CellTree anzeigen zu können.
+	 * @param contact
+	 */
+	
+	public void addContact(Contact contact) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

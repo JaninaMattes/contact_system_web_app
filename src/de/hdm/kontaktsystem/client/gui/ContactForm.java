@@ -87,7 +87,7 @@ public class ContactForm extends VerticalPanel{
 	
 	public void  onLoad() {
 		super.onLoad();
-				
+		
 		/**
 		 * Panel für Anordnung der Button
 		 */
@@ -183,25 +183,21 @@ public class ContactForm extends VerticalPanel{
 		textBoxGeburtsdatum.setStyleName("Textbox");
 		textBoxAdresse.setStyleName("Textbox");
 
-
-
-
 		
 		/**
 		 * Anordnung der einzelnen Inhalte für ContactForm.
 		 * Abhandlung der Teilhaberschaft.
 		 */
-		Grid shareGrid = new Grid (4, 2);
-		shareGrid.setWidget(0, 0, labelShare);
-		
-		shareGrid.setWidget(1, 0, shareUser);
-		shareGrid.setWidget(1, 1, shareButton);
+		Grid shareGrid = new Grid (4, 3);
+		shareGrid.setWidget(0, 0, labelShare);		
+		shareGrid.setWidget(0, 1, shareUser);
+		shareGrid.setWidget(0, 2, shareButton);
 	
 		shareGrid.setWidget(1, 0, labelSharedWith);
 		shareGrid.setWidget(1, 1, sharedWithUser);
-		
-		shareGrid.setWidget(1, 0, labelReceiedFrom);
-		shareGrid.setWidget(1, 1, receivedFrom);		
+			
+		shareGrid.setWidget(2, 0, labelReceiedFrom);
+		shareGrid.setWidget(2, 1, receivedFrom);		
 		
 		/**
 		 * Anordnung der Buttons auf einem Button Panel
@@ -314,7 +310,7 @@ public class ContactForm extends VerticalPanel{
 	      @Override
 	      public void onClick(ClickEvent event) {
 	    	  String contactName = textBoxName.getText();
-	    	  if(contactName.equals("")) {
+	    	  if(contactName.isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
@@ -434,7 +430,7 @@ public class ContactForm extends VerticalPanel{
 		this.add(contactGrid);
 		this.add(shareGrid);
 		this.add(btnPanel);
-				
+					
 	}		
 		
 	  /**
@@ -462,8 +458,12 @@ public class ContactForm extends VerticalPanel{
 		/**
 		 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
 		 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
-		 * gefüllt bzw. gelöscht.
-		*/
+		 * gefüllt bzw. gelöscht. Dies wird mittels eines Kontakt-Objektes über 
+		 * den Aufruf aus dem CellTree an die Methode <code>setSelected()</code> 
+		 * übergeben.
+		 * @author janina
+		 * @param c
+		 */
 		
 		public void setSelected(Contact c) {
 			
@@ -475,8 +475,41 @@ public class ContactForm extends VerticalPanel{
 				} else { contactStatus.setText("Status: Nicht geteilt");}
 				
 				label.setText("Kontakt: " + c.getBoId());
+												
+				Vector <PropertyValue> pv = new Vector <PropertyValue>();
+				pv = contactToDisplay.getPropertyValues();
 				
-				//Enable Checkboxen
+				for(PropertyValue p : pv) {	
+					if(p!=null) {
+						switch(p.getProperty().getId()) {
+						case(1):
+							textBoxName.setText(p.getValue()); 
+							break;
+						case(2):
+							textBoxNickName.setText(p.getValue()); 
+							break;
+						case(3):
+							textBoxFirma.setText(p.getValue()); 
+							break;
+						case(4):
+							textBoxTelefonnummer.setText(p.getValue()); 
+							break;
+						case(5):
+							textBoxMobilnummer.setText(p.getValue()); 
+						 	break;
+						case(6):
+							textBoxEmail.setText(p.getValue()); 
+							break;
+						case(7):
+							textBoxGeburtsdatum.setText(p.getValue()); 
+							break;
+						case(8):
+							textBoxAdresse.setText(p.getValue()); 
+							break;
+					}
+				}
+				
+				//Enable Checkboxen falls diese einen Wert enthalten
 				if(!textBoxName.getText().isEmpty()) checkBox1.setEnabled(true);		
 				if(!textBoxNickName.getText().isEmpty()) checkBox2.setEnabled(true);
 				if(!textBoxFirma.getText().isEmpty()) checkBox3.setEnabled(true);
@@ -486,42 +519,24 @@ public class ContactForm extends VerticalPanel{
 				if(!textBoxGeburtsdatum.getText().isEmpty()) checkBox7.setEnabled(true);
 				if(!textBoxAdresse.getText().isEmpty()) checkBox8.setEnabled(true);
 				
-				//Status überprüfen, ob PropertyValue bereits geteilt wurde
-				this.setUpCheckBoxValues();
-								
-				Vector <PropertyValue> pv = new Vector <PropertyValue>();
-				pv = contactToDisplay.getPropertyValues();
-				
-				for(PropertyValue p : pv) {	
-					
-				//Setzen der PropertyValue Werte aus Kontakt-Objekt
-				if(p.getProperty().getId() == 1) textBoxName.setText(p.getValue()); 
-				if(p.getProperty().getId() == 2) textBoxNickName.setText(p.getValue());
-				if(p.getProperty().getId() == 3) textBoxFirma.setText(p.getValue());
-				if(p.getProperty().getId() == 4) textBoxTelefonnummer.setText(p.getValue());
-				if(p.getProperty().getId() == 5) textBoxMobilnummer.setText(p.getValue());
-				if(p.getProperty().getId() == 6) textBoxEmail.setText(p.getValue());
-				if(p.getProperty().getId() == 7) textBoxGeburtsdatum.setText(p.getValue());
-				if(p.getProperty().getId() == 8) textBoxAdresse.setText(p.getValue());	
-				
-				}
+				//Status überprüfen, ob PropertyValues bereits geteilt wurden
+				this.setUpCheckBoxValues(c);
 				
 				//TODO: Überprüfen!! ->> 
 				User myself = new User();
-				myself.setGoogleID(170);
-				
+				myself.setGoogleID(170);				
 				
 				//Befüllen der Listbox mit allen User Objekten aus dem System
        			Vector <User> u = new Vector<User>();
        			contactSystemAdmin.getAllUsers(new UserCallback(u));
-       		//	contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
-       			ListBox shareUser = new ListBox();
-       			ListBox sharedWithUser = new ListBox();
-       			TextBox receivedFrom = new TextBox();
-       			
-	
-			} else {
-				//Löschen eines Kontaktes
+//       			contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
+//       			ListBox shareUser = new ListBox();
+//       			ListBox sharedWithUser = new ListBox();
+//       			TextBox receivedFrom = new TextBox();
+       				
+				}
+				} else {
+				//Löschen eines Kontaktes aus KontaktForm
 			    checkBox2.setEnabled(false);
 			    checkBox3.setEnabled(false);
 			    checkBox4.setEnabled(false);
@@ -549,18 +564,22 @@ public class ContactForm extends VerticalPanel{
 			    text.setText(s);
 			  }
 		 
-		 /*Alle CheckBoxen anhacken, wenn diese mit der ausgewählten Person bereits geteilt wurden*/
-		 private void setUpCheckBoxValues() {
+		 /**
+		  * Alle CheckBoxen per default anhacken, wenn diese mit der ausgewählten Person 
+		  * bereits geteilt wurden. 
+		  * @author janina
+		  */
+		 private void setUpCheckBoxValues(Contact contact) {
 			 
-			 //User u = this.getSharedTo();
+			// User u = getSelectedUser();
 			 
+			 if(contact.isShared_status()) {
 			 Vector<PropertyValue> result = new Vector<PropertyValue>();
-			 for(PropertyValue p : result) {
-				 
+			 for(PropertyValue p : result) {				 
 			 
 				 /*Überprüfen des Status und der Gleichheit der Werte*/
 				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
+						 && contactToDisplay.isShared_status()) { //Name muss immer mitgeteilt werden
 					 checkBox1.setValue(true);
 				 }
 				 if(p.getValue().equals(textBoxName.getText()) 
@@ -595,6 +614,9 @@ public class ContactForm extends VerticalPanel{
 						 && p.isShared_status()) {
 					 checkBox1.setValue(true);
 				 }
+			 	}
+			 } else {
+				 
 			 }
 		 }
 		 
@@ -1073,8 +1095,7 @@ public class ContactForm extends VerticalPanel{
 			 * @author janina
 			 *
 			 */
-			private class ShareClickHandler implements ClickHandler {
-				
+			private class ShareClickHandler implements ClickHandler {				
 				Vector <PropertyValue> p = new Vector<PropertyValue>();
 
 				@Override
@@ -1086,8 +1107,7 @@ public class ContactForm extends VerticalPanel{
 						p = getAllUpdatedValues();
 						contactToDisplay.setPropertyValues(p);
 						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback(contactToDisplay));						
-				}
-				
+				}				
 			}
 			}
 			

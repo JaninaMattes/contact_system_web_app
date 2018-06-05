@@ -194,11 +194,17 @@ class DataCell extends AbstractCell<BusinessObject> {
 	public void render(Context context, BusinessObject value, SafeHtmlBuilder sb) {
 		if (value != null) {
 		if (value instanceof ContactList) {
-			sb.appendHtmlConstant("<p class='Cell'>" + ((ContactList) value).getName() + "</p>");
+
+			sb.appendHtmlConstant("<p>" + "<img src=http://www.biochemie.uni-freiburg.de/de/pfanner/pfeil.jpg/ height=\"80px\" width=\"80px\">" + ((ContactList) value).getName() + "</p>");
+
 		} else if (value instanceof Contact) {
-			sb.appendHtmlConstant("<p class='Cell'>" + ((Contact) value).getName().getValue() + "</p>");
+
+			sb.appendHtmlConstant("<p>" + "<img src=http://www.biochemie.uni-freiburg.de/de/pfanner/pfeil.jpg/ height=\"80px\" width=\"80px\">" + ((Contact) value).getName().getValue() + "</p>");
+
 		} else {
-			sb.appendHtmlConstant("<p class='Cell'>" + value.getBoId() + "</p>");
+
+			sb.appendHtmlConstant("<p>" + "<img src=http://www.biochemie.uni-freiburg.de/de/pfanner/pfeil.jpg/ height=\"80px\" width=\"80px\">" + value.getBoId() + "</p>");
+
 		}
 		}
 	}
