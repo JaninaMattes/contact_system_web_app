@@ -530,6 +530,11 @@ public class ContactForm extends VerticalPanel{
 				//Befüllen der Listbox mit allen User Objekten aus dem System
        			Vector <User> u = new Vector<User>();
        			contactSystemAdmin.getAllUsers(new UserCallback(u));
+       			//Befüllen der ListBox mit User Objekten, welche eine Teilhaberschaft haben
+       			Vector <Participation> part = new Vector<Participation>();
+       			//if(myself.isOwner) { -> TODO Dummy Code ausformulieren
+       			contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new ParticipantCallback(part));
+       			//}
 //       			contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
 //       			ListBox shareUser = new ListBox();
 //       			ListBox sharedWithUser = new ListBox();
@@ -1078,7 +1083,7 @@ public class ContactForm extends VerticalPanel{
 					if (result != null) {
 						for(User user: result) {						
 						//User Liste updaten
-						shareUser.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
+						shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());	
 						++count;
 						}
 					//Genug Platz schaffen für alle Elemente
@@ -1089,6 +1094,35 @@ public class ContactForm extends VerticalPanel{
 				}
 			}
 			
+		
+			private class ParticipantCallback implements AsyncCallback<Vector<Participation>>{
+				
+				Vector <Participation> part = null;				
+				ParticipantCallback(Vector<Participation> part){
+					this.part = part;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Der Aufruf der Teilhaber ist misglückt! :(");
+				}
+
+				@Override
+				public void onSuccess(Vector<Participation> result) {
+					int count = 0;
+					if (result != null) {
+						for(Participation p: result) {						
+						//User Liste updaten
+						shareUser.addItem(p.getParticipant().getUserContact().getName().getValue() + " , " + p.getParticipant().getGMail());	
+						++count;
+						}
+					//Genug Platz schaffen für alle Elemente
+					shareUser.setVisibleItemCount(count);
+					} else {
+						Window.alert("Kein Teilhaber gefunden :(");
+					}
+				}
+			}
 			
 			/**
 			 * ShareClickHandler zum Teilen eines Kontaktes und/oder einer Eigenschaft
