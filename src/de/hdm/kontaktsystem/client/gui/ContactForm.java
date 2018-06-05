@@ -458,8 +458,12 @@ public class ContactForm extends VerticalPanel{
 		/**
 		 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
 		 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
-		 * gefüllt bzw. gelöscht.
-		*/
+		 * gefüllt bzw. gelöscht. Dies wird mittels eines Kontakt-Objektes über 
+		 * den Aufruf aus dem CellTree an die Methode <code>setSelected()</code> 
+		 * übergeben.
+		 * @author janina
+		 * @param c
+		 */
 		
 		public void setSelected(Contact c) {
 			
@@ -505,7 +509,7 @@ public class ContactForm extends VerticalPanel{
 					}
 				}
 				
-				//Enable Checkboxen
+				//Enable Checkboxen falls diese einen Wert enthalten
 				if(!textBoxName.getText().isEmpty()) checkBox1.setEnabled(true);		
 				if(!textBoxNickName.getText().isEmpty()) checkBox2.setEnabled(true);
 				if(!textBoxFirma.getText().isEmpty()) checkBox3.setEnabled(true);
@@ -516,12 +520,11 @@ public class ContactForm extends VerticalPanel{
 				if(!textBoxAdresse.getText().isEmpty()) checkBox8.setEnabled(true);
 				
 				//Status überprüfen, ob PropertyValues bereits geteilt wurden
-				this.setUpCheckBoxValues();
+				this.setUpCheckBoxValues(c);
 				
 				//TODO: Überprüfen!! ->> 
 				User myself = new User();
-				myself.setGoogleID(170);
-				
+				myself.setGoogleID(170);				
 				
 				//Befüllen der Listbox mit allen User Objekten aus dem System
        			Vector <User> u = new Vector<User>();
@@ -533,7 +536,7 @@ public class ContactForm extends VerticalPanel{
        				
 				}
 				} else {
-				//Löschen eines Kontaktes
+				//Löschen eines Kontaktes aus KontaktForm
 			    checkBox2.setEnabled(false);
 			    checkBox3.setEnabled(false);
 			    checkBox4.setEnabled(false);
@@ -562,14 +565,15 @@ public class ContactForm extends VerticalPanel{
 			  }
 		 
 		 /**
-		  * Alle CheckBoxen anhacken, wenn diese mit der ausgewählten Person 
-		  * bereits geteilt wurden
-		  * 
+		  * Alle CheckBoxen per default anhacken, wenn diese mit der ausgewählten Person 
+		  * bereits geteilt wurden. 
+		  * @author janina
 		  */
-		 private void setUpCheckBoxValues() {
+		 private void setUpCheckBoxValues(Contact contact) {
 			 
-			 //User u = this.getSharedTo();
+			// User u = getSelectedUser();
 			 
+			 if(contact.isShared_status()) {
 			 Vector<PropertyValue> result = new Vector<PropertyValue>();
 			 for(PropertyValue p : result) {				 
 			 
@@ -610,6 +614,9 @@ public class ContactForm extends VerticalPanel{
 						 && p.isShared_status()) {
 					 checkBox1.setValue(true);
 				 }
+			 	}
+			 } else {
+				 
 			 }
 		 }
 		 

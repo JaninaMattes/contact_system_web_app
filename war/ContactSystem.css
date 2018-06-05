@@ -7,7 +7,7 @@ body {
     }
 
 div {
-	border: solid 1px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
+	border: solid 0.5px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
 }
 
 h1 {
@@ -262,24 +262,24 @@ h1 {
 	
 }]
 
-/*Div´s*/
+/*Divï¿½s*/
 
 div#TopLevelFrame {
 	width: 100%;
 	height: 100%;	
 	text-align: center;
-	background: #0c101a;
+	background: #051117;
 	align-content: center;
  } 
 
 div#Header { 	
 	/*background: linear-gradient(to bottom right, #0c101a, #506bae); /*Color gradien siehe W3School*/
 	text-align: center;
-	background-color: #000080;
+	background-color: #34BFFF;
 }
 
 div#Navigator {	
-	background-color: #000080;
+	background-color: #051117;
 	align-content: left;
 }
 
@@ -305,5 +305,5 @@ div#Trailer {
 	
 	text-align: center;	
 	align-content: center;
-	background-color: #000080;
+	background-color: #051117;
 }
