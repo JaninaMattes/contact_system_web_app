@@ -30,7 +30,7 @@ public class TreeViewModelTest implements TreeViewModel {
 	private SingleSelectionModel<BusinessObject> selectionModel;
 	
 	/**
-	 * Gibt eindeutigen Schluessel für das BusinessObject zurück.
+	 * Gibt eindeutigen Schluessel fï¿½r das BusinessObject zurï¿½ck.
 	 * @author Marco
 	 *
 	 */
@@ -194,11 +194,11 @@ class DataCell extends AbstractCell<BusinessObject> {
 	public void render(Context context, BusinessObject value, SafeHtmlBuilder sb) {
 		if (value != null) {
 		if (value instanceof ContactList) {
-			sb.appendHtmlConstant("<p>" + ((ContactList) value).getName() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + ((ContactList) value).getName() + "</p>");
 		} else if (value instanceof Contact) {
-			sb.appendHtmlConstant("<p>" + ((Contact) value).getName().getValue() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + ((Contact) value).getName().getValue() + "</p>");
 		} else {
-			sb.appendHtmlConstant("<p>" + value.getBoId() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + value.getBoId() + "</p>");
 		}
 		}
 	}

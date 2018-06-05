@@ -262,7 +262,7 @@ h1 {
 	
 }]
 
-/*Div´s*/
+/*Divï¿½s*/
 
 div#TopLevelFrame {
 	width: 100%;
@@ -306,4 +306,8 @@ div#Trailer {
 	text-align: center;	
 	align-content: center;
 	background-color: #000080;
+}
+
+.Cell{
+	Border: none;
 }
