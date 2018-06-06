@@ -381,7 +381,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				/*
+				
 				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -401,7 +401,7 @@ public class ContactSystem implements EntryPoint {
 					}
 
 				});	
-				*/
+				
 					log("Load Shared By Me");
 			}
 		});
@@ -410,7 +410,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				/*
+				
 				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -430,7 +430,7 @@ public class ContactSystem implements EntryPoint {
 					}
 
 				});	
-				*/	
+				
 				log("Load Shared With Me");
 				
 			}
