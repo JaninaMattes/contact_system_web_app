@@ -237,7 +237,7 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
-		reportLink.getElement().setId("report-button");
+		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
 		
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java

@@ -159,9 +159,10 @@ public class ReportGenerator implements EntryPoint {
 		 */
 		
 		//Labels in CSS
-		findByParticipantLabel.getElement().setId("findbylabel");
+		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
 		loginLabel.getElement().setId("loginlabel");
+		headerText.getElement().setId("headertext");
 		
 		//Textbox in CSS
 
@@ -169,17 +170,19 @@ public class ReportGenerator implements EntryPoint {
 		
 		//DropDownList in CSS
 		propertiesDropDownList.getElement().setId("DropDownList");
+		usersDropDownList.getElement().setId("DropDownList");
 
 		//Button in CSS
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
 		findByParticipantButton.getElement().setId("searchButton");
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
 		findByValueButton.getElement().setId("searchButton");
+		showAllButton.getElement().setId("searchAllContacts");
 	
 		//Links
-		signInLink.setStyleName("link");
-		signOutLink.setStyleName("link");
-		editorLink.setStyleName("link");
+		signInLink.setStyleName("link");//??
+		signOutLink.getElement().setId("log-out-button");
+		editorLink.getElement().setId("switch-button");
 
 		/**
 		 * Aufbau der Oberfläche.
