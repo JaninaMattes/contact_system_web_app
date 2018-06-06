@@ -158,6 +158,7 @@ public class ContactSystem implements EntryPoint {
 				log("Es wurden " + result.size() + " Listen gefunden");
 				ct = new CellTree(tvm, result);
 				ct.setAnimationEnabled(true);
+				ct.setDefaultNodeSize(result.size());
 				treeScrollPanel.add(ct);
 				
 				
@@ -331,12 +332,13 @@ public class ContactSystem implements EntryPoint {
 					public void onSuccess(Vector<Contact> result) {
 						// TODO Auto-generated method stub
 						log("Es wurden " + result.size() + " Listen gefunden");
-						Vector<BusinessObject> vbo = new Vector<BusinessObject>();
+						Vector<BusinessObject> bov = new Vector<BusinessObject>();
 						for(Contact cl : result){
-							vbo.add(cl);
+							bov.add(cl);
 						}
 						
-						tvm.updateData(vbo);
+						tvm.updateData(bov);
+						ct.setDefaultNodeSize(result.size());
 					}
 
 				});			
@@ -360,12 +362,13 @@ public class ContactSystem implements EntryPoint {
 					public void onSuccess(Vector<ContactList> result) {
 						// TODO Auto-generated method stub
 						log("Es wurden " + result.size() + " Listen gefunden");
-						Vector<BusinessObject> vbo = new Vector<BusinessObject>();
+						Vector<BusinessObject> bov = new Vector<BusinessObject>();
 						for(ContactList cl : result){
-							vbo.add(cl);
+							bov.add(cl);
 						}
 						
-						tvm.updateData(vbo);
+						tvm.updateData(bov);
+						ct.setDefaultNodeSize(result.size());
 					}
 
 				});			
@@ -378,6 +381,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				/*
 				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -393,9 +397,11 @@ public class ContactSystem implements EntryPoint {
 						
 						
 						tvm.updateData(result);
+						ct.setDefaultNodeSize(result.size());
 					}
 
-				});		
+				});	
+				*/
 					log("Load Shared By Me");
 			}
 		});
@@ -404,7 +410,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				
+				/*
 				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -420,9 +426,11 @@ public class ContactSystem implements EntryPoint {
 						
 						
 						tvm.updateData(result);
+						ct.setDefaultNodeSize(result.size());
 					}
 
-				});		
+				});	
+				*/	
 				log("Load Shared With Me");
 				
 			}

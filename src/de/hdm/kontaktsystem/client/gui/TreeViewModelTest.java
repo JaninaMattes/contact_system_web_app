@@ -7,11 +7,13 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
+import com.mysql.jdbc.log.Log;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
@@ -23,6 +25,7 @@ public class TreeViewModelTest implements TreeViewModel {
 
 	private ContactSystemAdministrationAsync csa = ClientsideSettings.getContactAdministration();
 	private ListDataProvider<BusinessObject> dataProvider = null;
+	private ListDataProvider<BusinessObject> rootData = null;
 	private BusinessObject selectedContactContactlist;
 	private ContactListForm clForm;
 	private ContactForm cForm;
@@ -84,11 +87,21 @@ public class TreeViewModelTest implements TreeViewModel {
 	
 	public void setSelectedContactContactlist(BusinessObject sccl) {
 		this.selectedContactContactlist = sccl;
+		RootPanel.get("Details").add(clForm); // Platzhalter Test
+		RootPanel.get("Details").add(cForm); // Platzhalter Test
+		RootPanel.get("Details").removeFromParent();
+		RootPanel.get("Details").remove(cForm); /*Alle Child-Widgets von Parent entfernen*/
+		RootPanel.get("Details").remove(clForm);
+		
 		if(sccl instanceof ContactList) {
 			clForm.setSelected((ContactList)sccl);
+			log("Update clForm");
+			RootPanel.get("Details").add(clForm);
 		}
 		else if (sccl instanceof Contact) {
 			cForm.setSelected((Contact) sccl);
+			log("Update cForm");
+			RootPanel.get("Details").add(cForm);
 		}
 	}
 
@@ -125,11 +138,12 @@ public class TreeViewModelTest implements TreeViewModel {
 	}
 
 	
-	public void updateData(Vector<BusinessObject> vbo){
+	public void updateData(Vector<BusinessObject> bov){
 		log("Update Data");
-		dataProvider.getList().clear();
-		for (BusinessObject bo : vbo) {
-			dataProvider.getList().add(bo);
+		rootData.getList().clear();
+		dataProvider = null;
+		for (BusinessObject bo : bov) {
+			rootData.getList().add(bo);
 
 		}
 		//getNodeInfo(vbo);
@@ -157,27 +171,17 @@ public class TreeViewModelTest implements TreeViewModel {
 
 		if (value instanceof Vector) {
 			log("NodeInfo: is Vector" );
+			rootData = dataProvider; // Speichert RootListe damit die UpdateData methode die Daten Überschreiben kann;
 			Vector v = (Vector) value;
-			if (v.get(0) instanceof Contact) {
-				log("NodeInfo: is Contact " + v.size());
-				Vector<Contact> cv = v;
-				for (Contact c : cv) {
-					log("Add: " + c.getName().getValue());
-					dataProvider.getList().add(c);
+			Vector<BusinessObject> bov = v;	
+				for (BusinessObject bo : bov) {
+					
+					dataProvider.getList().add(bo);
 				}
-			} else 
-			if (v.get(0) instanceof ContactList) {
-				log("NodeInfo: is ContactList " + v.size());
-				Vector<ContactList> clv = v;	
-				for (ContactList cl : clv) {
-					dataProvider.getList().add(cl);
-	
-				}
-			}
-		}if(value instanceof ContactList){
+		}else 
+		if(value instanceof ContactList){
 			for (Contact c : ((ContactList) value).getContacts()) {
 				dataProvider.getList().add(c);
-				log(c.getCreationDate().toString());
 			}
 		}
 		
