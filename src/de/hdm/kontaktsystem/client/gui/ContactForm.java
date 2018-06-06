@@ -208,28 +208,27 @@ public class ContactForm extends VerticalPanel{
 		checkBox7.getElement().setId("checkBox");
 		checkBox8.getElement().setId("checkBox");
 
-
 		
 		/**
 		 * Anordnung der einzelnen Inhalte für ContactForm.
 		 * Abhandlung der Teilhaberschaft.
 		 */
-		Grid shareGrid = new Grid (4, 3);
-		shareGrid.setWidget(0, 0, labelShare);		
-		shareGrid.setWidget(0, 1, shareUser);
-		shareGrid.setWidget(0, 2, shareButton);
+		Grid shareGrid = new Grid (4, 2);
+		shareGrid.setWidget(0, 0, labelReceiedFrom);		
+		shareGrid.setWidget(0, 1, receivedFrom);
 	
 		shareGrid.setWidget(1, 0, labelSharedWith);
 		shareGrid.setWidget(1, 1, sharedWithUser);
 			
-		shareGrid.setWidget(2, 0, labelReceiedFrom);
-		shareGrid.setWidget(2, 1, receivedFrom);		
+		shareGrid.setWidget(2, 0, labelShare);
+		shareGrid.setWidget(2, 1, shareUser);		
 		
 		/**
 		 * Anordnung der Buttons auf einem Button Panel
 		 */
-		btnPanel.add(deleteButton);
 		btnPanel.add(saveButton);
+		btnPanel.add(shareButton);
+		btnPanel.add(deleteButton);
 		
 		/*
 		 * CheckBoxen für das Teilen einzelner Elemente einer ContactForm 
@@ -252,11 +251,13 @@ public class ContactForm extends VerticalPanel{
 	     * @author janina
 	     */	
 		
-		textBoxName.addClickHandler(new ClickHandler() {	        
+	    //TODO: Prüfen -> onClick Methode wird nicht ausgelöst
+		textBoxName.addClickHandler(new ClickHandler() {	    
 			@Override
 			public void onClick(ClickEvent event) {
-			if(!saveButton.isEnabled()) saveButton.setEnabled(true);
-			if(!checkBox1.isEnabled()) checkBox1.setEnabled(true);
+			if(!checkBox1.isEnabled()) {
+				checkBox1.setEnabled(true);
+			}
 			updateText(textBoxName, textBoxName.getText());
 			}
 	    });
@@ -264,9 +265,9 @@ public class ContactForm extends VerticalPanel{
 		textBoxNickName.addClickHandler(new ClickHandler() {	        
 			@Override
 			public void onClick(ClickEvent event) {
-			checkBox1.setEnabled(true);
-			if(!saveButton.isEnabled()) saveButton.setEnabled(true);
-			if(!checkBox2.isEnabled()) checkBox2.setEnabled(true);
+			if(!checkBox2.isEnabled()) {
+				checkBox2.setEnabled(true);
+			}
 			updateText(textBoxNickName, textBoxNickName.getText());
 			}
 	    });
@@ -274,8 +275,9 @@ public class ContactForm extends VerticalPanel{
 		textBoxFirma.addClickHandler(new ClickHandler() {	        
 			@Override
 			public void onClick(ClickEvent event) {
-			if(!saveButton.isEnabled()) saveButton.setEnabled(true);
-			if(!checkBox3.isEnabled()) checkBox3.setEnabled(true);
+			if(!checkBox3.isEnabled()) {
+				checkBox3.setEnabled(true);
+			}
 			updateText(textBoxFirma, textBoxFirma.getText());
 			}
 	    });
@@ -283,8 +285,9 @@ public class ContactForm extends VerticalPanel{
 		textBoxTelefonnummer.addClickHandler(new ClickHandler() {	        
 			@Override
 			public void onClick(ClickEvent event) {
-			if(!saveButton.isEnabled()) saveButton.setEnabled(true);
-			if(!checkBox4.isEnabled()) checkBox4.setEnabled(true);
+			if(!checkBox4.isEnabled()) {
+				checkBox4.setEnabled(true);
+			}
 			updateText(textBoxTelefonnummer, textBoxTelefonnummer.getText());
 			}
 	    });
@@ -292,8 +295,9 @@ public class ContactForm extends VerticalPanel{
 		textBoxMobilnummer.addClickHandler(new ClickHandler() {	        
 			@Override
 			public void onClick(ClickEvent event) {
-			if(!saveButton.isEnabled()) saveButton.setEnabled(true);
-			if(!checkBox5.isEnabled()) checkBox5.setEnabled(true);
+			if(!checkBox5.isEnabled()) {
+				checkBox5.setEnabled(true);
+			}
 			updateText(textBoxMobilnummer, textBoxMobilnummer.getText());
 			}
 	    });
@@ -301,8 +305,9 @@ public class ContactForm extends VerticalPanel{
 		textBoxEmail.addClickHandler(new ClickHandler() {	        
 			@Override
 			public void onClick(ClickEvent event) {
-			if(!saveButton.isEnabled()) saveButton.setEnabled(true);
-			if(!checkBox6.isEnabled()) checkBox6.setEnabled(true);
+			if(!checkBox6.isEnabled()) {
+				checkBox6.setEnabled(true);
+			}
 			updateText(textBoxEmail, textBoxEmail.getText());
 			}
 	    });
@@ -310,8 +315,9 @@ public class ContactForm extends VerticalPanel{
 		textBoxGeburtsdatum.addClickHandler(new ClickHandler() {	        
 			@Override
 			public void onClick(ClickEvent event) {
-			if(!saveButton.isEnabled()) saveButton.setEnabled(true);
-			if(!checkBox7.isEnabled()) checkBox7.setEnabled(true);
+			if(!checkBox7.isEnabled()) {
+				checkBox7.setEnabled(true);
+			}
 			updateText(textBoxGeburtsdatum, textBoxGeburtsdatum.getText());
 			}
 	    });
@@ -319,8 +325,9 @@ public class ContactForm extends VerticalPanel{
 		textBoxAdresse.addClickHandler(new ClickHandler() {	        
 			@Override
 			public void onClick(ClickEvent event) {
-			if(!saveButton.isEnabled()) saveButton.setEnabled(true);
-			if(!checkBox8.isEnabled()) checkBox8.setEnabled(true);
+			if(!checkBox8.isEnabled()) {
+				checkBox8.setEnabled(true);
+			}
 			updateText(textBoxAdresse, textBoxAdresse.getText());
 			}
 	    });
@@ -332,113 +339,105 @@ public class ContactForm extends VerticalPanel{
 	    
 		//TODO: Prüfen ob Abruf hier sinnvoll ist oder in einer einzigen Methode
 	    checkBox1.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;	      
+	      
 	      @Override
 	      public void onClick(ClickEvent event) {
-	    	  String contactName = textBoxName.getText();
-	    	  if(contactName.isEmpty()) {
+	    	  if(textBoxName.getText().isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
-	    		  pv = contactToDisplay.getName();
+	    		  //TODO:
 	    	  }	    	  
 	      }
 	    });	    
 	    
 	    checkBox2.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;	    	
+	     	
 	      @Override
 	      public void onClick(ClickEvent event) {
-	    	  String contactNickName = textBoxName.getText();
-	    	  if(contactNickName.isEmpty()) {
+	    	  if(textBoxName.getText().isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
-	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    		  //TODO:
 	    	  }
 	      }
 	    });
 	    	  
 	    checkBox3.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;	
+	      	
 	      @Override
 	      public void onClick(ClickEvent event) {
-	    	  String contactFirma = textBoxFirma.getText();
-	    	  if(contactFirma.isEmpty()) {
+	    	  if(textBoxFirma.getText().isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
-	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    		  //TODO:
 	    	  }
 	      }
 	    });
 
 	    checkBox4.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;	
+	      
 	      @Override
 	      public void onClick(ClickEvent event) {
-	    	  String contactPhone = textBoxTelefonnummer.getText();
-	    	  if(contactPhone.isEmpty()) {
+	    	  if(textBoxTelefonnummer.getText().isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
-	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    		  //TODO:
 	    	  }
 	      }
 	    });
 	    
 	    checkBox5.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;	
+	
 	      @Override
 	      public void onClick(ClickEvent event) {
-	    	  String contactMobile = textBoxMobilnummer.getText();
-	    	  if(contactMobile.isEmpty()) {
+	    	  if(textBoxMobilnummer.getText().isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
-	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    		  //TODO:
 	    	  }
 	      }
 	    });
 	    
 	    checkBox6.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;	
+	     
 	      @Override
 	      public void onClick(ClickEvent event) {
-	    	  String contactEmail = textBoxEmail.getText();
-	    	  if(contactEmail.isEmpty()) {
+	    	  if(textBoxEmail.getText().isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
-	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    		  //TODO:
 	    	  }
 	      }
 	    });
 	 
 	    checkBox7.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;	
+	     	
 	      @Override
 	      public void onClick(ClickEvent event) {
-	    	  String contactGebuDatum = textBoxGeburtsdatum.getText();
-	    	  if(contactGebuDatum.isEmpty()) {
+	    	  if(textBoxGeburtsdatum.getText().isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
-	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    		  //TODO:
 	    	  }
 	      }
 	    });
 	    
 	    checkBox8.addClickHandler(new ClickHandler() {
-	      PropertyValue pv = null;	
+	     	
 	      @Override
 	      public void onClick(ClickEvent event) {
-	    	  String contactAdresse = textBoxAdresse.getText();
-	    	  if(contactAdresse.isEmpty()) {
+	    	  if(textBoxAdresse.getText().isEmpty()) {
 	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
 	    	  }
 	    	  else {
-	    		  pv = findCorrectPv(textBoxNickName.getText());
+	    		  //TODO:
 	    	  }
 	      }
 	    });
@@ -449,9 +448,7 @@ public class ContactForm extends VerticalPanel{
 		 * über das Grid Widget untereinander auf dem VerticalPanel angeordnet.
 		 * 
 		 */		
-	    
-	    //Grid content = new Grid(4, 2);
-	    
+	    	    
 		this.add(label);
 		this.add(contactGrid);
 		this.add(shareGrid);
@@ -459,28 +456,6 @@ public class ContactForm extends VerticalPanel{
 					
 	}		
 		
-	  /**
-	   * Übergabe eines Wertes aus dem Textfeld mit Typ String
-	   * und Rückgabe eines dem entsprechend gefundenen PropertyValue Objektes
-	   * aus dem übergebenen KontaktObjekt. 
-	   * @param string
-	   * @return propertyValue
-	   * @author janina
-	   */
-	
-	
-	    public PropertyValue findCorrectPv(String s) {
-	    	PropertyValue pv = new PropertyValue();
-	    	Vector<PropertyValue> result = new Vector<PropertyValue>();
-	    	if(s!=null) {
-	    		for(PropertyValue p: result) {
-	    			if(p.getValue().equals(s)) {
-	    				pv = p;
-	    			}
-	    		}
-	    	} return pv;
-	    }
-	   
 		/**
 		 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
 		 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
@@ -506,6 +481,7 @@ public class ContactForm extends VerticalPanel{
 				pv = contactToDisplay.getPropertyValues();
 				
 				for(PropertyValue p : pv) {	
+					
 					if(p!=null) {
 						switch(p.getProperty().getId()) {
 						case(1):
@@ -546,11 +522,7 @@ public class ContactForm extends VerticalPanel{
 				if(!textBoxAdresse.getText().isEmpty()) checkBox8.setEnabled(true);
 				
 				//Status überprüfen, ob PropertyValues bereits geteilt wurden
-				this.setUpCheckBoxValues(c);
-				
-				//TODO: Überprüfen!! ->> 
-				User myself = new User();
-				myself.setGoogleID(170);				
+				this.setUpCheckBoxValues(c);		
 				
 				//Befüllen der Listbox mit allen User Objekten aus dem System
        			Vector <User> u = new Vector<User>();
@@ -601,53 +573,45 @@ public class ContactForm extends VerticalPanel{
 		  * @author janina
 		  */
 		 private void setUpCheckBoxValues(Contact contact) {
-			 
-			// User u = getSelectedUser();
-			 
+			 		 
 			 if(contact.isShared_status()) {
-			 Vector<PropertyValue> result = new Vector<PropertyValue>();
-			 for(PropertyValue p : result) {				 
+			 for(PropertyValue p : contact.getPropertyValues()) {				 
+				 switch(p.getProperty().getId()) {
+					case(1):
+						checkBox1.setEnabled(true);					
+						if(p.isShared_status())checkBox1.setValue(true);
+						break;
+					case(2):
+						checkBox2.setEnabled(true);
+						if(p.isShared_status())checkBox2.setValue(true);
+						break;
+					case(3):
+						checkBox3.setEnabled(true);
+						if(p.isShared_status())checkBox3.setValue(true);
+						break;
+					case(4):
+						checkBox4.setEnabled(true);
+						if(p.isShared_status())checkBox4.setValue(true);
+						break;
+					case(5):
+						checkBox5.setEnabled(true);
+						if(p.isShared_status())checkBox5.setValue(true);
+					 	break;
+					case(6):
+						checkBox6.setEnabled(true);
+						if(p.isShared_status())checkBox6.setValue(true);
+						break;
+					case(7):
+						checkBox7.setEnabled(true);
+						if(p.isShared_status())checkBox7.setValue(true);
+						break;
+					case(8):
+						checkBox8.setEnabled(true);
+						if(p.isShared_status())checkBox8.setValue(true);
+						break;
+				}
 			 
-				 /*Überprüfen des Status und der Gleichheit der Werte*/
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && contactToDisplay.isShared_status()) { //Name muss immer mitgeteilt werden
-					 checkBox1.setValue(true);
-				 }
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
-					 checkBox1.setValue(true);
-				 }
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
-					 checkBox1.setValue(true);
-				 }
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
-					 checkBox1.setValue(true);
-				 }
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
-					 checkBox1.setValue(true);
-				 }
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
-					 checkBox1.setValue(true);
-				 }
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
-					 checkBox1.setValue(true);
-				 }
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
-					 checkBox1.setValue(true);
-				 }
-				 if(p.getValue().equals(textBoxName.getText()) 
-						 && p.isShared_status()) {
-					 checkBox1.setValue(true);
-				 }
-			 	}
-			 } else {
-				 
+			 }
 			 }
 		 }
 		 
@@ -840,6 +804,7 @@ public class ContactForm extends VerticalPanel{
 //			   contactSystemAdmin.getAllParticipationsByOwner(owner, new AsyncCallback (owner));
 			   return false;
 			}
+			
 			
 			/**
 			 * Zum Löschen eines Kontaktes wird zunächst der Eigentümer abgefragt, bevor im
@@ -1104,15 +1069,14 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onSuccess(Vector <User> result) {
-					int count = 0;
+					
 					if (result != null) {
 						for(User user: result) {						
 						//User Liste updaten
-						shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());	
-						++count;
-						}
+						shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());
+					}
 					//Genug Platz schaffen für alle Elemente
-					shareUser.setVisibleItemCount(count);
+					shareUser.setVisibleItemCount(user.size());
 					} else {
 						Window.alert("Kein Nutzer gefunden :(");
 					}
@@ -1134,15 +1098,14 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onSuccess(Vector<Participation> result) {
-					int count = 0;
+					
 					if (result != null) {
 						for(Participation p: result) {						
 						//User Liste updaten
 						shareUser.addItem(p.getParticipant().getUserContact().getName().getValue() + " , " + p.getParticipant().getGMail());	
-						++count;
 						}
 					//Genug Platz schaffen für alle Elemente
-					shareUser.setVisibleItemCount(count);
+					shareUser.setVisibleItemCount(part.size());
 					} else {
 						Window.alert("Kein Teilhaber gefunden :(");
 					}
