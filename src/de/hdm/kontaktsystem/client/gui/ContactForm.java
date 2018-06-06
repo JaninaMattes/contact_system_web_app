@@ -2,7 +2,6 @@ package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 
-import com.google.api.client.http.MultipartContent.Part;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -32,6 +31,7 @@ public class ContactForm extends VerticalPanel{
 	private User owner = new User();
 	private User sharedFor = new User();
 	private User sharedFrom = new User();
+	private int count = 0;
 	
 	
 	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
@@ -85,7 +85,7 @@ public class ContactForm extends VerticalPanel{
 	
 	ListBox shareUser = new ListBox();
 	ListBox sharedWithUser = new ListBox();
-	TextBox receivedFrom = new TextBox();
+	ListBox receivedFrom = new ListBox();
 	
 	/**
 	 * Startpunkt
@@ -141,7 +141,11 @@ public class ContactForm extends VerticalPanel{
 		contactGrid.setWidget(8, 1, textBoxAdresse);
 		contactGrid.setWidget(8, 2, checkBox8);
 		
+		//CSS IDs setzen
 		shareUser.getElement().setId("ListBox");
+		sharedWithUser.getElement().setId("ListBox");
+		receivedFrom.getElement().setId("ListBox");
+		
 		/*TextBox kann nur Informationen darstellen, verhindert aber deren Bearbeitung*/
 		receivedFrom.setEnabled(false);
 		
@@ -1114,11 +1118,10 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onSuccess(Vector<Participation> result) {
-					int count = 0;
-					if (result != null) {
+						if (result != null) {
 						for(Participation p: result) {						
 						//User Liste updaten
-						shareUser.addItem(p.getParticipant().getUserContact().getName().getValue() + " , " + p.getParticipant().getGMail());	
+						sharedWithUser.addItem(p.getParticipant().getUserContact().getName().getValue() + " , " + p.getParticipant().getGMail());	
 						++count;
 						}
 					//Genug Platz schaffen für alle Elemente
@@ -1161,7 +1164,7 @@ public class ContactForm extends VerticalPanel{
 						Participation part = new Participation();
 						part.setParticipant(share);
 						part.setReference(contactToDisplay);
-						contactSystemAdmin.createParticipation(part, new ParticipationCallback(part));
+						contactSystemAdmin.createParticipation(part, new ParticipationCallback(part)); //Neuen Teilhaber hinzufügen
 				}				
 			}
 			}
@@ -1219,7 +1222,7 @@ public class ContactForm extends VerticalPanel{
 			
 			
 			private class ParticipationCallback implements AsyncCallback<Participation>{
-				
+								
 				Participation part = null;				
 				ParticipationCallback(Participation part){
 					this.part = part;
@@ -1232,7 +1235,14 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onSuccess(Participation result) {
-					if (result != null) {
+						
+						if (result != null) {
+							sharedWithUser.addItem(result.getParticipant().getUserContact().getName().getValue() + " , " + result.getParticipant().getGMail());	
+							count++;
+							}
+						//Genug Platz schaffen für alle Elemente
+						shareUser.setVisibleItemCount(count);
+						
 						Window.alert("Du hast hast " + result.getParticipant().getUserContact().getName().getValue() + 
 								" erfolgreich zum Teilhaber gemacht.");	
 						//TODO: zur ListBox hinzufügen
@@ -1240,6 +1250,6 @@ public class ContactForm extends VerticalPanel{
 					
 				}
 				
-			}
+			
 		  
 }
