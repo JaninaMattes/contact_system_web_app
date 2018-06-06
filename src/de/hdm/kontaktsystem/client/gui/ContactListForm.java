@@ -42,9 +42,6 @@ public class ContactListForm extends VerticalPanel {
 	 * Widgets mit variablen Inhalten.
 	 */
 
-	TextBox nameContactList = new TextBox();
-	ListBox contactNames = new ListBox();
-
 
 	/**
 	 * WIdgets um die Attribute einer Kontaktliste anzuzeigen.
@@ -53,19 +50,24 @@ public class ContactListForm extends VerticalPanel {
 	Label contactLabel = new Label("Kontakt: "); 
 	
 	HorizontalPanel btnPanel = new HorizontalPanel();
-	Button deleteButton = new Button("Kontakt löschen");
+	Button deleteConButton = new Button("Kontakt entfernen");
 	Button deleteClButton = new Button("Kontaktliste löschen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
 	
+	Label isShared = new Label("Geteilt: ");
 	Label labelShare = new Label("Teilen mit: ");
 	Label contactStatus = new Label("");
+	Label labelSharedWith = new Label("Geteilt mit: ");
+	Label labelReceivedFrom = new Label("Geteilt von: ");
 	
 
 	CheckBox checkBox1 = new CheckBox();
-	CheckBox checkBox2 = new CheckBox();
-
-	ListBox shareUser = new ListBox();	
+	ListBox listBoxShareWith = new ListBox();	
+	TextBox textBoxReceivedFrom = new TextBox();
+	ListBox listBoxSharedWith = new ListBox();
+	TextBox nameContactList = new TextBox();
+	ListBox contactNames = new ListBox();
 
 	
 
@@ -83,39 +85,47 @@ public class ContactListForm extends VerticalPanel {
 		
 		contactListGrid.setWidget(1, 0, contactLabel);
 		contactListGrid.setWidget(1, 1, contactNames);
-		contactListGrid.setWidget(1, 2, deleteButton);
-		//contactListGrid.setWidget(1, 3, checkBox2);
+		contactListGrid.setWidget(1, 2, deleteConButton);
+
 		
 		contactListGrid.setWidget(2, 0, labelShare);
-		contactListGrid.setWidget(2, 1, shareUser);
+		contactListGrid.setWidget(2, 1, listBoxShareWith);
 		contactListGrid.setWidget(2, 2, shareButton);	
 		
-		contactListGrid.setWidget(3, 1, btnPanel);
+		contactListGrid.setWidget(3, 0, labelSharedWith);
+		contactListGrid.setWidget(3, 1, listBoxSharedWith);
+		
+		contactListGrid.setWidget(4, 0, labelReceivedFrom);
+		contactListGrid.setWidget(4, 1, textBoxReceivedFrom);
+		
+		contactListGrid.setWidget(5, 1, btnPanel);
 
 		contactNames.getElement().setId("ListBox");
-		shareUser.getElement().setId("ListBox");
+		listBoxShareWith.getElement().setId("ListBox");
 		
 		/**
 		 * Panel für Anordnung der Button
 		 */
 
-		deleteButton.setPixelSize(110, 30);
+		deleteConButton.setPixelSize(110, 30);
 		saveButton.setPixelSize(110, 30);
 		deleteClButton.setPixelSize(110, 30);
 		btnPanel.add(saveButton);
-		saveButton.addClickHandler(new saveClickHandler());
 		btnPanel.add(deleteClButton);
+		saveButton.addClickHandler(new saveClickHandler());
+		deleteClButton.addClickHandler(new deleteContactListClickHandler());
 		
-		/*
-		 * CheckBoxen für das Teilen einer ContactList Form
-		 * per Default auf "false" setzen.
-		 * -> Anordnung neben TextBoxen der Form?
-		 */
-		checkBox1.setEnabled(false);
-		checkBox2.setEnabled(false);
-
+		
 		
 		/**
+		 * CheckBoxen für das Teilen einer ContactList Form
+		 * per Default auf "false" gesetzt.
+		 * -> Anordnung neben TextBox der Form
+		 */
+		checkBox1.setEnabled(false);
+
+		
+		/*
 		 * CSS
 		 */
 		
@@ -123,31 +133,29 @@ public class ContactListForm extends VerticalPanel {
 		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
 
 		nameContactList.getElement().setId("Textbox");
-		contactNames.getElement().setId("Listbox");
+		contactNames.getElement().setId("ListBox");
+		textBoxReceivedFrom.getElement().setId("TextBox");
+		listBoxShareWith.getElement().setId("ListBox");
+		listBoxSharedWith.getElement().setId("ListBox");
 
 		
 		//Labels in CSS
 		contactListLabel.getElement().setId("ueberschriftlabel");
 		contactLabel.getElement().setId("namelabel");
-		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
-		//firstNameLabel.getElement().setId("namelabel");
-		//lastNameLabel.getElement().setId("namelabel");
 		contactLabel.getElement().setId("contactlabel");
+		contactStatus.getElement().setId("contactstatus");
 
 		
 		labelShare.getElement().setId("teilenlabel");
 		contactStatus.getElement().setId("contactstatus");
 		
-		//Buttons in CSS
-		//delete + share + save-Buttons müssen jeweils auch gleich sein
-		
-		deleteButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
-		deleteButton.getElement().setId("deleteButton");
-		deleteClButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		deleteConButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		deleteConButton.getElement().setId("deleteButton");
+		deleteClButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		deleteClButton.getElement().setId("deleteButton");
-		saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		saveButton.getElement().setId("saveButton");
-		shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		shareButton.getElement().setId("shareButton");
 		
 		
@@ -173,12 +181,12 @@ public class ContactListForm extends VerticalPanel {
 //			} else {
 				Window.alert(cl.toString());
 				contactSystemAdmin.createContactList
-				(cl, new CreateClCallback());
+				(cl, new SaveCallback());
 			//}
 		}
 	}
 	
-	private class CreateClCallback implements AsyncCallback<ContactList> {
+	private class SaveCallback implements AsyncCallback<ContactList> {
 
 		
 		@Override
@@ -213,12 +221,7 @@ public class ContactListForm extends VerticalPanel {
 				Participation part = new Participation();
 				part.setParticipant(u);
 				part.setReference(contactListToDisplay);
-				// TODO:
-				// contactSystemAdmin.shareContactListWith(part, new
-				// shareContactListWithCallback(part));
-				// ALTERNATIV: contactSystemAdmin.createParticipation(contactListToDisplay, u ,
-				// new AsyncCallback<Participation>() {
-				// In andere NestedKlasse ausgliedern, wie bei "delete Clickhandler"
+				
 			}
 		}
 	}
@@ -229,12 +232,12 @@ public class ContactListForm extends VerticalPanel {
 	 *
 	 */
 
-	private class shareContactListWithCallback 
+	private class shareCallback 
 	implements AsyncCallback<Participation> {
 
 		Participation participation = null;
 
-		shareContactListWithCallback(Participation part) {
+		shareCallback(Participation part) {
 			participation = part;
 		}
 
@@ -253,13 +256,28 @@ public class ContactListForm extends VerticalPanel {
 
 	}
 
-
 	/**
-	 * ClickHandler zum Löschen von Kontakten aus Kontaktliste
+	 * Clickhandler zum Löschen von Kontakt aus Kontaktliste
 	 * @author Kim-Ly
 	 *
 	 */
-	private class deleteContactfromListCallback 
+	
+	private class deleteConFromListClickHandler implements ClickHandler {
+		public void onClick(ClickEvent event) {
+			if (contactListToDisplay == null) {
+				Window.alert("Keine Kontaktliste ausgewählt");
+			} else {
+			
+			}
+		}
+	}
+
+	/**
+	 * Callback zum Löschen von Kontakt aus Kontaktliste
+	 * @author Kim-Ly
+	 *
+	 */
+	private class deleteConfromListCallback 
 	implements AsyncCallback<ContactList> {
 
 		public void onFailure(Throwable caught) {
@@ -269,7 +287,6 @@ public class ContactListForm extends VerticalPanel {
 		public void onSuccess(ContactList result) {
 			if (result != null) {
 				setSelected(null);
-				cltvm.removeContactList(result);
 				Window.alert("Kontakt wurde erfolgreich aus der Liste gelöscht");
 			}
 		}
@@ -282,23 +299,29 @@ public class ContactListForm extends VerticalPanel {
 	 *
 	 */
 
-	private class deleteClClickHandler implements ClickHandler {
+	private class deleteContactListClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (contactListToDisplay == null) {
-				Window.alert("keine Kontaktliste ausgew�hlt");
+				Window.alert("keine Kontaktliste ausgewählt");
 			} else {
 				contactSystemAdmin.deleteContactList(contactListToDisplay, new deleteContactListCallback());
 			}
 		}
 
+		/**
+		 * Callback Methode zum Lösschen einer Kontaktliste
+		 * @author Kim-Ly
+		 *
+		 */
+		
 		private class deleteContactListCallback 
 		implements AsyncCallback<ContactList> {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Löschen der Kontaktliste fehlgeschlagen");
+				Window.alert("Löschen der Kontaktliste fehlgeschlagen!");
 			}
 
 			@Override
@@ -306,13 +329,16 @@ public class ContactListForm extends VerticalPanel {
 				if (result != null) {
 					setSelected(null);
 					cltvm.removeContactList(result);
+					Window.alert("Kontaktliste gelöscht!");
 				}
 			}
 		}
 	}
 
 	/**
-	 * cstvm setter
+	 * Setzen des ContactList Objekts, aller zugehörigen Kontakte aus TreeView
+	 * und Anzeige aller im System vorhandenen User
+	 * @author Kim-Ly
 	 */
 
 	void setCltvm(ContactListTreeViewModel cltvm) {
@@ -323,8 +349,14 @@ public class ContactListForm extends VerticalPanel {
 
 		if (cl != null) {
 			int count = 0;
+			//Befüllen der Listbox mit allen User Objekten aus dem System
+   			Vector <User> u = new Vector<User>();
+   			contactSystemAdmin.getAllUsers(new UserToShareCallback(u));
+   			contactSystemAdmin.getAllUsers(new UserSharedWithCallback(u));
+   			contactSystemAdmin.getAllUsers(new UserSharedByCallback(u));
 			contactListToDisplay = cl;
 			deleteClButton.setEnabled(true);
+			deleteConButton.setEnabled(true);
 			nameContactList.setText(cl.getName());
 			Vector<Contact> conVec = cl.getContacts();
 
@@ -338,21 +370,21 @@ public class ContactListForm extends VerticalPanel {
 			nameContactList.setText("");
 			deleteClButton.setEnabled(false);
 			contactNames.addItem("Keine Kontakte vorhanden");
-			deleteButton.setEnabled(false);
+			deleteConButton.setEnabled(false);
 		}
 
 	}
 	
 	/**
-	 * UserCallback Klasse zum befüllen der ListBox mit User -Objekten 
-	 * aus dem System. 
-	 * @author janina
+	 * UserCallback Klasse zum befüllen der listBoxShareWith mit allen User
+	 * aus dem System. Mit diesen kann die Kontaktliste geteilt werden. 
+	 * @author Kim-Ly
 	 *
 	 */
 	
-	private class UserCallback implements AsyncCallback<Vector<User>> {
+	private class UserToShareCallback implements AsyncCallback<Vector<User>> {
 		Vector <User> user = null;				
-		UserCallback(Vector<User> user){
+		UserToShareCallback(Vector<User> user){
 			this.user = user;
 		}
 
@@ -367,22 +399,84 @@ public class ContactListForm extends VerticalPanel {
 			if (result != null) {
 				for(User user: result) {						
 				//User Liste updaten
-				shareUser.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
+				listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
 				++count;
 				}
 			//Genug Platz schaffen für alle Elemente
-			shareUser.setVisibleItemCount(count);
+				listBoxShareWith.setVisibleItemCount(count);
 			} else {
 				Window.alert("Kein Nutzer gefunden :(");
 			}
 		}
 	}
 	
+	/**
+	 * UserSharedWithCallback Klasse zum befüllen der listBoxSharedWith mit Usern 
+	 * an die die Kontaktliste geteilt wurde.
+	 * @author Kim-Ly
+	 *
+	 */
 	
+	private class UserSharedWithCallback implements AsyncCallback<Vector<User>> {
+		Vector <User> user = null;	
+		User u = new User();
+		
+		//findAllShared
+		
+		UserSharedWithCallback(Vector<User> user){
+			this.user = user;
+		}
 
-	public void setSelected(Object object) {
-		// TODO Auto-generated method stub
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Der Aufruf der Nutzer ist misglückt! :( ");
+		}
 
+		@Override
+		public void onSuccess(Vector <User> result) {
+			int count = 0;
+			if (result != null) {
+				
+				for(User user: result) {						
+				//User Liste updaten
+				listBoxSharedWith.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
+				++count;
+				}
+			//Genug Platz schaffen für alle Elemente
+				listBoxSharedWith.setVisibleItemCount(count);
+			} else {
+				Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");
+			}
+		}
+	}
+	
+	/**
+	 * UserSharedByCallback Klasse zum befüllen der listBoxReceivedFrom mit User 
+	 * von dem die Kontaktliste geteilt wurde.
+	 * @author Kim-Ly
+	 *
+	 */
+	
+	private class UserSharedByCallback implements AsyncCallback<Vector<User>> {
+		Vector <User> user = null;				
+		UserSharedByCallback(Vector<User> user){
+			this.user = user;
+		}
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Der Aufruf der Nutzer ist misglückt! :( ");
+		}
+
+		@Override
+		public void onSuccess(Vector <User> result) {
+			int count = 0;
+			if (result != null) {
+				textBoxReceivedFrom.setText("");	
+			} else {
+				Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");
+			}
+		}
 	}
 	
 	native void log(String s)/*-{

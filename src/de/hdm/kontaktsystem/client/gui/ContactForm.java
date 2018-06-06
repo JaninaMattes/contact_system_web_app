@@ -146,15 +146,15 @@ public class ContactForm extends VerticalPanel{
 		//Buttons in CSS
 		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
 		
-		deleteButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
+		deleteButton.removeStyleName("gwt-Button"); //um den von GWT fï¿½r Buttons vorgegebenen Style zu lï¿½schen
 		deleteButton.getElement().setId("deleteButton");
 		deleteButton.addClickHandler(new DeleteClickHandler());
 
-		saveButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
+		saveButton.removeStyleName("gwt-Button"); //um den von GWT fï¿½r Buttons vorgegebenen Style zu lï¿½schen
 		saveButton.getElement().setId("saveButton");
 		saveButton.addClickHandler(new SaveClickHandler());
 		
-		shareButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
+		shareButton.removeStyleName("gwt-Button"); //um den von GWT fï¿½r Buttons vorgegebenen Style zu lï¿½schen
 		shareButton.getElement().setId("shareButton");
 		shareButton.addClickHandler(new ShareClickHandler());
 		
@@ -1089,7 +1089,7 @@ public class ContactForm extends VerticalPanel{
 			 *
 			 */
 			
-			private class UserCallback implements AsyncCallback<Vector<User>>{
+			private class UserCallback implements AsyncCallback<Vector<User>> {
 				Vector <User> user = null;				
 				UserCallback(Vector<User> user){
 					this.user = user;

@@ -890,6 +890,38 @@ public User login(String requestUri) {
 					
 				}
 		
+		/**
+		 *  Alle Benutzer finden, denen eine bestimmte Kontaktliste geteilt wurde.
+		 *  @param User-Objekt
+		 *  @return Vector<ContactList>
+		 *  @author Kim-Ly
+		 */
+		public Vector<User> findAllUserForSharedCL (ContactList cl) {
+
+			//TODO: Mapper schreiben
+			
+//			Vector<Participation> participationVector = new Vector<Participation>();		
+//			participationVector = this.getAllParticipationsBy(user);
+//					// Vector für die Speicherung aller BusinessObjekte erzeugen
+//					Vector<User> userVector = new Vector <User>(); 		
+//					//System.out.println(participationVector);
+//					
+//					for (Participation part : participationVector) { 		
+//						
+//						//System.out.println(part);
+//						 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
+//						 //System.out.println(bo);
+//						 User u = new User();	 
+//						 //System.out.println(propVal); 	
+//						 if(bo instanceof ContactList) {			 		
+//							 u = (User) bo;
+//						 		//System.out.println("Ausprägung " + propVal.getProp());
+//							 userVector.addElement(contactList);		     
+//						 }
+//					}
+					return null;
+					
+				}
 		
 		/**
 		 * Methode zur L�schung aller von einem User erstellten Ausprägungen, Ownership und Participation!
