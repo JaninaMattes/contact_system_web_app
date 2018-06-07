@@ -532,9 +532,9 @@ public class ContactForm extends VerticalPanel{
 						case(8):
 							textBoxAdresse.setText(p.getValue()); 
 							break;
+						}
 					}
 				}
-				
 				//Enable Checkboxen falls diese einen Wert enthalten
 				if(!textBoxName.getText().isEmpty()) checkBox1.setEnabled(true);		
 				if(!textBoxNickName.getText().isEmpty()) checkBox2.setEnabled(true);
@@ -565,7 +565,7 @@ public class ContactForm extends VerticalPanel{
 //       			ListBox sharedWithUser = new ListBox();
 //       			TextBox receivedFrom = new TextBox();
        				
-				}
+				
 				} else {
 				//Löschen eines Kontaktes aus KontaktForm
 			    checkBox2.setEnabled(false);
