@@ -29,6 +29,42 @@ h1, #headertext {
 	
 }
 
+#reporttitle{ /* Überschrift des erstellten Reports */
+	font-family: "Arial", Arial, sans-serif;
+  	font-size: 2em; /*Schriftgr��e*/
+  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+	color: black
+}
+
+#reportheader{ /*Kopfdaten des erstellten Reports (Tabelle) */
+	width:400px;
+	border:1px solid silver;
+	margin: auto;
+}
+
+.reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
+	width:400px;
+	margin: auto;
+}
+
+.reportpropertyvalues{ /* Tabelle, die die Eigenschaften eines einzelnen Kontakts im erstellten Report darstellt */
+	width:400px;
+	margin: auto;
+}
+
+.reportpropertyvalues.tableheader{
+	
+}
+
+.tablecell{
+	border-top:1px solid silver;
+}
+
+.reportparticipants{ /*Tabellenzeile, die Teilhaber des Kontakts auflistet */
+	margin: auto;
+	align: center;
+}
+
 
 * {
     box-sizing: border-box;

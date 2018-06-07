@@ -30,12 +30,6 @@ public interface ReportGenerator extends RemoteService {
 	   */
 	  public void init() throws IllegalArgumentException;
 	  
-	  /**
-	   * Setzen der User-Informationen auf dem Server.
-	   * @param userInfo
-	   */
-	  public void setUserInfo(User userInfo);
-	  
 	  
 	  /**
 	   * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte

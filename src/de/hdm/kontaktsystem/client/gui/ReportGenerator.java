@@ -147,13 +147,6 @@ public class ReportGenerator implements EntryPoint {
 //			contactSysAdmin = ClientsideSettings.getContactAdministration();
 //		}
 		
-		
-		/**
-		 * Setzen der User-Informationen im Server
-		 */
-		reportGenerator.setUserInfo(userInfo, new SetUserInfoCallback());
-		
-		
 		/**
 		 * CSS
 		 */
@@ -342,7 +335,8 @@ public class ReportGenerator implements EntryPoint {
 
 		@Override
 		public void onSuccess(AllContactsOfUserReport report) {
-			if (report != null) {
+			
+			if (report != null) {				
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
 				RootPanel.get("Details").clear();
