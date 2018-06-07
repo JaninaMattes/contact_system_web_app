@@ -239,7 +239,7 @@ public class ReportGenerator implements EntryPoint {
 				if(usersDropDownList.getSelectedValue() == null) {
 					Window.alert("Kein Teilhaber ausgewählt!");
 				} else {
-					int participantId = Integer.parseInt(usersDropDownList.getSelectedValue());
+					double participantId = Double.parseDouble(usersDropDownList.getSelectedValue());
 					reportGenerator.createAllContactsForParticipantReport(participantId,
 							new CreateAllContactsForParticipantReportCallback(participantId));
 				}		
@@ -352,9 +352,9 @@ public class ReportGenerator implements EntryPoint {
 	class CreateAllContactsForParticipantReportCallback 
 	implements AsyncCallback<AllContactsForParticipantReport> {
 		
-		int searchedParticipant = 0;
+		double searchedParticipant = 0d;
 		
-		public CreateAllContactsForParticipantReportCallback(int participantId) {
+		public CreateAllContactsForParticipantReportCallback(double participantId) {
 			this.searchedParticipant = participantId;
 		}
 		

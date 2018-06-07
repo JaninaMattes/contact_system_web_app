@@ -23,7 +23,7 @@ public interface ReportGeneratorAsync {
 	
 	void createAllContactsReport(AsyncCallback<AllContactsOfUserReport> callback);
 	
-	void createAllContactsForParticipantReport(int participantId, 
+	void createAllContactsForParticipantReport(double participantId, 
 			AsyncCallback<AllContactsForParticipantReport> callback);
 	
 	void createAllContactsForPropertyReport(int propertyId, String propertyvalue,

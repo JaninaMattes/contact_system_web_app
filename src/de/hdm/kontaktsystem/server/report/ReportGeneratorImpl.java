@@ -224,7 +224,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 	
 	@Override
-	public AllContactsForParticipantReport createAllContactsForParticipantReport(int participantId)
+	public AllContactsForParticipantReport createAllContactsForParticipantReport(double participantId)
 			throws IllegalArgumentException {
 		
 		System.out.println("Methode aufgerufen");
