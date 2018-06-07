@@ -406,3 +406,15 @@ div#Trailer {
 	Border: none;
 
 }
+
+#add{
+    position: fixed;
+    top: 87vh;
+    left: 53vw;
+    text-align: center;
+    z-index: 5;
+    height: 65px;
+    width:  65px;
+    background: #00cfff;
+    border-radius: 50px;
+}

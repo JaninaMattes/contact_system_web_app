@@ -12,6 +12,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -111,7 +112,10 @@ public class ContactSystem implements EntryPoint {
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
 	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
-	private Anchor reportLink = new Anchor("Report");		
+	private Anchor reportLink = new Anchor("Report");
+	
+	// Add Button/Panel
+	private FocusPanel addPanel = new FocusPanel();
 
 	//Header
 	private HorizontalPanel header = new HorizontalPanel();				
@@ -262,6 +266,7 @@ public class ContactSystem implements EntryPoint {
 			signOutLink.setHref(userInfo.getLogoutUrl());
 		}
 		
+		reportLink.setHref(GWT.getHostPageBaseURL() + "ReportGenerator.html");
 
 		/** 
 		 * Namen für CSS festlegen 
@@ -287,6 +292,11 @@ public class ContactSystem implements EntryPoint {
 		 * CSS Identifier für das Logo
 		 */
 		chainSymbolLogo.getElement().setId("logo");
+		
+		/*
+		 * CSS für Add Panel
+		 */
+		addPanel.getElement().setId("add");
 		
 		/**
 		 * CSS Identifier für die Elemente
@@ -436,6 +446,19 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 		
+		addPanel.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				Window.alert("Add something");
+			}
+			
+		});
+		Image add = new Image("/images/add.png");
+		add.setPixelSize(70, 70);
+		addPanel.add(add);
+		
 		//Header
 	    header.add(chainSymbolLogo);
  		header.add(reportLink);
@@ -452,6 +475,7 @@ public class ContactSystem implements EntryPoint {
 	  	RootPanel.get("Header").add(header);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Trailer").add(trailer);
+	  	RootPanel.get().add(addPanel);
 		
 	}
 	
