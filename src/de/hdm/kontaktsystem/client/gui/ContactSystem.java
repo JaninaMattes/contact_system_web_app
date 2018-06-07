@@ -391,7 +391,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				/*
+				
 				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -411,7 +411,7 @@ public class ContactSystem implements EntryPoint {
 					}
 
 				});	
-				*/
+				
 					log("Load Shared By Me");
 			}
 		});
@@ -420,7 +420,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				/*
+				
 				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -440,7 +440,7 @@ public class ContactSystem implements EntryPoint {
 					}
 
 				});	
-				*/	
+				
 				log("Load Shared With Me");
 				
 			}
@@ -492,42 +492,31 @@ public class ContactSystem implements EntryPoint {
 				Window.alert("Das Suchfeld ist leer!");
 			} else {
 			 String s = search.getText();
+			 log("Suche: "+ s);
 			 // Suche der Kontakte
-			 contactSystemAdmin.searchContacts(s, 
-					 new SearchCallback(s));
+			 contactSystemAdmin.searchContacts(s, new AsyncCallback<Vector<Contact>>(){
+				 @Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Die Suche ist fehlgeschlagen!");
+					}
+
+					@Override
+					public void onSuccess(Vector<Contact> result) {
+						if (result != null) {
+							Vector<BusinessObject> bov = new Vector<BusinessObject>();
+							for(BusinessObject bo : result) {
+								bov.add(bo);
+							}
+							tvm.updateData(bov);
+						} else {
+							//Window.alert("Keine Kontakte gefunden :(");
+						}
+					}
+			 });
 			}
 		}
 	}
 
-	/**
-	 * SearchCallback
-	 * @author janin
-	 *
-	 */
-	private class SearchCallback implements AsyncCallback<Vector<Contact>> {
-
-		String search = null;
-		
-		SearchCallback(String s){
-			this.search = s;
-		}
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Die Suche ist fehlgeschlagen!");
-		}
-
-		@Override
-		public void onSuccess(Vector<Contact> result) {
-			if (result != null) {
-				for(Contact c : result) {
-				ctvm.addContact(c); 			   
-				}
-			} else {
-				Window.alert("Keine Kontakte gefunden :(");
-			}
-		}
-	}
 	
 	
 	native void log(String s)/*-{
