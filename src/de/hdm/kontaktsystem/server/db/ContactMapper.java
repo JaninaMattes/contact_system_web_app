@@ -96,7 +96,7 @@ public class ContactMapper {
 
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					  "SELECT c.* , bo.* " 
+					  "SELECT * " 
 					+ "FROM  Contact AS c " 
 					+ "INNER JOIN BusinessObject AS bo ON bo.bo_ID = c.ID "
 					+ "WHERE bo.user_ID = ?"
@@ -108,12 +108,12 @@ public class ContactMapper {
 			while (rs.next()) {
 				Contact contact = new Contact();
 				User u = new User();
-				u.setGoogleID(user_id);
+				u.setGoogleID(rs.getDouble("user_ID"));
 				contact.setOwner(u);
-				contact.setBo_Id(rs.getInt("c.ID"));
-				contact.setShared_status(rs.getBoolean("bo.status"));
-				contact.setCreationDate(rs.getTimestamp("bo.creationDate"));
-				contact.setModifyDate(rs.getTimestamp("bo.modificationDate"));				
+				contact.setBo_Id(rs.getInt("ID"));
+				contact.setShared_status(rs.getBoolean("status"));
+				contact.setCreationDate(rs.getTimestamp("creationDate"));
+				contact.setModifyDate(rs.getTimestamp("modificationDate"));
 				result.addElement(contact);
 			}
 			return result;

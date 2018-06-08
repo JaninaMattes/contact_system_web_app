@@ -224,16 +224,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 
-	// Nur für Report!
-	public Vector<Contact> getAllContactsFromUser() {
-		return cMapper.findAllContactsByUser(this.getCurrentUser());
-	}
-
 	// Nur Intern Verwendet
 	public Contact getOwnContact(User u) {
 		Contact contact = cMapper.findOwnContact(u);
-		contact.setName(this.getNameOfContact(contact));
-		contact.setPropertyValues(this.getPropertyValuesForContact(contact));
+		if(contact != null){
+			contact.setName(this.getNameOfContact(contact));
+			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
+		}
 		return contact;
 	}
 
@@ -258,13 +255,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	@Override
-	public Vector<Contact> getContactsFromUser() {
-		User user = this.getUserByID(getCurrentUser());
+	public Vector<Contact> getAllContactsFromUser()  {
+		User user = this.getUserByID(this.getCurrentUser());
 		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
 		for (Contact contact : cv) {
-			contact.setOwner(user);
-			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
+			contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 			contact.setName(this.getNameOfContact(contact));
+			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		}
 		return cv;
 	}
@@ -727,8 +724,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln,
 		// die von diesem geteilt wurden
+		User user = this.getUserByID(this.getCurrentUser());
 		Vector<Participation> participationVector = new Vector<Participation>();
-		participationVector = this.getAllParticipationsByParticipant(this.getUserByID(this.getCurrentUser()));
+		participationVector = this.getAllParticipationsByParticipant(user);
 		Vector<Contact> contactResultVector = new Vector<Contact>();
 
 		for (Participation part : participationVector) {
@@ -737,14 +735,31 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 			if (bo instanceof Contact) {
 				contact = (Contact) bo;
-				contactResultVector.addElement(contact);
+				
+				
+				contactResultVector.addElement(this.filterContactData(contact));
 			}
 		}
 		if (contactResultVector.isEmpty())
 			System.out.println("# no contacts found");
 		return contactResultVector;
 	}
-
+	
+	private Contact filterContactData(Contact contact){
+		// Filter damit nur die geteilten PropertyValues ausgegeben werden; Namen werden nicht gefiltert
+		Vector<PropertyValue> pvv = contact.getPropertyValues();
+		Vector<PropertyValue> allPVswm = this.findAllPVSharedByOthersToMe();
+		for(PropertyValue pv : pvv){
+			if(pv.getProperty().getId() != 1){
+				if(!allPVswm.contains(pv)){
+					//
+					pvv.remove(pv);
+				}
+			}
+		}
+		contact.setPropertyValues(pvv);
+		return contact;
+	}
 	/**
 	 * Alle für den Benutzer in der Applikation geteilte Kontaktelisten
 	 * <code>ContactList</code> -Objekte künnen über den Aufruf dieser Methode aus
@@ -770,7 +785,27 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 			if (bo instanceof ContactList) {
 				cl = (ContactList) bo;
-				// System.out.println("contactList name " + bo);
+				// Filter von nicht geteilten Kontakten in der KontaktListe
+				/*
+				Vector<Contact> cv = new Vector<Contact>();
+				for(Contact c : cl.getContacts()){
+					Vector<PropertyValue> pvv = contact.getPropertyValues();
+					Vector<PropertyValue> allPVswm = this.findAllPVSharedByOthersToMe();
+					for(PropertyValue pv : pvv){
+						if(pv.getProperty().getId() != 1){
+							if(!allPVswm.contains(pv)){
+								
+								pvv.remove(pv);
+							
+							}
+						}
+						
+					}
+					c.setPropertyValues(pvv);
+					cv.add(c);
+				}
+				cl.setContacts(cv);
+				*/
 				clResultVector.addElement(cl);
 			}
 		}

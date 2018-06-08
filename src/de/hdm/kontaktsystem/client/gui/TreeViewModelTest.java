@@ -174,6 +174,7 @@ public class TreeViewModelTest implements TreeViewModel {
 			rootData = dataProvider; // Speichert RootListe damit die UpdateData methode die Daten Überschreiben kann;
 			Vector v = (Vector) value;
 			Vector<BusinessObject> bov = v;	
+			
 				for (BusinessObject bo : bov) {
 					
 					dataProvider.getList().add(bo);
