@@ -456,16 +456,18 @@ public class ContactSystem implements EntryPoint {
 			
 		});
 		Image add = new Image("/images/add.png");
-		add.setPixelSize(70, 70);
+		add.setPixelSize(50, 50);
 		addPanel.add(add);
 		
 		//Header
+		header.add(sg);
 	    header.add(chainSymbolLogo);
  		header.add(reportLink);
 	    header.add(signOutLink);
+	    
 		
 		//Menu Leiste
-	  	navigation.add(sg);
+	  	
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
