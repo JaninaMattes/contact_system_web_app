@@ -2,6 +2,8 @@ package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 
+import org.omg.PortableServer.ServantActivatorHelper;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,6 +17,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -44,30 +47,32 @@ public class ReportGenerator implements EntryPoint {
 
 	ReportGeneratorAsync reportGenerator = null;
 	
-	//TEST
-//	ContactSystemAdministrationAsync contactSysAdmin = null;
+	/**
+	 * Bilder: Symbol für die Such-Buttons, Logo im Header
+	 */
+	Image searchSymbol1 = new Image();
+	Image searchSymbol2 = new Image();
+	Image logo = new Image();
 	
 	/**
 	 * Definition der grundlegenden Widgets des Report-Generators
 	 */
 	HorizontalPanel headerPanel = new HorizontalPanel();
 	Label headerText = new Label("Report Generator");
-	Image logo = new Image();
 	VerticalPanel navigationPanel = new VerticalPanel();
 	Button showAllButton = new Button("Alle Kontakte");
 	
 	Label findByParticipantLabel = new Label("Nach Teilhaber filtern");
 	HorizontalPanel findByParticipantPanel = new HorizontalPanel();
 	ListBox usersDropDownList = new ListBox();
-	Button findByParticipantButton = new Button("Suche"); //TODO: Symbol statt Text einfügen
+	PushButton findByParticipantButton = new PushButton(searchSymbol1);
 	
 	Label findByValueLabel = new Label("Nach Eigenschaftsausprägung filtern");
 	ListBox propertiesDropDownList = new ListBox();
 	HorizontalPanel findByValuePanel = new HorizontalPanel();
 	TextBox findByValueText = new TextBox();
-	Button findByValueButton = new Button("Suche"); //TODO: Symbol statt Text einfügen
+	PushButton findByValueButton = new PushButton(searchSymbol2); 
 	
-
 	
 	/**
 	 * Attribute für den Login
@@ -142,10 +147,6 @@ public class ReportGenerator implements EntryPoint {
 			reportGenerator = ClientsideSettings.getReportGenerator();
 		}
 
-		//TEST
-//		if(contactSysAdmin == null) {
-//			contactSysAdmin = ClientsideSettings.getContactAdministration();
-//		}
 		
 		/**
 		 * CSS
@@ -162,8 +163,8 @@ public class ReportGenerator implements EntryPoint {
 		findByValueText.getElement().setId("findByTextbox");
 		
 		//DropDownList in CSS
-		propertiesDropDownList.getElement().setId("DropDownList");
-		usersDropDownList.getElement().setId("DropDownList");
+		propertiesDropDownList.getElement().setId("ReportDropDownList");
+		usersDropDownList.getElement().setId("ReportDropDownList");
 
 		//Button in CSS
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
@@ -178,6 +179,21 @@ public class ReportGenerator implements EntryPoint {
 		editorLink.getElement().setId("switch-button");
 
 		/**
+		 * Zuweisen von Bilddateien zu den Image-Elementen, Setzen der Größe
+		 */
+		//Logo
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+		logo.setHeight("100px");
+		logo.setAltText("Logo");
+		//Such-Symbole
+		searchSymbol1.setHeight("25px");
+		searchSymbol1.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
+		searchSymbol1.setAltText("Suche");
+		searchSymbol2.setHeight("25px");
+		searchSymbol2.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
+		searchSymbol2.setAltText("Suche");
+		
+		/**
 		 * Aufbau der Oberfläche.
 		 * Die Reportanwendung besteht aus einem "Navigationsteil" mit den
 		 * Schaltflächen zum Auslösen der Reportgenerierung und einem "Datenteil"
@@ -186,12 +202,9 @@ public class ReportGenerator implements EntryPoint {
 		
 		/**
 		 * Aufbau des Headers
-		 */
-		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
-		logo.setHeight("50px");
-		logo.setAltText("Logo");
+		 */	
 		headerPanel.add(logo);
-		headerPanel.add(headerText); //TODO: Durch Logo ersetzen
+		headerPanel.add(headerText);
 		headerPanel.add(signOutLink);		
 		headerPanel.add(editorLink);		
 		
@@ -425,7 +438,6 @@ public class ReportGenerator implements EntryPoint {
 					String idAsString = String.valueOf(element.getId());
 					propertiesDropDownList.addItem(element.getDescription(), idAsString);
 				}
-				propertiesDropDownList.setVisibleItemCount(result.size());
 				
 			} else {
 				Window.alert("Keine Eigenschaften vorhanden!");
@@ -454,7 +466,6 @@ public class ReportGenerator implements EntryPoint {
 					String userIdAsString = String.valueOf(element.getGoogleID());
 					usersDropDownList.addItem(name, userIdAsString);
 				}
-				usersDropDownList.setVisibleItemCount(result.size());
 			}						
 		}
 		
