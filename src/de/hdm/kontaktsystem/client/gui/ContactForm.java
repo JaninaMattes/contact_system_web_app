@@ -506,9 +506,9 @@ public class ContactForm extends VerticalPanel{
 						case(8):
 							textBoxAdresse.setText(p.getValue()); 
 							break;
+						}
 					}
 				}
-				
 				//Enable Checkboxen falls diese einen Wert enthalten
 				if(!textBoxName.getText().isEmpty()) checkBox1.setEnabled(true);		
 				if(!textBoxNickName.getText().isEmpty()) checkBox2.setEnabled(true);
@@ -529,6 +529,7 @@ public class ContactForm extends VerticalPanel{
        			User owner = new User();
        			owner.setGoogleID(107); //TODO: Tatsächliche ID des Owners aus LogIn Service abrufen
        			Vector <Participation> part = new Vector<Participation>();
+
        			if(c.getOwner().equals(owner)) { //TODO: -> Ziel ein User kann nur seine erstellten Teilhaberschaften eines Kontaktes anezeigen
       			contactSystemAdmin.getAllParticipationsByOwner(c.getOwner(), new ParticipantCallback(part));
        			}
@@ -538,7 +539,7 @@ public class ContactForm extends VerticalPanel{
        					+ c.getOwner().getGMail());
        			receivedFrom.setVisibleItemCount(1);
        			}       				
-				}
+
 				} else {
 				//Löschen eines Kontaktes aus KontaktForm
 			    checkBox2.setEnabled(false);
