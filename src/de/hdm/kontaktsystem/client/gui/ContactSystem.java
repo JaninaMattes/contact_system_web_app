@@ -148,18 +148,18 @@ public class ContactSystem implements EntryPoint {
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
 		treeScrollPanel.setHeight("80vh");
-		contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+		contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				log("Keine Listen gefunden");
+				log("Keine Kontakte gefunden");
 			}
 
 			@Override
 			public void onSuccess(Vector<Contact> result) {
 				// TODO Auto-generated method stub
-				log("Es wurden " + result.size() + " Listen gefunden");
+				log("Es wurden " + result.size() + " Kontakte gefunden");
 				ct = new CellTree(tvm, result);
 				ct.setAnimationEnabled(true);
 				ct.setDefaultNodeSize(result.size());
@@ -330,18 +330,18 @@ public class ContactSystem implements EntryPoint {
 		//TEST -> ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-			contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+			contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
-						log("Keine Listen gefunden");
+						log("Keine Kontakte gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<Contact> result) {
 						// TODO Auto-generated method stub
-						log("Es wurden " + result.size() + " Listen gefunden");
+						log("Es wurden " + result.size() + " Kontakte gefunden");
 						Vector<BusinessObject> bov = new Vector<BusinessObject>();
 						for(Contact cl : result){
 							bov.add(cl);
@@ -360,7 +360,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ContactListButton
 		contactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				contactSystemAdmin.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
+				contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {

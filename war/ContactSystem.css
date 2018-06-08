@@ -449,8 +449,8 @@ div#Trailer {
     left: 53vw;
     text-align: center;
     z-index: 5;
-    height: 65px;
-    width:  65px;
+    height: 50px;
+    width:  50px;
     background: #00cfff;
     border-radius: 50px;
 }
