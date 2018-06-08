@@ -36,33 +36,29 @@ h1, #headertext {
 	color: black
 }
 
-#reportheader{ /*Kopfdaten des erstellten Reports (Tabelle) */
-	width:400px;
+#reportheader{ /*Kopfdaten des erstellten Reports mit Userdaten (Tabelle) */
+	width:600px;
 	border:1px solid silver;
 	margin: auto;
 }
 
 .reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
-	width:400px;
-	margin: auto;
-}
-
-.reportpropertyvalues{ /* Tabelle, die die Eigenschaften eines einzelnen Kontakts im erstellten Report darstellt */
-	width:400px;
-	margin: auto;
-}
-
-.reportpropertyvalues.tableheader{
+	width:600px;
+	border:1px solid silver;
+	margin: 10px auto;
 	
 }
 
-.tablecell{
-	border-top:1px solid silver;
+.reportpropertyvalues{ /* Tabellenzeile, die eine Eigenschaft eines einzelnen Kontakts im erstellten Report darstellt */
 }
 
-.reportparticipants{ /*Tabellenzeile, die Teilhaber des Kontakts auflistet */
-	margin: auto;
-	align: center;
+.label{	/* linke Tabellenspalte, enthält Beschriftung zu den Werten der Eigenschaften eines Kontakts  (Report) */
+	width: 200px;
+}
+
+.tablecell{ /* rechte Tabellenspalte, enthält Werte der Eigenschaften eines Kontakts (Report) */
+	border-top:1px solid silver;
+	width: 400px;
 }
 
 
@@ -70,6 +66,7 @@ h1, #headertext {
     box-sizing: border-box;
 }
 
+/* Aufbau des Editors */
 .column-left {
     float: left;
     width: 20%;
@@ -88,16 +85,18 @@ h1, #headertext {
     height: 80vh;
 }
 
+/* Aufbau des Report Generators */
 .report-left {
 	float: left;
-    width: 20%;
+    width: 25%;
     height: 80vh;
 }
 
 .report-right {
 	float: right;
-	width: 80%;
+	width: 75%;
 	height: 80vh;
+	overflow: auto;
 }
 
 #ListBox {
@@ -291,7 +290,9 @@ h1, #headertext {
 }
 
 /* DropDown-Liste */
-/*TODO: weiter ausschreiben, wenn ReportGenerator fertig */
+#ReportDropDownList{
+	margin: 0 4px;
+}
 
 #DropDownList{
 	margin-left: 4px;

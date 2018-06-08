@@ -132,16 +132,13 @@ public class HTMLReportWriter extends ReportWriter {
 			
 			//Umwandeln der Eigenschafts-Tabelle in HTML-Form
 			Vector<Row> contactRows = element.getPropertyRows();
-			result.append("<tr><td>");
-			
-			result.append("<table class=\"reportpropertyvalues\">");
 
 		    for (int i = 0; i < contactRows.size(); i++) {
 		    	Row row = contactRows.elementAt(i);
-		    	result.append("<tr>");
+		    	result.append("<tr class=\"reportpropertyvalues\">");
 		    	for (int k = 0; k < row.getNumColumns(); k++) {
 		    		if (i == 0) {
-		    			result.append("<td class=\"tableheader\">" + row.getColumnAt(k)
+		    			result.append("<td class=\"label\">" + row.getColumnAt(k)
 		    			+ "</td>");
 		    		}
 		    		else {
@@ -152,12 +149,9 @@ public class HTMLReportWriter extends ReportWriter {
 		    	result.append("</tr>");
 		    }
 		    Window.alert("Kontakt hinzugefügt"); //TEST
-		    result.append("</table>");
-			
-			result.append("</td></tr>");
 			
 			//Umwandeln der Liste mit Teilhabern in HTML
-			result.append("<tr class=\"reportparticipants\"><td>Teilhaber: </td><td><ul>");
+			result.append("<tr class=\"reportparticipants\"><td class=\"label\">Teilhaber: </td><td class=\"tablecell\"><ul>");
 			Vector<SimpleParagraph> participants = element.getParticipantList().getSubParagraphs();
 			for(SimpleParagraph participant : participants) {
 				result.append("<li>" + participant.toString() + "</li>");

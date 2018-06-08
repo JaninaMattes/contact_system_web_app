@@ -44,8 +44,6 @@ public class ReportGenerator implements EntryPoint {
 
 	ReportGeneratorAsync reportGenerator = null;
 	
-	//TEST
-//	ContactSystemAdministrationAsync contactSysAdmin = null;
 	
 	/**
 	 * Definition der grundlegenden Widgets des Report-Generators
@@ -142,10 +140,6 @@ public class ReportGenerator implements EntryPoint {
 			reportGenerator = ClientsideSettings.getReportGenerator();
 		}
 
-		//TEST
-//		if(contactSysAdmin == null) {
-//			contactSysAdmin = ClientsideSettings.getContactAdministration();
-//		}
 		
 		/**
 		 * CSS
@@ -162,8 +156,8 @@ public class ReportGenerator implements EntryPoint {
 		findByValueText.getElement().setId("findByTextbox");
 		
 		//DropDownList in CSS
-		propertiesDropDownList.getElement().setId("DropDownList");
-		usersDropDownList.getElement().setId("DropDownList");
+		propertiesDropDownList.getElement().setId("ReportDropDownList");
+		usersDropDownList.getElement().setId("ReportDropDownList");
 
 		//Button in CSS
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
