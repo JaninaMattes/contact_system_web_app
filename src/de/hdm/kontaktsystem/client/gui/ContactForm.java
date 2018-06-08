@@ -28,6 +28,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 public class ContactForm extends VerticalPanel{
 	
+	//TODO: Owner im System abrufen
 	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact contactToDisplay = null;
 	ContactTreeViewModel ctvm = null;
@@ -79,7 +80,7 @@ public class ContactForm extends VerticalPanel{
 	
 	ListBox shareUser = new ListBox();
 	ListBox sharedWithUser = new ListBox();
-	TextBox receivedFrom = new TextBox();
+	ListBox receivedFrom = new ListBox();
 	
 	/**
 	 * Startpunkt
@@ -136,8 +137,8 @@ public class ContactForm extends VerticalPanel{
 		contactGrid.setWidget(8, 2, checkBox8);
 		
 		shareUser.getElement().setId("ListBox");
-		/*TextBox kann nur Informationen darstellen, verhindert aber deren Bearbeitung*/
-		receivedFrom.setEnabled(false);
+		/*ListBox ist nicht sichtbar außer User ist Teilhaber*/
+		receivedFrom.setVisible(true);
 		
 		/**
 		 * id für CSS
@@ -189,15 +190,12 @@ public class ContactForm extends VerticalPanel{
 		textBoxEmail.getElement().setId("Textbox");
 		textBoxGeburtsdatum.getElement().setId("Textbox");
 		textBoxAdresse.getElement().setId("Textbox");
-		receivedFrom.getElement().setId("geteiltvontextfeld");
 		
 		//ListBox CSS
+		receivedFrom.getElement().setId("geteiltvontextfeld");
 		shareUser.getElement().setId("geteiltmitlistbox");
 		sharedWithUser.getElement().setId("teilenmitlistbox");
-		ListBox shareUser = new ListBox();
-		ListBox sharedWithUser = new ListBox();
-		TextBox receivedFrom = new TextBox();
-		
+				
 		//Checkboxen CSS
 		checkBox1.getElement().setId("checkBox");
 		checkBox2.getElement().setId("checkBox");
@@ -528,15 +526,18 @@ public class ContactForm extends VerticalPanel{
        			Vector <User> u = new Vector<User>();
        			contactSystemAdmin.getAllUsers(new UserCallback(u));
        			//Befüllen der ListBox mit User Objekten, welche eine Teilhaberschaft haben
+       			User owner = new User();
+       			owner.setGoogleID(107); //TODO: Tatsächliche ID des Owners aus LogIn Service abrufen
        			Vector <Participation> part = new Vector<Participation>();
-       			//if(myself.isOwner) { -> TODO Dummy Code ausformulieren
-       			contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new ParticipantCallback(part));
-       			//}
-//       			contactSystemAdmin.getAllParticipationsByOwner(myself, callback);
-//       			ListBox shareUser = new ListBox();
-//       			ListBox sharedWithUser = new ListBox();
-//       			TextBox receivedFrom = new TextBox();
-       				
+       			if(c.getOwner().equals(owner)) { //TODO: -> Ziel ein User kann nur seine erstellten Teilhaberschaften eines Kontaktes anezeigen
+      			contactSystemAdmin.getAllParticipationsByOwner(c.getOwner(), new ParticipantCallback(part));
+       			}
+       			else { //Wenn User nicht selbst Ersteller ist, dann wird ihm dieser dargestellt
+       			receivedFrom.setVisible(true);
+       			receivedFrom.addItem(c.getOwner().getUserContact().getName().getValue() + " , " 
+       					+ c.getOwner().getGMail());
+       			receivedFrom.setVisibleItemCount(1);
+       			}       				
 				}
 				} else {
 				//Löschen eines Kontaktes aus KontaktForm
@@ -1102,10 +1103,10 @@ public class ContactForm extends VerticalPanel{
 					if (result != null) {
 						for(Participation p: result) {						
 						//User Liste updaten
-						shareUser.addItem(p.getParticipant().getUserContact().getName().getValue() + " , " + p.getParticipant().getGMail());	
+							sharedWithUser.addItem(p.getParticipant().getUserContact().getName().getValue() + " , " + p.getParticipant().getGMail());	
 						}
 					//Genug Platz schaffen für alle Elemente
-					shareUser.setVisibleItemCount(part.size());
+						sharedWithUser.setVisibleItemCount(part.size());
 					} else {
 						Window.alert("Kein Teilhaber gefunden :(");
 					}
