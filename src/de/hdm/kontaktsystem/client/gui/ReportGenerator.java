@@ -425,7 +425,6 @@ public class ReportGenerator implements EntryPoint {
 					String idAsString = String.valueOf(element.getId());
 					propertiesDropDownList.addItem(element.getDescription(), idAsString);
 				}
-				propertiesDropDownList.setVisibleItemCount(result.size());
 				
 			} else {
 				Window.alert("Keine Eigenschaften vorhanden!");
@@ -454,7 +453,6 @@ public class ReportGenerator implements EntryPoint {
 					String userIdAsString = String.valueOf(element.getGoogleID());
 					usersDropDownList.addItem(name, userIdAsString);
 				}
-				usersDropDownList.setVisibleItemCount(result.size());
 			}						
 		}
 		

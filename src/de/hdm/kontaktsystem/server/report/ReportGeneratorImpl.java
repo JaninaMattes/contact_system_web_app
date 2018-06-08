@@ -230,11 +230,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		System.out.println("Methode aufgerufen");
 		//User-Objekt zu Namen zuordnen
 		User searchedParticipant = administration.getUserByID(participantId);
-		System.out.println("User gefunden");
+		System.out.println("User gefunden, ID: " + searchedParticipant.getGoogleID());
 		
 		//Erstellen des noch leeren Reports
 		AllContactsForParticipantReport report = new AllContactsForParticipantReport();
-		System.out.println("Leerer Report erstellt");
 				
 		//Titel des Reports
 		report.setTitle("Alle mit "
@@ -258,7 +257,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		}else {
 			System.out.println("Teilhaberschaften des Nutzers abgerufen");
 			for(Participation participation : allParticipations) {
-				if(participation.getParticipant().equals(searchedParticipant)) {
+				if(participation.getParticipant().getGoogleID() == searchedParticipant.getGoogleID()) {
 					allParticipationsToParticipant.add(participation);
 				}
 			}
@@ -304,7 +303,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			throws IllegalArgumentException {
 		//Property-Objekt zu Id suchen
 		Property searchedProperty = administration.getPropertyByID(propertyId);
-		System.out.println("Property gefunden");
 		
 		//Erstellen des noch leeren Reports
 		AllContactsForPropertyReport report = new AllContactsForPropertyReport();
