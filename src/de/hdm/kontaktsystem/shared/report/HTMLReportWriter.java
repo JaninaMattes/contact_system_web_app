@@ -112,21 +112,23 @@ public class HTMLReportWriter extends ReportWriter {
 		//Tabelle mit allgemeinen Daten:
 		//Titel
 	    result.append("<H1 id=\"reporttitle\">" + report.getTitle() + "</H1>");
-	    Window.alert("Titel hinzugefügt"); //TEST
 	    
 	    //User-Daten
 	    result.append("<table id=\"reportheader\"><tr>");
 	    result.append("<td align=\"center\">" + paragraph2HTML(report.getUserData()) + "</td>");
-	    Window.alert("User-Daten"); //TEST
 	    
 		//Erstellungsdatum
 	    result.append("</tr><tr><td align=\"center\">" + report.getCreated().toString()
 	            + "</td></tr></table>");
-	    Window.alert("Datum"); //TEST
 	    
 	    //Kontakt-Elemente: je eine Tabelle pro Element
 	    Vector<SingleContact> elements = report.getAllSingleContacts();
-	    Window.alert("Alle Kontakte abgerufen"); //TEST
+	    if(elements.isEmpty()) {
+	    	result.append("<table class=\"reportcontactdata\">"
+	    			+ "<tr><td>"
+	    			+ "Keine Kontakte gefunden."
+	    			+ "</tr></td></table>");
+	    }
 		for(SingleContact element : elements) {
 			result.append("<table class=\"reportcontactdata\">");
 			
@@ -148,7 +150,6 @@ public class HTMLReportWriter extends ReportWriter {
 		    	}
 		    	result.append("</tr>");
 		    }
-		    Window.alert("Kontakt hinzugefügt"); //TEST
 			
 			//Umwandeln der Liste mit Teilhabern in HTML
 			result.append("<tr class=\"reportparticipants\"><td class=\"label\">Teilhaber: </td><td class=\"tablecell\"><ul>");

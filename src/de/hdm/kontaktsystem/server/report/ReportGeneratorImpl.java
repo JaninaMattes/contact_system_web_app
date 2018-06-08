@@ -146,7 +146,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			Vector<Participation> participations = administration.getAllParticipationsByBusinessObject(contact);
 			for(Participation singleParticipation : participations) {
 				Double participantID = singleParticipation.getParticipant().getGoogleID();
-				//momentan noch null, da Testkontakt zu User 666 keinen Namen hat
 				String name = administration.getUserByID(participantID).getUserContact().getName().getValue();
 				SimpleParagraph singleParticipant = new SimpleParagraph(name);
 				contactElement.addElementToParticipantList(singleParticipant);
