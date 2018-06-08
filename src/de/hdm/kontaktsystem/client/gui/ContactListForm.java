@@ -21,6 +21,7 @@ import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 //import com.smartgwt.client.types.Alignment;  
 //import com.smartgwt.client.types.DragDataAction;  
@@ -47,19 +48,21 @@ public class ContactListForm extends VerticalPanel {
 	 * WIdgets um die Attribute einer Kontaktliste anzuzeigen.
 	 */
 	Label contactListLabel = new Label("Kontaktliste: ");
-	Label contactLabel = new Label("Kontakt: "); 
+	Label contactLabel = new Label("Kontakte: "); 
 	
 	HorizontalPanel btnPanel = new HorizontalPanel();
 	Button deleteConButton = new Button("Kontakt entfernen");
 	Button deleteClButton = new Button("Kontaktliste löschen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
+	Button addConToList = new Button("Hinzufügen");
 	
 	Label isShared = new Label("Geteilt: ");
 	Label labelShare = new Label("Teilen mit: ");
 	Label contactStatus = new Label("");
 	Label labelSharedWith = new Label("Geteilt mit: ");
 	Label labelReceivedFrom = new Label("Geteilt von: ");
+	Label labelAddConsToList = new Label("Kontakt hinzufügen ");
 	
 
 	CheckBox checkBox1 = new CheckBox();
@@ -68,6 +71,7 @@ public class ContactListForm extends VerticalPanel {
 	ListBox listBoxSharedWith = new ListBox();
 	TextBox nameContactList = new TextBox();
 	ListBox contactNames = new ListBox();
+	ListBox contactsToAdd = new ListBox();
 
 	
 
@@ -86,19 +90,23 @@ public class ContactListForm extends VerticalPanel {
 		contactListGrid.setWidget(1, 0, contactLabel);
 		contactListGrid.setWidget(1, 1, contactNames);
 		contactListGrid.setWidget(1, 2, deleteConButton);
+		
+		contactListGrid.setWidget(2, 0, labelAddConsToList);
+		contactListGrid.setWidget(2, 1, contactsToAdd);
+		contactListGrid.setWidget(2, 2, addConToList);
 
 		
-		contactListGrid.setWidget(2, 0, labelShare);
-		contactListGrid.setWidget(2, 1, listBoxShareWith);
-		contactListGrid.setWidget(2, 2, shareButton);	
+		contactListGrid.setWidget(3, 0, labelShare);
+		contactListGrid.setWidget(3, 1, listBoxShareWith);
+		contactListGrid.setWidget(3, 2, shareButton);	
 		
-		contactListGrid.setWidget(3, 0, labelSharedWith);
-		contactListGrid.setWidget(3, 1, listBoxSharedWith);
+		contactListGrid.setWidget(4, 0, labelSharedWith);
+		contactListGrid.setWidget(4, 1, listBoxSharedWith);
 		
-		contactListGrid.setWidget(4, 0, labelReceivedFrom);
-		contactListGrid.setWidget(4, 1, textBoxReceivedFrom);
+		contactListGrid.setWidget(5, 0, labelReceivedFrom);
+		contactListGrid.setWidget(5, 1, textBoxReceivedFrom);
 		
-		contactListGrid.setWidget(5, 1, btnPanel);
+		contactListGrid.setWidget(6, 1, btnPanel);
 
 		contactNames.getElement().setId("ListBox");
 		listBoxShareWith.getElement().setId("ListBox");
@@ -114,6 +122,7 @@ public class ContactListForm extends VerticalPanel {
 		btnPanel.add(deleteClButton);
 		saveButton.addClickHandler(new saveClickHandler());
 		deleteClButton.addClickHandler(new deleteContactListClickHandler());
+		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
 		
 		
 		
@@ -137,6 +146,7 @@ public class ContactListForm extends VerticalPanel {
 		textBoxReceivedFrom.getElement().setId("TextBox");
 		listBoxShareWith.getElement().setId("ListBox");
 		listBoxSharedWith.getElement().setId("ListBox");
+		contactsToAdd.getElement().setId("ListBox");
 
 		
 		//Labels in CSS
@@ -176,13 +186,13 @@ public class ContactListForm extends VerticalPanel {
 			u.setGoogleID(126);
 			cl.setName(clName);	
 			cl.setOwner(u);
-//			if (cl == null) {
-//				Window.alert("Keine Kontaktliste ausgewählt");
-//			} else {
+			if (cl == null) {
+				Window.alert("Keine Kontaktliste ausgewählt");
+			} else {
 				Window.alert(cl.toString());
 				contactSystemAdmin.createContactList
 				(cl, new SaveCallback());
-			//}
+			}
 		}
 	}
 	
@@ -267,7 +277,13 @@ public class ContactListForm extends VerticalPanel {
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 			} else {
-			
+				Contact c = new Contact();
+				PropertyValue pV = new PropertyValue();
+				Integer lbItemIndex = contactNames.getSelectedIndex();
+				String contactName = contactNames.getValue(lbItemIndex);
+				pV.setValue(contactName);
+				c.setName(pV);
+				contactSystemAdmin.removeContactFromList(c, contactListToDisplay, new deleteConfromListCallback());
 			}
 		}
 	}
@@ -281,13 +297,14 @@ public class ContactListForm extends VerticalPanel {
 	implements AsyncCallback<ContactList> {
 
 		public void onFailure(Throwable caught) {
-			Window.alert("Löschen eines Kontaktes fehlgeschlagen");
+			Window.alert("Entfernen des Kontakts aus Liste fehlgeschlagen");
 		}
 
 		public void onSuccess(ContactList result) {
 			if (result != null) {
 				setSelected(null);
-				Window.alert("Kontakt wurde erfolgreich aus der Liste gelöscht");
+				cltvm.removeContactList(result);
+				Window.alert("Kontakt wurde erfolgreich aus der Liste entfernt");
 			}
 		}
 	}
@@ -351,9 +368,11 @@ public class ContactListForm extends VerticalPanel {
 			int count = 0;
 			//Befüllen der Listbox mit allen User Objekten aus dem System
    			Vector <User> u = new Vector<User>();
+   			Vector<Contact> c = new Vector<Contact>();
    			contactSystemAdmin.getAllUsers(new UserToShareCallback(u));
    			contactSystemAdmin.getAllUsers(new UserSharedWithCallback(u));
    			contactSystemAdmin.getAllUsers(new UserSharedByCallback(u));
+   			contactSystemAdmin.getAllContacts(new ContactsToAddCallback(c));
 			contactListToDisplay = cl;
 			deleteClButton.setEnabled(true);
 			deleteConButton.setEnabled(true);
@@ -477,6 +496,29 @@ public class ContactListForm extends VerticalPanel {
 				Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");
 			}
 		}
+	}
+	
+	/**
+	 * Anzeige aller vom User erstellten und dem User geteilten Kontakte, um einen daraus selektierten Kontakt zur Kontaktliste hinzuzufügen.
+	 * @author Kim-Ly
+	 */
+	
+	private class ContactsToAddCallback implements AsyncCallback<Vector<Contact>> {
+
+		Vector<Contact> c= new Vector<Contact>(); 
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Keine Kontakte vorhanden. Kontakte anlegen um diese hinzuzufügen. ");
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<Contact> result) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 	
 	native void log(String s)/*-{

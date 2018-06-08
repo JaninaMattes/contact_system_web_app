@@ -103,6 +103,7 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void deleteContact(Contact c, AsyncCallback<Contact> callback);
 	
+	
 	public void deleteContactList(ContactList cl, AsyncCallback<ContactList> callback);
 	
 	public void deletePropertyValue(PropertyValue pv, AsyncCallback<PropertyValue> callback);
