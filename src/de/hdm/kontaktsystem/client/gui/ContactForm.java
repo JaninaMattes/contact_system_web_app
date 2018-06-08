@@ -38,8 +38,7 @@ public class ContactForm extends VerticalPanel{
 	
 	/**
 	 * Widgets, deren Inhalte variable sind, werden als Attribute angelegt.
-	 */
-	
+	 */	
 	TextBox textBoxName = new TextBox();
 	TextBox textBoxNickName = new TextBox();
 	TextBox textBoxFirma = new TextBox();
@@ -84,16 +83,13 @@ public class ContactForm extends VerticalPanel{
 	
 	/**
 	 * Startpunkt
-	 */
-	
+	 */	
 	public void  onLoad() {
 		super.onLoad();
 		
-		
 		/**
 		 * id für CSS
-		 */
-		
+		 */		
 		//Buttons in CSS
 		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
 
@@ -145,6 +141,10 @@ public class ContactForm extends VerticalPanel{
 		receivedFrom.getElement().setId("teilenmitlistbox");//.setId("geteiltvontextfeld");
 		shareUser.getElement().setId("teilenmitlistbox");//.setId("geteiltmitlistbox");
 		sharedWithUser.getElement().setId("teilenmitlistbox");
+	    
+		shareUser.getElement().setId("ListBox");
+		receivedFrom.getElement().setId("ListBox");
+		labelSharedWith.getElement().setId("ListBox");
 				
 		//Checkboxen CSS
 		checkBox1.getElement().setId("checkBox");
@@ -154,10 +154,9 @@ public class ContactForm extends VerticalPanel{
 		checkBox5.getElement().setId("checkBox");
 		checkBox6.getElement().setId("checkBox");
 		checkBox7.getElement().setId("checkBox");
-		checkBox8.getElement().setId("checkBox");
+		checkBox8.getElement().setId("checkBox");		
 		
-		
-		/*
+		/**
 		 * CheckBoxen für das Teilen einzelner Elemente einer ContactForm 
 		 * per Default auf "false" setzen.
 		 */
@@ -178,9 +177,8 @@ public class ContactForm extends VerticalPanel{
 		 /**
 	     * Clickhandler zum Überprüfen ob TextBox angeklickt wurde.
 	     * Unterstützt darin herauszufinden, ob eine Veränderung in 
-	     * TextBox vorgenommen wurde und updated deren Inhalt.
-	     * 
-	     * @author janina
+	     * TextBox vorgenommen wurde und updated deren Inhalt.	     
+	     * @author Janina
 	     */	
 		
 	    //TODO: Prüfen -> onClick Methode wird nicht ausgelöst
@@ -373,12 +371,14 @@ public class ContactForm extends VerticalPanel{
 	    	  }
 	      }
 	    });
-	       
 		
-		shareUser.getElement().setId("ListBox");
 		/*ListBox ist nicht sichtbar außer User ist Teilhaber*/
+		labelShare.setVisible(false);
+		shareUser.setVisible(false);
+		
 		labelReceiedFrom.setVisible(false);
 		receivedFrom.setVisible(false);
+		
 		sharedWithUser.setVisible(false);
 		labelSharedWith.setVisible(false);
 		
@@ -504,9 +504,8 @@ public class ContactForm extends VerticalPanel{
        			}
        			receivedFrom.addItem(c.getOwner().getUserContact().getName().getValue() + " , " 
        					+ c.getOwner().getGMail());
-       			receivedFrom.setVisibleItemCount(1);      				
-
-				} 
+       			receivedFrom.setVisibleItemCount(1);    		
+       			} 
        			} else {
 				//Löschen eines Kontaktes aus KontaktForm
 			    checkBox2.setEnabled(false);
