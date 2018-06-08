@@ -121,25 +121,16 @@ public class User implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
-		if (gMail == null) {
-			if (other.gMail != null)
-				return false;
-		} else if (!gMail.equals(other.gMail))
+		if (this != obj)
 			return false;
+		User other = (User) obj;
 		if (googleID != other.googleID)
 			return false;
-		if (userContact == null) {
-			if (other.userContact != null)
-				return false;
-		} else if (!userContact.equals(other.userContact))
-			return false;
+		
 		return true;
 	}
 	

@@ -20,7 +20,9 @@ import de.hdm.kontaktsystem.shared.bo.ContactList;
 public class ContactListTreeViewModel implements TreeViewModel{
 
 	private ContactListForm contactListForm;
+	private ContactForm contactForm;
 	private ContactList selectedContactList;
+	private Contact conFromCL;
 	
 	private ContactSystemAdministrationAsync contactSystemAdmin = null;
 	private ListDataProvider<ContactList> contactListDataProvider = null;
@@ -86,10 +88,23 @@ public class ContactListTreeViewModel implements TreeViewModel{
 		return selectedContactList;
 	}
 	
+	
 	void setSelectedContactList(ContactList cl) {
 		selectedContactList = cl;
 		contactListForm.setSelected(cl);
 	}
+	
+	Contact getSelectedContactFromCl() {
+		Vector<Contact> conVec = new Vector<Contact>();
+		Contact conFromCl = new Contact();
+		conVec = selectedContactList.getContacts() ;
+		
+		for (Contact c : conVec) {
+			conFromCl = c;
+		}	
+		return conFromCl;
+	}
+	
 	
 	void removeContactList(ContactList cl) {
 		contactListDataProvider.getList().remove(cl);
@@ -109,6 +124,7 @@ public class ContactListTreeViewModel implements TreeViewModel{
 		
 			public void onSuccess(Vector<ContactList> contactLists) {
 				for (ContactList cl : contactLists) {
+					Window.alert(contactLists.toString());
 					contactListDataProvider.getList().add(cl);
 				}
 			}
@@ -132,48 +148,29 @@ public class ContactListTreeViewModel implements TreeViewModel{
 	 * Dies ist sinnvoll, wenn sich die Eigenschaften eines Kontakts z.B. durch <em>editieren</em> 
 	 * geändert haben und in der Baumstruktur noch ein "veraltetes" Kontakt - Objekt enthalten ist.
 	 */
-	void updateContact(ContactList clist) {
-		contactSystemAdmin.getContactById(clist.getBoId(), new UpdateContactCallback(clist));
-	
-	}
-
-	private class UpdateContactCallback implements AsyncCallback<Contact> {
-
-		ContactList cl = null;
-
-		@SuppressWarnings("unused")
-		UpdateContactCallback (ContactList list) {
-			this.cl = list;
-		}
-
-		@Override
-		public void onFailure(Throwable t) {
-			Window.alert("Update nicht durchgeführt.");
-		}
-
-		@Override
-		public void onSuccess(Contact c) {
-			List<ContactList> contactList = contactListDataProviders.get(c)
-					.getList();
-			for (int i=0; i<contactList.size(); i++) {
-				if (cl.getBoId() == contactList.get(i).getBoId()) {
-					contactList.set(i, cl);
-					break;
-				}
+	public void updateContactList(ContactList clist) {
+		List<ContactList> contactList = contactListDataProvider.getList();
+		int i = 0;
+		for (ContactList con : contactList) {
+			if (con.getBoId() == clist.getBoId()) {
+				contactList.set(i, clist);
+				break;
+			} else {
+				i++;
 			}
 		}
+		contactListDataProvider.refresh();
 	}
 
-	
-	/**
-	 * Verwendung der Methode um Contact Objekte, welche über die Sucheingabe
-	 * gefunden wurden im CellTree anzeigen zu können.
-	 * @param contact
-	 */
-	
-	public void addContact(Contact contact) {
+	public void addContact(Contact c) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	/*
+	 * Kontakte aus DefaultNodeInfo<ContactList> extrahieren und in Form als Kontakt anzeigen
+	 */
+	
+
 
 }

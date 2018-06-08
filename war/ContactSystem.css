@@ -1,3 +1,5 @@
+/*TODO: ReportGenerator, Checkboxen, Textboxen,Listboxen, allgemein anpassen */
+
 body {
 	margin: 0 auto; /*Der Wert wird horizontal zentriert */
     text-align: center;  /* Zentrierung im Internet Explorer */
@@ -10,7 +12,7 @@ div {
 	border: solid 0.5px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
 }
 
-h1 {
+h1, #headertext {
   font-family: "Arial", Arial, sans-serif;
   font-size: 2em; /*Schriftgr��e*/
   font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
@@ -18,11 +20,53 @@ h1 {
   margin: 40px 0px 20px; /*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
   text-align: center; /*zentriert*/
 }
+#headertext{ /*�berschrift des Report-Generators*/
+	border: none;
+	text-align: center;
+	margin: 40px 300px 40px;
+	padding-left: 200px;
+
+	
+}
+
+#reporttitle{ /* Überschrift des erstellten Reports */
+	font-family: "Arial", Arial, sans-serif;
+  	font-size: 2em; /*Schriftgr��e*/
+  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+	color: black
+}
+
+#reportheader{ /*Kopfdaten des erstellten Reports mit Userdaten (Tabelle) */
+	width:600px;
+	border:1px solid silver;
+	margin: auto;
+}
+
+.reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
+	width:600px;
+	border:1px solid silver;
+	margin: 10px auto;
+	
+}
+
+.reportpropertyvalues{ /* Tabellenzeile, die eine Eigenschaft eines einzelnen Kontakts im erstellten Report darstellt */
+}
+
+.label{	/* linke Tabellenspalte, enthält Beschriftung zu den Werten der Eigenschaften eines Kontakts  (Report) */
+	width: 200px;
+}
+
+.tablecell{ /* rechte Tabellenspalte, enthält Werte der Eigenschaften eines Kontakts (Report) */
+	border-top:1px solid silver;
+	width: 400px;
+}
+
 
 * {
     box-sizing: border-box;
 }
 
+/* Aufbau des Editors */
 .column-left {
     float: left;
     width: 20%;
@@ -41,16 +85,18 @@ h1 {
     height: 80vh;
 }
 
+/* Aufbau des Report Generators */
 .report-left {
 	float: left;
-    width: 20%;
+    width: 25%;
     height: 80vh;
 }
 
 .report-right {
 	float: right;
-	width: 80%;
+	width: 75%;
 	height: 80vh;
+	overflow: auto;
 }
 
 #ListBox {
@@ -83,126 +129,155 @@ h1 {
 #shareButton{
 	height: 30px;
     width: 53px;
-    font-size: 16px;
+    font-size: 14px;
     border: none;
     font-family: "Arial", Arial, sans-serif;
 	background-color: #0080ff;
-	color: white;
+	color: black;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     margin: 4px 2px;
     cursor: pointer;
-    
+	border-radius: 5px; /*abgerundete Ecken*/
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
-
 #menue-button{
-	height: 30px;
+	height: 40px;
     width: 240px;
     font-family: "Arial", Arial, sans-serif;
 	border: solid 1px white; 
 	background-color: #727272;
     border: none;
     border-radius: 0;
-    color: #ffffff;
+    color: #000000;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+   	margin: 4px 2px;
     cursor: pointer;
 	
 }
 
 #searchButton{
-	height: 30px;
+	height: 25px;
     width: 53px;
     font-family: "Arial", Arial, sans-serif;
-	background-color: #FFFFFF;
+	background-color: #c0c0c0;
     border: none;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    /*margin: 4px 2px;*/
+    margin-bottom: 30px;
     cursor: pointer;
-	
+}
+
+#searchAllContacts{
+	height: 25px;
+    width: 100px;
+    margin-left: 5px;
+    margin-top: 10px;
+    font-family: "Arial", Arial, sans-serif;
+	background-color: #c0c0c0;
+    border: none;
+    padding: 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    /*margin: 4px 2px;*/
+    margin-bottom: 30px;
+    cursor: pointer;
 }
 
 #saveButton{
 	height: 30px;
-    width: 50px; 
+    width: 80px; 
     font-family: "Arial", Arial, sans-serif;     
 	background-color: #3cbb35;
-	color: white;
+	color: black;
     border: none;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     margin: 4px 2px;
     cursor: pointer;
-	
+    border-radius: 5px; /*abgerundete Ecken*/
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
 #deleteButton{
 	height: 30px;
-    width: 50px;
+    width: 70px;
     font-family: "Arial", Arial, sans-serif;     
 	background-color: #d32016;
-	color: white;
+	color: black;
     border: none;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     margin: 4px 2px;
-    cursor: pointer;	
+    cursor: pointer;	/*Mauszeiger ver�ndert sich, wenn man auf dem Button ist*/
+	border-radius: 5px; /*abgerundete Ecken*/
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
 #log-out-button{
 	height: 30px;
-    width: 50px;
+    width: 90px;
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
     border: none;
-    border-radius: 0;
-    color: #727272;
+    border-radius: 5px; /*abgerundete Ecken*/
+    color: red;
     background-color: black;
-    padding: 25px 25px 25px 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     text-align: center;
     text-decoration: none;
+    text-transform: uppercase;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;	
     align: right;
+    display: table-cell;
+    vertical-align: middle;
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
+  
 }
-
-#report-button{
+#switch-button{
 	height: 30px;
-    width: 50px;
+    width: 90px;
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
-	border: solid 1px white; 
-    border: none;
-    border-radius: 0;
+	border: solid 1px #727272; 
     color: white;
     background-color: #727272;
-    /*padding: 25px 25px 25px 600px;*/
     text-align: center;
     text-decoration: none;
+    text-transform: uppercase;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;	
     align-content: right;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
+
 
 /* Das Logo */
 
@@ -215,10 +290,14 @@ h1 {
 }
 
 /* DropDown-Liste */
-/*TODO: weiter ausschreiben, wenn ReportGenerator fertig */
+#ReportDropDownList{
+	margin: 0 4px;
+}
 
 #DropDownList{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 /* Textboxen */
@@ -228,35 +307,57 @@ h1 {
 	
 }
 
-#findByTextBox{
+#findByTextbox{
+	width: 187px;
+	hight: 30px;
+	margin-top: 10px;
+	margin-right: 5px;
+	margin-left: 4px;
+}
+
+#search-textfeld{
+	width: 187px;
+	hight: 30px;
+	margin-bottom: 30px;
+}
+
+#geteiltvontextfeld{
 	
 }
 
-#search-Textfeld{
+/*Listboxen*/
+
+#teilenmitlistbox{
+	
+}
+
+#geteiltmitlistbox{
 	
 }
 
 /* Labels */
 
+
 #namelabel{
-    border: none;
+    border-style: none;
     background-color: white;
 	 	
 }
 
 #eigenschaftlabel{
- 	border: none;
+ 	border-style: none;
  	background-color: white;
 }
 
 #teilenlabel{
-	border: none;
+	border-style: none;
 	background-color: white;
 }
 
-/* Label von �berschrift "Kontakt:" und "Kontaktliste:"*/
+/* Label von �berschrift "Kontakt:" und "Kontaktliste:"*/
 #ueberschriftlabel{
-	 border: none;
+	 border-style: none;
+	 border-color:white;
 	 font-size: 20px;
 	 color: black;
 	 font-weight: bold;
@@ -265,21 +366,30 @@ h1 {
 	 
 }
 
+#geteiltlabel{
+	font-style: italic;
+	border: none;
+}
+
 #contactstatus{
 	
 }
 
-#findbylabel{
-	
-}
-
 #filtern{
-	
+	border: none;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-size: 14px;
+	color: white;
 }
 
 #loginlabel{
 	
 }]
+
+#checkbox{
+	margin-left: 10px;
+}
 
 /*Div�s*/
 
@@ -292,28 +402,25 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-	/*background: linear-gradient(to bottom right, #0c101a, #506bae); /*Color gradien siehe W3School*/
+	background: linear-gradient(to bottom right, #0000ff, white);/*W3School*/
 	text-align: center;
-	background-color: #34BFFF;
 }
 
 div#Navigator {	
-<<<<<<< HEAD
-	background-color: #0c145c;
-=======
-	background-color: #051117;
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
-	align-content: left;
+	background: #0c145c;
+
 }
 
 div#Lists {	
-	background: #d9d9d9;
+	background: #ffffff;
 	align-content: center;
 }
 
 div#Details {
 	background: #fefeff;
 	align-content: center;
+	padding-left: 20px;
+	padding-top: 10px;
 }
 
 div#Trailer {
@@ -322,16 +429,14 @@ div#Trailer {
 	clear: both;
 	padding: 10px 0;
 	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
-	border-top: 1px white;
+	border-top: 1px #000000;
 	font-size: 80%;
 	color: white;
 	text-align: center;	
 	align-content: center;
-<<<<<<< HEAD
-	background-color: #3939fd;
-=======
-	background-color: #051117;
->>>>>>> branch 'master' of https://github.com/SandraPrestel/ItProjektSS2018-Team09.git
+	background-color: #01010e;
+
+
 }
 
 .Cell{

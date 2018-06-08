@@ -2,6 +2,7 @@ package de.hdm.kontaktsystem.shared;
 
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -62,6 +63,10 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<Property> getAllProperties();
 	
 	public Property getPropertyByID(int id);
+	
+	public Vector<BusinessObject> getAllSharedByMe();
+	
+	public Vector<BusinessObject> getAllSharedByOthersToMe();
 
 	/**
 	 * Create
