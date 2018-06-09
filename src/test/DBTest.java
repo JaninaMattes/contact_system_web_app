@@ -34,6 +34,11 @@ public class DBTest {
 	
 	public static void main(String[] args){
 		csa.init();
+		System.out.println("My Contacts: " + csa.getAllContactsFromUser());
+		System.out.println("My Contacts: " + csa.getAllContacts());
+		
+		/**
+		csa.init();
 		csa.searchContacts("Test");
 		csa.getUserByID(170);
 		csa.getAllContactLists();
@@ -69,7 +74,7 @@ public class DBTest {
 
 		/**
 		 * Create
-		 */
+
 		//Zu klären: was wird jeweils bei create übergeben?
 		User u = new User();
 		u.setGoogleID(170);

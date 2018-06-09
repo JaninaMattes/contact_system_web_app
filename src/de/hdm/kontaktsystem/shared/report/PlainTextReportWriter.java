@@ -35,7 +35,6 @@ public class PlainTextReportWriter extends ReportWriter {
 	 * @return Header in text-Form
 	 */
 	public String getHeader() {
-		//TODO: Implement method
 		return "Report in TextForm \n";
 	}
 	
@@ -72,8 +71,6 @@ public class PlainTextReportWriter extends ReportWriter {
 		 */
 		//Titel
 		result.append("*** " + report.getTitle() + " ***\n\n");		
-		//Header-Daten
-		result.append(report.getHeaderData() + "\n");
 		//User-Daten
 		result.append("User: " + report.getUserData().toString() + "\n");
 		//Erstellungsdatum

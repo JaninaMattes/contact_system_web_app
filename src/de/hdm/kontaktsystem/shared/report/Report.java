@@ -29,10 +29,6 @@ public class Report implements Serializable {
 	 */
 	private Paragraph userData = null;
 	
-	/**
-	 * Kopfdaten des Berichts
-	 */
-	private Paragraph headerData = null;
 	
 	/**
 	 * Titel des Berichts
@@ -64,22 +60,6 @@ public class Report implements Serializable {
 	 */
 	public void setUserData(Paragraph userData) {
 		this.userData = userData;
-	}
-
-	/**
-	 * Auslesen der Kopfdaten
-	 * @return Kopfdaten des Berichts
-	 */
-	public Paragraph getHeaderData() {
-		return this.headerData;
-	}
-
-	/**
-	 * Setzen der Kopfdaten
-	 * @param headerData zu setzende Kopfdaten
-	 */
-	public void setHeaderData(Paragraph headerData) {
-		this.headerData = headerData;
 	}
 
 	/**

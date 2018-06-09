@@ -29,8 +29,6 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getContactByPropertyValue(PropertyValue pv, AsyncCallback<Contact> callback);
 	
-	public void getContactsFromUser(AsyncCallback<Vector<Contact>> callback);
-	
 	public void getContactsByStatus(Boolean status, AsyncCallback<Vector<Contact>> callback);
 	
 	public void getContactById(int id, AsyncCallback<Contact> callback);
@@ -58,6 +56,11 @@ public interface ContactSystemAdministrationAsync {
 	public void getAllProperties(AsyncCallback<Vector<Property>> callback);
 	
 	public void getPropertyByID(int id, AsyncCallback<Property> callback);
+	
+	public void getAllSharedByMe(AsyncCallback<Vector<BusinessObject>> callback);
+	
+	public void getAllSharedByOthersToMe(AsyncCallback<Vector<BusinessObject>> callback);
+	
 	
 	/**
 	 * Methode für die Suchfunktion

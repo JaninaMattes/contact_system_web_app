@@ -51,9 +51,11 @@ public class ContactListForm extends VerticalPanel {
 	 */
 	Label contactListLabel = new Label("Kontaktliste: ");
 	Label contactLabel = new Label("Kontakt: "); 
+
 	
 	HorizontalPanel btnPanel = new HorizontalPanel();
 	Button deleteButton = new Button("Kontakt lÃ¶schen");
+
 	Button deleteClButton = new Button("Kontaktliste lÃ¶schen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
@@ -122,32 +124,38 @@ public class ContactListForm extends VerticalPanel {
 		//Textboxen in CSS
 		//FÃ¼r die Textboxen gleicher StyleName (wie auch in ContactForm.java)
 
+
 		nameContactList.getElement().setId("Textbox");
 		contactNames.getElement().setId("Listbox");
 
 		
 		//Labels in CSS
+
 		contactListLabel.getElement().setId("ueberschriftlabel");
 		contactLabel.getElement().setId("namelabel");
+
 		//Anzeige des Labels fÃ¼r Vorname und Nachname gleicher StyleName
+
 		//firstNameLabel.getElement().setId("namelabel");
 		//lastNameLabel.getElement().setId("namelabel");
 		contactLabel.getElement().setId("contactlabel");
 
-		
+
 		labelShare.getElement().setId("teilenlabel");
 		contactStatus.getElement().setId("contactstatus");
 		
 		//Buttons in CSS
 		//delete + share + save-Buttons mÃ¼ssen jeweils auch gleich sein
+
 		
-		deleteButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
+		deleteButton.removeStyleName("gwt-Button"); //um den von GWT fï¿½r Buttons vorgegebenen Style zu lï¿½schen
 		deleteButton.getElement().setId("deleteButton");
-		deleteClButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
+		deleteClButton.removeStyleName("gwt-Button"); //um den von GWT fï¿½r Buttons vorgegebenen Style zu lï¿½schen
 		deleteClButton.getElement().setId("deleteButton");
-		saveButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
+		saveButton.removeStyleName("gwt-Button"); //um den von GWT fï¿½r Buttons vorgegebenen Style zu lï¿½schen
 		saveButton.getElement().setId("saveButton");
-		shareButton.removeStyleName("gwt-Button"); //um den von GWT für Buttons vorgegebenen Style zu löschen
+		shareButton.removeStyleName("gwt-Button"); //um den von GWT fï¿½r Buttons vorgegebenen Style zu lï¿½schen
+
 		shareButton.getElement().setId("shareButton");
 		
 		
