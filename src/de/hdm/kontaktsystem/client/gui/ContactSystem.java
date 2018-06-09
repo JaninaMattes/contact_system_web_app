@@ -76,10 +76,15 @@ public class ContactSystem implements EntryPoint {
 //	private Image contactsSymbol = new Image();
 //	private Image listSymbol = new Image(); //Alternatives Symbol für Kontaktliste
 	
+
 	//TreeView
 	ScrollPanel treeScrollPanel = new ScrollPanel();
 	final TreeViewModelTest tvm = new TreeViewModelTest();
 	CellTree ct = null;
+	
+	//Header
+	HorizontalPanel headerPanel = new HorizontalPanel();
+	Label headerText = new Label("KontaktSystem");
 	
 	//Suchfunktion
 	private TextBox search = new TextBox();
@@ -98,11 +103,13 @@ public class ContactSystem implements EntryPoint {
 	private Image updateSymbol = new Image();
 	private Image deleteSymbol = new Image();
 	private Image shareSymbol = new Image();	
-	private Image searchSymbol = new Image();			
+	private Image searchSymbol = new Image();
+	
+	//Logo-Bild
+	Image logo = new Image();
 		
 	//Symbol für Cells (in Cell-Klasse verschieben?)
 	private Image chainSymbolLogo = new Image(); //Symbol für Status geteilt/nicht geteilt
-	
 	/**
 	 * Attribute für den Login
 	 */
@@ -113,6 +120,11 @@ public class ContactSystem implements EntryPoint {
 	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
 	private Anchor reportLink = new Anchor("Report");
+	
+	//Logo
+	//logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+	//logo.setHeight("100px");
+	//logo.setAltText("Logo");
 	
 	// Add Button/Panel
 	private FocusPanel addPanel = new FocusPanel();
@@ -273,6 +285,9 @@ public class ContactSystem implements EntryPoint {
 		 */
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
+		
+		//Label der �berschrift im Header
+		headerText.getElement().setId("headertext");
 		
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
 		searchButton.getElement().setId("searchButton"); 
@@ -460,10 +475,12 @@ public class ContactSystem implements EntryPoint {
 		addPanel.add(add);
 		
 		//Header
-		header.add(sg);
-	    header.add(chainSymbolLogo);
- 		header.add(reportLink);
-	    header.add(signOutLink);
+		headerPanel.add(logo);
+		headerPanel.add(sg);
+	    headerPanel.add(chainSymbolLogo);
+		headerPanel.add(headerText);
+ 		headerPanel.add(reportLink);
+	    headerPanel.add(signOutLink);
 	    
 		
 		//Menu Leiste
@@ -474,7 +491,7 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(receivedParticipationsButton); 
 
 		
-	  	RootPanel.get("Header").add(header);
+	  	RootPanel.get("Header").add(headerPanel);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Trailer").add(trailer);
 	  	RootPanel.get().add(addPanel);

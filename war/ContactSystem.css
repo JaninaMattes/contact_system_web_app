@@ -23,8 +23,8 @@ h1, #headertext {
 #headertext{ /*�berschrift des Report-Generators*/
 	border: none;
 	text-align: center;
-	margin: 40px 300px 60px;
-	padding-left: 200px;
+	margin: 40px 250px 60px;
+	padding-left: 150px;
 
 	
 }
