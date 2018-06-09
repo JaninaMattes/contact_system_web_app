@@ -1,8 +1,8 @@
 package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
+import java.util.logging.Logger;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Popup;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -163,7 +162,7 @@ public class ContactForm extends VerticalPanel{
 		labelSharedWith.getElement().setId("ListBox");
 				
 		//Checkboxen CSS
-//		checkBox1.getElement().setId("checkBox");
+//		checkBox1.getElement().setId("checkBox"); //Name kann nicht einzeln geteilt werden
 		checkBox2.getElement().setId("checkBox");
 		checkBox3.getElement().setId("checkBox");
 		checkBox4.getElement().setId("checkBox");
@@ -196,8 +195,7 @@ public class ContactForm extends VerticalPanel{
 	     * TextBox vorgenommen wurde und updated deren Inhalt.	     
 	     * @author Janina
 	     */	
-		
-	    //TODO: Prüfen -> onClick Methode wird nicht ausgelöst
+
 		textBoxName.addClickHandler(new ClickHandler() {	    
 			@Override
 			public void onClick(ClickEvent event) {
@@ -278,12 +276,8 @@ public class ContactForm extends VerticalPanel{
 			}
 	    });
 		
-	    /**
-	     * ClickHandler Verbindung zu CheckBoxen.
-	     * @author janina
-	     */
-	    
-		//TODO: Prüfen ob Abruf hier sinnvoll ist oder in einer einzigen Methode
+	 
+
 //	    checkBox1.addClickHandler(new ClickHandler() {
 //	      
 //	      @Override
@@ -297,6 +291,12 @@ public class ContactForm extends VerticalPanel{
 //	      }
 //	    });	    
 	    
+		/**
+	     * ClickHandler zu CheckBoxen, überprüfung ob der Wert des TextBox Feldes
+	     * leer ist, wenn ja kann dies nicht geteilt werden. 
+	     * @author janina
+	     */
+		
 	    checkBox2.addClickHandler(new ClickHandler() {
 	     	
 	      @Override
@@ -378,19 +378,20 @@ public class ContactForm extends VerticalPanel{
 			}		    	
 		});
 		    
-		Button cancelBtn = new Button("Abbrechen");
-		cancelBtn.addClickHandler(new ClickHandler() {
-			@Override
-				public void onClick(ClickEvent event) {
-					popUp.hide();				
-				}		    	
-		});
-		    
+//		Button cancelBtn = new Button("Abbrechen");
+//		cancelBtn.addClickHandler(new ClickHandler() {
+//			@Override
+//				public void onClick(ClickEvent event) {
+//					popUp.hide();				
+//				}		    	
+//		});
+//		    
 		popUp.setAnimationEnabled(true);
 		popUp.setGlassEnabled(true);
 		    
-		popUp.add(deleteMessage);
-		popUp.add(cancelBtn);
+//		popUp.add(deleteMessage);
+//		popUp.add(cancelBtn);
+		popUp.setTitle("Hinweis: Soll der Kontakt gelöscht werden?");
 		popUp.add(okBtn);		    
 		popUp.hide();
 	    
@@ -416,7 +417,7 @@ public class ContactForm extends VerticalPanel{
 		
 		contactGrid.setWidget(1, 0, labelName);
 		contactGrid.setWidget(1, 1, textBoxName);
-//		contactGrid.setWidget(1, 2, checkBox1); Entwicklerentscheidung -> Name muss immer vorhanden sein 
+//		contactGrid.setWidget(1, 2, checkBox1);-> Name kann nicht einzeln geteilt werden
 				
 		contactGrid.setWidget(2, 0, labelNickName);
 		contactGrid.setWidget(2, 1, textBoxNickName);
@@ -467,15 +468,13 @@ public class ContactForm extends VerticalPanel{
 		 * über das Grid Widget untereinander auf dem VerticalPanel angeordnet.
 		 * 
 		 */		
-	    this.add(popUp);	    
+	    //this.add(popUp);	    
 		this.add(label);
 		this.add(contactGrid);
 		this.add(btnPanel);
 					
 	}		
 		
-
-	
 		/**
 		 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
 		 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
@@ -483,7 +482,7 @@ public class ContactForm extends VerticalPanel{
 		 * den Aufruf aus dem CellTree an die Methode <code>setSelected()</code> 
 		 * übergeben.
 		 * @author janina
-		 * @param contact Objekt 
+		 * @param Contact - Objekt 
 		 */
 		
 		public void setSelected(Contact c) {
@@ -491,44 +490,46 @@ public class ContactForm extends VerticalPanel{
 		if (c != null) {
 				contactToDisplay = c;	
 				
+				label.setText("Kontakt ID: " + c.getBoId());
+				//Eingeloggten User abfragen
+				contactSystemAdmin.getAccountOwner(new OwnerCallback());
+				
+				//TextBoxen befüllen
+				Vector <PropertyValue> pv = new Vector <PropertyValue>();
+				pv = c.getPropertyValues();				
+				for(PropertyValue p : pv) {					
+						this.setUpTextBoxes(p);
+				}				
+				//CheckBox aktivieren für PropertyValue Einträge
+				this.setUpCheckBoxes();
+				
 				if(c.isShared_status()) {
 					contactStatus.setText("Status: Geteilt");
+					//Geteilte PropertyValue Objekte anzeigen
+					this.setUpCheckBoxValues(c);
 				} else { contactStatus.setText("Status: Nicht geteilt");
-				}				
-				
-				label.setText("Kontakt ID: " + c.getBoId());
-												
-				Vector <PropertyValue> pv = new Vector <PropertyValue>();
-				pv = contactToDisplay.getPropertyValues();
-				
-				for(PropertyValue p : pv) {						
-					if(p!= null) this.setUpTextBoxes(p);
-				}
-				//Status überprüfen, ob PropertyValues bereits geteilt wurden
-				this.setUpCheckBoxValues(c);	
-				//CheckBox auf enable setzen, falls Wert in TextBox vorhanden
-				this.setUpCheckBoxes();
+				}	
 				
 				//Befüllen der Listbox mit allen User Objekten aus dem System
 				labelShare.setVisible(true);
-				shareUser.setVisible(true);
 				shareUser.clear(); //Löschen alter Einträge
+				shareUser.setVisible(true);				
 				
        			contactSystemAdmin.getAllUsers(new UserToShareCallback());
        			//Befüllen der ListBox mit User Objekten, welche eine Teilhaberschaft haben
       			
        			if(isOwnedByMe(c)) { 
        				labelSharedWith.setVisible(true);
-       				sharedWithUser.setVisible(false);
        				sharedWithUser.clear(); //Löschen alter Einträge
+       				sharedWithUser.setVisible(true);       				
        				
        				contactSystemAdmin.getAllParticipationsByOwner(c.getOwner(), new ParticipantCallback());
        			}
        			else { //Wenn User nicht selbst Ersteller ist, dann wird ihm dieser dargestellt
        				labelReceivedFrom.setVisible(true);
-       				receivedFrom.setVisible(true);
-       				
        				receivedFrom.clear(); //Löschen alter Einträge
+       				receivedFrom.setVisible(true);       				
+       				
        				receivedFrom.addItem(c.getOwner().getUserContact().getName().getValue() + " , " 
        					+ c.getOwner().getGMail());
        				receivedFrom.setVisibleItemCount(receivedFrom.getItemCount()); //Platz schaffen für alle Elemente   		
@@ -698,7 +699,7 @@ public class ContactForm extends VerticalPanel{
 			 if(contact.isShared_status()) {
 			 for(PropertyValue p : contact.getPropertyValues()) {				 
 				 switch(p.getProperty().getId()) {
-//					case(1):
+//					case(1): //-> Name kann nicht einzeln geteilt werden, nur mit dem Kontakt
 //						checkBox1.setEnabled(true);					
 //						if(p.isShared_status())checkBox1.setValue(true, true);
 //						break;
@@ -743,12 +744,13 @@ public class ContactForm extends VerticalPanel{
 		 */			
 			@SuppressWarnings("unused")
 			public Vector <PropertyValue> getCheckedValues(){				
-			 
+			  
 				Vector <PropertyValue> pv = new Vector <PropertyValue>();
 				pv = contactToDisplay.getPropertyValues();	
 				Vector <PropertyValue> result = new Vector<PropertyValue>();
 				PropertyValue prop = null;
-										
+				log("CheckBox Werte abrufen");
+				
 				for(PropertyValue p : pv) {
 				switch(p.getProperty().getId()) {
 						case(1): //Keine Checkbox, da Name nicht einzeln geteilt werden kann
@@ -835,7 +837,6 @@ public class ContactForm extends VerticalPanel{
 			 * @return
 			 */
 			public boolean isOwnedByMe(Contact c) {				
-			   contactSystemAdmin.getAccountOwner(new OwnerCallback());
 			   if(accountOwner.equals(c.getOwner())){
 				   return true;
 			   }
@@ -864,12 +865,14 @@ public class ContactForm extends VerticalPanel{
 			 * Callback eine Löschung durchgeführt wird.
 			 * @author Janina
 			 */
-			private class DeleteClickHandler implements ClickHandler {
+			private class DeleteClickHandler implements ClickHandler {				
 				Vector <PropertyValue> p = new Vector<PropertyValue>();
 				Participation part = new Participation();
-				
+								
 				@Override
 				public void onClick(ClickEvent event) {
+					log("Delete: "+ event);
+					
 					if (contactToDisplay != null) {		
 					//Prüfe ob Werte abgehackt wurden
 					if (getCheckedValues()!= null){ 
@@ -923,7 +926,9 @@ public class ContactForm extends VerticalPanel{
 						//PropertyValues von Kontakt in Liste entfernen
 						Vector <PropertyValue> pv = contactToDisplay.getPropertyValues();
 						for(PropertyValue p: pv) {
-							if(p.equals(result)) pv.remove(p); //Löschen eines Pv Objekts aus Vektor
+							if(p.equals(result)) {
+								pv.remove(p); //Löschen eines Pv Objekts aus Vektor
+							}
 						}
 						contactSystemAdmin.editContact(contactToDisplay, new EditContactCallback());	
 						contactToDisplay.setPropertyValues(pv);
@@ -1036,12 +1041,12 @@ public class ContactForm extends VerticalPanel{
 			 * @author janina
 			 *
 			 */
-			private class SaveClickHandler implements ClickHandler {
-				
+			private class SaveClickHandler implements ClickHandler {				
 				Vector <PropertyValue> p = new Vector<PropertyValue>();
 
 				@Override
-				public void onClick(ClickEvent event) {					
+				public void onClick(ClickEvent event) {	
+					System.out.println("Save-Button");
 					if (contactToDisplay!= null && getCheckedValues()!= null){
 						p = getCheckedValues();
 						contactToDisplay.setPropertyValues(p);
@@ -1068,6 +1073,7 @@ public class ContactForm extends VerticalPanel{
 				@Override
 				public void onSuccess(Contact result) {
 					if (result != null) {
+						log("Speichern: " + result);
 						//KontaktObjekt updaten
 						ctvm.updateContact(result);
 						setSelected(contactToDisplay);
@@ -1143,14 +1149,20 @@ public class ContactForm extends VerticalPanel{
 				}
 
 				@Override
-				public void onSuccess(Vector <User> result) {					
+				public void onSuccess(Vector <User> result) {	
+									
 					if (result != null) {
-						for(User user: result) {						
-						//User Liste updaten
-						shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());
+						for(User user: result) {
+							//Eigenen User aus Liste löschen
+							if(user.equals(contactToDisplay.getOwner())) {
+								result.remove(user);
+							}else {
+							//User Liste updaten
+							shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());
+							}
 					}
 					//Genug Platz schaffen für alle Elemente
-					shareUser.setVisibleItemCount(result.size());
+					shareUser.setVisibleItemCount(shareUser.getItemCount());
 					} else {
 						Window.alert("Kein Nutzer gefunden :(");
 					}
@@ -1174,7 +1186,7 @@ public class ContactForm extends VerticalPanel{
 						   contactParticipants.add(p.getParticipant());
 						}
 					    //Genug Platz schaffen für alle Elemente
-						sharedWithUser.setVisibleItemCount(result.size());
+						sharedWithUser.setVisibleItemCount(sharedWithUser.getItemCount());
 					} else {
 						Window.alert("Kein Teilhaber gefunden :(");
 					}
@@ -1201,6 +1213,11 @@ public class ContactForm extends VerticalPanel{
 				
 			}
 			
+			/**
+			 * 
+			 * @author janin
+			 *
+			 */
 			private class CreateParticipationCallback implements AsyncCallback<Participation>{
 
 				@Override
@@ -1210,6 +1227,7 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onSuccess(Participation result) {
+					log("Neue Teilhaberschaft: " + result);
 					mptvm.addContact(result.getReferencedObject());					
 				}				
 			}
@@ -1224,6 +1242,8 @@ public class ContactForm extends VerticalPanel{
 				Vector <PropertyValue> p = new Vector<PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {	
+					log("Teilen: "+ event);
+					
 					if(contactToDisplay != null) {
 					if (getCheckedValues()!= null){
 						contactToDisplay.setPropertyValues(getCheckedValues()); //Abrufen der ausgewählten Werte
@@ -1247,6 +1267,10 @@ public class ContactForm extends VerticalPanel{
 				}
 			}
 			
-		
+			
+			native void log(String s)/*-{
+			console.log(s);
+			}-*/;
 		  
 }
+
