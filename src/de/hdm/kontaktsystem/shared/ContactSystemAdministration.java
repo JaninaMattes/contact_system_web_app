@@ -38,8 +38,6 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Contact getContactByPropertyValue(PropertyValue pv);
 	
-	public Vector<Contact> getContactsFromUser();
-	
 	public Vector<Contact> getContactsByStatus(Boolean status);
 	
 	public Contact getContactById(int id);
