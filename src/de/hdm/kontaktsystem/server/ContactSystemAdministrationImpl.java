@@ -345,11 +345,20 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			if (c != null)
 				boMapper.deleteBusinessObjectByID(c.getBoId());
 		}else{
-			Participation p = new Participation();
-			p.setParticipant(this.getUserByID(this.getCurrentUser()));
-			p.setReference(contact);
-			p = this.deleteParticipation(p);
-			if(p != null) c = contact;
+			Participation part = new Participation();
+			User user = this.getUserByID(this.getCurrentUser());
+			part.setParticipant(user);
+			part.setReference(contact);
+			part = this.deleteParticipation(part);
+			if(part != null){
+				c = contact;
+				for(PropertyValue pv : c.getPropertyValues()){
+					part = new Participation();
+					part.setParticipant(user);
+					part.setReference(pv);
+					this.deleteParticipation(part);
+				}
+			}
 		}
 		return c;
 	}
@@ -440,9 +449,18 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	@Override
 	public ContactList deleteContactList(ContactList contactList) {
-		ContactList cl = clMapper.deleteContactList(contactList);
-		if (cl != null)
-			boMapper.deleteBusinessObjectByID(cl.getBoId());
+		ContactList cl = null;
+		if(contactList.getOwner().getGoogleID() == this.getCurrentUser()){
+			cl = clMapper.deleteContactList(contactList);
+			if (cl != null)
+				boMapper.deleteBusinessObjectByID(cl.getBoId());
+		}else{
+			Participation p = new Participation();
+			p.setParticipant(this.getUserByID(this.getCurrentUser()));
+			p.setReference(contactList);
+			p = this.deleteParticipation(p);
+			if(p != null) cl = contactList;
+		}
 		return cl;
 	}
 
