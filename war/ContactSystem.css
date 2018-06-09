@@ -1,4 +1,4 @@
-/*TODO: ReportGenerator, Checkboxen, Textboxen,Listboxen, allgemein anpassen */
+/*TODO: Checkboxen, Textboxen,Listboxen, zusammenfassen ähnlicher Elemente, allgemein anpassen */
 
 body {
 	margin: 0 auto; /*Der Wert wird horizontal zentriert */
@@ -23,8 +23,8 @@ h1, #headertext {
 #headertext{ /*ï¿½berschrift des Report-Generators*/
 	border: none;
 	text-align: center;
-	margin: 40px 300px 40px;
-	padding-left: 200px;
+	margin: 40px 250px 60px;
+	padding-left: 150px;
 
 	
 }
@@ -388,7 +388,7 @@ h1, #headertext {
 }]
 
 #checkbox{
-	margin-left: 10px;
+	margin-left: 20px; 
 }
 
 /*Divï¿½s*/
