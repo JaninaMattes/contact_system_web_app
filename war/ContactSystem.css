@@ -12,19 +12,16 @@ div {
 	border: solid 0.5px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
 }
 
-h1, #headertext {
-  font-family: "Arial", Arial, sans-serif;
-  font-size: 2em; /*Schriftgrï¿½ï¿½e*/
-  font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
-  color: white; /*Schriftfarbe*/
-  margin: 40px 0px 20px; /*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
-  text-align: center; /*zentriert*/
-}
-#headertext{ /*ï¿½berschrift des Report-Generators*/
+#headertext{ /*Ueberschrift des Report-Generators und des Editors*/
 	border: none;
 	text-align: center;
-	margin: 40px 250px 60px;
+	margin: 40px 250px 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
 	padding-left: 150px;
+	font-family: "Arial", Arial, sans-serif;
+  	font-size: 2em; /*Schriftgrï¿½ï¿½e*/
+  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+  	color: white; /*Schriftfarbe*/
+  	text-align: center; /*zentriert*/
 
 	
 }
@@ -99,6 +96,8 @@ h1, #headertext {
 	overflow: auto;
 }
 
+
+
 #ListBox {
    background: transparent;
    width: 268px;
@@ -126,7 +125,7 @@ h1, #headertext {
 
 /*Buttons*/
 
-#shareButton{
+#shareButton{ /* Teilen-Button*/
 	height: 30px;
     width: 53px;
     font-size: 14px;
@@ -143,7 +142,7 @@ h1, #headertext {
 	border-radius: 5px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
-#menue-button{
+#menue-button{ /* Buttons der Menüleiste des Editors */
 	height: 40px;
     width: 240px;
     font-family: "Arial", Arial, sans-serif;
@@ -162,7 +161,7 @@ h1, #headertext {
 	
 }
 
-#searchButton{
+#searchButton{ /* Suchen-Button im Editor */
 	height: 25px;
     width: 53px;
     font-family: "Arial", Arial, sans-serif;
@@ -178,7 +177,7 @@ h1, #headertext {
     cursor: pointer;
 }
 
-#searchAllContacts{
+#searchAllContacts{ /* Button "Alle Kontakte" im Report Generator */
 	height: 25px;
     width: 100px;
     margin-left: 5px;
@@ -196,7 +195,7 @@ h1, #headertext {
     cursor: pointer;
 }
 
-#saveButton{
+#saveButton{ /* Speichern-Button im Editor */
 	height: 30px;
     width: 80px; 
     font-family: "Arial", Arial, sans-serif;     
@@ -214,7 +213,7 @@ h1, #headertext {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#deleteButton{
+#deleteButton{ /* Löschen-Button im Editor */
 	height: 30px;
     width: 70px;
     font-family: "Arial", Arial, sans-serif;     
@@ -232,7 +231,7 @@ h1, #headertext {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#log-out-button{
+#log-out-button{ /* Logout-Butten im Editor und Report Generator */
 	height: 30px;
     width: 90px;
 	float: right;
@@ -256,7 +255,7 @@ h1, #headertext {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
   
 }
-#switch-button{
+#switch-button{ /* "Report"- und "Editor"- Button, um vom Editor in den Report Generator zu gelangen und anders herum */
 	height: 30px;
     width: 90px;
 	float: right;

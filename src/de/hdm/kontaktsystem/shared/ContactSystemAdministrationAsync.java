@@ -63,6 +63,8 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getAllSharedByOthersToMe(AsyncCallback<Vector<BusinessObject>> callback);
 	
+	public void findAllCSharedByOthersToMe(AsyncCallback<Vector<Contact>> callback);
+	
 	
 	/**
 	 * Methode für die Suchfunktion
