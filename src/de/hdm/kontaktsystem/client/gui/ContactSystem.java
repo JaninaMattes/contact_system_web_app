@@ -12,6 +12,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -75,10 +76,16 @@ public class ContactSystem implements EntryPoint {
 //	private Image contactsSymbol = new Image();
 //	private Image listSymbol = new Image(); //Alternatives Symbol für Kontaktliste
 	
+
 	//TreeView
 	ScrollPanel treeScrollPanel = new ScrollPanel();
 	final TreeViewModelTest tvm = new TreeViewModelTest();
 	CellTree ct = null;
+	
+	//Header
+	HorizontalPanel headerPanel = new HorizontalPanel();
+	Label headerText = new Label("KontaktSystem");
+	VerticalPanel suchundlogoPanel = new VerticalPanel(); //um die Suche unter dem Logo anzuordnen
 	
 	//Suchfunktion
 	private TextBox search = new TextBox();
@@ -97,11 +104,13 @@ public class ContactSystem implements EntryPoint {
 	private Image updateSymbol = new Image();
 	private Image deleteSymbol = new Image();
 	private Image shareSymbol = new Image();	
-	private Image searchSymbol = new Image();			
+	private Image searchSymbol = new Image();
+	
+	//Logo-Bild
+	private Image logo = new Image();
 		
 	//Symbol für Cells (in Cell-Klasse verschieben?)
 	private Image chainSymbolLogo = new Image(); //Symbol für Status geteilt/nicht geteilt
-	
 	/**
 	 * Attribute für den Login
 	 */
@@ -111,7 +120,16 @@ public class ContactSystem implements EntryPoint {
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
 	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
-	private Anchor reportLink = new Anchor("Report");		
+	private Anchor reportLink = new Anchor("Report");
+	
+	//Logo
+	//logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+	//logo.setHeight("100px");
+	//logo.setAltText("Logo");
+	//TODO: Logo einbinden
+	
+	// Add Button/Panel
+	private FocusPanel addPanel = new FocusPanel();
 
 	//Header
 	private HorizontalPanel header = new HorizontalPanel();				
@@ -144,18 +162,18 @@ public class ContactSystem implements EntryPoint {
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
 		treeScrollPanel.setHeight("80vh");
+	//	contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
 		contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
-
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				log("Keine Listen gefunden");
+				log("Keine Kontakte gefunden");
 			}
 
 			@Override
 			public void onSuccess(Vector<Contact> result) {
 				// TODO Auto-generated method stub
-				log("Es wurden " + result.size() + " Listen gefunden");
+				log("Es wurden " + result.size() + " Kontakte gefunden");
 				ct = new CellTree(tvm, result);
 				ct.setAnimationEnabled(true);
 				ct.setDefaultNodeSize(result.size());
@@ -262,12 +280,16 @@ public class ContactSystem implements EntryPoint {
 			signOutLink.setHref(userInfo.getLogoutUrl());
 		}
 		
+		reportLink.setHref(GWT.getHostPageBaseURL() + "ReportGenerator.html");
 
 		/** 
 		 * Namen für CSS festlegen 
 		 */
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
+		
+		//Label der �berschrift im Header
+		headerText.getElement().setId("headertext");
 		
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
 		searchButton.getElement().setId("searchButton"); 
@@ -287,6 +309,11 @@ public class ContactSystem implements EntryPoint {
 		 * CSS Identifier für das Logo
 		 */
 		chainSymbolLogo.getElement().setId("logo");
+		
+		/*
+		 * CSS für Add Panel
+		 */
+		addPanel.getElement().setId("add");
 		
 		/**
 		 * CSS Identifier für die Elemente
@@ -320,18 +347,18 @@ public class ContactSystem implements EntryPoint {
 		//TEST -> ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+			//contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
 			contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
-
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
-						log("Keine Listen gefunden");
+						log("Keine Kontakte gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<Contact> result) {
 						// TODO Auto-generated method stub
-						log("Es wurden " + result.size() + " Listen gefunden");
+						log("Es wurden " + result.size() + " Kontakte gefunden");
 						Vector<BusinessObject> bov = new Vector<BusinessObject>();
 						for(Contact cl : result){
 							bov.add(cl);
@@ -350,8 +377,8 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ContactListButton
 		contactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+			//	contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
 				contactSystemAdmin.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
-
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
@@ -436,22 +463,41 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 		
+		addPanel.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				Window.alert("Add something");
+			}
+			
+		});
+		Image add = new Image("/images/add.png");
+		add.setPixelSize(50, 50);
+		addPanel.add(add);
+		
 		//Header
-	    header.add(chainSymbolLogo);
- 		header.add(reportLink);
-	    header.add(signOutLink);
+		suchundlogoPanel.add(logo);
+		suchundlogoPanel.add(sg);
+	    suchundlogoPanel.add(chainSymbolLogo);
+		headerPanel.add(suchundlogoPanel);
+		headerPanel.add(headerText);
+ 		headerPanel.add(reportLink);
+	    headerPanel.add(signOutLink);
+	    
 		
 		//Menu Leiste
-	  	navigation.add(sg);
+	  	
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
 
 		
-	  	RootPanel.get("Header").add(header);
+	  	RootPanel.get("Header").add(headerPanel);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Trailer").add(trailer);
+	  	RootPanel.get().add(addPanel);
 		
 	}
 	

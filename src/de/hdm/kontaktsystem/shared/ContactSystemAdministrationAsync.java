@@ -29,8 +29,6 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getContactByPropertyValue(PropertyValue pv, AsyncCallback<Contact> callback);
 	
-	public void getContactsFromUser(AsyncCallback<Vector<Contact>> callback);
-	
 	public void getContactsByStatus(Boolean status, AsyncCallback<Vector<Contact>> callback);
 	
 	public void getContactById(int id, AsyncCallback<Contact> callback);
