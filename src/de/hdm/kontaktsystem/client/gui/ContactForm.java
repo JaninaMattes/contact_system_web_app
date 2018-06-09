@@ -373,6 +373,7 @@ public class ContactForm extends VerticalPanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				contactSystemAdmin.deleteContact(contactToDisplay, new DeleteContactCallback());
+				contactToDisplay = null;
 			popUp.hide();
 			}		    	
 		});
@@ -697,7 +698,7 @@ public class ContactForm extends VerticalPanel{
 			 if(contact.isShared_status()) {
 			 for(PropertyValue p : contact.getPropertyValues()) {				 
 				 switch(p.getProperty().getId()) {
-					case(1):
+//					case(1):
 //						checkBox1.setEnabled(true);					
 //						if(p.isShared_status())checkBox1.setValue(true, true);
 //						break;
@@ -952,36 +953,15 @@ public class ContactForm extends VerticalPanel{
 					if (result != null) {
 						//Kontakt Objekt aus der Liste löschen
 						ctvm.removeContact(result);
+						
+						contactToDisplay = null;
+						setSelected(contactToDisplay);
 					} else {
 						Window.alert("Keine Kontakte gefunden :(");
 					}
 				}
 			}
 			
-			/**
-			 * Callback Methode zur Löschung meiner Teilhaberschaft
-			 * @author janina
-			 *
-			 */
-			private class DeleteMyParticipationCallback implements AsyncCallback<Participation> {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Löschen der Teilhaberschft ist fehlgeschlagen! :(");
-				}
-
-				@Override
-				public void onSuccess(Participation result) {
-					if (result != null) {
-						//KontaktObjekt aus Listen
-						ctvm.removeContact(result.getReferencedObject());
-						mptvm.removeParticipation(result);
-						
-					} else {
-						Window.alert("Keine Teilhaberschaft gefunden :(");
-					}
-				}
-			}
 			
 			/**
 			 * Callback Methode zur Löschung der erhaltener Teilhaberschaft
@@ -1001,6 +981,9 @@ public class ContactForm extends VerticalPanel{
 						//Contact-Objekt aus Listen löschen
 						ctvm.removeContact(result.getReferencedObject());
 						rptvm.removeParticipation(result);
+						
+						contactToDisplay = null;
+						setSelected(contactToDisplay);
 					} else {
 						Window.alert("Keine Teilhaberschaft gefunden :(");
 					}
@@ -1032,24 +1015,25 @@ public class ContactForm extends VerticalPanel{
 				}
 			}
 			
-			
-			private class EditParticipationCallback implements AsyncCallback<Participation>{
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Editieren der Teilhaberschaft ist fehlgeschlagen! :(");					
-				}
-
-				@Override
-				public void onSuccess(Participation result) {
-					mptvm.update(result.getReferencedObject());					
-				}
-				
-			}
-			
+//			
+//			private class EditParticipationCallback implements AsyncCallback<Participation>{
+//
+//				@Override
+//				public void onFailure(Throwable caught) {
+//					Window.alert("Das Editieren der Teilhaberschaft ist fehlgeschlagen! :(");					
+//				}
+//
+//				@Override
+//				public void onSuccess(Participation result) {
+//					mptvm.update(result.getReferencedObject());
+//					setSelected(contactToDisplay);
+//				}
+//				
+//			}
+//			
 			/**
 			 * SaveClickHandler zum Speichern eines Kontaktes oder dessen Update.
-			 * @author janin
+			 * @author janina
 			 *
 			 */
 			private class SaveClickHandler implements ClickHandler {
@@ -1061,7 +1045,8 @@ public class ContactForm extends VerticalPanel{
 					if (contactToDisplay!= null && getCheckedValues()!= null){
 						p = getCheckedValues();
 						contactToDisplay.setPropertyValues(p);
-						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());						
+						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());	
+						
 					} else {
 					Window.alert("Kein Kontakt ausgewählt");
 					}			
@@ -1110,6 +1095,8 @@ public class ContactForm extends VerticalPanel{
 				public void onSuccess(User result) {
 					if(result != null) {
 					sharedUser = result;
+					
+					setSelected(contactToDisplay);
 					} else {
 						Window.alert("Der Nutzer " + result.getGoogleID() + " konnte nicht gefunden werden :(");
 					}
@@ -1135,7 +1122,7 @@ public class ContactForm extends VerticalPanel{
 					if(result != null) {
 						accountOwner = result; //Owner Referenzattribut befüllen
 					} else {
-						Window.alert("Der Nutzer " + result.getGoogleID() + " konnte nicht gefunden werden :(");
+						Window.alert("Der Nutzer [ " + result.getGoogleID() + " ] konnte nicht gefunden werden :(");
 					}
 				}				
 			}
@@ -1236,51 +1223,30 @@ public class ContactForm extends VerticalPanel{
 			private class ShareClickHandler implements ClickHandler {				
 				Vector <PropertyValue> p = new Vector<PropertyValue>();
 				@Override
-				public void onClick(ClickEvent event) {				
-					if (contactToDisplay!= null & getCheckedValues()!= null){
+				public void onClick(ClickEvent event) {	
+					if(contactToDisplay != null) {
+					if (getCheckedValues()!= null){
 						contactToDisplay.setPropertyValues(getCheckedValues()); //Abrufen der ausgewählten Werte
 						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback()); //Kontakt wird upgedated in DB
 						
-						contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new ParticipationsByBOCallback());
+//						contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new ParticipationsByBOCallback());
 						Participation part = new Participation();
 						part.setParticipant(sharedUser); //Den zuvor aus ListBox gewählten User setzen
 						part.setReference(contactToDisplay);							
-							contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());					
+							contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());
+						
 						}else{
-							Window.alert("Kein Kontakt ausgewählt.");
+							Participation part = new Participation();
+							part.setParticipant(sharedUser); //Den zuvor aus ListBox gewählten User setzen
+							part.setReference(contactToDisplay);							
+								contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());
+								
+							setSelected(contactToDisplay);
 						} 
-					}
-				}
-			
-			/**
-			 * Callback Methode zur Speicherung eines Kontaktes oder dessen Update. 
-			 * @author janina
-			 *
-			 */
-			private class ShareCallback implements AsyncCallback<Contact> {
-
-				Contact c = null;				
-				ShareCallback(Contact c){
-					this.c = c;
-				}
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Speichern des Kontaktes ist fehlgeschlagen! :(");
-				}
-
-				@Override
-				public void onSuccess(Contact result) {
-					if (result != null) {
-						//KontaktObjekt updaten
-						//ctvm.updateContact(result);
-					} else {
-						Window.alert("Kein Kontakt gefunden :(");
 					}
 				}
 			}
 			
-			
-			
+		
 		  
 }
