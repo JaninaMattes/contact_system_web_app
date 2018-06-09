@@ -369,7 +369,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		AllContactsForPropertyReport report = new AllContactsForPropertyReport();
 				
 		//Titel des Reports
-		report.setTitle("Alle Kontakte des Nutzers mit der Eigenschaftsausprägung "
+		report.setTitle("Alle Kontakte mit der Eigenschaftsausprägung "
 				+ searchedProperty.getDescription() + " = "
 				+ propertyvalue);
 				
@@ -410,19 +410,49 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			}
 		}
 		
-		//Gefundene Kontakte nach dem Eigentümer (currentUser) filtern
+		/*
+		 * Es werden alle Kontakte angezeigt, bei denen der aktuelle User entweder
+		 * Eigentümer oder Teilhaber ist.
+		 * Zunächst werden die Kontakte nach Eigentümer = aktueller User gefiltert, die
+		 * Ergebnisse werden im Vektor "foundContacts" gespeichert.
+		 * Dann werden dieselben Kontakte noch einmal gefiltert, um diejenigen 
+		 * zu finden, bei denen der aktuelle User Teilhaber ist. Diese werden im
+		 * Vektor "participatedContacts" zwischengespeichert und anschließend dem 
+		 * Ergebnisvektor "foundContacts" hinzugefügt.
+		 */
 		Vector<Contact> foundContacts = new Vector<Contact>();
+		Vector<Contact> participatedContacts = new Vector<Contact>();
 		if(allContacts.isEmpty()) {
 			//TODO
 			System.out.println("Keine Kontakte gefunden");
 		} else {
+			
 			for(Contact contact : allContacts) {
 				System.out.println(contact.getOwner());
+				
+				//Gefundene Kontakte nach dem Eigentümer (currentUser) filtern
 				if(contact.getOwner().getGoogleID() == this.getCurrentUser().getGoogleID()) {
 					foundContacts.add(contact);
 				}
+				
+				//Gefundene Kontakte nach dem Teilhaber (currentUser) filtern
+				Vector<Participation> participationsForContact = 
+						administration.getAllParticipationsByBusinessObject(contact);
+				if(participationsForContact.isEmpty()) {
+					System.out.println("Keine Teilhaber für Kontakt gefunden");
+				} else {
+					for(Participation part : participationsForContact) {
+						if(part.getParticipant().getGoogleID() == this.getCurrentUser().getGoogleID()) {
+							participatedContacts.add(contact);
+						}
+					}
+				}
 			}
 		}
+
+		//Vektoren vereinen
+		foundContacts.addAll(participatedContacts);
+		
 				
 		//Hinzufügen der einzelnen Kontakt-Elemente
 		
