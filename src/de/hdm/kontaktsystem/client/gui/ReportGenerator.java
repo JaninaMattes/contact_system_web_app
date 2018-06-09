@@ -97,25 +97,25 @@ public class ReportGenerator implements EntryPoint {
 		
 		loadReportGenerator(); //Test, solange Login nicht funktioniert
 		
-//		/**
-//		 * Login-Status feststellen mit LoginService
-//		 */		
-//		LoginServiceAsync loginService = GWT.create(LoginService.class);
-//		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
-//			public void onFailure(Throwable error) {
-//				Window.alert("Login Error :(");
-//			}
-//				
-//			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
-//			public void onSuccess(User result) {
-//				userInfo = result;
-//				if(userInfo.isLoggedIn()){
-//					loadReportGenerator();
-//				}else{
-//					loadLogin();					
-//				}
-//			}
-//		});
+		/**
+		 * Login-Status feststellen mit LoginService
+		 *		
+		ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
+		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+			public void onFailure(Throwable error) {
+				Window.alert("Login Error :(");
+			}
+				
+			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+			public void onSuccess(User result) {
+				userInfo = result;
+				if(userInfo.isLoggedIn()){
+					loadReportGenerator();
+				}else{
+					loadLogin();					
+				}
+			}
+		});*/
 	}
 		
 	/**
@@ -192,7 +192,7 @@ public class ReportGenerator implements EntryPoint {
 		searchSymbol2.setHeight("25px");
 		searchSymbol2.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
 		searchSymbol2.setAltText("Suche");
-		
+		editorLink.setHref(GWT.getHostPageBaseURL() + "ContactSystem.html");
 		/**
 		 * Aufbau der Oberfläche.
 		 * Die Reportanwendung besteht aus einem "Navigationsteil" mit den

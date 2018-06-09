@@ -336,12 +336,21 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	@Override
 	public Contact deleteContact(Contact contact) {
-		for (PropertyValue pv : this.getPropertyValuesForContact(contact)) {
-			this.deletePropertyValue(pv);
+		Contact c = null;
+		if(contact.getOwner().getGoogleID() == this.getCurrentUser()){
+			for (PropertyValue pv : this.getPropertyValuesForContact(contact)) {
+				this.deletePropertyValue(pv);
+			}
+			c = cMapper.deleteContact(contact);
+			if (c != null)
+				boMapper.deleteBusinessObjectByID(c.getBoId());
+		}else{
+			Participation p = new Participation();
+			p.setParticipant(this.getUserByID(this.getCurrentUser()));
+			p.setReference(contact);
+			p = this.deleteParticipation(p);
+			if(p != null) c = contact;
 		}
-		Contact c = cMapper.deleteContact(contact);
-		if (c != null)
-			boMapper.deleteBusinessObjectByID(c.getBoId());
 		return c;
 	}
 
