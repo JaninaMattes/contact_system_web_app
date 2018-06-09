@@ -158,6 +158,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	@Override
+	public User getAccountOwner() {
+		return getUserByID(this.getCurrentUser());
+	}
+	
+	@Override
 	public User createUser(User u, Contact contact) {
 
 		User user = uMapper.insert(u);
@@ -1014,5 +1019,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		}
 	}
+
+	
+	
 
 }

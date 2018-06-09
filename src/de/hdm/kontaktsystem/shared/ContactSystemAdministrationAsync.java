@@ -22,6 +22,8 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getAllUsers(AsyncCallback<Vector<User>> callback);
 	
+	public void getAccountOwner(AsyncCallback<User> callback); //TODO
+	
 
 	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback);
 	
@@ -98,7 +100,7 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void editContactList(ContactList cl, AsyncCallback<ContactList> callback);
 	
-	public void editPropertyValue(PropertyValue pv, AsyncCallback<PropertyValue> callback);
+	public void editPropertyValue(PropertyValue pv, AsyncCallback<PropertyValue> callback);	
 	
 	
 	/**
@@ -115,6 +117,10 @@ public interface ContactSystemAdministrationAsync {
 	public void deleteParticipation(Participation p, AsyncCallback<Participation> callback);
 	
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback);
+
+	
+
+	
 
 	
 

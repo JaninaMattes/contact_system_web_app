@@ -15,6 +15,7 @@ import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
 import com.google.gwt.view.client.TreeViewModel.NodeInfo;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
@@ -26,8 +27,7 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
  */
 public class ContactTreeViewModel implements TreeViewModel {
 
-	private ContactForm contactForm;
-	
+	private ContactForm contactForm;	
 	private Contact selectedContact;
 	
 	private ContactSystemAdministrationAsync contactSystemAdmin = null;
@@ -119,8 +119,11 @@ public class ContactTreeViewModel implements TreeViewModel {
 		return false;
 	}
 
-	public void removeContact(Contact c) {
-		contactDataProvider.getList().remove(c);		
+	public void removeContact(BusinessObject businessObject) {
+		if(businessObject instanceof Contact) {
+			Contact c = (Contact)businessObject;
+			contactDataProvider.getList().remove(c);
+		}				
 	}	
 	 
 	/*

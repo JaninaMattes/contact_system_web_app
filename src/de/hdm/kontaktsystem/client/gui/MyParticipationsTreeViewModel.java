@@ -14,6 +14,7 @@ import com.google.gwt.view.client.TreeViewModel.DefaultNodeInfo;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.User;
@@ -138,6 +139,16 @@ public class MyParticipationsTreeViewModel implements TreeViewModel {
 	@Override
 	public boolean isLeaf(Object value) {
 		return false;
+	}
+
+	public void addContact(BusinessObject referencedObject) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void update(BusinessObject referencedObject) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

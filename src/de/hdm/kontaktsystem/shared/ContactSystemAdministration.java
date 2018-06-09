@@ -29,6 +29,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<User> getAllUsers();
 	
+	public User getAccountOwner(); //TODO
+	
 
 	public Vector<Contact> getAllContactsFromUser(); 
 
@@ -91,8 +93,7 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList editContactList(ContactList cl);
 	
 	public PropertyValue editPropertyValue(PropertyValue pv);
-	
-	
+		
 	/**
 	 * Delete
 	 */
