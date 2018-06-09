@@ -9,6 +9,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministration;
 import de.hdm.kontaktsystem.shared.ReportGenerator;
+import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
@@ -193,7 +194,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		AllContactsOfUserReport report = new AllContactsOfUserReport();
 		
 		//Titel des Reports
-		report.setTitle("Alle Kontakte des Nutzers");
+		report.setTitle("Alle Kontakte");
 		
 		//Daten des Benutzers, für den der Report erstellt wird
 		this.addUserParagraph(getCurrentUser(), report);
@@ -201,8 +202,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Datum der Erstellung
 		report.setCreated(new Date());
 		
-		//Hinzufügen der einzelnen Kontakt-Elemente
+		//Abrufen aller Kontakte, deren Eigentümer der aktuelle User ist
 		Vector<Contact> allContacts = administration.getAllContactsFromUser();
+		//Abrufen aller Kontakte, die mit dem aktuellen User geteilt wurden
+		Vector<Contact> allSharedContacts = administration.findAllCSharedByOthersToMe();
+		
+		//Hinzufügen der einzelnen Kontakt-Elemente
+		allContacts.addAll(allSharedContacts);
 		if(allContacts.isEmpty()) {
 			System.out.println("Keine Kontakte gefunden");
 		}else {
@@ -237,7 +243,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Titel des Reports
 		report.setTitle("Alle mit "
 				+ searchedParticipant.getUserContact().getName().getValue() 
-				+ " geteilten Kontakte des Nutzers");
+				+ " geteilten Kontakte");
 		System.out.println("Titel gesetzt");
 				
 		//Daten des Benutzers, für den der Report erstellt wird
@@ -246,30 +252,86 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Datum der Erstellung
 		report.setCreated(new Date());
 		
-		//Alle Teilhaberschaften, die der aktuelle User hat, ermitteln
-		Vector<Participation> allParticipations = administration.getAllParticipationsByOwner(this.getCurrentUser());
-		//Alle Teilhaberschaften mit dem gesuchten Teilhaber ermitteln
-		Vector<Participation> allParticipationsToParticipant = new Vector<Participation>();
-		if(allParticipations.isEmpty()) {
-			//TODO: Was wenn Nutzer keine Teilhaberschaften hat
-			System.out.println("Nutzer hat keine Teilhaberschaften");
-		}else {
-			System.out.println("Teilhaberschaften des Nutzers abgerufen");
-			for(Participation participation : allParticipations) {
-				if(participation.getParticipant().getGoogleID() == searchedParticipant.getGoogleID()) {
-					allParticipationsToParticipant.add(participation);
+		Vector<Participation> allParticipations = null;		
+		/*
+		 * Falls der gesuchte Teilhaber der aktuelle User ist, werden alle Teilhaberschaften
+		 * ermittelt, in denen er Teilhaber ist und mit dem nächsten Schritt weiter gemacht.
+		 */
+		if(searchedParticipant.getGoogleID() == this.getCurrentUser().getGoogleID()) {
+			//Alle Teilhaberschaften, bei denen der aktuelle User Teilhaber ist, ermitteln
+			allParticipations = 
+					administration.getAllParticipationsByParticipant(this.getCurrentUser());
+		} else {
+			/*
+			 * Falls der gesuchte Teilhaber nicht der aktuelle User ist, werden zunächst alle 
+			 * Teilhaberschaften ermittelt, die sich auf Objekte beziehen, deren Eigentümer der
+			 * aktuelle User ist und die mit dem gesuchten User geteilt wurden. 
+			 * Anschließend werden alle Teilhaberschaften ermittelt, die der
+			 * gesuchte und der aktuelle User gemeinsam haben. 
+			 * Diese Vectoren werden dann kombiniert.
+			 */
+			//Alle Teilhaberschaften, die der aktuelle User besitzt, ermitteln
+			Vector<Participation> allParticipationsOfUser = 
+					administration.getAllParticipationsByOwner(this.getCurrentUser());
+			//Alle Teilhaberschaften mit dem gesuchten Teilhaber ermitteln
+			allParticipations = new Vector<Participation>();
+			if(allParticipationsOfUser.isEmpty()) {
+				System.out.println("Nutzer besitzt keine Teilhaberschaften");
+			}else {
+				System.out.println("Teilhaberschaften des Nutzers abgerufen");
+				for(Participation participation : allParticipationsOfUser) {
+					if(participation.getParticipant().getGoogleID() == searchedParticipant.getGoogleID()) {
+						allParticipations.add(participation);
+					}
 				}
 			}
+			
+			
+			//Alle Teilhaberschaften ermitteln, bei denen der aktuelle User Teilhaber ist
+			Vector<Participation> allParticipationsWithUser = 
+					administration.getAllParticipationsByParticipant(this.getCurrentUser());	
+			
+			//Zugehörige Kontakt-Objekte ermitteln
+			Vector<Contact> allContacts= new Vector<Contact>();
+			if(allParticipationsWithUser.isEmpty()) {
+				System.out.println("Keine Teilhaberschaften mit aktuellem User gefunden");
+			} else {
+				for(Participation part : allParticipationsWithUser) {				
+					if(part.getReferencedObject() instanceof Contact) {
+						allContacts.addElement((Contact) part.getReferencedObject());
+					}				
+				}
+			}	
+			
+			//Alle Teilhaberschaften raus filtern, bei denen auch der gesuchte User Teilhaber ist
+			Vector<Participation> allSharedParticipations = new Vector<Participation>();
+			if(allContacts.isEmpty()) {
+				System.out.println("Keine mit aktuellem User geteilten Kontakte gefunden");
+			} else {
+				for(Contact contact : allContacts) {
+					Vector<Participation> participationsForContact = 
+							administration.getAllParticipationsByBusinessObject(contact);
+					for(Participation participation : participationsForContact) {
+						if(participation.getParticipant().getGoogleID() == searchedParticipant.getGoogleID()) {
+							allSharedParticipations.add(participation);
+						}
+					}
+				}
+			}		
+			
+			//Vektoren zusammen führen
+			allParticipations.addAll(allSharedParticipations);
 		}
+				
+		
 		
 		//Alle Teilhaberschaften von Kontakten ermitteln
 		Vector<Contact> allContacts = new Vector<Contact>();
-		if(allParticipationsToParticipant.isEmpty()) {
-			//TODO: Was wenn Nutzer keine Teilhaberschaften mit Teilhaber hat
+		if(allParticipations.isEmpty()) {
 			System.out.println("Nutzer hat keine Teilhaberschaften mit Teilhaber");
 		} else {
 			System.out.println("Teilhaberschaften mit Teilhaber abgerufen");
-			for(Participation participation : allParticipationsToParticipant) {
+			for(Participation participation : allParticipations) {
 				if(participation.getReferencedObject() instanceof Contact) {
 					Contact contact = (Contact) participation.getReferencedObject();
 					allContacts.add(contact);

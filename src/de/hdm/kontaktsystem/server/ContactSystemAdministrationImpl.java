@@ -732,11 +732,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<Contact> contactResultVector = new Vector<Contact>();
 
 		for (Participation part : participationVector) {
-			BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
-			Contact contact = new Contact();
-
-			if (bo instanceof Contact) {
-				contact = (Contact) bo;
+			
+			if (this.findBusinessObjectByID(part.getReferenceID()) instanceof Contact) {
+				Contact contact = (Contact) this.findBusinessObjectByID(part.getReferenceID());
 				contactResultVector.addElement(contact);
 			}
 		}

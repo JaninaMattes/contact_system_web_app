@@ -113,6 +113,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<Participation> getAllParticipationsByParticipant(User participant);
 	
 	public Vector<Participation> getAllParticipationsByBusinessObject(BusinessObject bo);
+	
+	public Vector<Contact> findAllCSharedByOthersToMe();
 
 
 }
