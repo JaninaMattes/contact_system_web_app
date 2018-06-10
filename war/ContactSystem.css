@@ -20,7 +20,7 @@ h1, #headertext {
   margin: 40px 0px 20px; /*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
   text-align: center; /*zentriert*/
 }
-#headertext{ /*Überschrift des Report-Generators*/
+#headertext{ /*ï¿½berschrift des Report-Generators*/
 	border: none;
 	text-align: center;
 	margin: 40px 300px 40px;
@@ -29,11 +29,44 @@ h1, #headertext {
 	
 }
 
+#reporttitle{ /* Ãœberschrift des erstellten Reports */
+	font-family: "Arial", Arial, sans-serif;
+  	font-size: 2em; /*Schriftgrï¿½ï¿½e*/
+  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+	color: black
+}
+
+#reportheader{ /*Kopfdaten des erstellten Reports mit Userdaten (Tabelle) */
+	width:600px;
+	border:1px solid silver;
+	margin: auto;
+}
+
+.reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
+	width:600px;
+	border:1px solid silver;
+	margin: 10px auto;
+	
+}
+
+.reportpropertyvalues{ /* Tabellenzeile, die eine Eigenschaft eines einzelnen Kontakts im erstellten Report darstellt */
+}
+
+.label{	/* linke Tabellenspalte, enthÃ¤lt Beschriftung zu den Werten der Eigenschaften eines Kontakts  (Report) */
+	width: 200px;
+}
+
+.tablecell{ /* rechte Tabellenspalte, enthÃ¤lt Werte der Eigenschaften eines Kontakts (Report) */
+	border-top:1px solid silver;
+	width: 400px;
+}
+
 
 * {
     box-sizing: border-box;
 }
 
+/* Aufbau des Editors */
 .column-left {
     float: left;
     width: 20%;
@@ -52,16 +85,18 @@ h1, #headertext {
     height: 80vh;
 }
 
+/* Aufbau des Report Generators */
 .report-left {
 	float: left;
-    width: 20%;
+    width: 25%;
     height: 80vh;
 }
 
 .report-right {
 	float: right;
-	width: 80%;
+	width: 75%;
 	height: 80vh;
+	overflow: auto;
 }
 
 #ListBox {
@@ -192,7 +227,7 @@ h1, #headertext {
     display: inline-block;
     font-size: 14px;
     margin: 4px 2px;
-    cursor: pointer;	/*Mauszeiger verändert sich, wenn man auf dem Button ist*/
+    cursor: pointer;	/*Mauszeiger verï¿½ndert sich, wenn man auf dem Button ist*/
 	border-radius: 5px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
@@ -255,7 +290,9 @@ h1, #headertext {
 }
 
 /* DropDown-Liste */
-/*TODO: weiter ausschreiben, wenn ReportGenerator fertig */
+#ReportDropDownList{
+	margin: 0 4px;
+}
 
 #DropDownList{
 	margin-left: 4px;
@@ -317,7 +354,7 @@ h1, #headertext {
 	background-color: white;
 }
 
-/* Label von Überschrift "Kontakt:" und "Kontaktliste:"*/
+/* Label von ï¿½berschrift "Kontakt:" und "Kontaktliste:"*/
 #ueberschriftlabel{
 	 border-style: none;
 	 border-color:white;
@@ -398,6 +435,7 @@ div#Trailer {
 	text-align: center;	
 	align-content: center;
 	background-color: #01010e;
+
 
 }
 

@@ -47,11 +47,15 @@ public class ContactListForm extends VerticalPanel {
 	/**
 	 * WIdgets um die Attribute einer Kontaktliste anzuzeigen.
 	 */
+
 	Label contactListLabel = new Label("Kontaktliste: ");
 	Label contactLabel = new Label("Kontakte: "); 
 	
 	HorizontalPanel btnPanel = new HorizontalPanel();
 	Button deleteConButton = new Button("Kontakt entfernen");
+
+
+
 	Button deleteClButton = new Button("Kontaktliste löschen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
@@ -141,23 +145,39 @@ public class ContactListForm extends VerticalPanel {
 		//Textboxen in CSS
 		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
 
+
 		nameContactList.getElement().setId("Textbox");
 		contactNames.getElement().setId("ListBox");
 		textBoxReceivedFrom.getElement().setId("TextBox");
 		listBoxShareWith.getElement().setId("ListBox");
 		listBoxSharedWith.getElement().setId("ListBox");
 		contactsToAdd.getElement().setId("ListBox");
+		contactNames.getElement().setId("Listbox");
 
 		
 		//Labels in CSS
+
 		contactListLabel.getElement().setId("ueberschriftlabel");
 		contactLabel.getElement().setId("namelabel");
+
+
+		//Anzeige des Labels für Vorname und Nachname gleicher StyleName
+
+		//firstNameLabel.getElement().setId("namelabel");
+		//lastNameLabel.getElement().setId("namelabel");
 		contactLabel.getElement().setId("contactlabel");
 		contactStatus.getElement().setId("contactstatus");
 
-		
+
 		labelShare.getElement().setId("teilenlabel");
 		contactStatus.getElement().setId("contactstatus");
+		
+
+		deleteConButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		deleteConButton.getElement().setId("deleteButton");
+		//Buttons in CSS
+		//delete + share + save-Buttons müssen jeweils auch gleich sein
+
 		
 		deleteConButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		deleteConButton.getElement().setId("deleteButton");
@@ -166,6 +186,7 @@ public class ContactListForm extends VerticalPanel {
 		saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		saveButton.getElement().setId("saveButton");
 		shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+
 		shareButton.getElement().setId("shareButton");
 		
 		
@@ -372,7 +393,7 @@ public class ContactListForm extends VerticalPanel {
    			contactSystemAdmin.getAllUsers(new UserToShareCallback(u));
    			contactSystemAdmin.getAllUsers(new UserSharedWithCallback(u));
    			contactSystemAdmin.getAllUsers(new UserSharedByCallback(u));
-   			contactSystemAdmin.getAllContacts(new ContactsToAddCallback(c));
+   			contactSystemAdmin.getAllContacts(new ContactsToAddCallback());
 			contactListToDisplay = cl;
 			deleteClButton.setEnabled(true);
 			deleteConButton.setEnabled(true);

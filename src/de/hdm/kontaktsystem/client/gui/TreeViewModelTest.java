@@ -7,6 +7,7 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -24,11 +25,13 @@ public class TreeViewModelTest implements TreeViewModel {
 
 	private ContactSystemAdministrationAsync csa = ClientsideSettings.getContactAdministration();
 	private ListDataProvider<BusinessObject> dataProvider = null;
+	private ListDataProvider<BusinessObject> rootData = null;
 	private BusinessObject selectedContactContactlist;
 	private ContactListForm clForm;
 	private ContactForm cForm;
 	private BoKeyProvider boKey = null;
 	private SingleSelectionModel<BusinessObject> selectionModel;
+	private Vector<BusinessObject> serverData = null;
 	
 	/**
 	 * Gibt eindeutigen Schluessel f�r das BusinessObject zur�ck.
@@ -84,11 +87,21 @@ public class TreeViewModelTest implements TreeViewModel {
 	
 	public void setSelectedContactContactlist(BusinessObject sccl) {
 		this.selectedContactContactlist = sccl;
+		RootPanel.get("Details").add(clForm); // Platzhalter Test
+		RootPanel.get("Details").add(cForm); // Platzhalter Test
+		RootPanel.get("Details").removeFromParent();
+		RootPanel.get("Details").remove(cForm); /*Alle Child-Widgets von Parent entfernen*/
+		RootPanel.get("Details").remove(clForm);
+		
 		if(sccl instanceof ContactList) {
 			clForm.setSelected((ContactList)sccl);
+			log("Update clForm");
+			RootPanel.get("Details").add(clForm);
 		}
 		else if (sccl instanceof Contact) {
 			cForm.setSelected((Contact) sccl);
+			log("Update cForm");
+			RootPanel.get("Details").add(cForm);
 		}
 	}
 
@@ -124,9 +137,27 @@ public class TreeViewModelTest implements TreeViewModel {
 		this.cForm = cForm;
 	}
 
+	
+	public void updateData(Vector<BusinessObject> bov){
+		log("Update Data");
+		rootData.getList().clear();
+		dataProvider = null;
+		for (BusinessObject bo : bov) {
+			rootData.getList().add(bo);
 
+		}
+		//getNodeInfo(vbo);
+	}
+	
+	public void addBusinessObject(BusinessObject bo){
+		dataProvider.getList().add(bo);
+	}
+	
+	public void removeBusinessObject(BusinessObject bo){
+		dataProvider.getList().remove(bo);
+	}
 
-
+	
 
 	/**
 	 * Hier wird die Baumstruktur getestet.
@@ -135,45 +166,26 @@ public class TreeViewModelTest implements TreeViewModel {
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
 
-		log("NodeInfo: " + value);
+		log("NodeInfo: " + value.getClass());
 		dataProvider = new ListDataProvider<BusinessObject>();
-		
-		if (value instanceof ContactList) {
+
+		if (value instanceof Vector) {
+			log("NodeInfo: is Vector" );
+			rootData = dataProvider; // Speichert RootListe damit die UpdateData methode die Daten Überschreiben kann;
+			Vector v = (Vector) value;
+			Vector<BusinessObject> bov = v;	
+				for (BusinessObject bo : bov) {
+					
+					dataProvider.getList().add(bo);
+				}
+		}else 
+		if(value instanceof ContactList){
 			for (Contact c : ((ContactList) value).getContacts()) {
 				dataProvider.getList().add(c);
-				log(c.getCreationDate().toString());
 			}
-		} else {
-			csa.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					// TODO Auto-generated method stub
-					log("Keine Listen gefunden");
-				}
-
-				@Override
-				public void onSuccess(Vector<ContactList> result) {
-					// TODO Auto-generated method stub
-					log("Es wurden " + result.size() + " Listen gefunden");
-					for (ContactList cl : result) {
-						dataProvider.getList().add(cl);
-
-					}
-				}
-
-			});
 		}
+		
 
-		/*
-		 * //Anzahl der Elemente for (int i = 0; i < 2; i++) { ContactList cl = new
-		 * ContactList(); Vector<Contact> cv = new Vector<Contact>(); for(int j = 0; j <
-		 * 5; j++) { Contact c = new Contact(); c.setBo_Id(j); cv.add(c); }
-		 * 
-		 * cl.setContacts(cv); cl.setName("Liste " + i); cl.setBo_Id(i);
-		 * 
-		 * dataProvider.getList().add(cl); log(cl.getName()); }
-		 */
 		return new DefaultNodeInfo<BusinessObject>(dataProvider, new DataCell(), selectionModel, null);
 	}
 
@@ -187,6 +199,12 @@ public class TreeViewModelTest implements TreeViewModel {
 	native void log(String s)/*-{
 								console.log(s);
 								}-*/;
+
+
+
+
+
+	
 
 }
 

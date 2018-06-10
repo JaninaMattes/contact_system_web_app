@@ -59,6 +59,11 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getPropertyByID(int id, AsyncCallback<Property> callback);
 	
+	public void getAllSharedByMe(AsyncCallback<Vector<BusinessObject>> callback);
+	
+	public void getAllSharedByOthersToMe(AsyncCallback<Vector<BusinessObject>> callback);
+	
+	
 	/**
 	 * Methode für die Suchfunktion
 	 * @param value
