@@ -87,12 +87,7 @@ public class TreeViewModelTest implements TreeViewModel {
 	
 	public void setSelectedContactContactlist(BusinessObject sccl) {
 		this.selectedContactContactlist = sccl;
-		RootPanel.get("Details").add(clForm); // Platzhalter Test
-		RootPanel.get("Details").add(cForm); // Platzhalter Test
-		RootPanel.get("Details").removeFromParent();
-		RootPanel.get("Details").remove(cForm); /*Alle Child-Widgets von Parent entfernen*/
-		RootPanel.get("Details").remove(clForm);
-		
+		RootPanel.get("Details").clear();
 		if(sccl instanceof ContactList) {
 			clForm.setSelected((ContactList)sccl);
 			log("Update clForm");
@@ -174,6 +169,7 @@ public class TreeViewModelTest implements TreeViewModel {
 			rootData = dataProvider; // Speichert RootListe damit die UpdateData methode die Daten Überschreiben kann;
 			Vector v = (Vector) value;
 			Vector<BusinessObject> bov = v;	
+			
 				for (BusinessObject bo : bov) {
 					
 					dataProvider.getList().add(bo);

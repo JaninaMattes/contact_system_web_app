@@ -29,14 +29,14 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<User> getAllUsers();
 	
+	public User getAccountOwner(); //TODO
+	
 
 	public Vector<Contact> getAllContactsFromUser(); 
 
 	public Vector<Contact> getAllContacts(); 	
 	
 	public Contact getContactByPropertyValue(PropertyValue pv);
-	
-	public Vector<Contact> getContactsFromUser();
 	
 	public Vector<Contact> getContactsByStatus(Boolean status);
 	
@@ -92,7 +92,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public PropertyValue editPropertyValue(PropertyValue pv);
 	
-	
+	public Participation editParticpation(Participation part);
+		
 	/**
 	 * Delete
 	 */
@@ -113,6 +114,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<Participation> getAllParticipationsByParticipant(User participant);
 	
 	public Vector<Participation> getAllParticipationsByBusinessObject(BusinessObject bo);
+	
+	public Vector<Contact> findAllCSharedByOthersToMe();
 
 
 }

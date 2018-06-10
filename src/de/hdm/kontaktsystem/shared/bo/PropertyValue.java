@@ -111,23 +111,18 @@ public class PropertyValue extends BusinessObject {
 	 * 
 	 * 
 	 */
-	
+	@Override
 	 public boolean equals(Object o) {
 		    /*
 		     * Abfragen, ob ein Objekt ungl. NULL ist und ob ein Objekt gecastet werden
 		     * kann
 		     */
-		    if (o != null && o instanceof PropertyValue) {
-		      PropertyValue propVal = (PropertyValue) o;
-		      try {
-		        return super.equals(propVal);
-		      }
-		      catch (IllegalArgumentException e) {
-		        return false;
-		      }
-		    }
-		    return false;
-		  }
+		
+		    if (o == null) return false;
+		    if (!(o instanceof PropertyValue))  return false;
+		    if (this.getBoId() != ((PropertyValue) o).getBoId())  return false;
+		    return true;
+	}
 
 
 	 /*
@@ -141,7 +136,7 @@ public class PropertyValue extends BusinessObject {
 						+ "Eigenschaft = leer \n" 
 						+ "Ausprägung = " + value+ " \n";
 		  }
-		  	 return "PropertyValue: " + "\n" 
+		  	 return "PropertyValue: " +prop.getId()+ "\n" 
 				+ "Eigenschaft = " + prop.getDescription() + " \n" 
 				+ "Ausprägung = " + value + " \n";
 		  	 	//+ "Contact = " + this.getName() + "\n";

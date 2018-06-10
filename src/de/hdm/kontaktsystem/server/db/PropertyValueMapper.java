@@ -108,7 +108,6 @@ public class PropertyValueMapper {
 				pv.setBo_Id(rs.getInt("ID"));
 				pv.setValue(rs.getString("value"));
 				pv.setProperty(p);
-				System.out.println("############################ Found Pv-id: " + pv.getBoId());
 			}
 			return pv;
 			

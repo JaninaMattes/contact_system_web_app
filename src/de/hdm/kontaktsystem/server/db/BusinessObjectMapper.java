@@ -58,7 +58,6 @@ public class BusinessObjectMapper implements Serializable {
 						"INSERT INTO BusinessObject (user_ID) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 				
 				statement.setDouble(1, bo.getOwner().getGoogleID());
-				System.out.println("test");
 				// Führt das PreparedStatement aus
 				statement.executeUpdate();
 				
@@ -71,7 +70,6 @@ public class BusinessObjectMapper implements Serializable {
 					 * dadurch erhalten die Klassen, welche von BusinessObject erben die selbe ID.
 					 * Somit erhält jedes BusinessObjecten eine einzigartige ID.
 					 */
-					System.out.println("test");
 					bo.setBo_Id(rs.getInt(1));
 				}
 			} catch (SQLException e) {
@@ -295,6 +293,21 @@ public class BusinessObjectMapper implements Serializable {
 		      e.printStackTrace();
 		    }
 		
+	}
+	
+	public void resetBoId(){
+		Connection con = DBConnection.connection();
+		  
+		  try {
+			  // Einfügeoperation in propertyvalue erfolgt
+		      PreparedStatement stmt = con.prepareStatement
+		      ("ALTER TABLE BusinessObject AUTO_INCREMENT = 1");
+		      stmt.execute();
+		      
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
 	}
 
 }

@@ -6,12 +6,16 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -75,20 +79,28 @@ public class ContactSystem implements EntryPoint {
 //	private Image contactsSymbol = new Image();
 //	private Image listSymbol = new Image(); //Alternatives Symbol für Kontaktliste
 	
+
 	//TreeView
 	ScrollPanel treeScrollPanel = new ScrollPanel();
 	final TreeViewModelTest tvm = new TreeViewModelTest();
 	CellTree ct = null;
 	
+	//Header
+	HorizontalPanel headerPanel = new HorizontalPanel();
+	Label headerText = new Label("KontaktSystem");
+	VerticalPanel suchundlogoPanel = new VerticalPanel(); //um die Suche unter dem Logo anzuordnen
+	
 	//Suchfunktion
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
 	
+	private Label menueLabel = new Label("Menue:");
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
 	private Button myParticipationsButton = new Button("Von mir geteilt");
 	private Button receivedParticipationsButton = new Button("An mich geteilt");
+	private Button accountButton = new Button("Account");
 	//Trailer Text
 	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen	
 					
@@ -97,11 +109,13 @@ public class ContactSystem implements EntryPoint {
 	private Image updateSymbol = new Image();
 	private Image deleteSymbol = new Image();
 	private Image shareSymbol = new Image();	
-	private Image searchSymbol = new Image();			
+	private Image searchSymbol = new Image();
+	
+	//Logo-Bild
+	private Image logo = new Image();
 		
 	//Symbol für Cells (in Cell-Klasse verschieben?)
 	private Image chainSymbolLogo = new Image(); //Symbol für Status geteilt/nicht geteilt
-	
 	/**
 	 * Attribute für den Login
 	 */
@@ -111,7 +125,16 @@ public class ContactSystem implements EntryPoint {
 			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
 	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
-	private Anchor reportLink = new Anchor("Report");		
+	private Anchor reportLink = new Anchor("Report");
+	
+	//Logo
+	//logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+	//logo.setHeight("100px");
+	//logo.setAltText("Logo");
+	//TODO: Logo einbinden
+	
+	// Add Button/Panel
+	private FocusPanel addPanel = new FocusPanel();
 
 	//Header
 	private HorizontalPanel header = new HorizontalPanel();				
@@ -140,22 +163,33 @@ public class ContactSystem implements EntryPoint {
 	 */
 	
 	public void loadTree() {
+		Button but = new Button("Test");
+		but.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				Window.alert("Test");
+			}
+			
+		});
+		
 		
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
 		treeScrollPanel.setHeight("80vh");
+	//	contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
 		contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
-
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				log("Keine Listen gefunden");
+				log("Keine Kontakte gefunden");
 			}
 
 			@Override
 			public void onSuccess(Vector<Contact> result) {
 				// TODO Auto-generated method stub
-				log("Es wurden " + result.size() + " Listen gefunden");
+				log("Es wurden " + result.size() + " Kontakte gefunden");
 				ct = new CellTree(tvm, result);
 				ct.setAnimationEnabled(true);
 				ct.setDefaultNodeSize(result.size());
@@ -253,6 +287,7 @@ public class ContactSystem implements EntryPoint {
 	    contactListsButton.setEnabled(true);
 	    myParticipationsButton.setEnabled(true);
 	    receivedParticipationsButton.setEnabled(true);
+	    accountButton.setEnabled(true);
 	  			
 	    //Trailer
 	    trailer.setTitle("Copyright Team09, Hochschule der Medien Stuttgart");
@@ -262,12 +297,17 @@ public class ContactSystem implements EntryPoint {
 			signOutLink.setHref(userInfo.getLogoutUrl());
 		}
 		
+		reportLink.setHref(GWT.getHostPageBaseURL() + "ReportGenerator.html");
 
 		/** 
 		 * Namen für CSS festlegen 
 		 */
+		menueLabel.getElement().setId("menue-label");
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
+		
+		//Label der �berschrift im Header
+		headerText.getElement().setId("headertext");
 		
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
 		searchButton.getElement().setId("searchButton"); 
@@ -277,6 +317,7 @@ public class ContactSystem implements EntryPoint {
 		contactListsButton.getElement().setId("menue-button");
 		myParticipationsButton.getElement().setId("menue-button");
 		receivedParticipationsButton.getElement().setId("menue-button");
+		accountButton.getElement().setId("menue-button");
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
@@ -288,13 +329,18 @@ public class ContactSystem implements EntryPoint {
 		 */
 		chainSymbolLogo.getElement().setId("logo");
 		
+		/*
+		 * CSS für Add Panel
+		 */
+		addPanel.getElement().setId("add");
+		
 		/**
 		 * CSS Identifier für die Elemente
 		 */		
 
-		header.setStyleName("header");		
-		navigation.setStyleName("navigation");
-		trailer.setStyleName("trailer");
+		header.getElement().setId("Header");		
+		navigation.getElement().setId("Navigation");
+		trailer.getElement().setId("Trailer");
 
 		
 		/**
@@ -317,21 +363,20 @@ public class ContactSystem implements EntryPoint {
 		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
 		 */
 	
-		//TEST -> ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+			//contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
 			contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
-
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
-						log("Keine Listen gefunden");
+						log("Keine Kontakte gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<Contact> result) {
 						// TODO Auto-generated method stub
-						log("Es wurden " + result.size() + " Listen gefunden");
+						log("Es wurden " + result.size() + " Kontakte gefunden");
 						Vector<BusinessObject> bov = new Vector<BusinessObject>();
 						for(Contact cl : result){
 							bov.add(cl);
@@ -350,8 +395,8 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ContactListButton
 		contactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+			//	contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
 				contactSystemAdmin.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
-
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
@@ -436,22 +481,70 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 		
+		accountButton.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				
+				DialogBox db = new DialogBox();
+				VerticalPanel vp = new VerticalPanel();
+				db.setSize("200", "300");
+				db.setPopupPosition(0, 0);
+				vp.add(new HTML("<h3>User: 	Oli</h3>"));
+				vp.add(new HTML("<p>ID:	170</p>"));
+				vp.add(new HTML("<p>Email:	Oli@gmail.com</p>"));
+				vp.add(new Button("Delete Account", new ClickHandler(){
+
+					@Override
+					public void onClick(ClickEvent event) {
+						// TODO Auto-generated method stub
+						log("Delete Account");
+					}
+					
+				}));
+				db.add(vp);
+				RootPanel.get("Details").add(db);
+			}
+			
+		});
+		
+		addPanel.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				Window.alert("Add something");
+			}
+			
+		});
+		Image add = new Image("/images/add.png");
+		add.setPixelSize(50, 50);
+		addPanel.add(add);
+		
 		//Header
-	    header.add(chainSymbolLogo);
- 		header.add(reportLink);
-	    header.add(signOutLink);
+		suchundlogoPanel.add(logo);
+		suchundlogoPanel.add(sg);
+	    suchundlogoPanel.add(chainSymbolLogo);
+		headerPanel.add(suchundlogoPanel);
+		headerPanel.add(headerText);
+ 		headerPanel.add(reportLink);
+	    headerPanel.add(signOutLink);
+	    
 		
 		//Menu Leiste
-	  	navigation.add(sg);
+	  	navigation.add(menueLabel);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
+	  	navigation.add(accountButton);
 
 		
-	  	RootPanel.get("Header").add(header);
+	  	RootPanel.get("Header").add(headerPanel);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Trailer").add(trailer);
+	  	RootPanel.get().add(addPanel);
 		
 	}
 	

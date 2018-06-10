@@ -130,8 +130,6 @@ public class ParticipationMapper {
 				
 				participations.add(participation);
 				
-			    System.out.println("###### Participant id: " + participant.getGoogleID());
-				System.out.println("###### Participation object id: " + reference.getBoId());
 			}
 			return participations;
 			
@@ -307,7 +305,6 @@ public class ParticipationMapper {
 	public void deleteParticipationForParticipant(User user) {
 		Vector<Participation> participations = findParticipationsByParticipant(user);		
 		Connection con = DBConnection.connection();
-		System.out.println(participations);
 		for(Participation p : participations) {
 			try {
 				PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE User_ID = ? AND BusinessObject_ID = ?");
