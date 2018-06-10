@@ -100,6 +100,8 @@ public class ContactForm extends VerticalPanel{
 	 */	
 	public void  onLoad() {
 		super.onLoad();
+		VerticalPanel vp  = new VerticalPanel();
+		this.add(vp);
 		
 		/**
 		 * id für CSS
@@ -487,9 +489,9 @@ public class ContactForm extends VerticalPanel{
 		 * 
 		 */		
 	    //this.add(popUp);	    
-		this.add(label);
-		this.add(contactGrid);
-		this.add(btnPanel);
+		vp.add(label);
+		vp.add(contactGrid);
+		vp.add(btnPanel);
 					
 	}		
 		
@@ -1083,7 +1085,7 @@ public class ContactForm extends VerticalPanel{
 
 				@Override
 				public void onClick(ClickEvent event) {	
-					System.out.println("Save-Button");
+					log("Save-Button");
 					if (contactToDisplay!= null && getCheckedValues()!= null){
 						p = getCheckedValues();
 						contactToDisplay.setPropertyValues(p);

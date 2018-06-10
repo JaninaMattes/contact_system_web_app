@@ -6,12 +6,15 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -97,6 +100,7 @@ public class ContactSystem implements EntryPoint {
 	private Button contactListsButton = new Button("Kontaktlisten");
 	private Button myParticipationsButton = new Button("Von mir geteilt");
 	private Button receivedParticipationsButton = new Button("An mich geteilt");
+	private Button accountButton = new Button("Account");
 	//Trailer Text
 	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen	
 					
@@ -159,6 +163,17 @@ public class ContactSystem implements EntryPoint {
 	 */
 	
 	public void loadTree() {
+		Button but = new Button("Test");
+		but.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				Window.alert("Test");
+			}
+			
+		});
+		
 		
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
@@ -272,6 +287,7 @@ public class ContactSystem implements EntryPoint {
 	    contactListsButton.setEnabled(true);
 	    myParticipationsButton.setEnabled(true);
 	    receivedParticipationsButton.setEnabled(true);
+	    accountButton.setEnabled(true);
 	  			
 	    //Trailer
 	    trailer.setTitle("Copyright Team09, Hochschule der Medien Stuttgart");
@@ -301,6 +317,7 @@ public class ContactSystem implements EntryPoint {
 		contactListsButton.getElement().setId("menue-button");
 		myParticipationsButton.getElement().setId("menue-button");
 		receivedParticipationsButton.getElement().setId("menue-button");
+		accountButton.getElement().setId("menue-button");
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
@@ -464,6 +481,34 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 		
+		accountButton.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				
+				DialogBox db = new DialogBox();
+				VerticalPanel vp = new VerticalPanel();
+				db.setSize("200", "300");
+				db.setPopupPosition(0, 0);
+				vp.add(new HTML("<h3>User: 	Oli</h3>"));
+				vp.add(new HTML("<p>ID:	170</p>"));
+				vp.add(new HTML("<p>Email:	Oli@gmail.com</p>"));
+				vp.add(new Button("Delete Account", new ClickHandler(){
+
+					@Override
+					public void onClick(ClickEvent event) {
+						// TODO Auto-generated method stub
+						log("Delete Account");
+					}
+					
+				}));
+				db.add(vp);
+				RootPanel.get("Details").add(db);
+			}
+			
+		});
+		
 		addPanel.addClickHandler(new ClickHandler(){
 
 			@Override
@@ -493,6 +538,7 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
+	  	navigation.add(accountButton);
 
 		
 	  	RootPanel.get("Header").add(headerPanel);

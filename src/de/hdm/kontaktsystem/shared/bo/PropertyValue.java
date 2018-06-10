@@ -117,17 +117,11 @@ public class PropertyValue extends BusinessObject {
 		     * Abfragen, ob ein Objekt ungl. NULL ist und ob ein Objekt gecastet werden
 		     * kann
 		     */
-		    if (o != null && o instanceof PropertyValue) {
-		      PropertyValue propVal = (PropertyValue) o;
-		      try {
-		        return super.equals(propVal);
-		      }
-		      catch (IllegalArgumentException e) {
-		        return false;
-		      }
-		    }
-		    return false;
-		  }
+		    if (o != null) return false;
+		    if (!(o instanceof PropertyValue)) return false;
+		    if (this.getBoId() != ((PropertyValue) o).getBoId()) return false;
+		    return true;
+	}
 
 
 	 /*
