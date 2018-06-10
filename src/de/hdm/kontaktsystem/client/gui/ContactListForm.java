@@ -341,10 +341,50 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			User u = new User();
+			u.setGoogleID(777);
 			if (contactListToDisplay == null) {
-				Window.alert("keine Kontaktliste ausgewählt");
+				Window.alert("Keine Kontaktliste ausgewählt");
 			} else {
+				User clOwner = contactListToDisplay.getOwner();
+				Participation p = new Participation();
+				p.setReference(contactListToDisplay);
+				p.setParticipant(u);
+				
+				if (clOwner.getGoogleID() != u.getGoogleID()) {
+					contactSystemAdmin.deleteParticipation(p, new deleteContactListPartCallback());
+				} else {	
 				contactSystemAdmin.deleteContactList(contactListToDisplay, new deleteContactListCallback());
+				}
+			}
+		}
+		
+		/**
+		 * Löschen der Teilhaberschaft zur ausgewählten Kontaktliste
+		 * @author Kim-Ly
+		 *
+		 */
+		private class deleteContactListPartCallback 
+		implements AsyncCallback<Participation> {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Löschen der Kontaktliste Teilhaberschaft fehlgeschlagen!");
+			}
+
+			@Override
+			public void onSuccess(Participation p) {
+				
+				ContactList clPart = (ContactList) p.getReferencedObject();
+				//log(clPart.toString());
+				
+				if (clPart != null) {
+					log(clPart.toString());
+					setSelected(null);
+					//TODO: @Oli removeContactList überprüfen, gibt null zurück!!
+					cltvm.removeContactList(clPart);
+					Window.alert("Teilhaberschaft mit Kontaktliste gelöscht!");
+				}
 			}
 		}
 
