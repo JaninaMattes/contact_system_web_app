@@ -151,7 +151,7 @@ public class ContactSystem implements EntryPoint {
 	private ContactListForm clf = new ContactListForm();
 	private MyParticipationForm mpf = new MyParticipationForm();
 	private ReceivedParticipationForm rpf = new ReceivedParticipationForm();
-	private UserForm uf = new UserForm();
+//	private UserForm uf = new UserForm();
 	
 	//CellTree Model
 	private ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
@@ -479,7 +479,7 @@ public class ContactSystem implements EntryPoint {
 				// TODO Auto-generated method stub
 				
 				
-				RootPanel.get("Details").add(uf);
+				RootPanel.get("Details").add(cf); 
 			}
 			
 		});
