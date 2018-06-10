@@ -631,6 +631,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 	
+	@Override
 	public Participation editParticpation(Participation part){
 		if(part.getReferencedObject() instanceof Contact){
 			Contact c = (Contact) part.getReferencedObject();
