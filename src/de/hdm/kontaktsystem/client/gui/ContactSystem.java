@@ -94,7 +94,7 @@ public class ContactSystem implements EntryPoint {
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
 	
-	private Label menueLabel = new Label("Menue:");
+	private Label menuLabel = new Label("Menu:");
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
@@ -293,7 +293,7 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
-		menueLabel.getElement().setId("menue-label");
+		menuLabel.getElement().setId("menue-label");
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
 		
@@ -304,11 +304,11 @@ public class ContactSystem implements EntryPoint {
 		searchButton.getElement().setId("searchButton"); 
 		
 		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
-		contactButton.getElement().setId("menue-button");
-		contactListsButton.getElement().setId("menue-button");
-		myParticipationsButton.getElement().setId("menue-button");
-		receivedParticipationsButton.getElement().setId("menue-button");
-		accountButton.getElement().setId("menue-button");
+		contactButton.getElement().setId("menu-button");
+		contactListsButton.getElement().setId("menu-button");
+		myParticipationsButton.getElement().setId("menu-button");
+		receivedParticipationsButton.getElement().setId("menu-button");
+		accountButton.getElement().setId("menu-button");
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
@@ -508,7 +508,7 @@ public class ContactSystem implements EntryPoint {
 	    
 		
 		//Menu Leiste
-	  	navigation.add(menueLabel);
+	  	navigation.add(menuLabel);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
