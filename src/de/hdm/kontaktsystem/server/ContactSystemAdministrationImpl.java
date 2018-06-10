@@ -812,7 +812,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 			if (bo instanceof PropertyValue) {
 				propVal = (PropertyValue) bo;
-				System.out.println("Ausprägung " + propVal);
+//				System.out.println("Ausprägung " + propVal);
 				propertyResultVector.addElement(propVal);
 			}
 		}
@@ -866,6 +866,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				pvv.add(pv);
 			}else if(allPVswm.contains(pv)){
 				pvv.add(pv);
+			}else{
+				System.out.println(pv +" not Shared");
+				
 			}
 		}
 		
