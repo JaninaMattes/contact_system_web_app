@@ -39,7 +39,7 @@ public class DBConnection {
                 	//System.out.println("Load MySQL Driver");
                     // Local MySQL instance to use during development.
                 	Class.forName("com.mysql.jdbc.Driver");
-                    url = localUrl;
+                    url = kimlyUrl;
                 }
 				
 				

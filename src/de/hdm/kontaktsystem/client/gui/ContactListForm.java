@@ -65,7 +65,7 @@ public class ContactListForm extends VerticalPanel {
 	Label labelShare = new Label("Teilen mit: ");
 	Label contactStatus = new Label("");
 	Label labelSharedWith = new Label("Geteilt mit: ");
-	Label labelReceivedFrom = new Label("Geteilt von: ");
+	Label labelReceivedFrom = new Label("Eigentümer: ");
 	Label labelAddConsToList = new Label("Kontakt hinzufügen ");
 	
 
@@ -388,12 +388,26 @@ public class ContactListForm extends VerticalPanel {
 		if (cl != null) {
 			int count = 0;
 			//Befüllen der Listbox mit allen User Objekten aus dem System
-   			Vector <User> u = new Vector<User>();
+			User u = new User();
+			
+			// User setzen, sodass Programm Ownership zuordnen kann
+			u.setGoogleID(777);
+   			Vector<User> uVec = new Vector<User>();
+			Vector <Participation> partVec = new Vector<Participation>();
    			Vector<Contact> c = new Vector<Contact>();
-   			contactSystemAdmin.getAllUsers(new UserToShareCallback(u));
-   			contactSystemAdmin.getAllUsers(new UserSharedWithCallback(u));
-   			contactSystemAdmin.getAllUsers(new UserSharedByCallback(u));
-   			contactSystemAdmin.getAllContacts(new ContactsToAddCallback());
+   			Vector<ContactList> clVec = new Vector<ContactList>();
+   			
+   			// Alle User mit denen Kontaktliste geteilet werden kann
+   			contactSystemAdmin.getAllUsers(new UserToShareCallback(uVec));
+   			
+   			// Alle User mit denen Kontaktliste geteilt wurde
+   			contactSystemAdmin.getAllParticipationsByBusinessObject(cl, new UserSharedWithCallback(partVec));
+   			
+   			// User, von dem Kontaktliste geteilt wurde
+   			contactSystemAdmin.getAllContactListsFromUser(new UserOwnerClCallback(clVec));
+   			
+   			// Kontakte, die der ausgewählten Kontaktliste hinzugefügt werden können
+   			//contactSystemAdmin.getAllContacts(new ContactsToAddCallback());
 			contactListToDisplay = cl;
 			deleteClButton.setEnabled(true);
 			deleteConButton.setEnabled(true);
@@ -457,14 +471,18 @@ public class ContactListForm extends VerticalPanel {
 	 *
 	 */
 	
-	private class UserSharedWithCallback implements AsyncCallback<Vector<User>> {
-		Vector <User> user = null;	
+	private class UserSharedWithCallback implements AsyncCallback<Vector<Participation>> {
+		
+		// Alle User (participant) mit denen Contactlist (reference) geteilt wurde
+		Vector <Participation> part = null;	
+		// Ich (angemeldeter User)
 		User u = new User();
 		
-		//findAllShared
+		//findAllSharedByMe
 		
-		UserSharedWithCallback(Vector<User> user){
-			this.user = user;
+		UserSharedWithCallback(Vector<Participation> part){
+			this.part = part;
+	
 		}
 
 		@Override
@@ -473,13 +491,13 @@ public class ContactListForm extends VerticalPanel {
 		}
 
 		@Override
-		public void onSuccess(Vector <User> result) {
+		public void onSuccess(Vector <Participation> result) {
 			int count = 0;
 			if (result != null) {
 				
-				for(User user: result) {						
+				for(Participation part: result) {						
 				//User Liste updaten
-				listBoxSharedWith.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
+				listBoxSharedWith.addItem(part.getParticipant().getGMail());
 				++count;
 				}
 			//Genug Platz schaffen für alle Elemente
@@ -497,24 +515,24 @@ public class ContactListForm extends VerticalPanel {
 	 *
 	 */
 	
-	private class UserSharedByCallback implements AsyncCallback<Vector<User>> {
-		Vector <User> user = null;				
-		UserSharedByCallback(Vector<User> user){
-			this.user = user;
+	private class UserOwnerClCallback implements AsyncCallback<Vector<ContactList>> {
+		Vector <ContactList> clVec = null;				
+		UserOwnerClCallback(Vector<ContactList> clVec) {
+			this.clVec = clVec;
 		}
 
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("Der Aufruf der Nutzer ist misglückt! :( ");
+			Window.alert("Eigentümer der Kontaktliste konnte nicht gefunden werden");
 		}
 
 		@Override
-		public void onSuccess(Vector <User> result) {
-			int count = 0;
-			if (result != null) {
-				textBoxReceivedFrom.setText("");	
+		public void onSuccess(Vector <ContactList> clVec) {
+			if (clVec != null) {						
+				textBoxReceivedFrom.setText(contactListToDisplay.getOwner().getGMail());		
+				
 			} else {
-				Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");
+				Window.alert("Eigentümer der Kontaktliste konnte nicht gefunden werden");
 			}
 		}
 	}
@@ -530,16 +548,26 @@ public class ContactListForm extends VerticalPanel {
 		
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("Keine Kontakte vorhanden. Kontakte anlegen um diese hinzuzufügen. ");
+			Window.alert("Keine Kontakte im System vorhanden. Kontakte anlegen um diese hinzuzufügen. ");
 			
 		}
 
 		@Override
 		public void onSuccess(Vector<Contact> result) {
-			// TODO Auto-generated method stub
-			
-		}
-		
+			Vector<Contact> conResult = new Vector<Contact>();
+			int count = 0;
+			if (result != null) {
+				for(Contact con: result) {						
+					//Contacts updaten
+					listBoxSharedWith.addItem(con.getName().getValue());
+					++count;
+					}
+				//Genug Platz schaffen für alle Elemente
+					listBoxSharedWith.setVisibleItemCount(count);
+				} else {
+					Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");
+				}
+			}
 	}
 	
 	native void log(String s)/*-{
