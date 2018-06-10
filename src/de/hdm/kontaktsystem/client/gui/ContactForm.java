@@ -109,7 +109,11 @@ public class ContactForm extends VerticalPanel{
 		//Buttons in CSS
 		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
 
+		
+		deleteButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+
 		deleteButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu loeschen
+
 		deleteButton.getElement().setId("deleteButton");
 		deleteButton.setEnabled(true);		
 		deleteButton.addClickHandler(new DeleteClickHandler());
@@ -531,11 +535,16 @@ public class ContactForm extends VerticalPanel{
 				}	
 				
 				//Befüllen der Listbox mit allen User Objekten aus dem System
+
+       			Vector <User> u = new Vector<User>();
+       			contactSystemAdmin.getAllUsers(new UserToShareCallback());
+
 				labelShare.setVisible(true);
 				shareUser.clear(); //Löschen alter Einträge
 				shareUser.setVisible(true);				
 				
        			contactSystemAdmin.getAllUsers(new UserToShareCallback());
+
        			//Befüllen der ListBox mit User Objekten, welche eine Teilhaberschaft haben
       			
        			if(isOwnedByMe(c)) { 
@@ -1179,6 +1188,9 @@ public class ContactForm extends VerticalPanel{
 			 * @author janina
 			 *
 			 */
+
+
+
 			
 			private class UserToShareCallback implements AsyncCallback<Vector<User>>{
 
@@ -1347,4 +1359,5 @@ public class ContactForm extends VerticalPanel{
 			}-*/;
 		  
 }
+
 
