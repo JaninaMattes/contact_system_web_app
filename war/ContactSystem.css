@@ -309,7 +309,9 @@ div {
 /*TODO: weiter ausschreiben, wenn ReportGenerator fertig */
 
 #TextBox{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 #findByTextbox{
@@ -327,17 +329,23 @@ div {
 }
 
 #geteiltvontextfeld{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 /*Listboxen*/
 
 #teilenmitlistbox{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 #geteiltmitlistbox{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 /* Labels */
@@ -377,7 +385,7 @@ div {
 }
 
 #contactstatus{
-	
+	border:none;
 }
 
 #filtern{
@@ -393,7 +401,17 @@ div {
 }
 
 #checkbox{
+	border-radius: none;
 	margin-left: 20px; 
+	height: 50px;
+    width: 50px;
+    
+}
+
+input:checked {
+    height: 50px;
+    width: 50px;
+    background: #00C6FF;
 }
 
 /*Div�s*/
@@ -407,17 +425,18 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-	background: linear-gradient(to bottom right, #0077FF, #00C6FF); /*W3School*/
+	background: linear-gradient(to bottom right, #0281FF, #00DDFF); /*W3School*/
 	text-align: center;
 }
 
 div#Navigator {	
-	background: #224E7F;
+	background: #193852;
 
 }
 
 div#Lists {	
-	background: #ffffff;
+	border-radius: none;
+	background: #BFE0FF;
 	align-content: center;
 }
 
@@ -439,7 +458,7 @@ div#Trailer {
 	color: white;
 	text-align: center;	
 	align-content: center;
-	background-color: #224E7F;
+	background-color: #193852;
 
 
 }
@@ -457,6 +476,7 @@ div#Trailer {
     z-index: 5;
     height: 50px;
     width:  50px;
-    background: #00cfff;
+    color: white;
+    background: #00C6FF;
     border-radius: 50px;
 }

@@ -34,7 +34,7 @@ public class ContactListTreeViewModel implements TreeViewModel{
 	
 	
 	/**
-	 * ContactList als eindeutige Zielobjekte, welche als Schluessel f�r Baumknoten
+	 * ContactList als eindeutige Zielobjekte, welche als Schluessel f�r BaumknotensetSelectedContact
 	 * dienen. 
 	 * Dadurch werden im Selektmodell alle Objekte mit der gleichen ID ausgew�hlt,
 	 * wenn eines davon selectiert wird.

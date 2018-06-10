@@ -249,8 +249,7 @@ public class ParticipationMapper {
 		
 		return null;
 	}
-	
-	
+		
 	/**
 	 * Löschen aller Teilhaberschaften
 	 *  @note in GUI Nicht Verwendet
@@ -360,6 +359,10 @@ public class ParticipationMapper {
 		}
 		BusinessObjectMapper.businessObjectMapper().setStatusFalse(businessObject.getBoId());
 	}
+	
+	
+	
+
 	
 	
 	

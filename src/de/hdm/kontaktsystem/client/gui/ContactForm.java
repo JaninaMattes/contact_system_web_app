@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
