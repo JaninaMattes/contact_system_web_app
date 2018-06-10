@@ -88,7 +88,6 @@ public class TreeViewModelTest implements TreeViewModel {
 	public void setSelectedContactContactlist(BusinessObject sccl) {
 		this.selectedContactContactlist = sccl;
 		RootPanel.get("Details").clear();
-		
 		if(sccl instanceof ContactList) {
 			clForm.setSelected((ContactList)sccl);
 			log("Update clForm");
