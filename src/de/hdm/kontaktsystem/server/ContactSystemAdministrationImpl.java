@@ -241,13 +241,27 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	@Override
 	public Contact editContact(Contact contact) {
-		Contact con = cMapper.updateContact(contact);
-		Vector<PropertyValue> propResult = new Vector<PropertyValue>();
-		propResult = this.getPropertyValuesForContact(con);
-		for (PropertyValue pV : propResult) {
-			this.editPropertyValue(pV);
+		boMapper.update(contact);
+		Vector<PropertyValue> newPV = contact.getPropertyValues();
+		Vector<PropertyValue> oldPV = this.getPropertyValuesForContact(contact);
+		// Löscht alle PropertyValues die es in dem neuen Eigenschafts Vector nicht mehr gibt
+		for (PropertyValue pV : oldPV) {
+			if(!newPV.contains(pV)) {
+				oldPV.remove(pV);
+				this.deletePropertyValue(pV);
+			}
 		}
-		return con;
+		// Fügt dem Kontakt neue PropertyValues hinzu
+		// Updatet die bestehenden PropertyValues
+		for (PropertyValue pV : newPV) {
+			if(!oldPV.contains(pV)) {
+				this.createPropertyValue(pV);
+			}else{
+				this.editPropertyValue(pV);
+			}
+			
+		}
+		return this.getContactById(contact.getBoId());
 
 	}
 
@@ -605,8 +619,54 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Participation createParticipation(Participation part) {
 		Participation participation = partMapper.insertParticipation(part);
 		boMapper.setStatusTrue(participation.getReferenceID());
+		if(part.getReferencedObject() instanceof Contact){
+			for(PropertyValue pv : ((Contact) part.getReferencedObject()).getPropertyValues()){
+				Participation partPV = new Participation();
+				partPV.setParticipant(part.getParticipant());
+				partPV.setReference(pv);
+				this.createParticipation(part);
+			}
+		}
 		return participation;
 
+	}
+	
+	@Override
+	public Participation editParticpation(Participation part){
+		if(part.getReferencedObject() instanceof Contact){
+			Contact c = (Contact) part.getReferencedObject();
+			// Suchen von allen geteilten Eigenschaften 
+			Vector<Participation> allShared = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
+			// Referenz Contact-Object um festzustellen was nicht geteilt wird
+			Contact refC = this.getContactById(c.getBoId());
+			// Kontrolle ob neue PropertyValues geteilt wurden
+			for(PropertyValue pv : c.getPropertyValues()){
+				Participation addPart = new Participation();
+				addPart.setParticipant(part.getParticipant());
+				addPart.setReference(pv);
+				if(!allShared.contains(addPart)){
+					this.createParticipation(addPart);
+				}
+			}
+			// Löscht alle beziehungen zu PropertyValues die nicht mehr geteilt werden sollen.
+			for(PropertyValue pv : refC.getPropertyValues()){
+				if(!c.getPropertyValues().contains(pv)){
+					Participation delPart = new Participation();
+					delPart.setParticipant(part.getParticipant());
+					delPart.setReference(pv);
+					this.deleteParticipation(delPart);
+				}
+			}
+			
+			return part;
+		}else if(part.getReferencedObject() instanceof ContactList){
+			ContactList cl = (ContactList) part.getReferencedObject();
+			// Kontaktlisten werden aktuell nur Vollständig geteilt
+			return part;
+		}
+		
+		
+		return null;
 	}
 
 	// Report
@@ -657,6 +717,15 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		if (participations.isEmpty()) {
 			BusinessObjectMapper.businessObjectMapper().setStatusFalse(part.getReferenceID());
 		}
+		if(p.getReferencedObject() instanceof Contact){
+			for(PropertyValue pv : ((Contact) p.getReferencedObject()).getPropertyValues()){
+				Participation partPV = new Participation();
+				partPV.setParticipant(p.getParticipant());
+				partPV.setReference(pv);
+				this.deleteParticipation(part);
+			}
+		}
+		
 		return part;
 
 	}
