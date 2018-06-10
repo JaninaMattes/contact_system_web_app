@@ -94,7 +94,7 @@ public class ContactSystem implements EntryPoint {
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
 	
-	private Label menuLabel = new Label("Menu:");
+	//private Label menuLabel = new Label("Menu:");
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
@@ -293,7 +293,7 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
-		menuLabel.getElement().setId("menue-label");
+		//menuLabel.getElement().setId("menue-label");
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
 		
@@ -508,7 +508,7 @@ public class ContactSystem implements EntryPoint {
 	    
 		
 		//Menu Leiste
-	  	navigation.add(menuLabel);
+	  	//navigation.add(menuLabel);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
