@@ -57,7 +57,7 @@ public class ContactForm extends VerticalPanel{
 	TextBox textBoxAdresse = new TextBox();
 	
 	//PopUp
-	DialogBox popUp = new DialogBox();
+//	DialogBox popUp = new DialogBox();
 	
 	Label label = new Label("Kontakt:");
 	Label labelName = new Label("Name:");
@@ -154,7 +154,7 @@ public class ContactForm extends VerticalPanel{
 		textBoxAdresse.getElement().setId("Textbox");
 		
 		//Pop in CSS
-		popUp.getElement().setId("PopUp");
+//		popUp.getElement().setId("PopUp");
 		
 		//ListBox CSS
 		receivedFrom.getElement().setId("teilenmitlistbox");//.setId("geteiltvontextfeld");
@@ -393,7 +393,7 @@ public class ContactForm extends VerticalPanel{
 			public void onClick(ClickEvent event) {
 				contactSystemAdmin.deleteContact(contactToDisplay, new DeleteContactCallback());
 				contactToDisplay = null;
-			popUp.hide();
+//			popUp.hide();
 			}		    	
 		});
 		    
@@ -410,9 +410,9 @@ public class ContactForm extends VerticalPanel{
 		    
 //		popUp.add(deleteMessage);
 //		popUp.add(cancelBtn);
-		popUp.setTitle("Hinweis: Soll der Kontakt gelöscht werden?");
-		popUp.add(okBtn);		    
-		popUp.hide();
+//		popUp.setTitle("Hinweis: Soll der Kontakt gelöscht werden?");
+//		popUp.add(okBtn);		    
+//		popUp.hide();
 	    
 		//ListBox ist nicht sichtbar
 		labelShare.setVisible(false);
@@ -927,7 +927,7 @@ public class ContactForm extends VerticalPanel{
 						//Überprüfen ob Ersteller (Owner)
 						if(isOwnedByMe(contactToDisplay)) {	
 							 //PopUp anzeigen
-							 popUp.show();
+//							 popUp.show();
 							 Window.alert("Der Kontakt" + contactToDisplay.getName() + " wurde gelöscht.");							
 						//Wenn nur Teilhaber, dann nur Teilhaberschaft löschen -> damit kein Zugriff mehr auf Kontakt
 						} else {							
