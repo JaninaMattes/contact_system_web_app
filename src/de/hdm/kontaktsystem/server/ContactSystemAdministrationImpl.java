@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.server;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 import com.google.appengine.api.users.UserService;
@@ -93,10 +94,15 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
-
+	private double currentUser = 170d;
+	
+	public void setCurrentUser(double uid){ // Test um den User zu wechseln
+		currentUser = uid;
+	}
+	
 	public double getCurrentUser() {
 		// Test
-		return 170d;// Double.parseDouble(userService.getCurrentUser().getUserId());
+		return currentUser;// Double.parseDouble(userService.getCurrentUser().getUserId());
 	}
 
 	/*
@@ -243,11 +249,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Contact editContact(Contact contact) {
 		boMapper.update(contact);
 		Vector<PropertyValue> newPV = contact.getPropertyValues();
-		Vector<PropertyValue> oldPV = this.getPropertyValuesForContact(contact);
+		Vector<PropertyValue> oldPV = this.getPropertyValuesForContact(contact); // Liste uim Iterieren
+		Vector<PropertyValue> oldPV2 = oldPV; // Liste aus der Elemente gelöscht werden
 		// Löscht alle PropertyValues die es in dem neuen Eigenschafts Vector nicht mehr gibt
 		for (PropertyValue pV : oldPV) {
 			if(!newPV.contains(pV)) {
-				oldPV.remove(pV);
 				this.deletePropertyValue(pV);
 			}
 		}
@@ -517,7 +523,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
 		// Da Property immer fest zu einem Contact-Objekt gehört hat es auch den selben
 		// Besitzer
-		System.out.println("Eingenschaft: " + propertyValue.getValue());
 		propertyValue.setOwner(propertyValue.getContact().getOwner());
 		boMapper.insert(propertyValue);
 		return propValMapper.insert(propertyValue);
@@ -624,7 +629,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				Participation partPV = new Participation();
 				partPV.setParticipant(part.getParticipant());
 				partPV.setReference(pv);
-				this.createParticipation(part);
+				this.createParticipation(partPV);
 			}
 		}
 		return participation;
@@ -769,10 +774,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<BusinessObject> getAllSharedByOthersToMe() {
 		Vector<BusinessObject> bov = new Vector<BusinessObject>();
+		System.out.println("FInd all shared");
 		for (Contact c : this.findAllCSharedByOthersToMe()) {
+			
 			bov.add(c);
 		}
 		for (ContactList cl : this.findAllCLSharedByOthersToMe()) {
+			
 			bov.add(cl);
 		}
 		return bov;
@@ -804,7 +812,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 			if (bo instanceof PropertyValue) {
 				propVal = (PropertyValue) bo;
-				//// System.out.println("Ausprägung " + propVal.getProp());
+				System.out.println("Ausprägung " + propVal);
 				propertyResultVector.addElement(propVal);
 			}
 		}
@@ -848,16 +856,19 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	private Contact filterContactData(Contact contact){
 		// Filter damit nur die geteilten PropertyValues ausgegeben werden; Namen werden nicht gefiltert
-		Vector<PropertyValue> pvv = contact.getPropertyValues();
+		Iterator<PropertyValue> iterator = contact.getPropertyValues().iterator(); // Liste zum Iterieren
+		Vector<PropertyValue> pvv = new Vector<PropertyValue>(); // Liste aus der Elemente gelöscht werden
 		Vector<PropertyValue> allPVswm = this.findAllPVSharedByOthersToMe();
-		for(PropertyValue pv : pvv){
-			if(pv.getProperty().getId() != 1){
-				if(!allPVswm.contains(pv)){
-					//
-					pvv.remove(pv);
-				}
+		
+		while(iterator.hasNext()){
+			PropertyValue pv = iterator.next();
+			if(pv.getProperty().getId() == 1){
+				pvv.add(pv);
+			}else if(allPVswm.contains(pv)){
+				pvv.add(pv);
 			}
 		}
+		
 		contact.setPropertyValues(pvv);
 		return contact;
 	}

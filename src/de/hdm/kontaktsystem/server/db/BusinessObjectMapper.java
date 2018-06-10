@@ -294,5 +294,20 @@ public class BusinessObjectMapper implements Serializable {
 		    }
 		
 	}
+	
+	public void resetBoId(){
+		Connection con = DBConnection.connection();
+		  
+		  try {
+			  // Einfügeoperation in propertyvalue erfolgt
+		      PreparedStatement stmt = con.prepareStatement
+		      ("ALTER TABLE BusinessObject AUTO_INCREMENT = 1");
+		      stmt.execute();
+		      
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+	}
 
 }

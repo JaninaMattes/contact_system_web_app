@@ -1,6 +1,9 @@
 package test;
 
+import java.util.Vector;
+
 import de.hdm.kontaktsystem.server.ContactSystemAdministrationImpl;
+import de.hdm.kontaktsystem.server.db.BusinessObjectMapper;
 import de.hdm.kontaktsystem.shared.bo.*;
 
 public class DBCleaner {
@@ -43,9 +46,12 @@ public class DBCleaner {
 		double id = 10d;
 		int cid = 1;
 		for(User user : csa.getAllUsers()){
-		
+			System.out.println("Delete: " + user);
+			csa.setCurrentUser(user.getGoogleID());
 			csa.deleteUser(user);
 		}
+		
+		BusinessObjectMapper.businessObjectMapper().resetBoId();
 		
 		u = new User();
 		u.setGMail("Oli@gmail.com");
@@ -301,6 +307,81 @@ public class DBCleaner {
 		}
 		csa.addContactToList(c, cl);
 		cid++;
+		
+		// Erstellen von beziehungen
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(170d));
+		part.setReference(csa.getContactById(91));
+		csa.createParticipation(part);
+		
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(170d));
+		Contact maxi = csa.getContactById(65);
+		Vector<PropertyValue> dm = maxi.getPropertyValues();
+		dm.remove(csa.getPropertyValueById(69)); // Entfernt die Telefonnummer aus der Teilhaberschaft
+		maxi.setPropertyValues(dm);
+		part.setReference(maxi);
+		csa.createParticipation(part);
+		
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(170d));
+		Contact ingo = csa.getContactById(46);
+		Vector<PropertyValue> di = ingo.getPropertyValues();
+		di.remove(csa.getPropertyValueById(51)); // Entfernt die Email aus der Teilhaberschaft
+		ingo.setPropertyValues(di);
+		part.setReference(ingo);
+		csa.createParticipation(part);
+		
+		// Listen Teilen mit User 170
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(170d));
+		part.setReference(csa.getContactListById(84));
+		csa.createParticipation(part);
+		
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(170d));
+		part.setReference(csa.getContactListById(26));
+		csa.createParticipation(part);
+		
+		// BOs teilen mit anderen Usern
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(110d));
+		part.setReference(csa.getContactListById(7));
+		csa.createParticipation(part);
+		
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(110d));
+		part.setReference(csa.getContactById(1));
+		csa.createParticipation(part);
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(210d));
+		part.setReference(csa.getContactById(1));
+		csa.createParticipation(part);
+		
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(310d));
+		Contact oli = csa.getContactById(1);
+		Vector<PropertyValue> d = oli.getPropertyValues();
+		d.remove(csa.getPropertyValueById(4)); // Entfernt die Frima aus der Teilhaberschaft
+		oli.setPropertyValues(d);
+		part.setReference(oli);
+		csa.createParticipation(part);
+		part = new Participation();
+		
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(410d));
+		oli = csa.getContactById(1);
+		d = oli.getPropertyValues();
+		d.remove(csa.getPropertyValueById(5)); // Entfernt die Tel aus der Teilhaberschaft
+		oli.setPropertyValues(d);
+		part.setReference(oli);
+		csa.createParticipation(part);
+		part = new Participation();
+		
+		part = new Participation();
+		part.setParticipant(csa.getUserByID(510d));
+		part.setReference(csa.getContactById(1));
+		csa.createParticipation(part);
 		
 		System.out.println("DB clean complete");
 		
