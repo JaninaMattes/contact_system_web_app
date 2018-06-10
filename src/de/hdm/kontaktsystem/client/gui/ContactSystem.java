@@ -151,6 +151,7 @@ public class ContactSystem implements EntryPoint {
 	private ContactListForm clf = new ContactListForm();
 	private MyParticipationForm mpf = new MyParticipationForm();
 	private ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+	private UserForm uf = new UserForm();
 	
 	//CellTree Model
 	private ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
@@ -162,18 +163,7 @@ public class ContactSystem implements EntryPoint {
 	 * EntryPoint
 	 */
 	
-	public void loadTree() {
-		Button but = new Button("Test");
-		but.addClickHandler(new ClickHandler(){
-
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				Window.alert("Test");
-			}
-			
-		});
-		
+	public void loadTree() {		
 		
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
@@ -190,7 +180,8 @@ public class ContactSystem implements EntryPoint {
 			public void onSuccess(Vector<Contact> result) {
 				// TODO Auto-generated method stub
 				log("Es wurden " + result.size() + " Kontakte gefunden");
-				ct = new CellTree(tvm, result);
+				CellTree.Resources res = GWT.create(ContactSystemTreeResources.class);
+				ct = new CellTree(tvm, result, res);
 				ct.setAnimationEnabled(true);
 				ct.setDefaultNodeSize(result.size());
 				treeScrollPanel.add(ct);
@@ -229,7 +220,7 @@ public class ContactSystem implements EntryPoint {
 //				userInfo = result;
 //				if(userInfo.isLoggedIn()){
 //					loadTree(); // für Test
-//					
+//					uf.setUser(userInfo);
 //					loadContactSystem(); // für Test	
 //				}else{
 //					loadLogin();					
@@ -487,24 +478,8 @@ public class ContactSystem implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				
-				DialogBox db = new DialogBox();
-				VerticalPanel vp = new VerticalPanel();
-				db.setSize("200", "300");
-				db.setPopupPosition(0, 0);
-				vp.add(new HTML("<h3>User: 	Oli</h3>"));
-				vp.add(new HTML("<p>ID:	170</p>"));
-				vp.add(new HTML("<p>Email:	Oli@gmail.com</p>"));
-				vp.add(new Button("Delete Account", new ClickHandler(){
-
-					@Override
-					public void onClick(ClickEvent event) {
-						// TODO Auto-generated method stub
-						log("Delete Account");
-					}
-					
-				}));
-				db.add(vp);
-				RootPanel.get("Details").add(db);
+				
+				RootPanel.get("Details").add(uf);
 			}
 			
 		});

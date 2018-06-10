@@ -124,16 +124,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		if (guser != null) {
 
 			double id = Double.parseDouble(guser.getUserId());
-			user.setGoogleID(id);
-			user.setGMail(guser.getEmail());
-			// user.setNickname(guser.getNickname()); // Not used
+			user = UserMapper.userMapper().findById(id);
+			
 
-			user.setLoggedIn(true); // norm True
-			user.setLogoutUrl(userService.createLogoutURL(requestUri));
-
-			if (UserMapper.userMapper().findById(id) == null) {
+			if (user == null) {
+				
 				System.out.println("Create new User: " + user);
-
+				user = new User();
+				user.setGoogleID(id);
+				user.setGMail(guser.getEmail());
+//				user.setNickname(guser.getNickname()); // Not used
 				own.setBo_Id(1); // updated in db
 				own.setOwner(user);
 				own.setName(name);
@@ -151,6 +151,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			} else {
 				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
 			}
+			user.setLoggedIn(true); // norm True
+			user.setLogoutUrl(userService.createLogoutURL(requestUri));
 
 		} else {
 
