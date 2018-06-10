@@ -91,6 +91,7 @@ public class ContactSystem implements EntryPoint {
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
 	
+	private Label menueLabel = new Label("Menue:");
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
@@ -285,10 +286,11 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
+		menueLabel.getElement().setId("menue-label");
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
 		
-		//Label der �berschrift im Header
+		//Label der �berschrift im Header
 		headerText.getElement().setId("headertext");
 		
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
@@ -319,9 +321,9 @@ public class ContactSystem implements EntryPoint {
 		 * CSS Identifier für die Elemente
 		 */		
 
-		header.setStyleName("header");		
-		navigation.setStyleName("navigation");
-		trailer.setStyleName("trailer");
+		header.getElement().setId("Header");		
+		navigation.getElement().setId("Navigation");
+		trailer.getElement().setId("Trailer");
 
 		
 		/**
@@ -344,7 +346,6 @@ public class ContactSystem implements EntryPoint {
 		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
 		 */
 	
-		//TEST -> ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 			//contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
@@ -487,7 +488,7 @@ public class ContactSystem implements EntryPoint {
 	    
 		
 		//Menu Leiste
-	  	
+	  	navigation.add(menueLabel);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);

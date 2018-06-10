@@ -1,4 +1,4 @@
-/*TODO: Checkboxen, Textboxen,Listboxen, zusammenfassen ähnlicher Elemente, allgemein anpassen */
+/*TODO: Checkboxen, Textboxen,Listboxen, zusammenfassen ï¿½hnlicher Elemente, allgemein anpassen */
 
 body {
 	margin: 0 auto; /*Der Wert wird horizontal zentriert */
@@ -96,8 +96,6 @@ div {
 	overflow: auto;
 }
 
-
-
 #ListBox {
    background: transparent;
    width: 268px;
@@ -114,7 +112,7 @@ div {
 	font-family: "Arial", Arial, sans-serif;
     /*border: solid 2px black; Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
     text-decoration: none; /*Links werden nicht unterstrichen dargestellt */
-    color: black; /*Textfarbe*/
+    color: white; /*Textfarbe*/
     padding: 10px; /*Abstand des Rahmens zum Inhalt*/
     text-shadow: 1px 1px #DCDCDC; /*Text-Schatten*/
     box-shadow:  2px 2px #DCDCDC; /*Box mit Schattenverlauf (helles grau)*/
@@ -131,18 +129,19 @@ div {
     font-size: 14px;
     border: none;
     font-family: "Arial", Arial, sans-serif;
-	background-color: #0080ff;
-	color: black;
+	background-color: #FFC173;
+	color: white;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     margin: 4px 2px;
     cursor: pointer;
-	border-radius: 5px; /*abgerundete Ecken*/
+	border-radius: 0px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
-#menue-button{ /* Buttons der Menüleiste des Editors */
+
+#menue-button{ /* Buttons der Menï¿½leiste des Editors */
 	height: 40px;
     width: 240px;
     font-family: "Arial", Arial, sans-serif;
@@ -199,8 +198,8 @@ div {
 	height: 30px;
     width: 80px; 
     font-family: "Arial", Arial, sans-serif;     
-	background-color: #3cbb35;
-	color: black;
+	background-color: #00FFC0;
+	color: white;
     border: none;
     padding: 0px;
     text-align: center;
@@ -209,16 +208,16 @@ div {
     font-size: 14px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 5px; /*abgerundete Ecken*/
+    border-radius: 0px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#deleteButton{ /* Löschen-Button im Editor */
+#deleteButton{ /* Lï¿½schen-Button im Editor */
 	height: 30px;
     width: 70px;
     font-family: "Arial", Arial, sans-serif;     
-	background-color: #d32016;
-	color: black;
+	background-color: #BF0D32;
+	color: white;
     border: none;
     padding: 0px;
     text-align: center;
@@ -227,7 +226,7 @@ div {
     font-size: 14px;
     margin: 4px 2px;
     cursor: pointer;	/*Mauszeiger verï¿½ndert sich, wenn man auf dem Button ist*/
-	border-radius: 5px; /*abgerundete Ecken*/
+	border-radius: 0px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
@@ -277,6 +276,13 @@ div {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
+#menue-label{
+	font-family: "Arial", Arial, sans-serif;
+	color: white;
+	font-size: 25px;
+	border: none;
+	margin: 6px 3px;
+}
 
 /* Das Logo */
 
@@ -384,7 +390,7 @@ div {
 
 #loginlabel{
 	
-}]
+}
 
 #checkbox{
 	margin-left: 20px; 
@@ -401,12 +407,12 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-	background: linear-gradient(to bottom right, #0000ff, white);/*W3School*/
+	background: linear-gradient(to bottom right, #0077FF, #00C6FF); /*W3School*/
 	text-align: center;
 }
 
 div#Navigator {	
-	background: #0c145c;
+	background: #224E7F;
 
 }
 
@@ -433,7 +439,7 @@ div#Trailer {
 	color: white;
 	text-align: center;	
 	align-content: center;
-	background-color: #01010e;
+	background-color: #224E7F;
 
 
 }
