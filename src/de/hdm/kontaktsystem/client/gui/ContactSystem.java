@@ -505,7 +505,7 @@ public class ContactSystem implements EntryPoint {
 		
 		//Header
 		suchundlogoPanel.add(logo);
-		suchundlogoPanel.add(sg);
+		//suchundlogoPanel.add(sg);
 		headerPanel.add(suchundlogoPanel);
 		headerPanel.add(headerText);
  		headerPanel.add(reportLink);
@@ -514,6 +514,7 @@ public class ContactSystem implements EntryPoint {
 		
 		//Menu Leiste
 	  	//navigation.add(menuLabel);
+	    navigation.add(sg);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
