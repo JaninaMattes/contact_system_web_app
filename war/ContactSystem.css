@@ -424,21 +424,13 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-<<<<<<< HEAD
-	background: linear-gradient(to bottom right, #0281FF, #00DDFF); /*W3School*/
-=======
 	background: #628cd5; /*W3School*/
->>>>>>> c402efe9961d218726ae4338a12cf9686f665a80
 	text-align: center;
 	border: 1px solid black;
 }
 
 div#Navigator {	
-<<<<<<< HEAD
-	background: #193852;
-=======
 	background: #0c145c;
->>>>>>> c402efe9961d218726ae4338a12cf9686f665a80
 
 }
 
@@ -466,13 +458,8 @@ div#Trailer {
 	color: white;
 	text-align: center;	
 	align-content: center;
-<<<<<<< HEAD
 	background-color: #193852;
 
-
-=======
-	background-color: black;
->>>>>>> c402efe9961d218726ae4338a12cf9686f665a80
 }
 
 .Cell{
