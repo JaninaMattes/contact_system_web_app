@@ -476,10 +476,9 @@ public class ContactSystem implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
+				// TODO Auto-generated method stub		
 				
-				
-				RootPanel.get("Details").add(cf); 
+				//RootPanel.get("Details").add(uf); 
 			}
 			
 		});
@@ -489,7 +488,13 @@ public class ContactSystem implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				Window.alert("Add something");
+				// Window.alert("Add something");
+				RootPanel.get("Details").clear();
+				
+				Contact c = null;
+				cf.setSelected(c);	
+				
+				RootPanel.get("Details").add(cf); 
 			}
 			
 		});

@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
@@ -31,7 +32,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 public class ContactForm extends VerticalPanel{
 	
-	//Referenzvariable zum Speichern eines Participant
+	//Referenzvariable zum Speichern eines Teilhabers
 	User accountOwner = null; //Eingeloggter User
 	User sharedUser = null; //User zum teilen ausgewählt
 	Vector <User> contactParticipants = null; //Teilhaber eines Kontaktes 
@@ -119,7 +120,7 @@ public class ContactForm extends VerticalPanel{
 
 		saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		saveButton.getElement().setId("saveButton");
-		deleteButton.setEnabled(true);	
+		saveButton.setEnabled(true);	
 		saveButton.addClickHandler(new SaveClickHandler());
 		
 		shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
@@ -511,8 +512,9 @@ public class ContactForm extends VerticalPanel{
 		public void setSelected(Contact c) {
 			
 		if (c != null) {
+			
 				contactToDisplay = c;	
-				
+				log("Kontakt" +c);
 				label.setText("Kontakt ID: " + c.getBoId());
 				//Eingeloggten User abfragen
 				contactSystemAdmin.getAccountOwner(new OwnerCallback());
@@ -534,10 +536,7 @@ public class ContactForm extends VerticalPanel{
 				}	
 				
 				//Befüllen der Listbox mit allen User Objekten aus dem System
-
-       			Vector <User> u = new Vector<User>();
-       			contactSystemAdmin.getAllUsers(new UserToShareCallback());
-
+       			
 				labelShare.setVisible(true);
 				shareUser.clear(); //Löschen alter Einträge
 				shareUser.setVisible(true);				
@@ -801,6 +800,7 @@ public class ContactForm extends VerticalPanel{
 				switch(p.getProperty().getId()) {
 						case(1): //Keine Checkbox, da Name nicht einzeln geteilt werden kann
 							p.setValue(textBoxName.getText());
+							result.add(p);
 							break;
 						case(2):
 							if(checkBox2.getValue()) {
@@ -1094,14 +1094,119 @@ public class ContactForm extends VerticalPanel{
 				@Override
 				public void onClick(ClickEvent event) {	
 					log("Save-Button");
-					if (contactToDisplay!= null && getCheckedValues()!= null){
+					//Falls Kontakt bereits existiert
+					if (contactToDisplay!=null){
+						log("Kontakt gefunden");
+						if(getCheckedValues()!=null) {
 						p = getCheckedValues();
 						contactToDisplay.setPropertyValues(p);
-						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());	
+						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
+						} else {
+							Window.alert("Keine Werte zum speichern ausgewählt");
+						}
+					} 
+					//Falls noch kein Kontakt exisitiert
+					if(contactToDisplay==null) {
+						log("Neuen Kontakt anlegen");
+						if(textBoxName!=null) {
+						//TODO:
+							
+						//Neuen Kontakt im System anlegen
+//						Contact c = new Contact();
+//						PropertyValue prop = new PropertyValue(textBoxName.getText());		
+//						getTextBoxValues(); //Werte aus TextBox abrufen
+//						
+//						c.setBo_Id(1);
+//						c.setName(prop); //TODO: 
+//						c.setPropertyValues(contactToDisplay.getPropertyValues());
+//						c.setOwner(accountOwner);//Ersteller festlegen
+//						
+//						contactSystemAdmin.createContact(c, new SaveCallback());	
 						
-					} else {
-					Window.alert("Kein Kontakt ausgewählt");
-					}			
+						Window.alert("Do something - not yet implemented!");
+						
+						} else {
+							Window.alert("Der Name darf nicht leer sein.");							
+						}
+					} 
+				}
+			}
+			
+			//TODO: Prüfen
+			
+			public void getTextBoxValues() {
+				Vector <PropertyValue> pv = new Vector<PropertyValue>();
+				Property p = new Property();
+				
+				if(!textBoxName.getText().isEmpty()) {
+					PropertyValue prop = new PropertyValue(textBoxName.getText());
+					p.setId(1);
+					p.setDescription("Name");
+					prop.setProperty(p);
+					pv.add(prop);
+					log("TextBox1 " + prop);
+				}
+				if(!textBoxNickName.getText().isEmpty()) {
+					PropertyValue prop = new PropertyValue(textBoxNickName.getText());
+					p.setId(2);
+					p.setDescription("Nick-Name");
+					prop.setProperty(p);
+					pv.add(prop);
+					log("TextBox2 " + prop);
+				}
+				if(!textBoxFirma.getText().isEmpty()) {
+					PropertyValue prop = new PropertyValue(textBoxFirma.getText());
+					p.setId(3);
+					p.setDescription("Firma");
+					prop.setProperty(p);
+					pv.add(prop);
+					log("TextBox3 " + prop);
+				}
+				if(!textBoxTelefonnummer.getText().isEmpty()) {
+					PropertyValue prop = new PropertyValue(textBoxTelefonnummer.getText());
+					p.setId(4);
+					p.setDescription("Telefonnummer");
+					prop.setProperty(p);
+					pv.add(prop);
+					log("TextBox4 " + prop);
+				}
+				if(!textBoxMobilnummer.getText().isEmpty()) {
+					PropertyValue prop = new PropertyValue(textBoxMobilnummer.getText());
+					p.setId(5);
+					p.setDescription("Mobilnummer");
+					prop.setProperty(p);
+					pv.add(prop);
+					log("TextBox5 " + prop);
+				}
+				if(!textBoxEmail.getText().isEmpty()) {
+					PropertyValue prop = new PropertyValue(textBoxEmail.getText());
+					p.setId(6);
+					p.setDescription("Email");
+					prop.setProperty(p);
+					pv.add(prop);
+					log("TextBox6 " + prop);
+				}
+				if(!textBoxGeburtsdatum.getText().isEmpty()) {
+					PropertyValue prop = new PropertyValue(textBoxGeburtsdatum.getText());
+					p.setId(7);
+					p.setDescription("Geburtsdatum");
+					prop.setProperty(p);
+					pv.add(prop);
+					log("TextBox7 " + prop);
+				}
+				if(!textBoxAdresse.getText().isEmpty()) {
+					PropertyValue prop = new PropertyValue(textBoxAdresse.getText());
+					p.setId(8);
+					p.setDescription("Adresse");
+					prop.setProperty(p);
+					pv.add(prop);
+					log("TextBox7 " + prop);
+				}
+				
+				for(PropertyValue result : pv) {
+					if(result!=null) {
+							contactSystemAdmin.createPropertyValue(result, new CreatePvCallBack());
+				}
 				}
 			}
 			
@@ -1182,33 +1287,33 @@ public class ContactForm extends VerticalPanel{
 			
 			
 			/**
-			 * UserCallnack Klasse zum befüllen der ListBox mit User -Objekten 
+			 * UserToShareCallback Klasse zum befüllen der ListBox mit User -Objekten 
 			 * aus dem System. 
 			 * @author janina
 			 *
 			 */
-
-
-
 			
 			private class UserToShareCallback implements AsyncCallback<Vector<User>>{
 
 				@Override
 				public void onFailure(Throwable caught) {
-					Window.alert("Der Nutzer Abruf ist misglückt! :(");
+					//Window.alert("Der Nutzer Abruf ist misglückt! :(");
 				}
 
 				@Override
 				public void onSuccess(Vector <User> result) {	
 									
 					if (result != null) {
+					shareUser.clear();
+					shareUser.setVisible(true);
+					
 						for(User user: result) {
-							//Eigenen User aus Liste löschen
-							if(user.equals(contactToDisplay.getOwner())) {
-								result.remove(user);
+							if(user.getGoogleID() != accountOwner.getGoogleID()){
+								//User Liste updaten
+								shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());
+								log("ListBox: " + user);
 							}else {
-							//User Liste updaten
-							shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());
+								log("Owner Eintrag");
 							}
 					}
 					//Genug Platz schaffen für alle Elemente
@@ -1299,6 +1404,32 @@ public class ContactForm extends VerticalPanel{
 				}				
 			}
 			
+			/**
+			 * Ein neues PropertyValue Objekt anlegen. 
+			 * @author janina
+			 *
+			 */
+			
+			private class CreatePvCallBack implements AsyncCallback<PropertyValue>{
+
+				@Override
+				public void onFailure(Throwable caught) {
+//					Window.alert("");					
+				}
+
+				@Override
+				public void onSuccess(PropertyValue result) {
+					log("PropertyValue: " + result);
+					contactToDisplay.addPropertyValue(result); //neu erzeugte PropertyValue Objekte für neuen Kontakt					
+				}
+				
+			}
+			
+			
+			/**
+			 * TextboxClickHandler für alle Textboxen
+			 * @param s
+			 */
 			
 //			private class TextBoxClickHandler implements ClickHandler {
 //
