@@ -11,23 +11,51 @@ div {
 	 /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
 }
 
-h1, #headertext {
-  font-family: "Arial", Arial, sans-serif;
-  font-size: 2em; /*Schriftgr��e*/
-  font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
-  color: white; /*Schriftfarbe*/
-  margin: 40px 0px 20px; /*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
-  text-align: center; /*zentriert*/
-}
-#headertext{ /*�berschrift des Report-Generators*/
+#headertext{ /*Ueberschrift des Report-Generators und des Editors*/
 	border: none;
 	text-align: center;
-	margin: 40px 300px 40px;
-	padding-left: 200px;
+	margin: 40px 250px 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
+	padding-left: 150px;
+	font-family: "Arial", Arial, sans-serif;
+  	font-size: 3em; /*Schriftgr��e*/
+  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+  	color: white; /*Schriftfarbe*/
+  	text-align: center; /*zentriert*/
 
 	
 }
 
+#reporttitle{ /* Überschrift des erstellten Reports */
+	font-family: "Arial", Arial, sans-serif;
+  	font-size: 2em; /*Schriftgr��e*/
+  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+	color: black
+}
+
+#reportheader{ /*Kopfdaten des erstellten Reports mit Userdaten (Tabelle) */
+	width:600px;
+	border:1px solid silver;
+	margin: auto;
+}
+
+.reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
+	width:600px;
+	border:1px solid silver;
+	margin: 10px auto;
+	
+}
+
+.reportpropertyvalues{ /* Tabellenzeile, die eine Eigenschaft eines einzelnen Kontakts im erstellten Report darstellt */
+}
+
+.label{	/* linke Tabellenspalte, enthält Beschriftung zu den Werten der Eigenschaften eines Kontakts  (Report) */
+	width: 200px;
+}
+
+.tablecell{ /* rechte Tabellenspalte, enthält Werte der Eigenschaften eines Kontakts (Report) */
+	border-top:1px solid silver;
+	width: 400px;
+}
 
 * {
     box-sizing: border-box;
@@ -49,22 +77,26 @@ h1, #headertext {
 	height: 82vh;
 }
 
+
+
 .column-centered {
     width: 40vw;
     display: inline-block;
     height: 82vh;
 }
 
+/* Aufbau des Report Generators */
 .report-left {
 	float: left;
-    width: 20vw;
-    height: 82vh;
+    width: 25vw;
+    height: 80vh;
 }
 
 .report-right {
 	float: right;
-	width: 80vw;
-	height: 82vh;
+	width: 75vw;
+	height: 80vh;
+	overflow: auto;
 }
 
 #ListBox {
@@ -111,7 +143,7 @@ h1, #headertext {
 	border-radius: 5px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
-#menue-button{
+#menu-button{ /* Buttons der Men�leiste des Editors */
 	height: 63px;
     width: 20vw;
     font-family: "Arial", Arial, sans-serif;
@@ -128,7 +160,7 @@ h1, #headertext {
 	
 }
 
-#menue-button:hover{
+#menu-button:hover{
     background: #628cd5; /* Alternativ #1c347c */
 }
 
@@ -258,7 +290,9 @@ h1, #headertext {
 }
 
 /* DropDown-Liste */
-/*TODO: weiter ausschreiben, wenn ReportGenerator fertig */
+#ReportDropDownList{
+	margin: 0 4px;
+}
 
 #DropDownList{
 	margin-left: 4px;
@@ -271,6 +305,86 @@ h1, #headertext {
 
 #TextBox{
 	
+}
+
+#findByTextbox{
+	width: 187px;
+	hight: 30px;
+	margin-top: 10px;
+	margin-right: 5px;
+	margin-left: 4px;
+}
+
+#search-textfeld{
+	width: 187px;
+	hight: 30px;
+	margin-bottom: 30px;
+}
+
+#geteiltvontextfeld{
+	
+}
+
+/*Listboxen*/
+
+#teilenmitlistbox{
+	
+}
+
+/* Labels */
+
+
+#namelabel{
+    border-style: none;
+    background-color: white;
+	 	
+}
+
+#eigenschaftlabel{
+ 	border-style: none;
+ 	background-color: white;
+}
+
+#teilenlabel{
+	border-style: none;
+	background-color: white;
+}
+
+/* Label von �berschrift "Kontakt:" und "Kontaktliste:"*/
+#ueberschriftlabel{
+	 border-style: none;
+	 border-color:white;
+	 font-size: 20px;
+	 color: black;
+	 font-weight: bold;
+	 font-family: "Arial", Arial, sans-serif; 
+	 background-color: white;
+	 
+}
+
+#geteiltlabel{
+	font-style: italic;
+	border: none;
+}
+
+#contactstatus{
+	
+}
+
+#filtern{
+	border: none;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-size: 14px;
+	color: white;
+}
+
+#loginlabel{
+	
+}
+
+#checkbox{
+	margin-left: 20px; 
 }
 
 #findByTextbox{
@@ -393,7 +507,7 @@ div#Details {
 }
 
 div#Trailer {
-	width: 100%;
+	width: 100vw;
 	height: 4vh;
 	clear: both;
 	padding: 1.5vh 0;
