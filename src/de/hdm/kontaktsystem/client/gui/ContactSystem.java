@@ -506,7 +506,6 @@ public class ContactSystem implements EntryPoint {
 		//Header
 		suchundlogoPanel.add(logo);
 		suchundlogoPanel.add(sg);
-	    suchundlogoPanel.add(chainSymbolLogo);
 		headerPanel.add(suchundlogoPanel);
 		headerPanel.add(headerText);
  		headerPanel.add(reportLink);
