@@ -256,7 +256,7 @@ public class ContactSystem implements EntryPoint {
 	    HorizontalPanel trailer = new HorizontalPanel();
 
 		//Logo 
-		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
 				    
 	    searchButton.addClickHandler(new SearchClickHandler());
 		searchButton.setEnabled(true);
