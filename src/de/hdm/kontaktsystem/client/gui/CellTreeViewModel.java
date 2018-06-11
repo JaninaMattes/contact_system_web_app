@@ -21,7 +21,7 @@ import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 
-public class TreeViewModelTest implements TreeViewModel {
+public class CellTreeViewModel implements TreeViewModel {
 
 	private ContactSystemAdministrationAsync csa = ClientsideSettings.getContactAdministration();
 	private ListDataProvider<BusinessObject> dataProvider = null;
@@ -64,7 +64,7 @@ public class TreeViewModelTest implements TreeViewModel {
 		
 	}
 	
-	public TreeViewModelTest() {
+	public CellTreeViewModel() {
 		BoKeyProvider keyProvider = new BoKeyProvider();
 		selectionModel = new SingleSelectionModel<BusinessObject>();
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());

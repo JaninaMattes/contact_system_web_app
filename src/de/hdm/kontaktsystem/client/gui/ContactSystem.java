@@ -87,7 +87,7 @@ public class ContactSystem implements EntryPoint {
 
 	//TreeView
 	ScrollPanel treeScrollPanel = new ScrollPanel();
-	final TreeViewModelTest tvm = new TreeViewModelTest();
+	final CellTreeViewModel tvm = new CellTreeViewModel();
 	CellTree ct = null;
 	
 	//Header
