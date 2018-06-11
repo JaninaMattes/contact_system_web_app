@@ -1,9 +1,6 @@
 package de.hdm.kontaktsystem.client.gui;
 
-import java.util.Comparator;
 import java.util.Vector;
-import java.util.logging.Logger;
-
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,8 +18,6 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
@@ -31,18 +26,17 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 /**
  * Formular für die Darstellung und Anzeige eines Kontaktes
- * @author janina
+ * @author Janina
  */
 
 public class ContactForm extends VerticalPanel{
 	
-	//Referenzvariable zum Speichern eines Participant
-	User accountOwner = null; //Eingeloggter User
-	User sharedUser = null; //User zum teilen ausgewählt
-	Vector <User> contactParticipants = null; //Teilhaber eines Kontaktes 
+	//Referenzvariable eingeloggter User
+	User myUser = null; 
 	
-	//TODO: Owner im System abrufen
+	//Proxy-Objekt erzeugen
 	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
+	
 	Contact contactToDisplay = null;
 	ContactTreeViewModel ctvm = null;
 	ContactListTreeViewModel cltvm = null; /*Kann von beiden TreeViewModeln aufgerufen werden*/
@@ -85,8 +79,9 @@ public class ContactForm extends VerticalPanel{
 	Button deleteButton = new Button("Löschen");
 	Button saveButton = new Button("Speichern");
 	Button shareButton = new Button("Teilen");
+	Button emailButton = new Button("Email Prüfen");
 	
-//	CheckBox checkBox1 = new CheckBox();
+	CheckBox checkBox1 = new CheckBox();
 	CheckBox checkBox2 = new CheckBox();
 	CheckBox checkBox3 = new CheckBox();
 	CheckBox checkBox4 = new CheckBox();
@@ -616,6 +611,21 @@ public class ContactForm extends VerticalPanel{
 				labelSharedWith.setVisible(false);				
 				
 			}
+		}
+		
+		/*
+		 * User setter
+		 */
+		
+		void setAccountOwner(User user) {
+			this.myUser = user;
+		}
+		
+		/*
+		 * User getter
+		 */
+		User getAccountOwner() {
+			return myUser;
 		}
 		
 		/*
