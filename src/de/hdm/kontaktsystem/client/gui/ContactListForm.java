@@ -203,10 +203,10 @@ public class ContactListForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			String clName = nameContactList.getText();
 			ContactList cl = new ContactList();
-			User u = new User();
-			u.setGoogleID(126);
+//			User u = new User();
+//			u.setGoogleID(126);
 			cl.setName(clName);	
-			cl.setOwner(u);
+//			cl.setOwner(u);
 			if (cl == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 			} else {
