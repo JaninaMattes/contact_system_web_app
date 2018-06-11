@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -14,7 +16,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -34,6 +38,7 @@ import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
+import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
@@ -94,7 +99,7 @@ public class ContactSystem implements EntryPoint {
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
 	
-	private Label menueLabel = new Label("Menue:");
+	//private Label menuLabel = new Label("Menu:");
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
@@ -293,7 +298,7 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
-		menueLabel.getElement().setId("menue-label");
+		//menuLabel.getElement().setId("menue-label");
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
 		
@@ -304,11 +309,11 @@ public class ContactSystem implements EntryPoint {
 		searchButton.getElement().setId("searchButton"); 
 		
 		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
-		contactButton.getElement().setId("menue-button");
-		contactListsButton.getElement().setId("menue-button");
-		myParticipationsButton.getElement().setId("menue-button");
-		receivedParticipationsButton.getElement().setId("menue-button");
-		accountButton.getElement().setId("menue-button");
+		contactButton.getElement().setId("menu-button");
+		contactListsButton.getElement().setId("menu-button");
+		myParticipationsButton.getElement().setId("menu-button");
+		receivedParticipationsButton.getElement().setId("menu-button");
+		accountButton.getElement().setId("menu-button");
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
@@ -487,14 +492,9 @@ public class ContactSystem implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				// Window.alert("Add something");
-				RootPanel.get("Details").clear();
-				
-				Contact c = null;
-				cf.setSelected(c);	
-				
-				RootPanel.get("Details").add(cf); 
+
+				Window.alert("Add something");
+
 			}
 			
 		});
@@ -513,7 +513,7 @@ public class ContactSystem implements EntryPoint {
 	    
 		
 		//Menu Leiste
-	  	navigation.add(menueLabel);
+	  	//navigation.add(menuLabel);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
