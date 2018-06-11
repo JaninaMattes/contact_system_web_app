@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -11,10 +13,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -126,7 +130,7 @@ public class ContactForm extends VerticalPanel{
 		shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		shareButton.getElement().setId("shareButton");
 		shareButton.setEnabled(true);
-		shareButton.addClickHandler(new ShareClickHandler());		
+		shareButton.addClickHandler(new olisShareClickHandler());		
 		
 		//Labels in CSS
 		label.getElement().setId("ueberschriftlabel");
@@ -1354,9 +1358,163 @@ public class ContactForm extends VerticalPanel{
 //				}
 //			}
 			
+			/**
+			 * Share ClickHandler Beispiel von Oli
+			 * @param 
+			 */
+			
+			private class olisShareClickHandler implements ClickHandler{
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					// TODO Auto-generated method stub
+					final DialogBox db = new DialogBox();
+					VerticalPanel vp = new VerticalPanel();
+					HorizontalPanel buttons = new HorizontalPanel();
+					HorizontalPanel input = new HorizontalPanel();
+					final Vector<CheckBox> cbv = new Vector<CheckBox>();
+					final Contact c = contactToDisplay;
+					FlexTable ft = new FlexTable();
+					Button cancel = new Button("Abbrechen");
+					Button share = new Button("Teilen");
+					Label participant = new Label("Teilen mit: ");
+					final TextBox email = new TextBox();
+					final Button check = new Button("Check");
+//					final PushButton check = new PushButton(new Image("test.png")); // Button with Image
+					
+					final Boolean isChecked = new Boolean(false);
+					final User user = new User();
+					// Style
+					db.getElement().getStyle().setZIndex(2);
+					db.center();
+					check.setStyleName("check");
+					
+					ft.setText(0, 0, "Eigenschaft");
+					ft.setText(0, 1, "Auswahl");
+					
+					int row = 1;
+					for(PropertyValue pv : c.getPropertyValues()){
+						Label l = new Label();
+						CheckBox cb = new CheckBox();
+						l.setTitle(pv.getBoId()+"");
+						l.setText(pv.getValue());
+						cb.setTitle(pv.getBoId()+"");
+						cbv.add(cb);
+						ft.setWidget(row, 0, l);
+						ft.setWidget(row, 1, cb);
+						row++;
+					}
+					
+					share.addClickHandler(new ClickHandler(){
+
+						@Override
+						public void onClick(ClickEvent event) {
+							// TODO Auto-generated method stub
+							if(user.getUserContact().getName().getValue() == email.getText()){
+								Participation part = new Participation();
+								Vector<PropertyValue> pvv = new Vector<PropertyValue>();
+								for(CheckBox cb: cbv){
+									if(cb.getValue()){
+										log(cb.getTitle());
+										for(PropertyValue pv : c.getPropertyValues()){
+											if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
+												pvv.add(pv);
+												log("Share: " + pv.getValue() + " With " + email.getText());
+											}
+										}
+									}
+								}
+								part.setParticipant(user);
+								c.setPropertyValues(pvv);
+								part.setReference(c);
+								log("Share:" + part);
+								contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());
+								RootPanel.get("Details").remove(db);
+								// create new participation
+							}else{
+								Window.alert("Bitte geben Sie die Email eines Nutzers ein und bestätigen diese mit dem CheckButton");
+							}
+						}
+						
+					});
+					
+					check.addClickHandler(new ClickHandler(){
+
+						@Override
+						public void onClick(ClickEvent event) {
+							// TODO Auto-generated method stub
+							contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
+								@Override
+								public void onFailure(Throwable caught) {
+									// TODO Auto-generated method stub
+									log("User nicht gefunden");
+									check.setStyleName("check_notFound");
+									check.setText("X");
+								}
+
+								@Override
+								public void onSuccess(User result) {
+									// TODO Auto-generated method stub
+									check.setStyleName("check_Found");
+									check.setText("OK");
+									user.setGoogleID(result.getGoogleID());
+									user.setGMail(result.getGMail());
+									user.setUserContact(result.getUserContact());
+									email.setText(result.getUserContact().getName().getValue());
+								}
+							});
+						}
+						
+					});
+					
+					email.addChangeHandler(new ChangeHandler(){
+
+						@Override
+						public void onChange(ChangeEvent event) {
+							// TODO Auto-generated method stub
+							log("Change Text");
+							check.setText("Check");
+							check.setStyleName("check");
+						}
+						
+					});
+					
+					cancel.addClickHandler(new ClickHandler(){
+
+						@Override
+						public void onClick(ClickEvent event) {
+							// TODO Auto-generated method stub
+							RootPanel.get("Details").remove(db);
+						}
+						
+					});
+					
+					input.add(participant);
+					input.add(email);
+					input.add(check);
+					
+					buttons.add(cancel);
+					buttons.add(share);
+					
+					vp.add(new Label("ShareElements"));
+					vp.add(input);
+					vp.add(ft);
+					vp.add(buttons);
+					
+					db.add(vp);
+					RootPanel.get("Details").add(db);
+				}	
+				
+				
+			}
+			
+			
+			
 			native void log(String s)/*-{
 			console.log(s);
 			}-*/;
+						
 		  
 }
 
