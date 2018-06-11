@@ -415,6 +415,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 	@Override
 	public ContactList createContactList(ContactList contactList) {
+		if(contactList.getOwner() == null) contactList.setOwner(this.getUserByID(this.getCurrentUser()));
 		boMapper.insert(contactList);
 		return clMapper.insertContactList(contactList);
 
