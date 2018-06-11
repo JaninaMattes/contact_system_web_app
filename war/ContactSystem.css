@@ -8,9 +8,7 @@ body {
     color: white;
     }
 
-div {
-	border: solid 0.5px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
-}
+
 
 #headertext{ /*Ueberschrift des Report-Generators und des Editors*/
 	border: none;
@@ -142,14 +140,12 @@ div {
 }
 
 #menu-button{ /* Buttons der Men�leiste des Editors */
-	height: 40px;
-    width: 240px;
+	height: 63px;
+    width: 20vw;
     font-family: "Arial", Arial, sans-serif;
-	border: solid 1px white; 
-	background-color: #727272;
+	background: #0c145c;
     border: none;
-    border-radius: 0;
-    color: #000000;
+    color: #ffffff;
     padding: 0px;
     text-align: center;
     text-decoration: none;
@@ -160,9 +156,8 @@ div {
 	
 }
 
-#menu-button:hover {
-    background-color: #555;
-    color: white;
+#menu-button:hover{
+    background: #628cd5; /* Alternativ #1c347c */
 }
 
 #searchButton{ /* Suchen-Button im Editor */
@@ -235,17 +230,14 @@ div {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#log-out-button{ /* Logout-Butten im Editor und Report Generator */
+#log-out-button{ /* Logout-Button im Editor und Report Generator */
 	height: 30px;
     width: 90px;
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
-    border: none;
-    border-radius: 5px; /*abgerundete Ecken*/
-    color: red;
-    background-color: black;
-    padding-top: 5px;
-    padding-bottom: 5px;
+	border: solid 1px #727272; 
+    color: white;
+    background-color: #727272;
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
@@ -253,9 +245,10 @@ div {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;	
-    align: right;
-    display: table-cell;
-    vertical-align: middle;
+    align-content: right;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
   
 }
@@ -412,12 +405,13 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-	background: linear-gradient(to bottom right, #0077FF, #00C6FF); /*W3School*/
+	background: #628cd5; /*W3School*/
 	text-align: center;
+	border: 1px solid black;
 }
 
 div#Navigator {	
-	background: #224E7F;
+	background: #0c145c;
 
 }
 
@@ -444,9 +438,7 @@ div#Trailer {
 	color: white;
 	text-align: center;	
 	align-content: center;
-	background-color: #224E7F;
-
-
+	background-color: black;
 }
 
 .Cell{
