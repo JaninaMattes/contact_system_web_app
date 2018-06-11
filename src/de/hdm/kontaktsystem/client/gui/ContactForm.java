@@ -29,7 +29,7 @@ public class ContactForm extends VerticalPanel {
 		User myUser = null; 
 		
 		Contact contactToDisplay = null;
-		TreeViewModelTest tvm = null;
+		CellTreeViewModel tvm = null;
 		
 		//Proxy-Objekt erzeugen
 		ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();		
@@ -68,7 +68,7 @@ public class ContactForm extends VerticalPanel {
 		 */
 		public void  onLoad() {
 			super.onLoad();
-			User user = new User();
+			final User user = new User();
 			VerticalPanel vp  = new VerticalPanel();
 			this.add(vp);
 			
@@ -297,7 +297,7 @@ public class ContactForm extends VerticalPanel {
 		 * TreeViewModel setter
 		 */
 		
-		void setTree(TreeViewModelTest tvm) {
+		void setTree(CellTreeViewModel tvm) {
 			this.tvm = tvm;
 		}
 
