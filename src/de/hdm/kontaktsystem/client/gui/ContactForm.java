@@ -2,8 +2,12 @@ package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -20,6 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
@@ -43,6 +48,7 @@ public class ContactForm extends VerticalPanel {
 		
 		HorizontalPanel ePanel = new HorizontalPanel();
 		HorizontalPanel btnPanel = new HorizontalPanel();
+		HorizontalPanel addPanel = new HorizontalPanel();
 		
 		Label cLabel = new Label("Kontakt:");
 				
@@ -55,24 +61,65 @@ public class ContactForm extends VerticalPanel {
 		Button deleteButton = new Button("Löschen");
 		Button saveButton = new Button("Speichern");
 		Button shareButton = new Button("Teilen");
-		Button emailButton = new Button("Email Prüfen");
-				
-		ListBox shareUser = new ListBox();
+		Button addButton = new Button("Hinzufügen");
+		Button emailButton = new Button("Prüfen");
+		
+		ListBox addElement = new ListBox();
 		ListBox sharedWithUser = new ListBox();
 		ListBox receivedFrom = new ListBox();
 		
 		TextBox email = new TextBox();
+		
+		
+		//Statische Anzeige
+		Label label = new Label("Kontakt:");
+		Label labelName = new Label("Name:");
+		Label labelNickName = new Label("Nick-Name:");
+		Label labelFirma = new Label("Firma:");
+		Label labelTeleNr = new Label("Telefonnummer:");
+		Label labelMobilNr = new Label("Mobilnummer:");
+		Label labelEmail = new Label("Email:");
+		Label labelGeburtsdatum = new Label("Geburtsdatum:");
+		Label labelAdresse = new Label("Adresse:");
+						
+		Button cancelButton = new Button("Abbrechen");
+		Button createButton = new Button("Erstellen");
+				
+		CheckBox checkBox1 = new CheckBox();
+		CheckBox checkBox2 = new CheckBox();
+		CheckBox checkBox3 = new CheckBox();
+		CheckBox checkBox4 = new CheckBox();
+		CheckBox checkBox5 = new CheckBox();
+		CheckBox checkBox6 = new CheckBox();
+		CheckBox checkBox7 = new CheckBox();
+		CheckBox checkBox8 = new CheckBox();
+		
+		TextBox textBoxName = new TextBox();
+		TextBox textBoxNickName = new TextBox();
+		TextBox textBoxFirma = new TextBox();
+		TextBox textBoxTelefonnummer = new TextBox();
+		TextBox textBoxMobilnummer = new TextBox();
+		TextBox textBoxEmail = new TextBox();
+		TextBox textBoxGeburtsdatum = new TextBox();
+		TextBox textBoxAdresse = new TextBox();				
+		
+	
 		
 		/**
 		 * Startpunkt ist die onLoad() Methode
 		 */
 		public void  onLoad() {
 			super.onLoad();
+
 			final User user = new User();
+
 			VerticalPanel vp  = new VerticalPanel();
 			this.add(vp);
 			
-			emailButton.setStyleName("check");
+			//CSS
+			emailButton.setStyleName("check");	
+			shareButton.setStyleName("share");	
+					
 			
 			shareButton.addClickHandler(new ClickHandler(){
 				
@@ -109,11 +156,9 @@ public class ContactForm extends VerticalPanel {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
 						@Override
 						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
 							log("User nicht gefunden");
 							emailButton.setStyleName("check_notFound");
 							emailButton.setText("X");
@@ -121,7 +166,7 @@ public class ContactForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(User result) {
-							// TODO Auto-generated method stub
+							log("User"+result);
 							emailButton.setStyleName("check_Found");
 							emailButton.setText("OK");
 							user.setGoogleID(result.getGoogleID());
@@ -134,6 +179,67 @@ public class ContactForm extends VerticalPanel {
 				
 			});
 			
+			email.addChangeHandler(new ChangeHandler() {
+		
+				@Override
+				public void onChange(ChangeEvent event) {
+					emailButton.setText("Prüfen");
+					
+				}
+			});
+			
+			cancelButton.addClickHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+					//TODO: Zurück setzen
+					setSelected(null);
+					RootPanel.get("Details").remove(vp);
+				}
+				
+			});
+			
+			addButton.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					Property p = new Property();
+					p.setId(Integer.parseInt(addElement.getTitle()));
+					p.setDescription(addElement.getSelectedItemText());
+					PropertyValue pv = new PropertyValue();
+					pv.setBo_Id(1);//TODO neue Id vergeben
+					pv.setProperty(p);
+					pv.setContact(contactToDisplay);
+					pv.setOwner(myUser);
+					pv.setValue("");
+					contactSystemAdmin.createPropertyValue(pv, new AsyncCallback<PropertyValue>(){
+
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub							
+						}
+
+						@Override
+						public void onSuccess(PropertyValue result) {
+							contactToDisplay.addPropertyValue(result);
+						}
+						
+					});
+					
+					Label label = new Label(addElement.getSelectedItemText());
+					TextBox tb = new TextBox();
+					CheckBox cb = new CheckBox();	
+					
+					int row = ft.getRowCount()+1;
+					
+					ft.setWidget(row, 0, label);
+					ft.setWidget(row, 1, tb);
+					ft.setWidget(row, 2, cb);
+				}
+				
+			});
+			
+			
 		    /*
 			 * Panel für Anordnung der Button
 			 */
@@ -144,17 +250,25 @@ public class ContactForm extends VerticalPanel {
 			ePanel.add(email);
 			ePanel.add(emailButton);
 			
+			addPanel.add(addElement);
+			addPanel.add(addButton);
+			
 			vp.add(cLabel);
+			vp.add(contactStatus);
 			vp.add(ft);
 			vp.add(ePanel);
+			vp.add(addPanel);
 			vp.add(btnPanel);
+			
+			RootPanel.get("Details").add(vp);
 		}
 		
 		
 		public void setSelected(Contact contact) {
-			
+			log("Kontakt" + contact);
 			if(contact.getBoId()!=0 & contact!=null) {
 				this.contactToDisplay = contact;
+				
 				cLabel.setText("Kontakt ID: " + contact.getBoId());			
 
 				if(contact.isShared_status()) {
@@ -176,53 +290,43 @@ public class ContactForm extends VerticalPanel {
 					label.setText(pv.getProperty().getDescription());
 					cb.setTitle(pv.getBoId()+"");
 					tb.setTitle(pv.getBoId()+"");
+					tb.setText(pv.getValue());
 					
 					cbv.add(cb);
 					tbv.add(tb);
 					
-					int row = 1;			
+					int row = 0;			
 					ft.setWidget(row, 0, label);
 					ft.setWidget(row, 1, tb);
 					ft.setWidget(row, 2, cb);
+					
+//					ft.getFlexCellFormatter().setColSpan(1, 0, 3);
+					log("Table row:" + row);
 					row++;
 				}
+			//Elemente füllen
+			contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub					
+				}
+
+				@Override
+				public void onSuccess(Vector<Property> result) {
+					 for(Property p : result) {
+						 if(p.getId()!=1) { 
+						 addElement.addItem(p.getDescription());
+						 addElement.setTitle(p.getId()+"");
+						 }
+					 }					
+				}
+				});
+			
+			 addElement.setVisibleItemCount(contact.getPropertyValues().size());
 				
 			} else {
-				this.contactToDisplay = null;
-				
-				Label label = new Label("Kontakt:");
-				Label labelName = new Label("Name:");
-				Label labelNickName = new Label("Nick-Name:");
-				Label labelFirma = new Label("Firma:");
-				Label labelTeleNr = new Label("Telefonnummer:");
-				Label labelMobilNr = new Label("Mobilnummer:");
-				Label labelEmail = new Label("Email:");
-				Label labelGeburtsdatum = new Label("Geburtsdatum:");
-				Label labelAdresse = new Label("Adresse:");
-				
-				Label isShared = new Label("Auswählen: ");
-				Label contactStatus = new Label("");
-						
-				Button deleteButton = new Button("Löschen");
-				Button saveButton = new Button("Speichern");
-				
-				CheckBox checkBox1 = new CheckBox();
-				CheckBox checkBox2 = new CheckBox();
-				CheckBox checkBox3 = new CheckBox();
-				CheckBox checkBox4 = new CheckBox();
-				CheckBox checkBox5 = new CheckBox();
-				CheckBox checkBox6 = new CheckBox();
-				CheckBox checkBox7 = new CheckBox();
-				CheckBox checkBox8 = new CheckBox();
-				
-				TextBox textBoxName = new TextBox();
-				TextBox textBoxNickName = new TextBox();
-				TextBox textBoxFirma = new TextBox();
-				TextBox textBoxTelefonnummer = new TextBox();
-				TextBox textBoxMobilnummer = new TextBox();
-				TextBox textBoxEmail = new TextBox();
-				TextBox textBoxGeburtsdatum = new TextBox();
-				TextBox textBoxAdresse = new TextBox();				
+				this.contactToDisplay = null;				
 				
 				Grid contactGrid = new Grid(12, 3);
 				
@@ -262,12 +366,17 @@ public class ContactForm extends VerticalPanel {
 				contactGrid.setWidget(8, 1, textBoxAdresse);
 				contactGrid.setWidget(8, 2, checkBox8);
 								
-				btnPanel.add(saveButton);
-				btnPanel.add(deleteButton);
+				btnPanel.add(createButton);
+				btnPanel.add(cancelButton);
 				
 				this.add(cLabel);
 				this.add(contactGrid);
 				this.add(btnPanel);
+				
+				RootPanel.get("Details").clear();
+				RootPanel.get("Details").add(this);
+				
+				
 				
 			}
 		}
