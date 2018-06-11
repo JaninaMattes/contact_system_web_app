@@ -282,6 +282,7 @@ public class ContactForm extends VerticalPanel {
 				
 				//Flextable befüllen
 				for(PropertyValue pv : contact.getPropertyValues()){
+					log("PropertyValue" +pv);
 					Label label = new Label();
 					CheckBox cb = new CheckBox();
 					TextBox tb = new TextBox();
