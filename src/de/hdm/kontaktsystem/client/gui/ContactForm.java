@@ -2,8 +2,12 @@ package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -55,24 +59,30 @@ public class ContactForm extends VerticalPanel {
 		Button deleteButton = new Button("Löschen");
 		Button saveButton = new Button("Speichern");
 		Button shareButton = new Button("Teilen");
-		Button emailButton = new Button("Email Prüfen");
+		Button emailButton = new Button("Prüfen");
+
 				
 		ListBox shareUser = new ListBox();
 		ListBox sharedWithUser = new ListBox();
 		ListBox receivedFrom = new ListBox();
 		
 		TextBox email = new TextBox();
+	
 		
 		/**
 		 * Startpunkt ist die onLoad() Methode
 		 */
 		public void  onLoad() {
 			super.onLoad();
-			User user = new User();
 			VerticalPanel vp  = new VerticalPanel();
 			this.add(vp);
 			
-			emailButton.setStyleName("check");
+			User user = new User();	
+			
+			//CSS
+			emailButton.setStyleName("check");	
+			shareButton.setStyleName("share");	
+					
 			
 			shareButton.addClickHandler(new ClickHandler(){
 				
@@ -109,11 +119,9 @@ public class ContactForm extends VerticalPanel {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
 						@Override
 						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
 							log("User nicht gefunden");
 							emailButton.setStyleName("check_notFound");
 							emailButton.setText("X");
@@ -121,7 +129,7 @@ public class ContactForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(User result) {
-							// TODO Auto-generated method stub
+							log("User"+result);
 							emailButton.setStyleName("check_Found");
 							emailButton.setText("OK");
 							user.setGoogleID(result.getGoogleID());
@@ -132,6 +140,15 @@ public class ContactForm extends VerticalPanel {
 					});
 				}
 				
+			});
+			
+			email.addChangeHandler(new ChangeHandler() {
+		
+				@Override
+				public void onChange(ChangeEvent event) {
+					emailButton.setText("Prüfen");
+					
+				}
 			});
 			
 		    /*
@@ -145,16 +162,20 @@ public class ContactForm extends VerticalPanel {
 			ePanel.add(emailButton);
 			
 			vp.add(cLabel);
+			vp.add(contactStatus);
 			vp.add(ft);
 			vp.add(ePanel);
 			vp.add(btnPanel);
+			
+			RootPanel.get("Details").add(vp);
 		}
 		
 		
 		public void setSelected(Contact contact) {
-			
+			log("Kontakt" + contact);
 			if(contact.getBoId()!=0 & contact!=null) {
 				this.contactToDisplay = contact;
+				
 				cLabel.setText("Kontakt ID: " + contact.getBoId());			
 
 				if(contact.isShared_status()) {
@@ -176,14 +197,18 @@ public class ContactForm extends VerticalPanel {
 					label.setText(pv.getProperty().getDescription());
 					cb.setTitle(pv.getBoId()+"");
 					tb.setTitle(pv.getBoId()+"");
+					tb.setText(pv.getValue());
 					
 					cbv.add(cb);
 					tbv.add(tb);
 					
-					int row = 1;			
+					int row = 0;			
 					ft.setWidget(row, 0, label);
 					ft.setWidget(row, 1, tb);
 					ft.setWidget(row, 2, cb);
+					
+//					ft.getFlexCellFormatter().setColSpan(1, 0, 3);
+					log("Table row:" + row);
 					row++;
 				}
 				
@@ -268,6 +293,9 @@ public class ContactForm extends VerticalPanel {
 				this.add(cLabel);
 				this.add(contactGrid);
 				this.add(btnPanel);
+				
+				RootPanel.get("Details").clear();
+				RootPanel.get("Details").add(this);
 				
 			}
 		}
