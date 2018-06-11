@@ -267,8 +267,10 @@ public class ContactSystem implements EntryPoint {
 	    //Trailer
 	    HorizontalPanel trailer = new HorizontalPanel();
 
-		//Logo 
-		//chainSymbolLogo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	    
+		//Logo Kontaktsystem
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	
+		logo.setHeight("100px");
+		logo.setAltText("Logo");
 				    
 	    searchButton.addClickHandler(new SearchClickHandler());
 		searchButton.setEnabled(true);
@@ -505,7 +507,6 @@ public class ContactSystem implements EntryPoint {
 		//Header
 		suchundlogoPanel.add(logo);
 		suchundlogoPanel.add(sg);
-	    suchundlogoPanel.add(chainSymbolLogo);
 		headerPanel.add(suchundlogoPanel);
 		headerPanel.add(headerText);
  		headerPanel.add(reportLink);
