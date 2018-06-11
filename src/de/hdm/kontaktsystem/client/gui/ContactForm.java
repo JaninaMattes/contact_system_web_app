@@ -1,15 +1,13 @@
 package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -22,1628 +20,292 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.Participation;
-import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
-/**
- * Formular für die Darstellung und Anzeige eines Kontaktes
- * @author Janina
- */
-
-public class ContactForm extends VerticalPanel{
-
-	//Referenzvariable eingeloggter User
-	User myUser = null; 
+public class ContactForm extends VerticalPanel {
 	
-	//Proxy-Objekt erzeugen
-	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
-	
-	Contact contactToDisplay = null;
-	TreeViewModelTest tvm = null;
-	
-	/**
-	 * Widgets, deren Inhalte variable sind, werden als Attribute angelegt.
-	 */	
-	Vector <TextBox> textboxes = new Vector <TextBox>();
-	FlexTable ft = new FlexTable();
-	
-	Label label = new Label("Kontakt:");
-	Label labelName = new Label("Name:");
-	Label labelNickName = new Label("Nick-Name:");
-	Label labelFirma = new Label("Firma:");
-	Label labelTeleNr = new Label("Telefonnummer:");
-	Label labelMobilNr = new Label("Mobilnummer:");
-	Label labelEmail = new Label("Email:");
-	Label labelGeburtsdatum = new Label("Geburtsdatum:");
-	Label labelAdresse = new Label("Adresse:");
-	
-	Label isShared = new Label("Auswählen: ");
-	Label labelShare = new Label("Teilen mit: ");
-	Label labelSharedWith = new Label("Geteilt mit: ");
-	Label labelReceivedFrom = new Label("Geteilt von: ");
-	Label contactStatus = new Label("");
+		//Referenzattribute
+		User myUser = null; 
+		
+		Contact contactToDisplay = null;
+		TreeViewModelTest tvm = null;
+		
+		//Proxy-Objekt erzeugen
+		ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();		
+		
+		/**
+		 * Widgets, deren Inhalte variable sind, werden als Attribute angelegt.
+		 */	
+		Vector <TextBox> tbv = new Vector <TextBox>();
+		Vector<CheckBox> cbv = new Vector<CheckBox>();
+		FlexTable ft = new FlexTable();
+		
+		HorizontalPanel ePanel = new HorizontalPanel();
+		HorizontalPanel btnPanel = new HorizontalPanel();
+		
+		Label cLabel = new Label("Kontakt:");
+				
+		Label isShared = new Label("Auswahl: ");
+		Label labelShare = new Label("Teilen mit: ");
+		Label labelSharedWith = new Label("Geteilt mit: ");
+		Label labelReceivedFrom = new Label("Geteilt von: ");
+		Label contactStatus = new Label("");
+				
+		Button deleteButton = new Button("Löschen");
+		Button saveButton = new Button("Speichern");
+		Button shareButton = new Button("Teilen");
+		Button emailButton = new Button("Email Prüfen");
+				
+		ListBox shareUser = new ListBox();
+		ListBox sharedWithUser = new ListBox();
+		ListBox receivedFrom = new ListBox();
+		
+		TextBox email = new TextBox();
+		
+		/**
+		 * Startpunkt ist die onLoad() Methode
+		 */
+		public void  onLoad() {
+			super.onLoad();
+			User user = new User();
+			VerticalPanel vp  = new VerticalPanel();
+			this.add(vp);
 			
-	Button deleteButton = new Button("Löschen");
-	Button saveButton = new Button("Speichern");
-	Button shareButton = new Button("Teilen");
-	Button emailButton = new Button("Email Prüfen");
-	
-	CheckBox checkBox1 = new CheckBox();
-	CheckBox checkBox2 = new CheckBox();
-	CheckBox checkBox3 = new CheckBox();
-	CheckBox checkBox4 = new CheckBox();
-	CheckBox checkBox5 = new CheckBox();
-	CheckBox checkBox6 = new CheckBox();
-	CheckBox checkBox7 = new CheckBox();
-	CheckBox checkBox8 = new CheckBox();
-	
-	ListBox shareUser = new ListBox();
-	ListBox sharedWithUser = new ListBox();
-	ListBox receivedFrom = new ListBox();
-	
-	/**
-	 * Startpunkt
-	 */	
-	public void  onLoad() {
-		super.onLoad();
-		VerticalPanel vp  = new VerticalPanel();
-		this.add(vp);
-		
-		/**
-		 * id für CSS
-		 */		
-		//Buttons in CSS
-		//gleicher Stylename wie die anderen share-, delete- und save-Buttons
-
-		
-		deleteButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
-
-		deleteButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu loeschen
-
-		deleteButton.getElement().setId("deleteButton");
-		deleteButton.setEnabled(true);		
-		deleteButton.addClickHandler(new DeleteClickHandler());
-
-		saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
-		saveButton.getElement().setId("saveButton");
-		saveButton.setEnabled(true);	
-		saveButton.addClickHandler(new SaveClickHandler());
-		
-		shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
-		shareButton.getElement().setId("shareButton");
-		shareButton.setEnabled(true);
-		shareButton.addClickHandler(new olisShareClickHandler());		
-		
-		//Labels in CSS
-		label.getElement().setId("ueberschriftlabel");
-		labelName.getElement().setId("namelabel");
-		labelNickName.getElement().setId("namelabel");
-		
-		//Hinzufügbare Eigenschaften gleicher StyleName
-		labelFirma.getElement().setId("eigenschaftlabel");
-		labelTeleNr.getElement().setId("eigenschaftlabel");
-		labelMobilNr.getElement().setId("eigenschaftlabel");
-		labelEmail.getElement().setId("eigenschaftlabel");
-		labelGeburtsdatum.getElement().setId("eigenschaftlabel");
-		labelAdresse.getElement().setId("eigenschaftlabel");
-
-		isShared.getElement().setId("geteiltlabel");
-		labelShare.getElement().setId("teilenlabel");
-		labelSharedWith.getElement().setId("teilenlabel");
-		labelReceivedFrom.getElement().setId("teilenlabel");
-		contactStatus.getElement().setId("contactstatus");
-		
-		//Textboxen in CSS
-		//bekommen alle den gleichen StyleName (wie in ContactLIstForm.java)
-		textBoxName.getElement().setId("Textbox");
-		textBoxNickName.getElement().setId("Textbox");
-		textBoxFirma.getElement().setId("Textbox");
-		textBoxTelefonnummer.getElement().setId("Textbox");
-		textBoxMobilnummer.getElement().setId("Textbox");
-		textBoxEmail.getElement().setId("Textbox");
-		textBoxGeburtsdatum.getElement().setId("Textbox");
-		textBoxAdresse.getElement().setId("Textbox");
-		
-		//Pop in CSS
-//		popUp.getElement().setId("PopUp");
-		
-		//ListBox CSS
-		receivedFrom.getElement().setId("teilenmitlistbox");//.setId("geteiltvontextfeld");
-		shareUser.getElement().setId("teilenmitlistbox");//.setId("geteiltmitlistbox");
-		sharedWithUser.getElement().setId("teilenmitlistbox");
-	    
-		shareUser.getElement().setId("ListBox");
-		receivedFrom.getElement().setId("ListBox");
-		labelSharedWith.getElement().setId("ListBox");
-				
-		//Checkboxen CSS
-//		checkBox1.getElement().setId("checkBox"); //Name kann nicht einzeln geteilt werden
-		checkBox2.getElement().setId("checkBox");
-		checkBox3.getElement().setId("checkBox");
-		checkBox4.getElement().setId("checkBox");
-		checkBox5.getElement().setId("checkBox");
-		checkBox6.getElement().setId("checkBox");
-		checkBox7.getElement().setId("checkBox");
-		checkBox8.getElement().setId("checkBox");		
-		
-		/**
-		 * CheckBoxen für das Teilen einzelner Elemente einer ContactForm 
-		 * per Default auf "false" setzen.
-		 */
-//		checkBox1.setEnabled(false);
-	    checkBox2.setEnabled(false);
-	    checkBox3.setEnabled(false);
-	    checkBox4.setEnabled(false);
-	    checkBox5.setEnabled(false);
-	    checkBox6.setEnabled(false);
-	    checkBox7.setEnabled(false);
-	    checkBox8.setEnabled(false);
-		
-		/**
-		 * Panel für Anordnung der Button
-		 */
-		HorizontalPanel btnPanel = new HorizontalPanel(); 
-		
-		 /**
-	     * Clickhandler zum Überprüfen ob TextBox angeklickt wurde.
-	     * Unterstützt darin herauszufinden, ob eine Veränderung in 
-	     * TextBox vorgenommen wurde und updated deren Inhalt.	     
-	     * @author Janina
-	     */	
-
-		textBoxName.addClickHandler(new ClickHandler() {	    
-			@Override
-			public void onClick(ClickEvent event) {
-				log("Textbox: "+ event);
-//			if(!checkBox1.isEnabled()) {
-//				checkBox1.setEnabled(true);
-//			}
-			updateText(textBoxName, textBoxName.getText());
-			}
-	    });
-	    
-		textBoxNickName.addClickHandler(new ClickHandler() {	        
-			@Override
-			public void onClick(ClickEvent event) {
-				log("Textbox: "+ event);
-			if(!checkBox2.isEnabled()) {
-				checkBox2.setEnabled(true);
-			}
-			updateText(textBoxNickName, textBoxNickName.getText());
-			}
-	    });
-		
-		textBoxFirma.addClickHandler(new ClickHandler() {	        
-			@Override
-			public void onClick(ClickEvent event) {
-				log("Textbox: "+ event);
-			if(!checkBox3.isEnabled()) {
-				checkBox3.setEnabled(true);
-			}
-			updateText(textBoxFirma, textBoxFirma.getText());
-			}
-	    });
-		
-		textBoxTelefonnummer.addClickHandler(new ClickHandler() {	        
-			@Override
-			public void onClick(ClickEvent event) {
-				log("Textbox: "+ event);
-			if(!checkBox4.isEnabled()) {
-				checkBox4.setEnabled(true);
-			}
-			updateText(textBoxTelefonnummer, textBoxTelefonnummer.getText());
-			}
-	    });
-		
-		textBoxMobilnummer.addClickHandler(new ClickHandler() {	        
-			@Override
-			public void onClick(ClickEvent event) {
-				log("Textbox: "+ event);
-			if(!checkBox5.isEnabled()) {
-				checkBox5.setEnabled(true);
-			}
-			updateText(textBoxMobilnummer, textBoxMobilnummer.getText());
-			}
-	    });
-		
-		textBoxEmail.addClickHandler(new ClickHandler() {	        
-			@Override
-			public void onClick(ClickEvent event) {
-				log("Textbox: "+ event);
-			if(!checkBox6.isEnabled()) {
-				checkBox6.setEnabled(true);
-			}
-			updateText(textBoxEmail, textBoxEmail.getText());
-			}
-	    });
-		
-		textBoxGeburtsdatum.addClickHandler(new ClickHandler() {	        
-			@Override
-			public void onClick(ClickEvent event) {
-				log("Textbox: "+ event);
-			if(!checkBox7.isEnabled()) {
-				checkBox7.setEnabled(true);
-			}
-			updateText(textBoxGeburtsdatum, textBoxGeburtsdatum.getText());
-			}
-	    });
-		
-		textBoxAdresse.addClickHandler(new ClickHandler() {	        
-			@Override
-			public void onClick(ClickEvent event) {
-				log("Textbox: "+ event);
-			if(!checkBox8.isEnabled()) {
-				checkBox8.setEnabled(true);
-			}
-			updateText(textBoxAdresse, textBoxAdresse.getText());
-			}
-	    });
-		
-	 
-
-//	    checkBox1.addClickHandler(new ClickHandler() {
-//	      
-//	      @Override
-//	      public void onClick(ClickEvent event) {
-//	    	  if(textBoxName.getText().isEmpty()) {
-//	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-//	    	  }
-//	    	  else {
-//	    		  //TODO:
-//	    	  }	    	  
-//	      }
-//	    });	    
-	    
-		/**
-	     * ClickHandler zu CheckBoxen, überprüfung ob der Wert des TextBox Feldes
-	     * leer ist, wenn ja kann dies nicht geteilt werden. 
-	     * @author janina
-	     */
-		
-	    checkBox2.addClickHandler(new ClickHandler() {
-	     	
-	      @Override
-	      public void onClick(ClickEvent event) {
-	    	  log("CheckBox: "+ event);
-	    	  if(textBoxName.getText().isEmpty()) {
-	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  }
-	      }
-	    });
-	    	  
-	    checkBox3.addClickHandler(new ClickHandler() {
-	      	
-	      @Override
-	      public void onClick(ClickEvent event) {
-	    	  log("CheckBox: "+ event);
-	    	  if(textBoxFirma.getText().isEmpty()) {
-	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  }
-	      }
-	    });
-
-	    checkBox4.addClickHandler(new ClickHandler() {
-	      
-	      @Override
-	      public void onClick(ClickEvent event) {
-	    	  log("CheckBox: "+ event);
-	    	  if(textBoxTelefonnummer.getText().isEmpty()) {
-	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  }
-	      }
-	    });
-	    
-	    checkBox5.addClickHandler(new ClickHandler() {
-	
-	      @Override
-	      public void onClick(ClickEvent event) {
-	    	  log("CheckBox: "+ event);
-	    	  if(textBoxMobilnummer.getText().isEmpty()) {
-	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  }
-	      }
-	    });
-	    
-	    checkBox6.addClickHandler(new ClickHandler() {
-	     
-	      @Override
-	      public void onClick(ClickEvent event) {
-	    	  log("CheckBox: "+ event);
-	    	  if(textBoxEmail.getText().isEmpty()) {
-	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  }
-	      }
-	    });
-	 
-	    checkBox7.addClickHandler(new ClickHandler() {
-	     	
-	      @Override
-	      public void onClick(ClickEvent event) {
-	    	  log("CheckBox: "+ event);
-	    	  if(textBoxGeburtsdatum.getText().isEmpty()) {
-	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  }
-	      }
-	    });
-	    
-	    checkBox8.addClickHandler(new ClickHandler() {
-	     	
-	      @Override
-	      public void onClick(ClickEvent event) {
-	    	  log("CheckBox: "+ event);
-	    	  if(textBoxAdresse.getText().isEmpty()) {
-	    		  Window.alert("Das gewählte Feld enthält keinen Wert.");
-	    	  }
-	      }
-	    });
-	
-		//PopUp DialogBox aufsetzen
-		Button okBtn = new Button("OK");
-		okBtn.addClickHandler(new ClickHandler(){
-			@Override
-			public void onClick(ClickEvent event) {
-				contactSystemAdmin.deleteContact(contactToDisplay, new DeleteContactCallback());
-				contactToDisplay = null;
-//			popUp.hide();
-			}		    	
-		});
-		    
-//		Button cancelBtn = new Button("Abbrechen");
-//		cancelBtn.addClickHandler(new ClickHandler() {
-//			@Override
-//				public void onClick(ClickEvent event) {
-//					popUp.hide();				
-//				}		    	
-//		});
-//		    
-//		popUp.setAnimationEnabled(true);
-//		popUp.setGlassEnabled(true);
-		    
-//		popUp.add(deleteMessage);
-//		popUp.add(cancelBtn);
-//		popUp.setTitle("Hinweis: Soll der Kontakt gelöscht werden?");
-//		popUp.add(okBtn);		    
-//		popUp.hide();
-	    
-		//ListBox ist nicht sichtbar
-		labelShare.setVisible(false);
-		shareUser.setVisible(false);
-		
-		labelReceivedFrom.setVisible(false);
-		receivedFrom.setVisible(false);
-		
-		sharedWithUser.setVisible(false);
-		labelSharedWith.setVisible(false);
-		
-		/**
-		 * Anordnung der einzelnen Inhalte für ContactForm.
-		 * 
-		 */
-		Grid contactGrid = new Grid(12, 3);
-				
-		contactGrid.setWidget(0, 0, label);
-		contactGrid.setWidget(0, 1, contactStatus);
-		contactGrid.setWidget(0, 2, isShared);
-		
-		contactGrid.setWidget(1, 0, labelName);
-		contactGrid.setWidget(1, 1, textBoxName);
-//		contactGrid.setWidget(1, 2, checkBox1);-> Name kann nicht einzeln geteilt werden
-				
-		contactGrid.setWidget(2, 0, labelNickName);
-		contactGrid.setWidget(2, 1, textBoxNickName);
-		contactGrid.setWidget(2, 2, checkBox2);
-				
-		contactGrid.setWidget(3, 0, labelFirma);
-		contactGrid.setWidget(3, 1, textBoxFirma);
-		contactGrid.setWidget(3, 2, checkBox3);
-				
-		contactGrid.setWidget(4, 0, labelTeleNr);
-		contactGrid.setWidget(4, 1, textBoxTelefonnummer);
-		contactGrid.setWidget(4, 2, checkBox4);
-		
-		contactGrid.setWidget(5, 0, labelMobilNr);
-		contactGrid.setWidget(5, 1, textBoxMobilnummer);
-		contactGrid.setWidget(5, 2, checkBox5);
-		
-		contactGrid.setWidget(6, 0, labelEmail);
-		contactGrid.setWidget(6, 1, textBoxEmail);
-		contactGrid.setWidget(6, 2, checkBox6);
-		
-		contactGrid.setWidget(7, 0, labelGeburtsdatum);
-		contactGrid.setWidget(7, 1, textBoxGeburtsdatum);
-		contactGrid.setWidget(7, 2, checkBox7);
-		
-		contactGrid.setWidget(8, 0, labelAdresse);
-		contactGrid.setWidget(8, 1, textBoxAdresse);
-		contactGrid.setWidget(8, 2, checkBox8);
-		
-		contactGrid.setWidget(9, 0, labelReceivedFrom);
-		contactGrid.setWidget(9, 1, receivedFrom);
+			emailButton.setStyleName("check");
 			
-		contactGrid.setWidget(10, 0, labelShare);
-		contactGrid.setWidget(10, 1, shareUser);
-		
-		contactGrid.setWidget(11, 0, labelSharedWith);
-		contactGrid.setWidget(11, 1, sharedWithUser);
-		
-		/**
-		 * Anordnung der Buttons auf einem Button Panel
-		 */
-		btnPanel.add(saveButton);
-		btnPanel.add(shareButton);
-		btnPanel.add(deleteButton);		
-			     
-		/**
-		 * Die TextBox um den Kontakt einzugeben, das Label und das Panel für die Buttons werden 
-		 * über das Grid Widget untereinander auf dem VerticalPanel angeordnet.
-		 * 
-		 */		
-	    //this.add(popUp);	    
-		vp.add(label);
-		vp.add(contactGrid);
-		vp.add(btnPanel);
-					
-	}		
-		
-		/**
-		 * Wenn der anzuzeigende Kontakt gesetzt bzw. gelöscht wird, werden die
-		 * zugehörenden Textfelder mit den Informationen aus dem Kontaktobjekt
-		 * gefüllt bzw. gelöscht. Dies wird mittels eines Kontakt-Objektes über 
-		 * den Aufruf aus dem CellTree an die Methode <code>setSelected()</code> 
-		 * übergeben.
-		 * @author janina
-		 * @param Contact - Objekt 
-		 */
-		
-		public void setSelected(Contact c) {
-			
-		if (c != null) {
-			
-				contactToDisplay = c;	
-				log("Kontakt" +c);
-				label.setText("Kontakt ID: " + c.getBoId());
-				//Eingeloggten User abfragen
-				contactSystemAdmin.getAccountOwner(new OwnerCallback());
+			shareButton.addClickHandler(new ClickHandler(){
 				
-				//TextBoxen befüllen
-				Vector <PropertyValue> pv = new Vector <PropertyValue>();
-				pv = c.getPropertyValues();				
-				for(PropertyValue p : pv) {					
-						this.setUpTextBoxes(p);
-				}				
-				//CheckBox aktivieren für PropertyValue Einträge
-				this.setUpCheckBoxes();
+				@Override
+				public void onClick(ClickEvent event) {
+					if(user.getUserContact().getName().getValue() == email.getText()){
+						Participation part = new Participation();
+						Contact c = contactToDisplay;
+						Vector<PropertyValue> pvv = new Vector<PropertyValue>();
+						for(CheckBox cb: cbv){
+							if(cb.getValue()){
+								log(cb.getTitle());
+								for(PropertyValue pv : c.getPropertyValues()){
+									if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
+										pvv.add(pv);
+										log("Share: " + pv.getValue() + " With " + email.getText());
+									}
+								}
+							}
+						}
+						part.setParticipant(user);
+						c.setPropertyValues(pvv);
+						part.setReference(c);
+						log("Share:" + part);
+						contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());						
+					}else{
+						Window.alert("Bitte geben Sie die Email eines Nutzers ein und bestätigen Sie diese mit dem CheckButton");
+					}
+				}
 				
-				if(c.isShared_status()) {
+			});
+			
+			emailButton.addClickHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+							log("User nicht gefunden");
+							emailButton.setStyleName("check_notFound");
+							emailButton.setText("X");
+						}
+
+						@Override
+						public void onSuccess(User result) {
+							// TODO Auto-generated method stub
+							emailButton.setStyleName("check_Found");
+							emailButton.setText("OK");
+							user.setGoogleID(result.getGoogleID());
+							user.setGMail(result.getGMail());
+							user.setUserContact(result.getUserContact());
+							email.setText(result.getUserContact().getName().getValue());
+						}
+					});
+				}
+				
+			});
+			
+		    /*
+			 * Panel für Anordnung der Button
+			 */
+			btnPanel.add(deleteButton);
+			btnPanel.add(saveButton);
+			btnPanel.add(shareButton);
+			
+			ePanel.add(email);
+			ePanel.add(emailButton);
+			
+			vp.add(cLabel);
+			vp.add(ft);
+			vp.add(ePanel);
+			vp.add(btnPanel);
+		}
+		
+		
+		public void setSelected(Contact contact) {
+			
+			if(contact.getBoId()!=0 & contact!=null) {
+				this.contactToDisplay = contact;
+				cLabel.setText("Kontakt ID: " + contact.getBoId());			
+
+				if(contact.isShared_status()) {
 					contactStatus.setText("Status: Geteilt");
-					//Geteilte PropertyValue Objekte anzeigen
-					this.setUpCheckBoxValues(c);
-				} else { contactStatus.setText("Status: Nicht geteilt");
+//					this.setUpCheckBoxValues(contact);
+				} else { 
+					contactStatus.setText("Status: Nicht geteilt");
 				}	
 				
-				//Befüllen der Listbox mit allen User Objekten aus dem System
-       			
-				labelShare.setVisible(true);
-				shareUser.clear(); //Löschen alter Einträge
-				shareUser.setVisible(true);				
+				Boolean isChecked = new Boolean(false);
 				
-       			contactSystemAdmin.getAllUsers(new UserToShareCallback());
-
-       			//Befüllen der ListBox mit User Objekten, welche eine Teilhaberschaft haben
-      			
-       			if(isOwnedByMe(c)) { 
-       				labelSharedWith.setVisible(true);
-       				sharedWithUser.clear(); //Löschen alter Einträge
-       				sharedWithUser.setVisible(true);       				
-       				
-       				contactSystemAdmin.getAllParticipationsByOwner(c.getOwner(), new ParticipantCallback());
-       			}else { //Wenn User nicht selbst Ersteller ist, dann wird ihm dieser dargestellt
-       				labelReceivedFrom.setVisible(true);
-       				receivedFrom.clear(); //Löschen alter Einträge
-       				receivedFrom.setVisible(true);       				
-       				
-       				receivedFrom.addItem(c.getOwner().getUserContact().getName().getValue() + " , " 
-       					+ c.getOwner().getGMail());
-       				receivedFrom.setVisibleItemCount(receivedFrom.getItemCount()); //Platz schaffen für alle Elemente   		
-       			 } 
-       	 } else {
-       			
-       			//Kontaktreferenz 
-    			contactToDisplay = null;
-    				
-				//Löschen eines Kontaktes aus KontaktForm			    
-			    checkBox2.setValue(false, false);
-			    checkBox2.setEnabled(false);			    
-			    
-			    checkBox3.setValue(false, false);
-			    checkBox3.setEnabled(false);			    
-			    
-			    checkBox4.setValue(false, false);
-			    checkBox4.setEnabled(false);
-			    
-			    checkBox5.setValue(false, false);
-			    checkBox5.setEnabled(false);			    
-			    
-			    checkBox6.setValue(false, false);
-			    checkBox6.setEnabled(false);			    
-			    
-			    checkBox7.setValue(false, false);
-			    checkBox7.setEnabled(false);			    
-			    
-			    checkBox8.setValue(false, false);
-			    checkBox8.setEnabled(false);			    
-			   
-				//Alle angezeigten Werte zurück setzen
-				contactStatus.setText("");
-				label.setText("Kontakt: ");
-				textBoxName.setText("");
-				textBoxNickName.setText("");
-				textBoxFirma.setText("");
-				textBoxTelefonnummer.setText("");
-				textBoxMobilnummer.setText("");
-				textBoxEmail.setText("");
-				textBoxGeburtsdatum.setText("");
-				textBoxAdresse.setText("");
+				//Flextable befüllen
+				for(PropertyValue pv : contact.getPropertyValues()){
+					Label label = new Label();
+					CheckBox cb = new CheckBox();
+					TextBox tb = new TextBox();
+					
+					label.setTitle(pv.getBoId()+"");
+					label.setText(pv.getProperty().getDescription());
+					cb.setTitle(pv.getBoId()+"");
+					tb.setTitle(pv.getBoId()+"");
+					
+					cbv.add(cb);
+					tbv.add(tb);
+					
+					int row = 1;			
+					ft.setWidget(row, 0, label);
+					ft.setWidget(row, 1, tb);
+					ft.setWidget(row, 2, cb);
+					row++;
+				}
 				
-				//ListBoxen werden ausgeblendet
-				labelShare.setVisible(false);
-				shareUser.setVisible(false);
+			} else {
+				this.contactToDisplay = null;
 				
-				labelReceivedFrom.setVisible(false);
-				receivedFrom.setVisible(false);
+				Label label = new Label("Kontakt:");
+				Label labelName = new Label("Name:");
+				Label labelNickName = new Label("Nick-Name:");
+				Label labelFirma = new Label("Firma:");
+				Label labelTeleNr = new Label("Telefonnummer:");
+				Label labelMobilNr = new Label("Mobilnummer:");
+				Label labelEmail = new Label("Email:");
+				Label labelGeburtsdatum = new Label("Geburtsdatum:");
+				Label labelAdresse = new Label("Adresse:");
 				
-				sharedWithUser.setVisible(false);
-				labelSharedWith.setVisible(false);				
+				Label isShared = new Label("Auswählen: ");
+				Label contactStatus = new Label("");
+						
+				Button deleteButton = new Button("Löschen");
+				Button saveButton = new Button("Speichern");
+				
+				CheckBox checkBox1 = new CheckBox();
+				CheckBox checkBox2 = new CheckBox();
+				CheckBox checkBox3 = new CheckBox();
+				CheckBox checkBox4 = new CheckBox();
+				CheckBox checkBox5 = new CheckBox();
+				CheckBox checkBox6 = new CheckBox();
+				CheckBox checkBox7 = new CheckBox();
+				CheckBox checkBox8 = new CheckBox();
+				
+				TextBox textBoxName = new TextBox();
+				TextBox textBoxNickName = new TextBox();
+				TextBox textBoxFirma = new TextBox();
+				TextBox textBoxTelefonnummer = new TextBox();
+				TextBox textBoxMobilnummer = new TextBox();
+				TextBox textBoxEmail = new TextBox();
+				TextBox textBoxGeburtsdatum = new TextBox();
+				TextBox textBoxAdresse = new TextBox();				
+				
+				Grid contactGrid = new Grid(12, 3);
+				
+				contactGrid.setWidget(0, 0, label);
+				contactGrid.setWidget(0, 1, contactStatus);
+				contactGrid.setWidget(0, 2, isShared);
+				
+				contactGrid.setWidget(1, 0, labelName);
+				contactGrid.setWidget(1, 1, textBoxName);
+				contactGrid.setWidget(1, 2, checkBox1);
+						
+				contactGrid.setWidget(2, 0, labelNickName);
+				contactGrid.setWidget(2, 1, textBoxNickName);
+				contactGrid.setWidget(2, 2, checkBox2);
+						
+				contactGrid.setWidget(3, 0, labelFirma);
+				contactGrid.setWidget(3, 1, textBoxFirma);
+				contactGrid.setWidget(3, 2, checkBox3);
+						
+				contactGrid.setWidget(4, 0, labelTeleNr);
+				contactGrid.setWidget(4, 1, textBoxTelefonnummer);
+				contactGrid.setWidget(4, 2, checkBox4);
+				
+				contactGrid.setWidget(5, 0, labelMobilNr);
+				contactGrid.setWidget(5, 1, textBoxMobilnummer);
+				contactGrid.setWidget(5, 2, checkBox5);
+				
+				contactGrid.setWidget(6, 0, labelEmail);
+				contactGrid.setWidget(6, 1, textBoxEmail);
+				contactGrid.setWidget(6, 2, checkBox6);
+				
+				contactGrid.setWidget(7, 0, labelGeburtsdatum);
+				contactGrid.setWidget(7, 1, textBoxGeburtsdatum);
+				contactGrid.setWidget(7, 2, checkBox7);
+				
+				contactGrid.setWidget(8, 0, labelAdresse);
+				contactGrid.setWidget(8, 1, textBoxAdresse);
+				contactGrid.setWidget(8, 2, checkBox8);
+								
+				btnPanel.add(saveButton);
+				btnPanel.add(deleteButton);
+				
+				this.add(cLabel);
+				this.add(contactGrid);
+				this.add(btnPanel);
 				
 			}
 		}
+
+		/**
+		 * Eine neue Teilhaberschaft anlegen.
+		 * @author janina
+		 *
+		 */
+		private class CreateParticipationCallback implements AsyncCallback<Participation>{
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Kontakt konnte nicht geteilt werden. :(");						
+			}
+
+			@Override
+			public void onSuccess(Participation result) {
+				log("Neue Teilhaberschaft: " + result);	
+				//TODO: 
+			}				
+		}
+		
+	
 		
 		/*
-		 * User setter
+		 * TreeViewModel setter
 		 */
 		
-		void setAccountOwner(User user) {
+		void setTree(TreeViewModelTest tvm) {
+			this.tvm = tvm;
+		}
+
+		void setMyUser(User user) {
 			this.myUser = user;
 		}
 		
-		/*
-		 * User getter
-		 */
-		User getAccountOwner() {
-			return myUser;
-		}
-		
-		/*
-		 *  ctvm setter
-		 */			
-		void setCtvm(ContactTreeViewModel ctvm) {
-			this.ctvm = ctvm;
-		}
-		
-		/*
-		 * cltvm setter
-		 */
-		void setCltvm(ContactListTreeViewModel cltvm) {
-			this.cltvm = cltvm;
-		}
-		
-		/*
-		 * mpvtm setter
-		 */	
-		void setMptvm(MyParticipationsTreeViewModel mptvm) {
-			this.mptvm = mptvm;
-		}
-		
-		/*
-		 * mpvtm setter
-		 */			
-		void setRptvm(ReceivedParticipationTreeViewModel rptvm) {
-			this.rptvm = rptvm;
-		}
-		
-		
-		 private void updateText(TextBox text, String s) {
-			    text.setText(s);
-			  }
-		 
-		 /**
-		  * Methode zur Befüllung der TextBox Elemente mit bereits vorhandenen PropertyValues,
-		  * oder zur der Leerung alter Werte, wenn keine Werte vorhanden sind. 
-		  * @param p
-		  */
-		 private void setUpTextBoxes(PropertyValue p) {
-			//Befüllung neuer Werte	
-			 if(p!=null) {
-					switch(p.getProperty().getId()) {
-					case(1):
-						textBoxName.setText(p.getValue()); 
-						break;
-					case(2):
-						textBoxNickName.setText(p.getValue()); 
-						break;
-					case(3):
-						textBoxFirma.setText(p.getValue()); 
-						break;
-					case(4):
-						textBoxTelefonnummer.setText(p.getValue()); 
-						break;
-					case(5):
-						textBoxMobilnummer.setText(p.getValue()); 
-					 	break;
-					case(6):
-						textBoxEmail.setText(p.getValue()); 
-						break;
-					case(7):
-						textBoxGeburtsdatum.setText(p.getValue()); 
-						break;
-					case(8):
-						textBoxAdresse.setText(p.getValue()); 
-						break;
-				}
-		
-			}
-
-		 }
-		 
-		
-		 public void setUpCheckBoxes() {
-			    //Enable Checkboxen falls die Textbox bereits einen Wert enthält
-//				if(!textBoxName.getText().isEmpty()) {
-//					checkBox1.setEnabled(true);
-//					}
-				if(!textBoxNickName.getText().isEmpty()) {
-					checkBox2.setEnabled(true);
-					}
-				if(!textBoxFirma.getText().isEmpty()) {
-					checkBox3.setEnabled(true);
-					}
-				if(!textBoxTelefonnummer.getText().isEmpty()) {
-					checkBox4.setEnabled(true);
-					}
-				if(!textBoxMobilnummer.getText().isEmpty()) {
-					checkBox5.setEnabled(true);
-					}
-				if(!textBoxEmail.getText().isEmpty()) {
-				    checkBox6.setEnabled(true);
-				    }				
-				if(!textBoxGeburtsdatum.getText().isEmpty()) {
-					checkBox7.setEnabled(true);
-					}
-				if(!textBoxAdresse.getText().isEmpty()) {
-					checkBox8.setEnabled(true);
-					}
-		 }
-		 
-		 /**
-		  * Alle CheckBoxen per default anhacken, wenn diese mit der ausgewählten Person 
-		  * bereits geteilt wurden. 
-		  * @author janina
-		  */
-		 private void setUpCheckBoxValues(Contact contact) {			 		 
-			 if(contact.isShared_status()) {
-			 for(PropertyValue p : contact.getPropertyValues()) {				 
-				 switch(p.getProperty().getId()) {
-				 
-//					case(1): //-> Name kann nicht einzeln geteilt werden, nur mit dem Kontakt
-//						checkBox1.setEnabled(true);					
-//						if(p.isShared_status())checkBox1.setValue(true, true);
-//						break;
-					case(2):
-						log("CheckBox Value: "+ p.getProperty().getId());
-						checkBox2.setEnabled(true);
-						if(p.isShared_status()) {
-							checkBox2.setValue(true, true);
-						}
-						break;
-					case(3):
-						log("CheckBox Value: "+ p.getProperty().getId());
-						checkBox3.setEnabled(true);
-						if(p.isShared_status()) {
-							checkBox3.setValue(true, true);
-						}
-						break;
-					case(4):
-						log("CheckBox Value: "+ p.getProperty().getId());
-						checkBox4.setEnabled(true);
-						if(p.isShared_status()) {
-							checkBox4.setValue(true, true);
-						}
-						break;
-					case(5):
-						log("CheckBox Value: "+ p.getProperty().getId());
-						checkBox5.setEnabled(true);
-						if(p.isShared_status()) {
-							checkBox5.setValue(true, true);
-						}
-					 	break;
-					case(6):
-						log("CheckBox Value: "+ p.getProperty().getId());
-						checkBox6.setEnabled(true);
-						if(p.isShared_status()) {
-							checkBox6.setValue(true, true);
-						}
-						break;
-					case(7):
-						log("CheckBox Value: "+ p.getProperty().getId());
-						checkBox7.setEnabled(true);
-						if(p.isShared_status()) {
-							checkBox7.setValue(true, true);
-						}
-						break;
-					case(8):
-						log("CheckBox Value: "+ p.getProperty().getId());
-						checkBox8.setEnabled(true);
-						if(p.isShared_status()) {
-							checkBox8.setValue(true, true);
-						}
-						break;
-				}
-			  }
-			 }
-		 }
-		 
-		/**
-		 * Abruf aller PropertyValue Werte. Welche bei einer bestimmten Property-ID
-		 * in der TextBox eingegeben wurden oder bereits im Kontakt vorhanden sind. 
-		 * @author Janina
-		 * @return
-		 */			
-			@SuppressWarnings("unused")
-			public Vector <PropertyValue> getCheckedValues(){				
-			  
-				Vector <PropertyValue> pv = new Vector <PropertyValue>();
-				pv = contactToDisplay.getPropertyValues();	
-				Vector <PropertyValue> result = new Vector<PropertyValue>();
-				PropertyValue prop = null;
-				log("CheckBox Werte abgerufen.");
-				
-				for(PropertyValue p : pv) {
-				switch(p.getProperty().getId()) {
-						case(1): //Keine Checkbox, da Name nicht einzeln geteilt werden kann
-							p.setValue(textBoxName.getText());
-							result.add(p);
-							break;
-						case(2):
-							if(checkBox2.getValue()) {
-							if(p!=null) {
-								p.setValue(textBoxNickName.getText());
-								result.add(p);
-								}
-							else {prop = new PropertyValue(textBoxName.getText());
-								result.add(prop);
-								}							
-							} break;
-						case(3):
-							if(checkBox3.getValue()) {
-							if(p!=null) {
-								p.setValue(textBoxFirma.getText());
-								result.add(p);
-								}
-							else {prop = new PropertyValue(textBoxFirma.getText());
-								result.add(prop);
-								}							
-							} break;
-						case(4):
-							if(checkBox4.getValue()) {
-							if(p!=null) {
-								p.setValue(textBoxTelefonnummer.getText());
-								result.add(p);
-								}
-							else {prop = new PropertyValue(textBoxTelefonnummer.getText());
-								result.add(prop);
-								}							
-							} break;
-						case(5):
-							if(checkBox5.getValue()) {
-							if(p!=null) {
-								p.setValue(textBoxMobilnummer.getText());
-								result.add(p);
-								}
-							else {prop = new PropertyValue(textBoxMobilnummer.getText());
-								result.add(prop);
-								}						 	
-							} break;
-						case(6):
-							if(checkBox6.getValue()) {
-							if(p!=null) {
-								p.setValue(textBoxEmail.getText());
-								result.add(p);}
-							else {prop = new PropertyValue(textBoxEmail.getText());
-								result.add(prop); 
-								}
-							} break;
-						case(7):
-							if(checkBox7.getValue()) {
-							if(p!=null) {
-								p.setValue(textBoxGeburtsdatum.getText());
-								result.add(p);}
-							else {prop = new PropertyValue(textBoxGeburtsdatum.getText());
-								result.add(prop);
-								}
-							} break;
-						case(8):
-							if(checkBox8.getValue()) {
-							if(p!=null) {
-								p.setValue(textBoxAdresse.getText());
-								result.add(p);
-								}
-							else {prop = new PropertyValue(textBoxAdresse.getText());
-								result.add(prop);
-								}
-							}break;
-										
-						}
-					}
-				 return result;
-				}
-
-			
-			/**
-			 * Abrufen des Users TODO
-			 * @param c
-			 * @return
-			 */
-			public boolean isOwnedByMe(Contact c) {	
-				log("Account Owner: " + c.getOwner());
-			   if(accountOwner.equals(c.getOwner())){
-				   return true;
-			   }
-			   return false;
-			}
-			
-			/**
-			 * Methode um aus der ListBox über Split Operation die Email Adresse eines ausgewählten
-			 * Users herauszufinden und anhand dieser ein User Objekt aus der DB abzurufen. 
-			 * @author Janina
-			 * @return
-			 */
-			public User getUserFromList() {
-				if(shareUser.getSelectedIndex()!= -1) {
-					String s = shareUser.getSelectedValue();
-					String [] s2= s.split(",");			
-					log("User aus Liste gewählt: " +s2[1]);
-					contactSystemAdmin.getUserBygMail(s2[1], new SharedUserCallback());					
-				} else {
-					Window.alert("Bitte wähle einen Nutzer zum teilen des Kontaktes aus.");
-				}
-				return sharedUser;				
-			}
-			
-
-			/**
-			 * Zum Löschen eines Kontaktes wird zunächst der Eigentümer abgefragt, bevor im
-			 * Callback eine Löschung durchgeführt wird.
-			 * @author Janina
-			 */
-			private class DeleteClickHandler implements ClickHandler {				
-				Vector <PropertyValue> p = new Vector<PropertyValue>();
-				Participation part = new Participation();
-								
-				@Override
-				public void onClick(ClickEvent event) {
-					log("DeleteButton: "+ event);
-					
-					if (contactToDisplay != null) {		
-					//Prüfe ob Werte abgehackt wurden
-					if (getCheckedValues()!= null){ 
-						p = getCheckedValues(); //holt alle PVs der ausgewählten Checkboxen 
-						/*Löschen aller über CheckBoxen ausgewählten Werte*/
-						for(PropertyValue pv : p) {
-							contactSystemAdmin.deletePropertyValue(pv, new DeletePVCallback());						
-						} Window.alert("Die ausgewählten Werte wurden gelöscht.");
-					}
-					//Wenn keine Werte abgehackt wurden lösche gesamten Kontakt
-					else {
-						//Überprüfen ob Ersteller (Owner)
-						if(isOwnedByMe(contactToDisplay)) {	
-							 //PopUp anzeigen
-//							 popUp.show();
-							 Window.alert("Der Kontakt" + contactToDisplay.getName() + " wurde gelöscht.");							
-						//Wenn nur Teilhaber, dann nur Teilhaberschaft löschen -> damit kein Zugriff mehr auf Kontakt
-						} else {							
-							part.setReference(contactToDisplay);
-							part.setParticipant(accountOwner);
-								contactSystemAdmin.deleteParticipation(part, 
-										new DeleteReceivedParticipationCallback());
-								}
-							Window.alert("Deine Teilhaberschaft zum Kontakt" 
-										+ contactToDisplay.getName() + " wurde gelöscht.");
-						}
-					} else {
-					Window.alert("Kein Kontakt ausgewählt!");
-				 } 
-				}
-			}
-			
-			
-			/**
-			 * DeleteCallback zur Löschung einzelner PropertyValues.
-			 * @author janina
-			 *
-			 */
-			private class DeletePVCallback implements AsyncCallback<PropertyValue> {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Löschen der Werte ist fehlgeschlagen! :(");
-				}
-
-				@Override
-				public void onSuccess(PropertyValue result) {
-					if (result != null) {
-						//PropertyValues von Kontakt in Liste entfernen
-						Vector <PropertyValue> pv = contactToDisplay.getPropertyValues();
-						for(PropertyValue p: pv) {
-							if(p.equals(result)) {
-								pv.remove(p); //Löschen eines Pv Objekts aus Vektor
-							}
-						}
-						contactSystemAdmin.editContact(contactToDisplay, new EditContactCallback());	
-						contactToDisplay.setPropertyValues(pv);
-						//Update ContactForm mit neuen Kontakt Informationen
-						setSelected(contactToDisplay);
-					} else {
-						Window.alert("Keine Kontakte gefunden :(");
-					}
-				}
-			}	
-			
-			
-			/**
-			 * DeleteContactCallback Klasse
-			 * @author janina
-			 *
-			 */
-			private class DeleteContactCallback implements AsyncCallback<Contact> {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Löschen des Kontaktes ist fehlgeschlagen! :(");
-				}
-
-				@Override
-				public void onSuccess(Contact result) {
-					if (result != null) {
-						//Kontakt Objekt aus der Liste löschen
-						ctvm.removeContact(result);
-						
-						contactToDisplay = null;
-						setSelected(contactToDisplay);
-					} else {
-						Window.alert("Keine Kontakte gefunden :(");
-					}
-				}
-			}
-			
-			
-			/**
-			 * Callback Methode zur Löschung der erhaltener Teilhaberschaft
-			 * @author janina
-			 *
-			 */
-			private class DeleteReceivedParticipationCallback implements AsyncCallback<Participation> {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Löschen der Teilhaberschft ist fehlgeschlagen! :(");
-				}
-
-				@Override
-				public void onSuccess(Participation result) {
-					if (result != null) {
-						//Contact-Objekt aus Listen löschen
-						ctvm.removeContact(result.getReferencedObject());
-						rptvm.removeParticipation(result);
-						
-						contactToDisplay = null;
-						setSelected(contactToDisplay);
-					} else {
-						Window.alert("Keine Teilhaberschaft gefunden :(");
-					}
-				}
-			}
-			
-			/**
-			 * Callback für das Editieren und speichern eines bereits vorhandenen Kontaktes.
-			 * @author janina
-			 *
-			 */
-			
-			private class EditContactCallback implements AsyncCallback<Contact>{
-				
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Editieren des Kontaktes ist fehlgeschlagen! :(");
-				}
-
-				@Override
-				public void onSuccess(Contact result) {
-					if (result != null) {
-						//Kontakt Objekte in Liste updaten analog zu speichern
-						ctvm.updateContact(contactToDisplay);
-						setSelected(contactToDisplay);
-					} else {
-						Window.alert("Keine Kontakte gefunden :(");
-					}
-				}
-			}
-			
-//			
-//			private class EditParticipationCallback implements AsyncCallback<Participation>{
-//
-//				@Override
-//				public void onFailure(Throwable caught) {
-//					Window.alert("Das Editieren der Teilhaberschaft ist fehlgeschlagen! :(");					
-//				}
-//
-//				@Override
-//				public void onSuccess(Participation result) {
-//					mptvm.update(result.getReferencedObject());
-//					setSelected(contactToDisplay);
-//				}
-//				
-//			}
-//			
-			/**
-			 * SaveClickHandler zum Speichern eines Kontaktes oder dessen Update.
-			 * @author janina
-			 *
-			 */
-			private class SaveClickHandler implements ClickHandler {				
-				Vector <PropertyValue> p = new Vector<PropertyValue>();
-
-				@Override
-				public void onClick(ClickEvent event) {	
-					log("Save-Button");
-					//Falls Kontakt bereits existiert
-					if (contactToDisplay!=null){
-						log("Kontakt gefunden");
-						if(getCheckedValues()!=null) {
-						p = getCheckedValues();
-						contactToDisplay.setPropertyValues(p);
-						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
-						} else {
-							Window.alert("Keine Werte zum speichern ausgewählt");
-						}
-					} 
-					//Falls noch kein Kontakt exisitiert
-					if(contactToDisplay==null) {
-						log("Neuen Kontakt anlegen");
-						if(textBoxName!=null) {
-						//TODO:
-							
-						//Neuen Kontakt im System anlegen
-//						Contact c = new Contact();
-//						PropertyValue prop = new PropertyValue(textBoxName.getText());		
-//						getTextBoxValues(); //Werte aus TextBox abrufen
-//						
-//						c.setBo_Id(1);
-//						c.setName(prop); //TODO: 
-//						c.setPropertyValues(contactToDisplay.getPropertyValues());
-//						c.setOwner(accountOwner);//Ersteller festlegen
-//						
-//						contactSystemAdmin.createContact(c, new SaveCallback());	
-						
-						Window.alert("Do something - not yet implemented!");
-						
-						} else {
-							Window.alert("Der Name darf nicht leer sein.");							
-						}
-					} 
-				}
-			}
-			
-			//TODO: Prüfen
-			
-			public void getTextBoxValues() {
-				Vector <PropertyValue> pv = new Vector<PropertyValue>();
-				Property p = new Property();
-				
-				if(!textBoxName.getText().isEmpty()) {
-					PropertyValue prop = new PropertyValue(textBoxName.getText());
-					p.setId(1);
-					p.setDescription("Name");
-					prop.setProperty(p);
-					pv.add(prop);
-					log("TextBox1 " + prop);
-				}
-				if(!textBoxNickName.getText().isEmpty()) {
-					PropertyValue prop = new PropertyValue(textBoxNickName.getText());
-					p.setId(2);
-					p.setDescription("Nick-Name");
-					prop.setProperty(p);
-					pv.add(prop);
-					log("TextBox2 " + prop);
-				}
-				if(!textBoxFirma.getText().isEmpty()) {
-					PropertyValue prop = new PropertyValue(textBoxFirma.getText());
-					p.setId(3);
-					p.setDescription("Firma");
-					prop.setProperty(p);
-					pv.add(prop);
-					log("TextBox3 " + prop);
-				}
-				if(!textBoxTelefonnummer.getText().isEmpty()) {
-					PropertyValue prop = new PropertyValue(textBoxTelefonnummer.getText());
-					p.setId(4);
-					p.setDescription("Telefonnummer");
-					prop.setProperty(p);
-					pv.add(prop);
-					log("TextBox4 " + prop);
-				}
-				if(!textBoxMobilnummer.getText().isEmpty()) {
-					PropertyValue prop = new PropertyValue(textBoxMobilnummer.getText());
-					p.setId(5);
-					p.setDescription("Mobilnummer");
-					prop.setProperty(p);
-					pv.add(prop);
-					log("TextBox5 " + prop);
-				}
-				if(!textBoxEmail.getText().isEmpty()) {
-					PropertyValue prop = new PropertyValue(textBoxEmail.getText());
-					p.setId(6);
-					p.setDescription("Email");
-					prop.setProperty(p);
-					pv.add(prop);
-					log("TextBox6 " + prop);
-				}
-				if(!textBoxGeburtsdatum.getText().isEmpty()) {
-					PropertyValue prop = new PropertyValue(textBoxGeburtsdatum.getText());
-					p.setId(7);
-					p.setDescription("Geburtsdatum");
-					prop.setProperty(p);
-					pv.add(prop);
-					log("TextBox7 " + prop);
-				}
-				if(!textBoxAdresse.getText().isEmpty()) {
-					PropertyValue prop = new PropertyValue(textBoxAdresse.getText());
-					p.setId(8);
-					p.setDescription("Adresse");
-					prop.setProperty(p);
-					pv.add(prop);
-					log("TextBox7 " + prop);
-				}
-				
-				for(PropertyValue result : pv) {
-					if(result!=null) {
-							contactSystemAdmin.createPropertyValue(result, new CreatePvCallBack());
-				}
-				}
-			}
-			
-			/**
-			 * Callback Methode zur Speicherung eines Kontaktes oder dessen Update. 
-			 * @author Janina
-			 *
-			 */
-			private class SaveCallback implements AsyncCallback<Contact> {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Das Speichern des Kontaktes ist fehlgeschlagen! :(");
-				}
-
-				@Override
-				public void onSuccess(Contact result) {
-					if (result != null) {
-						log("Speichern: " + result);
-						//KontaktObjekt updaten
-						ctvm.updateContact(result);
-						setSelected(contactToDisplay);
-					} else {
-						Window.alert("Oups da ist was schief gelaufen! :(");
-					}
-				}
-			}
-			
-			/**
-			 * Abruf eines bestimmten Users, um diesen aus der ListBox
-			 * zurück zu transferieren als User-Objekt zur weiteren Verarbeitung. 
-			 * @author janin
-			 *
-			 */
-			
-			private class SharedUserCallback implements AsyncCallback<User>{
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Der Nutzer Abruf ist misglückt! :(");					
-				}
-				
-				@Override
-				public void onSuccess(User result) {
-					log("Gewählter User: " + result);
-					if(result != null) {
-					sharedUser = result;					
-					setSelected(contactToDisplay);
-					} else {
-						Window.alert("Der Nutzer " + result.getGoogleID() + " konnte nicht korrekt abgerufen werden :(");
-					}
-				}
-			}
-			
-			/**
-			 * Abruf eines bestimmten Users, um diesen aus der ListBox
-			 * zurück zu transferieren als User-Objekt zur weiteren Verarbeitung. 
-			 * @author janin
-			 *
-			 */
-			
-			private class OwnerCallback implements AsyncCallback<User>{
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Der Nutzer Abruf ist misglückt! :(");					
-				}
-
-				@Override
-				public void onSuccess(User result) {
-					if(result != null) {
-						accountOwner = result; //Owner Referenzattribut befüllen
-					} else {
-						Window.alert("Der Nutzer " + result.getGoogleID() + "konnte nicht gefunden werden :(");
-					}
-				}				
-			}
-			
-			
-			/**
-			 * UserToShareCallback Klasse zum befüllen der ListBox mit User -Objekten 
-			 * aus dem System. 
-			 * @author janina
-			 *
-			 */
-			
-			private class UserToShareCallback implements AsyncCallback<Vector<User>>{
-
-				@Override
-				public void onFailure(Throwable caught) {
-					//Window.alert("Der Nutzer Abruf ist misglückt! :(");
-				}
-
-				@Override
-				public void onSuccess(Vector <User> result) {	
-									
-					if (result != null) {
-					shareUser.clear();
-					shareUser.setVisible(true);
-					
-						for(User user: result) {
-							if(user.getGoogleID() != accountOwner.getGoogleID()){
-								//User Liste updaten
-								shareUser.addItem(user.getUserContact().getName().getValue() + " , " + user.getGMail());
-								log("ListBox: " + user);
-							}else {
-								log("Owner Eintrag");
-							}
-					}
-					//Genug Platz schaffen für alle Elemente
-					shareUser.setVisibleItemCount(shareUser.getItemCount());
-					} else {
-						Window.alert("Kein Nutzer gefunden :(");
-					}
-				}
-			}
-			
-		
-			private class ParticipantCallback implements AsyncCallback<Vector<Participation>>{
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Der Abruf der Teilhaber ist misglückt! :(");
-				}
-
-				@Override
-				public void onSuccess(Vector<Participation> result) {					
-					if (result != null) {
-						for(Participation p: result) {
-						   //User Liste updaten
-						   sharedWithUser.addItem(p.getParticipant().getUserContact().getName().getValue() + " , " + p.getParticipant().getGMail());	
-						   contactParticipants.add(p.getParticipant());
-						}
-					    //Genug Platz schaffen für alle Elemente
-						sharedWithUser.setVisibleItemCount(sharedWithUser.getItemCount());
-					} else {
-						Window.alert("Kein Teilhaber gefunden :(");
-					}
-				}
-			}
-
-			/**
-			 * ShareClickHandler zum Teilen eines Kontaktes und/oder einer Eigenschaft
-			 * zu dem bereits geteilten Kontakt mit einem bestimmten Nutzer.
-			 * @author janina
-			 *
-			 */
-			private class ShareClickHandler implements ClickHandler {				
-				Vector <PropertyValue> p = new Vector<PropertyValue>();
-				@Override
-				public void onClick(ClickEvent event) {	
-					log("Teilen: "+ event);
-					
-				if(contactToDisplay != null) {
-					if (getCheckedValues()!= null){
-						contactToDisplay.setPropertyValues(getCheckedValues()); //Abrufen der ausgewählten Werte
-						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback()); //Kontakt wird upgedated in DB
-						
-//						contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new ParticipationsByBOCallback());
-						Participation part = new Participation();
-						part.setParticipant(getUserFromList()); //Den zuvor aus ListBox gewählten User setzen
-						part.setReference(contactToDisplay);							
-							contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());
-						log("Neuer Teilhaber: " + part.getParticipant() +" , " + part.getReferencedObject());
-						}else{
-							Participation part = new Participation();
-							part.setParticipant(getUserFromList()); //Den zuvor aus ListBox gewählten User setzen
-							part.setReference(contactToDisplay);							
-								contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());
-								
-							setSelected(contactToDisplay);
-						} 
-					} else {
-						Window.alert("Kein Kontakt zum teilen ausgewählt.");
-					}
-				}
-			}
-			
-			/**
-			 * Eine neue Teilhaberschaft anlegen.
-			 * @author janina
-			 *
-			 */
-			private class CreateParticipationCallback implements AsyncCallback<Participation>{
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Kontakt konnte nicht geteilt werden. :(");						
-				}
-
-				@Override
-				public void onSuccess(Participation result) {
-					log("Neue Teilhaberschaft: " + result);
-					mptvm.addContact(result.getReferencedObject());					
-				}				
-			}
-			
-			/**
-			 * Ein neues PropertyValue Objekt anlegen. 
-			 * @author janina
-			 *
-			 */
-			
-			private class CreatePvCallBack implements AsyncCallback<PropertyValue>{
-
-				@Override
-				public void onFailure(Throwable caught) {
-//					Window.alert("");					
-				}
-
-				@Override
-				public void onSuccess(PropertyValue result) {
-					log("PropertyValue: " + result);
-					contactToDisplay.addPropertyValue(result); //neu erzeugte PropertyValue Objekte für neuen Kontakt					
-				}
-				
-			}
-			
-			
-			/**
-			 * TextboxClickHandler für alle Textboxen
-			 * @param s
-			 */
-			
-//			private class TextBoxClickHandler implements ClickHandler {
-//
-//				@Override
-//				public void onClick(ClickEvent event) {
-//					Widget sender = (Widget) event.getSource();
-//				    if (sender == textBoxName) {
-//				    	updateText(textBoxName, textBoxName.getText());
-//						}
-//				    if (sender == textBoxNickName) {
-//				    	if(!checkBox2.isEnabled()) {
-//							checkBox2.setEnabled(true);
-//						}
-//						updateText(textBoxNickName, textBoxNickName.getText());
-//						}
-//				    if (sender == textBoxFirma) {
-//				    	if(!checkBox3.isEnabled()) {
-//				    		checkBox3.setEnabled(true);
-//						}
-//						updateText(textBoxFirma, textBoxFirma.getText());
-//						}
-//				    if(sender == textBoxTelefonnummer) {
-//				    	if(!checkBox4.isEnabled()) {
-//							checkBox4.setEnabled(true);
-//						}
-//						updateText(textBoxTelefonnummer, textBoxTelefonnummer.getText());
-//						}
-//				    if(sender == textBoxMobilnummer) {
-//				    	if(!checkBox5.isEnabled()) {
-//							checkBox5.setEnabled(true);
-//						}
-//						updateText(textBoxMobilnummer, textBoxMobilnummer.getText());
-//						}				
-//				    if(sender == textBoxEmail) {
-//				    	if(!checkBox6.isEnabled()) {
-//							checkBox6.setEnabled(true);
-//						}
-//						updateText(textBoxEmail, textBoxEmail.getText());
-//						}
-//				    if(sender == textBoxGeburtsdatum) {
-//				    	if(!checkBox7.isEnabled()) {
-//							checkBox7.setEnabled(true);
-//						}
-//						updateText(textBoxGeburtsdatum, textBoxGeburtsdatum.getText());
-//						}
-//				    if(sender == textBoxAdresse) {
-//				    	if(!checkBox7.isEnabled()) {
-//							checkBox7.setEnabled(true);
-//						}
-//						updateText(textBoxGeburtsdatum, textBoxGeburtsdatum.getText());				    	
-//				    }						
-//				}
-//			}
-			
-			/**
-			 * Share ClickHandler Beispiel von Oli
-			 * @param 
-			 */
-			
-			private class olisShareClickHandler implements ClickHandler{
-
-				@Override
-				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
-					// TODO Auto-generated method stub
-					final DialogBox db = new DialogBox();
-					VerticalPanel vp = new VerticalPanel();
-					HorizontalPanel buttons = new HorizontalPanel();
-					HorizontalPanel input = new HorizontalPanel();
-					final Vector<CheckBox> cbv = new Vector<CheckBox>();
-					final Contact c = contactToDisplay;
-					FlexTable ft = new FlexTable();
-					Button cancel = new Button("Abbrechen");
-					Button share = new Button("Teilen");
-					Label participant = new Label("Teilen mit: ");
-					final TextBox email = new TextBox();
-					final Button check = new Button("Check");
-//					final PushButton check = new PushButton(new Image("test.png")); // Button with Image
-					
-					final Boolean isChecked = new Boolean(false);
-					final User user = new User();
-					// Style
-					db.getElement().getStyle().setZIndex(2);
-					db.center();
-					check.setStyleName("check");
-					
-					ft.setText(0, 0, "Eigenschaft");
-					ft.setText(0, 1, "Auswahl");
-					
-					int row = 1;
-					for(PropertyValue pv : c.getPropertyValues()){
-						Label l = new Label();
-						CheckBox cb = new CheckBox();
-						l.setTitle(pv.getBoId()+"");
-						l.setText(pv.getValue());
-						cb.setTitle(pv.getBoId()+"");
-						cbv.add(cb);
-						ft.setWidget(row, 0, l);
-						ft.setWidget(row, 1, cb);
-						row++;
-					}
-					
-					share.addClickHandler(new ClickHandler(){
-
-						@Override
-						public void onClick(ClickEvent event) {
-							// TODO Auto-generated method stub
-							if(user.getUserContact().getName().getValue() == email.getText()){
-								Participation part = new Participation();
-								Vector<PropertyValue> pvv = new Vector<PropertyValue>();
-								for(CheckBox cb: cbv){
-									if(cb.getValue()){
-										log(cb.getTitle());
-										for(PropertyValue pv : c.getPropertyValues()){
-											if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
-												pvv.add(pv);
-												log("Share: " + pv.getValue() + " With " + email.getText());
-											}
-										}
-									}
-								}
-								part.setParticipant(user);
-								c.setPropertyValues(pvv);
-								part.setReference(c);
-								log("Share:" + part);
-								contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());
-								RootPanel.get("Details").remove(db);
-								// create new participation
-							}else{
-								Window.alert("Bitte geben Sie die Email eines Nutzers ein und bestätigen diese mit dem CheckButton");
-							}
-						}
-						
-					});
-					
-					check.addClickHandler(new ClickHandler(){
-
-						@Override
-						public void onClick(ClickEvent event) {
-							// TODO Auto-generated method stub
-							contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
-								@Override
-								public void onFailure(Throwable caught) {
-									// TODO Auto-generated method stub
-									log("User nicht gefunden");
-									check.setStyleName("check_notFound");
-									check.setText("X");
-								}
-
-								@Override
-								public void onSuccess(User result) {
-									// TODO Auto-generated method stub
-									check.setStyleName("check_Found");
-									check.setText("OK");
-									user.setGoogleID(result.getGoogleID());
-									user.setGMail(result.getGMail());
-									user.setUserContact(result.getUserContact());
-									email.setText(result.getUserContact().getName().getValue());
-								}
-							});
-						}
-						
-					});
-					
-					email.addChangeHandler(new ChangeHandler(){
-
-						@Override
-						public void onChange(ChangeEvent event) {
-							// TODO Auto-generated method stub
-							log("Change Text");
-							check.setText("Check");
-							check.setStyleName("check");
-						}
-						
-					});
-					
-					cancel.addClickHandler(new ClickHandler(){
-
-						@Override
-						public void onClick(ClickEvent event) {
-							// TODO Auto-generated method stub
-							RootPanel.get("Details").remove(db);
-						}
-						
-					});
-					
-					input.add(participant);
-					input.add(email);
-					input.add(check);
-					
-					buttons.add(cancel);
-					buttons.add(share);
-					
-					vp.add(new Label("ShareElements"));
-					vp.add(input);
-					vp.add(ft);
-					vp.add(buttons);
-					
-					db.add(vp);
-					RootPanel.get("Details").add(db);
-				}	
-				
-				
-			}
-			
-			
-			
-			native void log(String s)/*-{
-			console.log(s);
-			}-*/;
-						
-		  
+		native void log(String s)/*-{
+		console.log(s);
+		}-*/;
 }
-
-
