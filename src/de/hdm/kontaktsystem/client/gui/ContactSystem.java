@@ -6,12 +6,15 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -91,11 +94,13 @@ public class ContactSystem implements EntryPoint {
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
 	
+	//private Label menuLabel = new Label("Menu:");
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
 	private Button myParticipationsButton = new Button("Von mir geteilt");
 	private Button receivedParticipationsButton = new Button("An mich geteilt");
+	private Button accountButton = new Button("Account");
 	//Trailer Text
 	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen	
 					
@@ -146,6 +151,7 @@ public class ContactSystem implements EntryPoint {
 	private ContactListForm clf = new ContactListForm();
 	private MyParticipationForm mpf = new MyParticipationForm();
 	private ReceivedParticipationForm rpf = new ReceivedParticipationForm();
+	private UserForm uf = new UserForm();
 	
 	//CellTree Model
 	private ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
@@ -157,7 +163,7 @@ public class ContactSystem implements EntryPoint {
 	 * EntryPoint
 	 */
 	
-	public void loadTree() {
+	public void loadTree() {		
 		
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
@@ -174,7 +180,8 @@ public class ContactSystem implements EntryPoint {
 			public void onSuccess(Vector<Contact> result) {
 				// TODO Auto-generated method stub
 				log("Es wurden " + result.size() + " Kontakte gefunden");
-				ct = new CellTree(tvm, result);
+				CellTree.Resources res = GWT.create(ContactSystemTreeResources.class);
+				ct = new CellTree(tvm, result, res);
 				ct.setAnimationEnabled(true);
 				ct.setDefaultNodeSize(result.size());
 				treeScrollPanel.add(ct);
@@ -213,7 +220,7 @@ public class ContactSystem implements EntryPoint {
 //				userInfo = result;
 //				if(userInfo.isLoggedIn()){
 //					loadTree(); // für Test
-//					
+//					uf.setUser(userInfo);
 //					loadContactSystem(); // für Test	
 //				}else{
 //					loadLogin();					
@@ -271,6 +278,7 @@ public class ContactSystem implements EntryPoint {
 	    contactListsButton.setEnabled(true);
 	    myParticipationsButton.setEnabled(true);
 	    receivedParticipationsButton.setEnabled(true);
+	    accountButton.setEnabled(true);
 	  			
 	    //Trailer
 	    trailer.setTitle("Copyright Team09, Hochschule der Medien Stuttgart");
@@ -285,20 +293,22 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
+		//menuLabel.getElement().setId("menue-label");
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
 		
-		//Label der �berschrift im Header
+		//Label der �berschrift im Header
 		headerText.getElement().setId("headertext");
 		
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
 		searchButton.getElement().setId("searchButton"); 
 		
 		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
-		contactButton.getElement().setId("menue-button");
-		contactListsButton.getElement().setId("menue-button");
-		myParticipationsButton.getElement().setId("menue-button");
-		receivedParticipationsButton.getElement().setId("menue-button");
+		contactButton.getElement().setId("menu-button");
+		contactListsButton.getElement().setId("menu-button");
+		myParticipationsButton.getElement().setId("menu-button");
+		receivedParticipationsButton.getElement().setId("menu-button");
+		accountButton.getElement().setId("menu-button");
 		
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
@@ -319,9 +329,9 @@ public class ContactSystem implements EntryPoint {
 		 * CSS Identifier für die Elemente
 		 */		
 
-		header.setStyleName("header");		
-		navigation.setStyleName("navigation");
-		trailer.setStyleName("trailer");
+		header.getElement().setId("Header");		
+		navigation.getElement().setId("Navigation");
+		trailer.getElement().setId("Trailer");
 
 		
 		/**
@@ -344,7 +354,6 @@ public class ContactSystem implements EntryPoint {
 		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
 		 */
 	
-		//TEST -> ClickHandler für ContactButton
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 			//contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
@@ -463,6 +472,18 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 		
+		accountButton.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				
+				
+				RootPanel.get("Details").add(uf);
+			}
+			
+		});
+		
 		addPanel.addClickHandler(new ClickHandler(){
 
 			@Override
@@ -487,11 +508,12 @@ public class ContactSystem implements EntryPoint {
 	    
 		
 		//Menu Leiste
-	  	
+	  	//navigation.add(menuLabel);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
 	  	navigation.add(myParticipationsButton);
 	  	navigation.add(receivedParticipationsButton); 
+	  	navigation.add(accountButton);
 
 		
 	  	RootPanel.get("Header").add(headerPanel);

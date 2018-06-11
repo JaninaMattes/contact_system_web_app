@@ -97,7 +97,7 @@ public class ContactList extends BusinessObject {
 	
 	@Override
 	public String toString() {
-		return "ContactList [name=" + name + ", owner=" + getOwner() + ", contacts=" + contacts + "]";
+		return "ContactList [name=" + name + ", owner=" + getOwner() + ", contacts=" + contacts + " ID: " + this.getBoId() + "]";
 	}
 
 	 /**

@@ -101,6 +101,7 @@ public interface ContactSystemAdministrationAsync {
 	public void editContactList(ContactList cl, AsyncCallback<ContactList> callback);
 	
 	public void editPropertyValue(PropertyValue pv, AsyncCallback<PropertyValue> callback);	
+	public void editParticpation(Participation part, AsyncCallback<Participation> callback);
 	
 	
 	/**
@@ -109,6 +110,7 @@ public interface ContactSystemAdministrationAsync {
 	public void deleteUser(User u, AsyncCallback<User> callback);
 	
 	public void deleteContact(Contact c, AsyncCallback<Contact> callback);
+	
 	
 	public void deleteContactList(ContactList cl, AsyncCallback<ContactList> callback);
 	

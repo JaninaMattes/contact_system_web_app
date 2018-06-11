@@ -135,10 +135,7 @@ public class Contact extends BusinessObject {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		if (this != obj)
-			return false;
-		Contact other = (Contact) obj;
-		if (getBoId() != other.getBoId())
+		if (getBoId() != ((Contact) obj).getBoId())
 			return false;
 		
 		return true;

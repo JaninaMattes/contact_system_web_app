@@ -91,6 +91,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList editContactList(ContactList cl);
 	
 	public PropertyValue editPropertyValue(PropertyValue pv);
+	
+	public Participation editParticpation(Participation part);
 		
 	/**
 	 * Delete
