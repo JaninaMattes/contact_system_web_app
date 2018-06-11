@@ -40,14 +40,13 @@ public class ContactForm extends VerticalPanel{
 	//TODO: Owner im System abrufen
 	ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();
 	Contact contactToDisplay = null;
-	ContactTreeViewModel ctvm = null;
-	ContactListTreeViewModel cltvm = null; /*Kann von beiden TreeViewModeln aufgerufen werden*/
-	MyParticipationsTreeViewModel mptvm = null;
-	ReceivedParticipationTreeViewModel rptvm = null;
+	TreeViewModelTest tvm = null;
 	
 	/**
 	 * Widgets, deren Inhalte variable sind, werden als Attribute angelegt.
 	 */	
+	Vector <TextBox> textboxes = new Vector <TextBox>();
+	FlexTable 
 	TextBox textBoxName = new TextBox();
 	TextBox textBoxNickName = new TextBox();
 	TextBox textBoxFirma = new TextBox();
