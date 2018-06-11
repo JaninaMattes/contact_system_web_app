@@ -37,7 +37,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class ContactListForm extends VerticalPanel {
 	ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
 	ContactList contactListToDisplay = null;
-	ContactListTreeViewModel cltvm = null;
+	TreeViewModelTest tvm = null;
 
 	/**
 	 * Widgets mit variablen Inhalten.
@@ -324,7 +324,7 @@ public class ContactListForm extends VerticalPanel {
 		public void onSuccess(ContactList result) {
 			if (result != null) {
 				setSelected(null);
-				cltvm.removeContactList(result);
+				tvm.removeBusinessObject(result);
 				Window.alert("Kontakt wurde erfolgreich aus der Liste entfernt");
 			}
 		}
@@ -382,7 +382,7 @@ public class ContactListForm extends VerticalPanel {
 					log(clPart.toString());
 					setSelected(null);
 					//TODO: @Oli removeContactList überprüfen, gibt null zurück!!
-					cltvm.removeContactList(clPart);
+					tvm.removeBusinessObject(clPart);
 					Window.alert("Teilhaberschaft mit Kontaktliste gelöscht!");
 				}
 			}
@@ -406,7 +406,7 @@ public class ContactListForm extends VerticalPanel {
 			public void onSuccess(ContactList result) {
 				if (result != null) {
 					setSelected(null);
-					cltvm.removeContactList(result);
+					tvm.removeBusinessObject(result);
 					Window.alert("Kontaktliste gelöscht!");
 				}
 			}
@@ -419,8 +419,8 @@ public class ContactListForm extends VerticalPanel {
 	 * @author Kim-Ly
 	 */
 
-	void setCltvm(ContactListTreeViewModel cltvm) {
-		this.cltvm = cltvm;
+	void setTree(TreeViewModelTest tvm) {
+		this.tvm = tvm;
 	}
 
 	void setSelected(ContactList cl) {

@@ -154,15 +154,7 @@ public class ContactSystem implements EntryPoint {
 
 	private ContactForm cf = new ContactForm();
 	private ContactListForm clf = new ContactListForm();
-	private MyParticipationForm mpf = new MyParticipationForm();
-	private ReceivedParticipationForm rpf = new ReceivedParticipationForm();
 	private UserForm uf = new UserForm();
-	
-	//CellTree Model
-	private ContactListTreeViewModel ctvm = new ContactListTreeViewModel();
-	//ContactListsTreeViewModel cltvm = new ContactListsTreeViewModel();
-	private MyParticipationsTreeViewModel mptvm = new MyParticipationsTreeViewModel();
-	private ReceivedParticipationTreeViewModel rptvm = new ReceivedParticipationTreeViewModel();
 	
 	/**
 	 * EntryPoint
@@ -172,6 +164,10 @@ public class ContactSystem implements EntryPoint {
 		
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
+		clf.setTree(tvm);
+//		cf.setTree(tvm);
+		
+		
 		treeScrollPanel.setHeight("80vh");
 	//	contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
 		contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
@@ -204,18 +200,33 @@ public class ContactSystem implements EntryPoint {
 	public void onModuleLoad() {
 		
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
-		
+		// Test aufrufe
 		loadTree(); // für Test
 		loadContactSystem(); // für Test		
-
+		
+		contactSystemAdmin.getUserByID(170, new AsyncCallback<User>() {
+			public void onFailure(Throwable error) {
+				
+			}
+				
+			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+			public void onSuccess(User result) {
+				
+					uf.setUser(result);
+//					cf.setMyUser(result);
+					loadContactSystem(); // für Test	
+				
+			}
+		});	
+		
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
 
 		
-//		contactSystemVerwaltung = ClientsideSettings.getContactAdministration();
-//		contactSystemVerwaltung.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+//		contactSystemAdmin = ClientsideSettings.getContactAdministration();
+//		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 //			public void onFailure(Throwable error) {
 //				Window.alert("Login Error :(");
 //			}
@@ -226,6 +237,7 @@ public class ContactSystem implements EntryPoint {
 //				if(userInfo.isLoggedIn()){
 //					loadTree(); // für Test
 //					uf.setUser(userInfo);
+//					cf.setMyUser(userInfo);
 //					loadContactSystem(); // für Test	
 //				}else{
 //					loadLogin();					
