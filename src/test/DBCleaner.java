@@ -33,6 +33,7 @@ public class DBCleaner {
 									};
 	private static PropertyValue pv;
 	private static Participation part;
+	private static Vector<PropertyValue> pvv;
 	
 	
 	public static void main(String[] args) {
@@ -57,16 +58,16 @@ public class DBCleaner {
 		u.setGMail("Oli@gmail.com");
 		u.setGoogleID(170d);
 		c = new Contact(); // 0
-		u = csa.createUser(u, c);
-		c = u.getUserContact();
+		Vector<PropertyValue> pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
 			pv.setValue(data[0][i]);
-			csa.createPropertyValue(pv);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		u = csa.createUser(u, c);
 		
 		cl = new ContactList();
 		cl.setName(data[0][1] + "s Liste");
@@ -76,27 +77,31 @@ public class DBCleaner {
 		
 		c = new Contact(); //1
 		c.setOwner(u);
-		c = csa.createContact(c);
+		
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[1][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact( c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
 		c = new Contact(); // 2
 		c.setOwner(u);
-		c = csa.createContact(c);
+		pvv = new Vector<PropertyValue>();
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[2][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact(c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
@@ -104,16 +109,16 @@ public class DBCleaner {
 		u = new User();
 		u.setGMail(data[cid][4]);
 		u.setGoogleID(id);
-		c = new Contact(); // 3
-		csa.createUser(u, c);
+		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[3][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		u = csa.createUser(u, c);
 		
 		// KontaktListen erstellen
 		cl = new ContactList();
@@ -125,27 +130,31 @@ public class DBCleaner {
 		
 		c = new Contact(); // 4
 		c.setOwner(u);
-		c = csa.createContact(c);
+		pvv = new Vector<PropertyValue>();
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[4][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact(c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
 		c = new Contact(); // 5
 		c.setOwner(u);
-		c = csa.createContact(c);
+		pvv = new Vector<PropertyValue>();
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[5][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact(c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
@@ -154,15 +163,16 @@ public class DBCleaner {
 		u.setGMail(data[cid][4]);
 		u.setGoogleID(id);
 		c = new Contact(); // 6
-		csa.createUser(u, c);
+		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[6][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		u = csa.createUser(u, c);
 		
 		// KontaktListen erstellen
 		cl = new ContactList();
@@ -174,27 +184,31 @@ public class DBCleaner {
 		
 		c = new Contact(); // 7
 		c.setOwner(u);
-		c = csa.createContact(c);
+		pvv = new Vector<PropertyValue>();
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[7][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact(c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
 		c = new Contact(); // 8
 		c.setOwner(u);
-		c = csa.createContact(c);
+		pvv = new Vector<PropertyValue>();
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[8][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact(c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
@@ -202,16 +216,17 @@ public class DBCleaner {
 		u = new User();
 		u.setGMail(data[cid][4]);
 		u.setGoogleID(id);
-		c = new Contact(); // 9
-		csa.createUser(u, c);
+		c = new Contact(); // 6
+		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[9][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		u = csa.createUser(u, c);
 		
 		// KontaktListen erstellen
 		cl = new ContactList();
@@ -223,14 +238,16 @@ public class DBCleaner {
 		
 		c = new Contact(); // 10
 		c.setOwner(u);
-		c = csa.createContact(c);
+		pvv = new Vector<PropertyValue>();
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[10][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact(c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
@@ -239,15 +256,16 @@ public class DBCleaner {
 		u.setGMail(data[cid][4]);
 		u.setGoogleID(id);
 		c = new Contact(); // 11
-		csa.createUser(u, c);
+		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[11][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		u = csa.createUser(u, c);
 		
 		// KontaktListen erstellen
 		cl = new ContactList();
@@ -264,15 +282,16 @@ public class DBCleaner {
 		u.setGMail(data[cid][4]);
 		u.setGoogleID(id);
 		c = new Contact(); // 12
-		csa.createUser(u, c);
+		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[12][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		u = csa.createUser(u, c);
 		
 		// KontaktListen erstellen
 		cl = new ContactList();
@@ -284,50 +303,54 @@ public class DBCleaner {
 		
 		c = new Contact(); // 13
 		c.setOwner(u);
-		c = csa.createContact(c);
+		pvv = new Vector<PropertyValue>();
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[13][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact(c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
 		c = new Contact(); // 14
 		c.setOwner(u);
-		c = csa.createContact(c);
+		pvv = new Vector<PropertyValue>();
+		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();
 			pv.setProperty(p[i]);
-			pv.setContact(c);
-			pv.setValue(data[cid][i]);
-			csa.createPropertyValue(pv);
+			pv.setValue(data[14][i]);
+			pvv.add(pv);
 		}
+		c.setPropertyValues(pvv);
+		c = csa.createContact(c);
 		csa.addContactToList(c, cl);
 		cid++;
 		
 		// Erstellen von beziehungen
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		part.setReference(csa.getContactById(91));
+		part.setReference(csa.getContactById(90));
 		csa.createParticipation(part);
 		
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		Contact maxi = csa.getContactById(65);
+		Contact maxi = csa.getContactById(63);
 		Vector<PropertyValue> dm = maxi.getPropertyValues();
-		dm.remove(csa.getPropertyValueById(69)); // Entfernt die Telefonnummer aus der Teilhaberschaft
+		dm.remove(csa.getPropertyValueById(68)); // Entfernt die Telefonnummer aus der Teilhaberschaft
 		maxi.setPropertyValues(dm);
 		part.setReference(maxi);
 		csa.createParticipation(part);
 		
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		Contact ingo = csa.getContactById(46);
+		Contact ingo = csa.getContactById(44);
 		Vector<PropertyValue> di = ingo.getPropertyValues();
-		di.remove(csa.getPropertyValueById(51)); // Entfernt die Email aus der Teilhaberschaft
+		di.remove(csa.getPropertyValueById(47)); // Entfernt die Email aus der Teilhaberschaft
 		ingo.setPropertyValues(di);
 		part.setReference(ingo);
 		csa.createParticipation(part);
@@ -335,12 +358,12 @@ public class DBCleaner {
 		// Listen Teilen mit User 170
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		part.setReference(csa.getContactListById(84));
+		part.setReference(csa.getContactListById(82));
 		csa.createParticipation(part);
 		
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		part.setReference(csa.getContactListById(26));
+		part.setReference(csa.getContactListById(31));
 		csa.createParticipation(part);
 		
 		// BOs teilen mit anderen Usern
