@@ -383,7 +383,7 @@ public class ReportGenerator implements EntryPoint {
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
 				RootPanel.get("Details").clear();
-				RootPanel.get("Details").add(new HTML(writer.getReportText()));			
+				RootPanel.get("Details").add(new HTML(writer.getReportText()));	
 			}		
 		}		
 	}
@@ -415,6 +415,8 @@ public class ReportGenerator implements EntryPoint {
 				writer.process(report);
 				RootPanel.get("Details").clear();
 				RootPanel.get("Details").add(new HTML(writer.getReportText()));			
+				findByValueText.setText("");
+				propertiesDropDownList.setSelectedIndex(0);
 			}
 		}		
 	}
