@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 //import com.mysql.jdbc.log.Log;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
+import de.hdm.kontaktsystem.server.db.ContactMapper;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
@@ -32,6 +33,7 @@ public class ContactListForm extends VerticalPanel {
 	ContactList contactListToDisplay = null;
 	CellTreeViewModel tvm = null;
 	User myUser = null;
+	private ContactMapper cMapper = null;
 
 
 	/**
@@ -119,6 +121,7 @@ public class ContactListForm extends VerticalPanel {
 		saveButton.addClickHandler(new saveAndUpdateClickHandler());
 		deleteClButton.addClickHandler(new deleteContactListClickHandler());
 		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
+		addConToList.addClickHandler(new addContactToClClickHandler());
 		
 		
 		
@@ -197,11 +200,9 @@ public class ContactListForm extends VerticalPanel {
 			
 			String clName = nameContactList.getText();
 			//contactListToDisplay.setName(clName);
-			myUser.setGoogleID(777);
+			myUser.setGoogleID(170);
 			contactListToDisplay.setOwner(myUser);
-			Contact c = new Contact();
-			PropertyValue pV = new PropertyValue();
-			myUser.setUserContact(c);
+
 			
 			if (contactListToDisplay == null) {				
 				Window.alert("Keine Kontaktliste ausgewählt");
@@ -210,9 +211,12 @@ public class ContactListForm extends VerticalPanel {
 				
 				if (contactListToDisplay.getName() != nameContactList.getText()) {
 					
-					Window.alert("Aktualisiert:" + contactListToDisplay.toString());
-					
+					String newClName = nameContactList.getText();
+					contactListToDisplay.setName(newClName); 
 					contactSystemAdmin.editContactList(contactListToDisplay, new UpdateCallback(contactListToDisplay));
+					
+					Window.alert("Aktualisierte Kontaktliste" + contactListToDisplay.toString());
+					
 				} else {
 					
 					Window.alert("Gespeichert" + contactListToDisplay.toString());
@@ -334,17 +338,29 @@ public class ContactListForm extends VerticalPanel {
 	 */
 	
 	private class deleteConFromListClickHandler implements ClickHandler {
+		
 		public void onClick(ClickEvent event) {
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
+				
 			} else {
-				Contact c = new Contact();
-				PropertyValue pV = new PropertyValue();
+				Vector<Contact> conVec = new Vector<Contact>();
+				
 				Integer lbItemIndex = contactNames.getSelectedIndex();
 				String contactName = contactNames.getValue(lbItemIndex);
-				pV.setValue(contactName);
-				c.setName(pV);
-				contactSystemAdmin.removeContactFromList(c, contactListToDisplay, new deleteConfromListCallback());
+
+
+				conVec = contactListToDisplay.getContacts();
+				
+				// Suche und Rückgabe nach Kontakt aus Kontaktliste, der mit ausgewählten Kontakt aus ListBox übereinstimmt
+				for (Contact con : conVec) {
+					if (con.getName().getValue() == contactName) {
+						Contact conToDelete = con;
+						contactSystemAdmin.removeContactFromList(conToDelete, contactListToDisplay, 
+								new deleteConfromListCallback());
+					}
+				}
+				
 			}
 		}
 	}
@@ -383,6 +399,7 @@ public class ContactListForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			
 			// Setzen des eingeloggten Users, seines eigenen Kontakts
+			myUser.setGoogleID(170);
 			contactListToDisplay.setOwner(myUser);
 			
 			//log(contactListToDisplay.toString());
@@ -394,19 +411,8 @@ public class ContactListForm extends VerticalPanel {
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 				
-//			} else {
-//				User clOwner = contactListToDisplay.getOwner();
-//				Participation p = new Participation();
-//				p.setReference(contactListToDisplay);
-//				// Aufruf nicht manuell umsetzen?
-//				p.setParticipant(partUser);
-//				
-//				if (clOwner.getGoogleID() != partUser.getGoogleID()) {
-//					contactSystemAdmin.deleteParticipation(p, new deleteContactListPartCallback());
-				
-				} else {	
+			} else {	
 				contactSystemAdmin.deleteContactList(contactListToDisplay, new deleteContactListCallback());
-				log("Kontaktliste gelöscht");
 				}
 			}
 		}
@@ -433,7 +439,6 @@ public class ContactListForm extends VerticalPanel {
 				if (clPart != null) {
 					//log(clPart.toString());
 					setSelected(null);
-					//TODO: @Oli removeContactList überprüfen, gibt null zurück!!
 					tvm.removeBusinessObject(clPart);
 					Window.alert("Teilhaberschaft mit Kontaktliste gelöscht!");
 				}
@@ -458,12 +463,12 @@ public class ContactListForm extends VerticalPanel {
 			public void onSuccess(ContactList result) {
 				if (result != null) {
 					setSelected(null);
-					//tvm.removeBusinessObject(result);
+					tvm.removeBusinessObject(result);
 					Window.alert("Kontaktliste gelöscht!");
 				}
 			}
 		}
-//	}
+
 
 	/**
 	 * Setzen des ContactList Objekts, aller zugehörigen Kontakte aus TreeView
@@ -491,7 +496,7 @@ public class ContactListForm extends VerticalPanel {
 			setMyUser(u);
    			Vector<User> uVec = new Vector<User>();
 			Vector <Participation> partVec = new Vector<Participation>();
-   			Vector<Contact> c = new Vector<Contact>();
+   			Vector<Contact> cVec = new Vector<Contact>();
    			Vector<ContactList> clVec = new Vector<ContactList>();
    			
    			// Alle User mit denen Kontaktliste geteilet werden kann
@@ -502,6 +507,9 @@ public class ContactListForm extends VerticalPanel {
    			
    			// User, von dem Kontaktliste geteilt wurde
    			contactSystemAdmin.getAllContactListsFromUser(new UserOwnerClCallback(clVec));
+   			
+   			// Alle Kontakte die User angelegt oder die ihm geteilt wurden 
+   			contactSystemAdmin.getAllContactsFromUser(new ContactsToAddConCallback(cVec));
    			
    			// Kontakte, die der ausgewählten Kontaktliste hinzugefügt werden können
    			//contactSystemAdmin.getAllContacts(new ContactsToAddCallback());
@@ -638,15 +646,95 @@ public class ContactListForm extends VerticalPanel {
 	}
 	
 	/**
-	 * Anzeige aller vom User erstellten und dem User geteilten Kontakte, um einen daraus selektierten Kontakt zur Kontaktliste hinzuzufügen.
+	 * ClickHandler zum Hinzufügen eines Kontakts, 
+	 * Auswahl aus aller für User geteilten und von User erstellten Kontakte z
+	 */
+	
+	private class addContactToClClickHandler implements ClickHandler {
+		
+		Vector<ContactList> clVec = new Vector<ContactList>();
+		
+		@Override
+		public void onClick(ClickEvent event) {
+			if (contactListToDisplay == null) {
+				Window.alert("Keine Kontaktliste ausgewählt");
+				
+			} else {
+				Contact conToAdd = null;
+				Integer lbItemIndex = contactsToAdd.getSelectedIndex();
+				String contactToAddName = contactsToAdd.getValue(lbItemIndex);
+				
+				Vector<Contact> allConFromUser = getAllContactsFromUser();
+				
+				log("Alle Kontakte von User: " + allConFromUser);
+
+				// Suche und Rückgabe nach Kontakt aus Kontaktliste, der mit ausgewählten Kontakt aus ListBox übereinstimmt
+				for (Contact con : allConFromUser) {
+					
+					if (con.getName().getValue().equals(contactToAddName)) {
+						conToAdd = con;
+						log("Hinzuzufügender Kontakt zu Kontaktliste: " + conToAdd);
+					}
+				}
+				contactSystemAdmin.addContactToList(conToAdd, contactListToDisplay, new ContactsToAddClCallback(clVec));
+			}
+		}
+	}
+	
+	/**
+	 * Callback des aktualisierten Kontaktlistenobjekts nachdem neuer Kontakt hinzugefügt wurde
+	 * Befüllung der Listbox mit Kontakten die zu Kontaktliste hinzugefügt wurden
 	 * @author Kim-Ly
 	 */
 	
-	private class ContactsToAddCallback implements AsyncCallback<Vector<Contact>> {
+	private class ContactsToAddClCallback implements AsyncCallback<ContactList> {
+
+		Vector<ContactList> clVec = new Vector<ContactList>(); 
+		
+		ContactsToAddClCallback(Vector<ContactList> clVec) {
+			this.clVec = clVec;
+		}
+		
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Keine Kontaktliste vorhanden");			
+		}
+
+		@Override
+		public void onSuccess(ContactList result) {
+
+			Vector<ContactList> conResult = new Vector<ContactList>();
+			int count = 0;
+				if (result != null) {
+					Vector<Contact> resultCon = result.getContacts();
+					
+				for(Contact con: resultCon) {						
+				
+					contactNames.addItem(con.getName().getValue());
+					++count;
+					}
+
+					contactNames.setVisibleItemCount(count);
+				} else {
+					Window.alert("Kontakt konnte nicht hinzugefügt werden!");
+				}
+			}
+			
+		}
+		
+	
+	/**
+	 * Callback aller vom User erstellten und dem User geteilten Kontakte, um einen daraus selektierten Kontakt zur Kontaktliste hinzuzufügen.
+	 * Befüllung der Listbox mit Kontakten die zu Kontaktliste hinzugefügt werden können
+	 * @author Kim-Ly
+	 */
+	
+	private class ContactsToAddConCallback implements AsyncCallback<Vector<Contact>> {
 
 		Vector<Contact> c= new Vector<Contact>(); 
 		
-		ContactsToAddCallback(Vector<Contact> con) {
+		ContactsToAddConCallback(Vector<Contact> con) {
 			this.c = con;
 		}
 		
@@ -673,6 +761,19 @@ public class ContactListForm extends VerticalPanel {
 				}
 			}
 	}
+
+	public Vector<Contact> getAllContactsFromUser() {
+		
+			myUser.setGoogleID(170);
+			Vector<Contact> cv = cMapper.findAllContactsByUser(myUser);
+			for (Contact contact : cv) {
+				contact.setOwner(myUser);
+				contact.setName(contact.getName());
+				contact.setPropertyValues(contact.getPropertyValues());
+			}
+			return cv;
+		}
+	
 	
 	void setMyUser(User user) {
 		this.myUser = user;
