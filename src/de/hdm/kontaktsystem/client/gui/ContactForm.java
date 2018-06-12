@@ -255,6 +255,7 @@ public class ContactForm extends VerticalPanel {
 			});
 			
 			addButton.addClickHandler(new ClickHandler() {
+				
 				@Override
 				public void onClick(ClickEvent event) {
 					Property p = new Property();
@@ -265,8 +266,8 @@ public class ContactForm extends VerticalPanel {
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
 					
-					tb.setTitle("Neu: "+p.getId());
-					cb.setTitle("Neu: "+p.getId());
+					tb.setTitle("Neu:"+p.getId());
+					cb.setTitle("Neu:"+p.getId());
 					
 					tbv.add(tb);
 					cbv.add(cb);
@@ -400,6 +401,7 @@ public class ContactForm extends VerticalPanel {
 					log("Table row:" + row);
 					row++;
 				}
+			
 			//Elemente füllen
 			contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
@@ -411,6 +413,7 @@ public class ContactForm extends VerticalPanel {
 
 				@Override
 				public void onSuccess(Vector<Property> result) {
+					 addElement.clear();					 
 					 for(Property p : result) {
 						 if(p.getId()!=1) { 
 						 addElement.addItem(p.getDescription());
@@ -422,9 +425,10 @@ public class ContactForm extends VerticalPanel {
 							
 			} else {
 				this.contactToDisplay = null;				
-				log("Kontakt" + contact);
+				log("Neuer Kontakt" + contact);
 				
-				final Vector<Property> ppv = new Vector <Property>();
+//				final Vector<Property> ppv = new Vector <Property>(); TODO prüfen
+				final Vector<Property> ppv = null;
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
 					@Override
@@ -436,6 +440,7 @@ public class ContactForm extends VerticalPanel {
 					@Override
 					public void onSuccess(Vector<Property> result) {
 						ppv.addAll(result);					
+						log("Kontakt Properties: " + result);
 					}
 					
 				});	
@@ -453,10 +458,10 @@ public class ContactForm extends VerticalPanel {
 					CheckBox cb = new CheckBox();
 					TextBox tb = new TextBox();
 					
-					label.setTitle("Neu: "+p.getId());
-					label.setText("Neu: "+p.getId());
-					cb.setTitle("Neu: "+p.getId());
-					tb.setTitle("Neu: "+p.getId());
+					label.setTitle("Neu:"+p.getId());
+					label.setText("Neu:"+p.getId());
+					cb.setTitle("Neu:"+p.getId());
+					tb.setTitle("Neu:"+p.getId());
 					tb.setText("");
 					
 					cb.addClickHandler(new ClickHandler() {
