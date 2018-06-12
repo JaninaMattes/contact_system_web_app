@@ -334,21 +334,21 @@ public class DBCleaner {
 		// Erstellen von beziehungen
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		part.setReference(csa.getContactById(90));
+		part.setReference(csa.getContactById(91));
 		csa.createParticipation(part);
 		
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		Contact maxi = csa.getContactById(63);
+		Contact maxi = csa.getContactById(71);
 		Vector<PropertyValue> dm = maxi.getPropertyValues();
-		dm.remove(csa.getPropertyValueById(68)); // Entfernt die Telefonnummer aus der Teilhaberschaft
+		dm.remove(csa.getPropertyValueById(75)); // Entfernt die Telefonnummer aus der Teilhaberschaft
 		maxi.setPropertyValues(dm);
 		part.setReference(maxi);
 		csa.createParticipation(part);
 		
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		Contact ingo = csa.getContactById(44);
+		Contact ingo = csa.getContactById(51);
 		Vector<PropertyValue> di = ingo.getPropertyValues();
 		di.remove(csa.getPropertyValueById(47)); // Entfernt die Email aus der Teilhaberschaft
 		ingo.setPropertyValues(di);
@@ -358,12 +358,12 @@ public class DBCleaner {
 		// Listen Teilen mit User 170
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		part.setReference(csa.getContactListById(82));
+		part.setReference(csa.getContactListById(77));
 		csa.createParticipation(part);
 		
 		part = new Participation();
 		part.setParticipant(csa.getUserByID(170d));
-		part.setReference(csa.getContactListById(31));
+		part.setReference(csa.getContactListById(26));
 		csa.createParticipation(part);
 		
 		// BOs teilen mit anderen Usern
