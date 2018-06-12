@@ -169,8 +169,8 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    /*margin: 4px 2px;*/
-    margin-top: 3vh;
+    margin-top: 2vh;
+    margin-Bottom: 13vh;
     cursor: pointer;
 }
 
@@ -320,11 +320,11 @@ body {
 }
 
 #search-textfeld{
-	width: 15vw;
+	width: 13vw;
 	height: 27px;
-	margin-top: 3vh;
-	/*margin-left: 10px;*/
-	/*margin-Bottom: 13vh;*/
+	margin-top: 2vh;
+	margin-left: 1vw;
+	margin-Bottom: 13vh;
 	
 }
 
