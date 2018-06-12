@@ -357,7 +357,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Contact createContact(Contact contact) {
 
 		boMapper.insert(contact);
-		return cMapper.insertContact(contact);
+		Contact c = cMapper.insertContact(contact);
+		Vector<PropertyValue> pvv = new Vector<PropertyValue>();
+		for(PropertyValue pv : contact.getPropertyValues()){
+			pv.setContact(c);
+			pvv.add(this.createPropertyValue(pv));
+		}
+		c.setPropertyValues(pvv);
+		return c;
 
 	}
 

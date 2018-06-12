@@ -36,6 +36,8 @@ public class ContactForm extends VerticalPanel {
 		Contact contactToDisplay = null;
 		CellTreeViewModel tvm = null;
 		
+		Grid contactGrid = new Grid(12, 3);
+		
 		//Proxy-Objekt erzeugen
 		ContactSystemAdministrationAsync contactSystemAdmin = de.hdm.kontaktsystem.client.ClientsideSettings.getContactAdministration();		
 		
@@ -66,7 +68,7 @@ public class ContactForm extends VerticalPanel {
 		
 		ListBox addElement = new ListBox();
 		ListBox sharedWithUser = new ListBox();
-		ListBox receivedFrom = new ListBox();
+		Label receivedFrom = new Label();
 		
 		TextBox email = new TextBox();
 		
@@ -102,8 +104,7 @@ public class ContactForm extends VerticalPanel {
 		TextBox textBoxEmail = new TextBox();
 		TextBox textBoxGeburtsdatum = new TextBox();
 		TextBox textBoxAdresse = new TextBox();				
-		
-	
+			
 		
 		/**
 		 * Startpunkt ist die onLoad() Methode
@@ -148,6 +149,63 @@ public class ContactForm extends VerticalPanel {
 					}else{
 						Window.alert("Bitte geben Sie die Email eines Nutzers ein und bestätigen Sie diese mit dem CheckButton");
 					}
+				}
+				
+			});
+			
+			deleteButton.addClickHandler(new ClickHandler(){
+				Vector <PropertyValue> result = new Vector <PropertyValue>();
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					for(CheckBox cb :cbv) {
+						if(cb.getValue()) {
+						for(TextBox tb: tbv) { //TODO: 
+							if(cb.getTitle()==tb.getTitle()) {
+								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
+								if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
+									result.add(pv);
+								}
+							}
+						   }
+						}
+					  }
+					}
+					
+					contactSystemAdmin.deletePropertyValues(result, new AsyncCallback<Vector<PropertyValue>>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+							Window.alert("Die Eigenschaftsausprägungen des Kontakts konnten nicht gelöscht werden.");
+						}
+
+						@Override
+						public void onSuccess(Vector<PropertyValue> result) {
+							// TODO Auto-generated method stub
+							for(PropertyValue pv: result) {
+								for(PropertyValue p: contactToDisplay.getPropertyValues()) {
+									if(pv.getBoId()==p.getBoId()) {
+										result.remove(pv);
+										log("Löschen:" + pv);
+									}
+								}
+							}
+							contactToDisplay.setPropertyValues(result);
+						}
+						
+					});
+					
+				} 
+				
+			});
+			
+			saveButton.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					
 				}
 				
 			});
@@ -243,9 +301,17 @@ public class ContactForm extends VerticalPanel {
 		    /*
 			 * Panel für Anordnung der Button
 			 */
+//			//Geteilt mit
+//			labelSharedWith
+//			sharedWithUser
+//			//Geteilt von
+//			labelReceivedFrom
+//			receivedFrom
+			
 			btnPanel.add(deleteButton);
 			btnPanel.add(saveButton);
-			btnPanel.add(shareButton);
+			btnPanel.add(shareButton);			
+			
 			
 			ePanel.add(email);
 			ePanel.add(emailButton);
@@ -278,8 +344,8 @@ public class ContactForm extends VerticalPanel {
 					contactStatus.setText("Status: Nicht geteilt");
 				}	
 				
-				Boolean isChecked = new Boolean(false);
-				
+				Boolean isChecked = new Boolean(true);
+				int row = 0;
 				//Flextable befüllen
 				for(PropertyValue pv : contact.getPropertyValues()){
 					log("PropertyValue" +pv);
@@ -293,15 +359,21 @@ public class ContactForm extends VerticalPanel {
 					tb.setTitle(pv.getBoId()+"");
 					tb.setText(pv.getValue());
 					
+					cb.addClickHandler(new ClickHandler() {
+
+						@Override
+						public void onClick(ClickEvent event) {
+							cb.setValue(isChecked);							
+						}						
+					});
+					
 					cbv.add(cb);
 					tbv.add(tb);
-					
-					int row = 0;			
+								
 					ft.setWidget(row, 0, label);
 					ft.setWidget(row, 1, tb);
 					ft.setWidget(row, 2, cb);
 					
-//					ft.getFlexCellFormatter().setColSpan(1, 0, 3);
 					log("Table row:" + row);
 					row++;
 				}
@@ -327,9 +399,7 @@ public class ContactForm extends VerticalPanel {
 			 addElement.setVisibleItemCount(contact.getPropertyValues().size());
 				
 			} else {
-				this.contactToDisplay = null;				
-				
-				Grid contactGrid = new Grid(12, 3);
+				this.contactToDisplay = null;		
 				
 				contactGrid.setWidget(0, 0, label);
 				contactGrid.setWidget(0, 1, contactStatus);
