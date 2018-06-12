@@ -324,13 +324,6 @@ public class ContactForm extends VerticalPanel {
 		    /*
 			 * Panel für Anordnung der Button
 			 */
-//			//Geteilt mit
-//			labelSharedWith
-//			sharedWithUser
-//			//Geteilt von
-//			labelReceivedFrom
-//			receivedFrom
-			
 			btnPanel.add(deleteButton);
 			btnPanel.add(saveButton);
 			btnPanel.add(shareButton);			
