@@ -328,6 +328,7 @@ public class ContactSystem implements EntryPoint {
 		 * CSS Identifier für das Logo
 		 */
 		chainSymbolLogo.getElement().setId("logo");
+		logo.getElement().setId("logo");
 		
 		/*
 		 * CSS für Add Panel
