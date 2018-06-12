@@ -109,6 +109,10 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public ContactList removeContactFromList(Contact contact, ContactList contactList);
 	
+	/*
+	 * Get all
+	 */
+	
 	public Vector<Participation> getAllParticipationsByOwner(User u);
 	
 	public Vector<Participation> getAllParticipationsByParticipant(User participant);
@@ -116,6 +120,7 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<Participation> getAllParticipationsByBusinessObject(BusinessObject bo);
 	
 	public Vector<Contact> findAllCSharedByOthersToMe();
+	
 
 
 }
