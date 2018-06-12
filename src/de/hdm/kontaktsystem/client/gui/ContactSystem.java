@@ -82,13 +82,11 @@ public class ContactSystem implements EntryPoint {
 	//Header
 	HorizontalPanel headerPanel = new HorizontalPanel();
 	Label headerText = new Label("Editor");
-	VerticalPanel suchundlogoPanel = new VerticalPanel(); //um die Suche unter dem Logo anzuordnen
 	
 	//Suchfunktion
 	private TextBox search = new TextBox();
 	private Button searchButton = new Button("Suche");
 	
-	//private Label menuLabel = new Label("Menu:");
 	//Buttons Menü links
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
@@ -265,7 +263,7 @@ public class ContactSystem implements EntryPoint {
 
 		//Logo Kontaktsystem
 		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");	
-		logo.setHeight("100px");
+		logo.setHeight("70px");
 		logo.setAltText("Logo");
 				    
 	    searchButton.addClickHandler(new SearchClickHandler());
@@ -296,7 +294,6 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
-		//menuLabel.getElement().setId("menue-label");
 		reportLink.getElement().setId("switch-button");
 		signOutLink.getElement().setId("log-out-button");
 		
@@ -321,7 +318,6 @@ public class ContactSystem implements EntryPoint {
 		/**
 		 * CSS Identifier für das Logo
 		 */
-		chainSymbolLogo.getElement().setId("logo");
 		logo.getElement().setId("logo");
 		
 		/*
@@ -501,16 +497,13 @@ public class ContactSystem implements EntryPoint {
 		addPanel.add(add);
 		
 		//Header
-		suchundlogoPanel.add(logo);
-		//suchundlogoPanel.add(sg);
-		headerPanel.add(suchundlogoPanel);
+		headerPanel.add(logo);
 		headerPanel.add(headerText);
  		headerPanel.add(reportLink);
 	    headerPanel.add(signOutLink);
 	    
 		
 		//Menu Leiste
-	  	//navigation.add(menuLabel);
 	    navigation.add(sg);
 	  	navigation.add(contactButton);
 	  	navigation.add(contactListsButton);
