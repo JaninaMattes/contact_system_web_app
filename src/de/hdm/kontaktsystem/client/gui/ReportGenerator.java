@@ -180,7 +180,7 @@ public class ReportGenerator implements EntryPoint {
 		 * Zuweisen von Bilddateien zu den Image-Elementen, Setzen der Größe
 		 */
 		//Logo
-		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");
 		logo.setHeight("100px");
 		logo.setAltText("Logo");
 		//Such-Symbole

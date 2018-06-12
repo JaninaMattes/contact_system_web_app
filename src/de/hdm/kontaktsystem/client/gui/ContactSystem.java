@@ -81,7 +81,7 @@ public class ContactSystem implements EntryPoint {
 	
 	//Header
 	HorizontalPanel headerPanel = new HorizontalPanel();
-	Label headerText = new Label("KontaktSystem");
+	Label headerText = new Label("Editor");
 	VerticalPanel suchundlogoPanel = new VerticalPanel(); //um die Suche unter dem Logo anzuordnen
 	
 	//Suchfunktion
@@ -120,12 +120,6 @@ public class ContactSystem implements EntryPoint {
 	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
 	private Anchor reportLink = new Anchor("Report");
-	
-	//Logo
-	//logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
-	//logo.setHeight("100px");
-	//logo.setAltText("Logo");
-	//TODO: Logo einbinden
 	
 	// Add Button/Panel
 	private FocusPanel addPanel = new FocusPanel();
@@ -270,7 +264,7 @@ public class ContactSystem implements EntryPoint {
 	    HorizontalPanel trailer = new HorizontalPanel();
 
 		//Logo Kontaktsystem
-		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");	
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");	
 		logo.setHeight("100px");
 		logo.setAltText("Logo");
 				    
