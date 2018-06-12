@@ -211,11 +211,11 @@ class DataCell extends AbstractCell<BusinessObject> {
 		if (value != null) {
 		if (value instanceof ContactList) {
 			
-			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >" + ((ContactList) value).getName() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >  " + ((ContactList) value).getName() + "</p>");
 
 		} else if (value instanceof Contact) {
 			
-			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>" + ((Contact) value).getName().getValue() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>  " + ((Contact) value).getName().getValue() + "</p>");
 
 		} else {
 

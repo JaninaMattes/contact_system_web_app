@@ -15,16 +15,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </welcome-file-list>
   
 <!-- Servlets -->  
-
-  <servlet>
-    <servlet-name>LoginService</servlet-name>
-    <servlet-class>de.hdm.kontaktsystem.server.LoginServiceImpl</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>LoginService</servlet-name>
-    <url-pattern>/kontaktsystem/login</url-pattern>
-  </servlet-mapping>
   
   <servlet>
     <servlet-name>EditorService</servlet-name>

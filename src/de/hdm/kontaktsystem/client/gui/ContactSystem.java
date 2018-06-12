@@ -4,21 +4,14 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -29,16 +22,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.TreeViewModel;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
-import de.hdm.kontaktsystem.shared.bo.Property;
-import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
-import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 
@@ -213,8 +202,9 @@ public class ContactSystem implements EntryPoint {
 			public void onSuccess(User result) {
 				
 					uf.setUser(result);
-//					cf.setMyUser(result);
-					loadContactSystem(); // für Test	
+					log("Set User: "+ result);
+					cf.setMyUser(result);
+					//loadContactSystem(); // für Test	
 				
 			}
 		});	
@@ -338,6 +328,7 @@ public class ContactSystem implements EntryPoint {
 		 * CSS Identifier für das Logo
 		 */
 		chainSymbolLogo.getElement().setId("logo");
+		logo.getElement().setId("logo");
 		
 		/*
 		 * CSS für Add Panel
@@ -497,7 +488,7 @@ public class ContactSystem implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub		
 				
-				//RootPanel.get("Details").add(uf); 
+				RootPanel.get("Details").add(uf); 
 			}
 			
 		});
@@ -506,9 +497,8 @@ public class ContactSystem implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-
-				Window.alert("Add something");
-
+				Contact c = null;
+				cf.setSelected(c);			
 			}
 			
 		});

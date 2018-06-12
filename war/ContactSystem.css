@@ -5,7 +5,6 @@ body {
     text-align: center;  /* Zentrierung im Internet Explorer */
     display: block; /*Block-Elemente */
     font-family: Arial;
-    color: white;
     }
 
 
@@ -64,18 +63,18 @@ body {
 /* Aufbau des Editors */
 .column-left {
     float: left;
-    width: 20wh;
+    width: 20vw;
     height: 80vh;
 }
 
 .column-right {
 	float: right;
-	width: 40wh;
+	width: 45vw;
 	height: 80vh;
 }
 
 .column-centered {
-    width: 40wh;
+    width: 35vw;
     display: inline-block;
     height: 80vh;
 }
@@ -83,13 +82,13 @@ body {
 /* Aufbau des Report Generators */
 .report-left {
 	float: left;
-    width: 25wh;
+    width: 25vw;
     height: 80vh;
 }
 
 .report-right {
 	float: right;
-	width: 75wh;
+	width: 75vw;
 	height: 80vh;
 	overflow: auto;
 }
@@ -150,7 +149,7 @@ body {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 18px;
    	margin: 4px 2px;
     cursor: pointer;
 	
@@ -172,7 +171,7 @@ body {
     display: inline-block;
     font-size: 16px;
     /*margin: 4px 2px;*/
-    margin-bottom: 30px;
+    margin-Bottom: 15vh;
     cursor: pointer;
 }
 
@@ -252,8 +251,8 @@ body {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
     /*Positionierung des Buttons*/
     position: absolute;
-    top: 0%;
-  	left: 92%;
+    top: 5px;
+  	left: calc(100vw - 100px);
   
 }
 #switch-button{ /* "Report"- und "Editor"- Button, um vom Editor in den Report Generator zu gelangen und anders herum */
@@ -278,8 +277,8 @@ body {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
     /*Positionierung des Buttons */
     position: absolute;
-    top: 0%;
-  	left: 84%;
+    top: 5px;
+  	left: calc(100vw - 200px);;
 }
 
 /*#menue-label{
@@ -293,9 +292,7 @@ body {
 /* Das Logo */
 
 #logo{
-    height: 100px;
-    width: 200px;
-    margin: 4px 2px;
+    margin: 15px 20px;
     padding: 2px;
     align-content: left;
 }
@@ -329,9 +326,10 @@ body {
 }
 
 #search-textfeld{
-	width: 187px;
-	hight: 30px;
-	margin-bottom: 30px;
+	width: 12vw;
+	height: 30px;
+	margin-left: 10px;
+	margin-Bottom: 15vh;
 }
 
 #geteiltvontextfeld{
@@ -424,7 +422,7 @@ input:checked {
 /*Div�s*/
 
 div#TopLevelFrame {
-	width: 100wh;
+	width: 100vw;
 	height: 100vh;	
 	text-align: center;
 	background: #051117;
@@ -432,9 +430,9 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-	background: #628cd5; /*W3School*/
+	background: #0c145c; /*W3School*/
 	text-align: center;
-	border: 1px solid black;
+	height: 14vh;
 }
 
 div#Navigator {	
@@ -444,8 +442,9 @@ div#Navigator {
 
 div#Lists {	
 	border-radius: none;
-	background: #BFE0FF;
+	background: #edf4ff;
 	align-content: center;
+	padding-left: 5vw;
 }
 
 div#Details {
@@ -456,8 +455,8 @@ div#Details {
 }
 
 div#Trailer {
-	width: 100%;
-	height: 5%;
+	width: 100vw;
+	height: 4vh;
 	clear: both;
 	padding: 10px 0;
 	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
@@ -472,19 +471,20 @@ div#Trailer {
 
 .Cell{
 	Border: none;
+	font-size:16px;
 
 }
 
 #add{
     position: fixed;
     top: 87vh;
-    left: 53vw;
+    left: 50vw;
     text-align: center;
     z-index: 5;
     height: 50px;
     width:  50px;
     color: white;
-    background: #00C6FF;
+    background: #0c145c;
     border-radius: 50px;
 }
 

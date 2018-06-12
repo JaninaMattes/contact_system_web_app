@@ -27,7 +27,7 @@ public class UserForm extends VerticalPanel{
 						+ "Diese Änderung kann nicht rückgängig gemacht werden. ";
 	Button delete = new Button("Account Löschen");
 	VerticalPanel vp = new VerticalPanel();
-	
+	ContactForm cf = new ContactForm();
 	User myUser;
 	
 	/**
@@ -38,14 +38,15 @@ public class UserForm extends VerticalPanel{
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 		
 		this.add(vp);
-		welcome.setText("Hallo ");
+		//welcome.setText("Hallo ");
 		vp.add(welcome);
-		id.setText("Meine User ID: ");
+		//id.setText("Meine User ID: ");
 		vp.add(id);
-		email.setText("Meine Email Adresse: ");
+		//email.setText("Meine Email Adresse: ");
 		vp.add(email);
-		contact.setText("Mein Kontakt: ");
 		vp.add(contact);
+		vp.add(cf);
+
 		vp.add(delete);
 		
 	}
@@ -53,10 +54,16 @@ public class UserForm extends VerticalPanel{
 	public void setUser(User user){
 		myUser = user;
 		if(myUser != null){
-			welcome.setText(welcome.getText() + user.getUserContact().getName());
-			id.setText(id.getText() + user.getGoogleID());
-			email.setText(email.getText() + user.getGMail());
-			contact.setText(contact.getText() + user.getUserContact().toString());
+			welcome.setText("Hallo " + user.getUserContact().getName().getValue());
+			id.setText("Meine User ID: "+ user.getGoogleID());
+			email.setText("Meine Email Adresse: "+ user.getGMail());
+			contact.setText("Mein Kontakt: ");
+			cf.setSelected(user.getUserContact());
+			
+			log("Name: "+ user.getUserContact().getName().getValue());
+			log("ID: "+user.getGoogleID()+"");
+			log("Mail: " + user.getGMail());
+			log("Contact: "+ user.getUserContact().toString());
 			
 			delete.addClickHandler(new ClickHandler(){
 				@Override
@@ -84,5 +91,8 @@ public class UserForm extends VerticalPanel{
 		}
 	}
 	
+	native void log(String s)/*-{
+	console.log(s);
+	}-*/;
 	
 }
