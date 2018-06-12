@@ -672,13 +672,24 @@ public class ContactListForm extends VerticalPanel {
 					}
 
 					@Override
-					public void onSuccess(Vector<Contact> allConFromUser) {
-						
-						for (Contact con : allConFromUser) {						
-							if (con.getName().getValue() == contactToAddName) {
-								contactSystemAdmin.addContactToList(con, contactListToDisplay, new ContactsToAddClCallback());
-								//log("Hinzuzufügender Kontakt zu Kontaktliste: " + con.toString());
-							}
+					public void onSuccess(Vector<Contact> allConFromUser) {	
+						 
+						for (Contact conFromUser : allConFromUser) {
+							
+							// Wenn ausgewählter Contact aus Listbox mit Contact des Users übereinstimmt
+							if (conFromUser.getName().getValue() == contactToAddName) {
+								
+								for (Contact conFromCl : contactListToDisplay.getContacts()) {
+									// und hinzuzufügender Kontakt nicht bereits als Kontakt in Kontaktlist vorhanden
+									if (conFromUser.getName().getValue() != conFromCl.getName().getValue()) {
+										// ausgewählten Kontakt zu Kontaktliste hinzufügen
+										contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay, new ContactsToAddClCallback());
+										//log("Hinzuzufügender Kontakt zu Kontaktliste: " + con.toString());
+									} else {
+										Window.alert("Kontakt bereits in Kontaktliste vorhanden");
+									}
+								}
+							}			
 						}
 					}
 				});
