@@ -118,24 +118,15 @@ public class ContactList extends BusinessObject {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if(!(obj instanceof ContactList))
 			return false;
-		ContactList other = (ContactList) obj;
-		if (contacts == null) {
-			if (other.contacts != null)
-				return false;
-		} else if (!contacts.equals(other.contacts))
+		if(this.getBoId() != ((ContactList) obj).getBoId())
 			return false;
-		if (getOwner() == null) {
-			if (other.getOwner() != null)
-				return false;
-		} else if (!getOwner().equals(other.getOwner()))
-			return false;
+		
 		return true;
+		
 	}
 
 	
