@@ -654,6 +654,7 @@ public class ContactListForm extends VerticalPanel {
 		
 		@Override
 		public void onClick(ClickEvent event) {
+			
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 				
