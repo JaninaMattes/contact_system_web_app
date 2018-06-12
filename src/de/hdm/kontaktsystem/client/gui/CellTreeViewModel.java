@@ -144,16 +144,49 @@ public class CellTreeViewModel implements TreeViewModel {
 		//getNodeInfo(vbo);
 	}
 	
-	public void addBusinessObject(BusinessObject bo){
-		dataProvider.getList().add(bo);
+	public void updateBusinessObject(BusinessObject bo){
+		log("Update Data");
+		if(bo instanceof Contact) {
+			dataProvider.getList().remove(bo);
+			dataProvider.getList().add(bo);
+		} else if (bo instanceof ContactList){
+			rootData.getList().remove(bo);
+			rootData.getList().add(bo);
+		}
+		
 	}
+	
+	/**
+	 * AddBusinessObjekt Methode f�r den AddButton im CellTree
+	 * Die Methode muss erst pr�fen, ob das BusinessObject ein Kontakt,
+	 * oder eine Kontaktliste ist.
+	 * @param bo
+	 */
+	
+	public void addBusinessObject(BusinessObject bo){
+		if(bo instanceof Contact) {
+		dataProvider.getList().add(bo);
+		} else if (bo instanceof ContactList){
+		rootData.getList().add(bo);
+		}
+	}
+	
+	/**
+	 * RemoveBusinessObjekt Methode f�r den RemoveButton im CellTree
+	 * Die Methode muss erst pr�fen, ob das BusinessObject ein Kontakt,
+	 * oder eine Kontaktliste ist.
+	 * @param bo
+	 */
 	
 	public void removeBusinessObject(BusinessObject bo){
+		if(bo instanceof Contact) {
 		dataProvider.getList().remove(bo);
+		} else if (bo instanceof ContactList){
+		rootData.getList().remove(bo);
+		}
+		
 	}
-
 	
-
 	/**
 	 * Hier wird die Baumstruktur getestet.
 	 */
@@ -196,7 +229,7 @@ public class CellTreeViewModel implements TreeViewModel {
 								console.log(s);
 								}-*/;
 
-
+	
 
 
 

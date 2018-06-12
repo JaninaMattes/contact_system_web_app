@@ -11,8 +11,7 @@ body {
 
 #headertext{ /*Ueberschrift des Report-Generators und des Editors*/
 	border: none;
-	text-align: center;
-	margin: 40px 250px 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
+	margin: 20px 100% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
 	padding-left: 150px;
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 3em; /*Schriftgr��e*/
@@ -136,6 +135,7 @@ body {
     cursor: pointer;
 	border-radius: 0px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
+    
 }
 
 #menu-button{ /* Buttons der Men�leiste des Editors */
@@ -165,21 +165,21 @@ body {
     font-family: "Arial", Arial, sans-serif;
 	background-color: #c0c0c0;
     border: none;
-    padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     /*margin: 4px 2px;*/
-    margin-Bottom: 15vh;
+    margin-top: 3vh;
     cursor: pointer;
 }
 
 #searchAllContacts{ /* Button "Alle Kontakte" im Report Generator */
 	height: 25px;
     width: 100px;
-    margin-left: 5px;
-    margin-top: 10px;
+    /*margin: 15px 73px;*/
+    margin-left: 73px;
+    margin-top: 15px;
     font-family: "Arial", Arial, sans-serif;
 	background-color: #c0c0c0;
     border: none;
@@ -281,20 +281,14 @@ body {
   	left: calc(100vw - 200px);;
 }
 
-/*#menue-label{
-	font-family: "Arial", Arial, sans-serif;
-	color: white;
-	font-size: 25px;
-	border: none;
-	margin: 6px 3px;
-}*/
-
 /* Das Logo */
 
 #logo{
-    margin: 15px 20px;
+    margin: 15px 73px;
     padding: 2px;
     align-content: left;
+    display: table-cell;
+  	vertical-align: middle;
 }
 
 /* DropDown-Liste */
@@ -326,10 +320,12 @@ body {
 }
 
 #search-textfeld{
-	width: 12vw;
-	height: 30px;
-	margin-left: 10px;
-	margin-Bottom: 15vh;
+	width: 15vw;
+	height: 27px;
+	margin-top: 3vh;
+	/*margin-left: 10px;*/
+	/*margin-Bottom: 13vh;*/
+	
 }
 
 #geteiltvontextfeld{
@@ -432,7 +428,8 @@ div#TopLevelFrame {
 div#Header { 	
 	background: #0c145c; /*W3School*/
 	text-align: center;
-	height: 14vh;
+	height: 15vh;
+	vertical-align: middle;
 }
 
 div#Navigator {	
