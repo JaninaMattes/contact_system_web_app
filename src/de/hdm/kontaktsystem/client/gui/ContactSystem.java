@@ -485,7 +485,7 @@ public class ContactSystem implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub		
-				
+				RootPanel.get("Details").clear();
 				RootPanel.get("Details").add(uf); 
 			}
 			

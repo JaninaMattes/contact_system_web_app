@@ -26,9 +26,9 @@ public class DBCleaner {
 									{	"Kim Lee"	,			"Kim"	, 			"Daimler TSS"			, "07117657452" 	, "Kim@gmail.com"		}, // 9
 									{	"Maximilian Muster"	,	"Maxi"	, 			"MusterFirma"			, "07111235756" 	, "Maxi@gmail.com"		}, // 10
 									{	"Katalin Wagner",		"Katalin"	, 			"HdM" 				, "07110985314" 	, "Katalin@gmail.com"	}, // 11
-									{	"Sandra Prestel"	,		"Sandra"	, 			"HdM" 				, "07119832476" 	, "Sandra@gmail.com"	}, // 12
-									{	"Test User2"	,		"Testi"	, 			"TestFirma" 			, "73571" 			, "Tes1@gmail.com"		}, // 13
-									{	"Test User3"	,		"Test"	, 			"TestFirma" 			, "73572" 			, "Test2@gmail.com"		}, // 14
+									{	"Sandra Prestel",		"Sandra"	, 			"HdM" 				, "07119832476" 	, "Sandra@gmail.com"	}, // 12
+									{	"Luca Holzwart",		"Luca"	, 			   "Bosch" 				, "10231239991" 	, "Luca@gmail.com"		}, // 13
+									{	"Test User2"	,		"Test"	, 			"TestFirma" 			, "73572" 			, "Test2@gmail.com"		}, // 14
 									
 									};
 	private static PropertyValue pv;
