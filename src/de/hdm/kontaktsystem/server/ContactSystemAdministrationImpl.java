@@ -124,16 +124,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		if (guser != null) {
 
 			double id = Double.parseDouble(guser.getUserId());
-			user.setGoogleID(id);
-			user.setGMail(guser.getEmail());
-			// user.setNickname(guser.getNickname()); // Not used
+			user = UserMapper.userMapper().findById(id);
+			
 
-			user.setLoggedIn(true); // norm True
-			user.setLogoutUrl(userService.createLogoutURL(requestUri));
-
-			if (UserMapper.userMapper().findById(id) == null) {
+			if (user == null) {
+				
 				System.out.println("Create new User: " + user);
-
+				user = new User();
+				user.setGoogleID(id);
+				user.setGMail(guser.getEmail());
+//				user.setNickname(guser.getNickname()); // Not used
 				own.setBo_Id(1); // updated in db
 				own.setOwner(user);
 				own.setName(name);
@@ -151,6 +151,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			} else {
 				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
 			}
+			user.setLoggedIn(true); // norm True
+			user.setLogoutUrl(userService.createLogoutURL(requestUri));
 
 		} else {
 
@@ -413,6 +415,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 	@Override
 	public ContactList createContactList(ContactList contactList) {
+		if(contactList.getOwner() == null) contactList.setOwner(this.getUserByID(this.getCurrentUser()));
 		boMapper.insert(contactList);
 		return clMapper.insertContactList(contactList);
 
@@ -774,7 +777,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<BusinessObject> getAllSharedByOthersToMe() {
 		Vector<BusinessObject> bov = new Vector<BusinessObject>();
-		System.out.println("FInd all shared");
 		for (Contact c : this.findAllCSharedByOthersToMe()) {
 			
 			bov.add(c);
@@ -837,14 +839,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			participationVector = this.getAllParticipationsByOwner(user);		
 			Vector<Contact> contactResultVector = new Vector <Contact>(); 		
 					
-			for (Participation part : participationVector) {
-				 System.out.println("part id:" + part.getReferenceID());			 
+			for (Participation part : participationVector) {			 
 				 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
 				 Contact contact = new Contact();
 				 
 				 	if(bo instanceof Contact) {			 		
 				 		contact = (Contact) bo;
-				 		System.out.println("contact name " + contact.getName());
 				 		contactResultVector.addElement(contact);	     
 				 }		
 			}	 	

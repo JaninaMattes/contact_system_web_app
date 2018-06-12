@@ -5,12 +5,9 @@ body {
     text-align: center;  /* Zentrierung im Internet Explorer */
     display: block; /*Block-Elemente */
     font-family: Arial;
-    color: white;
     }
 
-div {
-	border: solid 0.5px black; /*Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
-}
+
 
 #headertext{ /*Ueberschrift des Report-Generators und des Editors*/
 	border: none;
@@ -18,7 +15,7 @@ div {
 	margin: 40px 250px 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
 	padding-left: 150px;
 	font-family: "Arial", Arial, sans-serif;
-  	font-size: 2em; /*Schriftgr��e*/
+  	font-size: 3em; /*Schriftgr��e*/
   	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
   	color: white; /*Schriftfarbe*/
   	text-align: center; /*zentriert*/
@@ -66,18 +63,18 @@ div {
 /* Aufbau des Editors */
 .column-left {
     float: left;
-    width: 20%;
+    width: 20vw;
     height: 80vh;
 }
 
 .column-right {
 	float: right;
-	width: 40%;
+	width: 45vw;
 	height: 80vh;
 }
 
 .column-centered {
-    width: 40%;
+    width: 35vw;
     display: inline-block;
     height: 80vh;
 }
@@ -85,13 +82,13 @@ div {
 /* Aufbau des Report Generators */
 .report-left {
 	float: left;
-    width: 25%;
+    width: 25vw;
     height: 80vh;
 }
 
 .report-right {
 	float: right;
-	width: 75%;
+	width: 75vw;
 	height: 80vh;
 	overflow: auto;
 }
@@ -141,23 +138,25 @@ div {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#menue-button{ /* Buttons der Men�leiste des Editors */
-	height: 40px;
-    width: 240px;
+#menu-button{ /* Buttons der Men�leiste des Editors */
+	height: 63px;
+    width: 20vw;
     font-family: "Arial", Arial, sans-serif;
-	border: solid 1px white; 
-	background-color: #727272;
+	background: #0c145c;
     border: none;
-    border-radius: 0;
-    color: #000000;
+    color: #ffffff;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 18px;
    	margin: 4px 2px;
     cursor: pointer;
 	
+}
+
+#menu-button:hover{
+    background: #628cd5; /* Alternativ #1c347c */
 }
 
 #searchButton{ /* Suchen-Button im Editor */
@@ -172,7 +171,7 @@ div {
     display: inline-block;
     font-size: 16px;
     /*margin: 4px 2px;*/
-    margin-bottom: 30px;
+    margin-Bottom: 15vh;
     cursor: pointer;
 }
 
@@ -198,8 +197,8 @@ div {
 	height: 30px;
     width: 80px; 
     font-family: "Arial", Arial, sans-serif;     
-	background-color: #00FFC0;
-	color: white;
+	background-color: #00d000;
+	color: black;
     border: none;
     padding: 0px;
     text-align: center;
@@ -230,17 +229,14 @@ div {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#log-out-button{ /* Logout-Butten im Editor und Report Generator */
+#log-out-button{ /* Logout-Button im Editor und Report Generator */
 	height: 30px;
     width: 90px;
 	float: right;
     font-family: "Arial", Arial, sans-serif;    
-    border: none;
-    border-radius: 5px; /*abgerundete Ecken*/
-    color: red;
-    background-color: black;
-    padding-top: 5px;
-    padding-bottom: 5px;
+	border: solid 1px #727272; 
+    color: white;
+    background-color: #727272;
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
@@ -248,10 +244,15 @@ div {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;	
-    align: right;
-    display: table-cell;
-    vertical-align: middle;
+    align-content: right;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
+    /*Positionierung des Buttons*/
+    position: absolute;
+    top: 5px;
+  	left: calc(100vw - 100px);
   
 }
 #switch-button{ /* "Report"- und "Editor"- Button, um vom Editor in den Report Generator zu gelangen und anders herum */
@@ -274,22 +275,24 @@ div {
     padding-top: 5px;
     padding-bottom: 5px;
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
+    /*Positionierung des Buttons */
+    position: absolute;
+    top: 5px;
+  	left: calc(100vw - 200px);;
 }
 
-#menue-label{
+/*#menue-label{
 	font-family: "Arial", Arial, sans-serif;
 	color: white;
 	font-size: 25px;
 	border: none;
 	margin: 6px 3px;
-}
+}*/
 
 /* Das Logo */
 
 #logo{
-    height: 100px;
-    width: 200px;
-    margin: 4px 2px;
+    margin: 15px 20px;
     padding: 2px;
     align-content: left;
 }
@@ -309,7 +312,9 @@ div {
 /*TODO: weiter ausschreiben, wenn ReportGenerator fertig */
 
 #TextBox{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 #findByTextbox{
@@ -321,23 +326,30 @@ div {
 }
 
 #search-textfeld{
-	width: 187px;
-	hight: 30px;
-	margin-bottom: 30px;
+	width: 12vw;
+	height: 30px;
+	margin-left: 10px;
+	margin-Bottom: 15vh;
 }
 
 #geteiltvontextfeld{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 /*Listboxen*/
 
 #teilenmitlistbox{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 #geteiltmitlistbox{
-	
+	margin-left: 4px;
+	padding-left: 182px;
+	margin-right: 5px;
 }
 
 /* Labels */
@@ -377,7 +389,7 @@ div {
 }
 
 #contactstatus{
-	
+	border:none;
 }
 
 #filtern{
@@ -393,44 +405,58 @@ div {
 }
 
 #checkbox{
+	border-radius: none;
 	margin-left: 20px; 
+	height: 10px;
+    width: 10px;
+    
+}
+
+input:checked {
+	border-radius: none;
+    height: 10px;
+    width: 10px;
+    background: #00C6FF;
 }
 
 /*Div�s*/
 
 div#TopLevelFrame {
-	width: 100%;
-	height: 100%;	
+	width: 100vw;
+	height: 100vh;	
 	text-align: center;
 	background: #051117;
 	align-content: center;
  } 
 
 div#Header { 	
-	background: linear-gradient(to bottom right, #0077FF, #00C6FF); /*W3School*/
+	background: #0c145c; /*W3School*/
 	text-align: center;
+	height: 14vh;
 }
 
 div#Navigator {	
-	background: #224E7F;
+	background: #0c145c;
 
 }
 
 div#Lists {	
-	background: #ffffff;
+	border-radius: none;
+	background: #edf4ff;
 	align-content: center;
+	padding-left: 5vw;
 }
 
 div#Details {
-	background: #fefeff;
+	background: white;
 	align-content: center;
 	padding-left: 20px;
 	padding-top: 10px;
 }
 
 div#Trailer {
-	width: 100%;
-	height: 5%;
+	width: 100vw;
+	height: 4vh;
 	clear: both;
 	padding: 10px 0;
 	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
@@ -439,24 +465,26 @@ div#Trailer {
 	color: white;
 	text-align: center;	
 	align-content: center;
-	background-color: #224E7F;
-
+	background-color: #193852;
 
 }
 
 .Cell{
 	Border: none;
+	font-size:16px;
 
 }
 
 #add{
     position: fixed;
     top: 87vh;
-    left: 53vw;
+    left: 50vw;
     text-align: center;
     z-index: 5;
     height: 50px;
     width:  50px;
-    background: #00cfff;
+    color: white;
+    background: #0c145c;
     border-radius: 50px;
 }
+

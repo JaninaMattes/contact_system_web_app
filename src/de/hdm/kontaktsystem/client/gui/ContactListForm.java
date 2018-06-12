@@ -29,7 +29,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class ContactListForm extends VerticalPanel {
 	ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
 	ContactList contactListToDisplay = null;
-	ContactListTreeViewModel cltvm = null;
+	CellTreeViewModel tvm = null;
 
 	/**
 	 * Widgets mit variablen Inhalten.
@@ -47,7 +47,6 @@ public class ContactListForm extends VerticalPanel {
 	Button deleteConButton = new Button("Kontakt entfernen");
 
 
-
 	Button deleteClButton = new Button("Kontaktliste löschen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
@@ -59,11 +58,11 @@ public class ContactListForm extends VerticalPanel {
 	Label labelSharedWith = new Label("Geteilt mit: ");
 	Label labelReceivedFrom = new Label("Eigentümer: ");
 	Label labelAddConsToList = new Label("Kontakt hinzufügen ");
+	Label clOwner = new Label();
 	
 
 	CheckBox checkBox1 = new CheckBox();
 	ListBox listBoxShareWith = new ListBox();	
-	TextBox textBoxReceivedFrom = new TextBox();
 	ListBox listBoxSharedWith = new ListBox();
 	TextBox nameContactList = new TextBox();
 	ListBox contactNames = new ListBox();
@@ -98,7 +97,7 @@ public class ContactListForm extends VerticalPanel {
 		contactListGrid.setWidget(4, 1, listBoxSharedWith);
 		
 		contactListGrid.setWidget(5, 0, labelReceivedFrom);
-		contactListGrid.setWidget(5, 1, textBoxReceivedFrom);
+		contactListGrid.setWidget(5, 1, clOwner);
 		
 		contactListGrid.setWidget(6, 1, btnPanel);
 
@@ -138,7 +137,7 @@ public class ContactListForm extends VerticalPanel {
 
 		nameContactList.getElement().setId("Textbox");
 		contactNames.getElement().setId("ListBox");
-		textBoxReceivedFrom.getElement().setId("TextBox");
+		clOwner.getElement().setId("contactlabel");
 		listBoxShareWith.getElement().setId("ListBox");
 		listBoxSharedWith.getElement().setId("ListBox");
 		contactsToAdd.getElement().setId("ListBox");
@@ -193,10 +192,10 @@ public class ContactListForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			String clName = nameContactList.getText();
 			ContactList cl = new ContactList();
-			User u = new User();
-			u.setGoogleID(126);
+//			User u = new User();
+//			u.setGoogleID(126);
 			cl.setName(clName);	
-			cl.setOwner(u);
+//			cl.setOwner(u);
 			if (cl == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 			} else {
@@ -314,7 +313,7 @@ public class ContactListForm extends VerticalPanel {
 		public void onSuccess(ContactList result) {
 			if (result != null) {
 				setSelected(null);
-				cltvm.removeContactList(result);
+				tvm.removeBusinessObject(result);
 				Window.alert("Kontakt wurde erfolgreich aus der Liste entfernt");
 			}
 		}
@@ -372,7 +371,7 @@ public class ContactListForm extends VerticalPanel {
 					log(clPart.toString());
 					setSelected(null);
 					//TODO: @Oli removeContactList überprüfen, gibt null zurück!!
-					cltvm.removeContactList(clPart);
+					tvm.removeBusinessObject(clPart);
 					Window.alert("Teilhaberschaft mit Kontaktliste gelöscht!");
 				}
 			}
@@ -396,7 +395,7 @@ public class ContactListForm extends VerticalPanel {
 			public void onSuccess(ContactList result) {
 				if (result != null) {
 					setSelected(null);
-					cltvm.removeContactList(result);
+					tvm.removeBusinessObject(result);
 					Window.alert("Kontaktliste gelöscht!");
 				}
 			}
@@ -409,8 +408,8 @@ public class ContactListForm extends VerticalPanel {
 	 * @author Kim-Ly
 	 */
 
-	void setCltvm(ContactListTreeViewModel cltvm) {
-		this.cltvm = cltvm;
+	void setTree(CellTreeViewModel tvm) {
+		this.tvm = tvm;
 	}
 
 	void setSelected(ContactList cl) {
@@ -564,7 +563,7 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onSuccess(Vector <ContactList> clVec) {
 			if (clVec != null) {						
-				textBoxReceivedFrom.setText(contactListToDisplay.getOwner().getGMail());		
+				clOwner.setText(contactListToDisplay.getOwner().getGMail());		
 				
 			} else {
 				Window.alert("Eigentümer der Kontaktliste konnte nicht gefunden werden");

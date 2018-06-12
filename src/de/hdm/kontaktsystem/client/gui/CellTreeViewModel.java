@@ -21,7 +21,7 @@ import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 
-public class TreeViewModelTest implements TreeViewModel {
+public class CellTreeViewModel implements TreeViewModel {
 
 	private ContactSystemAdministrationAsync csa = ClientsideSettings.getContactAdministration();
 	private ListDataProvider<BusinessObject> dataProvider = null;
@@ -64,7 +64,7 @@ public class TreeViewModelTest implements TreeViewModel {
 		
 	}
 	
-	public TreeViewModelTest() {
+	public CellTreeViewModel() {
 		BoKeyProvider keyProvider = new BoKeyProvider();
 		selectionModel = new SingleSelectionModel<BusinessObject>();
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
@@ -211,15 +211,15 @@ class DataCell extends AbstractCell<BusinessObject> {
 		if (value != null) {
 		if (value instanceof ContactList) {
 			
-			sb.appendHtmlConstant("<p>" + "<img src='/images/group.png' height='22px' width='22px' >" + ((ContactList) value).getName() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >  " + ((ContactList) value).getName() + "</p>");
 
 		} else if (value instanceof Contact) {
 			
-			sb.appendHtmlConstant("<p>" + "<img src='/images/person.png' height='22px' width='22px'>" + ((Contact) value).getName().getValue() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>  " + ((Contact) value).getName().getValue() + "</p>");
 
 		} else {
 
-			sb.appendHtmlConstant("<p>" + value.getBoId() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + value.getBoId() + "</p>");
 
 		}
 		}
