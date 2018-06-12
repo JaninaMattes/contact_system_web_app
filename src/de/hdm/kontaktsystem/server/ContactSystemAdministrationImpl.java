@@ -777,7 +777,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<BusinessObject> getAllSharedByOthersToMe() {
 		Vector<BusinessObject> bov = new Vector<BusinessObject>();
-		System.out.println("FInd all shared");
 		for (Contact c : this.findAllCSharedByOthersToMe()) {
 			
 			bov.add(c);
@@ -840,14 +839,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			participationVector = this.getAllParticipationsByOwner(user);		
 			Vector<Contact> contactResultVector = new Vector <Contact>(); 		
 					
-			for (Participation part : participationVector) {
-				 System.out.println("part id:" + part.getReferenceID());			 
+			for (Participation part : participationVector) {			 
 				 BusinessObject bo = this.findBusinessObjectByID(part.getReferenceID());
 				 Contact contact = new Contact();
 				 
 				 	if(bo instanceof Contact) {			 		
 				 		contact = (Contact) bo;
-				 		System.out.println("contact name " + contact.getName());
 				 		contactResultVector.addElement(contact);	     
 				 }		
 			}	 	

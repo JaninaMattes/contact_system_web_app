@@ -202,8 +202,9 @@ public class ContactSystem implements EntryPoint {
 			public void onSuccess(User result) {
 				
 					uf.setUser(result);
-//					cf.setMyUser(result);
-					loadContactSystem(); // für Test	
+					log("Set User: "+ result);
+					cf.setMyUser(result);
+					//loadContactSystem(); // für Test	
 				
 			}
 		});	
@@ -486,7 +487,7 @@ public class ContactSystem implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub		
 				
-				//RootPanel.get("Details").add(uf); 
+				RootPanel.get("Details").add(uf); 
 			}
 			
 		});

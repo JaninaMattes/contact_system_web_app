@@ -14,7 +14,7 @@ public class DBCleaner {
 	private static User u;
 	private static Property[] p = new Property[5]; 
 //											0: Name				1: Nick					2:Firma					3:Tel				4:Email
-	private static String[][] data ={{	"Oliver Gorges"	,		"Oli"	, 	"Stuttgarter Straßenbahen AG" 	, "07117651745" 	, "Oli@gmail.com"		}, // 0
+	private static String[][] data ={{	"Oliver Gorges"	,		"Oli"	, 	"Stuttgarter Straßenbahnen AG" 	, "07117651745" 	, "Oli@gmail.com"		}, // 0
 									{	"Michi Gorges"	,		"Michi"	, 			"Schreinerei Weiss"		, "07117651745" 	, "Michi@gmail.com"		}, // 1
 									{	"Michi Wörner"	,		"Michi"	, 			"Thyssen Krupp" 		, "07118123894" 	, "MichiW@gmail.com"	}, // 2
 									{	"Marco Pracher"	,		"Marco"	, 				"HdM" 				, "07117261234" 	, "Marco@gmail.com"		}, // 3
@@ -26,7 +26,7 @@ public class DBCleaner {
 									{	"Kim Lee"	,			"Kim"	, 			"Daimler TSS"			, "07117657452" 	, "Kim@gmail.com"		}, // 9
 									{	"Maximilian Muster"	,	"Maxi"	, 			"MusterFirma"			, "07111235756" 	, "Maxi@gmail.com"		}, // 10
 									{	"Katalin Wagner",		"Katalin"	, 			"HdM" 				, "07110985314" 	, "Katalin@gmail.com"	}, // 11
-									{	"Sandra Pestel"	,		"Sandra"	, 			"HdM" 				, "07119832476" 	, "Sandra@gmail.com"	}, // 12
+									{	"Sandra Prestel"	,		"Sandra"	, 			"HdM" 				, "07119832476" 	, "Sandra@gmail.com"	}, // 12
 									{	"Test User2"	,		"Testi"	, 			"TestFirma" 			, "73571" 			, "Tes1@gmail.com"		}, // 13
 									{	"Test User3"	,		"Test"	, 			"TestFirma" 			, "73572" 			, "Test2@gmail.com"		}, // 14
 									

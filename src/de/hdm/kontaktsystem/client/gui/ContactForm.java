@@ -113,7 +113,7 @@ public class ContactForm extends VerticalPanel {
 
 			final User user = new User();
 
-			VerticalPanel vp  = new VerticalPanel();
+			final VerticalPanel vp  = new VerticalPanel();
 			this.add(vp);
 			
 			//CSS
