@@ -200,6 +200,15 @@ public class CellTreeViewModel implements TreeViewModel {
 
 
 
+	public void updateContact(Contact result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+
 	
 
 }
