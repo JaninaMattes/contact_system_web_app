@@ -55,7 +55,6 @@ public class ContactListForm extends VerticalPanel {
 	Button deleteConButton = new Button("Kontakt entfernen");
 
 
-
 	Button deleteClButton = new Button("Kontaktliste löschen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
@@ -67,11 +66,11 @@ public class ContactListForm extends VerticalPanel {
 	Label labelSharedWith = new Label("Geteilt mit: ");
 	Label labelReceivedFrom = new Label("Eigentümer: ");
 	Label labelAddConsToList = new Label("Kontakt hinzufügen ");
+	Label clOwner = new Label();
 	
 
 	CheckBox checkBox1 = new CheckBox();
 	ListBox listBoxShareWith = new ListBox();	
-	TextBox textBoxReceivedFrom = new TextBox();
 	ListBox listBoxSharedWith = new ListBox();
 	TextBox nameContactList = new TextBox();
 	ListBox contactNames = new ListBox();
@@ -108,7 +107,7 @@ public class ContactListForm extends VerticalPanel {
 		contactListGrid.setWidget(4, 1, listBoxSharedWith);
 		
 		contactListGrid.setWidget(5, 0, labelReceivedFrom);
-		contactListGrid.setWidget(5, 1, textBoxReceivedFrom);
+		contactListGrid.setWidget(5, 1, clOwner);
 		
 		contactListGrid.setWidget(6, 1, btnPanel);
 
@@ -148,7 +147,7 @@ public class ContactListForm extends VerticalPanel {
 
 		nameContactList.getElement().setId("Textbox");
 		contactNames.getElement().setId("ListBox");
-		textBoxReceivedFrom.getElement().setId("TextBox");
+		clOwner.getElement().setId("contactlabel");
 		listBoxShareWith.getElement().setId("ListBox");
 		listBoxSharedWith.getElement().setId("ListBox");
 		contactsToAdd.getElement().setId("ListBox");
@@ -569,7 +568,7 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onSuccess(Vector <ContactList> clVec) {
 			if (clVec != null) {						
-				textBoxReceivedFrom.setText(contactListToDisplay.getOwner().getGMail());		
+				clOwner.setText(contactListToDisplay.getOwner().getGMail());		
 				
 			} else {
 				Window.alert("Eigentümer der Kontaktliste konnte nicht gefunden werden");
