@@ -77,7 +77,7 @@ public class DBCleaner {
 		
 		c = new Contact(); //1
 		c.setOwner(u);
-		
+		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
 			pv = new PropertyValue();

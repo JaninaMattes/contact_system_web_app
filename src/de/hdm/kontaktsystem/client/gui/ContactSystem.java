@@ -137,6 +137,9 @@ public class ContactSystem implements EntryPoint {
 	private ContactListForm clf = new ContactListForm();
 	private UserForm uf = new UserForm();
 	
+	//Add
+	private boolean addContact = true;
+	
 	/**
 	 * EntryPoint
 	 */
@@ -357,6 +360,9 @@ public class ContactSystem implements EntryPoint {
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 			//contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
+				
+			addContact = true;
+			addPanel.setVisible(true);
 			contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -387,6 +393,8 @@ public class ContactSystem implements EntryPoint {
 		contactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 			//	contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
+				addContact = false;
+				addPanel.setVisible(true);
 				contactSystemAdmin.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -417,7 +425,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				
+				addPanel.setVisible(false);
 				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -446,7 +454,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				
+				addPanel.setVisible(false);
 				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -487,8 +495,17 @@ public class ContactSystem implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				Contact c = null;
-				cf.setSelected(c);			
+				RootPanel.get("Details").clear();
+				if(addContact){
+					Contact c = null;
+					cf.setSelected(c);
+					RootPanel.get("Details").add(cf);
+				}else{
+					ContactList cl = null;
+					clf.setSelected(cl);
+					RootPanel.get("Details").add(clf);
+				}
+							
 			}
 			
 		});
