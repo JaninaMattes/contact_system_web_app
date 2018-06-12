@@ -204,6 +204,7 @@ public class ContactSystem implements EntryPoint {
 					uf.setUser(result);
 					log("Set User: "+ result);
 					cf.setMyUser(result);
+					clf.setMyUser(result);
 					//loadContactSystem(); // für Test	
 				
 			}

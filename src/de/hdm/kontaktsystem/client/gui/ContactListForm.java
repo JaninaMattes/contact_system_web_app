@@ -27,9 +27,12 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 
 public class ContactListForm extends VerticalPanel {
+	
 	ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
 	ContactList contactListToDisplay = null;
 	CellTreeViewModel tvm = null;
+	User myUser = null;
+
 
 	/**
 	 * Widgets mit variablen Inhalten.
@@ -113,7 +116,7 @@ public class ContactListForm extends VerticalPanel {
 		deleteClButton.setPixelSize(110, 30);
 		btnPanel.add(saveButton);
 		btnPanel.add(deleteClButton);
-		saveButton.addClickHandler(new saveClickHandler());
+		saveButton.addClickHandler(new saveAndUpdateClickHandler());
 		deleteClButton.addClickHandler(new deleteContactListClickHandler());
 		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
 		
@@ -188,26 +191,44 @@ public class ContactListForm extends VerticalPanel {
 	 *
 	 */
 
-	private class saveClickHandler implements ClickHandler {
+	private class saveAndUpdateClickHandler implements ClickHandler {
+		
 		public void onClick(ClickEvent event) {
+			
 			String clName = nameContactList.getText();
-			ContactList cl = new ContactList();
-//			User u = new User();
-//			u.setGoogleID(126);
-			cl.setName(clName);	
-//			cl.setOwner(u);
-			if (cl == null) {
+			//contactListToDisplay.setName(clName);
+			myUser.setGoogleID(777);
+			contactListToDisplay.setOwner(myUser);
+			Contact c = new Contact();
+			PropertyValue pV = new PropertyValue();
+			myUser.setUserContact(c);
+			
+			if (contactListToDisplay == null) {				
 				Window.alert("Keine Kontaktliste ausgewählt");
-			} else {
-				Window.alert(cl.toString());
-				contactSystemAdmin.createContactList
-				(cl, new SaveCallback());
+				
+			} else {				
+				
+				if (contactListToDisplay.getName() != nameContactList.getText()) {
+					
+					Window.alert("Aktualisiert:" + contactListToDisplay.toString());
+					
+					contactSystemAdmin.editContactList(contactListToDisplay, new UpdateCallback(contactListToDisplay));
+				} else {
+					
+					Window.alert("Gespeichert" + contactListToDisplay.toString());
+					
+					contactSystemAdmin.createContactList(contactListToDisplay, new SaveCallback(contactListToDisplay));
+				}	
 			}
 		}
 	}
 	
 	private class SaveCallback implements AsyncCallback<ContactList> {
 
+		ContactList cl = null;
+		SaveCallback (ContactList cl) {
+			this.cl = cl;
+		}
 		
 		@Override
 		public void onFailure(Throwable caught) {
@@ -218,11 +239,41 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onSuccess(ContactList cl) {
 			if (cl != null) {
+				tvm.addBusinessObject(cl);
 				Window.alert("Neue Kontaktliste gespeichert!");
 			}
 			
 		}
 		
+	}
+	
+	/**
+	 * Updaten einer überarbeiteten ContactList
+	 * @author Kim-Ly
+	 */
+	
+	private class UpdateCallback implements AsyncCallback<ContactList> {
+
+		ContactList cl = null;
+		UpdateCallback (ContactList cl) {
+			this.cl = cl;		
+		}
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Aktualisieren der KontaktListe fehlgeschlagen!");
+			//log("Aktualisierte Kontaktliste nicht angelegt" + cl.toString());
+			
+		}
+
+		@Override
+		public void onSuccess(ContactList cl) {
+			if (cl != null) {
+				// tvm.updateMethode();
+				Window.alert("Neue Kontaktliste gespeichert!");
+				//log("Aktualisierte Kontaktliste angelegt" + cl.toString());
+			}	
+		}
 	}
 
 	/**
@@ -330,20 +381,32 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			User u = new User();
-			u.setGoogleID(777);
+			
+			// Setzen des eingeloggten Users, seines eigenen Kontakts
+			contactListToDisplay.setOwner(myUser);
+			
+			//log(contactListToDisplay.toString());
+			
+			// Setzen des teilhabenden Users
+			User partUser = new User();
+			partUser.setGoogleID(666);
+			
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
-			} else {
-				User clOwner = contactListToDisplay.getOwner();
-				Participation p = new Participation();
-				p.setReference(contactListToDisplay);
-				p.setParticipant(u);
 				
-				if (clOwner.getGoogleID() != u.getGoogleID()) {
-					contactSystemAdmin.deleteParticipation(p, new deleteContactListPartCallback());
+//			} else {
+//				User clOwner = contactListToDisplay.getOwner();
+//				Participation p = new Participation();
+//				p.setReference(contactListToDisplay);
+//				// Aufruf nicht manuell umsetzen?
+//				p.setParticipant(partUser);
+//				
+//				if (clOwner.getGoogleID() != partUser.getGoogleID()) {
+//					contactSystemAdmin.deleteParticipation(p, new deleteContactListPartCallback());
+				
 				} else {	
 				contactSystemAdmin.deleteContactList(contactListToDisplay, new deleteContactListCallback());
+				log("Kontaktliste gelöscht");
 				}
 			}
 		}
@@ -368,7 +431,7 @@ public class ContactListForm extends VerticalPanel {
 				//log(clPart.toString());
 				
 				if (clPart != null) {
-					log(clPart.toString());
+					//log(clPart.toString());
 					setSelected(null);
 					//TODO: @Oli removeContactList überprüfen, gibt null zurück!!
 					tvm.removeBusinessObject(clPart);
@@ -378,7 +441,7 @@ public class ContactListForm extends VerticalPanel {
 		}
 
 		/**
-		 * Callback Methode zum Lösschen einer Kontaktliste
+		 * Callback Methode zum Löschen einer Kontaktliste
 		 * @author Kim-Ly
 		 *
 		 */
@@ -395,12 +458,12 @@ public class ContactListForm extends VerticalPanel {
 			public void onSuccess(ContactList result) {
 				if (result != null) {
 					setSelected(null);
-					tvm.removeBusinessObject(result);
+					//tvm.removeBusinessObject(result);
 					Window.alert("Kontaktliste gelöscht!");
 				}
 			}
 		}
-	}
+//	}
 
 	/**
 	 * Setzen des ContactList Objekts, aller zugehörigen Kontakte aus TreeView
@@ -414,15 +477,18 @@ public class ContactListForm extends VerticalPanel {
 
 	void setSelected(ContactList cl) {
 
+//		if(cl.getBoId()!=0 & cl !=null) {
+//			this.contactListToDisplay = cl;
+//		}
+		
 		if (cl != null) {
 			int count = 0;
-			//Befüllen der Listbox mit allen User Objekten aus dem System
 			User u = new User();
 			
 			/* User setzen, sodass Programm Ownership zuordnen kann 
 			 * Sobald App Engine -> entfernen
 			*/
-			u.setGoogleID(777);
+			setMyUser(u);
    			Vector<User> uVec = new Vector<User>();
 			Vector <Participation> partVec = new Vector<Participation>();
    			Vector<Contact> c = new Vector<Contact>();
@@ -452,7 +518,7 @@ public class ContactListForm extends VerticalPanel {
 				}
 			contactNames.setVisibleItemCount(count);
 			
-			contactSystemAdmin.getAllContactsFromUser(new ContactsToAddCallback(c));
+			//contactSystemAdmin.getAllContactsFromUser(new ContactsToAddCallback(c));
 
 		} else {
 			nameContactList.setText("");
@@ -606,6 +672,15 @@ public class ContactListForm extends VerticalPanel {
 					Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");
 				}
 			}
+	}
+	
+	void setMyUser(User user) {
+		this.myUser = user;
+		Contact c = new Contact();
+		PropertyValue pV = new PropertyValue();
+		pV.setValue("Janina");
+		c.setName(pV);
+		user.setUserContact(c);
 	}
 	
 	native void log(String s)/*-{
