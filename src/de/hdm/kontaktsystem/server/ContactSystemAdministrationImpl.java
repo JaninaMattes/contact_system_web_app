@@ -1253,13 +1253,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		}
 	}
-
-	@Override
-	public Vector<PropertyValue> deletePropertyValues(Vector<PropertyValue> pvv) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
 	
 
