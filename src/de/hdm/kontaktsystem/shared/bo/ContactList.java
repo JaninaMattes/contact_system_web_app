@@ -41,8 +41,7 @@ public class ContactList extends BusinessObject {
 	}
 
 	/**
-	 * Beim erstellen einer Liste wird ein contact hinzugef�gt.
-	 * 
+	 * Beim erstellen einer Liste wird ein contact hinzugefuegt.
 	 */
 
 	public ContactList(String name, Contact contact) {
@@ -54,6 +53,7 @@ public class ContactList extends BusinessObject {
 	/*
 	 * Aufruf des Listen Namens
 	 */
+	
 	public String getName() {
 		return name;
 	}
@@ -83,7 +83,7 @@ public class ContactList extends BusinessObject {
 	}
 	
 	/*
-	 * Hinzufügem eines einzelnen Kontaktes zu einer Liste
+	 * Hinzufuegen eines einzelnen Kontaktes zu einer Liste
 	 */
 	
 	public void addContact(Contact contact) {
@@ -104,8 +104,7 @@ public class ContactList extends BusinessObject {
 	 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
 	 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
 	 * der ID des Objekts.
-	 * Dies überschreibt die Methode hashCode() der Klasse Object.
-	 * 
+	 * Dies Ueberschreibt die Methode hashCode() der Klasse Object.
 	 */
  
 	@Override
@@ -113,6 +112,9 @@ public class ContactList extends BusinessObject {
 		return super.getBoId();
 	}
 	
+	/**
+	 * Equal Methode
+	 */
 
 	@Override
 	public boolean equals(Object obj) {
