@@ -119,8 +119,6 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback);
 
-	public void deletePropertyValues(Vector<PropertyValue> result, AsyncCallback <Vector<PropertyValue>> callback);
-
 	
 
 	

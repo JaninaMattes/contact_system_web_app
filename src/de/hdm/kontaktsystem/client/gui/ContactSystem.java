@@ -496,7 +496,11 @@ public class ContactSystem implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				Contact c = null;
-				cf.setSelected(c);			
+				
+				log("Neuer Kontakt erstellen");
+				cf.setSelected(c);		
+				RootPanel.get("Details").clear();
+				RootPanel.get("Details").add(cf);
 			}
 			
 		});

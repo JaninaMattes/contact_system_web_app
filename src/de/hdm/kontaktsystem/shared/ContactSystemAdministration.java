@@ -105,8 +105,6 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public PropertyValue deletePropertyValue(PropertyValue pv);
 	
-	public Vector<PropertyValue> deletePropertyValues(Vector<PropertyValue>pvv);
-	
 	public Participation deleteParticipation(Participation p);
 	
 	public ContactList removeContactFromList(Contact contact, ContactList contactList);
