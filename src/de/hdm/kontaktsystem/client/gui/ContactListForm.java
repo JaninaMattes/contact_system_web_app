@@ -33,7 +33,7 @@ public class ContactListForm extends VerticalPanel {
 	ContactList contactListToDisplay = null;
 	CellTreeViewModel tvm = null;
 	User myUser = null;
-	private ContactMapper cMapper = null;
+
 
 
 	/**
@@ -652,31 +652,36 @@ public class ContactListForm extends VerticalPanel {
 	
 	private class addContactToClClickHandler implements ClickHandler {
 		
-		Vector<ContactList> clVec = new Vector<ContactList>();
-		
 		@Override
 		public void onClick(ClickEvent event) {
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 				
 			} else {
-				Contact conToAdd = null;
+				final Contact conToAdd = null;
 				Integer lbItemIndex = contactsToAdd.getSelectedIndex();
-				String contactToAddName = contactsToAdd.getValue(lbItemIndex);
+				final String contactToAddName = contactsToAdd.getValue(lbItemIndex);
 				
-				Vector<Contact> allConFromUser = getAllContactsFromUser();
+				//TODO: Überarbeiten, über final können 
 				
-				log("Alle Kontakte von User: " + allConFromUser);
+				contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>(){
 
-				// Suche und Rückgabe nach Kontakt aus Kontaktliste, der mit ausgewählten Kontakt aus ListBox übereinstimmt
-				for (Contact con : allConFromUser) {
-					
-					if (con.getName().getValue().equals(contactToAddName)) {
-						conToAdd = con;
-						log("Hinzuzufügender Kontakt zu Kontaktliste: " + conToAdd);
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("");					
 					}
-				}
-				contactSystemAdmin.addContactToList(conToAdd, contactListToDisplay, new ContactsToAddClCallback(clVec));
+
+					@Override
+					public void onSuccess(Vector<Contact> allConFromUser) {
+						
+						for (Contact con : allConFromUser) {						
+							if (con.getName().getValue() == contactToAddName) {
+								contactSystemAdmin.addContactToList(con, contactListToDisplay, new ContactsToAddClCallback());
+								//log("Hinzuzufügender Kontakt zu Kontaktliste: " + con.toString());
+							}
+						}
+					}
+				});
 			}
 		}
 	}
@@ -688,12 +693,6 @@ public class ContactListForm extends VerticalPanel {
 	 */
 	
 	private class ContactsToAddClCallback implements AsyncCallback<ContactList> {
-
-		Vector<ContactList> clVec = new Vector<ContactList>(); 
-		
-		ContactsToAddClCallback(Vector<ContactList> clVec) {
-			this.clVec = clVec;
-		}
 		
 		
 		@Override
@@ -702,9 +701,9 @@ public class ContactListForm extends VerticalPanel {
 		}
 
 		@Override
-		public void onSuccess(ContactList result) {
-
-			Vector<ContactList> conResult = new Vector<ContactList>();
+		public void onSuccess(ContactList result) {	
+			
+			log("Kontaktliste aus Callback" + result);
 			int count = 0;
 				if (result != null) {
 					Vector<Contact> resultCon = result.getContacts();
@@ -762,17 +761,6 @@ public class ContactListForm extends VerticalPanel {
 			}
 	}
 
-	public Vector<Contact> getAllContactsFromUser() {
-		
-			myUser.setGoogleID(170);
-			Vector<Contact> cv = cMapper.findAllContactsByUser(myUser);
-			for (Contact contact : cv) {
-				contact.setOwner(myUser);
-				contact.setName(contact.getName());
-				contact.setPropertyValues(contact.getPropertyValues());
-			}
-			return cv;
-		}
 	
 	
 	void setMyUser(User user) {
