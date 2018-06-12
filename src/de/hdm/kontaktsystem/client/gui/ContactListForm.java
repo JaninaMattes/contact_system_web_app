@@ -23,15 +23,7 @@ import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
-//import com.smartgwt.client.types.Alignment;  
-//import com.smartgwt.client.types.DragDataAction;  
-//import com.smartgwt.client.widgets.Canvas;  
-//import com.smartgwt.client.widgets.TransferImgButton;  
-//import com.smartgwt.client.widgets.events.ClickEvent;  
-//import com.smartgwt.client.widgets.events.ClickHandler;  
-//import com.smartgwt.client.widgets.layout.HStack;  
-//import com.smartgwt.client.widgets.layout.VStack;  
-//import com.smartgwt.sample.showcase.client.data.PartData;  
+
 
 
 public class ContactListForm extends VerticalPanel {
@@ -81,9 +73,7 @@ public class ContactListForm extends VerticalPanel {
 
 	public void onLoad() {
 		super.onLoad();
-		// Keine Tabelle sondern ein VertialPanel / ScrollPanel dem Kontaktelemente aus
-		// dem ContactVector hinzugef�gt werden.
-		// ... Mit einer while oder for-each Schleife die Kontakt-Elemente erzeugen.
+
 		Grid contactListGrid = new Grid(8, 3);
 		this.add(contactListGrid);
 
@@ -430,7 +420,9 @@ public class ContactListForm extends VerticalPanel {
 			//Befüllen der Listbox mit allen User Objekten aus dem System
 			User u = new User();
 			
-			// User setzen, sodass Programm Ownership zuordnen kann
+			/* User setzen, sodass Programm Ownership zuordnen kann 
+			 * Sobald App Engine -> entfernen
+			*/
 			u.setGoogleID(777);
    			Vector<User> uVec = new Vector<User>();
 			Vector <Participation> partVec = new Vector<Participation>();
@@ -452,6 +444,7 @@ public class ContactListForm extends VerticalPanel {
 			deleteClButton.setEnabled(true);
 			deleteConButton.setEnabled(true);
 			nameContactList.setText(cl.getName());
+			
 			Vector<Contact> conVec = cl.getContacts();
 
 				for (Contact con : conVec) {	
@@ -459,6 +452,8 @@ public class ContactListForm extends VerticalPanel {
 					++count;
 				}
 			contactNames.setVisibleItemCount(count);
+			
+			contactSystemAdmin.getAllContactsFromUser(new ContactsToAddCallback(c));
 
 		} else {
 			nameContactList.setText("");
@@ -586,9 +581,13 @@ public class ContactListForm extends VerticalPanel {
 
 		Vector<Contact> c= new Vector<Contact>(); 
 		
+		ContactsToAddCallback(Vector<Contact> con) {
+			this.c = con;
+		}
+		
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("Keine Kontakte im System vorhanden. Kontakte anlegen um diese hinzuzufügen. ");
+			Window.alert("Keine Kontakte im System vorhanden.");
 			
 		}
 
@@ -596,14 +595,14 @@ public class ContactListForm extends VerticalPanel {
 		public void onSuccess(Vector<Contact> result) {
 			Vector<Contact> conResult = new Vector<Contact>();
 			int count = 0;
-			if (result != null) {
+				if (result != null) {
 				for(Contact con: result) {						
-					//Contacts updaten
-					listBoxSharedWith.addItem(con.getName().getValue());
+				
+					contactsToAdd.addItem(con.getName().getValue());
 					++count;
 					}
-				//Genug Platz schaffen für alle Elemente
-					listBoxSharedWith.setVisibleItemCount(count);
+
+					contactsToAdd.setVisibleItemCount(count);
 				} else {
 					Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");
 				}
