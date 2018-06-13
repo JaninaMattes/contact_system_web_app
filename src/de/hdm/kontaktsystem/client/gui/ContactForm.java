@@ -29,7 +29,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class ContactForm extends VerticalPanel {
 	
 		//Referenzattribute
-		User myUser = null; 
+		User myUser = null;
 		
 		Contact contactToDisplay = null;
 		CellTreeViewModel tvm = null;
@@ -46,10 +46,11 @@ public class ContactForm extends VerticalPanel {
 		Vector<CheckBox> cbv = new Vector<CheckBox>();
 		FlexTable ft = new FlexTable();
 		
+		final VerticalPanel vp  = new VerticalPanel();
+				
 		HorizontalPanel ePanel = new HorizontalPanel();
 		HorizontalPanel btnPanel = new HorizontalPanel();
-		HorizontalPanel addPanel = new HorizontalPanel();
-		final VerticalPanel vp  = new VerticalPanel();
+		
 		Label cLabel = new Label("Kontakt:");
 				
 		Label isShared = new Label("Auswahl: ");
@@ -78,40 +79,23 @@ public class ContactForm extends VerticalPanel {
 		 * Startpunkt ist die onLoad() Methode
 		 */
 		public void  onLoad() {
-			
-			btnPanel.add(deleteButton);
-			btnPanel.add(saveButton);
-			btnPanel.add(shareButton);			
-			
-			
-			ePanel.add(email);
-			ePanel.add(emailButton);
-			
-			addPanel.add(addElement);
-			addPanel.add(addButton);
-			
-			vp.add(cLabel);
-			vp.add(contactStatus);
-			vp.add(ft);
-			vp.add(ePanel);
-			vp.add(addPanel);
-			vp.add(btnPanel);
-			
-			RootPanel.get("Details").add(vp);
-		}
-		
-		public ContactForm(){
 			super.onLoad();
-
-			final User user = new User();
-
-			
 			this.add(vp);
 			
+			final User user = new User();
+			
 			//CSS
+			addButton.setStyleName("add");
 			emailButton.setStyleName("check");	
-			shareButton.setStyleName("share");	
-					
+			saveButton.setStyleName("save");
+			shareButton.setStyleName("share");
+			
+			//Teilhaberschaften
+			labelSharedWith.setVisible(true);
+			labelReceivedFrom.setVisible(true);
+			
+			sharedWithUser.setVisible(true);
+			receivedFrom.setVisible(true);			
 			
 			shareButton.addClickHandler(new ClickHandler(){
 				
@@ -123,9 +107,11 @@ public class ContactForm extends VerticalPanel {
 						Vector<PropertyValue> pvv = new Vector<PropertyValue>();
 						for(CheckBox cb: cbv){
 							if(cb.getValue()){
+								log(cb.getTitle());
 								for(PropertyValue pv : c.getPropertyValues()){
 									if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
 										pvv.add(pv);
+										log("Share: " + pv.getValue() + " With " + email.getText());
 									}
 								}
 							}
@@ -133,6 +119,7 @@ public class ContactForm extends VerticalPanel {
 						part.setParticipant(user);
 						c.setPropertyValues(pvv);
 						part.setReference(c);
+						log("Share:" + part);
 						contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());						
 					}else{
 						Window.alert("Bitte geben Sie die Email eines Nutzers ein und bestätigen Sie diese mit dem CheckButton");
@@ -152,13 +139,12 @@ public class ContactForm extends VerticalPanel {
 						@Override
 						public void onFailure(Throwable caught) {
 							// TODO Auto-generated method stub
-							Window.alert("Die Eigenschaftsausprägungen des Kontakts konnten nicht gelöscht werden.");
+							Window.alert("Der Kontakt konnte nicht gelöscht werden.");
 						}
 
 						@Override
 						public void onSuccess(Contact result) {
 						contactToDisplay = null;
-						RootPanel.get("Details").clear();
 						tvm.removeBusinessObject(result);
 						}						
 					});
@@ -166,102 +152,87 @@ public class ContactForm extends VerticalPanel {
 				} 				
 			});
 			
+			/*
+			 * Save-Button ClickHandler
+			 */
 			saveButton.addClickHandler(new ClickHandler() {
-				Vector<PropertyValue> editResult = new Vector<PropertyValue>();
-				Vector<PropertyValue> createResult = new Vector<PropertyValue>();			
-			
+				Vector<PropertyValue>editResult = new Vector<PropertyValue>();
+				Vector<PropertyValue>createResult = new Vector<PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {
-					if(contactToDisplay!=null) {
-						log("Update Contact");
-						for(TextBox tb : tbv) {
-							if(!tb.getText().isEmpty()) { //editieren
-								if(tb.getTitle().charAt(0) != 'N'){
-								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
-									
+					// TODO Auto-generated method stub
+					
+					if(contactToDisplay!=null) { //1. Kontakt exisitiert -> Edit
+						for(TextBox tb:tbv) {
+							if(!tb.getText().isEmpty()) {//1.1 TextBox nicht leer
+								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
+									String[] s=tb.getTitle().split(":", 2);
+									log("Spliterator: "+s[1]);
+									Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
+									p.setId(Integer.parseInt(s[1]));
+									PropertyValue ppv = new PropertyValue();
+									ppv.setBo_Id(0);
+									ppv.setContact(contactToDisplay);
+									ppv.setOwner(contactToDisplay.getOwner());
+									ppv.setProperty(p);
+									ppv.setValue(tb.getText());
+									editResult.add(ppv);
+								} else{//1.1.2 TextBox alt?
+									for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
 										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
 											pv.setValue(tb.getText());
 											editResult.add(pv);
 										}
+									}
 								}
-								}else{
-									// Neues Element Anlegen
-									PropertyValue pv = new PropertyValue();
-									Property p = new Property(); 
-									p.setId(Integer.parseInt((tb.getTitle().split(":", 2))[1]));
-									pv.setBo_Id(0);
-									pv.setProperty(p);
-									pv.setContact(contactToDisplay);
-									pv.setValue(tb.getText());
-									editResult.add(pv);
-								}
-								
-							}else { //löschen
+							} else { //1.2TextBox leer -> löschen
 								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
 									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
 										pv.setValue("");
-//										editResult.add(pv);
+										editResult.add(pv);
+										log("Lösche aus Vector:" +tb);
+										tbv.remove(tb);
 									}
-								}
-							}							
-						}
-						contactToDisplay.setPropertyValues(editResult);
-						contactSystemAdmin.editContact(contactToDisplay, new AsyncCallback<Contact>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
-								Window.alert("Speichern ist fehlgeschlagen.");
+								}						
 							}
-
-							@Override
-							public void onSuccess(Contact result) {
-								// TODO Auto-generated method stub
-								setSelected(result);
-								tvm.updateBusinessObject(result);
-							}							
-						});
-					} 				
-					if(contactToDisplay==null) {
-						for(TextBox tb : tbv) {
-							if(!tb.getText().isEmpty()) { //neu erstellen
-									PropertyValue pv = new PropertyValue();
-									Property p = new Property(); 
-									p.setId(Integer.parseInt((tb.getTitle().split(":", 2))[1]));
-									pv.setBo_Id(0);
-									pv.setProperty(p);
-									pv.setValue(tb.getText());
-									editResult.add(pv);
+						 } 
+						 log("Kontakte Editieren:"+editResult);
+						 contactToDisplay.setPropertyValues(editResult);
+						 contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
+						 
+						} else if(contactToDisplay==null) {
+						for(TextBox tb:tbv) {//2. Kontakt existiert nicht -> CREATE
+							if(!tb.getText().isEmpty()) { //1.1 TextBox nicht leer
+								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
+									String[] s=tb.getTitle().split(":", 2);
+									log("Spliterator: "+s[1]);
+									Property p = new Property();//1.1.1.1 Erzeuge neues Objekt		
+									p.setId(Integer.parseInt(s[1]));
+									PropertyValue ppv = new PropertyValue();
+									ppv.setBo_Id(0);
+									ppv.setContact(contactToDisplay);
+									//ppv.setOwner(contactToDisplay.getOwner());
+									ppv.setProperty(p);
+									ppv.setValue(tb.getText());
+									createResult.add(ppv);
+								}								
+							}else {//1.2TextBox leer -> löschen
+								if(tb.getTitle().contains("Neu:1")) {
+									Window.alert("Das Feld Name darf nicht leer sein.");
+								}else {
+									log("Lösche aus Vector:" +tb);
+									tbv.remove(tb);
+								}
+							}					
 								
-							}else { //nicht erstellen
-								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
-									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-										pv.setValue("");
-//										editResult.add(pv);
-									}
-								}
-							}
 						}
+						 log("Kontakte Erstellen:"+createResult);
 						contactToDisplay.setPropertyValues(createResult);
-						contactSystemAdmin.createContact(contactToDisplay, new AsyncCallback<Contact>() {
-	
-							@Override
-							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
-								Window.alert("Speichern ist fehlgeschlagen.");
-							}
-	
-							@Override
-							public void onSuccess(Contact result) {
-								// TODO Auto-generated method stub
-								setSelected(result);
-								tvm.updateContact(result);
-							}						
-						});
-					}
-				} 									
+						contactSystemAdmin.createContact(contactToDisplay, new SaveCallback());
+					} 
+				}
+				
 			});
-						
 			
 			emailButton.addClickHandler(new ClickHandler(){
 
@@ -273,10 +244,12 @@ public class ContactForm extends VerticalPanel {
 							log("User nicht gefunden");
 							emailButton.setStyleName("check_notFound");
 							emailButton.setText("X");
+							emailButton.setEnabled(false);
 						}
 
 						@Override
 						public void onSuccess(User result) {
+							log("User"+result);
 							emailButton.setStyleName("check_Found");
 							emailButton.setText("OK");
 							user.setGoogleID(result.getGoogleID());
@@ -293,8 +266,8 @@ public class ContactForm extends VerticalPanel {
 		
 				@Override
 				public void onChange(ChangeEvent event) {
-					emailButton.setText("Prüfen");
-					
+					emailButton.setText("Prüfen");	
+					emailButton.setEnabled(true);
 				}
 			});
 			
@@ -302,42 +275,21 @@ public class ContactForm extends VerticalPanel {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					//TODO: Zurück setzen
-//					setSelected(null);
-//					RootPanel.get("Details").remove(vp);
+				 contactToDisplay = null;
+				 RootPanel.get("Details").clear();
+				 //TODO: Werte des Flextables zurück setzen
 				}
 				
 			});
 			
 			addButton.addClickHandler(new ClickHandler() {
+				
 				@Override
 				public void onClick(ClickEvent event) {
 					Property p = new Property();
-					p.setId(Integer.parseInt(addElement.getSelectedValue()));
+					p.setId(Integer.parseInt(addElement.getTitle()));
 					p.setDescription(addElement.getSelectedItemText());
-					PropertyValue pv = new PropertyValue();
-					pv.setBo_Id(0);
-					pv.setProperty(p);
-					pv.setContact(contactToDisplay);
-					pv.setOwner(contactToDisplay.getOwner());
-					pv.setValue("");
-					contactToDisplay.addPropertyValue(pv);
-					
-					contactSystemAdmin.editContact(contactToDisplay, new AsyncCallback<Contact>(){
-
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub							
-						}
-
-						@Override
-						public void onSuccess(Contact result) {
-							setSelected(result);
-							
-						}
-						
-					});
-					
+		
 					Label label = new Label(addElement.getSelectedItemText());
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
@@ -356,30 +308,53 @@ public class ContactForm extends VerticalPanel {
 				}
 				
 			});
-			
-			
+					
 		    /*
+		     * GridPanel für Abbildung der Teilhaber
+		     */
+						
+			Grid gp = new Grid(4,2);
+			gp.setWidget(0, 0, labelSharedWith);
+			gp.setWidget(0, 1, sharedWithUser);
+			
+			gp.setWidget(1, 0, labelReceivedFrom);
+			gp.setWidget(1, 1, receivedFrom);
+			
+			gp.setWidget(2, 0, email);
+			gp.setWidget(2, 1, emailButton);
+			
+			gp.setWidget(3, 0, addElement);
+			gp.setWidget(3, 1, addButton);
+			
+			/*
 			 * Panel für Anordnung der Button
 			 */
-//			//Geteilt mit
-//			labelSharedWith
-//			sharedWithUser
-//			//Geteilt von
-//			labelReceivedFrom
-//			receivedFrom
 			
+			btnPanel.add(deleteButton);
+			btnPanel.add(saveButton);
+			btnPanel.add(shareButton);	
+					
+			/*
+			 * Zuordnung zum VP			
+			 */
+			vp.add(cLabel);
+			vp.add(contactStatus);
+			vp.add(ft);
+			vp.add(gp);
+			
+			vp.add(btnPanel);
+			
+			RootPanel.get("Details").add(vp);
 		}
 		
 		
 		public void setSelected(Contact contact) {
-			// Inhalt von Vectoren und FlexTabel Löschen
-			cbv.clear();
-			tbv.clear();
-			ft.clear();
-			addElement.clear();
 			
-			log("Kontakt Anzeigen");
-			if(contact!=null && contact.getBoId()!=0) {
+			myUser = new User();
+			myUser.setGoogleID(170); //TODO: später über AppEngine angebunden
+			
+			if(contact!=null) {
+				log("Kontakt" + contact);
 				this.contactToDisplay = contact;
 				
 				cLabel.setText("Kontakt Id: " + contact.getBoId());			
@@ -390,12 +365,47 @@ public class ContactForm extends VerticalPanel {
 				} else { 
 					contactStatus.setText("Status: Nicht geteilt");
 				}	
+				if(myUser.getGoogleID()!=contact.getOwner().getGoogleID()) {
+					log("Kontakt Besitzer:" +contact.getOwner().getGMail());
+					labelReceivedFrom.setVisible(true);
+					receivedFrom.setVisible(true);
+					receivedFrom.setText(contact.getOwner().getGMail());
+				}else{	
+					log("Owner"+myUser.getGoogleID());
+					labelSharedWith.setVisible(false);
+					sharedWithUser.setVisible(false);
+					contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new AsyncCallback<Vector<Participation>>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+							Window.alert("Teilhaberschaften konnten nicht abgerufen werden.");
+						}
+
+						@Override
+						public void onSuccess(Vector<Participation> result) {
+							int i = 0;
+							for(Participation part: result) {
+								if(part.getParticipant().getGoogleID()==myUser.getGoogleID()) {
+									result.remove(part);
+								}else {
+									sharedWithUser.setValue(i, part.getParticipant().getGMail());
+									sharedWithUser.addItem(part.getParticipant().getGMail());
+									log("Teilhaber:"+part.getParticipant().getGMail());
+								}  
+								i++;
+								
+							}
+						}
+						
+					});
+					
+				}
 				
-				Boolean isChecked = new Boolean(true);
-				int row = 0;
-				
+				int row = 0;				
 				//Flextable befüllen
 				for(PropertyValue pv : contact.getPropertyValues()){
+					log("PropertyValue" +pv);
 					Label label = new Label();
 					CheckBox cb = new CheckBox();
 					TextBox tb = new TextBox();
@@ -405,15 +415,7 @@ public class ContactForm extends VerticalPanel {
 					cb.setTitle(pv.getBoId()+"");
 					tb.setTitle(pv.getBoId()+"");
 					tb.setText(pv.getValue());
-					
-//					cb.addClickHandler(new ClickHandler() {
-//
-//						@Override
-//						public void onClick(ClickEvent event) {
-//						// TODO Auto-generated method stub					
-//						}						
-//					});
-					
+				
 					cbv.add(cb);
 					tbv.add(tb);
 								
@@ -424,6 +426,7 @@ public class ContactForm extends VerticalPanel {
 					log("Table row:" + row);
 					row++;
 				}
+			
 			//Elemente füllen
 			contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
@@ -435,21 +438,23 @@ public class ContactForm extends VerticalPanel {
 
 				@Override
 				public void onSuccess(Vector<Property> result) {
+					 addElement.clear();					 
 					 for(Property p : result) {
 						 if(p.getId()!=1) { 
-						 addElement.addItem(p.getDescription(), p.getId()+"");
+						 addElement.addItem(p.getDescription());
 						 addElement.setTitle(p.getId()+"");
-						 
 						 }
 					 }					
 				}
 				});
 							
-			} else {
+			} else if(contact==null) {
 				this.contactToDisplay = null;				
-				log("Neuer Kontakt");
+				log("Neuer Kontakt" + contact);
 				
-				final Vector<Property> ppv = new Vector <Property>();
+				cLabel.setText("Kontakt Id: " + 0);			
+				contactStatus.setText("Status: Noch nicht erstellt");	
+				
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
 					@Override
@@ -459,52 +464,65 @@ public class ContactForm extends VerticalPanel {
 					}
 
 					@Override
-					public void onSuccess(Vector<Property> result) {
-						ppv.addAll(result);					
-					}
-					
+					public void onSuccess(Vector<Property> result) {			
+						log("Kontakt Properties: " + result);
+						
+						int row = 0;
+						//Flextable befüllen						
+						for(Property p : result){
+							log("PropertyValue" +p);
+							Label label = new Label();
+							CheckBox cb = new CheckBox();
+							TextBox tb = new TextBox();
+							
+							label.setTitle("Neu:"+p.getId());
+							label.setText(p.getDescription());
+							cb.setTitle("Neu:"+p.getId());
+							tb.setTitle("Neu:"+p.getId());
+							tb.setText("");
+							
+							cbv.add(cb);
+							tbv.add(tb);
+										
+							ft.setWidget(row, 0, label);
+							ft.setWidget(row, 1, tb);
+							ft.setWidget(row, 2, cb);
+							
+							log("Table row:" + row);
+							row++;
+							
+							ePanel.add(saveButton);
+							ePanel.add(cancelButton);
+							
+							vp.remove(btnPanel);
+							vp.add(ePanel);
+							
+							RootPanel.get("Details").clear();
+							RootPanel.get("Details").add(vp);
+						}	
+					}					
 				});	
-				
-				cLabel.setText("Kontakt Id: Neu");			
-				contactStatus.setText("Status: Noch nicht erstellt");				
-				
-				Boolean isChecked = new Boolean(true);
-				int row = 0;
-				//Flextable befüllen
-				
-				for(Property p : ppv){
-					Label label = new Label();
-					CheckBox cb = new CheckBox();
-					TextBox tb = new TextBox();
-					
-					label.setTitle("Neu:"+p.getId());
-					label.setText("Neu: "+p.getId());
-					cb.setTitle("Neu:"+p.getId());
-					tb.setTitle("Neu:"+p.getId());
-					tb.setText("");
-					
-//					cb.addClickHandler(new ClickHandler() {
-//						
-//						@Override
-//						public void onClick(ClickEvent event) {
-//						// TODO Auto-generated method stub					
-//						}						
-//					});
-					
-					cbv.add(cb);
-					tbv.add(tb);
-								
-					ft.setWidget(row, 0, label);
-					ft.setWidget(row, 1, tb);
-					ft.setWidget(row, 2, cb);
-					
-					log("Table row:" + row);
-					row++;
-				}				
 				
 			}
 		}
 
+		private class SaveCallback implements AsyncCallback<Contact> {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				Window.alert("Speichern ist fehlgeschlagen.");
+			}
+
+			@Override
+			public void onSuccess(Contact result) {
+				// TODO Auto-generated method stub
+				log("Kontakt gespeichert: "+result);
+				contactToDisplay = result;
+				tvm.updateBusinessObject(result);
+			}							
+		}
+		
 		/**
 		 * Eine neue Teilhaberschaft anlegen.
 		 * @author Janina
@@ -523,8 +541,7 @@ public class ContactForm extends VerticalPanel {
 				//TODO: 
 			}				
 		}
-		
-		
+				
 		/*
 		 * TreeViewModel setter
 		 */
