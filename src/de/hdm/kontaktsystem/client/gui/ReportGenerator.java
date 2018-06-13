@@ -175,13 +175,16 @@ public class ReportGenerator implements EntryPoint {
 		signInLink.setStyleName("link");//??
 		signOutLink.getElement().setId("log-out-button");
 		editorLink.getElement().setId("switch-button");
+		
+		//Logo
+		logo.getElement().setId("logo");
 
 		/**
 		 * Zuweisen von Bilddateien zu den Image-Elementen, Setzen der Größe
 		 */
 		//Logo
-		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoTransparent.png");
-		logo.setHeight("100px");
+		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");
+		logo.setHeight("70px");
 		logo.setAltText("Logo");
 		//Such-Symbole
 		searchSymbol1.setHeight("25px");
@@ -380,7 +383,8 @@ public class ReportGenerator implements EntryPoint {
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
 				RootPanel.get("Details").clear();
-				RootPanel.get("Details").add(new HTML(writer.getReportText()));			
+				RootPanel.get("Details").add(new HTML(writer.getReportText()));
+				usersDropDownList.setSelectedIndex(0);
 			}		
 		}		
 	}
@@ -412,6 +416,8 @@ public class ReportGenerator implements EntryPoint {
 				writer.process(report);
 				RootPanel.get("Details").clear();
 				RootPanel.get("Details").add(new HTML(writer.getReportText()));			
+				findByValueText.setText("");
+				propertiesDropDownList.setSelectedIndex(0);
 			}
 		}		
 	}
