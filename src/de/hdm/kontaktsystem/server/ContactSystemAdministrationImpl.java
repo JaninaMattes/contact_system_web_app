@@ -292,6 +292,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 		return cv;
 	}
+	
+	@Override
+	public Vector<Contact> getMyContactsPrev()  {
+		User user = this.getUserByID(this.getCurrentUser());
+		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
+		for (Contact contact : cv) {
+			contact.setName(this.getNameOfContact(contact));
+		}
+		return cv;
+	}
 
 	@Override
 	public Vector<Contact> getContactsByStatus(Boolean status) {
@@ -472,6 +482,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 		return contactListVector;
 	}
+	
+	
+	public Vector<ContactList> getMyContactListsPrev() {
+
+		Vector<ContactList> contactListVector = clMapper.findContactListByUserId(this.getCurrentUser());
+		return contactListVector;
+	}
+
 
 	@Override
 	public ContactList getContactListById(int id) {
