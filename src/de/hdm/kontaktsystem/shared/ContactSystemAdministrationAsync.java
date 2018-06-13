@@ -34,6 +34,9 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getContactsByStatus(Boolean status, AsyncCallback<Vector<Contact>> callback);
 	
+
+	public void getContactsFromList(ContactList cl, AsyncCallback<Vector<Contact>> callback);
+	
 	public void getContactById(int id, AsyncCallback<Contact> callback);
 	
 	public void getAllContactListsFromUser(AsyncCallback<Vector<ContactList>> callback);

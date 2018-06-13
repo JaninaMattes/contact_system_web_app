@@ -216,9 +216,23 @@ public class CellTreeViewModel implements TreeViewModel {
 				}
 		}else 
 		if(value instanceof ContactList){
-			for (Contact c : ((ContactList) value).getContacts()) {
-				dataProvider.getList().add(c);
-			}
+			this.csa.getContactsFromList(((ContactList) value), new AsyncCallback<Vector<Contact>>(){
+
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub
+					log("Kontaktsuche Fehlerhaft");
+				}
+
+				@Override
+				public void onSuccess(Vector<Contact> result) {
+					// TODO Auto-generated method stub
+					for(Contact c : result){
+						dataProvider.getList().add(c);
+					}
+				}
+				
+			});
 		}
 		
 

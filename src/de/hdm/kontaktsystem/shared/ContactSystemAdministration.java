@@ -41,7 +41,10 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Contact getContactByPropertyValue(PropertyValue pv);
 	
+	
 	public Vector<Contact> getContactsByStatus(Boolean status);
+
+	public Vector<Contact> getContactsFromList(ContactList cl);
 	
 	public Contact getContactById(int id);
 	
@@ -52,6 +55,7 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<ContactList> getAllContactLists();
 	
 	public ContactList getContactListById(int id);
+	
 	
 	public Vector<ContactList> getContactListByName(String name);
 	
