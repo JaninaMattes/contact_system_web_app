@@ -154,57 +154,76 @@ public class ContactForm extends VerticalPanel {
 				} 				
 			});
 			
+			/*
+			 * Save-Button ClickHandler
+			 */
 			saveButton.addClickHandler(new ClickHandler() {
-				Vector<PropertyValue> editResult = new Vector<PropertyValue>();
-				Vector<PropertyValue> createResult = new Vector<PropertyValue>();			
-			
+				Vector<PropertyValue>editResult = new Vector<PropertyValue>();
+				Vector<PropertyValue>createResult = new Vector<PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {
-					if(contactToDisplay!=null) {
-						for(TextBox tb : tbv) {
-							if(!tb.getText().isEmpty()) { //editieren
-								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
-									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-										pv.setValue(tb.getText());
-										editResult.add(pv);
+					// TODO Auto-generated method stub
+					
+					if(contactToDisplay!=null) { //1. Kontakt exisitiert -> Edit
+						for(TextBox tb:tbv) {
+							if(!tb.getText().isEmpty()) {//1.1 TextBox nicht leer
+								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
+									String[] s=tb.getTitle().split(":", 2);
+									log("Spliterator: "+s[1]);
+									Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
+									p.setId(Integer.parseInt(s[1]));
+									PropertyValue ppv = new PropertyValue();
+									ppv.setBo_Id(0);
+									ppv.setContact(contactToDisplay);
+									ppv.setOwner(contactToDisplay.getOwner());
+									ppv.setProperty(p);
+									editResult.add(ppv);
+								} else{//1.1.2 TextBox alt?
+									for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
+										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
+											pv.setValue(tb.getText());
+											editResult.add(pv);
+										}
 									}
 								}
-							}else { //löschen
-								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
-									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-										pv.setValue("");
-//										editResult.add(pv);
-									}
-								}
-							}							
-						}
-						contactToDisplay.setPropertyValues(editResult);
-						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
-					} 				
-					if(contactToDisplay==null) {
-						for(TextBox tb : tbv) {
-							if(!tb.getText().isEmpty()) { //neu erstellen
-								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
-									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-										pv.setValue(tb.getText());
-										editResult.add(pv);
-									}
-								}
-							}else { //nicht erstellen
+							} else { //1.2TextBox leer -> löschen
 								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
 									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
 										pv.setValue("");
-//										editResult.add(pv);
+										editResult.add(pv);
 									}
-								}
+								}						
 							}
+						 } 
+						 contactToDisplay.setPropertyValues(createResult);
+						 contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
+						 
+						} else {
+						for(TextBox tb:tbv) {//2. Kontakt existiert nicht -> CREATE
+							if(!tb.getText().isEmpty()) { //1.1 TextBox nicht leer
+								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
+									String[] s=tb.getTitle().split(":", 2);
+									log("Spliterator: "+s[1]);
+									Property p = new Property();//1.1.1.1 Erzeuge neues PV + P Objekt		
+									p.setId(Integer.parseInt(s[1]));
+									PropertyValue ppv = new PropertyValue();
+									ppv.setBo_Id(0);
+									ppv.setContact(contactToDisplay);
+									ppv.setOwner(contactToDisplay.getOwner());
+									ppv.setProperty(p);
+									createResult.add(ppv);
+								}								
+							}else {//1.2TextBox leer -> löschen
+								tbv.remove(tb);
+							}					
+								
 						}
+						contactToDisplay.setPropertyValues(createResult);
+						contactSystemAdmin.createContact(contactToDisplay, new SaveCallback());
 					} 
-					contactToDisplay.setPropertyValues(createResult);
-					contactSystemAdmin.createContact(contactToDisplay, new SaveCallback());
-				} 									
+				}
+				
 			});
-						
 			
 			emailButton.addClickHandler(new ClickHandler(){
 
@@ -497,8 +516,9 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onSuccess(Contact result) {
 				// TODO Auto-generated method stub
+				log("Kontakt gespeichert: "+result);
 				contactToDisplay = result;
-				tvm.updateContact(result);
+				tvm.updateBusinessObject(result);
 			}							
 		}
 		
@@ -520,8 +540,7 @@ public class ContactForm extends VerticalPanel {
 				//TODO: 
 			}				
 		}
-		
-		
+				
 		/*
 		 * TreeViewModel setter
 		 */
