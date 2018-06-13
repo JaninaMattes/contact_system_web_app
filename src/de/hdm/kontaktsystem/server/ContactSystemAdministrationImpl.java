@@ -361,6 +361,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<PropertyValue> pvv = new Vector<PropertyValue>();
 		for(PropertyValue pv : contact.getPropertyValues()){
 			pv.setContact(c);
+			pv.setOwner(c.getOwner());
 			pvv.add(this.createPropertyValue(pv));
 		}
 		c.setPropertyValues(pvv);
@@ -533,6 +534,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
 		// Da Property immer fest zu einem Contact-Objekt gehört hat es auch den selben
 		// Besitzer
+		System.out.println(propertyValue);
 		propertyValue.setOwner(propertyValue.getContact().getOwner());
 		boMapper.insert(propertyValue);
 		return propValMapper.insert(propertyValue);

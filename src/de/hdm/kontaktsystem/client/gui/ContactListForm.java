@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 //import com.mysql.jdbc.log.Log;
@@ -73,10 +74,11 @@ public class ContactListForm extends VerticalPanel {
 	ListBox contactNames = new ListBox();
 	ListBox contactsToAdd = new ListBox();
 
-	
+	// Update = True, Neu anlegen = false
+	boolean update = true;
 
-	public void onLoad() {
-		super.onLoad();
+	public ContactListForm() {
+		
 
 		Grid contactListGrid = new Grid(8, 3);
 		this.add(contactListGrid);
@@ -209,10 +211,11 @@ public class ContactListForm extends VerticalPanel {
 				
 			} else {				
 				
-				if (contactListToDisplay.getName() != nameContactList.getText()) {
+				//if (contactListToDisplay.getName() != nameContactList.getText()) {
+				String newClName = nameContactList.getText();
+				contactListToDisplay.setName(newClName); 
+				if (update) {	
 					
-					String newClName = nameContactList.getText();
-					contactListToDisplay.setName(newClName); 
 					contactSystemAdmin.editContactList(contactListToDisplay, new UpdateCallback(contactListToDisplay));
 					
 					Window.alert("Aktualisierte Kontaktliste" + contactListToDisplay.toString());
@@ -244,6 +247,7 @@ public class ContactListForm extends VerticalPanel {
 		public void onSuccess(ContactList cl) {
 			if (cl != null) {
 				tvm.addBusinessObject(cl);
+			setSelected(cl);
 				Window.alert("Neue Kontaktliste gespeichert!");
 			}
 			
@@ -273,7 +277,8 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onSuccess(ContactList cl) {
 			if (cl != null) {
-				// tvm.updateMethode();
+				tvm.updateBusinessObject(cl);
+				setSelected(cl);
 				Window.alert("Neue Kontaktliste gespeichert!");
 				//log("Aktualisierte Kontaktliste angelegt" + cl.toString());
 			}	
@@ -379,8 +384,8 @@ public class ContactListForm extends VerticalPanel {
 
 		public void onSuccess(ContactList result) {
 			if (result != null) {
-				setSelected(null);
-				tvm.removeBusinessObject(result);
+				setSelected(result);
+				tvm.updateBusinessObject(result);
 				Window.alert("Kontakt wurde erfolgreich aus der Liste entfernt");
 			}
 		}
@@ -463,6 +468,7 @@ public class ContactListForm extends VerticalPanel {
 			public void onSuccess(ContactList result) {
 				if (result != null) {
 					setSelected(null);
+					RootPanel.get("Details").clear();
 					tvm.removeBusinessObject(result);
 					Window.alert("Kontaktliste gelöscht!");
 				}
@@ -485,10 +491,14 @@ public class ContactListForm extends VerticalPanel {
 //		if(cl.getBoId()!=0 & cl !=null) {
 //			this.contactListToDisplay = cl;
 //		}
+		// Listen leeren
+		contactNames.clear();
+		contactsToAdd.clear();
 		
 		if (cl != null) {
 			int count = 0;
 			User u = new User();
+			update = true;
 			
 			/* User setzen, sodass Programm Ownership zuordnen kann 
 			 * Sobald App Engine -> entfernen
@@ -529,6 +539,8 @@ public class ContactListForm extends VerticalPanel {
 			//contactSystemAdmin.getAllContactsFromUser(new ContactsToAddCallback(c));
 
 		} else {
+			update = false;
+			contactListToDisplay = new ContactList();
 			nameContactList.setText("");
 			deleteClButton.setEnabled(false);
 			contactNames.addItem("Keine Kontakte vorhanden");
