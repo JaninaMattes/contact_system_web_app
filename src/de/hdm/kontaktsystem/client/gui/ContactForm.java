@@ -51,22 +51,23 @@ public class ContactForm extends VerticalPanel {
 		HorizontalPanel ePanel = new HorizontalPanel();
 		HorizontalPanel btnPanel = new HorizontalPanel();
 		HorizontalPanel gpPanel = new HorizontalPanel();
-		Grid gp = new Grid(4,2);
+		Grid gp = new Grid(4,3);
 		
 		Label cLabel = new Label("Kontakt:");
-				
-		Label isShared = new Label("Auswahl: ");
-		Label labelShare = new Label("Teilen mit: ");
-		Label labelSharedWith = new Label("Geteilt mit: ");
-		Label labelReceivedFrom = new Label("Geteilt von: ");
+		
+		Label labelShare = new Label("Kontakt teilen mit: ");
+		Label labelSharedWith = new Label("Kontakt Teilhaber: ");
+		Label labelReceivedFrom = new Label("Kontakt Ersteller: ");
+		Label labelAddElement = new Label("Ein weiteres Feld hinzufügen:");
 		Label contactStatus = new Label("");
 				
 		Button deleteButton = new Button("Löschen");
 		Button saveButton = new Button("Speichern");
 		Button shareButton = new Button("Teilen");
 		Button addButton = new Button("Hinzufügen");
-		Button emailButton = new Button("Prüfen");
+		Button emailButton = new Button("Email Prüfen");
 		Button cancelButton = new Button("Abbrechen");
+		Button editButton = new Button("Bearbeiten");
 		
 		ListBox addElement = new ListBox();
 		ListBox sharedWithUser = new ListBox();
@@ -113,6 +114,9 @@ public class ContactForm extends VerticalPanel {
 			shareButton.setStyleName("share");
 			
 			cancelButton.setStyleName("cancel");
+			editButton.setStyleName("edit");
+			
+			gp.setStyleName("grid-panel");
 			
 			//Teilhaberschaften
 			labelSharedWith.setVisible(false);
@@ -121,18 +125,22 @@ public class ContactForm extends VerticalPanel {
 			
 			/*
 		     * GridPanel für Abbildung der Teilhaber
-		     */					
-					
-			gp.setWidget(0, 0, labelReceivedFrom);
+		     */								
 			
-			gp.setWidget(1, 0, labelSharedWith);
-			gp.setWidget(1, 1, sharedWithUser);			
+			gp.setWidget(0, 0, labelAddElement);
+			gp.setWidget(0, 1, addElement);
+			gp.setWidget(0, 2, addButton);
 			
-			gp.setWidget(2, 0, email);
-			gp.setWidget(2, 1, emailButton);
+			gp.setWidget(1, 0, labelShare);
+			gp.setWidget(1, 1, email);
+			gp.setWidget(1, 2, emailButton);
 			
-			gp.setWidget(3, 0, addElement);
-			gp.setWidget(3, 1, addButton);
+			gp.setWidget(2, 0, labelSharedWith);
+			gp.setWidget(2, 1, sharedWithUser);	
+			gp.setWidget(2, 2, editButton);
+			
+			gp.setWidget(3, 0, labelReceivedFrom);
+			
 			
 			gpPanel.add(gp);
 			
@@ -184,6 +192,7 @@ public class ContactForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Contact result) {
+						contactToDisplay= null;
 						tvm.removeBusinessObject(result);
 						RootPanel.get("Details").clear();
 						}						
@@ -204,6 +213,7 @@ public class ContactForm extends VerticalPanel {
 					
 					if(contactToDisplay!=null) { //1. Kontakt exisitiert -> Edit
 						for(TextBox tb:tbv) {
+//							if(tb.getTitle().endsWith("1")&!tb.getText().isEmpty()) { //1.0 verhindern dass Kontakt Name leer
 							if(!tb.getText().isEmpty()) {//1.1 TextBox nicht leer
 								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
 									String[] s=tb.getTitle().split(":", 2);
@@ -235,6 +245,9 @@ public class ContactForm extends VerticalPanel {
 									}
 								}						
 							}
+//						  }else {
+//							  Window.alert("Das Feld Name darf nicht leer sein.");
+//						  }
 						 } 
 						 log("Kontakte Editieren:"+editResult);
 						 contactToDisplay.setPropertyValues(editResult);
@@ -243,6 +256,7 @@ public class ContactForm extends VerticalPanel {
 						} else if(contactToDisplay==null) {
 						contactToDisplay = new Contact();
 						for(TextBox tb:tbv) {//2. Kontakt existiert nicht -> CREATE
+							if(tb.getTitle().endsWith("1")&tb.getText().isEmpty()) { //1.0 verhindern dass Kontakt Name leer
 							if(!tb.getText().isEmpty()) { //1.1 TextBox nicht leer
 								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
 									String[] s=tb.getTitle().split(":", 2);
@@ -266,8 +280,10 @@ public class ContactForm extends VerticalPanel {
 									log("Lösche aus Vector:" +tb);
 									tbv.remove(tb);
 								}
-							}					
-								
+							  }					
+							} else {
+							  Window.alert("Das Feld Name darf nicht leer sein.");
+						  }
 						}
 						 log("Kontakte Erstellen:"+createResult);
 						contactToDisplay.setPropertyValues(createResult);
@@ -350,6 +366,63 @@ public class ContactForm extends VerticalPanel {
 				}
 				
 			});
+			
+			editButton.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					if(addElement.getSelectedIndex()>=0) {
+					String mail= addElement.getSelectedItemText();
+					contactSystemAdmin.getUserBygMail(mail, new AsyncCallback<User>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+							log("Nutzer Abruf fehlgeschlagen"+caught);
+						}
+
+						@Override
+						public void onSuccess(User userResult) {
+							log("User abgerufen:"+userResult);
+							contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new AsyncCallback<Vector<Participation>>(){
+
+								@Override
+								public void onFailure(Throwable caught) {
+									// TODO Auto-generated method stub
+									log("Teilhaberschaft Abruf fehlgeschlagen"+caught);									
+								}
+
+								@Override
+								public void onSuccess(Vector<Participation> result) {
+									for(Participation p: result) {
+										if(p.getParticipant().getGMail().equals(userResult.getGMail())
+												&p.getReferencedObject() instanceof Contact) {
+											if(p.getReferencedObject().getBoId()==contactToDisplay.getBoId()) {												
+												Contact c = (Contact)p.getReferencedObject();
+												for(CheckBox cb: cbv) {
+												for(PropertyValue pv: c.getPropertyValues()) {
+												if(pv.isShared_status()&
+														(Integer.parseInt(cb.getTitle())==(pv.getProperty().getId()))) {	
+												cb.setValue(true, true);
+												}
+												}
+											}
+											}
+										}
+									}
+								}
+								
+							});			
+						}
+						
+					});
+				}else if(addElement.getSelectedIndex()==-1){
+					Window.alert("Bitte wählen Sie zuerst einen Kontakt Teilhaber "
+							+ "vor der Bearbeitung dessen Teilhaberschaft aus.");
+				}
+				}
+					
+			});
 
 
 		}
@@ -396,10 +469,10 @@ public class ContactForm extends VerticalPanel {
 							CheckBox cb = new CheckBox();
 							TextBox tb = new TextBox();
 							
-							label.setTitle(pv.getProperty()+"");
+							label.setTitle(pv.getProperty().getId()+"");
 							label.setText(pv.getProperty().getDescription());
-							cb.setTitle(pv.getBoId()+"");
-							tb.setTitle(pv.getBoId()+"");
+							cb.setTitle(pv.getProperty().getId()+"");
+							tb.setTitle(pv.getProperty().getId()+"");
 							tb.setText(pv.getValue());
 						
 							cbv.add(cb);
@@ -510,11 +583,17 @@ public class ContactForm extends VerticalPanel {
 				contactStatus.setText("Status: Noch nicht erstellt");	
 				
 				//Teilen Funktionen
+				labelShare.setVisible(false);
 				email.setVisible(false);
 				emailButton.setVisible(false);
 				
+				labelAddElement.setVisible(false);
 				addElement.setVisible(false);
 				addButton.setVisible(false);
+				
+				labelSharedWith.setVisible(false);
+				sharedWithUser.setVisible(false);
+				editButton.setVisible(false);
 				
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
