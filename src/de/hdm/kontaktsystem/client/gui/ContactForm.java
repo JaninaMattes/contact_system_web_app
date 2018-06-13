@@ -190,13 +190,15 @@ public class ContactForm extends VerticalPanel {
 							} else { //1.2TextBox leer -> löschen
 								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
 									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-//										pv.setValue("");
-//										editResult.add(pv);
+										pv.setValue("");
+										editResult.add(pv);
+										log("Lösche aus Vector:" +tb);
 										tbv.remove(tb);
 									}
 								}						
 							}
 						 } 
+						 log("Kontakte Editieren:"+editResult);
 						 contactToDisplay.setPropertyValues(editResult);
 						 contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
 						 
@@ -217,10 +219,12 @@ public class ContactForm extends VerticalPanel {
 									createResult.add(ppv);
 								}								
 							}else {//1.2TextBox leer -> löschen
+								log("Lösche aus Vector:" +tb);
 								tbv.remove(tb);
 							}					
 								
 						}
+						 log("Kontakte Erstellen:"+createResult);
 						contactToDisplay.setPropertyValues(createResult);
 						contactSystemAdmin.createContact(contactToDisplay, new SaveCallback());
 					} 
