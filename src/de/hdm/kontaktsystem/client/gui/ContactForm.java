@@ -177,6 +177,7 @@ public class ContactForm extends VerticalPanel {
 									ppv.setContact(contactToDisplay);
 									ppv.setOwner(contactToDisplay.getOwner());
 									ppv.setProperty(p);
+									ppv.setValue(tb.getText());
 									editResult.add(ppv);
 								} else{//1.1.2 TextBox alt?
 									for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
@@ -189,13 +190,14 @@ public class ContactForm extends VerticalPanel {
 							} else { //1.2TextBox leer -> löschen
 								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
 									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-										pv.setValue("");
-										editResult.add(pv);
+//										pv.setValue("");
+//										editResult.add(pv);
+										tbv.remove(tb);
 									}
 								}						
 							}
 						 } 
-						 contactToDisplay.setPropertyValues(createResult);
+						 contactToDisplay.setPropertyValues(editResult);
 						 contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
 						 
 						} else {
@@ -204,13 +206,14 @@ public class ContactForm extends VerticalPanel {
 								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
 									String[] s=tb.getTitle().split(":", 2);
 									log("Spliterator: "+s[1]);
-									Property p = new Property();//1.1.1.1 Erzeuge neues PV + P Objekt		
+									Property p = new Property();//1.1.1.1 Erzeuge neues Objekt		
 									p.setId(Integer.parseInt(s[1]));
 									PropertyValue ppv = new PropertyValue();
 									ppv.setBo_Id(0);
 									ppv.setContact(contactToDisplay);
 									ppv.setOwner(contactToDisplay.getOwner());
 									ppv.setProperty(p);
+									ppv.setValue(tb.getText());
 									createResult.add(ppv);
 								}								
 							}else {//1.2TextBox leer -> löschen
