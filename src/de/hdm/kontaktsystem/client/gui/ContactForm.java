@@ -73,7 +73,6 @@ public class ContactForm extends VerticalPanel {
 						
 		Button cancelButton = new Button("Abbrechen");
 		Button createButton = new Button("Erstellen");
-		Grid gp = new Grid(4,2);	
 		
 		/**
 		 * Startpunkt ist die onLoad() Methode
@@ -83,6 +82,28 @@ public class ContactForm extends VerticalPanel {
 
 			super.onLoad();
 			this.add(vp);
+
+							
+		    /*
+		     * GridPanel für Abbildung der Teilhaber
+		     */
+						
+			Grid gp = new Grid(4,2);
+			gp.setWidget(0, 0, labelSharedWith);
+			gp.setWidget(0, 1, sharedWithUser);
+			
+			gp.setWidget(1, 0, labelReceivedFrom);
+			gp.setWidget(1, 1, receivedFrom);
+			
+			gp.setWidget(2, 0, email);
+			gp.setWidget(2, 1, emailButton);
+			
+			gp.setWidget(3, 0, addElement);
+			gp.setWidget(3, 1, addButton);
+			
+			/*
+			 * Panel für Anordnung der Button
+			 */
 			
 			btnPanel.add(deleteButton);
 			btnPanel.add(saveButton);
@@ -95,10 +116,8 @@ public class ContactForm extends VerticalPanel {
 			vp.add(contactStatus);
 			vp.add(ft);
 			vp.add(gp);
-			
 			vp.add(btnPanel);
 			
-			//RootPanel.get("Details").add(vp);
 		}
 		
 		public ContactForm() {
@@ -112,11 +131,11 @@ public class ContactForm extends VerticalPanel {
 			shareButton.setStyleName("share");
 			
 			//Teilhaberschaften
-			labelSharedWith.setVisible(true);
-			labelReceivedFrom.setVisible(true);
+			labelSharedWith.setVisible(false);
+			labelReceivedFrom.setVisible(false);
 			
-			sharedWithUser.setVisible(true);
-			receivedFrom.setVisible(true);			
+			sharedWithUser.setVisible(false);
+			receivedFrom.setVisible(false);			
 			
 			shareButton.addClickHandler(new ClickHandler(){
 				
@@ -329,27 +348,9 @@ public class ContactForm extends VerticalPanel {
 				}
 				
 			});
-					
-		    /*
-		     * GridPanel für Abbildung der Teilhaber
-		     */
-						
-			
-			gp.setWidget(0, 0, labelSharedWith);
-			gp.setWidget(0, 1, sharedWithUser);
-			
-			gp.setWidget(1, 0, labelReceivedFrom);
-			gp.setWidget(1, 1, receivedFrom);
-			
-			gp.setWidget(2, 0, email);
-			gp.setWidget(2, 1, emailButton);
-			
-			gp.setWidget(3, 0, addElement);
-			gp.setWidget(3, 1, addButton);
-			
-			
+
+
 		}
-		
 		
 		public void setSelected(Contact contact) {
 			
@@ -358,8 +359,7 @@ public class ContactForm extends VerticalPanel {
 			
 			if(contact!=null) {
 				log("Kontakt" + contact);
-				this.contactToDisplay = contact;
-				
+				this.contactToDisplay = contact;				
 				cLabel.setText("Kontakt Id: " + contact.getBoId());			
 
 				if(contact.isShared_status()) {
