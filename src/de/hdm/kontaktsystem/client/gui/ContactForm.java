@@ -2,8 +2,6 @@ package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
 
-import org.eclipse.jetty.util.log.Log;
-
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -72,7 +70,6 @@ public class ContactForm extends VerticalPanel {
 		
 		ListBox addElement = new ListBox();
 		ListBox sharedWithUser = new ListBox();
-//		Label receivedFrom = new Label();
 
 		TextBox email = new TextBox();
 								
@@ -125,10 +122,11 @@ public class ContactForm extends VerticalPanel {
 			/*
 		     * GridPanel für Abbildung der Teilhaber
 		     */					
+					
+			gp.setWidget(0, 0, labelReceivedFrom);
 			
-			gp.setWidget(0, 0, labelSharedWith);
-			gp.setWidget(0, 1, sharedWithUser);
-			
+			gp.setWidget(1, 0, labelSharedWith);
+			gp.setWidget(1, 1, sharedWithUser);			
 			
 			gp.setWidget(2, 0, email);
 			gp.setWidget(2, 1, emailButton);
@@ -414,9 +412,41 @@ public class ContactForm extends VerticalPanel {
 							log("Table row:" + row);
 							row++;
 						}
-					}
-					
-				});				
+						
+						if(myUser.getGoogleID()!=contact.getOwner().getGoogleID()) {
+							log("Kontakt Besitzer anzeigen:" +contact.getOwner().getGMail());
+							labelReceivedFrom.setVisible(true);
+							labelReceivedFrom.setText("Geteilt von: "+contact.getOwner().getGMail());
+						}else if(myUser.getGoogleID()==contact.getOwner().getGoogleID()){	
+							log("My User "+myUser.getGoogleID());
+							labelSharedWith.setVisible(true);
+							sharedWithUser.setVisible(true);
+							contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new AsyncCallback<Vector<Participation>>() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									// TODO Auto-generated method stub
+									Window.alert("Teilhaberschaften konnten nicht abgerufen werden.");
+								}
+
+								@Override
+								public void onSuccess(Vector<Participation> result) {
+									int i = 0;
+									for(Participation part: result) {
+										if(part.getParticipant().getGoogleID()==myUser.getGoogleID()) {
+											result.remove(part);
+										}else {
+											sharedWithUser.addItem(part.getParticipant().getGMail());										
+											log("Teilhaber:"+part.getParticipant().getGMail());
+										}  
+										i++;								
+									}
+								}						
+							});					
+						}
+					}					
+				});	
+				
 				cLabel.setText("Kontakt Id: " + contact.getBoId());			
 
 				if(contact.isShared_status()) {
@@ -425,38 +455,6 @@ public class ContactForm extends VerticalPanel {
 				} else { 
 					contactStatus.setText("Status: Nicht geteilt");
 				}	
-				if(myUser.getGoogleID()!=contact.getOwner().getGoogleID()) {
-					log("Kontakt Besitzer anzeigen:" +contact.getOwner().getGMail());
-					labelReceivedFrom.setVisible(true);
-					labelReceivedFrom.setText("Geteilt von: "+contact.getOwner().getGMail());
-				}else if(myUser.getGoogleID()==contact.getOwner().getGoogleID()){	
-					log("My User "+myUser.getGoogleID());
-					labelSharedWith.setVisible(false);
-					sharedWithUser.setVisible(false);
-					contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new AsyncCallback<Vector<Participation>>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-							Window.alert("Teilhaberschaften konnten nicht abgerufen werden.");
-						}
-
-						@Override
-						public void onSuccess(Vector<Participation> result) {
-							int i = 0;
-							for(Participation part: result) {
-								if(part.getParticipant().getGoogleID()==myUser.getGoogleID()) {
-									result.remove(part);
-								}else {
-									sharedWithUser.setValue(i, part.getParticipant().getGMail());
-									sharedWithUser.addItem(part.getParticipant().getGMail());
-									log("Teilhaber:"+part.getParticipant().getGMail());
-								}  
-								i++;								
-							}
-						}						
-					});					
-				}
 				
 				int row = 0;				
 				//Flextable befüllen
