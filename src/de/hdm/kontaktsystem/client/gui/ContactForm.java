@@ -123,11 +123,9 @@ public class ContactForm extends VerticalPanel {
 						Vector<PropertyValue> pvv = new Vector<PropertyValue>();
 						for(CheckBox cb: cbv){
 							if(cb.getValue()){
-								log(cb.getTitle());
 								for(PropertyValue pv : c.getPropertyValues()){
 									if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
 										pvv.add(pv);
-										log("Share: " + pv.getValue() + " With " + email.getText());
 									}
 								}
 							}
@@ -135,7 +133,6 @@ public class ContactForm extends VerticalPanel {
 						part.setParticipant(user);
 						c.setPropertyValues(pvv);
 						part.setReference(c);
-						log("Share:" + part);
 						contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());						
 					}else{
 						Window.alert("Bitte geben Sie die Email eines Nutzers ein und bestätigen Sie diese mit dem CheckButton");
@@ -184,7 +181,6 @@ public class ContactForm extends VerticalPanel {
 									
 										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
 											pv.setValue(tb.getText());
-											log("Add PropertyValue: "+pv.getValue());
 											editResult.add(pv);
 										}
 								}
@@ -197,7 +193,6 @@ public class ContactForm extends VerticalPanel {
 									pv.setProperty(p);
 									pv.setContact(contactToDisplay);
 									pv.setValue(tb.getText());
-									log("Add PropertyValue: "+pv.getValue());
 									editResult.add(pv);
 								}
 								
@@ -232,7 +227,6 @@ public class ContactForm extends VerticalPanel {
 							if(!tb.getText().isEmpty()) { //neu erstellen
 									PropertyValue pv = new PropertyValue();
 									Property p = new Property(); 
-									log("PropertyID: "+Integer.parseInt((tb.getTitle().split(":", 2))[1]));
 									p.setId(Integer.parseInt((tb.getTitle().split(":", 2))[1]));
 									pv.setBo_Id(0);
 									pv.setProperty(p);
@@ -283,7 +277,6 @@ public class ContactForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(User result) {
-							log("User"+result);
 							emailButton.setStyleName("check_Found");
 							emailButton.setText("OK");
 							user.setGoogleID(result.getGoogleID());
@@ -320,7 +313,6 @@ public class ContactForm extends VerticalPanel {
 				@Override
 				public void onClick(ClickEvent event) {
 					Property p = new Property();
-					log(addElement.getSelectedItemText() + " / " + addElement.getSelectedValue());
 					p.setId(Integer.parseInt(addElement.getSelectedValue()));
 					p.setDescription(addElement.getSelectedItemText());
 					PropertyValue pv = new PropertyValue();
@@ -388,7 +380,6 @@ public class ContactForm extends VerticalPanel {
 			
 			log("Kontakt Anzeigen");
 			if(contact!=null && contact.getBoId()!=0) {
-				log("Kontakt" + contact);
 				this.contactToDisplay = contact;
 				
 				cLabel.setText("Kontakt Id: " + contact.getBoId());			
@@ -405,7 +396,6 @@ public class ContactForm extends VerticalPanel {
 				
 				//Flextable befüllen
 				for(PropertyValue pv : contact.getPropertyValues()){
-					log("PropertyValue" +pv);
 					Label label = new Label();
 					CheckBox cb = new CheckBox();
 					TextBox tb = new TextBox();
@@ -483,7 +473,6 @@ public class ContactForm extends VerticalPanel {
 				//Flextable befüllen
 				
 				for(Property p : ppv){
-					log("PropertyValue" +p);
 					Label label = new Label();
 					CheckBox cb = new CheckBox();
 					TextBox tb = new TextBox();

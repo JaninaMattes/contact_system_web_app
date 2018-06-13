@@ -26,6 +26,8 @@ public interface ContactSystemAdministrationAsync {
 
 	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback);
 	
+	public void getMyContactsPrev(AsyncCallback<Vector<Contact>> callback);
+	
 	public void getAllContacts(AsyncCallback<Vector<Contact>> callback);
 	
 	public void getContactByPropertyValue(PropertyValue pv, AsyncCallback<Contact> callback);
@@ -35,6 +37,8 @@ public interface ContactSystemAdministrationAsync {
 	public void getContactById(int id, AsyncCallback<Contact> callback);
 	
 	public void getAllContactListsFromUser(AsyncCallback<Vector<ContactList>> callback);
+	
+	public void getMyContactListsPrev(AsyncCallback<Vector<ContactList>> callback);
 	
 	public void getAllContactLists(AsyncCallback<Vector<ContactList>> callback);
 	
