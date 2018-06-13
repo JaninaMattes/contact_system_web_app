@@ -35,12 +35,9 @@ public class ContactListForm extends VerticalPanel {
 	CellTreeViewModel tvm = null;
 	User myUser = null;
 
-
-
 	/**
 	 * Widgets mit variablen Inhalten.
 	 */
-
 
 	/**
 	 * WIdgets um die Attribute einer Kontaktliste anzuzeigen.
@@ -77,8 +74,9 @@ public class ContactListForm extends VerticalPanel {
 	// Update = True, Neu anlegen = false
 	boolean update = true;
 
-	public ContactListForm() {
-		
+	
+	public void onLoad() {		
+		super.onLoad();
 
 		Grid contactListGrid = new Grid(8, 3);
 		this.add(contactListGrid);
@@ -671,7 +669,7 @@ public class ContactListForm extends VerticalPanel {
 				Window.alert("Keine Kontaktliste ausgewählt");
 				
 			} else {
-				final Contact conToAdd = null;
+
 				Integer lbItemIndex = contactsToAdd.getSelectedIndex();
 				final String contactToAddName = contactsToAdd.getValue(lbItemIndex);
 				
@@ -758,11 +756,11 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Contact> result) {
-			Vector<Contact> conResult = new Vector<Contact>();
+			
+			
 			int count = 0;
 				if (result != null) {
-				for(Contact con: result) {						
-				
+				for(Contact con: result) {										
 					contactsToAdd.addItem(con.getName().getValue());
 					++count;
 					}
