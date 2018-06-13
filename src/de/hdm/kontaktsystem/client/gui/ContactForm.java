@@ -73,14 +73,35 @@ public class ContactForm extends VerticalPanel {
 						
 		Button cancelButton = new Button("Abbrechen");
 		Button createButton = new Button("Erstellen");
-					
+		Grid gp = new Grid(4,2);	
 		
 		/**
 		 * Startpunkt ist die onLoad() Methode
 		 */
-		public void  onLoad() {
+		
+		public void onLoad(){
+
 			super.onLoad();
 			this.add(vp);
+			
+			btnPanel.add(deleteButton);
+			btnPanel.add(saveButton);
+			btnPanel.add(shareButton);	
+					
+			/*
+			 * Zuordnung zum VP			
+			 */
+			vp.add(cLabel);
+			vp.add(contactStatus);
+			vp.add(ft);
+			vp.add(gp);
+			
+			vp.add(btnPanel);
+			
+			//RootPanel.get("Details").add(vp);
+		}
+		
+		public ContactForm() {
 			
 			final User user = new User();
 			
@@ -313,7 +334,7 @@ public class ContactForm extends VerticalPanel {
 		     * GridPanel für Abbildung der Teilhaber
 		     */
 						
-			Grid gp = new Grid(4,2);
+			
 			gp.setWidget(0, 0, labelSharedWith);
 			gp.setWidget(0, 1, sharedWithUser);
 			
@@ -326,25 +347,7 @@ public class ContactForm extends VerticalPanel {
 			gp.setWidget(3, 0, addElement);
 			gp.setWidget(3, 1, addButton);
 			
-			/*
-			 * Panel für Anordnung der Button
-			 */
 			
-			btnPanel.add(deleteButton);
-			btnPanel.add(saveButton);
-			btnPanel.add(shareButton);	
-					
-			/*
-			 * Zuordnung zum VP			
-			 */
-			vp.add(cLabel);
-			vp.add(contactStatus);
-			vp.add(ft);
-			vp.add(gp);
-			
-			vp.add(btnPanel);
-			
-			RootPanel.get("Details").add(vp);
 		}
 		
 		
