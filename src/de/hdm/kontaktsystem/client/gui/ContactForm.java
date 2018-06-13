@@ -52,6 +52,8 @@ public class ContactForm extends VerticalPanel {
 				
 		HorizontalPanel ePanel = new HorizontalPanel();
 		HorizontalPanel btnPanel = new HorizontalPanel();
+		HorizontalPanel gpPanel = new HorizontalPanel();
+		Grid gp = new Grid(4,2);
 		
 		Label cLabel = new Label("Kontakt:");
 				
@@ -70,7 +72,7 @@ public class ContactForm extends VerticalPanel {
 		
 		ListBox addElement = new ListBox();
 		ListBox sharedWithUser = new ListBox();
-		Label receivedFrom = new Label();
+//		Label receivedFrom = new Label();
 
 		TextBox email = new TextBox();
 								
@@ -79,28 +81,11 @@ public class ContactForm extends VerticalPanel {
 		 */
 		
 		public void onLoad(){
-
+			vp.clear();
+			
 			super.onLoad();
 			this.add(vp);
-
 							
-		    /*
-		     * GridPanel für Abbildung der Teilhaber
-		     */
-						
-			Grid gp = new Grid(4,2);
-			gp.setWidget(0, 0, labelSharedWith);
-			gp.setWidget(0, 1, sharedWithUser);
-			
-			gp.setWidget(1, 0, labelReceivedFrom);
-			gp.setWidget(1, 1, receivedFrom);
-			
-			gp.setWidget(2, 0, email);
-			gp.setWidget(2, 1, emailButton);
-			
-			gp.setWidget(3, 0, addElement);
-			gp.setWidget(3, 1, addButton);
-			
 			/*
 			 * Panel für Anordnung der Button
 			 */
@@ -115,7 +100,7 @@ public class ContactForm extends VerticalPanel {
 			vp.add(cLabel);
 			vp.add(contactStatus);
 			vp.add(ft);
-			vp.add(gp);
+			vp.add(gpPanel);
 			vp.add(btnPanel);
 			
 		}
@@ -134,11 +119,26 @@ public class ContactForm extends VerticalPanel {
 			
 			//Teilhaberschaften
 			labelSharedWith.setVisible(false);
-			labelReceivedFrom.setVisible(false);
+			labelReceivedFrom.setVisible(false);			
+			sharedWithUser.setVisible(false);	
 			
-			sharedWithUser.setVisible(false);
-			receivedFrom.setVisible(false);			
+			/*
+		     * GridPanel für Abbildung der Teilhaber
+		     */					
 			
+			gp.setWidget(0, 0, labelSharedWith);
+			gp.setWidget(0, 1, sharedWithUser);
+			
+			
+			gp.setWidget(2, 0, email);
+			gp.setWidget(2, 1, emailButton);
+			
+			gp.setWidget(3, 0, addElement);
+			gp.setWidget(3, 1, addButton);
+			
+			gpPanel.add(gp);
+			
+			//Click-Handler
 			shareButton.addClickHandler(new ClickHandler(){
 				
 				@Override
@@ -186,8 +186,8 @@ public class ContactForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Contact result) {
-						contactToDisplay = null;
 						tvm.removeBusinessObject(result);
+						RootPanel.get("Details").clear();
 						}						
 					});
 					}					
@@ -275,7 +275,7 @@ public class ContactForm extends VerticalPanel {
 						contactToDisplay.setPropertyValues(createResult);
 						contactSystemAdmin.createContact(contactToDisplay, new SaveCallback());
 					} 
-				}
+				} 
 				
 			});
 			
@@ -345,7 +345,7 @@ public class ContactForm extends VerticalPanel {
 					cbv.add(cb);
 					
 					int row = ft.getRowCount()+1;
-					
+
 					ft.setWidget(row, 0, label);
 					ft.setWidget(row, 1, tb);
 					ft.setWidget(row, 2, cb);
@@ -380,8 +380,39 @@ public class ContactForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Contact result) {
-						log("############ Callback Kontakt Pvs: "+ contact.getPropertyValues());
-						contactToDisplay= result;						
+						log("############ Callback Kontakt Pvs: "+ result.getPropertyValues());
+						contactToDisplay= result;	
+						
+						email.setVisible(true);
+						emailButton.setVisible(true);
+						
+						addElement.setVisible(true);
+						addButton.setVisible(true);
+						
+						int row = 0;				
+						//Flextable befüllen
+						for(PropertyValue pv : result.getPropertyValues()){
+							log("PropertyValue" +pv);
+							Label label = new Label();
+							CheckBox cb = new CheckBox();
+							TextBox tb = new TextBox();
+							
+							label.setTitle(pv.getProperty()+"");
+							label.setText(pv.getProperty().getDescription());
+							cb.setTitle(pv.getBoId()+"");
+							tb.setTitle(pv.getBoId()+"");
+							tb.setText(pv.getValue());
+						
+							cbv.add(cb);
+							tbv.add(tb);
+										
+							ft.setWidget(row, 0, label);
+							ft.setWidget(row, 1, tb);
+							ft.setWidget(row, 2, cb);
+							
+							log("Table row:" + row);
+							row++;
+						}
 					}
 					
 				});				
@@ -396,8 +427,7 @@ public class ContactForm extends VerticalPanel {
 				if(myUser.getGoogleID()!=contact.getOwner().getGoogleID()) {
 					log("Kontakt Besitzer anzeigen:" +contact.getOwner().getGMail());
 					labelReceivedFrom.setVisible(true);
-					receivedFrom.setVisible(true);
-					receivedFrom.setText(contact.getOwner().getGMail());
+					labelReceivedFrom.setText("Geteilt von: "+contact.getOwner().getGMail());
 				}else if(myUser.getGoogleID()==contact.getOwner().getGoogleID()){	
 					log("My User "+myUser.getGoogleID());
 					labelSharedWith.setVisible(false);
@@ -421,13 +451,10 @@ public class ContactForm extends VerticalPanel {
 									sharedWithUser.addItem(part.getParticipant().getGMail());
 									log("Teilhaber:"+part.getParticipant().getGMail());
 								}  
-								i++;
-								
+								i++;								
 							}
-						}
-						
-					});
-					
+						}						
+					});					
 				}
 				
 				int row = 0;				
@@ -478,10 +505,17 @@ public class ContactForm extends VerticalPanel {
 							
 			} else if(contact==null) {
 				contactToDisplay=contact;
-				log("Neuer Kontakt" + contact);
+				log("Neues Kontakt" + contact);
 				
 				cLabel.setText("Kontakt Id: " + 0);			
 				contactStatus.setText("Status: Noch nicht erstellt");	
+				
+				//Teilen Funktionen
+				email.setVisible(false);
+				emailButton.setVisible(false);
+				
+				addElement.setVisible(false);
+				addButton.setVisible(false);
 				
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
@@ -544,10 +578,11 @@ public class ContactForm extends VerticalPanel {
 
 			@Override
 			public void onSuccess(Contact result) {
-				// TODO Auto-generated method stub
 				log("Kontakt gespeichert: "+result);
-				contactToDisplay = result;
+				RootPanel.get("Details").clear();
+				setSelected(result);
 //				tvm.updateBusinessObject(result);
+				RootPanel.get("Details").add(vp);
 			}							
 		}
 		
