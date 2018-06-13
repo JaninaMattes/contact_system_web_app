@@ -79,7 +79,6 @@ public class ContactForm extends VerticalPanel {
 		 */
 		
 		public void onLoad(){
-
 			super.onLoad();
 			this.add(vp);
 
@@ -375,12 +374,10 @@ public class ContactForm extends VerticalPanel {
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
-						log("########## Fehler: "+contact.getBoId()+ " nicht abgerufen.");
 					}
 
 					@Override
 					public void onSuccess(Contact result) {
-						log("############ Callback Kontakt Pvs: "+ contact.getPropertyValues());
 						contactToDisplay= result;						
 					}
 					

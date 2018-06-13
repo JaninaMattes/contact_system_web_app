@@ -242,7 +242,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Contact contact = cMapper.findOwnContact(u);
 		if(contact != null){
 			contact.setName(this.getNameOfContact(contact));
-			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
+			//contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 		}
 		return contact;
 	}
@@ -317,11 +317,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<Contact> getContactsFromList(ContactList cl) {
 		Vector<Integer> iv = cMapper.findContactFromList(cl);
-
 		Vector<Contact> cv = new Vector<Contact>();
 		if (iv != null) {
 			for (int i : iv) {
-				cv.add(this.getContactById(i));
+				Contact c = cMapper.findContactById(i);
+				c.setName(this.getNameOfContact(c));
+				cv.add(c);
 			}
 		}
 		return cv;

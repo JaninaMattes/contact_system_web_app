@@ -179,7 +179,6 @@ public class ContactMapper {
 	 */
 	
 	public Contact findContactById(int id) {	
-		//System.out.println("#Contact -findcontactByID");
 		Connection con = DBConnection.connection();
 			
 		try {			
@@ -398,7 +397,6 @@ public class ContactMapper {
 	 */
 	
 	public int deleteContactByID(int id) {
-		System.out.println("Delete Contact");
 		int i = 0; // Anzahl der gelöschten Reihen
 		Connection con = DBConnection.connection();
 		try {
@@ -430,7 +428,6 @@ public class ContactMapper {
 	
 
 	public Contact findOwnContact(User owner) {
-		//System.out.println("#Contact -faddOwncontact");
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(

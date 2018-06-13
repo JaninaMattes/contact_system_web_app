@@ -233,7 +233,6 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findByContactID(int contactID) {
-		////System.out.println("#PV -findByContactID");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
@@ -261,7 +260,6 @@ public class PropertyValueMapper {
 				propValueResult.addElement(propValue);
 
 			}
-			//System.out.println(propValueResult);
 			return propValueResult;
 
 		} catch (SQLException e) {
@@ -280,7 +278,6 @@ public class PropertyValueMapper {
 	  */
 	
 	public Vector<PropertyValue> findBy(Property p) {
-		////System.out.println("#PV -findBy(Property)");
 		return findByPropertyID(p.getId());
 		
 	}
@@ -297,7 +294,6 @@ public class PropertyValueMapper {
 	public Vector<PropertyValue> findByValue(String value) {
 		
 		
-		System.out.println("#PV -findByContactID");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 
 		Connection con = DBConnection.connection();
@@ -344,7 +340,6 @@ public class PropertyValueMapper {
 	 */
 
 	public Vector<PropertyValue> findByPropertyID(int propertyID) {
-		////System.out.println("#PV-FindBy(id)");
 		Vector<PropertyValue> propValueResult = new Vector<PropertyValue>();
 		Connection con = DBConnection.connection();
 
@@ -367,11 +362,9 @@ public class PropertyValueMapper {
 				prop.setDescription(rs.getString("description"));
 				propValue.setBo_Id(rs.getInt("ID"));
 				propValue.setValue(rs.getString("value"));
-				//System.out.println("PV-id: " + propValue.getValue());
 				propValue.setProperty(prop);
 				propValueResult.addElement(propValue);
 			}
-			////System.out.println(propValueResult);
 			return propValueResult;
 			
 
