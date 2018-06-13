@@ -49,7 +49,7 @@ public class ContactForm extends VerticalPanel {
 		HorizontalPanel ePanel = new HorizontalPanel();
 		HorizontalPanel btnPanel = new HorizontalPanel();
 		HorizontalPanel addPanel = new HorizontalPanel();
-		
+		final VerticalPanel vp  = new VerticalPanel();
 		Label cLabel = new Label("Kontakt:");
 				
 		Label isShared = new Label("Auswahl: ");
@@ -78,11 +78,34 @@ public class ContactForm extends VerticalPanel {
 		 * Startpunkt ist die onLoad() Methode
 		 */
 		public void  onLoad() {
+			
+			btnPanel.add(deleteButton);
+			btnPanel.add(saveButton);
+			btnPanel.add(shareButton);			
+			
+			
+			ePanel.add(email);
+			ePanel.add(emailButton);
+			
+			addPanel.add(addElement);
+			addPanel.add(addButton);
+			
+			vp.add(cLabel);
+			vp.add(contactStatus);
+			vp.add(ft);
+			vp.add(ePanel);
+			vp.add(addPanel);
+			vp.add(btnPanel);
+			
+			RootPanel.get("Details").add(vp);
+		}
+		
+		public ContactForm(){
 			super.onLoad();
 
 			final User user = new User();
 
-			final VerticalPanel vp  = new VerticalPanel();
+			
 			this.add(vp);
 			
 			//CSS
@@ -138,6 +161,7 @@ public class ContactForm extends VerticalPanel {
 						@Override
 						public void onSuccess(Contact result) {
 						contactToDisplay = null;
+						RootPanel.get("Details").clear();
 						tvm.removeBusinessObject(result);
 						}						
 					});
@@ -152,14 +176,31 @@ public class ContactForm extends VerticalPanel {
 				@Override
 				public void onClick(ClickEvent event) {
 					if(contactToDisplay!=null) {
+						log("Update Contact");
 						for(TextBox tb : tbv) {
 							if(!tb.getText().isEmpty()) { //editieren
+								if(tb.getTitle().charAt(0) != 'N'){
 								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
-									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-										pv.setValue(tb.getText());
-										editResult.add(pv);
-									}
+									
+										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
+											pv.setValue(tb.getText());
+											log("Add PropertyValue: "+pv.getValue());
+											editResult.add(pv);
+										}
 								}
+								}else{
+									// Neues Element Anlegen
+									PropertyValue pv = new PropertyValue();
+									Property p = new Property(); 
+									p.setId(Integer.parseInt((tb.getTitle().split(":", 2))[1]));
+									pv.setBo_Id(0);
+									pv.setProperty(p);
+									pv.setContact(contactToDisplay);
+									pv.setValue(tb.getText());
+									log("Add PropertyValue: "+pv.getValue());
+									editResult.add(pv);
+								}
+								
 							}else { //löschen
 								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
 									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
@@ -181,20 +222,23 @@ public class ContactForm extends VerticalPanel {
 							@Override
 							public void onSuccess(Contact result) {
 								// TODO Auto-generated method stub
-								contactToDisplay = result;
-								tvm.updateContact(result);
+								setSelected(result);
+								tvm.updateBusinessObject(result);
 							}							
 						});
 					} 				
 					if(contactToDisplay==null) {
 						for(TextBox tb : tbv) {
 							if(!tb.getText().isEmpty()) { //neu erstellen
-								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
-									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-										pv.setValue(tb.getText());
-										editResult.add(pv);
-									}
-								}
+									PropertyValue pv = new PropertyValue();
+									Property p = new Property(); 
+									log("PropertyID: "+Integer.parseInt((tb.getTitle().split(":", 2))[1]));
+									p.setId(Integer.parseInt((tb.getTitle().split(":", 2))[1]));
+									pv.setBo_Id(0);
+									pv.setProperty(p);
+									pv.setValue(tb.getText());
+									editResult.add(pv);
+								
 							}else { //nicht erstellen
 								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
 									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
@@ -204,23 +248,23 @@ public class ContactForm extends VerticalPanel {
 								}
 							}
 						}
-					} 
-					contactToDisplay.setPropertyValues(createResult);
-					contactSystemAdmin.createContact(contactToDisplay, new AsyncCallback<Contact>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-							Window.alert("Speichern ist fehlgeschlagen.");
-						}
-
-						@Override
-						public void onSuccess(Contact result) {
-							// TODO Auto-generated method stub
-							contactToDisplay = result;
-							tvm.updateContact(result);
-						}						
-					});
+						contactToDisplay.setPropertyValues(createResult);
+						contactSystemAdmin.createContact(contactToDisplay, new AsyncCallback<Contact>() {
+	
+							@Override
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+								Window.alert("Speichern ist fehlgeschlagen.");
+							}
+	
+							@Override
+							public void onSuccess(Contact result) {
+								// TODO Auto-generated method stub
+								setSelected(result);
+								tvm.updateContact(result);
+							}						
+						});
+					}
 				} 									
 			});
 						
@@ -276,7 +320,8 @@ public class ContactForm extends VerticalPanel {
 				@Override
 				public void onClick(ClickEvent event) {
 					Property p = new Property();
-					p.setId(Integer.parseInt(addElement.getTitle()));
+					log(addElement.getSelectedItemText() + " / " + addElement.getSelectedValue());
+					p.setId(Integer.parseInt(addElement.getSelectedValue()));
 					p.setDescription(addElement.getSelectedItemText());
 					PropertyValue pv = new PropertyValue();
 					pv.setBo_Id(0);
@@ -295,7 +340,7 @@ public class ContactForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Contact result) {
-							contactToDisplay = result;
+							setSelected(result);
 							
 						}
 						
@@ -305,8 +350,8 @@ public class ContactForm extends VerticalPanel {
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
 					
-					tb.setTitle("Neu: "+p.getId());
-					cb.setTitle("Neu: "+p.getId());
+					tb.setTitle("Neu:"+p.getId());
+					cb.setTitle("Neu:"+p.getId());
 					
 					tbv.add(tb);
 					cbv.add(cb);
@@ -331,31 +376,18 @@ public class ContactForm extends VerticalPanel {
 //			labelReceivedFrom
 //			receivedFrom
 			
-			btnPanel.add(deleteButton);
-			btnPanel.add(saveButton);
-			btnPanel.add(shareButton);			
-			
-			
-			ePanel.add(email);
-			ePanel.add(emailButton);
-			
-			addPanel.add(addElement);
-			addPanel.add(addButton);
-			
-			vp.add(cLabel);
-			vp.add(contactStatus);
-			vp.add(ft);
-			vp.add(ePanel);
-			vp.add(addPanel);
-			vp.add(btnPanel);
-			
-			RootPanel.get("Details").add(vp);
 		}
 		
 		
 		public void setSelected(Contact contact) {
+			// Inhalt von Vectoren und FlexTabel Löschen
+			cbv.clear();
+			tbv.clear();
+			ft.clear();
+			addElement.clear();
 			
-			if(contact!=null&contact.getBoId()!=0) {
+			log("Kontakt Anzeigen");
+			if(contact!=null && contact.getBoId()!=0) {
 				log("Kontakt" + contact);
 				this.contactToDisplay = contact;
 				
@@ -384,13 +416,13 @@ public class ContactForm extends VerticalPanel {
 					tb.setTitle(pv.getBoId()+"");
 					tb.setText(pv.getValue());
 					
-					cb.addClickHandler(new ClickHandler() {
-
-						@Override
-						public void onClick(ClickEvent event) {
-						// TODO Auto-generated method stub					
-						}						
-					});
+//					cb.addClickHandler(new ClickHandler() {
+//
+//						@Override
+//						public void onClick(ClickEvent event) {
+//						// TODO Auto-generated method stub					
+//						}						
+//					});
 					
 					cbv.add(cb);
 					tbv.add(tb);
@@ -415,8 +447,9 @@ public class ContactForm extends VerticalPanel {
 				public void onSuccess(Vector<Property> result) {
 					 for(Property p : result) {
 						 if(p.getId()!=1) { 
-						 addElement.addItem(p.getDescription());
+						 addElement.addItem(p.getDescription(), p.getId()+"");
 						 addElement.setTitle(p.getId()+"");
+						 
 						 }
 					 }					
 				}
@@ -424,7 +457,7 @@ public class ContactForm extends VerticalPanel {
 							
 			} else {
 				this.contactToDisplay = null;				
-				log("Kontakt" + contact);
+				log("Neuer Kontakt");
 				
 				final Vector<Property> ppv = new Vector <Property>();
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
@@ -442,7 +475,7 @@ public class ContactForm extends VerticalPanel {
 					
 				});	
 				
-				cLabel.setText("Kontakt Id: " + 0);			
+				cLabel.setText("Kontakt Id: Neu");			
 				contactStatus.setText("Status: Noch nicht erstellt");				
 				
 				Boolean isChecked = new Boolean(true);
@@ -455,19 +488,19 @@ public class ContactForm extends VerticalPanel {
 					CheckBox cb = new CheckBox();
 					TextBox tb = new TextBox();
 					
-					label.setTitle("Neu: "+p.getId());
+					label.setTitle("Neu:"+p.getId());
 					label.setText("Neu: "+p.getId());
-					cb.setTitle("Neu: "+p.getId());
-					tb.setTitle("Neu: "+p.getId());
+					cb.setTitle("Neu:"+p.getId());
+					tb.setTitle("Neu:"+p.getId());
 					tb.setText("");
 					
-					cb.addClickHandler(new ClickHandler() {
-						
-						@Override
-						public void onClick(ClickEvent event) {
-						// TODO Auto-generated method stub					
-						}						
-					});
+//					cb.addClickHandler(new ClickHandler() {
+//						
+//						@Override
+//						public void onClick(ClickEvent event) {
+//						// TODO Auto-generated method stub					
+//						}						
+//					});
 					
 					cbv.add(cb);
 					tbv.add(tb);

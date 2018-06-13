@@ -145,10 +145,13 @@ public class CellTreeViewModel implements TreeViewModel {
 	}
 	
 	public void updateBusinessObject(BusinessObject bo){
-		log("Update Data");
+		log("Update BO");
 		if(bo instanceof Contact) {
 			dataProvider.getList().remove(bo);
 			dataProvider.getList().add(bo);
+			
+			rootData.getList().remove(bo);
+			rootData.getList().add(bo);
 		} else if (bo instanceof ContactList){
 			rootData.getList().remove(bo);
 			rootData.getList().add(bo);
@@ -166,6 +169,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	public void addBusinessObject(BusinessObject bo){
 		if(bo instanceof Contact) {
 		dataProvider.getList().add(bo);
+		rootData.getList().remove(bo);
 		} else if (bo instanceof ContactList){
 		rootData.getList().add(bo);
 		}
@@ -181,6 +185,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	public void removeBusinessObject(BusinessObject bo){
 		if(bo instanceof Contact) {
 		dataProvider.getList().remove(bo);
+		rootData.getList().remove(bo);
 		} else if (bo instanceof ContactList){
 		rootData.getList().remove(bo);
 		}
