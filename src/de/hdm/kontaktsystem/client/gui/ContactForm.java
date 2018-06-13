@@ -71,16 +71,18 @@ public class ContactForm extends VerticalPanel {
 		ListBox addElement = new ListBox();
 		ListBox sharedWithUser = new ListBox();
 		Label receivedFrom = new Label();
-		
-		TextBox email = new TextBox();				
-							
-		
+
+		TextBox email = new TextBox();
+								
 		/**
 		 * Startpunkt ist die onLoad() Methode
 		 */
-		public void  onLoad() {
+		
+		public void onLoad(){
+
 			super.onLoad();
 			this.add(vp);
+
 							
 		    /*
 		     * GridPanel für Abbildung der Teilhaber
@@ -350,7 +352,8 @@ public class ContactForm extends VerticalPanel {
 				}
 				
 			});
-			
+
+
 		}
 		
 		public void setSelected(Contact contact) {
