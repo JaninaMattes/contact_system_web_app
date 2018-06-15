@@ -282,16 +282,37 @@ public class ContactListForm extends VerticalPanel {
 				Window.alert("Kontaktliste auswählen");
 				
 			} else {
-				User uToShare = new User();
-				uToShare.setGMail("NeuerUser@gmail.com"); // Testdaten, sollte beim Teilen �ber ein Popup abgefragt werden.
+					
+				int userToShareIndex = listBoxShareWith.getSelectedIndex();
+				final String userToShareData = listBoxShareWith.getItemText(userToShareIndex);
+				
+				/*
+				 * Alle Kontaktlisten des User abrufen, mit ausgewähltem User aus Listbox abgleichen
+				 * -> Bei Übereinstimmung teilen
+				 */
+				contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
 
-				
-				Participation part = new Participation();
-				part.setParticipant(uToShare);
-				part.setReference(contactListToDisplay);
-				
-				contactSystemAdmin.createParticipation(part, new shareCallback());
-				
+					@Override
+					public void onFailure(Throwable caught) {
+						log("Abruf der Kontaktlisten von User fehlgeschlagen");
+						
+					}
+
+					@Override
+					public void onSuccess(Vector<ContactList> result) {
+						
+						for (ContactList cl : result) {
+							if (userToShareData == cl.getOwner().getGMail()) {
+								User uToShare = cl.getOwner();
+								Participation part = new Participation();
+								part.setParticipant(uToShare);
+								part.setReference(contactListToDisplay);
+								
+								contactSystemAdmin.createParticipation(part, new shareCallback());
+							}
+						}
+					}
+				});
 			}
 		}
 	}
@@ -327,6 +348,7 @@ public class ContactListForm extends VerticalPanel {
 			Window.alert("Keine KontaktListe ausgewählt.");		
 		} 
 
+		}
 	}
 
 	/**
@@ -840,4 +862,3 @@ public class ContactListForm extends VerticalPanel {
 	}-*/;
 
 	}
-}
