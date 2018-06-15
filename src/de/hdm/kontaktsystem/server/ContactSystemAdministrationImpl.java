@@ -281,6 +281,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contact;
 	}
 
+	
 	@Override
 	public Vector<Contact> getAllContactsFromUser()  {
 		User user = this.getUserByID(this.getCurrentUser());
@@ -432,6 +433,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ABSCHNITT, ContactList
 	 * ***************************************************************************
 	 */
+
+	
 	@Override
 	public ContactList createContactList(ContactList contactList) {
 		if(contactList.getOwner() == null) contactList.setOwner(this.getUserByID(this.getCurrentUser()));

@@ -19,11 +19,20 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getUserBygMail(String gMail, AsyncCallback<User> callback);
 	
+	/*
+	 * Callback aller im System existenten User zur Befüllung der Listbox mit Usern an die Kontaktliste geteilt werden kann 
+	 * -> Kontaktliste
+	 */
+	
 	public void getAllUsers(AsyncCallback<Vector<User>> callback);
 	
 	public void getAccountOwner(AsyncCallback<User> callback); //TODO
 	
 
+	/* Aufruf für Befüllung der Listbox mit allen Kontakten des Users zum Hinzufügen zur Kontaktliste
+	 * -> ContactList
+	*/
+	
 	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback);
 	
 	public void getMyContactsPrev(AsyncCallback<Vector<Contact>> callback);
@@ -39,6 +48,11 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getContactById(int id, AsyncCallback<Contact> callback);
 	
+	/*
+	 * Callback mit allen Kontaktlisten die der User angelegt oder die ihm geteilt wurden
+	 * -> Kontaktliste
+	 */
+	
 	public void getAllContactListsFromUser(AsyncCallback<Vector<ContactList>> callback);
 	
 	public void getMyContactListsPrev(AsyncCallback<Vector<ContactList>> callback);
@@ -52,6 +66,11 @@ public interface ContactSystemAdministrationAsync {
 	public void getAllParticipationsByOwner(User owner, AsyncCallback<Vector<Participation>> callback);
 	
 	public void getAllParticipationsByParticipant(User gMail, AsyncCallback<Vector<Participation>> callback);
+	
+	/*
+	 * Callback mit allen Usern denen die Kontaktliste geteilt wurde
+	 * -> Kontaktliste
+	 */
 	
 	public void getAllParticipationsByBusinessObject(BusinessObject bo, AsyncCallback<Vector<Participation>> callback);
 	
@@ -88,11 +107,20 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void createContact(Contact c, AsyncCallback<Contact> callback);
 	
+	/*
+	 * Speichern neu angelegter Kontaktlisten
+	 * -> Kontaktliste
+	 */
+	
 	public void createContactList(ContactList cl, AsyncCallback<ContactList> callback);
 	
 	public void createPropertyValue(PropertyValue pv, AsyncCallback<PropertyValue> callback);
 	
 	public void createParticipation(Participation part, AsyncCallback<Participation> callback);
+	
+	/*
+	 * Hinzufügen eines ausgewählten Kontakt von User (geteilt oder erstellt) zu ausgewählter Kontaktliste
+	 */
 	
 	public void addContactToList(Contact c, ContactList cl, AsyncCallback<ContactList> callback);
 
@@ -103,6 +131,11 @@ public interface ContactSystemAdministrationAsync {
 	public void editUser(User u, AsyncCallback<User> callback);
 	
 	public void editContact(Contact c, AsyncCallback<Contact> callback);
+	
+	/*
+	 * Editieren bereits existenter Kontaktlisten
+	 * -> Kontaktliste
+	 */
 	
 	public void editContactList(ContactList cl, AsyncCallback<ContactList> callback);
 	
@@ -117,12 +150,21 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void deleteContact(Contact c, AsyncCallback<Contact> callback);
 	
+	/*
+	 * Löschen von Kontaktlisten
+	 * -> Kontaktliste
+	 */
 	
 	public void deleteContactList(ContactList cl, AsyncCallback<ContactList> callback);
 	
 	public void deletePropertyValue(PropertyValue pv, AsyncCallback<PropertyValue> callback);
 	
 	public void deleteParticipation(Participation p, AsyncCallback<Participation> callback);
+	
+	/*
+	 * Entfernen von Kontakten aus Kontaktliste
+	 * -> Kontaktliste
+	 */
 	
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback);
 

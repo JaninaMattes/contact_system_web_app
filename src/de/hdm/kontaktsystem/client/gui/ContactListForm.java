@@ -129,13 +129,13 @@ public class ContactListForm extends VerticalPanel {
 		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
 
 
-		nameContactList.getElement().setId("Textbox");
-		contactNames.getElement().setId("ListBox");
+//		nameContactList.getElement().setId("Textbox");
+//		contactNames.getElement().setId("ListBox");
 		clOwner.getElement().setId("contactlabel");
-		listBoxShareWith.getElement().setId("ListBox");
-		listBoxSharedWith.getElement().setId("ListBox");
-		contactsToAdd.getElement().setId("ListBox");
-		contactNames.getElement().setId("Listbox");
+//		listBoxShareWith.getElement().setId("ListBox");
+//		listBoxSharedWith.getElement().setId("ListBox");
+//		contactsToAdd.getElement().setId("ListBox");
+//		contactNames.getElement().setId("Listbox");
 
 		
 		//Labels in CSS
@@ -258,7 +258,6 @@ public class ContactListForm extends VerticalPanel {
 				tvm.updateBusinessObject(cl);
 				setSelected(cl);
 				Window.alert("Neue Kontaktliste gespeichert!");
-				//log("Aktualisierte Kontaktliste angelegt" + cl.toString());
 			}	
 		}
 	}
@@ -451,6 +450,8 @@ public class ContactListForm extends VerticalPanel {
 	}
 
 	void setSelected(ContactList cl) {
+		
+		
 
 		// Listen leeren
 		contactNames.clear();
@@ -737,12 +738,8 @@ public class ContactListForm extends VerticalPanel {
 
 	
 	void setMyUser(User user) {
+
 		this.myUser = user;
-		Contact c = new Contact();
-		PropertyValue pV = new PropertyValue();
-		pV.setValue("Janina");
-		c.setName(pV);
-		user.setUserContact(c);
 	}
 	
 	native void log(String s)/*-{
