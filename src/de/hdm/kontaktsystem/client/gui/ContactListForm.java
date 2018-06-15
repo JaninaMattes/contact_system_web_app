@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 //import com.mysql.jdbc.log.Log;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
-import de.hdm.kontaktsystem.server.db.ContactMapper;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
@@ -35,12 +34,9 @@ public class ContactListForm extends VerticalPanel {
 	CellTreeViewModel tvm = null;
 	User myUser = null;
 
-
-
 	/**
 	 * Widgets mit variablen Inhalten.
 	 */
-
 
 	/**
 	 * WIdgets um die Attribute einer Kontaktliste anzuzeigen.
@@ -60,14 +56,14 @@ public class ContactListForm extends VerticalPanel {
 	
 	Label isShared = new Label("Geteilt: ");
 	Label labelShare = new Label("Teilen mit: ");
-	Label contactStatus = new Label("");
+	Label contactStatus = new Label("Status");
+	Label contactStatusValue = new Label("");
 	Label labelSharedWith = new Label("Geteilt mit: ");
 	Label labelReceivedFrom = new Label("Eigentümer: ");
 	Label labelAddConsToList = new Label("Kontakt hinzufügen ");
 	Label clOwner = new Label();
 	
 
-	CheckBox checkBox1 = new CheckBox();
 	ListBox listBoxShareWith = new ListBox();	
 	ListBox listBoxSharedWith = new ListBox();
 	TextBox nameContactList = new TextBox();
@@ -77,36 +73,39 @@ public class ContactListForm extends VerticalPanel {
 	// Update = True, Neu anlegen = false
 	boolean update = true;
 
-	public ContactListForm() {
+	
+	public ContactListForm() {		
 		
 
 		Grid contactListGrid = new Grid(8, 3);
 		this.add(contactListGrid);
 
-		contactListGrid.setWidget(0, 0, contactListLabel);
-		contactListGrid.setWidget(0, 1, nameContactList);
-		contactListGrid.setWidget(0, 2, checkBox1);
+		contactListGrid.setWidget(0, 0, contactStatus);
+		contactListGrid.setWidget(0, 1, contactStatusValue);
 		
-		contactListGrid.setWidget(1, 0, contactLabel);
-		contactListGrid.setWidget(1, 1, contactNames);
-		contactListGrid.setWidget(1, 2, deleteConButton);
+		contactListGrid.setWidget(1, 0, contactListLabel);
+		contactListGrid.setWidget(1, 1, nameContactList);
 		
-		contactListGrid.setWidget(2, 0, labelAddConsToList);
-		contactListGrid.setWidget(2, 1, contactsToAdd);
-		contactListGrid.setWidget(2, 2, addConToList);
+		contactListGrid.setWidget(2, 0, contactLabel);
+		contactListGrid.setWidget(2, 1, contactNames);
+		contactListGrid.setWidget(2, 2, deleteConButton);
+		
+		contactListGrid.setWidget(3, 0, labelAddConsToList);
+		contactListGrid.setWidget(3, 1, contactsToAdd);
+		contactListGrid.setWidget(3, 2, addConToList);
 
 		
-		contactListGrid.setWidget(3, 0, labelShare);
-		contactListGrid.setWidget(3, 1, listBoxShareWith);
-		contactListGrid.setWidget(3, 2, shareButton);	
+		contactListGrid.setWidget(4, 0, labelShare);
+		contactListGrid.setWidget(4, 1, listBoxShareWith);
+		contactListGrid.setWidget(4, 2, shareButton);	
 		
-		contactListGrid.setWidget(4, 0, labelSharedWith);
-		contactListGrid.setWidget(4, 1, listBoxSharedWith);
+		contactListGrid.setWidget(5, 0, labelSharedWith);
+		contactListGrid.setWidget(5, 1, listBoxSharedWith);
 		
-		contactListGrid.setWidget(5, 0, labelReceivedFrom);
-		contactListGrid.setWidget(5, 1, clOwner);
+		contactListGrid.setWidget(6, 0, labelReceivedFrom);
+		contactListGrid.setWidget(6, 1, clOwner);
 		
-		contactListGrid.setWidget(6, 1, btnPanel);
+		contactListGrid.setWidget(7, 1, btnPanel);
 
 		contactNames.getElement().setId("ListBox");
 		listBoxShareWith.getElement().setId("ListBox");
@@ -124,15 +123,6 @@ public class ContactListForm extends VerticalPanel {
 		deleteClButton.addClickHandler(new deleteContactListClickHandler());
 		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
 		addConToList.addClickHandler(new addContactToClClickHandler());
-		
-		
-		
-		/**
-		 * CheckBoxen für das Teilen einer ContactList Form
-		 * per Default auf "false" gesetzt.
-		 * -> Anordnung neben TextBox der Form
-		 */
-		checkBox1.setEnabled(false);
 
 		
 		/*
@@ -143,13 +133,13 @@ public class ContactListForm extends VerticalPanel {
 		//Für die Textboxen gleicher StyleName (wie auch in ContactForm.java)
 
 
-		nameContactList.getElement().setId("Textbox");
-		contactNames.getElement().setId("ListBox");
+//		nameContactList.getElement().setId("Textbox");
+//		contactNames.getElement().setId("ListBox");
 		clOwner.getElement().setId("contactlabel");
-		listBoxShareWith.getElement().setId("ListBox");
-		listBoxSharedWith.getElement().setId("ListBox");
-		contactsToAdd.getElement().setId("ListBox");
-		contactNames.getElement().setId("Listbox");
+//		listBoxShareWith.getElement().setId("ListBox");
+//		listBoxSharedWith.getElement().setId("ListBox");
+//		contactsToAdd.getElement().setId("ListBox");
+//		contactNames.getElement().setId("Listbox");
 
 		
 		//Labels in CSS
@@ -200,7 +190,6 @@ public class ContactListForm extends VerticalPanel {
 		
 		public void onClick(ClickEvent event) {
 			
-			String clName = nameContactList.getText();
 			//contactListToDisplay.setName(clName);
 			myUser.setGoogleID(170);
 			contactListToDisplay.setOwner(myUser);
@@ -214,9 +203,10 @@ public class ContactListForm extends VerticalPanel {
 				//if (contactListToDisplay.getName() != nameContactList.getText()) {
 				String newClName = nameContactList.getText();
 				contactListToDisplay.setName(newClName); 
+				
 				if (update) {	
 					
-					contactSystemAdmin.editContactList(contactListToDisplay, new UpdateCallback(contactListToDisplay));
+					contactSystemAdmin.editContactList(contactListToDisplay, new UpdateCallback());
 					
 					Window.alert("Aktualisierte Kontaktliste" + contactListToDisplay.toString());
 					
@@ -224,7 +214,7 @@ public class ContactListForm extends VerticalPanel {
 					
 					Window.alert("Gespeichert" + contactListToDisplay.toString());
 					
-					contactSystemAdmin.createContactList(contactListToDisplay, new SaveCallback(contactListToDisplay));
+					contactSystemAdmin.createContactList(contactListToDisplay, new SaveCallback());
 				}	
 			}
 		}
@@ -232,10 +222,6 @@ public class ContactListForm extends VerticalPanel {
 	
 	private class SaveCallback implements AsyncCallback<ContactList> {
 
-		ContactList cl = null;
-		SaveCallback (ContactList cl) {
-			this.cl = cl;
-		}
 		
 		@Override
 		public void onFailure(Throwable caught) {
@@ -247,7 +233,7 @@ public class ContactListForm extends VerticalPanel {
 		public void onSuccess(ContactList cl) {
 			if (cl != null) {
 				tvm.addBusinessObject(cl);
-			setSelected(cl);
+				setSelected(cl);
 				Window.alert("Neue Kontaktliste gespeichert!");
 			}
 			
@@ -262,10 +248,6 @@ public class ContactListForm extends VerticalPanel {
 	
 	private class UpdateCallback implements AsyncCallback<ContactList> {
 
-		ContactList cl = null;
-		UpdateCallback (ContactList cl) {
-			this.cl = cl;		
-		}
 		
 		@Override
 		public void onFailure(Throwable caught) {
@@ -280,18 +262,19 @@ public class ContactListForm extends VerticalPanel {
 				tvm.updateBusinessObject(cl);
 				setSelected(cl);
 				Window.alert("Neue Kontaktliste gespeichert!");
-				//log("Aktualisierte Kontaktliste angelegt" + cl.toString());
 			}	
 		}
 	}
 
 	/**
+	 * *************************** ÜBERARBEITEN ***************************************
 	 * ClickHandler zum Teilen der KontaktListe mit dem ausgewählten User
 	 * @author Kim-Ly
-	 *
+	 **********************************************************************************
 	 */
 	
 	private class shareClickHandler implements ClickHandler {
+		
 		public void onClick(ClickEvent event) {
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
@@ -314,12 +297,6 @@ public class ContactListForm extends VerticalPanel {
 
 	private class shareCallback 
 	implements AsyncCallback<Participation> {
-
-		Participation participation = null;
-
-		shareCallback(Participation part) {
-			participation = part;
-		}
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -403,16 +380,6 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 			
-			// Setzen des eingeloggten Users, seines eigenen Kontakts
-			myUser.setGoogleID(170);
-			contactListToDisplay.setOwner(myUser);
-			
-			//log(contactListToDisplay.toString());
-			
-			// Setzen des teilhabenden Users
-			User partUser = new User();
-			partUser.setGoogleID(666);
-			
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 				
@@ -474,6 +441,34 @@ public class ContactListForm extends VerticalPanel {
 				}
 			}
 		}
+		
+		private class ContactListStatusCallback
+		implements AsyncCallback<Vector<Participation>> {
+
+					
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Fehler beim Abruf des Teilhaber");
+;				
+			}
+
+
+			@Override
+			public void onSuccess(Vector<Participation> partVec) {
+				
+				for (Participation part : partVec) {
+					
+					if (part.getReferencedObject().getBoId() == contactListToDisplay.getBoId()) {
+						contactStatusValue.setText("Teilhaber");
+					} else {
+						contactStatusValue.setText("Besitzer");
+					}
+					
+				}
+
+			}
+			
+		}
 
 
 	/**
@@ -487,10 +482,34 @@ public class ContactListForm extends VerticalPanel {
 	}
 
 	void setSelected(ContactList cl) {
+		
+		int cl_boID = cl.getBoId();
+		
+		/*
+		 * Callback für Kontakte der Kontaktliste, da TreeView nur bo_ID & Kontaktlistenname weitergibt 
+		 */
+		contactSystemAdmin.getContactsFromList(cl, new AsyncCallback<Vector<Contact>>() {
 
-//		if(cl.getBoId()!=0 & cl !=null) {
-//			this.contactListToDisplay = cl;
-//		}
+			@Override
+			public void onFailure(Throwable caught) {
+				log("");
+				
+			}
+
+			@Override
+			public void onSuccess(Vector<Contact> conVec) {
+				int count = 0;
+				for (Contact con : conVec) {
+
+						contactNames.addItem(con.getName().getValue());
+						++count;
+				}
+				
+				contactNames.setVisibleItemCount(count);
+			}
+			
+		});
+		
 		// Listen leeren
 		contactNames.clear();
 		contactsToAdd.clear();
@@ -498,45 +517,59 @@ public class ContactListForm extends VerticalPanel {
 		if (cl != null) {
 			int count = 0;
 			User u = new User();
+			u.setGoogleID(170);
 			update = true;
 			
 			/* User setzen, sodass Programm Ownership zuordnen kann 
 			 * Sobald App Engine -> entfernen
 			*/
 			setMyUser(u);
-   			Vector<User> uVec = new Vector<User>();
-			Vector <Participation> partVec = new Vector<Participation>();
-   			Vector<Contact> cVec = new Vector<Contact>();
-   			Vector<ContactList> clVec = new Vector<ContactList>();
+			
+			/*
+			 *  Status der Kontaktliste anzeigen
+			 */
+			contactSystemAdmin.getAllParticipationsByParticipant(myUser, new ContactListStatusCallback());
    			
-   			// Alle User mit denen Kontaktliste geteilet werden kann
-   			contactSystemAdmin.getAllUsers(new UserToShareCallback(uVec));
+   			/*
+   			 *  Alle User mit denen Kontaktliste geteilt werden kann
+   			 */
+   			contactSystemAdmin.getAllUsers(new UserToShareCallback());
    			
-   			// Alle User mit denen Kontaktliste geteilt wurde
-   			contactSystemAdmin.getAllParticipationsByBusinessObject(cl, new UserSharedWithCallback(partVec));
    			
-   			// User, von dem Kontaktliste geteilt wurde
-   			contactSystemAdmin.getAllContactListsFromUser(new UserOwnerClCallback(clVec));
+			/* Alle User mit denen Kontaktliste geteilt wurde 
+			 * -> Nur Callback abrufen wenn User Besitzer der Kontaktliste, sonst Listbox + Label unsichtbar
+			 */ 			
+			if (contactListToDisplay.getOwner() == myUser) {
+				contactSystemAdmin.getAllParticipationsByBusinessObject(cl, new UserSharedWithCallback());
+			} else {
+				labelSharedWith.setVisible(false);
+				listBoxSharedWith.setVisible(false);
+			}
+
+			/* 
+			 * Eigentümer der Kontaktliste anzeigen, wenn User nicht Eigentümer ist
+			 */
+			if (contactListToDisplay.getOwner() != myUser) {			
+				clOwner.setText(contactListToDisplay.getOwner().getGMail());
+				contactSystemAdmin.getAllContactListsFromUser(new UserOwnerClCallback());
+			} else {
+				labelReceivedFrom.setVisible(false);
+				clOwner.setVisible(false);
+			}
+			
    			
-   			// Alle Kontakte die User angelegt oder die ihm geteilt wurden 
-   			contactSystemAdmin.getAllContactsFromUser(new ContactsToAddConCallback(cVec));
+   			/*
+   			 *  Alle Kontakte die User angelegt hat oder die ihm geteilt wurden 
+   			 */
+			
+   			contactSystemAdmin.getAllContactsFromUser(new ContactsToAddConCallback());
    			
-   			// Kontakte, die der ausgewählten Kontaktliste hinzugefügt werden können
-   			//contactSystemAdmin.getAllContacts(new ContactsToAddCallback());
 			contactListToDisplay = cl;
 			deleteClButton.setEnabled(true);
 			deleteConButton.setEnabled(true);
 			nameContactList.setText(cl.getName());
 			
-			Vector<Contact> conVec = cl.getContacts();
-
-				for (Contact con : conVec) {	
-					contactNames.addItem(con.getName().getValue());
-					++count;
-				}
-			contactNames.setVisibleItemCount(count);
 			
-			//contactSystemAdmin.getAllContactsFromUser(new ContactsToAddCallback(c));
 
 		} else {
 			update = false;
@@ -557,10 +590,6 @@ public class ContactListForm extends VerticalPanel {
 	 */
 	
 	private class UserToShareCallback implements AsyncCallback<Vector<User>> {
-		Vector <User> user = null;				
-		UserToShareCallback(Vector<User> user){
-			this.user = user;
-		}
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -572,6 +601,10 @@ public class ContactListForm extends VerticalPanel {
 			int count = 0;
 			if (result != null) {
 				for(User user: result) {						
+				
+				// Leeren der bisherigen Listbox mit 
+				listBoxShareWith.clear();	
+				
 				//User Liste updaten
 				listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());	
 				++count;
@@ -592,18 +625,7 @@ public class ContactListForm extends VerticalPanel {
 	 */
 	
 	private class UserSharedWithCallback implements AsyncCallback<Vector<Participation>> {
-		
-		// Alle User (participant) mit denen Contactlist (reference) geteilt wurde
-		Vector <Participation> part = null;	
-		// Ich (angemeldeter User)
-		User u = new User();
-		
-		//findAllSharedByMe
-		
-		UserSharedWithCallback(Vector<Participation> part){
-			this.part = part;
 	
-		}
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -615,7 +637,12 @@ public class ContactListForm extends VerticalPanel {
 			int count = 0;
 			if (result != null) {
 				
-				for(Participation part: result) {						
+				// Listbox mit Usern an die geteilt wurde leeren
+				listBoxSharedWith.clear();
+				
+				for(Participation part: result) {	
+					
+				//log("User mit denen Kontaktliste geteilt wurde" + part.getParticipant().getGMail());
 				//User Liste updaten
 				listBoxSharedWith.addItem(part.getParticipant().getGMail());
 				++count;
@@ -629,17 +656,14 @@ public class ContactListForm extends VerticalPanel {
 	}
 	
 	/**
-	 * UserSharedByCallback Klasse zum befüllen der listBoxReceivedFrom mit User 
+	 * UserSharedByCallback Klasse zum befüllen der labelReceivedFrom mit User 
 	 * von dem die Kontaktliste geteilt wurde.
 	 * @author Kim-Ly
 	 *
 	 */
 	
 	private class UserOwnerClCallback implements AsyncCallback<Vector<ContactList>> {
-		Vector <ContactList> clVec = null;				
-		UserOwnerClCallback(Vector<ContactList> clVec) {
-			this.clVec = clVec;
-		}
+
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -648,7 +672,8 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector <ContactList> clVec) {
-			if (clVec != null) {						
+			if (clVec != null) {		
+				
 				clOwner.setText(contactListToDisplay.getOwner().getGMail());		
 				
 			} else {
@@ -671,11 +696,12 @@ public class ContactListForm extends VerticalPanel {
 				Window.alert("Keine Kontaktliste ausgewählt");
 				
 			} else {
-				final Contact conToAdd = null;
+
+				// Extraktion des ausgewählten Kontakts als String 
 				Integer lbItemIndex = contactsToAdd.getSelectedIndex();
 				final String contactToAddName = contactsToAdd.getValue(lbItemIndex);
 				
-				//TODO: Überarbeiten, über final können 
+				//TODO: Überarbeiten, Callback verursacht Zeitverzögerung?
 				
 				contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>(){
 
@@ -685,13 +711,24 @@ public class ContactListForm extends VerticalPanel {
 					}
 
 					@Override
-					public void onSuccess(Vector<Contact> allConFromUser) {
-						
-						for (Contact con : allConFromUser) {						
-							if (con.getName().getValue() == contactToAddName) {
-								contactSystemAdmin.addContactToList(con, contactListToDisplay, new ContactsToAddClCallback());
-								//log("Hinzuzufügender Kontakt zu Kontaktliste: " + con.toString());
-							}
+					public void onSuccess(Vector<Contact> allConFromUser) {	
+						 
+						for (Contact conFromUser : allConFromUser) {
+							
+							// Wenn ausgewählter Contact aus Listbox mit Contact des Users übereinstimmt
+							if (conFromUser.getName().getValue() == contactToAddName) {
+								
+								for (Contact conFromCl : contactListToDisplay.getContacts()) {
+									// und hinzuzufügender Kontakt nicht bereits als Kontakt in Kontaktlist vorhanden
+									if (conFromUser.getName().getValue() != conFromCl.getName().getValue()) {
+										// ausgewählten Kontakt zu Kontaktliste hinzufügen
+										contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay, new ContactsToAddClCallback());
+										//log("Hinzuzufügender Kontakt zu Kontaktliste: " + con.toString());
+									} else {
+										Window.alert("Kontakt bereits in Kontaktliste vorhanden");
+									}
+								}
+							}			
 						}
 					}
 				});
@@ -722,7 +759,10 @@ public class ContactListForm extends VerticalPanel {
 					Vector<Contact> resultCon = result.getContacts();
 					
 				for(Contact con: resultCon) {						
-				
+					
+					// Leeren der Kontaktliste Listbox, damit Werte nicht doppelt angelegt werden
+					contactNames.clear();
+	
 					contactNames.addItem(con.getName().getValue());
 					++count;
 					}
@@ -744,11 +784,6 @@ public class ContactListForm extends VerticalPanel {
 	
 	private class ContactsToAddConCallback implements AsyncCallback<Vector<Contact>> {
 
-		Vector<Contact> c= new Vector<Contact>(); 
-		
-		ContactsToAddConCallback(Vector<Contact> con) {
-			this.c = con;
-		}
 		
 		@Override
 		public void onFailure(Throwable caught) {
@@ -758,11 +793,15 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Contact> result) {
-			Vector<Contact> conResult = new Vector<Contact>();
+			
+			
 			int count = 0;
 				if (result != null) {
-				for(Contact con: result) {						
-				
+				for(Contact con: result) {	
+					
+					// Leeren der Kontakte die hinzugefügt werden können
+					contactsToAdd.clear();
+					
 					contactsToAdd.addItem(con.getName().getValue());
 					++count;
 					}
@@ -775,14 +814,9 @@ public class ContactListForm extends VerticalPanel {
 	}
 
 	
-	
 	void setMyUser(User user) {
+
 		this.myUser = user;
-		Contact c = new Contact();
-		PropertyValue pV = new PropertyValue();
-		pV.setValue("Janina");
-		c.setName(pV);
-		user.setUserContact(c);
 	}
 	
 	native void log(String s)/*-{
