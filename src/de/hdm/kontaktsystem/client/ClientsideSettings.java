@@ -15,8 +15,10 @@ import de.hdm.kontaktsystem.shared.ReportGeneratorAsync;
  * Die Klasse <code>ClientsideSettings</code> enthält wichtige Eigenschaften und Diensten,
  * welche für alle Clientseitigen Klassen von Relevanz sind. 
  *  
+ *  @see de.hdm.thies.bankProjekt.client.ClientsideSettings
+ *  @author Sandra Prestel, ...
  */
-
+//TODO: Autoren ergänzen
 public class ClientsideSettings extends CommonSettings {
 
   /**
@@ -43,7 +45,10 @@ public class ClientsideSettings extends CommonSettings {
   private static final Logger log = Logger.getLogger(LOGGER_NAME);
 
   
-  public static Logger getLogger() {
+  /**
+   * @return log 
+   */
+public static Logger getLogger() {
     return log;
   }
 
@@ -60,6 +65,7 @@ public class ClientsideSettings extends CommonSettings {
    * <code>ContactSystemAdministrationAsync contactSystemAdministration = ClientSideSettings.getContactAdministration()</code>.
    * </p>
    * 
+   * @return contactSystemAdministration
    */
   public static ContactSystemAdministrationAsync getContactAdministration() {
     
@@ -85,10 +91,14 @@ public class ClientsideSettings extends CommonSettings {
    * Der Aufruf dieser Methode erfolgt im Client z.B. durch
    * <code>ReportGeneratorAsync reportGenerator = ClientSideSettings.getReportGenerator()</code>.
    * </p>
+   * 
+   * @return reportGenerator
    */
-  
   public static ReportGeneratorAsync getReportGenerator() {
-    // Gab es bislang noch keine ReportGenerator-Instanz, dann...
+    /* 
+     * Gab es bislang noch keine ReportGenerator-Instanz, wird eine erstellt und als Wert
+     * der statischen Variable reportGenerator gesetzt.
+	 */
     if (reportGenerator == null) {
       reportGenerator = GWT.create(ReportGenerator.class);
 

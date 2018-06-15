@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.hdm.kontaktsystem.shared.report;
 
 import java.io.Serializable;
@@ -14,7 +11,7 @@ import java.util.Vector;
  * 
  * @see Paragraph
  * @see de.hdm.thies.bankProjekt.shared.report.CompositeParagraph
- * @author Sandra
+ * @author Sandra Prestel
  *
  */
 public class CompositeParagraph extends Paragraph implements Serializable {

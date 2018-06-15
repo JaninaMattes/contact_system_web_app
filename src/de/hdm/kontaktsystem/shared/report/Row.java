@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.hdm.kontaktsystem.shared.report;
 
 import java.io.Serializable;
@@ -14,7 +11,7 @@ import java.util.Vector;
  * @see Report
  * @see Column
  * @see de.hdm.thies.bankProjekt.shared.report.Row
- * @author Sandra
+ * @author Sandra Prestel
  *
  */
 public class Row implements Serializable {

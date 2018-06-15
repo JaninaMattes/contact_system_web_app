@@ -12,10 +12,9 @@ import de.hdm.kontaktsystem.shared.report.AllContactsForPropertyReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
 
 /**
- * Synchrone Schnittstelle für eine RPC-fähige Klasse zur Erstellung von
- * Reports.
+ * Synchrone Schnittstelle für eine RPC-fähige Klasse zur Erstellung von Reports.
  * 
- * @author Sandra
+ * @author Sandra Prestel
  */
 @RemoteServiceRelativePath("reportgenerator")
 public interface ReportGenerator extends RemoteService {
@@ -32,8 +31,8 @@ public interface ReportGenerator extends RemoteService {
 	  
 	  
 	  /**
-	   * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte
-	   * eines Users dar.
+	   * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte dar,
+	   * auf die ein Nutzer Zugriff hat, durch Besitz oder Teilhaberschaft.
 	   * 
 	   * @return Das fertige Reportobjekt
 	   * @throws IllegalArgumentException
@@ -42,10 +41,10 @@ public interface ReportGenerator extends RemoteService {
 	  public AllContactsOfUserReport createAllContactsReport() throws IllegalArgumentException;
 	  
 	  /**
-	   * Erstellen eines AllContactsForParticipantReport. Dieser Report stellt alle Kontakte
-	   * des Users dar, die mit einem bestimmten User geteilt wurden.
+	   * Erstellen eines AllContactsForParticipantReport. Dieser Report stellt alle Kontakte dar,
+	   * auf die ein Nutzer Zugriff hat, und die mit einem definierten Nutzer geteilt wurden.
 	   * 
-	   * @param participant Name des Teilhabers, für den die mit ihm geteilten Kontakte angezeigt werden sollen
+	   * @param participantId GoogleID des Teilhabers, für den die mit ihm geteilten Kontakte angezeigt werden sollen
 	   * @return Das fertige Reportobjekt
 	   * @throws IllegalArgumentException
 	   * @see AllContactsForParticipantReport
@@ -54,10 +53,11 @@ public interface ReportGenerator extends RemoteService {
 			  throws IllegalArgumentException;
 	  
 	  /**
-	   * Erstellen eines AllContactsForPropertyReport. Dieser Report stellt alle Kontakte 
-	   * des Users dar, die eine bestimmte Eigenschaftsausprägung aufweisen.
+	   * Erstellen eines AllContactsForPropertyReport. Dieser Report stellt alle Kontakte dar,
+	   * auf die ein Nutzer Zugriff hat, und die eine definierte Eigenschaft und zugehörige 
+	   * Eigenschaftsausprägung aufweisen.
 	   * 
-	   * @param property Die gesuchte Eigenschaft
+	   * @param propertyId ID der gesuchten Eigenschaft
 	   * @param propertyvalue Die gesuchte Eigenschaftsausprägung
 	   * @return AllContactsForPropertyReport
 	   * @throws IllegalArgumentException
@@ -66,7 +66,7 @@ public interface ReportGenerator extends RemoteService {
 			  throws IllegalArgumentException;
 	  
 	  /**
-	   * Abrufen aller aktuell vorhandenen Eigenschaftsbezeichnungen
+	   * Abrufen aller aktuell vorhandenen Eigenschaften
 	   * 
 	   * @return Vector mit allen Properties
 	   * @throws IllegalArgumentException
