@@ -323,6 +323,8 @@ public class ContactMapper {
 		}
 		return null;
 	}
+	
+	
 
 	public Vector<Contact> findAllContactsByUser(User user) {
 		
@@ -354,9 +356,6 @@ public class ContactMapper {
 	}
 
 
-	
-	
-	
 	
 	
 	

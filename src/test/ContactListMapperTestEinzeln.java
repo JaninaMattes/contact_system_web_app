@@ -181,18 +181,18 @@ public class ContactListMapperTestEinzeln {
 //		clMapper.updateContactList(cl);
 		
 		
-		String clName = "hallo";
-		ContactList cl = new ContactList();
-		User u = new User();
-		u.setGoogleID(126);
-		cl.setName(clName);	
-		cl.setOwner(u);
-		ContactSystemAdministrationImpl test = new ContactSystemAdministrationImpl();
-
-		test.init();
-		test.createContactList(cl);
-		System.out.println(cl);
+//		String clName = "hallo";
+//		ContactList cl = new ContactList();
+//		User u = new User();
+//		u.setGoogleID(126);
+//		cl.setName(clName);	
+//		cl.setOwner(u);
+//		ContactSystemAdministrationImpl test = new ContactSystemAdministrationImpl();
+//
+//		test.init();
+//		test.createContactList(cl);
+//		System.out.println(cl);
 		
-	}
 
+}
 }
