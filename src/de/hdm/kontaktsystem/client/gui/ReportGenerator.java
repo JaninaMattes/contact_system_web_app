@@ -37,23 +37,27 @@ import de.hdm.kontaktsystem.shared.report.HTMLReportWriter;
 /**
  * Entry-Point-Klasse des Report-Generators im Projekt <b>Kontaktsystem</b>
  * 
- * @see de.hdm.thies.bankProjekt.client.gui.BankProjektReport
- * @author Sandra
- *
+ * @author Sandra Prestel
  */
 public class ReportGenerator implements EntryPoint {
 
 	ReportGeneratorAsync reportGenerator = null;
 	
 	/**
-	 * Bilder: Symbol für die Such-Buttons, Logo im Header
+	 * Definition der verwendeten Bilder, hier die Symbole für die Such-Buttons, 
+	 * mit denen Kontakte gefiltert werden können, sowie das Logo im Header.
 	 */
 	Image searchSymbol1 = new Image();
 	Image searchSymbol2 = new Image();
 	Image logo = new Image();
 	
 	/**
-	 * Definition der grundlegenden Widgets des Report-Generators
+	 * Definition der grundlegenden Widgets des Report-Generators. 
+	 * Dieser enthält einen Header, ein Menü mit verschiedenen Buttons, Labels 
+	 * und Auswahlmöglichkeiten sowie eine Detailansicht für die Reports. Ein Trailer
+	 * mit allgemeinen Informationen wird im HTML-Dokument des ReportGenerators definiert.
+	 * 
+	 * @see de.hdm.kontaktsystem.war.ReportGenerator.html
 	 */
 	HorizontalPanel headerPanel = new HorizontalPanel();
 	Label headerText = new Label("Report Generator");
@@ -71,9 +75,8 @@ public class ReportGenerator implements EntryPoint {
 	TextBox findByValueText = new TextBox();
 	PushButton findByValueButton = new PushButton(searchSymbol2); 
 	
-	
 	/**
-	 * Attribute für den Login
+	 * Definition der Widgets für den Login.
 	 */
 	private User userInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
@@ -85,10 +88,16 @@ public class ReportGenerator implements EntryPoint {
 
 	
 	/**
-	 * Da diese Klasse die Implementierung des Interface <code>EntryPoint</code>
-	 * zusichert, benötigen wir eine Methode
-	 * <code>public void onModuleLoad()</code>. Diese ist das GWT-Pendant der
-	 * <code>main()</code>-Methode normaler Java-Applikationen.
+	 * <p>
+	 * Da diese Klasse das Interface <code>EntryPoint</code> implementiert, wird 
+	 * die Methode <code>public void onModuleLoad()</code> benötigt. 
+	 * Diese entspricht der <code>main()</code>-Methode in Java-Applikationen.
+	 * </p><p>
+	 * In dieser Methode wird zunächst der Login-Service aufgerufen, um zu prüfen, ob ein Nutzer
+	 * aktuell im Kontaktsystem eingeloggt ist. Ist dies nicht der Fall, wird die Login-Seite
+	 * aufgerufen ({@link #loadLogin()}. Ist der Nutzer eingeloggt, wird die Oberfläche des 
+	 * ReportGenerators geladen ({@link #loadReportGenerator()}).
+	 * </p>
 	 */	
 	@Override
 	public void onModuleLoad() {
@@ -134,37 +143,38 @@ public class ReportGenerator implements EntryPoint {
 	
 	
 	/**
-	 * Aufbau der Startseite des Report-Generators
+	 * Aufbau der Startseite des Report-Generators. 
+	 * Diese Methode wird aufgerufen, wenn der Login erfolgreich war.
+	 * @see #onModuleLoad()
 	 */
 	public void loadReportGenerator() {
 		
 		/**
-		 * Zuweisung Asynchrones Interface
+		 * Zuweisung des Asynchronen Interface.
 		 */
 		if(reportGenerator == null) {
 			reportGenerator = ClientsideSettings.getReportGenerator();
 		}
-
 		
 		/**
-		 * CSS
+		 * Zuweisung von ids zu den HTML-Elementen, die aus den gwt-Widgets generiert
+		 * werden, um sie mit CSS gezielt ansprechen zu können.
 		 */
 		
-		//Labels in CSS
+		//Labels
 		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
 		loginLabel.getElement().setId("loginlabel");
 		headerText.getElement().setId("headertext");
 		
-		//Textbox in CSS
-
+		//Textbox
 		findByValueText.getElement().setId("findByTextbox");
 		
-		//DropDownList in CSS
+		//DropDownList
 		propertiesDropDownList.getElement().setId("ReportDropDownList");
 		usersDropDownList.getElement().setId("ReportDropDownList");
 
-		//Button in CSS
+		//Buttons
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
 		findByParticipantButton.getElement().setId("searchButton");
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
@@ -172,7 +182,7 @@ public class ReportGenerator implements EntryPoint {
 		showAllButton.getElement().setId("searchAllContacts");
 	
 		//Links
-		signInLink.setStyleName("link");//??
+		signInLink.setStyleName("link");
 		signOutLink.getElement().setId("log-out-button");
 		editorLink.getElement().setId("switch-button");
 		
@@ -180,12 +190,13 @@ public class ReportGenerator implements EntryPoint {
 		logo.getElement().setId("logo");
 
 		/**
-		 * Zuweisen von Bilddateien zu den Image-Elementen, Setzen der Größe
+		 * Zuweisen von Bilddateien zu den Image-Elementen und Setzen der Größe.
 		 */
 		//Logo
 		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");
 		logo.setHeight("70px");
 		logo.setAltText("Logo");
+		
 		//Such-Symbole
 		searchSymbol1.setHeight("25px");
 		searchSymbol1.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
@@ -193,12 +204,19 @@ public class ReportGenerator implements EntryPoint {
 		searchSymbol2.setHeight("25px");
 		searchSymbol2.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
 		searchSymbol2.setAltText("Suche");
-		editorLink.setHref(GWT.getHostPageBaseURL() + "ContactSystem.html");
+		
 		/**
-		 * Aufbau der Oberfläche.
-		 * Die Reportanwendung besteht aus einem "Navigationsteil" mit den
-		 * Schaltflächen zum Auslösen der Reportgenerierung und einem "Datenteil"
-		 * für die HTML-Version des Reports.
+		 * Setzen des Links zum Editor des Kontaktsystems. Hiermit kann die Webseite
+		 * "Editor" geöffnet werden, mit der Inhalte bearbeitet werden können.
+		 * @see ContactSystem.java
+		 */
+		editorLink.setHref(GWT.getHostPageBaseURL() + "ContactSystem.html");
+		
+		/**
+		 * Aufbau der Oberfläche des ReportGenerators.
+		 * Die Reportanwendung besteht aus einem Header mit Links zum Logout und dem Editor,
+		 * einem "Navigationsteil" mit den Schaltflächen zum Auslösen der Reportgenerierung 
+		 * und einem "Datenteil" für die HTML-Version des Reports.
 		 */
 		
 		/**
@@ -214,18 +232,15 @@ public class ReportGenerator implements EntryPoint {
 		/**
 		 * Aufbau der Navigation und der Detail-Ansicht
 		 */
-		/*
-		 * Anfangsansicht des Detail-Fensters (rechte Bildschirmseite)
-		 */
+		/* Anfangsansicht des Detail-Fensters (rechte Bildschirmseite) */
 		Label noDetails = new Label("Kein Report ausgewählt");
 		RootPanel.get("Details").add(noDetails);;
 		
 		/**
-		 * Funktion: alle Kontakte anzeigen
+		 * Durch Klick auf den Button <code>showAllButton</code> werden alle Kontakte angezeigt,
+		 * auf die der Nutzer Zugriff hat.
 		 */
-		/*
-		 * ShowAll-Button
-		 */
+		/* ShowAll-Button */
 		navigationPanel.add(showAllButton);
 		
 		showAllButton.addClickHandler(new ClickHandler() {
@@ -236,17 +251,14 @@ public class ReportGenerator implements EntryPoint {
 		});
 		
 		/**
-		 * Funktion: nach Teilhaber filtern
+		 * Durch Klick auf den Button <code>findByParticipantButton</code> werden alle Kontakte 
+		 * angezeigt, auf die der Nutzer Zugriff hat und die mit einem bestimmten Nutzer
+		 * geteilt wurden. Dieser kann aus einer DropDown-Liste ausgewählt werden.
 		 */
-		/*
-		 * DropDown-Liste für alle User
-		 */		
+		/* DropDown-Liste für alle User */		
 		reportGenerator.getAllUsers(new getAllUsersCallback());
 		
-		/*
-		 * FindByParticipant-Button
-		 */
-		
+		/* FindByParticipant-Button */		
 		findByParticipantButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -260,9 +272,7 @@ public class ReportGenerator implements EntryPoint {
 			}
 		});
 		
-		/*
-		 * Hinzufügen zur Oberfläche
-		 */
+		/* Hinzufügen zur Oberfläche */
 		navigationPanel.add(findByParticipantLabel);
 		findByParticipantPanel.add(usersDropDownList);
 		findByParticipantPanel.add(findByParticipantButton);
@@ -270,16 +280,15 @@ public class ReportGenerator implements EntryPoint {
 		
 		
 		/**
-		 * Funktion: nach Eigenschaft und Ausprägung filtern
+		 * Durch Klick auf den Button <code>findByValueButton</code> werden alle Kontakte 
+		 * angezeigt, auf die der Nutzer Zugriff hat und die eine bestimmte Eigenschaft 
+		 * und Eigenschaftsausprägung besitzen. Die Eigenschaft kann aus einer DropDown-Liste 
+		 * ausgewählt und die Ausprägung in ein Textfeld eingegeben werden.
 		 */
-		/*
-		 * DropDown-Liste für Eigenschaften
-		 */
+		/* DropDown-Liste für Eigenschaften */
 		reportGenerator.getAllProperties(new GetAllPropertiesCallback());
 		
-		/*
-		 * FindByValue-Button
-		 */		
+		/* FindByValue-Button */		
 		findByValueButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -300,9 +309,7 @@ public class ReportGenerator implements EntryPoint {
 			}		
 		});		
 		
-		/*
-		 * Hinzufügen zur Oberfläche
-		 */
+		/* Hinzufügen zur Oberfläche */
 		navigationPanel.add(findByValueLabel);
 		navigationPanel.add(propertiesDropDownList);
 		findByValuePanel.add(findByValueText);
@@ -310,36 +317,20 @@ public class ReportGenerator implements EntryPoint {
 		navigationPanel.add(findByValuePanel);
 		
 		/**
-		 * Hinzufügen der gesamten Navigation zur Benutzungsoberfläche
+		 * Hinzufügen der gesamten Navigation zur Benutzungsoberfläche.
 		 */
 		RootPanel.get("Navigator").add(navigationPanel);
-		
-		
-				
+			
 	}
-	
-	
+		
 	/**
-	 * Nested Class zum Setzen der User-Informationen auf dem Server
+	 * Innere Klassen, die die Callbacks zum Server definieren. Dazu implementieren sie
+	 * das Interface {@link: AsyncCallback} und ermöglichen so den Aufruf von Methoden 
+	 * des Interfaces {@link ReportGeneratorAsync}.
 	 */
-	class SetUserInfoCallback implements AsyncCallback<Void> {
-
-		User userInfo;
-		
-		@Override
-		public void onFailure(Throwable caught) {			
-		}
-
-		@Override
-		public void onSuccess(Void result) {			
-		}
-		
-	}
-	
-	
 	/**
-	 * Nested Class zum Erzeugen des AllContactsOfUserReports
-	 * @author Sandra
+	 * Innere Klasse zum Erzeugen des AllContactsOfUserReport.
+	 * @author Sandra Prestel
 	 */
 	class CreateAllContactsReportCallback implements AsyncCallback<AllContactsOfUserReport> {
 		@Override
@@ -360,8 +351,8 @@ public class ReportGenerator implements EntryPoint {
 	}
 
 	/**
-	 * Nested Class zum Erzeugen des AllContactsForParticipantReport
-	 * @author Sandra
+	 * Innere Klasse zum Erzeugen des AllContactsForParticipantReport.
+	 * @author Sandra Prestel
 	 */
 	class CreateAllContactsForParticipantReportCallback 
 	implements AsyncCallback<AllContactsForParticipantReport> {
@@ -390,8 +381,8 @@ public class ReportGenerator implements EntryPoint {
 	}
 	
 	/**
-	 * Nested Class zum Erzeugen des AllContactsForPropertyReport
-	 * @author Sandra
+	 * Innere Klasse zum Erzeugen des AllContactsForPropertyReport.
+	 * @author Sandra Prestel
 	 */
 	class CreateAllContactsForPropertyReportCallback 
 	implements AsyncCallback<AllContactsForPropertyReport> {
@@ -424,8 +415,8 @@ public class ReportGenerator implements EntryPoint {
 	
 
 	/**
-	 * Nested Class zum Befüllen der DropDown-Liste mit den Namen der aktuellen Properties
-	 * @author Sandra
+	 * Innere Klasse zum Befüllen der DropDown-Liste mit den Namen der aktuellen Properties
+	 * @author Sandra Prestel
 	 */
 	class GetAllPropertiesCallback 
 	implements AsyncCallback<Vector<Property>> {
@@ -450,8 +441,8 @@ public class ReportGenerator implements EntryPoint {
 	}
 	
 	/**
-	 * Nested Class zum Befüllen der DropDown-Liste mit den Namen der aktuellen User
-	 * @author Sandra
+	 * Innere Klasse zum Befüllen der DropDown-Liste mit den Namen der aktuellen User
+	 * @author Sandra Prestel
 	 */
 	class getAllUsersCallback implements AsyncCallback<Vector<User>> {
 

@@ -18,13 +18,11 @@ import java.util.Date;
  * Weiterhin enthält jedes Geschäftsobjekt Attribute, die auf das Erstellungs- und 
  * Modifikationsdatum der jeweiligen Instanz verweisen sowie eine user_ID, die der 
  * eindeutigen ID eines User-Objekts entspricht.
- * 
- * (vgl. Vorlesung Software Projekt, BankProjekt 2.0, Klasse BusinessObject)
  * </p>
  * 
+ * @see de.hdm.thies.bankProjekt.shared.BusinessObject
+ * @author Sandra Prestel
  */
-
-
 public class BusinessObject implements Serializable{
 	
 	/**
@@ -53,12 +51,15 @@ public class BusinessObject implements Serializable{
 	 */
 	private boolean shared_status = false; 
 	
-	public BusinessObject(){
-		
+	/**
+	 * No-Argument-Konstruktor
+	 */
+	public BusinessObject(){		
 	}
 		
 	/**
 	* Zurückgeben der ID.
+	 * @return bo_id ID des BusinessObjekts
 	*/
 	public int getBoId() {
 		return this.bo_id;
@@ -67,20 +68,23 @@ public class BusinessObject implements Serializable{
 
 	/**
 	 * Setzen der ID
+	 * @param id Die zu setzende ID
 	 */
 	public void setBo_Id(int id) {
 		this.bo_id = id;
 	}		
 	
 	/**
-	* Zurückgeben der UserID.
+	* Zurückgeben des Eigentümers
+	 * @return owner User-Objekt, das den Eigentümer der BusinessObjekts darstellt
 	*/
 	public User getOwner() {
 		return this.owner;
 	}
 
 	/**
-	 * Setzen der ID
+	 * Setzen des Eigentümers
+	 * @param owner Zu setzender Eigentümer
 	 */
 	public void setOwner(User owner) {
 		this.owner = owner;
@@ -89,6 +93,7 @@ public class BusinessObject implements Serializable{
 	
 	/**
 	 * Zurückgeben des Erstelldatums
+	 * @return creationDate Datum, an dem das BusinessObjekt erstellt wurde
 	 */
 	public Date getCreationDate() {
 		return this.creationDate;
@@ -96,6 +101,7 @@ public class BusinessObject implements Serializable{
 	
 	/**
 	 * Setzen des Erstelldatums
+	 * @param creationDate Zu setzendes Erstelldatum
 	 */
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
@@ -104,6 +110,7 @@ public class BusinessObject implements Serializable{
 	
 	/**
 	 * Zurückgeben des letzten Änderungszeitpunkts
+	 * @return modifyDate Letztes Änderungsdatum
 	 */
 	public Date getModifyDate() {
 		return this.modifyDate;
@@ -111,24 +118,25 @@ public class BusinessObject implements Serializable{
 
 	/**
 	 * Setzen des letzten Änderungszeitpunkts
+	 * @param modifyDate Zu setzendes Änderungsdatum
 	 */
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
 	
 		
-	/*
+	/**
 	 * Status abrufen ob ein BO geteilt wurde 
+	 * @return shared_status Geteilt-Status
 	 */
-
 	public boolean isShared_status() {
-		return shared_status;
+		return this.shared_status;
 	}
 
-	/*
+	/**
 	 * Setzen des Status
+	 * @param shared_status Zu setzender Geteilt-Status
 	 */
-
 	public void setShared_status(boolean shared_status) {
 		this.shared_status = shared_status;
 	}
@@ -138,7 +146,6 @@ public class BusinessObject implements Serializable{
 	 * Erzeugen einer Darstellung der jeweiligen Instanz als String (Text).
 	 * Dies überschreibt die Methode toString() der Klasse Object.
 	 */
-	
 	@Override
 	public String toString() {
 		/*
@@ -147,7 +154,6 @@ public class BusinessObject implements Serializable{
 		return this.getClass().getName() + " #" + this.owner.getGoogleID();
 	}
 	  
-	
 	/**
 	 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
 	 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 

@@ -27,10 +27,14 @@ import de.hdm.kontaktsystem.shared.report.SimpleParagraph;
 import de.hdm.kontaktsystem.shared.report.SingleContact;
 
 /**
- * Implementierung des <code>ReportGenerator</code>-Interface.
+ * Implementierung des <code>ReportGenerator</code>-Interface. 
+ * Diese Klasse bildet die Applikationslogik des ReportGenerators ab und 
+ * entspricht damit der Klasse {@link ContactSystemAdministrationImpl}. 
+ * Weitere Details zu Funktion und Umsetzung von Service-Klasssen siehe dort.
  * 
  * @see ReportGenerator
- * @author Sandra
+ * @see ContactSystemAdministrationImpl
+ * @author Sandra Prestel
  */
 public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportGenerator {
 
@@ -94,13 +98,18 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 	
 	/**
-	 * Erzeugt "Zelle" für einen einzelnen Kontakt. Wird von den anderen Methoden aufgerufen,
-	 * die daraus die Reports zusammensetzen.
+	 * Erzeugt "Zelle" für einen einzelnen Kontakt. Diese Zelle enthält eine Tabelle 
+	 * aus {@link Row}- und {@link Colum}-Objekten, die die einzelnen Eigenschaften und
+	 * deren Ausprägungen des Kontaktes darstellen. Weiterhin ist in der Tabelle der 
+	 * Eigentümer des Kontakts und der Geteilt-Status ersichtlich. An die Tabelle schließt
+	 * sich eine Liste der Teilhaber, die Zugriff auf den Kontakt haben, an.
+	 * Diese Methode wird von den anderen Methoden aufgerufen, die daraus die Reports zusammensetzen.
 	 */
 	protected void addSingleContact(Contact contact, Report report) {
 		SingleContact contactElement = new SingleContact();
 		Vector<PropertyValue> allPropertyValues = contact.getPropertyValues(); //TODO: Test
 		
+		/* Tabelle mit Eigenschaften und Ausprägungen erstellen */
 		for(PropertyValue singleProperty : allPropertyValues) {
 			Row row = new Row();
 			Column property = new Column(singleProperty.getProperty().getDescription());
@@ -110,9 +119,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			contactElement.addPropertyRow(row);
 		}
 		
-		/**
-		 * Name des Eigentümers zur Liste der Eigenschaften hinzufügen
-		 */
+		/* Name des Eigentümers zur Liste der Eigenschaften hinzufügen */
 		Row ownerRow = new Row();
 		Column ownerProperty = new Column("Eigentümer");
 		//TODO: Test
@@ -125,9 +132,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		ownerRow.addColumn(ownerPropertyValue);
 		contactElement.addPropertyRow(ownerRow);
 		
-		/**
-		 * Status hinzufügen
-		 */
+		/* Status zur Tabelle hinzufügen */
 		Row statusRow = new Row();
 		Column statusProperty = new Column("Status");
 		String status = "";
@@ -141,9 +146,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		statusRow.addColumn(statusPropertyValue);
 		contactElement.addPropertyRow(statusRow);
 		
-		/**
-		 * Liste mit Teilhabern erstellen
-		 */	
+		/* Liste mit Teilhabern erstellen */	
 		if(contact.isShared_status()) {
 			Vector<Participation> participations = administration.getAllParticipationsByBusinessObject(contact);
 			for(Participation singleParticipation : participations) {
@@ -159,13 +162,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			contactElement.addElementToParticipantList(noParticipant);
 		}
 				
-		//Hinzufügen des erstellten Elements zum Report
+		/* Hinzufügen des erstellten Elements zum Report */
 		report.addContactElement(contactElement);
 		
 	}
 	
 	/**
-	 * Erzeugt Paragraph mit den User-Daten, für den der Report erstellt wird.
+	 * Erzeugt Paragraph mit den Daten des Nutzers, für den der Report erstellt wird. 
 	 * Aus den Report-Methoden ausgelagert.
 	 */
 	protected void addUserParagraph(User user, Report report) {
@@ -179,19 +182,11 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		report.setUserData(userInfo);
 	}
 	
-	/**
-	 * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte
-	 * eines Users dar.
-	 * 
-	 * @return Das fertige Reportobjekt
-	 * @throws IllegalArgumentException
-	 * @see AllContactsOfUserReport
-	 */
+
 	@Override
 	public AllContactsOfUserReport createAllContactsReport() throws IllegalArgumentException {
-		/**
-		 * Aktuell eingeloggter User
-		 */
+		
+		/* Aktuell eingeloggter User */
 		User currentUser = this.getLoggedInUser();
 		
 		//Erstellen des noch leeren Reports
@@ -206,6 +201,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Datum der Erstellung
 		report.setCreated(new Date());
 		
+		/* Abrufen aller Kontakte, auf die der Nutzer Zugriff hat */
 		//Abrufen aller Kontakte, deren Eigentümer der aktuelle User ist
 		Vector<Contact> allContacts = administration.getAllContactsFromUser();
 		//Abrufen aller Kontakte, die mit dem aktuellen User geteilt wurden
@@ -221,20 +217,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			}
 		}
 		
-		/**
-		 * Zurückgeben des erstellten Reports
-		 */
+		/* Zurückgeben des erstellten Reports */
 		return report;
 	}
 
-	
+
 	@Override
 	public AllContactsForParticipantReport createAllContactsForParticipantReport(double participantId)
 			throws IllegalArgumentException {
 		
-		/**
-		 * Aktuell eingeloggter User
-		 */
+		/* Aktuell eingeloggter User */
 		User currentUser = this.getLoggedInUser();
 		
 		//User-Objekt zu Namen zuordnen
@@ -328,15 +320,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 						}
 					}
 				}
-			}		
-			
+			}					
 			//Vektoren zusammen führen
 			allParticipations.addAll(allSharedParticipations);
 		}
 				
 		
 		
-		//Alle Teilhaberschaften von Kontakten ermitteln
+		//Ermitteln der Kontakte aus den Participation-Objekten
 		Vector<Contact> allContacts = new Vector<Contact>();
 		if(allParticipations.isEmpty()) {
 			System.out.println("Nutzer hat keine Teilhaberschaften mit Teilhaber");
@@ -360,9 +351,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			}
 		}
 					
-		/**
-		 * Zurückgeben des erstellten Reports
-		 */
+		/** Zurückgeben des erstellten Reports */
 		return report;
 	}
 
@@ -370,9 +359,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	public AllContactsForPropertyReport createAllContactsForPropertyReport(int propertyId, String propertyvalue)
 			throws IllegalArgumentException {
 		
-		/**
-		 * Aktuell eingeloggter User
-		 */
+		/* Aktuell eingeloggter User */
 		User currentUser = this.getLoggedInUser();
 		
 		//Property-Objekt zu Id suchen
@@ -395,6 +382,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Alle PropertyValues, die dem Suchtext entsprechen, ermitteln
 		Vector<PropertyValue> allPVforString = administration.searchPropertyValues(propertyvalue);
 		Vector<PropertyValue> allPropertyValuesForProperty = new Vector<PropertyValue>();
+		
 		//Alle PropertyValues, denen die richtige Property zugeordnet ist, ermitteln
 		if(allPVforString.isEmpty()) {
 			System.out.println("Keine PV gefunden");
@@ -431,10 +419,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Vector<Contact> participatedContacts = new Vector<Contact>();
 		if(allContacts.isEmpty()) {
 			System.out.println("Keine Kontakte gefunden");
-		} else {
-			
-			for(Contact contact : allContacts) {
-			
+		} else {			
+			for(Contact contact : allContacts) {			
+		
 				//Gefundene Kontakte nach dem Eigentümer (currentUser) filtern
 				if(contact.getOwner().getGoogleID() == currentUser.getGoogleID()) {
 					foundContacts.add(contact);
@@ -454,13 +441,11 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				}
 			}
 		}
-
+		
 		//Vektoren vereinen
-		foundContacts.addAll(participatedContacts);
-		
+		foundContacts.addAll(participatedContacts);		
 				
-		//Hinzufügen der einzelnen Kontakt-Elemente
-		
+		//Hinzufügen der einzelnen Kontakt-Elemente		
 		if(foundContacts.isEmpty()) {
 			System.out.println("Keine Kontakte mit PropertyValue gefunden");
 		}else {
@@ -469,9 +454,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			}
 		}		
 		
-		/**
-		 * Zurückgeben des erstellten Reports
-		 */
+		/* Zurückgeben des erstellten Reports */
 		return report;
 	}
 

@@ -15,6 +15,7 @@ import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
  * Es wird semiautomatisch durch das Google Plugin erstellt und gepflegt. Daher erfolgt hier keine weitere Dokumentation. 
  * Für weitere Informationen siehe das synchrone Interface {@link ReportGenerator}.
  * 
+ * @author Sandra Prestel
  */
 
 public interface ReportGeneratorAsync {

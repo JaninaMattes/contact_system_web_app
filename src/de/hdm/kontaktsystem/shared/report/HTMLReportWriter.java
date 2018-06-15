@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.hdm.kontaktsystem.shared.report;
 
 import java.util.Vector;
@@ -12,7 +9,7 @@ import java.util.Vector;
  * <code>getReportText()</code> ausgelesen werden.
  * 
  * @see de.hdm.thies.bankProjekt.shared.report.HTMLReportWriter
- * @author Sandra
+ * @author Sandra Prestel
  *
  */
 public class HTMLReportWriter extends ReportWriter {

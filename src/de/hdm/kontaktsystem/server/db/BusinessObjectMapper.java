@@ -16,6 +16,9 @@ import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
+/**
+ * @author Oliver Gorges
+ */
 public class BusinessObjectMapper implements Serializable {
 	
 
@@ -24,8 +27,7 @@ public class BusinessObjectMapper implements Serializable {
 	
 	/*
 	 * Singleton Pattern
-	 */
-	
+	 */	
 	  private static BusinessObjectMapper businessObjectMapper = null;
 
 	  protected BusinessObjectMapper() {
