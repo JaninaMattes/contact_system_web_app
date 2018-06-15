@@ -54,7 +54,7 @@ public class ContactListForm extends VerticalPanel {
 	Button shareButton = new Button("Teilen");
 	Button addConToList = new Button("Hinzufügen");
 	
-	Label isShared = new Label("Geteilt: ");
+	Label isShared = new Label("Geteilt mit: ");
 	Label labelShare = new Label("Teilen mit: ");
 	Label contactStatus = new Label("");
 	Label labelSharedWith = new Label("Geteilt mit: ");
@@ -119,6 +119,7 @@ public class ContactListForm extends VerticalPanel {
 		deleteClButton.addClickHandler(new deleteContactListClickHandler());
 		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
 		addConToList.addClickHandler(new addContactToClClickHandler());
+		shareButton.addClickHandler(new shareClickHandler());
 
 		
 		/*
@@ -272,14 +273,20 @@ public class ContactListForm extends VerticalPanel {
 	private class shareClickHandler implements ClickHandler {
 		
 		public void onClick(ClickEvent event) {
+			
 			if (contactListToDisplay == null) {
-				Window.alert("Keine Kontaktliste ausgewählt");
+				Window.alert("Kontaktliste auswählen");
+				
 			} else {
-				User u = new User();
-				u.setGMail("NeuerUser@gmail.com"); // Testdaten, sollte beim Teilen �ber ein Popup abgefragt werden.
+				User uToShare = new User();
+				uToShare.setGMail("NeuerUser@gmail.com"); // Testdaten, sollte beim Teilen �ber ein Popup abgefragt werden.
+
+				
 				Participation part = new Participation();
-				part.setParticipant(u);
+				part.setParticipant(uToShare);
 				part.setReference(contactListToDisplay);
+				
+				contactSystemAdmin.createParticipation(part, new shareCallback());
 				
 			}
 		}
@@ -296,16 +303,25 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			// User nicht gefunden
+			Window.alert("Teilen fehlgeschlagen");
 		}
 
 		// @Override
 		public void onSuccess(Participation result) {
-			// Eventuell ein Update der Liste
-
-			Window.alert("KontaktListe wurde erfolgreich geteilt.");
-		}
+			int count = 0;	
+			User userSharedWith = (User) result.getParticipant();
+			
+			if (contactListToDisplay != null) {
+			listBoxSharedWith.addItem(userSharedWith.getUserContact().getName().getValue() + " /" + userSharedWith.getGMail());	
+			++count;
+			
+			//Genug Platz schaffen für alle Elemente
+			listBoxSharedWith.setVisibleItemCount(count);
+			
+			} else {	
+			
+			Window.alert("Keine KontaktListe ausgewählt.");		
+		} 
 
 	}
 
@@ -746,4 +762,5 @@ public class ContactListForm extends VerticalPanel {
 	console.log(s);
 	}-*/;
 
+	}
 }
