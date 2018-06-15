@@ -58,7 +58,7 @@ public interface ContactSystemAdministrationAsync {
 	public void getAllParticipationsByOwner(User owner, AsyncCallback<Vector<Participation>> callback); //Aufruf in Report, gebraucht: referencedObject (Kontakt mit boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
 	
 	public void getAllParticipationsByParticipant(User gMail, AsyncCallback<Vector<Participation>> callback); //Aufruf in Report, gebraucht: referencedObject (Kontakt mit boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
-	
+																											  // Aufruf in Kontaktliste: Status Label das anzeigt ob Teilhaberschaft oder Besitz der Kontaktliste
 
 	public void getAllParticipationsByBusinessObject(BusinessObject bo, AsyncCallback<Vector<Participation>> callback); //mehrfach Aufruf in Report, gebraucht (1): Teilhaber-Objekte (Namen der Teilhaber)), 
 																														//bzw. gebraucht (2): participantID, referencedObject (Kontakt mit boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
