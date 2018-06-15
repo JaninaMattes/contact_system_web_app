@@ -5,8 +5,6 @@ package de.hdm.kontaktsystem.shared.report;
 
 import java.util.Vector;
 
-import com.google.gwt.user.client.Window;
-
 /**
  * Ein <code>ReportWriter</code>, der Reports mittels HTML formatiert. Das im
  * Zielformat vorliegende Ergebnis wird in der Variable <code>reportText</code>
