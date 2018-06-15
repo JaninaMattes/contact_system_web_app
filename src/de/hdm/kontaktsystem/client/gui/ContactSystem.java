@@ -154,7 +154,7 @@ public class ContactSystem implements EntryPoint {
 		
 		treeScrollPanel.setHeight("80vh");
 	//	contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
-		contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+		contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
@@ -364,7 +364,7 @@ public class ContactSystem implements EntryPoint {
 				
 			addContact = true;
 			addPanel.setVisible(true);
-			contactSystemAdmin.getAllContacts(new AsyncCallback<Vector<Contact>>() {
+			contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
@@ -396,7 +396,7 @@ public class ContactSystem implements EntryPoint {
 			//	contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
 				addContact = false;
 				addPanel.setVisible(true);
-				contactSystemAdmin.getAllContactLists(new AsyncCallback<Vector<ContactList>>() {
+				contactSystemAdmin.getMyContactListsPrev(new AsyncCallback<Vector<ContactList>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub

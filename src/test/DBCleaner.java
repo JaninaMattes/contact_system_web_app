@@ -34,7 +34,7 @@ public class DBCleaner {
 	private static PropertyValue pv;
 	private static Participation part;
 	private static Vector<PropertyValue> pvv;
-	
+	private static User oli;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -67,16 +67,16 @@ public class DBCleaner {
 			pvv.add(pv);
 		}
 		c.setPropertyValues(pvv);
-		u = csa.createUser(u, c);
+		oli = csa.createUser(u, c);
 		
 		cl = new ContactList();
 		cl.setName(data[0][1] + "s Liste");
-		cl.setOwner(u);
+		cl.setOwner(oli);
 		cl = csa.createContactList(cl);
 		csa.addContactToList(c, cl);
 		
 		c = new Contact(); //1
-		c.setOwner(u);
+		c.setOwner(oli);
 		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
@@ -91,7 +91,7 @@ public class DBCleaner {
 		cid++;
 		
 		c = new Contact(); // 2
-		c.setOwner(u);
+		c.setOwner(oli);
 		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
@@ -123,13 +123,13 @@ public class DBCleaner {
 		// KontaktListen erstellen
 		cl = new ContactList();
 		cl.setName(data[cid][1] + "s Liste");
-		cl.setOwner(u);
+		cl.setOwner(oli);
 		cl = csa.createContactList(cl);
 		csa.addContactToList(c, cl);
 		cid++;
 		
 		c = new Contact(); // 4
-		c.setOwner(u);
+		c.setOwner(oli);
 		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
@@ -144,7 +144,7 @@ public class DBCleaner {
 		cid++;
 		
 		c = new Contact(); // 5
-		c.setOwner(u);
+		c.setOwner(oli);
 		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
@@ -177,13 +177,13 @@ public class DBCleaner {
 		// KontaktListen erstellen
 		cl = new ContactList();
 		cl.setName(data[cid][1] + "s Liste");
-		cl.setOwner(u);
+		cl.setOwner(oli);
 		cl = csa.createContactList(cl);
 		csa.addContactToList(c, cl);
 		cid++;
 		
 		c = new Contact(); // 7
-		c.setOwner(u);
+		c.setOwner(oli);
 		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
@@ -198,7 +198,7 @@ public class DBCleaner {
 		cid++;
 		
 		c = new Contact(); // 8
-		c.setOwner(u);
+		c.setOwner(oli);
 		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
@@ -231,13 +231,13 @@ public class DBCleaner {
 		// KontaktListen erstellen
 		cl = new ContactList();
 		cl.setName(data[cid][1] + "s Liste");
-		cl.setOwner(u);
+		cl.setOwner(oli);
 		cl = csa.createContactList(cl);
 		csa.addContactToList(c, cl);
 		cid++;
 		
 		c = new Contact(); // 10
-		c.setOwner(u);
+		c.setOwner(oli);
 		pvv = new Vector<PropertyValue>();
 		// Kontakt eigenschaften anlagen
 		for(int i = 0; i < 5; i++){
@@ -270,7 +270,7 @@ public class DBCleaner {
 		// KontaktListen erstellen
 		cl = new ContactList();
 		cl.setName(data[cid][1] + "s Liste");
-		cl.setOwner(u);
+		cl.setOwner(oli);
 		cl = csa.createContactList(cl);
 		csa.addContactToList(c, cl);
 		cid++;

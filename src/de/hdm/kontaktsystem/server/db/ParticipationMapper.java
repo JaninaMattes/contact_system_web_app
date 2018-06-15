@@ -323,7 +323,7 @@ public class ParticipationMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
-			//System.out.println("Delete: "+ part.getParticipantID() + " / " + part.getReferenceID());
+			
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE User_ID = ? AND BusinessObject_ID = ?");
 			stmt.setDouble(1, part.getParticipantID());
 			stmt.setInt(2, part.getReferenceID());
