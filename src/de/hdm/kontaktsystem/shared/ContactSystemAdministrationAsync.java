@@ -15,22 +15,22 @@ public interface ContactSystemAdministrationAsync {
 		
 	public void login(String requestUri, AsyncCallback<User> callback);
 		
-	public void getUserByID(double id, AsyncCallback<User> callback);
+	public void getUserByID(double id, AsyncCallback<User> callback); //Aufruf in Report, gebraucht: googleID, Name (über UserContact.getName().getValue())
 	
 	public void getUserBygMail(String gMail, AsyncCallback<User> callback);
 	
-	public void getAllUsers(AsyncCallback<Vector<User>> callback);
+	public void getAllUsers(AsyncCallback<Vector<User>> callback); //Aufruf in Report, gebraucht: googleID, Name (über UserContact.getName().getValue())
 	
-	public void getAccountOwner(AsyncCallback<User> callback); //TODO
+	public void getAccountOwner(AsyncCallback<User> callback); //TODO //Aufruf in Report, gebraucht: User-Objekt mit GoogleID, gMail, Name (über UserContact.getName().getValue())
 	
 
-	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback);
+	public void getAllContactsFromUser(AsyncCallback<Vector<Contact>> callback); //Aufruf in Report, gebraucht: Kontakt-Objekte (boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
 	
 	public void getMyContactsPrev(AsyncCallback<Vector<Contact>> callback);
 	
 	public void getAllContacts(AsyncCallback<Vector<Contact>> callback);
 	
-	public void getContactByPropertyValue(PropertyValue pv, AsyncCallback<Contact> callback);
+	public void getContactByPropertyValue(PropertyValue pv, AsyncCallback<Contact> callback); //Aufruf in Report, gebraucht: Kontakt-Objekte (boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichung und boID der zugehörigen Property)
 	
 	public void getContactsByStatus(Boolean status, AsyncCallback<Vector<Contact>> callback);
 	
@@ -49,27 +49,29 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getContactListByName(String name, AsyncCallback<Vector<ContactList>> callback);
 	
-	public void getAllParticipationsByOwner(User owner, AsyncCallback<Vector<Participation>> callback);
+	public void getAllParticipationsByOwner(User owner, AsyncCallback<Vector<Participation>> callback); //Aufruf in Report, gebraucht: referencedObject (Kontakt mit boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
 	
-	public void getAllParticipationsByParticipant(User gMail, AsyncCallback<Vector<Participation>> callback);
+	public void getAllParticipationsByParticipant(User gMail, AsyncCallback<Vector<Participation>> callback); //Aufruf in Report, gebraucht: referencedObject (Kontakt mit boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
 	
-	public void getAllParticipationsByBusinessObject(BusinessObject bo, AsyncCallback<Vector<Participation>> callback);
+	public void getAllParticipationsByBusinessObject(BusinessObject bo, AsyncCallback<Vector<Participation>> callback); //mehrfach Aufruf in Report, gebraucht (1): Teilhaber-Objekte (Namen der Teilhaber)), 
+																														//bzw. gebraucht (2): participantID, referencedObject (Kontakt mit boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
+																														//bzw. gebraucht (3): participantID
 	
 	public void getNameOfContact(Contact c, AsyncCallback<PropertyValue> callback);
 	
 	public void getPropertyValuesForContact(Contact c, AsyncCallback<Vector<PropertyValue>> callback);
 	
-	public void searchPropertyValues(String suchtext, AsyncCallback<Vector<PropertyValue>> callback);
+	public void searchPropertyValues(String suchtext, AsyncCallback<Vector<PropertyValue>> callback); //Aufruf in Report, gebraucht: boID, boID der zugehörigen Property
 
-	public void getAllProperties(AsyncCallback<Vector<Property>> callback);
+	public void getAllProperties(AsyncCallback<Vector<Property>> callback); //Aufruf in Report, gebraucht: Bezeichnung, boID
 	
-	public void getPropertyByID(int id, AsyncCallback<Property> callback);
+	public void getPropertyByID(int id, AsyncCallback<Property> callback); //Aufruf in Report, gebraucht: Bezeichnung, boID
 	
 	public void getAllSharedByMe(AsyncCallback<Vector<BusinessObject>> callback);
 	
 	public void getAllSharedByOthersToMe(AsyncCallback<Vector<BusinessObject>> callback);
 	
-	public void findAllCSharedByOthersToMe(AsyncCallback<Vector<Contact>> callback);
+	public void findAllCSharedByOthersToMe(AsyncCallback<Vector<Contact>> callback); //Aufruf in Report, gebraucht: Kontakt-Objekte (boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
 	
 	
 	/**

@@ -115,7 +115,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		 */
 		Row ownerRow = new Row();
 		Column ownerProperty = new Column("Eigentümer");
-		//TODO: Testing
+		//TODO: Test
 //		Double ownerID = contact.getOwner().getGoogleID();
 //		Column ownerPropertyValue = new Column(administration.getUserByID(ownerID).getUserContact().getName().getValue());
 		String ownerName = contact.getOwner().getUserContact().getName().getValue();
@@ -147,7 +147,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		if(contact.isShared_status()) {
 			Vector<Participation> participations = administration.getAllParticipationsByBusinessObject(contact);
 			for(Participation singleParticipation : participations) {
-				//TODO: Testing
+				//TODO: Test
 				String participantName = singleParticipation.getParticipant().getUserContact().getName().getValue();
 //				Double participantID = singleParticipation.getParticipant().getGoogleID();
 //				String name = administration.getUserByID(participantID).getUserContact().getName().getValue();
@@ -182,7 +182,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte
 	 * eines Users dar.
-	 * TODO: Alle mit dem User geteilte Kontakte mit aufnehmen
 	 * 
 	 * @return Das fertige Reportobjekt
 	 * @throws IllegalArgumentException
