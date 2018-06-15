@@ -56,7 +56,7 @@ public class ContactListForm extends VerticalPanel {
 	
 	Label isShared = new Label("Geteilt mit: ");
 	Label labelShare = new Label("Teilen mit: ");
-	Label contactStatus = new Label("Status");
+	Label contactStatus = new Label("Status: ");
 	Label contactStatusValue = new Label("");
 	Label labelSharedWith = new Label("Geteilt mit: ");
 	Label labelReceivedFrom = new Label("Eigentümer: ");
@@ -182,7 +182,7 @@ public class ContactListForm extends VerticalPanel {
 	
 	
 	/**
-	 * ClickHandelr zum Speichern der KontaktListe 
+	 * ClickHandler zum Speichern der KontaktListe 
 	 * @author Kim-Ly
 	 *
 	 */
@@ -220,6 +220,12 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 	}
+	
+	/**
+	 * Callback Klasse zum Speichern der neu angelegten Konttaktliste
+	 * @author Kim-Ly
+	 *
+	 */
 	
 	private class SaveCallback implements AsyncCallback<ContactList> {
 
@@ -268,10 +274,9 @@ public class ContactListForm extends VerticalPanel {
 	}
 
 	/**
-	 * *************************** ÜBERARBEITEN ***************************************
+	 * 
 	 * ClickHandler zum Teilen der KontaktListe mit dem ausgewählten User
 	 * @author Kim-Ly
-	 **********************************************************************************
 	 */
 	
 	private class shareClickHandler implements ClickHandler {
@@ -352,9 +357,9 @@ public class ContactListForm extends VerticalPanel {
 	}
 
 	/**
-	 * Clickhandler zum Löschen von Kontakt aus Kontaktliste
+	 * Clickhandler zum Löschen eines Kontakts aus der Kontaktliste
+	 * 
 	 * @author Kim-Ly
-	 *
 	 */
 	
 	private class deleteConFromListClickHandler implements ClickHandler {
@@ -368,27 +373,23 @@ public class ContactListForm extends VerticalPanel {
 				
 				Integer lbItemIndex = contactNames.getSelectedIndex();
 				String contactName = contactNames.getValue(lbItemIndex);
-
-
-				conVec = contactListToDisplay.getContacts();
 				
 				// Suche und Rückgabe nach Kontakt aus Kontaktliste, der mit ausgewählten Kontakt aus ListBox übereinstimmt
-				for (Contact con : conVec) {
+				for (Contact con : contactListToDisplay.getContacts()) {
 					if (con.getName().getValue() == contactName) {
 						Contact conToDelete = con;
 						contactSystemAdmin.removeContactFromList(conToDelete, contactListToDisplay, 
 								new deleteConfromListCallback());
 					}
 				}
-				
 			}
 		}
 	}
 
 	/**
-	 * Callback zum Löschen von Kontakt aus Kontaktliste
+	 * Callback Klasse zum Löschen eines Kontakts aus der Kontaktliste
+	 * 
 	 * @author Kim-Ly
-	 *
 	 */
 	private class deleteConfromListCallback 
 	implements AsyncCallback<ContactList> {
@@ -408,7 +409,6 @@ public class ContactListForm extends VerticalPanel {
 
 	/**
 	 * Clickhandler zum Loeschen einer Kontaktliste.
-	 * 
 	 * @author Kim-Ly
 	 *
 	 */
@@ -428,7 +428,7 @@ public class ContactListForm extends VerticalPanel {
 		}
 		
 		/**
-		 * Löschen der Teilhaberschaft zur ausgewählten Kontaktliste
+		 * Callback Klasse zum Löschen der ausgewählten Kontaktliste aus TreeView durch Auflösung der Teilhaberschaft
 		 * @author Kim-Ly
 		 *
 		 */
@@ -450,13 +450,13 @@ public class ContactListForm extends VerticalPanel {
 					//log(clPart.toString());
 					setSelected(null);
 					tvm.removeBusinessObject(clPart);
-					Window.alert("Teilhaberschaft mit Kontaktliste gelöscht!");
+					Window.alert("Teilhaberschaft der Kontaktliste gelöscht!");
 				}
 			}
 		}
 
 		/**
-		 * Callback Methode zum Löschen einer Kontaktliste
+		 * Callback Klasse zum Löschen einer Kontaktliste aus TreeView
 		 * @author Kim-Ly
 		 *
 		 */
@@ -480,6 +480,12 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 		
+		/**
+		 * Callback Klasse für Status Anzeige der Kontaktliste
+		 * @author Kim-Ly
+		 *
+		 */
+		
 		private class ContactListStatusCallback
 		implements AsyncCallback<Vector<Participation>> {
 
@@ -494,19 +500,35 @@ public class ContactListForm extends VerticalPanel {
 			@Override
 			public void onSuccess(Vector<Participation> partVec) {
 				
-				for (Participation part : partVec) {
-					
-					if (part.getReferencedObject().getBoId() == contactListToDisplay.getBoId()) {
-						contactStatusValue.setText("Teilhaber");
-					} else {
-						contactStatusValue.setText("Besitzer");
-					}
-					
-				}
+				contactListToDisplay.getBoId();
+				
+				contactSystemAdmin.getAllParticipationsByBusinessObject(contactListToDisplay, new AsyncCallback<Vector<Participation>>() {
 
+					@Override
+					public void onFailure(Throwable caught) {
+						log("Aufruf der Teilhaberschaften der Kontaktliste fehlgeschlagen");
+						
+					}
+
+					@Override
+					public void onSuccess(Vector<Participation> result) {
+						for (Participation part : result) {
+							
+							if (part.getParticipant().getGoogleID() == contactListToDisplay.getOwner().getGoogleID()) {
+								contactStatusValue.setText("An mich geteilt");
+							} else if (part.getParticipant().getGoogleID() != contactListToDisplay.getOwner().getGoogleID()) {
+								contactStatusValue.setText("Von mir geteilt");
+							} else {
+								contactStatusValue.setText("Nicht geteilt");
+							}
+						}
+					}
+	
+				});
+				
+				}
 			}
 			
-		}
 
 
 	/**
@@ -585,14 +607,11 @@ public class ContactListForm extends VerticalPanel {
 			}
 
 			/* 
-			 * Eigentümer der Kontaktliste anzeigen, wenn User nicht Eigentümer ist
+			 * Eigentümer der Kontaktliste anzeigen
 			 */
-			if (contactListToDisplay.getOwner() != myUser) {			
+			if (contactListToDisplay != null) {			
 				clOwner.setText(contactListToDisplay.getOwner().getGMail());
 				contactSystemAdmin.getAllContactListsFromUser(new UserOwnerClCallback());
-			} else {
-				labelReceivedFrom.setVisible(false);
-				clOwner.setVisible(false);
 			}
 			
    			
@@ -621,10 +640,8 @@ public class ContactListForm extends VerticalPanel {
 	}
 	
 	/**
-	 * UserCallback Klasse zum befüllen der listBoxShareWith mit allen User
-	 * aus dem System. Mit diesen kann die Kontaktliste geteilt werden. 
+	 * Callback Klasse zum befüllen der Listbox mit allen Usern aus dem System. Mit diesen kann die Kontaktliste geteilt werden. 
 	 * @author Kim-Ly
-	 *
 	 */
 	
 	private class UserToShareCallback implements AsyncCallback<Vector<User>> {
@@ -656,10 +673,8 @@ public class ContactListForm extends VerticalPanel {
 	}
 	
 	/**
-	 * UserSharedWithCallback Klasse zum befüllen der listBoxSharedWith mit Usern 
-	 * an die die Kontaktliste geteilt wurde.
+	 * Callback Klasse zum befüllen der Listbox mit Usern an die die Kontaktliste geteilt wurde.
 	 * @author Kim-Ly
-	 *
 	 */
 	
 	private class UserSharedWithCallback implements AsyncCallback<Vector<Participation>> {
@@ -694,8 +709,7 @@ public class ContactListForm extends VerticalPanel {
 	}
 	
 	/**
-	 * UserSharedByCallback Klasse zum befüllen der labelReceivedFrom mit User 
-	 * von dem die Kontaktliste geteilt wurde.
+	 * Callback Klasse zur Anzeige des Users der Eigentümer der Kontaktliste ist.
 	 * @author Kim-Ly
 	 *
 	 */
@@ -721,8 +735,10 @@ public class ContactListForm extends VerticalPanel {
 	}
 	
 	/**
-	 * ClickHandler zum Hinzufügen eines Kontakts, 
-	 * Auswahl aus aller für User geteilten und von User erstellten Kontakte z
+	 * ClickHandler zum Hinzufügen eines Kontakts zu Kontaktliste 
+	 * Auswahl aus aller für User geteilten und von User erstellten Kontakte 
+	 * 
+	 * @author Kim-Ly
 	 */
 	
 	private class addContactToClClickHandler implements ClickHandler {
@@ -775,8 +791,9 @@ public class ContactListForm extends VerticalPanel {
 	}
 	
 	/**
-	 * Callback des aktualisierten Kontaktlistenobjekts nachdem neuer Kontakt hinzugefügt wurde
-	 * Befüllung der Listbox mit Kontakten die zu Kontaktliste hinzugefügt wurden
+	 * Callback Klasse für aktualisiertes Kontaktlistenobjekt nachdem neuer Kontakt hinzugefügt wurde
+	 * Befüllung der Listbox mit Kontakten 
+	 * 
 	 * @author Kim-Ly
 	 */
 	
@@ -815,8 +832,9 @@ public class ContactListForm extends VerticalPanel {
 		
 	
 	/**
-	 * Callback aller vom User erstellten und dem User geteilten Kontakte, um einen daraus selektierten Kontakt zur Kontaktliste hinzuzufügen.
+	 * Callback Klasse für alle vom User erstellten und dem User geteilten Kontakte, um einen daraus selektierten Kontakt zur Kontaktliste hinzuzufügen.
 	 * Befüllung der Listbox mit Kontakten die zu Kontaktliste hinzugefügt werden können
+	 * 
 	 * @author Kim-Ly
 	 */
 	
@@ -830,8 +848,7 @@ public class ContactListForm extends VerticalPanel {
 		}
 
 		@Override
-		public void onSuccess(Vector<Contact> result) {
-			
+		public void onSuccess(Vector<Contact> result) {			
 			
 			int count = 0;
 				if (result != null) {
