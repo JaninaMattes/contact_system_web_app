@@ -17,7 +17,7 @@ public interface ContactSystemAdministrationAsync {
 		
 	public void getUserByID(double id, AsyncCallback<User> callback); //Aufruf in Report, gebraucht: googleID, Name (über UserContact.getName().getValue())
 	
-	public void getUserBygMail(String gMail, AsyncCallback<User> callback);
+	public void getUserBygMail(String gMail, AsyncCallback<User> callback); //ContactForm: Aufruf des Users mit Gmail/OwnContact/GoogleID
 	
 	
 	public void getAllUsers(AsyncCallback<Vector<User>> callback); //Aufruf in Report, gebraucht: googleID, Name (über UserContact.getName().getValue())  
@@ -42,7 +42,7 @@ public interface ContactSystemAdministrationAsync {
 
 	public void getContactsFromList(ContactList cl, AsyncCallback<Vector<Contact>> callback);
 	
-	public void getContactById(int id, AsyncCallback<Contact> callback);
+	public void getContactById(int id, AsyncCallback<Contact> callback); //ContactForm: Abruf eines Kontakt Objektes zur initialien Befüllung des Referenzattributs in der Klasse - alle Attribute benötigt 
 	
 	
 	public void getAllContactListsFromUser(AsyncCallback<Vector<ContactList>> callback); // Aufruf in Kontaktliste: Callback mit allen Kontaktlisten die der User angelegt oder die ihm geteilt wurden
@@ -64,6 +64,11 @@ public interface ContactSystemAdministrationAsync {
 																														//bzw. gebraucht (2): participantID, referencedObject (Kontakt mit boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
 																														//bzw. gebraucht (3): participantID
 																														// Aufruf in Kontaktliste: Callback mit allen Usern denen die Kontaktliste geteilt wurde
+																														
+																														// Aufruf in ContactForm 
+																														// (1) Methode für die Rückgabe NUR eines einzigen Participation Objekts wäre ausreichend, da anhand der Übergabe des User(Participant)+Contacts(BusinessObjects) dies in DB abrufbar
+																														//     Methode getParticipation(BusinessObject, User, AsyncCallback<Participation>)
+																														// (2) Methode um ListBox mit allen Participants (User) zu befüllen 
 
 	public void getNameOfContact(Contact c, AsyncCallback<PropertyValue> callback);
 	
@@ -96,7 +101,7 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void createUser(User u, Contact c, AsyncCallback<User> callback);
 	
-	public void createContact(Contact c, AsyncCallback<Contact> callback);
+	public void createContact(Contact c, AsyncCallback<Contact> callback); //ContactForm: Erstellen eines neuen Kontakt Eintrages in DB
 	
 	/*
 	 * Speichern neu angelegter Kontaktlisten
@@ -107,7 +112,7 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void createPropertyValue(PropertyValue pv, AsyncCallback<PropertyValue> callback);
 	
-	public void createParticipation(Participation part, AsyncCallback<Participation> callback);
+	public void createParticipation(Participation part, AsyncCallback<Participation> callback); //ContactForm: Erstellen eines neuen Participation Eintrags in der DB
 	
 	
 	public void addContactToList(Contact c, ContactList cl, AsyncCallback<ContactList> callback); // Aufruf in Kontaktliset: Hinzufügen eines ausgewählten Kontakt von User (geteilt oder erstellt) zu ausgewählter Kontaktliste
@@ -118,7 +123,7 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void editUser(User u, AsyncCallback<User> callback);
 	
-	public void editContact(Contact c, AsyncCallback<Contact> callback);
+	public void editContact(Contact c, AsyncCallback<Contact> callback);//ContactForm: Übergabe des kompletten Kontakt-Objektes für Update in DB
 
 	
 	public void editContactList(ContactList cl, AsyncCallback<ContactList> callback); // Aufruf in Kontaktliste: Editieren bereits existenter Kontaktlisten
@@ -132,7 +137,7 @@ public interface ContactSystemAdministrationAsync {
 	 */
 	public void deleteUser(User u, AsyncCallback<User> callback);
 	
-	public void deleteContact(Contact c, AsyncCallback<Contact> callback);
+	public void deleteContact(Contact c, AsyncCallback<Contact> callback); //ContctForm: Löschen eines Kontaktes
 	
 	public void deleteContactList(ContactList cl, AsyncCallback<ContactList> callback);  // Aufruf in Kontaktliste: Löschen von Kontaktlisten
 	

@@ -209,7 +209,6 @@ public class ContactForm extends VerticalPanel {
 				Vector<PropertyValue>createResult = new Vector<PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
 					
 					if(contactToDisplay!=null) { //1. Kontakt exisitiert -> Edit
 						for(TextBox tb:tbv) {
@@ -303,7 +302,7 @@ public class ContactForm extends VerticalPanel {
 							log("User nicht gefunden");
 							emailButton.setStyleName("check_notFound");
 							emailButton.setText("X");
-							emailButton.setEnabled(false);
+//							emailButton.setEnabled(false);
 						}
 
 						@Override
@@ -679,7 +678,7 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onSuccess(Participation result) {
 				log("Neue Teilhaberschaft: " + result);	
-				//TODO: 
+			    //Update tvm
 			}				
 		}
 				
