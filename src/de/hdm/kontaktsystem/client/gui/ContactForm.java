@@ -209,45 +209,45 @@ public class ContactForm extends VerticalPanel {
 				Vector<PropertyValue>createResult = new Vector<PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
-					
+										
 					if(contactToDisplay!=null) { //1. Kontakt exisitiert -> Edit
 						for(TextBox tb:tbv) {
-//							if(tb.getTitle().endsWith("1")&!tb.getText().isEmpty()) { //1.0 verhindern dass Kontakt Name leer
-							if(!tb.getText().isEmpty()) {//1.1 TextBox nicht leer
-								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
-									String[] s=tb.getTitle().split(":", 2);
-									log("Spliterator: "+s[1]);
-									Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
-									p.setId(Integer.parseInt(s[1]));
-									PropertyValue ppv = new PropertyValue();
-									ppv.setBo_Id(0);
-									ppv.setContact(contactToDisplay);
-									ppv.setOwner(contactToDisplay.getOwner());
-									ppv.setProperty(p);
-									ppv.setValue(tb.getText());
-									editResult.add(ppv);
-								} else{//1.1.2 TextBox alt?
-									for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
-										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-											pv.setValue(tb.getText());
-											editResult.add(pv);
+							if(Integer.parseInt(tb.getTitle())==1&tb.getText().isEmpty()) { //1.0 verhindern dass Kontakt Name leer
+								Window.alert("Das Feld Name darf nicht leer sein.");
+								return;
+						  }else{							  
+								if(!tb.getText().isEmpty()) {//1.1 TextBox nicht leer
+									if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
+										String[] s=tb.getTitle().split(":", 2);
+										log("Spliterator: "+s[1]);
+										Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
+										p.setId(Integer.parseInt(s[1]));
+										PropertyValue ppv = new PropertyValue();
+										ppv.setBo_Id(0);
+										ppv.setContact(contactToDisplay);
+										ppv.setOwner(contactToDisplay.getOwner());
+										ppv.setProperty(p);
+										ppv.setValue(tb.getText());
+										editResult.add(ppv);
+									}else{//1.1.2 TextBox alt?
+										for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
+											if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
+												pv.setValue(tb.getText());
+												editResult.add(pv);
+											}
 										}
 									}
+								} else { //1.2TextBox leer -> löschen
+									for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
+										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
+											pv.setValue("");
+											editResult.add(pv);
+											log("Lösche aus Vector:" +tb);
+											tbv.remove(tb);
+										}
+									}						
 								}
-							} else { //1.2TextBox leer -> löschen
-								for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
-									if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-										pv.setValue("");
-										editResult.add(pv);
-										log("Lösche aus Vector:" +tb);
-										tbv.remove(tb);
-									}
-								}						
-							}
-//						  }else {
-//							  Window.alert("Das Feld Name darf nicht leer sein.");
-//						  }
+						    }
 						 } 
 						 log("Kontakte Editieren:"+editResult);
 						 contactToDisplay.setPropertyValues(editResult);
