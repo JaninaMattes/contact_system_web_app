@@ -242,7 +242,9 @@ public class ContactForm extends VerticalPanel {
 											}
 									   }									
 								 }
-							 }else if(tb.getText().isEmpty()) {
+							 }
+							 // Nicht Umbedingt Notwendig
+							 else if(tb.getText().isEmpty()) {
 								 for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
 										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
 											pv.setValue("");
@@ -258,6 +260,7 @@ public class ContactForm extends VerticalPanel {
 						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
 						
 					} else{
+						// Das Dopplung mit Oben
 						log("Kontakt ist neu");
 						for(TextBox tb: tbv) {
 							 if(tb.getText().isEmpty()&tb.getTitle()=="Neu:1") { //1.0 verhindern dass Kontakt Name leer
