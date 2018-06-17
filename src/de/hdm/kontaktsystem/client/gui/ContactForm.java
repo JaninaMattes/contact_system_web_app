@@ -376,7 +376,7 @@ public class ContactForm extends VerticalPanel {
 						}
 
 						@Override
-						public void onSuccess(User userResult) {
+						public void onSuccess(final User userResult) {
 							log("User abgerufen:"+userResult);
 							contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new AsyncCallback<Vector<Participation>>(){
 
@@ -480,11 +480,11 @@ public class ContactForm extends VerticalPanel {
 							row++;
 						}
 						
-						if(myUser.getGoogleID()!=contact.getOwner().getGoogleID()) {
-							log("Kontakt Besitzer anzeigen:" +contact.getOwner().getGMail());
+						if(myUser.getGoogleID()!=result.getOwner().getGoogleID()) {
+							log("Kontakt Besitzer anzeigen:" +result.getOwner().getGMail());
 							labelReceivedFrom.setVisible(true);
-							labelReceivedFrom.setText("Geteilt von: "+contact.getOwner().getGMail());
-						}else if(myUser.getGoogleID()==contact.getOwner().getGoogleID()){	
+							labelReceivedFrom.setText("Geteilt von: "+result.getOwner().getGMail());
+						}else if(myUser.getGoogleID()==result.getOwner().getGoogleID()){	
 							log("My User "+myUser.getGoogleID());
 							labelSharedWith.setVisible(true);
 							sharedWithUser.setVisible(true);

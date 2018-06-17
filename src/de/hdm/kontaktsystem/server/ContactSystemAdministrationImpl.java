@@ -169,8 +169,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public User getAccountOwner() {
 		return getUserByID(this.getCurrentUser());
 	}
-	
-	@Override
+
+	/**
+	 * Interner Aufruf bei Login
+	 * @param u
+	 * @param contact
+	 * @return
+	 */
 	public User createUser(User u, Contact contact) {
 
 		User user = uMapper.insert(u);
@@ -304,7 +309,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return cv;
 	}
 
-	@Override
+/**
+ * Keine Verwendung 
+ * @param status
+ * @return
+ */
 	public Vector<Contact> getContactsByStatus(Boolean status) {
 		Vector<Contact> cv = cMapper.findContactByStatus(this.getCurrentUser(), status);
 		for (Contact contact : cv) {
@@ -316,6 +325,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 
+	@Override
 	public Vector<Contact> getContactsFromList(ContactList cl) {
 		Vector<Integer> iv = cMapper.findContactFromList(cl);
 		Vector<Contact> cv = new Vector<Contact>();
@@ -449,7 +459,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return clMapper.updateContactList(cl);
 	}
 
-	@Override
+/**
+ * Keine Verwendung
+ * @param name
+ * @return
+ */
 	public Vector<ContactList> getContactListByName(String name) {
 
 		Vector<ContactList> contactListVector = clMapper.findContactListByName(name);
@@ -462,8 +476,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 
-	// Nur für Report!
-	@Override
+	
+/**
+ * Keine Verwendung
+ * @return
+ */
 	public Vector<ContactList> getAllContactLists() {
 		Vector<ContactList> contactListVector = clMapper.findAllContactLists();
 
@@ -567,7 +584,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return propValMapper.update(propertyValue);
 	}
 
-	@Override
+/**
+ * Keine Verwendung
+ * @param propertyValue
+ * @return
+ */
 	public PropertyValue deletePropertyValue(PropertyValue propertyValue) {
 		PropertyValue pv = propValMapper.delete(propertyValue);
 		if (pv != null)
@@ -747,7 +768,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return partV;
 	}
 
-	@Override
+	/**
+	 * Keine Verwendung
+	 * @param p
+	 * @return
+	 */
 	public Participation deleteParticipation(Participation p) {
 		Participation part = partMapper.deleteParticipation(p);
 		// Prüfen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt,

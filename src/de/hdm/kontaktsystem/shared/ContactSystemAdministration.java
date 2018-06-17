@@ -29,22 +29,18 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<User> getAllUsers();
 	
-	public User getAccountOwner(); //TODO
+	public User getAccountOwner(); 
 	
 
 	public Vector<Contact> getAllContactsFromUser(); 
 	
 	public Vector<Contact> getMyContactsPrev();
-
-	public Vector<Contact> getAllContacts(); 
+	
+	public Vector<Contact> getContactsFromList(ContactList cl);
 
 	
 	public Contact getContactByPropertyValue(PropertyValue pv);
 	
-	
-	public Vector<Contact> getContactsByStatus(Boolean status);
-
-	public Vector<Contact> getContactsFromList(ContactList cl);
 	
 	public Contact getContactById(int id);
 	
@@ -52,20 +48,11 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Vector<ContactList> getMyContactListsPrev();
 	
-	public Vector<ContactList> getAllContactLists();
-	
 	public ContactList getContactListById(int id);
 	
-	
-	public Vector<ContactList> getContactListByName(String name);
-	
-	public PropertyValue getNameOfContact(Contact c);
-
 	public ContactList addContactToList(Contact c, ContactList cl);
 	
 	public Vector<Contact> searchContacts(String value);
-	
-	public Vector<PropertyValue> getPropertyValuesForContact(Contact c); 
 	
 	public Vector<PropertyValue> searchPropertyValues(String suchtext);
 	
@@ -80,26 +67,20 @@ public interface ContactSystemAdministration extends RemoteService {
 	/**
 	 * Create
 	 */
-	public User createUser(User u, Contact c);
 	
 	public Contact createContact(Contact c);
 	
 	public ContactList createContactList(ContactList cl);
-	
-	public PropertyValue createPropertyValue(PropertyValue pv);
 	
 	public Participation createParticipation(Participation part);
 
 	/**
 	 * Update
 	 */
-	public User editUser(User u);
 	
 	public Contact editContact(Contact c);
 	
 	public ContactList editContactList(ContactList cl);
-	
-	public PropertyValue editPropertyValue(PropertyValue pv);
 	
 	public Participation editParticpation(Participation part);
 		
@@ -111,10 +92,6 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Contact deleteContact(Contact c);
 	
 	public ContactList deleteContactList(ContactList cl);
-	
-	public PropertyValue deletePropertyValue(PropertyValue pv);
-	
-	public Participation deleteParticipation(Participation p);
 	
 	public ContactList removeContactFromList(Contact contact, ContactList contactList);
 	

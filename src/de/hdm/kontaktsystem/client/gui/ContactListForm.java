@@ -548,7 +548,7 @@ public class ContactListForm extends VerticalPanel {
 		/*
 		 * Callback für Kontakte der Kontaktliste, da TreeView nur bo_ID & Kontaktlistenname weitergibt 
 		 */
-		contactSystemAdmin.getContactsFromList(cl, new AsyncCallback<Vector<Contact>>() {
+		contactSystemAdmin.getContactListById(cl_boID, new AsyncCallback<ContactList>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -557,9 +557,10 @@ public class ContactListForm extends VerticalPanel {
 			}
 
 			@Override
-			public void onSuccess(Vector<Contact> conVec) {
+			public void onSuccess(ContactList list) {
+				contactListToDisplay = list;
 				int count = 0;
-				for (Contact con : conVec) {
+				for (Contact con : list.getContacts()) {
 
 						contactNames.addItem(con.getName().getValue());
 						++count;
