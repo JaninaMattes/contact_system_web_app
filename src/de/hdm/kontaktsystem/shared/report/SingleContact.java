@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.hdm.kontaktsystem.shared.report;
 
 import java.io.Serializable;
@@ -15,8 +12,7 @@ import java.util.Vector;
  * Weiterhin enthält die Klasse eine Liste (CompositeParagraph), die 
  * auf die Namen der Teilhaber verweist.
  * 
- * 
- * @author Sandra
+ * @author Sandra Prestel
  *
  */
 public class SingleContact implements Serializable {

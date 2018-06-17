@@ -11,7 +11,7 @@ import java.io.Serializable;
  * 
  * @see Report
  * @see de.hdm.thies.bankProjekt.shared.report.AllAccountsOfCustomerReport
- * @author Sandra
+ * @author Sandra Prestel
  *
  */
 public class AllContactsOfUserReport extends Report implements Serializable {

@@ -202,26 +202,29 @@ public class ContactForm extends VerticalPanel {
 			});
 			
 			/*
-			 * Save-Button ClickHandler
+			 * Save-Button ClickHandler 
 			 */
 			saveButton.addClickHandler(new ClickHandler() {
 				Vector<PropertyValue>editResult = new Vector<PropertyValue>();
 				Vector<PropertyValue>createResult = new Vector<PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {
-										
-					if(contactToDisplay!=null) { //1. Kontakt exisitiert -> Edit
-						for(TextBox tb:tbv) {
-							if(Integer.parseInt(tb.getTitle())==1&tb.getText().isEmpty()) { //1.0 verhindern dass Kontakt Name leer
-								Window.alert("Das Feld Name darf nicht leer sein.");
-								return;
-						  }else{							  
-								if(!tb.getText().isEmpty()) {//1.1 TextBox nicht leer
-									if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
-										String[] s=tb.getTitle().split(":", 2);
-										log("Spliterator: "+s[1]);
+					
+					if(contactToDisplay!=null&contactToDisplay.getBoId()!=0) {
+						log("Der Kontakt besteht bereits.");
+						for(TextBox tb: tbv) {
+							 if(tb.getText().isEmpty()&Integer.parseInt(tb.getTitle())==1){ //1.0 verhindern dass Kontakt Name leer
+									Window.alert("Das Feld Name darf nicht leer sein.");
+									return;							
+							 }
+							 if(!tb.getText().isEmpty()) {
+								 if(tb.getTitle().contains("Neu")) {
+									 	String[]s=tb.getTitle().split(":");
+										log("Split String:"+s[1]);
 										Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
 										p.setId(Integer.parseInt(s[1]));
+										p.setDescription(s[0]);
+										
 										PropertyValue ppv = new PropertyValue();
 										ppv.setBo_Id(0);
 										ppv.setContact(contactToDisplay);
@@ -229,69 +232,60 @@ public class ContactForm extends VerticalPanel {
 										ppv.setProperty(p);
 										ppv.setValue(tb.getText());
 										editResult.add(ppv);
-									}else{//1.1.2 TextBox alt?
-										for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
+										
+								 }else if(!tb.getTitle().contains("Neu")){
+									 for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
 											if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
 												pv.setValue(tb.getText());
 												editResult.add(pv);
+												log("Editieren des Pv:"+pv);
 											}
-										}
-									}
-								} else { //1.2TextBox leer -> löschen
-									for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
+									   }									
+								 }
+							 }else if(tb.getText().isEmpty()) {
+								 for(PropertyValue pv: contactToDisplay.getPropertyValues()) {
 										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
 											pv.setValue("");
 											editResult.add(pv);
 											log("Lösche aus Vector:" +tb);
 											tbv.remove(tb);
-										}
-									}						
+									}
 								}
-						    }
-						 } 
-						 log("Kontakte Editieren:"+editResult);
-						 contactToDisplay.setPropertyValues(editResult);
-						 contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
-						 
-						} else if(contactToDisplay==null) {
-						contactToDisplay = new Contact();
-						for(TextBox tb:tbv) {//2. Kontakt existiert nicht -> CREATE
-							if(tb.getTitle().endsWith("1")&tb.getText().isEmpty()) { //1.0 verhindern dass Kontakt Name leer
-							if(!tb.getText().isEmpty()) { //1.1 TextBox nicht leer
-								if(tb.getTitle().contains("Neu")) {//1.1.1 TextBox neu?
-									String[] s=tb.getTitle().split(":", 2);
-									log("Spliterator: "+s[1]);
-									Property p = new Property();//1.1.1.1 Erzeuge neues Objekt		
+							 }
+												
+							}
+						contactToDisplay.setPropertyValues(editResult);
+						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
+						
+					} else{
+						log("Kontakt ist neu");
+						for(TextBox tb: tbv) {
+							 if(tb.getText().isEmpty()&tb.getTitle()=="Neu:1") { //1.0 verhindern dass Kontakt Name leer
+									Window.alert("Das Feld Name darf nicht leer sein.");
+									return;
+							 }
+							 if(!tb.getText().isEmpty()) {
+								 	Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
+								 	String[]s=tb.getTitle().split(":");
+									log("Split String:"+s[1]);
 									p.setId(Integer.parseInt(s[1]));
+									p.setDescription(s[0]);
+									
 									PropertyValue ppv = new PropertyValue();
 									ppv.setBo_Id(0);
 									ppv.setContact(contactToDisplay);
-									//ppv.setOwner(contactToDisplay.getOwner());
+									ppv.setOwner(contactToDisplay.getOwner());
 									ppv.setProperty(p);
 									ppv.setValue(tb.getText());
 									createResult.add(ppv);
-								}								
-							}else if(tb.getText().isEmpty()){//1.2TextBox leer -> löschen
-								log("###########"+tb.getTitle()+" // " + tb.getText() +"###############");
-								if(tb.getTitle().equals("Neu:1")) {
-									log("TextBox"+tb.getTitle());
-									Window.alert("Das Feld Name darf nicht leer sein.");
-								}else {
-									log("Lösche aus Vector:" +tb);
-									tbv.remove(tb);
-								}
-							  }					
-							} else {
-							  Window.alert("Das Feld Name darf nicht leer sein.");
-						  }
+							 }
 						}
-						 log("Kontakte Erstellen:"+createResult);
 						contactToDisplay.setPropertyValues(createResult);
 						contactSystemAdmin.createContact(contactToDisplay, new SaveCallback());
-					} 
-				} 
+						}		
 				
-			});
+					}
+				});
 			
 			emailButton.addClickHandler(new ClickHandler(){
 
@@ -303,7 +297,7 @@ public class ContactForm extends VerticalPanel {
 							log("User nicht gefunden");
 							emailButton.setStyleName("check_notFound");
 							emailButton.setText("X");
-							emailButton.setEnabled(false);
+//							emailButton.setEnabled(false);
 						}
 
 						@Override
@@ -342,12 +336,12 @@ public class ContactForm extends VerticalPanel {
 			
 			addButton.addClickHandler(new ClickHandler() {
 				
-				@Override
+				@Override 
 				public void onClick(ClickEvent event) {
-					Property p = new Property();
-					p.setId(Integer.parseInt(addElement.getTitle()));
-					p.setDescription(addElement.getSelectedItemText());
-		
+					Property p = new Property();					
+					
+					p.setId(addElement.getSelectedIndex()+2);
+					
 					Label label = new Label(addElement.getSelectedItemText());
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
@@ -565,10 +559,13 @@ public class ContactForm extends VerticalPanel {
 
 				@Override
 				public void onSuccess(Vector<Property> result) {
-					 addElement.clear();					 
+					 addElement.clear();
+				
 					 for(Property p : result) {
 						 if(p.getId()!=1) { 
+						 log("###########################ListBox Element: "+p.getId());
 						 addElement.addItem(p.getDescription());
+//						 addElement.setValue(i, p.getId()+"");
 						 addElement.setTitle(p.getId()+"");
 						 }
 					 }					
@@ -679,7 +676,7 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onSuccess(Participation result) {
 				log("Neue Teilhaberschaft: " + result);	
-				//TODO: 
+			    //Update tvm
 			}				
 		}
 				

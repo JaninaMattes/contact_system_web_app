@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.hdm.kontaktsystem.shared.report;
 
 import java.util.Vector;
@@ -12,7 +9,7 @@ import java.util.Vector;
  * Prozessierungsmethode mit <code>getReportText()</code> ausgelesen werden.
  * 
  * @see de.hdm.thies.bankProjekt.shared.report.PlainTextReportWriter
- * @author Sandra
+ * @author Sandra Prestel
  *
  */
 public class PlainTextReportWriter extends ReportWriter {
@@ -66,9 +63,7 @@ public class PlainTextReportWriter extends ReportWriter {
 		 */
 		StringBuffer result = new StringBuffer();
 		
-		/*
-		 * Schrittweises Auslesen der Report-Bestandteile und Übersetzung in Text-Form
-		 */
+		/* Schrittweises Auslesen der Report-Bestandteile und Übersetzung in Text-Form */
 		//Titel
 		result.append("*** " + report.getTitle() + " ***\n\n");		
 		//User-Daten

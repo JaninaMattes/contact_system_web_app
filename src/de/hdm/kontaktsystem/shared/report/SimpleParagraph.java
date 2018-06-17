@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.hdm.kontaktsystem.shared.report;
 
 import java.io.Serializable;
@@ -13,7 +10,7 @@ import java.io.Serializable;
  * 
  * @see Paragraph
  * @see de.hdm.thies.bankProjekt.shared.report.SimpleParagraph
- * @author Sandra
+ * @author Sandra Prestel
  *
  */
 public class SimpleParagraph extends Paragraph implements Serializable {

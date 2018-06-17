@@ -93,7 +93,41 @@ public class ContactListMapper {
 		return null;
 	}
 
-	
+	/**
+	 * Methode um alle geteileten oder nicht geteilten Kontaktlisten zu finden.
+	 * @author Kim-Ly
+	 */
+
+	public Vector<ContactList> findContactListByStatus(double user_id, boolean shared_status) {
+		Vector<ContactList> clResult = new Vector<ContactList>();
+		Connection con = DBConnection.connection();
+
+		try {
+			PreparedStatement stmt = con.prepareStatement(
+					"SELECT * " 
+					+ "FROM  ContactList cl " + "INNER JOIN BusinessObject bo ON bo.bo_ID = cl.ID "
+					+ "WHERE bo.user_ID = ?" + "AND bo.status = ?");
+			stmt.setDouble(1, user_id);
+			stmt.setBoolean(2, shared_status);
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				ContactList cl = new ContactList();
+				User u = new User();
+				u.setGoogleID(rs.getDouble("user_ID"));
+				cl.setOwner(u);
+				cl.setBo_Id(rs.getInt("id"));
+				cl.setShared_status(rs.getBoolean("status"));
+				cl.setCreationDate(rs.getTimestamp("creationDate"));
+				cl.setModifyDate(rs.getTimestamp("modificationDate"));
+				clResult.addElement(cl);
+			}
+			return clResult;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * Eine Kontaktliste über ihre ID finden

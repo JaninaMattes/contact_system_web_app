@@ -20,7 +20,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
  * Löschen von Objekten zur Verfügung gestellt. Es können sowohl Objekte in Datenbank-Strukturen, 
  * als auch Datenbank-Strukturen in Objekte überführt werden.
  * 
- * @author Sandra
+ * @author Sandra Prestel
  *
  */
 

@@ -18,7 +18,7 @@ import java.util.Vector;
  * @see SingleContact
  * @see de.hdm.thies.bankProjekt.shared.report.Report
  * @see de.hdm.thies.bankProjekt.shared.report.CompositeReport
- * @author Sandra
+ * @author Sandra Prestel
  */
 public class Report implements Serializable {
 
