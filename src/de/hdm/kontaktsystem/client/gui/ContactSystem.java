@@ -502,6 +502,7 @@ public class ContactSystem implements EntryPoint {
 					cf.setSelected(c);
 					RootPanel.get("Details").add(cf);
 				}else{
+					
 					ContactList cl = null;
 					clf.setSelected(cl);
 					RootPanel.get("Details").add(clf);

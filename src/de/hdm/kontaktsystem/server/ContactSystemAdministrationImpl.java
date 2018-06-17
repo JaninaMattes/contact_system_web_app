@@ -206,6 +206,15 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return userVector;
 
 	}
+	
+	public Vector<User> getAllUsersForPart() {
+		Vector<User> userVector = uMapper.findAll();
+		for (User user : userVector) {
+			user.setUserContact(this.getOwnContact(user));
+		}
+		return userVector;
+
+	}
 
 	public User editUser(User user) {
 		return uMapper.update(user);
@@ -740,9 +749,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<Participation> getAllParticipationsByBusinessObject(BusinessObject bo) {
 		Vector<Participation> partV = partMapper.findParticipationsByBusinessObject(bo);
+		if (!partV.isEmpty()) {
 		for (Participation part : partV) {
 			part.setParticipant(this.getUserByID(part.getParticipantID()));
 			part.setReference(this.findBusinessObjectByID(part.getReferenceID()));
+			}
 		}
 		return partV;
 	}

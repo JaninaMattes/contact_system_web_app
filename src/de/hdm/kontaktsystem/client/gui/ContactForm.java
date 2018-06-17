@@ -381,7 +381,7 @@ public class ContactForm extends VerticalPanel {
 						}
 
 						@Override
-						public void onSuccess(User userResult) {
+						public void onSuccess(final User userResult) {
 							log("User abgerufen:"+userResult);
 							contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new AsyncCallback<Vector<Participation>>(){
 
@@ -426,7 +426,7 @@ public class ContactForm extends VerticalPanel {
 
 		}
 		
-		public void setSelected(Contact contact) {
+		public void setSelected(final Contact contact) {
 						
 			addElement.clear();
 			sharedWithUser.clear();

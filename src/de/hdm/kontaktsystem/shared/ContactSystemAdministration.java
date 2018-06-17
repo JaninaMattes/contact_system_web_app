@@ -19,7 +19,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
 @RemoteServiceRelativePath("editor")
 public interface ContactSystemAdministration extends RemoteService {
 	
-	
+	public Vector<User> getAllUsersForPart();
 	
 	public User login(String requestUri);
 	
