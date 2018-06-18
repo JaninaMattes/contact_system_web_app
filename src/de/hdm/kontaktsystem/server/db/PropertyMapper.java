@@ -177,7 +177,7 @@ public class PropertyMapper {
               PreparedStatement stmt = con.prepareStatement( 
             		  "SELECT Property.ID, Property.description "
             		+ "FROM Property "
-            		+ "WHERE Property.ID = ?"
+            		+ "WHERE Property.ID = ? "
             		+ "ORDER BY Property.ID");  // ORDER BY um die PropID zu sortieren.
               
               stmt.setInt(1, property_id);
@@ -221,7 +221,7 @@ public class PropertyMapper {
              // Statement ausfuellen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
             		 			"SELECT* FROM Property "
-                              + "WHERE Property.description = ?"
+                              + "WHERE Property.description = ? "
                               + "ORDER BY Property.ID" );  // ORDER BY um nach PropID zu sortieren.
              
              stmt.setString(1, description);
