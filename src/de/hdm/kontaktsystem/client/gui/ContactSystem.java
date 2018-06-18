@@ -18,8 +18,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -121,6 +123,9 @@ public class ContactSystem implements EntryPoint {
 	
 	// Add Button/Panel
 	private FocusPanel addPanel = new FocusPanel();
+	
+	// Lade Animation
+	private PopupPanel loadPanel = new PopupPanel();
 
 	//Header
 	private HorizontalPanel header = new HorizontalPanel();				
@@ -139,6 +144,7 @@ public class ContactSystem implements EntryPoint {
 	
 	//Add
 	private boolean addContact = true;
+	
 	
 	/**
 	 * EntryPoint
@@ -197,10 +203,12 @@ public class ContactSystem implements EntryPoint {
 					log("Set User: "+ result);
 					uf.setMyUser(result);
 					cf.setMyUser(result);
+					cf.setLoad(loadPanel);
 					clf.setMyUser(result);
+					clf.setLoad(loadPanel);
 					loadTree(); // für Test
 					loadContactSystem(); // für Test
-				
+					loadPanel.setVisible(false);
 			}
 		});	
 		
@@ -328,6 +336,11 @@ public class ContactSystem implements EntryPoint {
 		 */
 		addPanel.getElement().setId("add");
 		
+		/*
+		 * CSS für Load Panel
+		 */
+		loadPanel.getElement().setId("load");
+		
 		/**
 		 * CSS Identifier für die Elemente
 		 */		
@@ -363,16 +376,19 @@ public class ContactSystem implements EntryPoint {
 				
 			addContact = true;
 			addPanel.setVisible(true);
+			loadPanel.setVisible(true);
 			contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						log("Keine Kontakte gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<Contact> result) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						log("Es wurden " + result.size() + " Kontakte gefunden");
 						Vector<BusinessObject> bov = new Vector<BusinessObject>();
 						for(Contact cl : result){
@@ -395,16 +411,19 @@ public class ContactSystem implements EntryPoint {
 			//	contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
 				addContact = false;
 				addPanel.setVisible(true);
+				loadPanel.setVisible(true);
 				contactSystemAdmin.getMyContactListsPrev(new AsyncCallback<Vector<ContactList>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						log("Keine Listen gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<ContactList> result) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						log("Es wurden " + result.size() + " Listen gefunden");
 						Vector<BusinessObject> bov = new Vector<BusinessObject>();
 						for(ContactList cl : result){
@@ -426,17 +445,20 @@ public class ContactSystem implements EntryPoint {
 		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				addPanel.setVisible(false);
+				loadPanel.setVisible(true);
 				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						log("Keine Listen gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<BusinessObject> result) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						log("Es wurden " + result.size() + " SharedObjects gefunden");
 						
 						
@@ -455,17 +477,20 @@ public class ContactSystem implements EntryPoint {
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				addPanel.setVisible(false);
+				loadPanel.setVisible(true);
 				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						log("Keine Listen gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<BusinessObject> result) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						log("Es wurden " + result.size() + " SharedObjects gefunden");
 						
 						
@@ -514,6 +539,11 @@ public class ContactSystem implements EntryPoint {
 		add.setPixelSize(50, 50);
 		addPanel.add(add);
 		
+		Image load = new Image("/images/load.gif");
+		load.setStyleName("load_Animation");
+		add.setPixelSize(50, 50);
+		loadPanel.add(load);
+		
 		//Header
 		headerPanel.add(logo);
 		headerPanel.add(headerText);
@@ -529,7 +559,8 @@ public class ContactSystem implements EntryPoint {
 	  	navigation.add(receivedParticipationsButton); 
 	  	navigation.add(accountButton);
 
-		
+
+	  	RootPanel.get().add(loadPanel);
 	  	RootPanel.get("Header").add(headerPanel);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Trailer").add(trailer);
@@ -546,20 +577,24 @@ public class ContactSystem implements EntryPoint {
 		
 		@Override
 		public void onClick(ClickEvent event) {
+			
 			if (search.getText().equals("")) {
 				Window.alert("Das Suchfeld ist leer!");
 			} else {
+				loadPanel.setVisible(true);
 			 String s = search.getText();
 			 log("Suche: "+ s);
 			 // Suche der Kontakte
 			 contactSystemAdmin.search(s, new AsyncCallback<Vector<BusinessObject>>(){
 				 @Override
 					public void onFailure(Throwable caught) {
+					 	loadPanel.setVisible(false);
 						Window.alert("Die Suche ist fehlgeschlagen!");
 					}
 
 					@Override
 					public void onSuccess(Vector<BusinessObject> result) {
+						loadPanel.setVisible(false);
 						if (result != null) {
 							
 							tvm.updateData(result);

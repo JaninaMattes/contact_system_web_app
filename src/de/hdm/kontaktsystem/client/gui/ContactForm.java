@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -30,6 +31,9 @@ public class ContactForm extends VerticalPanel {
 	
 		//Referenzattribute
 		User myUser = null;
+		
+		// Lade overlay
+		PopupPanel loadPanel;
 		
 		Contact contactToDisplay = null;
 		CellTreeViewModel tvm = null;
@@ -151,6 +155,7 @@ public class ContactForm extends VerticalPanel {
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					loadPanel.setVisible(true);
 					if(user.getUserContact().getName().getValue() == email.getText()){
 						Participation part = new Participation();
 						Contact c = contactToDisplay;
@@ -182,6 +187,7 @@ public class ContactForm extends VerticalPanel {
 				Vector <PropertyValue> result = new Vector <PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {
+					loadPanel.setVisible(true);
 					// TODO Auto-generated method stub				
 					if(Window.confirm("Bitte bestätigen Sie dass der Kontakt gelöscht werden soll.")) {				
 					contactSystemAdmin.deleteContact(contactToDisplay, new AsyncCallback<Contact>() {
@@ -189,14 +195,17 @@ public class ContactForm extends VerticalPanel {
 						@Override
 						public void onFailure(Throwable caught) {
 							// TODO Auto-generated method stub
+							loadPanel.setVisible(false);
 							Window.alert("Der Kontakt konnte nicht gelöscht werden.");
 						}
 
 						@Override
 						public void onSuccess(Contact result) {
+						loadPanel.setVisible(false);
 						contactToDisplay= null;
 //						tvm.removeBusinessObject(result);
 						RootPanel.get("Details").clear();
+						loadPanel.setVisible(false);
 						}						
 					});
 					}					
@@ -211,7 +220,7 @@ public class ContactForm extends VerticalPanel {
 				
 				@Override
 				public void onClick(ClickEvent event) {
-					
+					loadPanel.setVisible(true);
 					if(contactToDisplay!=null) {
 						log("Der Kontakt besteht bereits. "+tbv.size());
 						for(TextBox tb: tbv) {
@@ -269,6 +278,7 @@ public class ContactForm extends VerticalPanel {
 
 				@Override
 				public void onClick(ClickEvent event) {
+					loadPanel.setVisible(true);
 					for(TextBox tb: tbv) {
 						 if(tb.getText().isEmpty()&tb.getTitle().equals("Neu:1")) { //1.0 verhindern dass Kontakt Name leer
 								Window.alert("Das Feld Name darf nicht leer sein.");
@@ -307,6 +317,7 @@ public class ContactForm extends VerticalPanel {
 					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
 						@Override
 						public void onFailure(Throwable caught) {
+							loadPanel.setVisible(false);
 							log("User nicht gefunden");
 							emailButton.setStyleName("check_notFound");
 							emailButton.setText("X");
@@ -316,6 +327,7 @@ public class ContactForm extends VerticalPanel {
 						@Override
 						public void onSuccess(User result) {
 							log("User"+result);
+							loadPanel.setVisible(false);
 							emailButton.setStyleName("check_Found");
 							emailButton.setText("OK");
 							user.setGoogleID(result.getGoogleID());
@@ -351,6 +363,7 @@ public class ContactForm extends VerticalPanel {
 				
 				@Override 
 				public void onClick(ClickEvent event) {
+					
 					Property p = new Property();					
 					
 					p.setId(addElement.getSelectedIndex()+2);
@@ -378,6 +391,7 @@ public class ContactForm extends VerticalPanel {
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					loadPanel.setVisible(true);
 					for(CheckBox cb: cbv) {
 						cb.setValue(false, false);
 					}
@@ -388,6 +402,7 @@ public class ContactForm extends VerticalPanel {
 
 						@Override
 						public void onFailure(Throwable caught) {
+							loadPanel.setVisible(false);
 							log("Nutzer Abruf fehlgeschlagen"+caught);
 						}
 
@@ -399,11 +414,13 @@ public class ContactForm extends VerticalPanel {
 						
 								@Override
 								public void onFailure(Throwable caught) {
+									loadPanel.setVisible(false);
 									log("Teilhaberschaft Abruf fehlgeschlagen"+caught);									
 								}
 
 								@Override
 								public void onSuccess(Vector<PropertyValue> result) {
+									loadPanel.setVisible(false);
 									for(PropertyValue pv: result) {	
 												for(CheckBox cb: cbv) {
 														if(Integer.parseInt(cb.getTitle())==pv.getBoId()){	
@@ -447,12 +464,13 @@ public class ContactForm extends VerticalPanel {
 				
 					@Override
 					public void onFailure(Throwable caught) {
+						loadPanel.setVisible(false);
 						log("Kontakt Callback fehlgeschlagen");
 					}
 
 					@Override
 					public void onSuccess(Contact result) {
-						
+						loadPanel.setVisible(false);
 						log("############ Callback Kontakt Pvs: "+ result.getPropertyValues());
 						contactToDisplay= result;	
 						
@@ -504,11 +522,13 @@ public class ContactForm extends VerticalPanel {
 								@Override
 								public void onFailure(Throwable caught) {
 									// TODO Auto-generated method stub
+									loadPanel.setVisible(false);
 									Window.alert("Teilhaberschaften konnten nicht abgerufen werden.");
 								}
 
 								@Override
 								public void onSuccess(Vector<Participation> result) {
+									loadPanel.setVisible(false);
 									int i = 0;
 									for(Participation part: result) {
 										if(part.getParticipant().getGoogleID()==myUser.getGoogleID()) {
@@ -539,13 +559,14 @@ public class ContactForm extends VerticalPanel {
 				@Override
 				public void onFailure(Throwable caught) {
 					// TODO Auto-generated method stub	
+					loadPanel.setVisible(false);
 					log("Properties nicht abgerufen");
 				}
 
 				@Override
 				public void onSuccess(Vector<Property> result) {
 					 addElement.clear();
-				
+					 loadPanel.setVisible(false);
 					 for(Property p : result) {
 						 if(p.getId()!=1) { 
 						 log("###########################ListBox Element: "+p.getId());
@@ -585,11 +606,13 @@ public class ContactForm extends VerticalPanel {
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
+						loadPanel.setVisible(false);
 						Window.alert("Eigenschaften konnten nicht abgerufen");						
 					}
 
 					@Override
-					public void onSuccess(Vector<Property> result) {			
+					public void onSuccess(Vector<Property> result) {	
+						loadPanel.setVisible(false);
 						log("Kontakt Properties: " + result);
 						
 						int row = 0;
@@ -632,11 +655,13 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
+				loadPanel.setVisible(false);
 				Window.alert("Speichern ist fehlgeschlagen.");
 			}
 
 			@Override
 			public void onSuccess(Contact result) {
+				loadPanel.setVisible(false);
 				log("####### Der Kontakt wurde gespeichert: "+result);
 				RootPanel.get("Details").clear();
 				setSelected(result);
@@ -654,11 +679,13 @@ public class ContactForm extends VerticalPanel {
 
 			@Override
 			public void onFailure(Throwable caught) {
+				loadPanel.setVisible(false);
 				Window.alert("Kontakt konnte nicht geteilt werden. :(");						
 			}
 
 			@Override
 			public void onSuccess(Participation result) {
+				loadPanel.setVisible(false);
 				log("Neue Teilhaberschaft: " + result);	
 //				tvm.updateBusinessObject(result.getReferencedObject());
 				Window.alert("Der Kontakt wurde geteilt." + "\n" + result.getReferencedObject().getBoId());
@@ -673,6 +700,14 @@ public class ContactForm extends VerticalPanel {
 		void setTree(CellTreeViewModel tvm) {
 			this.tvm = tvm;
 		}
+		
+		/*
+		 * LoadPanel setter
+		 */
+		void setLoad(PopupPanel load) {
+			this.loadPanel = load;
+		}
+		
 		/*
 		 * Eigenen User setzen
 		 */

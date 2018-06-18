@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -34,6 +35,9 @@ public class ContactListForm extends VerticalPanel {
 	CellTreeViewModel tvm = null;
 	User myUser = null;
 
+	// Lade overlay
+	PopupPanel loadPanel;
+	
 	/**
 	 * Widgets mit variablen Inhalten.
 	 */
@@ -869,6 +873,12 @@ public class ContactListForm extends VerticalPanel {
 			}
 	}
 
+	/*
+	 * LoadPanel setter
+	 */
+	void setLoad(PopupPanel load) {
+		this.loadPanel = load;
+	}
 	
 	void setMyUser(User user) {
 
