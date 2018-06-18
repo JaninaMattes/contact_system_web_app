@@ -504,7 +504,7 @@ public class ContactListForm extends VerticalPanel {
 			@Override
 			public void onSuccess(Vector<Participation> partVec) {
 				
-				contactListToDisplay.getBoId();
+				log(contactListToDisplay.getBoId()+" = ID");
 				
 				contactSystemAdmin.getAllParticipationsByBusinessObject(contactListToDisplay, new AsyncCallback<Vector<Participation>>() {
 
@@ -547,91 +547,86 @@ public class ContactListForm extends VerticalPanel {
 
 	void setSelected(ContactList cl) {
 		
-		int cl_boID = cl.getBoId();
-		
-		/*
-		 * Callback für Kontakte der Kontaktliste, da TreeView nur bo_ID & Kontaktlistenname weitergibt 
-		 */
-		contactSystemAdmin.getContactListById(cl_boID, new AsyncCallback<ContactList>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				log("");
-				
-			}
-
-			@Override
-			public void onSuccess(ContactList list) {
-				contactListToDisplay = list;
-				int count = 0;
-				for (Contact con : list.getContacts()) {
-
-						contactNames.addItem(con.getName().getValue());
-						++count;
-				}
-				
-				contactNames.setVisibleItemCount(count);
-			}
-			
-		});
 		
 		// Listen leeren
 		contactNames.clear();
 		contactsToAdd.clear();
 		
 		if (cl != null) {
+			update = true;
+			/*
+			 * Callback für Kontakte der Kontaktliste, da TreeView nur bo_ID & Kontaktlistenname weitergibt 
+			 */
+			contactSystemAdmin.getContactListById(cl.getBoId(), new AsyncCallback<ContactList>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					log("");
+					
+				}
+
+				@Override
+				public void onSuccess(ContactList list) {
+					contactListToDisplay = list;
+					int count = 0;
+					for (Contact con : list.getContacts()) {
+
+							contactNames.addItem(con.getName().getValue());
+							++count;
+					}
+					contactNames.setVisibleItemCount(count);
+					
+					/*
+					 *  Status der Kontaktliste anzeigen
+					 */
+					contactSystemAdmin.getAllParticipationsByParticipant(myUser, new ContactListStatusCallback());
+		   			
+		   			/*
+		   			 *  Alle User mit denen Kontaktliste geteilt werden kann
+		   			 */
+		   			contactSystemAdmin.getAllUsers(new UserToShareCallback());
+		   			
+		   			
+					/* Alle User mit denen Kontaktliste geteilt wurde 
+					 * -> Nur Callback abrufen wenn User Besitzer der Kontaktliste, sonst Listbox + Label unsichtbar
+					 */ 			
+					if (contactListToDisplay.getOwner() == myUser) {
+						contactSystemAdmin.getAllParticipationsByBusinessObject(contactListToDisplay, new UserSharedWithCallback());
+					} else {
+						labelSharedWith.setVisible(false);
+						listBoxSharedWith.setVisible(false);
+					}
+
+					/* 
+					 * Eigentümer der Kontaktliste anzeigen
+					 */
+					if (contactListToDisplay != null) {			
+						clOwner.setText(contactListToDisplay.getOwner().getGMail());
+						contactSystemAdmin.getAllContactListsFromUser(new UserOwnerClCallback());
+					}
+					
+		   			
+		   			/*
+		   			 *  Alle Kontakte die User angelegt hat oder die ihm geteilt wurden 
+		   			 */
+					
+		   			contactSystemAdmin.getAllContactsFromUser(new ContactsToAddConCallback());
+		   			
+					deleteClButton.setEnabled(true);
+					deleteConButton.setEnabled(true);
+					nameContactList.setText(contactListToDisplay.getName());
+				}
+				
+			});
 //			int count = 0;
 //			User u = new User();
 //			u.setGoogleID(170);
-			update = true;
+			
 			
 			/* User setzen, sodass Programm Ownership zuordnen kann 
 			 * Sobald App Engine -> entfernen
 			*/
 //			setMyUser(u);
-			
-			/*
-			 *  Status der Kontaktliste anzeigen
-			 */
-			contactSystemAdmin.getAllParticipationsByParticipant(myUser, new ContactListStatusCallback());
-   			
-   			/*
-   			 *  Alle User mit denen Kontaktliste geteilt werden kann
-   			 */
-   			contactSystemAdmin.getAllUsers(new UserToShareCallback());
-   			
-   			
-			/* Alle User mit denen Kontaktliste geteilt wurde 
-			 * -> Nur Callback abrufen wenn User Besitzer der Kontaktliste, sonst Listbox + Label unsichtbar
-			 */ 			
-			if (contactListToDisplay.getOwner() == myUser) {
-				contactSystemAdmin.getAllParticipationsByBusinessObject(cl, new UserSharedWithCallback());
-			} else {
-				labelSharedWith.setVisible(false);
-				listBoxSharedWith.setVisible(false);
-			}
-
-			/* 
-			 * Eigentümer der Kontaktliste anzeigen
-			 */
-			if (contactListToDisplay != null) {			
-				clOwner.setText(contactListToDisplay.getOwner().getGMail());
-				contactSystemAdmin.getAllContactListsFromUser(new UserOwnerClCallback());
-			}
-			
-   			
-   			/*
-   			 *  Alle Kontakte die User angelegt hat oder die ihm geteilt wurden 
-   			 */
-			
-   			contactSystemAdmin.getAllContactsFromUser(new ContactsToAddConCallback());
-   			
-			contactListToDisplay = cl;
-			deleteClButton.setEnabled(true);
-			deleteConButton.setEnabled(true);
-			nameContactList.setText(cl.getName());
-			
-			
 
 		} else {
 			update = false;

@@ -464,13 +464,11 @@ public class ContactForm extends VerticalPanel {
 				
 					@Override
 					public void onFailure(Throwable caught) {
-						loadPanel.setVisible(false);
 						log("Kontakt Callback fehlgeschlagen");
 					}
 
 					@Override
 					public void onSuccess(Contact result) {
-						loadPanel.setVisible(false);
 						log("############ Callback Kontakt Pvs: "+ result.getPropertyValues());
 						contactToDisplay= result;	
 						
@@ -559,14 +557,12 @@ public class ContactForm extends VerticalPanel {
 				@Override
 				public void onFailure(Throwable caught) {
 					// TODO Auto-generated method stub	
-					loadPanel.setVisible(false);
 					log("Properties nicht abgerufen");
 				}
 
 				@Override
 				public void onSuccess(Vector<Property> result) {
 					 addElement.clear();
-					 loadPanel.setVisible(false);
 					 for(Property p : result) {
 						 if(p.getId()!=1) { 
 						 log("###########################ListBox Element: "+p.getId());
