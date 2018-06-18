@@ -27,7 +27,7 @@ public class PropertyValueMapper {
 	}
 
 	/**
-	 * Gibt nach dem Singelton Pattern eine Instanz des PropertyValueMppers zurück
+	 * Gibt nach dem Singelton Pattern eine Instanz des PropertyValueMppers zurueck
 	 * @return PropertyValueMapper-Objekt
 	 */
 	public static PropertyValueMapper propertyValueMapper() {
@@ -50,12 +50,6 @@ public class PropertyValueMapper {
 
 		Connection con = DBConnection.connection();
 
-		/*
-		Property prop = new Property();
-		Contact contact = new Contact();
-		pv.setContact(contact);
-		pv.setProp(prop);
-		*/
 
 		try {
 			PreparedStatement stmt = con.prepareStatement(
@@ -94,17 +88,17 @@ public class PropertyValueMapper {
 							+ "FROM PropertyValue " 
 							+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID " 
 							+ "WHERE PropertyValue.ID = ? "
-							);			
+							+ "ORDER BY Property.ID");	// ORDER BY um es nach den ProbValue zu sortieren.		
 			stmt.setInt(1, propvalue_id);
 			stmt.execute();
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				// Erzeugen eines Property-Objektes und befüllen
+				// Erzeugen eines Property-Objektes und befuellen
 				Property p = new Property();
 				p.setId(rs.getInt("ID"));
 				p.setDescription(rs.getString("description"));
-				// Befülen eines PropertyValue-Objektes und setzen der Property-Objektes
+				// Befuellen eines PropertyValue-Objektes und setzen der Property-Objektes
 				pv.setBo_Id(rs.getInt("ID"));
 				pv.setValue(rs.getString("value"));
 				pv.setProperty(p);
@@ -139,8 +133,7 @@ public class PropertyValueMapper {
 					+ "FROM PropertyValue INNER JOIN Property "
 					+ "ON PropertyValue.property_ID = Property.ID "
 					+ "WHERE PropertyValue.property_ID = Property.ID " 
-					+ "ORDER BY property_ID"
-						);
+					+ "ORDER BY Property.ID");  // ORDER BY um nach dem PropVal zu sortieren. 
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
 
@@ -151,7 +144,7 @@ public class PropertyValueMapper {
 				propValue.setValue(rs.getString("value"));
 				prop.setDescription(rs.getString("description"));
 				propValue.setProperty(prop);
-				// Hinzufügen des neuen Objekts zum Ergebnisvektor
+				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				propValueResult.addElement(propValue);
 				
 			}
@@ -170,7 +163,7 @@ public class PropertyValueMapper {
 
 	/** TODO: 
 	 * UserMapper, ContactMapper, alle erzeugten PVs ausgeben
-	 * Benötigt???
+	 * Benoetigt???
 	 */
 
 	 public Vector <PropertyValue> findAllCreated(User u) {	
@@ -186,8 +179,8 @@ public class PropertyValueMapper {
 						+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
 						+ "INNER JOIN BusinessObject ON BusinessObject.bo_ID = PropertyValue.ID "
 						+ "WHERE BusinessObject.user_ID = ? " 
-						+ "ORDER BY property_ID"
-							);
+						+ "ORDER BY Property.ID");
+				
 						stmt.setDouble(1, u.getGoogleID());
 						stmt.execute();
 						ResultSet rs = stmt.executeQuery();
@@ -199,7 +192,7 @@ public class PropertyValueMapper {
 					propValue.setValue(rs.getString("value"));
 					prop.setDescription(rs.getString("description"));
 					propValue.setProperty(prop);
-					// Hinzufügen des neuen Objekts zum Ergebnisvektor
+					// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 					propValueResult.addElement(propValue);
 					
 				}
@@ -214,7 +207,7 @@ public class PropertyValueMapper {
 	 }
 
 	 /**
-	  * Gibt alle PropertValues zurück die zu einem Contact-Objekt gehören
+	  * Gibt alle PropertValues zurueck die zu einem Contact-Objekt gehoeren
 	  * @param Contact-Objekt
 	  * @return Vector<PropertyValue>
 	  */
@@ -238,13 +231,13 @@ public class PropertyValueMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			// Statement ausfüllen und als Query an die DB schicken
+			// Statement ausfuellen und als Query an die DB schicken
 			PreparedStatement stmt = con.prepareStatement
 					( "SELECT pv.*, c.* "
 					+ "FROM PropertyValue pv "
 					+ "INNER JOIN Contact c ON pv.contact_ID = c.ID "
-					+ "WHERE pv.contact_ID = ? " 
-					);
+					+ "WHERE pv.contact_ID = ? "
+					+ "ORDER BY pv.property_ID" );    // ORDER BY property_ID
 					stmt.setInt(1, contactID);
 					ResultSet rs = stmt.executeQuery();
 					
@@ -271,7 +264,7 @@ public class PropertyValueMapper {
 
 	
 	/**
-	  * Gibt alle PropertValues zurück die von einer Property sind
+	  * Gibt alle PropertValues zurueck die von einer Property sind
 	  * 
 	  * @param Property-Objekt
 	  * @return Vector<PropertyValue>
@@ -299,14 +292,14 @@ public class PropertyValueMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			// Statement ausfüllen und als Query an die DB schicken
+			// Statement ausfuellen und als Query an die DB schicken
 			PreparedStatement stmt = con.prepareStatement
 					( "SELECT * "
 					+ "FROM PropertyValue pv "
 					+ "INNER JOIN Contact c ON pv.contact_ID = c.ID "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = pv.ID "
-					+ "WHERE pv.value LIKE  ? " 
-					);
+					+ "WHERE pv.value LIKE  ? "
+					+ "ORDER BY pv.property_ID" );  // ORDER BY um nach der PropVal zu sortieren.
 					stmt.setString(1, "%" + value + "%");
 					ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -350,7 +343,7 @@ public class PropertyValueMapper {
 					+ "FROM PropertyValue "
 					+ "INNER JOIN Property ON PropertyValue.property_ID = Property.ID "
 					+ "WHERE PropertyValue.property_ID = ? "
-					);
+					+ "ORDER BY property_ID");	// ORDER BY um nach der PropVal zu sortieren.
 					stmt.setInt(1, propertyID);
 					stmt.execute();
 					ResultSet rs = stmt.executeQuery();
@@ -432,7 +425,7 @@ public class PropertyValueMapper {
 		int i = 0;
 
 		try {
-			// Einfügeoperation in propertyvalue erfolgt
+			// Einfuegeoperation in propertyvalue erfolgt
 			PreparedStatement stmt = con.prepareStatement
 			("DELETE FROM PropertyValue WHERE id= ?"
 			);
@@ -449,7 +442,7 @@ public class PropertyValueMapper {
 	
 
 	/**
-	 * Anhand der zugehörigen Eigenschaft wird eine Auspraegung gelöscht
+	 * Anhand der zugehoerigen Eigenschaft wird eine Auspraegung geloescht
 	 * 
 	 * @parm Property-Objekt
 	 */
@@ -461,8 +454,8 @@ public class PropertyValueMapper {
 	}
 
 	/**
-	 * Anhand der übergebenen ID einer Eigenschaft wird die Zugehörigkeit zur
-	 * Ausprägung gesucht und alle Ausprägungen mitsamt ihrer Eigenschaften gelöscht
+	 * Anhand der Uebergebenen ID einer Eigenschaft wird die Zugehoerigkeit zur
+	 * Ausprägung gesucht und alle Auspraegungen mitsamt ihrer Eigenschaften geloescht
 	 * 
 	 * @parm Property ID
 	 */
@@ -481,7 +474,7 @@ public class PropertyValueMapper {
 
 	/*************************************************************************************
 	 * Methode zum Leeren der PropertyValue Tabelle
-	 * WICHTIG: In App Logik nicht anwendbar, da Namensausprägung für Contact ggf. leer
+	 * WICHTIG: In App Logik nicht anwendbar, da Namensauspraegung fuer Contact ggf. leer
 	 *************************************************************************************/
 	
 	public void deleteAll() {
