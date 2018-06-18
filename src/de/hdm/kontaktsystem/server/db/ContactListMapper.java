@@ -107,7 +107,7 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT * " 
 					+ "FROM  ContactList cl " + "INNER JOIN BusinessObject bo ON bo.bo_ID = cl.ID "
-					+ "WHERE bo.user_ID = ?" + "AND bo.status = ?"
+					+ "WHERE bo.user_ID = ?" + "AND bo.status = ? "
 							+ "ORDER BY contactList_name");
 			stmt.setDouble(1, user_id);
 			stmt.setBoolean(2, shared_status);
@@ -148,7 +148,7 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT * FROM ContactList "
 					+ "LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  "
-					+ "WHERE id = ?"
+					+ "WHERE id = ? "
 					+ "ORDER BY contactList_name"); // ORDER BY um die gefundene(n) Kontaktlisten nach namen sortieren.
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
@@ -191,7 +191,7 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE user_ID = ?"
+					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE user_ID = ? "
 					+ "ORDER BY contactList_name"); // ORDER BY um die Kontaktlisten nach Namen zu sortieren.
 			stmt.setDouble(1, userID);
 			ResultSet rs = stmt.executeQuery();
@@ -224,7 +224,7 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID WHERE contactList_name = ?"
+					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID WHERE contactList_name = ? "
 					+ "ORDER BY contactList_name"); // ORDER BY um die Kontaktlisten nach Namen zu sortieren.
 			stmt.setString(1, name);
 			ResultSet rs = stmt.executeQuery();
