@@ -335,7 +335,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (Contact contact : cv) {
 			contact.setName(this.getNameOfContact(contact));
 		}
-		cv.addAll(this.getAllCSharedByOthersToMePrev());
+		//cv.addAll(this.getAllCSharedByOthersToMePrev());
 		return cv;
 	}
 
@@ -501,7 +501,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		Vector<ContactList> contactListVector = clMapper.findContactListByUserId(this.getCurrentUser());
 		// Alle geteilten Listen
-		contactListVector.addAll(this.getAllCLSharedByOthersToMePrev());
+		//contactListVector.addAll(this.getAllCLSharedByOthersToMePrev());
 		return contactListVector;
 	}
 

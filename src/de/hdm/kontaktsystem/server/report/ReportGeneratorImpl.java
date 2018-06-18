@@ -107,7 +107,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 */
 	protected void addSingleContact(Contact contact, Report report) {
 		SingleContact contactElement = new SingleContact();
-		Vector<PropertyValue> allPropertyValues = contact.getPropertyValues(); //TODO: Test
+		Vector<PropertyValue> allPropertyValues = contact.getPropertyValues();
 		
 		/* Tabelle mit Eigenschaften und Ausprägungen erstellen */
 		for(PropertyValue singleProperty : allPropertyValues) {
@@ -122,9 +122,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		/* Name des Eigentümers zur Liste der Eigenschaften hinzufügen */
 		Row ownerRow = new Row();
 		Column ownerProperty = new Column("Eigentümer");
-		//TODO: Test
-//		Double ownerID = contact.getOwner().getGoogleID();
-//		Column ownerPropertyValue = new Column(administration.getUserByID(ownerID).getUserContact().getName().getValue());
 		String ownerName = contact.getOwner().getUserContact().getName().getValue();
 		Column ownerPropertyValue = new Column(ownerName);
 		
@@ -150,10 +147,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		if(contact.isShared_status()) {
 			Vector<Participation> participations = administration.getAllParticipationsByBusinessObject(contact);
 			for(Participation singleParticipation : participations) {
-				//TODO: Test
 				String participantName = singleParticipation.getParticipant().getUserContact().getName().getValue();
-//				Double participantID = singleParticipation.getParticipant().getGoogleID();
-//				String name = administration.getUserByID(participantID).getUserContact().getName().getValue();
 				SimpleParagraph singleParticipant = new SimpleParagraph(participantName);
 				contactElement.addElementToParticipantList(singleParticipant);
 			}
@@ -246,7 +240,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Datum der Erstellung
 		report.setCreated(new Date());
 		
-		Vector<Participation> allParticipations = null;		
+		Vector<Participation> allParticipations = new Vector<Participation>();		
 		/*
 		 * Falls der gesuchte Teilhaber der aktuelle User ist, werden alle Teilhaberschaften
 		 * ermittelt, in denen er Teilhaber ist und mit dem nächsten Schritt weiter gemacht.
