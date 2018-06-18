@@ -242,12 +242,13 @@ public class ContactForm extends VerticalPanel {
 											}
 									   }									
 								 }
+
 							 }
 												
 							}
 						contactToDisplay.setPropertyValues(editResult);
 						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
-						
+
 					}else{
 						log("Kontakt ist neu");
 						for(TextBox tb: tbv) {
@@ -368,8 +369,9 @@ public class ContactForm extends VerticalPanel {
 						}
 
 						@Override
-						public void onSuccess(User userResult) {
-							log("User abgerufen: "+userResult); //Abrufen der geteilten PVs 
+						public void onSuccess(final User userResult) {
+							log("User abgerufen:"+userResult);
+
 							contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new AsyncCallback<Vector<Participation>>(){
 							//TODO: Applikationslogik -> Anpassung sodass nur PV Objekte zurück kommen
 								@Override
