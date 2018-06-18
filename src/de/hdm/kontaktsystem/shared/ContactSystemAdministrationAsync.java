@@ -64,11 +64,10 @@ public interface ContactSystemAdministrationAsync {
 																														//     Methode getParticipation(BusinessObject, User, AsyncCallback<Participation>)
 																														// (2) Methode um ListBox mit allen Participants (User) eines BOs zu befüllen 
 
-		
-	public void searchPropertyValues(String suchtext, AsyncCallback<Vector<PropertyValue>> callback); //Aufruf in Report, gebraucht: boID, boID der zugehörigen Property
-
 	public void getAllPVFromContactSharedWithUser(Contact c, User u, AsyncCallback<Vector<PropertyValue>> callback);
 	
+	public void searchPropertyValues(String suchtext, AsyncCallback<Vector<PropertyValue>> callback); //Aufruf in Report, gebraucht: boID, boID der zugehörigen Property
+
 	public void getAllProperties(AsyncCallback<Vector<Property>> callback); //Aufruf in Report, gebraucht: Bezeichnung, boID
 	
 	public void getPropertyByID(int id, AsyncCallback<Property> callback); //Aufruf in Report, gebraucht: Bezeichnung, boID
@@ -130,6 +129,8 @@ public interface ContactSystemAdministrationAsync {
 	public void deleteContactList(ContactList cl, AsyncCallback<ContactList> callback);  // Aufruf in Kontaktliste: Löschen von Kontaktlisten
 		
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback); // Aufruf in Kontaktliste: Entfernen von Kontakten aus Kontaktliste
+
+	
 
 	
 }
