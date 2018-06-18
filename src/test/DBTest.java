@@ -35,7 +35,6 @@ public class DBTest {
 	public static void main(String[] args){
 		csa.init();
 		System.out.println("My Contacts: " + csa.getAllContactsFromUser());
-		System.out.println("My Contacts: " + csa.getAllContacts());
 		
 		/**
 		csa.init();

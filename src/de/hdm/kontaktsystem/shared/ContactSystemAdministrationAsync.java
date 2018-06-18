@@ -76,7 +76,7 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void getAllSharedByOthersToMe(AsyncCallback<Vector<BusinessObject>> callback); // TreeView , Nur Hülle
 	
-	public void findAllCSharedByOthersToMe(AsyncCallback<Vector<Contact>> callback); //Aufruf in Report, gebraucht: Kontakt-Objekte (boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
+	public void getAllCSharedByOthersToMe(AsyncCallback<Vector<Contact>> callback); //Aufruf in Report, gebraucht: Kontakt-Objekte (boID, owner: Name und ID, Status, PropertyValues mit Namen sowie Bezeichnung der zugehörigen Property)
 	
 	
 	/**
@@ -85,7 +85,7 @@ public interface ContactSystemAdministrationAsync {
 	 * @param callback
 	 */
 	
-	public void searchContacts(String value, AsyncCallback<Vector<Contact>> callback);
+	public void search(String value, AsyncCallback<Vector<BusinessObject>> callback);
 
 	/**
 	 * Create

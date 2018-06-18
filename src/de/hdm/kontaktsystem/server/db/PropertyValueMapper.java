@@ -57,9 +57,8 @@ public class PropertyValueMapper {
 			stmt.setInt(1, pv.getBoId());
 			stmt.setInt(2, pv.getProperty().getId());
 			stmt.setString(3, pv.getValue());
-			stmt.setInt(4, pv.getContact().getBoId());			
-
-			if(stmt.executeUpdate() > 1) return pv;
+			stmt.setInt(4, pv.getContact().getBoId());	
+			if(stmt.executeUpdate() > 0) return pv;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
