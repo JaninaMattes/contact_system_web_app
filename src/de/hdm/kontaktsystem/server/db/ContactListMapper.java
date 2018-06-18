@@ -148,7 +148,7 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT * FROM ContactList "
 					+ "LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  "
-					+ "WHERE id = ?"
+					+ "WHERE id = ? "
 					+ "ORDER BY contactList_name"); // ORDER BY um die gefundene(n) Kontaktlisten nach namen sortieren.
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
