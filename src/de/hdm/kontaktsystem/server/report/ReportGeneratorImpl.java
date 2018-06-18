@@ -205,7 +205,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		//Abrufen aller Kontakte, deren Eigentümer der aktuelle User ist
 		Vector<Contact> allContacts = administration.getAllContactsFromUser();
 		//Abrufen aller Kontakte, die mit dem aktuellen User geteilt wurden
-		Vector<Contact> allSharedContacts = administration.findAllCSharedByOthersToMe();
+		Vector<Contact> allSharedContacts = administration.getAllCSharedByOthersToMe();
 		
 		//Hinzufügen der einzelnen Kontakt-Elemente
 		allContacts.addAll(allSharedContacts);
