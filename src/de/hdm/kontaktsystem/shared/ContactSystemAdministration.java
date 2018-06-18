@@ -31,6 +31,7 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public User getAccountOwner(); 
 	
+	
 
 	public Vector<Contact> getAllContactsFromUser(); 
 	
@@ -55,6 +56,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public Vector<Contact> searchContacts(String value);
 	
 	public Vector<PropertyValue> searchPropertyValues(String suchtext);
+	
+	public Vector<PropertyValue> getAllPVFromContactSharedWithUser(Contact c, User u);
 	
 	public Vector<Property> getAllProperties();
 	
