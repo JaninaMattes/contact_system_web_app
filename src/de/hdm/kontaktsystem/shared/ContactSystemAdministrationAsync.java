@@ -67,6 +67,8 @@ public interface ContactSystemAdministrationAsync {
 		
 	public void searchPropertyValues(String suchtext, AsyncCallback<Vector<PropertyValue>> callback); //Aufruf in Report, gebraucht: boID, boID der zugehörigen Property
 
+	public void getAllPVFromContactSharedWithUser(Contact c, User u, AsyncCallback<Vector<PropertyValue>> callback);
+	
 	public void getAllProperties(AsyncCallback<Vector<Property>> callback); //Aufruf in Report, gebraucht: Bezeichnung, boID
 	
 	public void getPropertyByID(int id, AsyncCallback<Property> callback); //Aufruf in Report, gebraucht: Bezeichnung, boID
