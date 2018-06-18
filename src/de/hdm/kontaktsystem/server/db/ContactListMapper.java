@@ -224,9 +224,12 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
+
 					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID WHERE contactList_name = ? "
 					+ "ORDER BY contactList_name"); // ORDER BY um die Kontaktlisten nach Namen zu sortieren.
+			
 			stmt.setString(1, name);
+
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				ContactList cl = new ContactList();

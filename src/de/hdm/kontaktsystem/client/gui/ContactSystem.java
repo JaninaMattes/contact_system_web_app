@@ -553,20 +553,17 @@ public class ContactSystem implements EntryPoint {
 			 String s = search.getText();
 			 log("Suche: "+ s);
 			 // Suche der Kontakte
-			 contactSystemAdmin.searchContacts(s, new AsyncCallback<Vector<Contact>>(){
+			 contactSystemAdmin.search(s, new AsyncCallback<Vector<BusinessObject>>(){
 				 @Override
 					public void onFailure(Throwable caught) {
 						Window.alert("Die Suche ist fehlgeschlagen!");
 					}
 
 					@Override
-					public void onSuccess(Vector<Contact> result) {
+					public void onSuccess(Vector<BusinessObject> result) {
 						if (result != null) {
-							Vector<BusinessObject> bov = new Vector<BusinessObject>();
-							for(BusinessObject bo : result) {
-								bov.add(bo);
-							}
-							tvm.updateData(bov);
+							
+							tvm.updateData(result);
 						} else {
 							//Window.alert("Keine Kontakte gefunden :(");
 						}
