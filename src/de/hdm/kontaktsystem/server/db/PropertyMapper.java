@@ -12,9 +12,9 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 /**
  * Die Mapper-Klasse <code>PropertyMapper</code> bildet <code>Property</code>-Objekte
- * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Ändern und
- * Löschen von Objekten zur Verfügung gestellt. Es können sowohl Objekte in Datenbank-Strukturen,
- * als auch Datenbank-Strukturen in Objekte überführt werden.
+ * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Aendern und
+ * Loeschen von Objekten zur Verfuegung gestellt. Es koennen sowohl Objekte in Datenbank-Strukturen,
+ * als auch Datenbank-Strukturen in Objekte Ueberfuehrt werden.
  *
  * @author Janina Mattes
  *
@@ -27,14 +27,14 @@ public class PropertyMapper {
      * Die Klasse <code>PropertyMapper</code> ist ein Singleton (Singleton Design Pattern),
      * d.h. sie wird nur einmal instantiiert. Die statische Variable <code>INSTANCE</code> speichert
      * die einzige Instanz der Klasse. Durch den Bezeichner <code>static</code> ist diese Variable
-     * nur einmal für alle Instanzen der Klasse vorhanden.
+     * nur einmal fuer alle Instanzen der Klasse vorhanden.
      *
      */
    
       private static PropertyMapper propertyMapper = null;
      
       /**
-        * Der Konstruktor ist <code>private</code>, um einen Zugriff von außerhalb der Klasse zu verhindern.
+        * Der Konstruktor ist <code>private</code>, um einen Zugriff von ausserhalb der Klasse zu verhindern.
         */
  
       private PropertyMapper() {
@@ -43,7 +43,7 @@ public class PropertyMapper {
      
       /**
          * Hier findet die Anwendung des <code> Singleton Pattern </code> statt
-         * Diese Methode gibt das einzige Objekt dieser Klasse zurück.
+         * Diese Methode gibt das einzige Objekt dieser Klasse zurueck.
          * 
          * @return Instanz des PropertyMapper
          */        
@@ -58,12 +58,12 @@ public class PropertyMapper {
       
 
       /**
-       * Einfügen eines <code>Property</code>-Objekts in die Datenbank. Dabei wird
-       * auch der Primärschlüssel des übergebenen Objekts geprüft und gegebenfals
+       * Einfuegen eines <code>Property</code>-Objekts in die Datenbank. Dabei wird
+       * auch der Primaerschluessel des uebergebenen Objekts geprueft und gegebenfals
        * berichtigt.
        *
        * @param property ist das zu speichernde Objekt
-       * @return das bereits übergebene Objekt, jedoch mit gegebenfals korrigierter
+       * @return das bereits uebergebene Objekt, jedoch mit gegebenfals korrigierter
        * 
        * @warning Nicht Verwendet
        * 
@@ -75,13 +75,13 @@ public class PropertyMapper {
           Connection con = DBConnection.connection();
             
           try {        	  
-              	// Die Einfügeoperation erfolgt	
+              	// Die Einfuegeoperation erfolgt	
               	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
     			stmt.setInt(1, property.getId());
     			stmt.setString(2, property.getDescription());
     			stmt.execute();
     			
-    			// Die Einfügeoperation für PropertyValue
+    			// Die Einfuegeoperation fuer PropertyValue
     			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
         	  	propertyValues = property.getPropertyValues();
         	  
@@ -97,9 +97,9 @@ public class PropertyMapper {
       
       
       /**
-       * Die Methode <em>findAll</em> ermöglicht das Abrufen aller Property Objekte
-       * in der Datenbank. Diese werden über einen Vector mit Property-Objekten, und
-       * nach deren zugehörigen User (über deren User ID) gefiltert zurück gegeben.
+       * Die Methode <em>findAll</em> ermoeglicht das Abrufen aller Property Objekte
+       * in der Datenbank. Diese werden ueber einen Vector mit Property-Objekten, und
+       * nach deren zugehoerigen User (ueber deren User ID) gefiltert zurueck gegeben.
        * 
        * @return Vector mit Property
        */
@@ -118,8 +118,7 @@ public class PropertyMapper {
   			ResultSet rs = stmt.executeQuery( 
 					  "SELECT Property.ID, Property.description "
 					+ "FROM Property "  
-					+ "ORDER BY Property.ID "
-					);		
+					+ "ORDER BY Property.ID ");		//ORDER BY um nach PropID zu sortieren.
   			
   			while(rs.next()){  			
   				
@@ -129,7 +128,7 @@ public class PropertyMapper {
   				property.setDescription(rs.getString("description"));
   				
   				 	
-  				 // Hinzufügen des neuen Objekts zum Ergebnisvektor
+  				 // Hinzufuegen des neuen Objekts zum Ergebnisvektor
                 propertyResult.addElement(property);
   				
   				}  					
@@ -144,11 +143,11 @@ public class PropertyMapper {
       
       
      /**
-       * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primärschlüssel ID.
+       * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primaerschluessel ID.
        * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
        *
        * @param prop ist ein Property-Objekt 
-       * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
+       * @return Property Objekt, das dem uebergebenen Schluessel entspricht,
        * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
        * 
        */             
@@ -160,11 +159,11 @@ public class PropertyMapper {
      
      
      /**
-      * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primärschlüssel ID.
-      * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zur�ckgegeben.
+      * Suchen einer Eigenschaft <code>Property</code> - Objekts innerhalb der DB anhand derer Primaerschluessel ID.
+      * Da diese eindeutig ist, wird genau ein Eigenschafts Objekt zurueckgegeben.
       *
-      * @param id ist das Primärschlüsselattribut
-      * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
+      * @param id ist das Primaerschluesselattribut
+      * @return Property Objekt, das dem uebergebenen Schluessel entspricht,
       * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
       * 
       */      
@@ -179,10 +178,10 @@ public class PropertyMapper {
             		  "SELECT Property.ID, Property.description "
             		+ "FROM Property "
             		+ "WHERE Property.ID = ?"
-            		);
+            		+ "ORDER BY Property.ID");  // ORDER BY um die PropID zu sortieren.
               
               stmt.setInt(1, property_id);
-              // Statement ausfüllen und als Query an die DB schicken
+              // Statement ausfuellen und als Query an die DB schicken
               ResultSet rs = stmt.executeQuery();     
                                         
               if (rs.next()) {
@@ -206,10 +205,10 @@ public class PropertyMapper {
       
       /**
        * Suchen eines <code>Property</code> -Objektes innerhalb der DB anhand dessen Beschreibung.
-       * Da dies in diesem Fall eindeutig ist, wird genau ein Eigenschafts - Objekt zurückgegeben.
+       * Da dies in diesem Fall eindeutig ist, wird genau ein Eigenschafts - Objekt zurueckgegeben.
        *
        * @param description ist ein Attribut in der Property Tabelle
-       * @return Property Objekt, das dem übergebenen Schlüssel entspricht,
+       * @return Property Objekt, das dem uebergebenen Schluessel entspricht,
        * dies wird null, wenn kein Datenbank Tupel vorhanden ist.
        */
            
@@ -219,11 +218,11 @@ public class PropertyMapper {
           // Verbindung zur DB herstellen
           Connection con = DBConnection.connection();  
           try {              
-             // Statement ausfüllen und als Query an die DB schicken
+             // Statement ausfuellen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
             		 			"SELECT* FROM Property "
-                              + "WHERE Property.description = ?" 
-                   			  );
+                              + "WHERE Property.description = ?"
+                              + "ORDER BY Property.ID" );  // ORDER BY um nach PropID zu sortieren.
              
              stmt.setString(1, description);
              ResultSet rs = stmt.executeQuery();           
@@ -251,8 +250,8 @@ public class PropertyMapper {
       /**
        * <code>Update Methode</code>
        * Analog zur Delete Methode wurde eine bewusste Entscheidung getroffen die CRUD Methoden 
-       * bei den Mappern für <em>Property</em>-Objekte hier nicht komplett umzusetzen. Dabei wird
-       * berücksichtigt, dass die <em>Property</em>-Objekte als statisch in der DB festgelegte
+       * bei den Mappern fuer <em>Property</em>-Objekte hier nicht komplett umzusetzen. Dabei wird
+       * beruecksichtigt, dass die <em>Property</em>-Objekte als statisch in der DB festgelegte
        * Objekte existieren sollen. Eine Update Methode würde diesem Grundprinzip daher nicht 
        * entsprechen. 
        * 
@@ -261,11 +260,11 @@ public class PropertyMapper {
       
       /**
        * <code>Delete Methode</code>
-       * Es war eine bewusste Entscheidung die CRUD Methoden für Property-Objekte nicht in den
+       * Es war eine bewusste Entscheidung die CRUD Methoden fuer Property-Objekte nicht in den
        * Mappern abzubilden, da Property-Objekte als statisch festgelegte Objekte festgelegt sind.
-       * Diese können zwar mit anderen Nutzern <em>User</em>-Objekten im System geteilt werden,
-       * jedoch sind diese nicht veränderbar. Nur <em>PropertyValue</em>-Objekte sollen in diesem Zusammen-
-       * hang veränderbar sein. Property und <em>PropertyValue</em>-Objekte werden nur gemeinsam geteilt.
+       * Diese koennen zwar mit anderen Nutzern <em>User</em>-Objekten im System geteilt werden,
+       * jedoch sind diese nicht veraenderbar. Nur <em>PropertyValue</em>-Objekte sollen in diesem Zusammen-
+       * hang veraenderbar sein. Property und <em>PropertyValue</em>-Objekte werden nur gemeinsam geteilt.
        * Ein PropertyValue-Objekt kann dabei auch <em>null</em> sein.
        * 
        */      

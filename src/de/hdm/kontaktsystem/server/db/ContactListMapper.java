@@ -73,7 +73,8 @@ public class ContactListMapper {
 
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID");
+					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID "
+					+ "ORDER BY contactList_name");  // ORDER BY um die Listen nach namen zu sortieren.
 			while (rs.next()) {
 				ContactList cl = new ContactList();
 				User owner = new User();
@@ -106,7 +107,8 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT * " 
 					+ "FROM  ContactList cl " + "INNER JOIN BusinessObject bo ON bo.bo_ID = cl.ID "
-					+ "WHERE bo.user_ID = ?" + "AND bo.status = ?");
+					+ "WHERE bo.user_ID = ?" + "AND bo.status = ?"
+							+ "ORDER BY contactList_name");
 			stmt.setDouble(1, user_id);
 			stmt.setBoolean(2, shared_status);
 			ResultSet rs = stmt.executeQuery();
@@ -117,6 +119,7 @@ public class ContactListMapper {
 				u.setGoogleID(rs.getDouble("user_ID"));
 				cl.setOwner(u);
 				cl.setBo_Id(rs.getInt("id"));
+				cl.setName(rs.getString("contactList_name"));
 				cl.setShared_status(rs.getBoolean("status"));
 				cl.setCreationDate(rs.getTimestamp("creationDate"));
 				cl.setModifyDate(rs.getTimestamp("modificationDate"));
@@ -130,7 +133,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Eine Kontaktliste über ihre ID finden
+	 * Eine Kontaktliste Ueber ihre ID finden
 	 * 
 	 * @param ContactList ID
 	 * @return ContactList
@@ -145,7 +148,8 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement(
 					"SELECT * FROM ContactList "
 					+ "LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  "
-					+ "WHERE id = ?");
+					+ "WHERE id = ?"
+					+ "ORDER BY contactList_name"); // ORDER BY um die gefundene(n) Kontaktlisten nach namen sortieren.
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -167,7 +171,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Gibt einen Vektor mit allen allen ContactList Objekten zurück, welche zu einem User gehören
+	 * Gibt einen Vektor mit allen allen ContactList Objekten zurueck, welche zu einem User gehoeren
 	 * @param User-Objekt
 	 * @return Vector<ContactList>
 	 */
@@ -176,7 +180,7 @@ public class ContactListMapper {
 		return findContactListByUserId(user.getGoogleID());
 	}
 	/**
-	 * Gibt einen Vektor mit allen allen ContactList Objekten zurück, welche zu einem User gehören
+	 * Gibt einen Vektor mit allen allen ContactList Objekten zurueck, welche zu einem User gehoeren
 	 * 
 	 * @param User ID
 	 * @return Vector<ContactList>
@@ -187,7 +191,8 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE user_ID = ?");
+					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID  WHERE user_ID = ?"
+					+ "ORDER BY contactList_name"); // ORDER BY um die Kontaktlisten nach Namen zu sortieren.
 			stmt.setDouble(1, userID);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -219,7 +224,8 @@ public class ContactListMapper {
 		Connection con = DBConnection.connection();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID WHERE contactList_name = ?");
+					"SELECT * FROM ContactList LEFT JOIN BusinessObject ON ContactList.ID = BusinessObject.bo_ID WHERE contactList_name = ?"
+					+ "ORDER BY contactList_name"); // ORDER BY um die Kontaktlisten nach Namen zu sortieren.
 			stmt.setString(1, name);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -244,7 +250,7 @@ public class ContactListMapper {
 
 	/**
 	 * Updatet einen eintrag in der ContactList Tabelle
-	 * verwendet zur Namensänderung
+	 * verwendet zur Namensaenderung
 	 * 
 	 * @param ContactList-Objekt
 	 */
@@ -268,7 +274,7 @@ public class ContactListMapper {
 
 	
 	/**
-	 * Löscht einen eintrag aus der ContactList Tabelle
+	 * Loescht einen eintrag aus der ContactList Tabelle
 	 * @param ContactList-Objekt
 	 * @return ContactList-Objekt
 	 */
@@ -280,15 +286,15 @@ public class ContactListMapper {
 	
 	
 	/**
-	 * Eine Kontaktliste löschen, mit der übergebenden ID.
+	 * Eine Kontaktliste loeschen, mit der Uebergebenden ID.
 	 * 
 	 * @param ContactList ID
-	 * @return Anzahl der gelöschten Zeilen
+	 * @return Anzahl der geloeschten Zeilen
 	 */
 
 	public int deleteContactListById(int id) {
 		Connection con = DBConnection.connection();
-		int i = 0; // Anzahl der gelöschten Zeilen
+		int i = 0; // Anzahl der geloeschten Zeilen
 		try {
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM ContactList Where ID = ?");
 			stmt.setInt(1, id);
@@ -303,7 +309,7 @@ public class ContactListMapper {
 
 	
 	/**
-	 * Alle Kontaktlisten löschen.
+	 * Alle Kontaktlisten loeschen.
 	 * @note Nicht genutzt
 	 * 
 	 */
@@ -319,7 +325,7 @@ public class ContactListMapper {
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		// ?????
+	
 		Vector<ContactList> clList = new Vector <ContactList>();
 		clList = this.findAllContactLists();
 		for(ContactList cl : clList) {
@@ -328,7 +334,7 @@ public class ContactListMapper {
 	}
 
 	/**
-	 * Einen Kontakt zur Kontaktliste hinzufügen.
+	 * Einen Kontakt zur Kontaktliste hinzufuegen.
 	 * 
 	 * @param ContactList-Objekt
 	 * @param Contact-Objekt
