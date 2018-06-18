@@ -94,7 +94,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
-	private double currentUser = 170d;
+	private double currentUser = 510d;
 	
 	public void setCurrentUser(double uid){ // Test um den User zu wechseln
 		currentUser = uid;
@@ -331,7 +331,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Vector<Contact> getMyContactsPrev()  {
 		User user = this.getUserByID(this.getCurrentUser());
 		Vector<Contact> cv = cMapper.findAllContactsByUser(user);
-		// cv.addAll(this.getAllCSharedWithMe()); // TODO
+		
 		for (Contact contact : cv) {
 			contact.setName(this.getNameOfContact(contact));
 		}
@@ -397,7 +397,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		}
 		// Findet alle KontaktListen
-		cv.addAll(clMapper.findContactListByName(value));
+		//cv.addAll(clMapper.findContactListByName(value));
 		
 		return cv;
 	}

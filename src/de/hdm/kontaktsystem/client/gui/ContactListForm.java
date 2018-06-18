@@ -192,7 +192,7 @@ public class ContactListForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			
 			//contactListToDisplay.setName(clName);
-			myUser.setGoogleID(170);
+//			myUser.setGoogleID(170);
 			contactListToDisplay.setOwner(myUser);
 
 			
@@ -576,15 +576,15 @@ public class ContactListForm extends VerticalPanel {
 		contactsToAdd.clear();
 		
 		if (cl != null) {
-			int count = 0;
-			User u = new User();
-			u.setGoogleID(170);
+//			int count = 0;
+//			User u = new User();
+//			u.setGoogleID(170);
 			update = true;
 			
 			/* User setzen, sodass Programm Ownership zuordnen kann 
 			 * Sobald App Engine -> entfernen
 			*/
-			setMyUser(u);
+//			setMyUser(u);
 			
 			/*
 			 *  Status der Kontaktliste anzeigen

@@ -149,7 +149,7 @@ public class ContactSystem implements EntryPoint {
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
 		clf.setTree(tvm);
-//		cf.setTree(tvm);
+		cf.setTree(tvm);
 		
 		
 		treeScrollPanel.setHeight("80vh");
@@ -184,23 +184,22 @@ public class ContactSystem implements EntryPoint {
 	public void onModuleLoad() {
 		
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
-		// Test aufrufe
-		loadTree(); // für Test
-		loadContactSystem(); // für Test		
 		
-		contactSystemAdmin.getUserByID(170, new AsyncCallback<User>() {
+				
+		// Test um Login zu Überbrücken
+		contactSystemAdmin.getUserByID(510, new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
 				
 			}
 				
 			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
 			public void onSuccess(User result) {
-				
-					uf.setUser(result);
 					log("Set User: "+ result);
+					uf.setMyUser(result);
 					cf.setMyUser(result);
 					clf.setMyUser(result);
-					//loadContactSystem(); // für Test	
+					loadTree(); // für Test
+					loadContactSystem(); // für Test
 				
 			}
 		});	

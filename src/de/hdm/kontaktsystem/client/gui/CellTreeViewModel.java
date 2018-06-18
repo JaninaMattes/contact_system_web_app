@@ -272,7 +272,7 @@ class DataCell extends AbstractCell<BusinessObject> {
 			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >  " + ((ContactList) value).getName() + "</p>");
 
 		} else if (value instanceof Contact) {
-			
+			log(value.toString());
 			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>  " + ((Contact) value).getName().getValue() + "</p>");
 
 		} else {
@@ -282,4 +282,7 @@ class DataCell extends AbstractCell<BusinessObject> {
 		}
 		}
 	}
+	native void log(String s)/*-{
+	console.log(s);
+	}-*/;
 }
