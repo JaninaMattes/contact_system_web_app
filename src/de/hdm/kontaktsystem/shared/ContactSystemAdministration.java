@@ -53,7 +53,7 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public ContactList addContactToList(Contact c, ContactList cl);
 	
-	public Vector<Contact> searchContacts(String value);
+	public Vector<BusinessObject> search(String value);
 	
 	public Vector<PropertyValue> searchPropertyValues(String suchtext);
 	

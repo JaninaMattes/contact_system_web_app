@@ -86,7 +86,7 @@ public interface ContactSystemAdministrationAsync {
 	 * @param callback
 	 */
 	
-	public void searchContacts(String value, AsyncCallback<Vector<Contact>> callback);
+	public void search(String value, AsyncCallback<Vector<BusinessObject>> callback);
 
 	/**
 	 * Create
