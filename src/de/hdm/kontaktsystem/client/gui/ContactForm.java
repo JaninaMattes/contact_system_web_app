@@ -437,9 +437,9 @@ public class ContactForm extends VerticalPanel {
 			tbv.clear();
 			cbv.clear();
 			ft.clear();
-			
-			myUser = new User();
-			myUser.setGoogleID(170); //TODO: später über AppEngine angebunden
+			log("MyUser: "+ myUser);
+//			myUser = new User();
+//			myUser.setGoogleID(170); //TODO: später über AppEngine angebunden
 			
 			if(contact!=null) {
 				this.contactToDisplay = contact;

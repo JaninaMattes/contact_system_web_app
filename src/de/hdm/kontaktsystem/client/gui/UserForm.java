@@ -51,7 +51,7 @@ public class UserForm extends VerticalPanel{
 		
 	}
 	
-	public void setUser(User user){
+	public void setMyUser(User user){
 		myUser = user;
 		if(myUser != null){
 			welcome.setText("Hallo " + user.getUserContact().getName().getValue());
