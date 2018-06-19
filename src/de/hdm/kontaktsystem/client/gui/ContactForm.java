@@ -114,15 +114,16 @@ public class ContactForm extends VerticalPanel {
 			final User user = new User();
 			
 			//CSS
-			addButton.setStyleName("add");
-			emailButton.setStyleName("check");	
-			saveButton.setStyleName("save");
-			shareButton.setStyleName("share");
+			//Stylenames nicht mehr ändern
+			addButton.getElement().setId("addButton");
+			emailButton.getElement().setId("check");	
+			saveButton.getElement().setId("saveButton");
+			shareButton.getElement().setId("shareButton");
 			
-			cancelButton.setStyleName("cancel");
-			editButton.setStyleName("edit");
+			cancelButton.getElement().setId("cancel");
+			editButton.getElement().setId("edit");
 			
-			gp.setStyleName("grid-panel");
+			gp.getElement().setId("grid-panel");
 			
 			//Teilhaberschaften
 			labelSharedWith.setVisible(false);
