@@ -335,7 +335,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (Contact contact : cv) {
 			contact.setName(this.getNameOfContact(contact));
 		}
-		//cv.addAll(this.getAllCSharedByOthersToMePrev());
+		cv.addAll(this.getAllCSharedByOthersToMePrev());
 		return cv;
 	}
 
@@ -391,13 +391,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
 		for (PropertyValue pv : pvv) {
 			Contact c = cMapper.findBy(pv);
-			contact.setName(this.getNameOfContact(contact));
+			c.setName(this.getNameOfContact(c));
+			System.out.println();
 			if (!cv.contains(c))
 				cv.add(c);
 
 		}
 		// Findet alle KontaktListen
-		//cv.addAll(clMapper.findContactListByName(value));
+		cv.addAll(clMapper.findContactListByName(value));
 		
 		return cv;
 	}

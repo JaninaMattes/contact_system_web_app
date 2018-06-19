@@ -6,6 +6,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.kontaktsystem.client.ClientsideSettings;
@@ -25,7 +26,8 @@ public class UserForm extends VerticalPanel{
 						+ "Alle Ihre Kontakte und Kontaktlisten werden gelöscht \n"
 						+ "und die dazugehörigen Teilhaberschaften aufgelöst. \n"
 						+ "Diese Änderung kann nicht rückgängig gemacht werden. ";
-	Button delete = new Button("Account Löschen");
+	Button deleteButton = new Button("Account Löschen");
+	Button contactButton = new Button("Kontakt anzeigen");
 	VerticalPanel vp = new VerticalPanel();
 	ContactForm cf = new ContactForm();
 	User myUser;
@@ -45,9 +47,9 @@ public class UserForm extends VerticalPanel{
 		//email.setText("Meine Email Adresse: ");
 		vp.add(email);
 		vp.add(contact);
-		vp.add(cf);
+		vp.add(contactButton);
 
-		vp.add(delete);
+		vp.add(deleteButton);
 		
 	}
 	
@@ -57,15 +59,10 @@ public class UserForm extends VerticalPanel{
 			welcome.setText("Hallo " + user.getUserContact().getName().getValue());
 			id.setText("Meine User ID: "+ user.getGoogleID());
 			email.setText("Meine Email Adresse: "+ user.getGMail());
-			contact.setText("Mein Kontakt: ");
-			cf.setSelected(user.getUserContact());
+			contact.setText("Kontakt ID: "+user.getUserContact().getBoId());
+		
 			
-			log("Name: "+ user.getUserContact().getName().getValue());
-			log("ID: "+user.getGoogleID()+"");
-			log("Mail: " + user.getGMail());
-			log("Contact: "+ user.getUserContact().toString());
-			
-			delete.addClickHandler(new ClickHandler(){
+			deleteButton.addClickHandler(new ClickHandler(){
 				@Override
 				public void onClick(ClickEvent event) {
 					if(Window.confirm(deleteText)){
@@ -87,6 +84,18 @@ public class UserForm extends VerticalPanel{
 						});
 					}
 				}
+			});
+			contactButton.addClickHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+
+					RootPanel.get("Details").clear();
+					cf.setSelected(myUser.getUserContact());
+					RootPanel.get("Details").add(cf);
+					
+				}
+				
 			});
 		}
 	}
