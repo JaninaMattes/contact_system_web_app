@@ -147,11 +147,15 @@ public class CellTreeViewModel implements TreeViewModel {
 	public void updateBusinessObject(BusinessObject bo){
 		log("Update BO");
 		if(bo instanceof Contact) {
-			dataProvider.getList().remove(bo);
-			dataProvider.getList().add(bo);
-			
-			rootData.getList().remove(bo);
-			rootData.getList().add(bo);
+			if(dataProvider != null){
+				log("Update Dataprovider");
+				dataProvider.getList().remove(bo);
+				dataProvider.getList().add(bo);
+			}else{
+				log("Update root");
+				rootData.getList().remove(bo);
+				rootData.getList().add(bo);
+			}
 		} else if (bo instanceof ContactList){
 			rootData.getList().remove(bo);
 			rootData.getList().add(bo);
@@ -168,8 +172,13 @@ public class CellTreeViewModel implements TreeViewModel {
 	
 	public void addBusinessObject(BusinessObject bo){
 		if(bo instanceof Contact) {
-		dataProvider.getList().add(bo);
-		rootData.getList().remove(bo);
+			if(dataProvider != null){
+				log("Add to Dataprovider");
+				dataProvider.getList().add(bo);
+			}else{
+				log("Add to root");
+				rootData.getList().add(bo);
+			}
 		} else if (bo instanceof ContactList){
 		rootData.getList().add(bo);
 		}
@@ -184,8 +193,13 @@ public class CellTreeViewModel implements TreeViewModel {
 	
 	public void removeBusinessObject(BusinessObject bo){
 		if(bo instanceof Contact) {
-		dataProvider.getList().remove(bo);
-		rootData.getList().remove(bo);
+			if(dataProvider != null){
+				log("Delete from Dataprovider");
+				dataProvider.getList().remove(bo);
+			}else{
+				log("Delete from root");
+				rootData.getList().remove(bo);
+			}
 		} else if (bo instanceof ContactList){
 		rootData.getList().remove(bo);
 		}

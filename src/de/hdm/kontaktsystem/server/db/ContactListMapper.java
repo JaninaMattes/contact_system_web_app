@@ -351,8 +351,12 @@ public class ContactListMapper {
 					.prepareStatement("INSERT INTO Contact_ContactList (Contact_ID, ContactList_ID) VALUES (?, ?)");
 			stmt.setInt(1, c.getBoId());
 			stmt.setInt(2, cl.getBoId());
-			stmt.executeUpdate();
-
+			
+			if(stmt.executeUpdate() > 0){
+				cl.addContact(c);
+				return cl;
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -375,7 +379,11 @@ public class ContactListMapper {
 					.prepareStatement("DELETE FROM Contact_ContactList WHERE Contact_ID = ? AND ContactList_ID = ?");
 			stmt.setInt(1, c.getBoId());
 			stmt.setInt(2, cl.getBoId());
-			stmt.execute();
+			if(stmt.executeUpdate() > 0){
+				cl.getContacts().remove(c);
+				return cl;
+				
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();

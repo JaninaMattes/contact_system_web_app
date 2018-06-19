@@ -203,7 +203,7 @@ public class ContactForm extends VerticalPanel {
 						public void onSuccess(Contact result) {
 						loadPanel.setVisible(false);
 						contactToDisplay= null;
-//						tvm.removeBusinessObject(result);
+						tvm.removeBusinessObject(result);
 						RootPanel.get("Details").clear();
 						loadPanel.setVisible(false);
 						}						
@@ -661,7 +661,7 @@ public class ContactForm extends VerticalPanel {
 				log("####### Der Kontakt wurde gespeichert: "+result);
 				RootPanel.get("Details").clear();
 				setSelected(result);
-//				tvm.updateBusinessObject(result); 
+				tvm.updateBusinessObject(result); 
 				RootPanel.get("Details").add(vp);
 			}							
 		}
@@ -683,9 +683,7 @@ public class ContactForm extends VerticalPanel {
 			public void onSuccess(Participation result) {
 				loadPanel.setVisible(false);
 				log("Neue Teilhaberschaft: " + result);	
-//				tvm.updateBusinessObject(result.getReferencedObject());
 				Window.alert("Der Kontakt wurde geteilt." + "\n" + result.getReferencedObject().getBoId());
-//			    tvm.updateBusinessObject(contactToDisplay);
 			}				
 		}
 				
