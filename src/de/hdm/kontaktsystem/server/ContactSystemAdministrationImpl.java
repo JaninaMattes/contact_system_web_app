@@ -787,11 +787,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Keine Verwendung
+	 * Löschen einer Teilhaberschft
 	 * @param p
 	 * @return
 	 */
-	// TODO Entfernen??
+	@Override
 	public Participation deleteParticipation(Participation p) {
 		Participation part = partMapper.deleteParticipation(p);
 		// Prüfen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt,

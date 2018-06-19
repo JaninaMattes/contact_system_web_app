@@ -56,6 +56,7 @@ public class ContactListForm extends VerticalPanel {
 	Button deleteClButton = new Button("Kontaktliste löschen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
+	Button unShareButton = new Button("Teilhaberschaft löschen");
 	Button addConToList = new Button("Hinzufügen");
 	
 	Label isShared = new Label("Geteilt mit: ");
@@ -106,6 +107,7 @@ public class ContactListForm extends VerticalPanel {
 		
 		contactListGrid.setWidget(5, 0, labelSharedWith);
 		contactListGrid.setWidget(5, 1, listBoxSharedWith);
+		contactListGrid.setWidget(5, 2, unShareButton);
 		
 		contactListGrid.setWidget(6, 0, labelReceivedFrom);
 		contactListGrid.setWidget(6, 1, clOwner);
@@ -129,6 +131,7 @@ public class ContactListForm extends VerticalPanel {
 		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
 		addConToList.addClickHandler(new addContactToClClickHandler());
 		shareButton.addClickHandler(new shareClickHandler());
+		unShareButton.addClickHandler(new unShareClickHandler());
 
 		
 		/*
@@ -287,7 +290,7 @@ public class ContactListForm extends VerticalPanel {
 	private class shareClickHandler implements ClickHandler {
 		
 		public void onClick(ClickEvent event) {
-			loadPanel.setVisible(false);
+			loadPanel.setVisible(true);
 			if (contactListToDisplay == null) {
 				Window.alert("Kontaktliste auswählen");
 				
@@ -297,13 +300,11 @@ public class ContactListForm extends VerticalPanel {
 					@Override
 					public void onFailure(Throwable caught) {
 						loadPanel.setVisible(false);
-						log("User nicht gefunden");
-//							emailButton.setEnabled(false);
 					}
 
 					@Override
 					public void onSuccess(User result) {
-						log("User"+result);
+						log("User "+result);
 						Participation p = new Participation();
 						p.setParticipant(result);
 						p.setReference(contactListToDisplay);
@@ -350,18 +351,52 @@ public class ContactListForm extends VerticalPanel {
 	}
 	
 	/**
+	 * 
+	 * ClickHandler zum Teilen der KontaktListe mit dem ausgewählten User
+	 * @author Kim-Ly
+	 */
+	
+	private class unShareClickHandler implements ClickHandler {
+		
+		public void onClick(ClickEvent event) {
+			if (contactListToDisplay == null) {
+				Window.alert("Kontaktliste auswählen");
+				
+			} else {
+				loadPanel.setVisible(true);
+				contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
+					@Override
+					public void onFailure(Throwable caught) {
+						loadPanel.setVisible(false);
+					}
+
+					@Override
+					public void onSuccess(User result) {
+						log("User "+result);
+						Participation p = new Participation();
+						p.setParticipant(result);
+						p.setReference(contactListToDisplay);
+						contactSystemAdmin.deleteParticipation(p, new shareCallback());
+						
+					}
+				});
+				
+			}
+		}
+	}
+	
+	/**
 	 * Callback Methode für das Teilen von Kontaktliste
 	 * @author Kim-Ly
 	 *
 	 */
 
-	private class shareCallback 
-	implements AsyncCallback<Participation> {
+	private class shareCallback implements AsyncCallback<Participation> {
 
 		@Override
 		public void onFailure(Throwable caught) {
 			loadPanel.setVisible(false);
-			Window.alert("Teilen fehlgeschlagen");
+			Window.alert("Teilen fehlgeschlagen: "+caught);
 		}
 
 		// @Override
@@ -381,6 +416,31 @@ public class ContactListForm extends VerticalPanel {
 		}
 	}
 
+	/**
+	 * Callback Methode für das Teilen von Kontaktliste
+	 * @author Kim-Ly
+	 *
+	 */
+
+	private class unShareCallback implements AsyncCallback<Participation> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			loadPanel.setVisible(false);
+			Window.alert("Teilhaberschaft löschen ist fehlgeschlagen: "+caught);
+		}
+
+		// @Override
+		public void onSuccess(Participation result) {
+			loadPanel.setVisible(false);
+			log("Teilhaberschaft gelöscht");
+			
+			listBoxSharedWith.removeItem(listBoxSharedWith.getSelectedIndex());
+			 
+
+		}
+	}
+	
 	/**
 	 * Clickhandler zum Löschen eines Kontakts aus der Kontaktliste
 	 * 
@@ -612,7 +672,7 @@ public class ContactListForm extends VerticalPanel {
 					/* Alle User mit denen Kontaktliste geteilt wurde 
 					 * -> Nur Callback abrufen wenn User Besitzer der Kontaktliste, sonst Listbox + Label unsichtbar
 					 */ 			
-					if (contactListToDisplay.getOwner() == myUser) {
+					if (contactListToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()) {
 						contactSystemAdmin.getAllParticipationsByBusinessObject(contactListToDisplay, new UserSharedWithCallback());
 					} else {
 						labelSharedWith.setVisible(false);

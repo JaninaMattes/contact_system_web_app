@@ -130,6 +130,7 @@ public interface ContactSystemAdministrationAsync {
 		
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback); // Aufruf in Kontaktliste: Entfernen von Kontakten aus Kontaktliste
 
+	public void deleteParticipation(Participation part, AsyncCallback<Participation> callback); // Löscht eine Teilhaberschaft
 	
 
 	

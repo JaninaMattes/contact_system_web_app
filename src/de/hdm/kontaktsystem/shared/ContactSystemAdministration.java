@@ -97,6 +97,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList deleteContactList(ContactList cl);
 	
 	public ContactList removeContactFromList(Contact contact, ContactList contactList);
+
+	public Participation deleteParticipation(Participation part);
 	
 	/*
 	 * Get all
