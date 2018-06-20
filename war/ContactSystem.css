@@ -120,20 +120,19 @@ body {
 /*Buttons*/
 
 #shareButton{ /* Teilen-Button*/
-	height: 30px;
-    width: 53px;
+	/*height: 20px;
+    width: 60px;
     font-size: 14px;
     border: none;
     font-family: "Arial", Arial, sans-serif;
-	background-color: #FFC173;
-	color: white;
-    padding: 0px;
+	background-color: ;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
-    margin: 4px 2px;
+    display: inline-block;*/
+    /*margin: 4px 2px;*/
+    color: black;
     cursor: pointer;
-	border-radius: 0px; /*abgerundete Ecken*/
+	border-radius: 2px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
     
 }
@@ -156,7 +155,7 @@ body {
 }
 
 #menu-button:hover{
-    background: #628cd5; /* Alternativ #1c347c */
+    background: #dfddfa;
 }
 
 #searchButton{ /* Suchen-Button im Editor */
@@ -194,36 +193,36 @@ body {
 }
 
 #saveButton{ /* Speichern-Button im Editor */
-	height: 30px;
+	/*height: 30px;
     width: 80px; 
     font-family: "Arial", Arial, sans-serif;     
 	background-color: #00d000;
-	color: black;
     border: none;
     padding: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    margin: 4px 2px;
+    margin: 4px 2px;*/
+    color: black;
     cursor: pointer;
     border-radius: 0px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
 #deleteButton{ /* L�schen-Button im Editor */
-	height: 30px;
+	/*height: 30px;
     width: 70px;
     font-family: "Arial", Arial, sans-serif;     
 	background-color: #BF0D32;
-	color: white;
     border: none;
-    padding: 0px;
+    padding-right: 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    margin: 4px 2px;
+    margin: 4px 2px;*/
+    color: black;
     cursor: pointer;	/*Mauszeiger ver�ndert sich, wenn man auf dem Button ist*/
 	border-radius: 0px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
@@ -426,14 +425,14 @@ div#TopLevelFrame {
  } 
 
 div#Header { 	
-	background: #0c145c; /*W3School*/
+	background: #000051;
 	text-align: center;
 	height: 15vh;
 	vertical-align: middle;
 }
 
 div#Navigator {	
-	background: #0c145c;
+	background: #534bae;
 
 }
 
@@ -462,7 +461,7 @@ div#Trailer {
 	color: white;
 	text-align: center;	
 	align-content: center;
-	background-color: #193852;
+	background-color: #000051;
 
 }
 
