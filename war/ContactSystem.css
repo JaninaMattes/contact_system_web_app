@@ -491,13 +491,13 @@ div#Trailer {
 	width:100vw;
 	z-index:10;
 	position: fixed;
-	background: #000000;
+	background: #f6f9ff; /* #000000; */
 	opacity: 0.5;
 }
 .load_Animation{
-	
-    top: 45vh;
-    left: 45vw;
+	z-index:10;
+    top: 20vh; /* 45vh; */
+    left: 20vw; /* 45vw; */
 	z-index:11;
 	position: fixed;
 }
