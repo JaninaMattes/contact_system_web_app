@@ -69,7 +69,7 @@ public class PlainTextReportWriter extends ReportWriter {
 		//User-Daten
 		result.append("User: " + report.getUserData().toString() + "\n");
 		//Erstellungsdatum
-		result.append("Erstellt am: " + report.getCreated().toString() + "\n\n");
+		result.append("Erstellt am: " + report.getCreated() + "\n\n");
 		
 		//Kontakt-Elemente
 		Vector<SingleContact> elements = report.getAllSingleContacts();
