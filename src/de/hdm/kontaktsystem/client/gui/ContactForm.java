@@ -10,6 +10,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -34,6 +35,9 @@ public class ContactForm extends VerticalPanel {
 		
 		// Lade overlay
 		PopupPanel loadPanel;
+		
+		// Share DialogBox
+		DialogBox shareDialog = new DialogBox();
 		
 		Contact contactToDisplay = null;
 		CellTreeViewModel tvm = null;
@@ -69,8 +73,9 @@ public class ContactForm extends VerticalPanel {
 		Button saveButton = new Button("Speichern");
 		Button shareButton = new Button("Teilen");
 		Button addButton = new Button("Hinzufügen");
-		Button emailButton = new Button("Email Prüfen");
 		Button editButton = new Button("Bearbeiten");
+		//Button cancelButton = new Button("Abbrechen"); // Teilen abbrechen
+		Button okButton = new Button("Teilen");
 		
 		Button cancelButton = new Button("Abbrechen");
 		Button createButton = new Button("Speichern");
@@ -85,11 +90,68 @@ public class ContactForm extends VerticalPanel {
 		 */
 		
 		public void onLoad(){
-			vp.clear();
+//			vp.clear();
+//			
+//			super.onLoad();
+//			this.add(vp);		
 			
-			super.onLoad();
-			this.add(vp);
-							
+		}
+		
+		public ContactForm() {
+			
+			
+			final User user = new User();
+			
+			//CSS
+			//Stylenames nicht mehr �ndern
+			addButton.getElement().setId("addButton");	
+			saveButton.getElement().setId("saveButton");
+			shareButton.getElement().setId("shareButton");
+			
+			cancelButton.getElement().setId("cancel");
+			editButton.getElement().setId("edit");
+			
+			shareDialog.setStyleName("shareDialog");
+			gp.getElement().setId("grid-panel");
+			
+			//Teilhaberschaften
+			labelSharedWith.setVisible(false);
+			labelReceivedFrom.setVisible(false);			
+			sharedWithUser.setVisible(false);	
+			
+			/*
+		     * GridPanel für Abbildung der Teilhaber
+		     */								
+			
+			gp.setWidget(0, 0, labelAddElement);
+			gp.setWidget(0, 1, addElement);
+			gp.setWidget(0, 2, addButton);
+			
+//			gp.setWidget(1, 0, labelShare);
+//			gp.setWidget(1, 1, email);
+			
+			gp.setWidget(1, 0, labelSharedWith);
+			gp.setWidget(1, 1, sharedWithUser);	
+			gp.setWidget(1, 2, editButton);
+			
+			gp.setWidget(2, 0, labelReceivedFrom);
+			
+			
+			gpPanel.add(gp);
+			
+			email.getElement().setPropertyString("placeholder", "Email");
+			VerticalPanel shareDialogvp = new VerticalPanel();
+			HorizontalPanel shareDialoghp = new HorizontalPanel();
+			shareDialogvp.add(labelShare);
+			shareDialogvp.add(email);
+			shareDialogvp.add(shareDialoghp);
+			shareDialoghp.add(cancelButton);
+			shareDialoghp.add(okButton);	
+			shareDialog.add(shareDialogvp);
+			shareDialog.center();
+			shareDialog.setVisible(false);
+			
+			
 			/*
 			 * Panel für Anordnung der Button
 			 */
@@ -106,82 +168,58 @@ public class ContactForm extends VerticalPanel {
 			vp.add(ft);
 			vp.add(gpPanel);
 			vp.add(btnPanel);
-			
-		}
-		
-		public ContactForm() {
-			
-			final User user = new User();
-			
-			//CSS
-			//Stylenames nicht mehr �ndern
-			addButton.getElement().setId("addButton");
-			emailButton.getElement().setId("check");	
-			saveButton.getElement().setId("saveButton");
-			shareButton.getElement().setId("shareButton");
-			
-			cancelButton.getElement().setId("cancel");
-			editButton.getElement().setId("edit");
-			
-			gp.getElement().setId("grid-panel");
-			
-			//Teilhaberschaften
-			labelSharedWith.setVisible(false);
-			labelReceivedFrom.setVisible(false);			
-			sharedWithUser.setVisible(false);	
-			
-			/*
-		     * GridPanel für Abbildung der Teilhaber
-		     */								
-			
-			gp.setWidget(0, 0, labelAddElement);
-			gp.setWidget(0, 1, addElement);
-			gp.setWidget(0, 2, addButton);
-			
-			gp.setWidget(1, 0, labelShare);
-			gp.setWidget(1, 1, email);
-			gp.setWidget(1, 2, emailButton);
-			
-			gp.setWidget(2, 0, labelSharedWith);
-			gp.setWidget(2, 1, sharedWithUser);	
-			gp.setWidget(2, 2, editButton);
-			
-			gp.setWidget(3, 0, labelReceivedFrom);
+			vp.add(shareDialog);
 			
 			
-			gpPanel.add(gp);
+			this.add(vp);
+			
 			
 			//Click-Handler
 			shareButton.addClickHandler(new ClickHandler(){
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					shareDialog.setVisible(true);
+				}
+				
+			});
+			okButton.addClickHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
 					loadPanel.setVisible(true);
-					if(user.getUserContact().getName().getValue() == email.getText()){
-						Participation part = new Participation();
-						Contact c = contactToDisplay;
-						Vector<PropertyValue> pvv = new Vector<PropertyValue>();
-						for(CheckBox cb: cbv){
-							if(cb.getValue()){
-								log(cb.getTitle());
-								for(PropertyValue pv : c.getPropertyValues()){
-									if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
-										pvv.add(pv);
-										log("Share: " + pv.getValue() + " With " + email.getText());
+					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
+						@Override
+						public void onFailure(Throwable caught) {
+							loadPanel.setVisible(false);
+							Window.alert("User wurde nicht gefunden");
+						}
+	
+						@Override
+						public void onSuccess(User result) {
+							Participation part = new Participation();
+							Contact c = contactToDisplay;
+							Vector<PropertyValue> pvv = new Vector<PropertyValue>();
+							for(CheckBox cb: cbv){
+								if(cb.getValue()){
+									log(cb.getTitle());
+									for(PropertyValue pv : c.getPropertyValues()){
+										if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
+											pvv.add(pv);
+											log("Share: " + pv.getValue() + " With " + email.getText());
+										}
 									}
 								}
 							}
+							part.setParticipant(result);
+							c.setPropertyValues(pvv);
+							part.setReference(c);
+							log("Share:" + part);
+							contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());						
 						}
-						part.setParticipant(user);
-						c.setPropertyValues(pvv);
-						part.setReference(c);
-						log("Share:" + part);
-						contactSystemAdmin.createParticipation(part, new CreateParticipationCallback());						
-					}else{
-						Window.alert("Bitte geben Sie die Email eines Nutzers ein und bestätigen Sie diese mit dem CheckButton");
-					}
+					});
 				}
-				
 			});
 			
 			deleteButton.addClickHandler(new ClickHandler(){
@@ -307,55 +345,18 @@ public class ContactForm extends VerticalPanel {
 				}
 			});
 			
-			/**
-			 * Email-ClickHandler 
-			 */
-			
-			emailButton.addClickHandler(new ClickHandler(){
-
-				@Override
-				public void onClick(ClickEvent event) {
-					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
-						@Override
-						public void onFailure(Throwable caught) {
-							loadPanel.setVisible(false);
-							log("User nicht gefunden");
-							emailButton.setStyleName("check_notFound");
-							emailButton.setText("X");
-//							emailButton.setEnabled(false);
-						}
-
-						@Override
-						public void onSuccess(User result) {
-							log("User"+result);
-							loadPanel.setVisible(false);
-							emailButton.setStyleName("check_Found");
-							emailButton.setText("OK");
-							user.setGoogleID(result.getGoogleID());
-							user.setGMail(result.getGMail());
-							user.setUserContact(result.getUserContact());
-							email.setText(result.getUserContact().getName().getValue());
-						}
-					});
-				}
-				
-			});
-			
-			email.addChangeHandler(new ChangeHandler() {
-		
-				@Override
-				public void onChange(ChangeEvent event) {
-					emailButton.setText("Geprüft");	
-					emailButton.setEnabled(true);
-				}
-			});
 			
 			cancelButton.addClickHandler(new ClickHandler(){
 
 				@Override
 				public void onClick(ClickEvent event) {
-				 contactToDisplay = null;
-				 RootPanel.get("Details").clear();
+					if(shareDialog.isVisible()){
+						shareDialog.setVisible(false);
+					}else{
+						contactToDisplay = null;
+						RootPanel.get("Details").clear();
+					}
+				 
 				}
 				
 			});
@@ -478,7 +479,7 @@ public class ContactForm extends VerticalPanel {
 						editButton.setVisible(true);
 						
 						email.setVisible(true);
-						emailButton.setVisible(true);
+						
 						
 						addElement.setVisible(true);
 						addButton.setVisible(true);
@@ -588,7 +589,6 @@ public class ContactForm extends VerticalPanel {
 				//Teilen Funktionen
 				labelShare.setVisible(false);
 				email.setVisible(false);
-				emailButton.setVisible(false);
 				
 				labelAddElement.setVisible(false);
 				addElement.setVisible(false);

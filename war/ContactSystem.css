@@ -500,3 +500,12 @@ div#Trailer {
 	z-index:11;
 	position: fixed;
 }
+
+.shareDialog{
+	z-index: 10;
+	position: absolute;
+	padding: 10px;
+	background-color:#000051;
+	color: #ffffff;
+	border-radius: 5px;
+}

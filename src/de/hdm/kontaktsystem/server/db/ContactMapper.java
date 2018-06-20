@@ -186,6 +186,9 @@ public class ContactMapper {
 					  "SELECT * " 
 					+ "FROM  Contact c "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
+//					+ "INNER JOIN User u ON u.ID = bo.user_ID "
+//					+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
+//					+ "INNER JOIN Property p ON p.ID = pv.property_ID "
 					+ "WHERE c.ID = ? "); 
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();

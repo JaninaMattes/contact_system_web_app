@@ -8,6 +8,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -38,6 +39,9 @@ public class ContactListForm extends VerticalPanel {
 	// Lade overlay
 	PopupPanel loadPanel;
 	
+	// Share DialogBox
+	DialogBox shareDialog = new DialogBox();
+	
 	/**
 	 * Widgets mit variablen Inhalten.
 	 */
@@ -56,6 +60,8 @@ public class ContactListForm extends VerticalPanel {
 	Button deleteClButton = new Button("Kontaktliste löschen");
 	Button saveButton = new Button("Kontaktliste speichern");
 	Button shareButton = new Button("Teilen");
+	Button cancelButton = new Button("Abbrechen"); // Teilen abbrechen
+	Button okButton = new Button("Teilen");
 	Button unShareButton = new Button("Teilhaberschaft löschen");
 	Button addConToList = new Button("Hinzufügen");
 	
@@ -75,7 +81,7 @@ public class ContactListForm extends VerticalPanel {
 	ListBox contactNames = new ListBox();
 	ListBox contactsToAdd = new ListBox();
 	TextBox email = new TextBox();
-
+	
 	// Update = True, Neu anlegen = false
 	boolean update = true;
 
@@ -101,18 +107,28 @@ public class ContactListForm extends VerticalPanel {
 		contactListGrid.setWidget(3, 2, addConToList);
 
 		
-		contactListGrid.setWidget(4, 0, labelShare);
-		contactListGrid.setWidget(4, 1, email);//listBoxShareWith);
-		contactListGrid.setWidget(4, 2, shareButton);	
+		contactListGrid.setWidget(4, 0, labelSharedWith);
+		contactListGrid.setWidget(4, 1, listBoxSharedWith);
+		contactListGrid.setWidget(4, 2, unShareButton);
 		
-		contactListGrid.setWidget(5, 0, labelSharedWith);
-		contactListGrid.setWidget(5, 1, listBoxSharedWith);
-		contactListGrid.setWidget(5, 2, unShareButton);
+		contactListGrid.setWidget(5, 0, labelReceivedFrom);
+		contactListGrid.setWidget(5, 1, clOwner);
 		
-		contactListGrid.setWidget(6, 0, labelReceivedFrom);
-		contactListGrid.setWidget(6, 1, clOwner);
+		contactListGrid.setWidget(6, 1, btnPanel);
 		
-		contactListGrid.setWidget(7, 1, btnPanel);
+		
+		email.getElement().setPropertyString("placeholder", "Email");
+		VerticalPanel shareDialogvp = new VerticalPanel();
+		HorizontalPanel shareDialoghp = new HorizontalPanel();
+		shareDialogvp.add(labelShare);
+		shareDialogvp.add(email);
+		shareDialogvp.add(shareDialoghp);
+		shareDialoghp.add(cancelButton);
+		shareDialoghp.add(okButton);	
+		shareDialog.add(shareDialogvp);
+		shareDialog.center();
+		shareDialog.setVisible(false);
+		this.add(shareDialog);
 
 		contactNames.getElement().setId("ListBox");
 		listBoxShareWith.getElement().setId("ListBox");
@@ -126,11 +142,14 @@ public class ContactListForm extends VerticalPanel {
 		deleteClButton.setPixelSize(110, 30);
 		btnPanel.add(saveButton);
 		btnPanel.add(deleteClButton);
+		btnPanel.add(shareButton);
 		saveButton.addClickHandler(new saveAndUpdateClickHandler());
 		deleteClButton.addClickHandler(new deleteContactListClickHandler());
 		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
 		addConToList.addClickHandler(new addContactToClClickHandler());
+		okButton.addClickHandler(new shareClickHandler());
 		shareButton.addClickHandler(new shareClickHandler());
+		cancelButton.addClickHandler(new cancelClickHandler());
 		unShareButton.addClickHandler(new unShareClickHandler());
 
 		
@@ -184,6 +203,8 @@ public class ContactListForm extends VerticalPanel {
 		shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 
 		shareButton.getElement().setId("shareButton");
+		
+		shareDialog.setStyleName("shareDialog");
 		
 		
 	}
@@ -290,16 +311,22 @@ public class ContactListForm extends VerticalPanel {
 	private class shareClickHandler implements ClickHandler {
 		
 		public void onClick(ClickEvent event) {
-			loadPanel.setVisible(true);
+			
 			if (contactListToDisplay == null) {
 				Window.alert("Kontaktliste auswählen");
 				
 			} else {
+				if(!shareDialog.isVisible()){
+					shareDialog.setVisible(true);
+				}else{
+					loadPanel.setVisible(true);
 				
-				contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
+				
+					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
 					@Override
 					public void onFailure(Throwable caught) {
 						loadPanel.setVisible(false);
+						Window.alert("User wurde nicht gefunden");
 					}
 
 					@Override
@@ -309,43 +336,33 @@ public class ContactListForm extends VerticalPanel {
 						p.setParticipant(result);
 						p.setReference(contactListToDisplay);
 						contactSystemAdmin.createParticipation(p, new shareCallback());
-						
+						email.setText("");
+						shareDialog.setVisible(false);
 					}
 				});
 				
 				
-				/*	
-				int userToShareIndex = listBoxShareWith.getSelectedIndex();
-				final String userToShareData = listBoxShareWith.getItemText(userToShareIndex);
+				}
 				
-				/*
-				 * Alle Kontaktlisten des User abrufen, mit ausgewähltem User aus Listbox abgleichen
-				 * -> Bei Übereinstimmung teilen
-				 *
-				contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						log("Abruf der Kontaktlisten von User fehlgeschlagen");
-						
-					}
-
-					@Override
-					public void onSuccess(Vector<ContactList> result) {
-						
-						for (ContactList cl : result) {
-							if (userToShareData == cl.getOwner().getGMail()) {
-								User uToShare = cl.getOwner();
-								Participation part = new Participation();
-								part.setParticipant(uToShare);
-								part.setReference(contactListToDisplay);
-								
-								contactSystemAdmin.createParticipation(part, new shareCallback());
-							}
-						}
-					}
-				});
-				*/
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * ClickHandler um den ShareDialog zu schließen
+	 * @author Oli
+	 */
+	
+	private class cancelClickHandler implements ClickHandler {
+		
+		public void onClick(ClickEvent event) {
+			if (contactListToDisplay == null) {
+				Window.alert("Kontaktliste auswählen");
+				
+			} else {
+				shareDialog.setVisible(false);
+				
 			}
 		}
 	}
@@ -364,10 +381,11 @@ public class ContactListForm extends VerticalPanel {
 				
 			} else {
 				loadPanel.setVisible(true);
-				contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
+				contactSystemAdmin.getUserBygMail(listBoxSharedWith.getSelectedItemText(), new AsyncCallback<User>(){
 					@Override
 					public void onFailure(Throwable caught) {
 						loadPanel.setVisible(false);
+						Window.alert("User nicht gefunden");
 					}
 
 					@Override
@@ -406,7 +424,7 @@ public class ContactListForm extends VerticalPanel {
 			User userSharedWith = result.getParticipant();
 			log("Liste wurde mit " + result.getParticipant() +" geteilt");
 			
-			listBoxSharedWith.addItem(userSharedWith.getUserContact().getName().getValue() + " /" + userSharedWith.getGMail());	
+			listBoxSharedWith.addItem(userSharedWith.getGMail());	
 			++count;
 			
 			//Genug Platz schaffen für alle Elemente
@@ -587,7 +605,11 @@ public class ContactListForm extends VerticalPanel {
 		// Listen leeren
 		contactNames.clear();
 		contactsToAdd.clear();
+		listBoxSharedWith.clear();
+		nameContactList.setText("");
 		email.setText("");
+		clOwner.setText("");
+		shareDialog.setVisible(false);
 		
 		if (cl != null) {
 			update = true;

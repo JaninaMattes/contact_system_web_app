@@ -54,6 +54,8 @@ public class ContactSystem implements EntryPoint {
 	    @Override
 		@Source("CellTree.css")
 	    CellTree.Style cellTreeStyle(); 
+	    
+	    
 	}
 	
 	/**
