@@ -376,7 +376,7 @@ public class ContactListForm extends VerticalPanel {
 						Participation p = new Participation();
 						p.setParticipant(result);
 						p.setReference(contactListToDisplay);
-						contactSystemAdmin.deleteParticipation(p, new shareCallback());
+						contactSystemAdmin.deleteParticipation(p, new unShareCallback());
 						
 					}
 				});
@@ -571,51 +571,6 @@ public class ContactListForm extends VerticalPanel {
 		 *
 		 */
 		
-		private class ContactListStatusCallback
-		implements AsyncCallback<Vector<Participation>> {
-
-					
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Fehler beim Abruf des Teilhaber");
-;				
-			}
-
-
-			@Override
-			public void onSuccess(Vector<Participation> partVec) {
-				
-				log(contactListToDisplay.getBoId()+" = ID");
-				
-				contactSystemAdmin.getAllParticipationsByBusinessObject(contactListToDisplay, new AsyncCallback<Vector<Participation>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						log("Aufruf der Teilhaberschaften der Kontaktliste fehlgeschlagen");
-						
-					}
-
-					@Override
-					public void onSuccess(Vector<Participation> result) {
-						for (Participation part : result) {
-							
-							if (part.getParticipant().getGoogleID() == contactListToDisplay.getOwner().getGoogleID()) {
-								contactStatusValue.setText("An mich geteilt");
-							} else if (part.getParticipant().getGoogleID() != contactListToDisplay.getOwner().getGoogleID()) {
-								contactStatusValue.setText("Von mir geteilt");
-							} else {
-								contactStatusValue.setText("Nicht geteilt");
-							}
-						}
-					}
-	
-				});
-				
-				}
-			}
-			
-
-
 	/**
 	 * Setzen des ContactList Objekts, aller zugehörigen Kontakte aus TreeView
 	 * und Anzeige aller im System vorhandenen User
@@ -632,6 +587,7 @@ public class ContactListForm extends VerticalPanel {
 		// Listen leeren
 		contactNames.clear();
 		contactsToAdd.clear();
+		email.setText("");
 		
 		if (cl != null) {
 			update = true;
@@ -642,12 +598,13 @@ public class ContactListForm extends VerticalPanel {
 
 				@Override
 				public void onFailure(Throwable caught) {
-					log("");
+					log("Listekonnte nicht geladen werden");
 					
 				}
 
 				@Override
 				public void onSuccess(ContactList list) {
+					log("Liste geladen");
 					contactListToDisplay = list;
 					int count = 0;
 					for (Contact con : list.getContacts()) {
@@ -655,18 +612,13 @@ public class ContactListForm extends VerticalPanel {
 							contactNames.addItem(con.getName().getValue());
 							++count;
 					}
-					log(""+count);
 					contactNames.setVisibleItemCount(count);
 					
-					/*
-					 *  Status der Kontaktliste anzeigen
-					 */
-					contactSystemAdmin.getAllParticipationsByParticipant(myUser, new ContactListStatusCallback());
 		   			
 		   			/*
 		   			 *  Alle User mit denen Kontaktliste geteilt werden kann
 		   			 */
-		   			contactSystemAdmin.getAllUsers(new UserToShareCallback());
+//		   			contactSystemAdmin.getAllUsers(new UserToShareCallback());
 		   			
 		   			
 					/* Alle User mit denen Kontaktliste geteilt wurde 
@@ -684,15 +636,10 @@ public class ContactListForm extends VerticalPanel {
 					 */
 					if (contactListToDisplay != null) {			
 						clOwner.setText(contactListToDisplay.getOwner().getGMail());
-						contactSystemAdmin.getAllContactListsFromUser(new UserOwnerClCallback());
+						//contactSystemAdmin.getMyContactListsPrev(new UserOwnerClCallback());
 					}
 					
 		   			
-		   			/*
-		   			 *  Alle Kontakte die User angelegt hat oder die ihm geteilt wurden 
-		   			 */
-					
-		   			contactSystemAdmin.getMyContactsPrev(new ContactsToAddConCallback());
 		   			
 					deleteClButton.setEnabled(true);
 					deleteConButton.setEnabled(true);
@@ -700,15 +647,39 @@ public class ContactListForm extends VerticalPanel {
 				}
 				
 			});
-//			int count = 0;
-//			User u = new User();
-//			u.setGoogleID(170);
 			
+			/*
+			 *  Status der Kontaktliste anzeigen
+			 */			
+			contactSystemAdmin.getAllParticipationsByBusinessObject(contactListToDisplay, new AsyncCallback<Vector<Participation>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					log("Aufruf der Teilhaberschaften der Kontaktliste fehlgeschlagen");
+					
+				}
+
+				@Override
+				public void onSuccess(Vector<Participation> result) {
+					for (Participation part : result) {
+						
+						if (part.getParticipant().getGoogleID() == contactListToDisplay.getOwner().getGoogleID()) {
+							contactStatusValue.setText("An mich geteilt");
+						} else if (part.getParticipant().getGoogleID() != contactListToDisplay.getOwner().getGoogleID()) {
+							contactStatusValue.setText("Von mir geteilt");
+						} else {
+							contactStatusValue.setText("Nicht geteilt");
+						}
+					}
+				}
+
+			});
+
+   			/*
+   			 *  Alle Kontakte die User angelegt hat oder die ihm geteilt wurden 
+   			 */
 			
-			/* User setzen, sodass Programm Ownership zuordnen kann 
-			 * Sobald App Engine -> entfernen
-			*/
-//			setMyUser(u);
+   			contactSystemAdmin.getMyContactsPrev(new ContactsToAddConCallback());
 
 		} else {
 			update = false;
