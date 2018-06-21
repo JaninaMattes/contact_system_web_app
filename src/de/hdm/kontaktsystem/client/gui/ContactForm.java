@@ -104,16 +104,18 @@ public class ContactForm extends VerticalPanel {
 			
 			//CSS
 			//Stylenames nicht mehr ï¿½ndern
-			addButton.getElement().setId("addButton");	
+			addButton.getElement().setId("addedit");	
 			saveButton.getElement().setId("saveButton");
 			shareButton.getElement().setId("shareButton");
 			deleteButton.getElement().setId("deleteButton");
 			
 			cancelButton.getElement().setId("cancel");
-			editButton.getElement().setId("edit");
+			editButton.getElement().setId("addedit");
 			
 			shareDialog.setStyleName("shareDialog");
 			gp.getElement().setId("grid-panel");
+			
+			labelAddElement.getElement().setId("labelfeldhinzu");
 			
 			//Teilhaberschaften
 			labelSharedWith.setVisible(false);
@@ -372,8 +374,7 @@ public class ContactForm extends VerticalPanel {
 					p.setId(addElement.getSelectedIndex()+2);
 					
 					Label label = new Label(addElement.getSelectedItemText());
-					//Entfernen des primären Stylename und ersetzen durch CSS-Namen
-					label.setStylePrimaryName(getElement(), "contactlabels"); 
+
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
 					
@@ -492,8 +493,14 @@ public class ContactForm extends VerticalPanel {
 						for(PropertyValue pv : result.getPropertyValues()){
 							log("PropertyValue" +pv);
 							Label label = new Label();
+							//Entfernen des primären Stylename und ersetzen durch CSS-Namen
+							label.setStylePrimaryName(getElement(), "contactlabels");
 							CheckBox cb = new CheckBox();
+							//Entfernen des primären Stylename und ersetzen durch CSS-Namen
+							cb.setStylePrimaryName(getElement(), "checkbox");
 							TextBox tb = new TextBox();
+							//Entfernen des primären Stylename und ersetzen durch CSS-Namen
+							tb.setStylePrimaryName(getElement(), "textbox");
 							
 							label.setTitle(pv.getProperty().getId()+"");
 							label.setText(pv.getProperty().getDescription());
