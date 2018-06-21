@@ -113,7 +113,7 @@ public class HTMLReportWriter extends ReportWriter {
 	    result.append("<td align=\"center\">" + paragraph2HTML(report.getUserData()) + "</td>");
 	    
 		//Erstellungsdatum
-	    result.append("</tr><tr><td align=\"center\">" + report.getCreated().toString()
+	    result.append("</tr><tr><td align=\"center\">" + report.getCreated()
 	            + "</td></tr></table>");
 	    
 	    //Kontakt-Elemente: je eine Tabelle pro Element

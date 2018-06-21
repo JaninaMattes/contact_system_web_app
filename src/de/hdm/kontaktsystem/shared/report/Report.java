@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 
+
 /**
  * <p>
  * Reports sind als <code>Serializable</code> deklariert, damit sie von dem 
@@ -36,9 +37,9 @@ public class Report implements Serializable {
 	private String title = "Report";
 	
 	/**
-	 * Erstellungsdatum des Berichts
+	 * Erstellungsdatum des Berichts als String
 	 */
-	private Date created = new Date();
+	private String created = "";
 
 	/**
 	 * Menge der enthaltenen <code>SingleContact</code>-Elemente
@@ -82,7 +83,7 @@ public class Report implements Serializable {
 	 * Zurückgeben des Erstellungsdatums
 	 * @return Erstellungsdatum des Berichts
 	 */
-	public Date getCreated() {
+	public String getCreated() {
 		return this.created;
 	}
 
@@ -90,7 +91,7 @@ public class Report implements Serializable {
 	 * Setzen des Erstellungsdatums
 	 * @param created Zu setzendes Erstellungsdatum
 	 */
-	public void setCreated(Date created) {
+	public void setCreated(String created) {
 		this.created = created;
 	}
 	
