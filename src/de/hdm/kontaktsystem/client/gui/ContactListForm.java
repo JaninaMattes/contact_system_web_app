@@ -331,7 +331,7 @@ public class ContactListForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(User result) {
-						log("User "+result);
+						log("User: "+result);
 						Participation p = new Participation();
 						p.setParticipant(result);
 						p.setReference(contactListToDisplay);
@@ -390,7 +390,7 @@ public class ContactListForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(User result) {
-						log("User "+result);
+						log("User: "+result);
 						Participation p = new Participation();
 						p.setParticipant(result);
 						p.setReference(contactListToDisplay);
@@ -838,7 +838,7 @@ public class ContactListForm extends VerticalPanel {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Window.alert("");					
+						Window.alert("");		
 					}
 
 					@Override
@@ -852,7 +852,7 @@ public class ContactListForm extends VerticalPanel {
 								if(contactListToDisplay.getContacts().size()>0){ // Eine leere Liste muss nicht überprüft werden
 									for (Contact conFromCl : contactListToDisplay.getContacts()) {
 										// und hinzuzufügender Kontakt nicht bereits als Kontakt in Kontaktlist vorhanden
-										log(conFromCl.toString());
+										log("Listen Kontakt: " + conFromCl.toString());
 										if (conFromUser.getName().getValue() != conFromCl.getName().getValue()) {
 											// ausgewählten Kontakt zu Kontaktliste hinzufügen
 											log("Hinzuzufügender Kontakt zu Kontaktliste: " + conFromUser.toString());
@@ -890,10 +890,8 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onSuccess(ContactList result) {	
-			
-			log("Kontaktliste aus Callback" + result);
-			// Leeren der Kontaktliste Listbox, damit Werte nicht doppelt angelegt werden
 			contactNames.clear();
+			log("Kontaktliste aus Callback" + result);
 			int count = 0;
 			if (result != null) {
 				Vector<Contact> resultCon = result.getContacts();
@@ -944,7 +942,7 @@ public class ContactListForm extends VerticalPanel {
 					contactsToAdd.addItem(con.getName().getValue());
 					++count;
 				}
-				log("Items:"+count);
+				log("Items: "+count);
 				contactsToAdd.setVisibleItemCount(1);
 			} else {
 				Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");

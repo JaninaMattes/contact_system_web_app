@@ -9,7 +9,9 @@ import java.util.Vector;
 
 import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
+import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.Participation;
+import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
 
@@ -89,6 +91,30 @@ public class ParticipationMapper {
 		}
 		return null;
 	}
+	
+	public boolean isFullShared(BusinessObject bo, User u){
+		
+		Connection con = DBConnection.connection();
+		
+		try {
+			// Create Vector for all Participation-Objects
+			Vector<Participation> participations = new Vector<Participation>();			
+			// Get all Participations from database and store in a ResultSet-Object
+			PreparedStatement stmt = con.prepareStatement("Select * From `User_BusinessObject` " + 
+			"WHERE `User_ID` = ? AND `BusinessObject_ID` = ? " );
+			stmt.setDouble(1, u.getGoogleID());
+			stmt.setInt(2, bo.getBoId());
+			ResultSet rs = stmt.executeQuery();
+			 if(rs.next()){
+				 return rs.getBoolean("Share_All");
+			 }
+			
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	
 	/**
@@ -127,7 +153,7 @@ public class ParticipationMapper {
 				participation.setParticipant(participant);	
 				bo.setBo_Id(rs.getInt("BusinessObject_ID"));
 				participation.setReference(bo);
-				
+				participation.setShareAll(rs.getBoolean("Share_All"));
 				participations.add(participation);
 				
 			}
@@ -166,7 +192,7 @@ public class ParticipationMapper {
 				participation.setParticipant(participant);	
 				bo.setBo_Id(rs.getInt("BusinessObject_ID"));
 				participation.setReference(bo);
-				
+				participation.setShareAll(rs.getBoolean("Share_All"));
 				participations.add(participation);
 
 			}
@@ -202,7 +228,7 @@ public class ParticipationMapper {
 				participation.setParticipant(participant);	
 				bo.setBo_Id(rs.getInt("BusinessObject_ID"));
 				participation.setReference(bo);
-				
+				participation.setShareAll(rs.getBoolean("Share_All"));
 				participations.add(participation);
 			}
 			
@@ -215,6 +241,138 @@ public class ParticipationMapper {
 	}
 
 
+	/**
+	 * Zurückgeben aller Teilhaberschaften von Vollständig geteilten Kontakten
+	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
+	 */
+	public Vector<Participation> findSharedContacts(User u){
+		
+		Connection con = DBConnection.connection();
+		
+		try {
+			// Create Vector for all Participation-Objects
+			Vector<Participation> participations = new Vector<Participation>();			
+			// Get all Participations from database and store in a ResultSet-Object
+			PreparedStatement stmt = con.prepareStatement("Select * From `User_BusinessObject` part " +
+			"INNER JOIN `Contact` c ON c.ID = part.`BusinessObject_ID` " +
+			"INNER JOIN `BusinessObject` bo ON bo.`bo_ID` = part.`BusinessObject_ID` " +
+			"WHERE part.`User_ID` = ?");
+			stmt.setDouble(1, u.getGoogleID());
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Participation participation = new Participation();
+				Contact c = new Contact();
+				
+				participation.setParticipant(u);	
+				c.setBo_Id(rs.getInt("BusinessObject_ID"));
+				c.setCreationDate(rs.getDate("creationDate"));
+				c.setModifyDate(rs.getDate("modificationDate"));				
+				participation.setShareAll(rs.getBoolean("Share_All"));
+				participation.setReference(c);
+				
+				participations.add(participation);
+			}
+			
+			return participations;
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Zurückgeben aller Teilhaberschaften von Teilweise geteilten Kontakten
+	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
+	 */
+	public Vector<Participation> fillPartContacts(Contact c, User u){
+		
+		Connection con = DBConnection.connection();
+		try {
+			// Create Vector for all Participation-Objects
+			Vector<Participation> participations = new Vector<Participation>();			
+			// Get all Participations from database and store in a ResultSet-Object
+			PreparedStatement stmt = con.prepareStatement("Select * From `User_BusinessObject` part " +
+			"INNER JOIN `PropertyValue` pv ON pv.ID = part.`BusinessObject_ID` " +
+			"INNER JOIN Property p ON p.`ID` = pv.`property_ID` " +
+			"INNER JOIN `BusinessObject` bo ON bo.`bo_ID` = pv.`contact_ID` " +
+			"WHERE part.`User_ID` = ? AND pv.`contact_ID` = ? " +
+			"ORDER BY `contact_ID`");
+			stmt.setDouble(1, u.getGoogleID());
+			stmt.setInt(2, c.getBoId());
+			ResultSet rs = stmt.executeQuery();
+			System.out.println("Result von "+c.getBoId() +" und "+c.getOwner().getGoogleID());
+			while(rs.next()){
+				PropertyValue pv = new PropertyValue(); // geteilte Eigenschft
+				Property p = new Property();
+				p.setDescription(rs.getString("Description"));
+				p.setId(rs.getInt("property_ID"));
+				pv.setProperty(p);
+				pv.setBo_Id(rs.getInt("BusinessObject_ID"));
+				pv.setCreationDate(rs.getDate("creationDate"));
+				pv.setModifyDate(rs.getDate("modificationDate"));
+				pv.setOwner(c.getOwner());
+				pv.setValue(rs.getString("value"));
+				c.addPropertyValue(pv);
+			}
+			
+			return participations;
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	
+	/**
+	 * Zurückgeben aller Teilhaberschaften, von geteilten KontaktListen
+	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
+	 */
+	public Vector<Participation> findAllSharedContactLists(User u){
+		
+		Connection con = DBConnection.connection();
+		
+		try {
+			// Create Vector for all Participation-Objects
+			Vector<Participation> participations = new Vector<Participation>();			
+			// Get all Participations from database and store in a ResultSet-Object
+			PreparedStatement stmt = con.prepareStatement("Select * From `User_BusinessObject` part " +
+			"INNER JOIN `ContactList` cl ON cl.ID = part.`BusinessObject_ID` " +
+			"INNER JOIN `BusinessObject` bo ON bo.`bo_ID` = part.`BusinessObject_ID` " +
+			"WHERE part.`User_ID` = ?");
+			stmt.setDouble(1, u.getGoogleID());
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Participation participation = new Participation();
+				ContactList cl = new ContactList();
+				
+				participation.setParticipant(u);	
+				
+				cl.setBo_Id(rs.getInt("BusinessObject_ID"));
+				cl.setCreationDate(rs.getDate("creationDate"));
+				cl.setModifyDate(rs.getDate("modificationDate"));
+				cl.setName(rs.getString("contactList_name"));
+				cl.setShared_status(rs.getBoolean("status"));
+
+				participation.setShareAll(rs.getBoolean("Share_All"));
+				participation.setReference(cl);
+				
+				participations.add(participation);
+			}
+			
+			return participations;
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	
+	
 	
 	
 	
@@ -236,9 +394,10 @@ public class ParticipationMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO User_BusinessObject (BusinessObject_ID, User_ID) VALUES (?, ?)");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO User_BusinessObject (BusinessObject_ID, User_ID, Share_All) VALUES (?, ?, ?)");
 			stmt.setInt(1, participation.getReferenceID());
 			stmt.setDouble(2, participation.getParticipantID());
+			stmt.setBoolean(3, participation.getShareAll());
 			stmt.execute();
 			return participation;
 		} catch(SQLException e){
