@@ -120,19 +120,20 @@ body {
 /*Buttons*/
 
 #shareButton{ /* Teilen-Button*/
-	/*height: 20px;
-    width: 60px;
+	height: 25px;
+    width: 100px;
     font-size: 14px;
     border: none;
     font-family: "Arial", Arial, sans-serif;
 	background-color: ;
     text-align: center;
     text-decoration: none;
-    display: inline-block;*/
-    /*margin: 4px 2px;*/
+    display: inline-block;
+    margin: 10px 2px;
+    margin-left: 3px;
     color: black;
     cursor: pointer;
-	border-radius: 2px; /*abgerundete Ecken*/
+	border-radius: 4px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
     
 }
@@ -193,8 +194,8 @@ body {
 }
 
 #saveButton{ /* Speichern-Button im Editor */
-	/*height: 30px;
-    width: 80px; 
+	height: 25px;
+    width: 100px; 
     font-family: "Arial", Arial, sans-serif;     
 	background-color: #00d000;
     border: none;
@@ -203,16 +204,17 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    margin: 4px 2px;*/
+    margin: 10px 2px;
+    margin-left: 3px;
     color: black;
     cursor: pointer;
-    border-radius: 0px; /*abgerundete Ecken*/
+    border-radius: 4px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
 #deleteButton{ /* L�schen-Button im Editor */
-	/*height: 30px;
-    width: 70px;
+	height: 25px;
+    width: 100px;
     font-family: "Arial", Arial, sans-serif;     
 	background-color: #BF0D32;
     border: none;
@@ -221,10 +223,11 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    margin: 4px 2px;*/
+    margin: 10px 2px;
+    margin-left: 3px;
     color: black;
     cursor: pointer;	/*Mauszeiger ver�ndert sich, wenn man auf dem Button ist*/
-	border-radius: 0px; /*abgerundete Ecken*/
+	border-radius: 4px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
@@ -254,6 +257,7 @@ body {
   	left: calc(100vw - 100px);
   
 }
+
 #switch-button{ /* "Report"- und "Editor"- Button, um vom Editor in den Report Generator zu gelangen und anders herum */
 	height: 30px;
     width: 90px;
@@ -350,21 +354,14 @@ body {
 /* Labels */
 
 
-#namelabel{
+.contactlabels{
     border-style: none;
+    color: red;
     background-color: white;
+    font-size: 130%;
 	 	
 }
 
-#eigenschaftlabel{
- 	border-style: none;
- 	background-color: white;
-}
-
-#teilenlabel{
-	border-style: none;
-	background-color: white;
-}
 
 /* Label von �berschrift "Kontakt:" und "Kontaktliste:"*/
 #ueberschriftlabel{

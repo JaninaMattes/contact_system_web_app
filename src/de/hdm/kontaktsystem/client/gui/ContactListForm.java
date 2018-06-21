@@ -57,8 +57,8 @@ public class ContactListForm extends VerticalPanel {
 	Button deleteConButton = new Button("Kontakt entfernen");
 
 
-	Button deleteClButton = new Button("Kontaktliste löschen");
-	Button saveButton = new Button("Kontaktliste speichern");
+	Button deleteClButton = new Button("Löschen");
+	Button saveButton = new Button("Speichern");
 	Button shareButton = new Button("Teilen");
 	Button cancelButton = new Button("Abbrechen"); // Teilen abbrechen
 	Button okButton = new Button("Teilen");
@@ -188,19 +188,17 @@ public class ContactListForm extends VerticalPanel {
 		contactStatus.getElement().setId("contactstatus");
 		
 
-		deleteConButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
-		deleteConButton.getElement().setId("deleteButton");
 		//Buttons in CSS
 		//delete + share + save-Buttons müssen jeweils auch gleich sein
 
 		
 		deleteConButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		deleteConButton.getElement().setId("deleteButton");
-		deleteClButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		//deleteClButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		deleteClButton.getElement().setId("deleteButton");
-		saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		//saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		saveButton.getElement().setId("saveButton");
-		shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		//shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 
 		shareButton.getElement().setId("shareButton");
 		

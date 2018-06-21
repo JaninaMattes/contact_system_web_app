@@ -107,6 +107,7 @@ public class ContactForm extends VerticalPanel {
 			addButton.getElement().setId("addButton");	
 			saveButton.getElement().setId("saveButton");
 			shareButton.getElement().setId("shareButton");
+			deleteButton.getElement().setId("deleteButton");
 			
 			cancelButton.getElement().setId("cancel");
 			editButton.getElement().setId("edit");
@@ -371,6 +372,8 @@ public class ContactForm extends VerticalPanel {
 					p.setId(addElement.getSelectedIndex()+2);
 					
 					Label label = new Label(addElement.getSelectedItemText());
+					//Entfernen des primären Stylename und ersetzen durch CSS-Namen
+					label.setStylePrimaryName(getElement(), "contactlabels"); 
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
 					
