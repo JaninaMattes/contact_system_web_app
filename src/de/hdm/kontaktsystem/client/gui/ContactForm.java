@@ -204,8 +204,14 @@ public class ContactForm extends VerticalPanel {
 						public void onSuccess(User result) {
 							Participation part = new Participation();
 							Contact c = contactToDisplay;
+							boolean somethingChecked = false;
+							// Überprüft ob eine Checkbox ausgewählt wurde, wenn nicht dann wird derKontaktebenso vollständig geteilt
+							for(CheckBox cb : cbv){
+								if(cb.getValue()) somethingChecked = true; break;
+							}
 							
-							if(!cbv.get(0).getValue()){
+							
+							if(!cbv.get(0).getValue() && somethingChecked){ 
 								part.setShareAll(false);
 								log("Kontakt nicht vollständig Geteilt");
 								// Wenn nicht der Vollständige Kontakt geteilt wird, muss überprüft werden, was geteilt werden soll
@@ -271,10 +277,11 @@ public class ContactForm extends VerticalPanel {
 			 * Save-Button ClickHandler 
 			 */
 			saveButton.addClickHandler(new ClickHandler() {
-				Vector<PropertyValue>editResult = new Vector<PropertyValue>();
+				
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					Vector<PropertyValue>editResult = new Vector<PropertyValue>();
 					loadPanel.setVisible(true);
 					if(contactToDisplay!=null) {
 						log("Der Kontakt besteht bereits. "+tbv.size());
@@ -285,38 +292,36 @@ public class ContactForm extends VerticalPanel {
 									return;							
 							 }
 							 
-							 if(!tb.getText().isEmpty()) {
-
-								 log("Titel: "+tb.getTitle());
-								 if(tb.getTitle().contains("Neu")) {
-									 	String[]s=tb.getTitle().split(":");
-										Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
-										p.setId(Integer.parseInt(s[1]));
-										p.setDescription(s[0]);
-										
-										PropertyValue ppv = new PropertyValue();
-										ppv.setContact(contactToDisplay);
-										ppv.setOwner(contactToDisplay.getOwner());
-										ppv.setProperty(p);
-										ppv.setValue(tb.getText());
-										editResult.add(ppv);
-										log("Neuen Pv: "+ppv);
-								 	}
-								 else{
-									 log("Update");
-									 for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
-											if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
-												pv.setValue(tb.getText());
-												editResult.add(pv);
-												log("Editieren des Pv: "+pv);
-											}
-									   }									
-								 }
-
+							 log("Titel: "+tb.getTitle());
+							 if(tb.getTitle().contains("Neu")) {
+								 	String[]s=tb.getTitle().split(":");
+									Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
+									p.setId(Integer.parseInt(s[1]));
+									p.setDescription(s[0]);
+									
+									PropertyValue ppv = new PropertyValue();
+									ppv.setContact(contactToDisplay);
+									ppv.setOwner(contactToDisplay.getOwner());
+									ppv.setProperty(p);
+									ppv.setValue(tb.getText());
+									editResult.add(ppv);
+									log("Neuen Pv: "+ppv);
+							 	}
+							 else{
+								 log("Update");
+								 for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
+										if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
+											pv.setValue(tb.getText());
+											editResult.add(pv);
+											log("Editieren des Pv: "+pv);
+										}
+								   }									
 							 }
-												
-							}
+
+											
+						}
 						contactToDisplay.setPropertyValues(editResult);
+						log("Save: "+contactToDisplay);
 						contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
 						}
 					}
@@ -437,10 +442,10 @@ public class ContactForm extends VerticalPanel {
 								@Override
 								public void onSuccess(Vector<PropertyValue> result) {
 									loadPanel.setVisible(false);
-									for(PropertyValue pv: result) {	
+									for(PropertyValue pv: result) {
 												for(CheckBox cb: cbv) {
 														if(Integer.parseInt(cb.getTitle())==pv.getBoId()){	
-															cb.setValue(true, true); //Anzeigen triggern
+															cb.setValue(true); //Anzeigen triggern
 														}												
 											}											
 										

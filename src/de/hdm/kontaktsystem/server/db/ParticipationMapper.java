@@ -286,7 +286,7 @@ public class ParticipationMapper {
 	 * Zurückgeben aller Teilhaberschaften von Teilweise geteilten Kontakten
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
-	public Vector<Participation> fillPartContacts(Contact c, User u){
+	public Vector<PropertyValue> findPVforSharedContact(Contact c, User u){
 		
 		Connection con = DBConnection.connection();
 		try {
@@ -302,7 +302,9 @@ public class ParticipationMapper {
 			stmt.setDouble(1, u.getGoogleID());
 			stmt.setInt(2, c.getBoId());
 			ResultSet rs = stmt.executeQuery();
-			System.out.println("Result von "+c.getBoId() +" und "+c.getOwner().getGoogleID());
+			
+			Vector<PropertyValue> pvv = new Vector<PropertyValue>();
+			
 			while(rs.next()){
 				PropertyValue pv = new PropertyValue(); // geteilte Eigenschft
 				Property p = new Property();
@@ -314,10 +316,10 @@ public class ParticipationMapper {
 				pv.setModifyDate(rs.getDate("modificationDate"));
 				pv.setOwner(c.getOwner());
 				pv.setValue(rs.getString("value"));
-				c.addPropertyValue(pv);
+				pvv.add(pv);
 			}
 			
-			return participations;
+			return pvv;
 			
 		} catch(SQLException e){
 			e.printStackTrace();

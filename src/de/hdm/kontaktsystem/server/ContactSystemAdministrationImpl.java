@@ -102,7 +102,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	public double getCurrentUser() {
 		// Test
-		return currentUser;// Double.parseDouble(userService.getCurrentUser().getUserId());
+		return Double.parseDouble(userService.getCurrentUser().getUserId()); // currentUser;
 	}
 
 	/*
@@ -124,7 +124,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		if (guser != null) {
 
 			double id = Double.parseDouble(guser.getUserId());
-			user = UserMapper.userMapper().findById(id);
+			user = this.getUserByID(id);
 			
 
 			if (user == null) {
@@ -193,7 +193,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public User getUserByID(double id) {
 		User user = uMapper.findById(id);
-		user.setUserContact(this.getOwnContact(user));
+		if(user != null){
+			user.setUserContact(this.getOwnContact(user));
+		}
 		return user;
 
 	}
@@ -271,16 +273,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		boMapper.update(contact);
 		Vector<PropertyValue> newPV = contact.getPropertyValues();
 		Vector<PropertyValue> oldPV = this.getPropertyValuesForContact(contact); // Liste uim Iterieren
-		Vector<PropertyValue> oldPV2 = oldPV; // Liste aus der Elemente gelöscht werden
-		// Löscht alle PropertyValues die es in dem neuen Eigenschafts Vector nicht mehr gibt
-		for (PropertyValue pV : oldPV) {
-			if(!newPV.contains(pV)) {
-				this.deletePropertyValue(pV);
-			}
-		}
+		
 		// Fügt dem Kontakt neue PropertyValues hinzu
 		// Updatet die bestehenden PropertyValues
 		for (PropertyValue pV : newPV) {
+			if(pV.getValue().isEmpty()) {
+				this.deletePropertyValue(pV);
+			}else
 			if(!oldPV.contains(pV)) {
 				this.createPropertyValue(pV);
 			}else{
@@ -382,7 +381,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 					System.out.println("##### Kontakt teilwiese geteilt 2### ");
 					contact.setName(this.getNameOfContact(contact));
 					contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
-					partMapper.fillPartContacts(contact, myUser);
+					contact.setPropertyValues(this.getAllPVFromContactSharedWithUser(contact, myUser));
 				}
 			}
 		}
@@ -1075,17 +1074,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	@Override
 	public Vector<PropertyValue> getAllPVFromContactSharedWithUser(Contact c, User u){
-		Vector<Participation> allSharedWithUser = this.getAllParticipationsByParticipant(u);
-		Vector<PropertyValue> pvFromContact = c.getPropertyValues();
-		Vector<PropertyValue> output = new Vector<PropertyValue>();
 		
-		for(Participation p : allSharedWithUser){
-			if(pvFromContact.contains(p.getReferencedObject())){
-				output.add((PropertyValue) p.getReferencedObject());
-			}
-			
-		}
-		return output;
+		return partMapper.findPVforSharedContact(c, u);
 	}
 	
 	/**

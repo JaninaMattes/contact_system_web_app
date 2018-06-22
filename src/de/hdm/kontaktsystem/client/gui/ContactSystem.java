@@ -190,7 +190,7 @@ public class ContactSystem implements EntryPoint {
 	}
 	
 	public void onModuleLoad() {
-		
+		/*
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 		
 				
@@ -214,31 +214,36 @@ public class ContactSystem implements EntryPoint {
 			}
 		});	
 		
-		
+		*/
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
 
-		
-//		contactSystemAdmin = ClientsideSettings.getContactAdministration();
-//		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
-//			public void onFailure(Throwable error) {
-//				Window.alert("Login Error :(");
-//			}
-//				
-//			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
-//			public void onSuccess(User result) {
-//				userInfo = result;
-//				if(userInfo.isLoggedIn()){
-//					loadTree(); // für Test
-//					uf.setUser(userInfo);
-//					cf.setMyUser(userInfo);
-//					loadContactSystem(); // für Test	
-//				}else{
-//					loadLogin();					
-//				}
-//			}
-//		});	
+		loadPanel.setVisible(false);
+		contactSystemAdmin = ClientsideSettings.getContactAdministration();
+		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+			public void onFailure(Throwable error) {
+				Window.alert("Login Error");
+			}
+				
+			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+			public void onSuccess(User result) {
+				userInfo = result;
+				if(userInfo.isLoggedIn()){
+					log("Load Editor");
+					uf.setMyUser(result);
+					cf.setMyUser(result);
+					clf.setMyUser(result);
+					cf.setLoad(loadPanel);
+					clf.setLoad(loadPanel);
+					loadTree(); // für Test
+					loadContactSystem(); // für Test
+					loadPanel.setVisible(false);	
+				}else{
+					loadLogin();					
+				}
+			}
+		});	
 		
 	}	
 	
@@ -246,8 +251,7 @@ public class ContactSystem implements EntryPoint {
 	 * Aufbau der Login-Seite
 	 */
 	private void loadLogin() {	
-		
-		Window.alert("Login :D");
+		log("Login");
 		signInLink.setHref(userInfo.getLoginUrl());
 		signInLink.getElement().setId("link");
 		loginPanel.add(new HTML("<center>"));
