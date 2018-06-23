@@ -37,6 +37,11 @@ public class Participation implements Serializable {
 	private BusinessObject reference = null;
 		
 	/**
+	 * Gibt an ob Kontakte oder Listen Vollständig oder nur Teilweise geteilt wurden
+	 */
+	private boolean shareAll = false;
+	
+	/**
 	 * Leerer Konstruktor
 	 */
 	public Participation() {
@@ -68,6 +73,14 @@ public class Participation implements Serializable {
 	}
 	
 	/**
+	* Zurückgeben des ShareAll werts
+	*/
+	public boolean getShareAll() {
+		return shareAll;
+		
+	}
+	
+	/**
 	 * Setzen des Teilhabers
 	 */
 	public void setParticipant(User participant) {
@@ -94,6 +107,13 @@ public class Participation implements Serializable {
 	 */
 	public void setReference(BusinessObject reference) {
 		this.reference = reference;
+	}
+	
+	/**
+	 * Setzen des ShareALL werts
+	 */
+	public void setShareAll(boolean all) {
+		 shareAll = all;
 	}
 
 	

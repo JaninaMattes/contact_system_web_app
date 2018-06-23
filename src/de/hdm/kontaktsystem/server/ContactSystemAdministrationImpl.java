@@ -368,9 +368,23 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Contact getContactById(int id) {
 		Contact contact = cMapper.findContactById(id);
 		if (contact != null) {
-			contact.setPropertyValues(this.getPropertyValuesForContact(contact));
-			contact.setName(this.getNameOfContact(contact));
-			contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
+			if(contact.getOwner().getGoogleID() == this.getCurrentUser()){ // Mein Kontakt
+				contact.setPropertyValues(this.getPropertyValuesForContact(contact));
+				contact.setName(this.getNameOfContact(contact));
+				contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
+			}else{ // Geteilter Kontakt
+				User myUser = this.getUserByID(this.getCurrentUser());
+				if(partMapper.isFullShared(contact, myUser)){
+					contact.setPropertyValues(this.getPropertyValuesForContact(contact));
+					contact.setName(this.getNameOfContact(contact));
+					contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
+				}else{
+					System.out.println("##### Kontakt teilwiese geteilt 2### ");
+					contact.setName(this.getNameOfContact(contact));
+					contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
+					partMapper.fillPartContacts(contact, myUser);
+				}
+			}
 		}
 		return contact;
 
@@ -691,11 +705,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Participation participation = partMapper.insertParticipation(part);
 		boMapper.setStatusTrue(participation.getReferenceID());
 		if(part.getReferencedObject() instanceof Contact){
-			for(PropertyValue pv : ((Contact) part.getReferencedObject()).getPropertyValues()){
-				Participation partPV = new Participation();
-				partPV.setParticipant(part.getParticipant());
-				partPV.setReference(pv);
-				this.createParticipation(partPV);
+			if(((Contact) part.getReferencedObject()).getPropertyValues() != null){
+				for(PropertyValue pv : ((Contact) part.getReferencedObject()).getPropertyValues()){
+					Participation partPV = new Participation();
+					partPV.setParticipant(part.getParticipant());
+					partPV.setReference(pv);
+					this.createParticipation(partPV);
+				}
 			}
 		}
 		return participation;
@@ -1014,21 +1030,23 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * Vorschau frü TreeView
 	 * @return
 	 */
+	// TODO Optimieren
 	public Vector<Contact> getAllCSharedByOthersToMePrev() {
 
-		Vector<Participation> participationVector = new Vector<Participation>();
-		participationVector = this.getAllParticipationsByParticipant(this.getUserByID(this.getCurrentUser()));
+		Vector<Participation> participationVector = partMapper.findSharedContacts(this.getUserByID(this.getCurrentUser()));
 		Vector<Contact> cResultVector = new Vector<Contact>();
 
 		for (Participation part : participationVector) {
-			Contact c = cMapper.findContactById(part.getReferenceID());
-			if (c != null) {
+			Contact c = (Contact) part.getReferencedObject();	
+			if(c != null && !cResultVector.contains(c)){
+				c.setName(this.getNameOfContact(c));
 				cResultVector.addElement(c);
 			}
+			
 		}
 
 		if (cResultVector.isEmpty())
-			System.out.println("# no contactList found");
+			System.out.println("# no contact found");
 
 		return cResultVector;
 	}
@@ -1109,11 +1127,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Vector<ContactList> getAllCLSharedByOthersToMePrev() {
 
 		Vector<Participation> participationVector = new Vector<Participation>();
-		participationVector = this.getAllParticipationsByParticipant(this.getUserByID(this.getCurrentUser()));
+		participationVector = partMapper.findAllSharedContactLists(this.getUserByID(this.getCurrentUser()));
 		Vector<ContactList> clResultVector = new Vector<ContactList>();
 
 		for (Participation part : participationVector) {
-			ContactList cl = clMapper.findContactListById(part.getReferenceID());
+			ContactList cl = (ContactList) part.getReferencedObject(); 
 			if (cl != null) {
 				clResultVector.addElement(cl);
 			}

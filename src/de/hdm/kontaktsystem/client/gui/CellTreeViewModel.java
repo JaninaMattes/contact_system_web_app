@@ -56,7 +56,7 @@ public class CellTreeViewModel implements TreeViewModel {
 		public void onSelectionChange(SelectionChangeEvent event) {
 			
 			setSelectedContactContactlist(selectionModel.getSelectedObject());
-			log("event" + event.toDebugString());
+			log(event.toDebugString());
 			
 			
 			
@@ -89,7 +89,7 @@ public class CellTreeViewModel implements TreeViewModel {
 		this.selectedContactContactlist = sccl;
 		RootPanel.get("Details").clear();
 		if(sccl instanceof ContactList) {
-			clForm.setSelected((ContactList)sccl);
+			clForm.setSelected((ContactList) sccl);
 			log("Update clForm");
 			RootPanel.get("Details").add(clForm);
 		}
@@ -286,7 +286,6 @@ class DataCell extends AbstractCell<BusinessObject> {
 			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >  " + ((ContactList) value).getName() + "</p>");
 
 		} else if (value instanceof Contact) {
-			log(value.toString());
 			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>  " + ((Contact) value).getName().getValue() + "</p>");
 
 		} else {

@@ -52,7 +52,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Objekt, das ein Date-Objekt in einen String umwandeln kann, der das Format
 	 * Tag.Monat.Jahr Stunde:Minute:Sekunde hat.
 	 */
-	DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+	DateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	
 	/**
 	 * No-Argument-Konstruktor. Dieser wird bei der Client-seitigen Erzeugung mittels
@@ -139,7 +139,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		/* Erstellungsdatum zur Liste der Eigenschaften hinzufügen */
 		Row createDateRow = new Row();
 		Column createDateProperty = new Column("Erstellt");
-		String createDateString = df.format(contact.getCreationDate());
+		String createDateString = dateformat.format(contact.getCreationDate());
 		Column createDateValue = new Column(createDateString);
 		
 		createDateRow.addColumn(createDateProperty);
@@ -149,7 +149,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		/* Modifizierungsdatum zur Liste der Eigenschaften hinzufügen */
 		Row modifyDateRow = new Row();
 		Column modifyDateProperty = new Column("Zuletzt geändert");
-		String modifyDateString = df.format(contact.getModifyDate());
+		String modifyDateString = dateformat.format(contact.getModifyDate());
 		Column modifyDateValue = new Column(modifyDateString);
 		
 		modifyDateRow.addColumn(modifyDateProperty);
@@ -222,7 +222,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		
 		//Datum der Erstellung
 		Date currentDate = new Date();
-		String currentDateString = df.format(currentDate);
+		String currentDateString = dateformat.format(currentDate);
 		report.setCreated("Erstellt: " + currentDateString);
 		
 		/* Abrufen aller Kontakte, auf die der Nutzer Zugriff hat */
@@ -269,7 +269,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				
 		//Datum der Erstellung
 		Date currentDate = new Date();
-		String currentDateString = df.format(currentDate);
+		String currentDateString = dateformat.format(currentDate);
 		report.setCreated("Erstellt: " + currentDateString);
 		
 		Vector<Participation> allParticipations = new Vector<Participation>();		
@@ -404,7 +404,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				
 		//Datum der Erstellung
 		Date currentDate = new Date();
-		String currentDateString = df.format(currentDate);
+		String currentDateString = dateformat.format(currentDate);
 		report.setCreated("Erstellt: " + currentDateString);
 		
 		//Alle PropertyValues, die dem Suchtext entsprechen, ermitteln

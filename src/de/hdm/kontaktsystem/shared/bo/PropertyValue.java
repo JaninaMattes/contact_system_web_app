@@ -1,6 +1,5 @@
 package de.hdm.kontaktsystem.shared.bo;
 
-import java.util.Vector;
 import de.hdm.kontaktsystem.shared.bo.Property;
 
 /**
