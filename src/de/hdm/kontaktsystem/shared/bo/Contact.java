@@ -14,6 +14,11 @@ public class Contact extends BusinessObject {
 
 		
 	/**
+	 * Default Serial Version ID
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Eigenschaftsausprägungen des Kontakts
 	 */
 	
