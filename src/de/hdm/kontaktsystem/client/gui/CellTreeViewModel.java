@@ -132,35 +132,34 @@ public class CellTreeViewModel implements TreeViewModel {
 		this.cForm = cForm;
 	}
 
-	
+	/*
+	 * Update Data in Dataprovider
+	 */
 	public void updateData(Vector<BusinessObject> bov){
 		log("Update Data");
 		rootData.getList().clear();
 		dataProvider = null;
 		for (BusinessObject bo : bov) {
 			rootData.getList().add(bo);
-
 		}
-		//getNodeInfo(vbo);
 	}
 	
-	public void updateBusinessObject(BusinessObject bo){
-		log("Update BO");
-		if(bo instanceof Contact) {
-			if(dataProvider != null){
-				log("Update Dataprovider");
-				dataProvider.getList().remove(bo);
-				dataProvider.getList().add(bo);
-			}else{
-				log("Update root");
-				rootData.getList().remove(bo);
-				rootData.getList().add(bo);
-			}
-		} else if (bo instanceof ContactList){
+	public void updateRoot(BusinessObject bo){
+		log("Update root");
+		if(rootData.getList().contains(bo)){
 			rootData.getList().remove(bo);
-			rootData.getList().add(bo);
+			addToRoot(bo);
 		}
 		
+			
+	}
+	public void updateLeef(BusinessObject bo){
+		log("Update Leef");		
+		if(dataProvider.getList().contains(bo)){
+			dataProvider.getList().remove(bo);
+			addToLeef(bo);
+		}
+			
 	}
 	
 	/**
@@ -170,18 +169,18 @@ public class CellTreeViewModel implements TreeViewModel {
 	 * @param bo
 	 */
 	
-	public void addBusinessObject(BusinessObject bo){
-		if(bo instanceof Contact) {
-			if(dataProvider != null){
-				log("Add to Dataprovider");
-				dataProvider.getList().add(bo);
-			}else{
-				log("Add to root");
-				rootData.getList().add(bo);
-			}
-		} else if (bo instanceof ContactList){
+	public void addToRoot(BusinessObject bo){
+		
+		log("Add to root "+bo);
 		rootData.getList().add(bo);
-		}
+			
+	}
+	
+	public void addToLeef(BusinessObject bo){
+		
+		log("Add to Leef");
+		dataProvider.getList().add(bo);
+			
 	}
 	
 	/**
@@ -191,19 +190,17 @@ public class CellTreeViewModel implements TreeViewModel {
 	 * @param bo
 	 */
 	
-	public void removeBusinessObject(BusinessObject bo){
-		if(bo instanceof Contact) {
-			if(dataProvider != null){
-				log("Delete from Dataprovider");
-				dataProvider.getList().remove(bo);
-			}else{
-				log("Delete from root");
-				rootData.getList().remove(bo);
-			}
-		} else if (bo instanceof ContactList){
+	public void removeFromRoot(BusinessObject bo){
+		log("Delete from root");
 		rootData.getList().remove(bo);
-		}
+			
 		
+	}
+	public void removeFromLeef(BusinessObject bo){
+		
+		log("Delete from Leef");
+		dataProvider.getList().remove(bo);
+			
 	}
 	
 

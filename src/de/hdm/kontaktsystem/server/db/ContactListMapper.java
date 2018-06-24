@@ -266,7 +266,7 @@ public class ContactListMapper {
 			PreparedStatement stmt = con.prepareStatement("UPDATE ContactList SET contactList_name = ? WHERE ID = ?");
 			stmt.setString(1, cl.getName());
 			stmt.setInt(2, cl.getBoId());
-			stmt.execute();
+			if(stmt.executeUpdate()>0) return cl;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

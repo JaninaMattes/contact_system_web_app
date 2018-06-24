@@ -277,7 +277,8 @@ public class ParticipationMapper {
 				participation.setParticipant(user);	
 				c.setBo_Id(rs.getInt("BusinessObject_ID"));
 				c.setCreationDate(rs.getDate("creationDate"));
-				c.setModifyDate(rs.getDate("modificationDate"));				
+				c.setModifyDate(rs.getDate("modificationDate"));	
+				c.setShared_status(rs.getBoolean("status"));
 				participation.setShareAll(rs.getBoolean("Share_All"));
 				participation.setReference(c);
 				
@@ -299,7 +300,7 @@ public class ParticipationMapper {
 	 * @param user Teilhaber
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
-	public Vector<Participation> fillPartContacts(Contact contact, User user){
+	public Vector<PropertyValue> findPVforSharedContact(Contact c, User u){
 		
 		Connection con = DBConnection.connection();
 		try {
@@ -313,11 +314,11 @@ public class ParticipationMapper {
 			"INNER JOIN `BusinessObject` bo ON bo.`bo_ID` = pv.`contact_ID` " +
 			"WHERE part.`User_ID` = ? AND pv.`contact_ID` = ? " +
 			"ORDER BY `contact_ID`");
-			stmt.setDouble(1, user.getGoogleID());
-			stmt.setInt(2, contact.getBoId());
+			stmt.setDouble(1, u.getGoogleID());
+			stmt.setInt(2, c.getBoId());
 			ResultSet rs = stmt.executeQuery();
-			System.out.println("Result von " + contact.getBoId() + " und " + contact.getOwner().getGoogleID());
 			
+			Vector<PropertyValue> pvv = new Vector<PropertyValue>();
 			//Alle Teilhaberschaften aus der Datenbank in Objekte überführen
 			while(rs.next()){
 				PropertyValue pv = new PropertyValue(); // geteilte Eigenschft
@@ -328,12 +329,13 @@ public class ParticipationMapper {
 				pv.setBo_Id(rs.getInt("BusinessObject_ID"));
 				pv.setCreationDate(rs.getDate("creationDate"));
 				pv.setModifyDate(rs.getDate("modificationDate"));
-				pv.setOwner(contact.getOwner());
+				pv.setShared_status(rs.getBoolean("status"));
+				pv.setOwner(c.getOwner());
 				pv.setValue(rs.getString("value"));
-				contact.addPropertyValue(pv);
+				pvv.add(pv);
 			}
 			
-			return participations;
+			return pvv;
 			
 		} catch(SQLException e){
 			e.printStackTrace();
@@ -376,7 +378,6 @@ public class ParticipationMapper {
 				cl.setModifyDate(rs.getDate("modificationDate"));
 				cl.setName(rs.getString("contactList_name"));
 				cl.setShared_status(rs.getBoolean("status"));
-
 				participation.setShareAll(rs.getBoolean("Share_All"));
 				participation.setReference(cl);
 				
@@ -393,9 +394,25 @@ public class ParticipationMapper {
 
 	
 	/**
-	 * Die Methode updatePartcipation() macht hier keinen Sinn, da die Attribute einer
-	 * Teilhaberschaft sich nicht ändern. Andere Attribute bedeuten eine andere Teilhabeschaft.
+	 * Updatet den ShareAll status der Teilhaberschaft
+	 * @param participation
 	 */
+	public Participation updateParticipation(Participation participation) {
+		Connection con = DBConnection.connection();
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement("UPDATE User_BusinessObject SET Share_All = ? WHERE BusinessObject_ID = ? AND User_ID = ?");
+			stmt.setBoolean(1, participation.getShareAll());
+			stmt.setInt(2, participation.getReferenceID());
+			stmt.setDouble(3, participation.getParticipantID());
+			stmt.execute();
+			return participation;
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 	
 	
 	/**
