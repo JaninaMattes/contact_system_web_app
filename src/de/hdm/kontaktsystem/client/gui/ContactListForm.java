@@ -191,15 +191,16 @@ public class ContactListForm extends VerticalPanel {
 		//Buttons in CSS
 		//delete + share + save-Buttons müssen jeweils auch gleich sein
 
-		
-		deleteConButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		addConToList.getElement().setId("addedit");
+		unShareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		unShareButton.getElement().setId("deleteCLCButton");
 		deleteConButton.getElement().setId("deleteButton");
 		//deleteClButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		deleteClButton.getElement().setId("deleteButton");
 		//saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
 		saveButton.getElement().setId("saveButton");
 		//shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons vorgegebenen Style zu l�schen
-
+		deleteConButton.getElement().setId("deleteCLCButton");
 		shareButton.getElement().setId("shareButton");
 		
 		shareDialog.setStyleName("shareDialog");

@@ -111,7 +111,6 @@ public class ContactForm extends VerticalPanel {
 			final User user = new User();
 			
 			//CSS
-			//Stylenames nicht mehr �ndern
 			addButton.getElement().setId("addedit");	
 			saveButton.getElement().setId("saveButton");
 			editButton.getElement().setId("saveButton");

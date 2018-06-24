@@ -23,19 +23,14 @@ import de.hdm.kontaktsystem.shared.bo.User;
  * als auch Datenbank-Strukturen in Objekte überführt werden.
  * 
  * @author Sandra Prestel
- *
  */
-
-
-
 public class ParticipationMapper {
 	
 	/**
 	 * Die Klasse <code>ParticipationMapper</code> ist ein Singleton, d.h. sie wird nur einmal instantiiert.
 	 * Die statische Variable <code>INSTANCE</code> speichert die einzige Instanz der Klasse. Durch den 
 	 * Bezeichner <code>static</code> ist diese Variable nur einmal für alle Instanzen der Klasse vorhanden.
-	 */	
-	
+	 */		
 	private static ParticipationMapper participationMapper = null;
 	
 	/**
@@ -44,12 +39,12 @@ public class ParticipationMapper {
 	private ParticipationMapper() {
 	}
 	
-	 /**
-	 * Hier findet die Anwendung des <code> Singleton Pattern </code> statt
-	 * Diese Methode gibt das einzige Objekt dieser Klasse zurück.
-	 * @return Instanz des PropertyMapper 
-	 */			
-
+	/**
+	* Hier findet die Anwendung des <code> Singleton Pattern </code> statt.
+	* Diese Methode gibt das einzige Objekt dieser Klasse zurück.
+	* 
+	* @return Instanz des PropertyMapper 
+	*/			
 	public static ParticipationMapper participationMapper() {
 		if (participationMapper == null) {
 			participationMapper = new ParticipationMapper();
@@ -59,21 +54,23 @@ public class ParticipationMapper {
   
 	
 	/**
-	 * Zurückgeben aller Teilhaberschaften in der Datenbank
+	 * Zurückgeben aller Teilhaberschaften in der Datenbank.
+	 * 
 	 * @return alle Teilhaberschaften als Participation-Objekte in einem Vector
-	 * @note only used in Report Generator
+	 * @note nur im Report-Generator genutzt
 	 */
 	public Vector<Participation> findAllParticipations(){
 		Connection con = DBConnection.connection();
 		Statement stmt;
 		try {
-			// Create Vector for all Participation-Objects
+			// Vector für alle Teilhaberschaftsobjekte erzeugen
 			Vector<Participation> participations = new Vector<Participation>();
 			
 			stmt = con.createStatement();
-			// Get all Participations from database and store in a ResultSet-Object
+			// Alle Teilhaberschaftsobjekte aus der Datenbank auslesen
 			ResultSet rs = stmt.executeQuery("SELECT * FROM User_BusinessObject");
-			//Transfer all Participations from database to Participation-Objects
+			
+			//Alle Teilhaberschaften aus der Datenbank in Objekte überführen
 			while(rs.next()) {
 				Participation participation = new Participation();
 				User participant = new User();
@@ -92,24 +89,28 @@ public class ParticipationMapper {
 		return null;
 	}
 	
-	public boolean isFullShared(BusinessObject bo, User u){
+	/**
+	 * Gibt zurück, ob ein Geschäftsobjekt vollständig mit einem bestimmten User geteilt wurde.
+	 * 
+	 * @param businessObject Das Geschäftsobjekt
+	 * @param user Teilhaber 
+	 * @return True oder False
+	 */
+	public boolean isFullShared(BusinessObject businessObject, User user){
 		
 		Connection con = DBConnection.connection();
 		
-		try {
-			// Create Vector for all Participation-Objects
-			Vector<Participation> participations = new Vector<Participation>();			
-			// Get all Participations from database and store in a ResultSet-Object
+		try {		
+			// Alle Teilhaberschaftsobjekte aus der Datenbank auslesen
 			PreparedStatement stmt = con.prepareStatement("Select * From `User_BusinessObject` " + 
 			"WHERE `User_ID` = ? AND `BusinessObject_ID` = ? " );
-			stmt.setDouble(1, u.getGoogleID());
-			stmt.setInt(2, bo.getBoId());
+			stmt.setDouble(1, user.getGoogleID());
+			stmt.setInt(2, businessObject.getBoId());
 			ResultSet rs = stmt.executeQuery();
 			 if(rs.next()){
 				 return rs.getBoolean("Share_All");
 			 }
-			
-			
+						
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -121,17 +122,17 @@ public class ParticipationMapper {
 	 * Zurückgeben aller Teilhaberschaften zu Objekten eines gegebenen Users.
 	 * Dieser stellt den Ersteller <em>Owner</em> des BusinessObjektes dar.
 	 * 
+	 * @param user Eigentümer
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
-	 */
-	
+	 */	
 	public Vector<Participation> findParticipationsByOwner(User user) {
 		Connection con = DBConnection.connection();
 		
 		try {
-			
+			// Vector für alle Teilhaberschaftsobjekte erzeugen
 			Vector<Participation> participations = new Vector<Participation>();
 			
-			// Get all Participations from database and store in a ResultSet-Object
+			// Alle Teilhaberschaftsobjekte aus der Datenbank auslesen
 			PreparedStatement stmt = con.prepareStatement(
 					  "SELECT User_BusinessObject.*, BusinessObject.* "
 					+ "FROM  User_BusinessObject "
@@ -142,11 +143,9 @@ public class ParticipationMapper {
 			stmt.setDouble(1, user.getGoogleID());
 			ResultSet rs = stmt.executeQuery();
 			
-			//Transfer all Participations from database to Participation-Objects
+			//Alle Teilhaberschaften aus der Datenbank in Objekte überführen
 			while(rs.next()) {
-				Participation participation = new Participation();
-				BusinessObject reference = new BusinessObject();
-				
+				Participation participation = new Participation();				
 				User participant = new User();
 				PropertyValue bo = new PropertyValue();  // Träger für BO ID, da BO nicht instanziiert werden kann.
 				participant.setGoogleID(rs.getDouble("User_ID"));
@@ -154,9 +153,10 @@ public class ParticipationMapper {
 				bo.setBo_Id(rs.getInt("BusinessObject_ID"));
 				participation.setReference(bo);
 				participation.setShareAll(rs.getBoolean("Share_All"));
-				participations.add(participation);
 				
+				participations.add(participation);				
 			}
+			
 			return participations;
 			
 		} catch(SQLException e){
@@ -167,22 +167,24 @@ public class ParticipationMapper {
 	
 	
 	/**
-	 * Zurückgeben aller Teilhaberschaften, die mit einem gegebenen User geteilt werden
+	 * Zurückgeben aller Teilhaberschaften, die mit einem gegebenen User geteilt werden.
+	 * 
+	 * @param user Teilhaber
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
 	public Vector<Participation> findParticipationsByParticipant(User user){
 		Connection con = DBConnection.connection();
 		
 		try {
-			// Create Vector for all Participation-Objects
+			// Vector für alle Teilhaberschaftsobjekte erzeugen
 			Vector<Participation> participations = new Vector<Participation>();
 			
-			// Get all Participations from database and store in a ResultSet-Object
+			// Alle Teilhaberschaftsobjekte aus der Datenbank auslesen
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User_BusinessObject WHERE User_ID = ?");
 			stmt.setDouble(1, user.getGoogleID());
 			ResultSet rs = stmt.executeQuery();
 			
-			//Transfer all Participations from database to Participation-Objects
+			//Alle Teilhaberschaften aus der Datenbank in Objekte überführen
 			while(rs.next()) {
 
 				Participation participation = new Participation();
@@ -205,7 +207,9 @@ public class ParticipationMapper {
 	}
 	
 	/**
-	 * Zurückgeben aller Teilhaberschaften, die sich auf ein gegebenes BusinessObject beziehen
+	 * Zurückgeben aller Teilhaberschaften, die sich auf ein gegebenes Geschäftsobjekt beziehen.
+	 * 
+	 * @param businessObject Das referenzierte Geschäftsobjekt
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
 	public Vector<Participation> findParticipationsByBusinessObject(BusinessObject businessObject){
@@ -213,13 +217,15 @@ public class ParticipationMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
-			// Create Vector for all Participation-Objects
-			Vector<Participation> participations = new Vector<Participation>();			
-			// Get all Participations from database and store in a ResultSet-Object
+			// Vector für alle Teilhaberschaftsobjekte erzeugen
+			Vector<Participation> participations = new Vector<Participation>();		
+			
+			// Alle Teilhaberschaftsobjekte aus der Datenbank auslesen
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM User_BusinessObject WHERE BusinessObject_ID = ?");
 			stmt.setInt(1, businessObject.getBoId());
 			ResultSet rs = stmt.executeQuery();
 			
+			//Alle Teilhaberschaften aus der Datenbank in Objekte überführen
 			while(rs.next()) {
 				Participation participation = new Participation();
 				User participant = new User();
@@ -242,29 +248,33 @@ public class ParticipationMapper {
 
 
 	/**
-	 * Zurückgeben aller Teilhaberschaften von Vollständig geteilten Kontakten
+	 * Zurückgeben aller Teilhaberschaften von vollständig geteilten Kontakten.
+	 * 
+	 * @param user Teilhaber
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
-	public Vector<Participation> findSharedContacts(User u){
+	public Vector<Participation> findSharedContacts(User user){
 		
 		Connection con = DBConnection.connection();
 		
 		try {
-			// Create Vector for all Participation-Objects
-			Vector<Participation> participations = new Vector<Participation>();			
-			// Get all Participations from database and store in a ResultSet-Object
+			// Vector für alle Teilhaberschaftsobjekte erzeugen
+			Vector<Participation> participations = new Vector<Participation>();	
+			
+			// Alle Teilhaberschaftsobjekte aus der Datenbank auslesen
 			PreparedStatement stmt = con.prepareStatement("Select * From `User_BusinessObject` part " +
 			"INNER JOIN `Contact` c ON c.ID = part.`BusinessObject_ID` " +
 			"INNER JOIN `BusinessObject` bo ON bo.`bo_ID` = part.`BusinessObject_ID` " +
 			"WHERE part.`User_ID` = ?");
-			stmt.setDouble(1, u.getGoogleID());
+			stmt.setDouble(1, user.getGoogleID());
 			ResultSet rs = stmt.executeQuery();
 			
+			//Alle Teilhaberschaften aus der Datenbank in Objekte überführen
 			while(rs.next()) {
 				Participation participation = new Participation();
 				Contact c = new Contact();
 				
-				participation.setParticipant(u);	
+				participation.setParticipant(user);	
 				c.setBo_Id(rs.getInt("BusinessObject_ID"));
 				c.setCreationDate(rs.getDate("creationDate"));
 				c.setModifyDate(rs.getDate("modificationDate"));	
@@ -284,16 +294,20 @@ public class ParticipationMapper {
 	}
 
 	/**
-	 * Zurückgeben aller Teilhaberschaften von Teilweise geteilten Kontakten
+	 * Zurückgeben aller Teilhaberschaften von teilweise geteilten Kontakten.
+	 * 
+	 * @param contact Kontakt-Objekt
+	 * @param user Teilhaber
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
 	public Vector<PropertyValue> findPVforSharedContact(Contact c, User u){
 		
 		Connection con = DBConnection.connection();
 		try {
-			// Create Vector for all Participation-Objects
-			Vector<Participation> participations = new Vector<Participation>();			
-			// Get all Participations from database and store in a ResultSet-Object
+			// Vector für alle Teilhaberschaftsobjekte erzeugen
+			Vector<Participation> participations = new Vector<Participation>();
+			
+			// Alle Teilhaberschaftsobjekte aus der Datenbank auslesen
 			PreparedStatement stmt = con.prepareStatement("Select * From `User_BusinessObject` part " +
 			"INNER JOIN `PropertyValue` pv ON pv.ID = part.`BusinessObject_ID` " +
 			"INNER JOIN Property p ON p.`ID` = pv.`property_ID` " +
@@ -305,7 +319,7 @@ public class ParticipationMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			Vector<PropertyValue> pvv = new Vector<PropertyValue>();
-			
+			//Alle Teilhaberschaften aus der Datenbank in Objekte überführen
 			while(rs.next()){
 				PropertyValue pv = new PropertyValue(); // geteilte Eigenschft
 				Property p = new Property();
@@ -331,29 +345,33 @@ public class ParticipationMapper {
 
 	
 	/**
-	 * Zurückgeben aller Teilhaberschaften, von geteilten KontaktListen
+	 * Zurückgeben aller Teilhaberschaften von geteilten Kontaktlisten.
+	 * 
+	 * @param user Eigentümer der Kontaktlisten
 	 * @return Teilhaberschaften als Participation-Objekte in einem Vector
 	 */
-	public Vector<Participation> findAllSharedContactLists(User u){
+	public Vector<Participation> findAllSharedContactLists(User user){
 		
 		Connection con = DBConnection.connection();
 		
 		try {
-			// Create Vector for all Participation-Objects
+			// Vector für alle Teilhaberschaftsobjekte erzeugen
 			Vector<Participation> participations = new Vector<Participation>();			
-			// Get all Participations from database and store in a ResultSet-Object
+			
+			// Alle Teilhaberschaftsobjekte aus der Datenbank auslesen
 			PreparedStatement stmt = con.prepareStatement("Select * From `User_BusinessObject` part " +
 			"INNER JOIN `ContactList` cl ON cl.ID = part.`BusinessObject_ID` " +
 			"INNER JOIN `BusinessObject` bo ON bo.`bo_ID` = part.`BusinessObject_ID` " +
 			"WHERE part.`User_ID` = ?");
-			stmt.setDouble(1, u.getGoogleID());
+			stmt.setDouble(1, user.getGoogleID());
 			ResultSet rs = stmt.executeQuery();
 			
+			//Alle Teilhaberschaften aus der Datenbank in Objekte überführen
 			while(rs.next()) {
 				Participation participation = new Participation();
 				ContactList cl = new ContactList();
 				
-				participation.setParticipant(u);	
+				participation.setParticipant(user);	
 				
 				cl.setBo_Id(rs.getInt("BusinessObject_ID"));
 				cl.setCreationDate(rs.getDate("creationDate"));
@@ -374,10 +392,6 @@ public class ParticipationMapper {
 		return null;
 	}
 
-	
-	
-	
-	
 	
 	/**
 	 * Updatet den ShareAll status der Teilhaberschaft
@@ -403,7 +417,8 @@ public class ParticipationMapper {
 	
 	/**
 	 * Einfügen einer neuen Teilhaberschaft in die Datenbank
-	 * @param participation
+	 * @param participation Das einzufügende Teilhaberschafts-Objekt
+	 * @return Das eingefügte Teilhaberschafts-Objekt
 	 */
 	public Participation insertParticipation(Participation participation) {
 		Connection con = DBConnection.connection();
@@ -424,7 +439,7 @@ public class ParticipationMapper {
 		
 	/**
 	 * Löschen aller Teilhaberschaften
-	 *  @note in GUI Nicht Verwendet
+	 *  @note Entwicklerinstrument, in GUI nicht verwendet
 	 */
 	public void deleteAllParticipations() {
 		Connection con = DBConnection.connection();
@@ -437,19 +452,11 @@ public class ParticipationMapper {
 		}
 	}
 	
-//	Fällt weg, da nicht mehr Subklasse von BusinessObject, damit keine eigene ID
-//	/**
-//	 * Delete a Participation with a given ID
-//	 * @param id
-//	 */
-//	public void deleteParticipationForId(int id) {
-//		//TODO Implement Method
-//	}
 	
 	/**
 	 * Löschen aller Teilhaberschaften zu Objekten eines gegebenen Users
-	 * @param owner
-	 * @note in GUI Nicht Verwendet
+	 * @param user User, zu dessen Objekte die Teilhaberschaften gelöscht werden sollen
+	 * @note Entwicklerinstrument, in GUI nicht verwendet
 	 */
 	public void deleteParticipationForOwner(User user) {
 		Vector<Participation> participations = this.findParticipationsByOwner(user);
@@ -472,8 +479,8 @@ public class ParticipationMapper {
 	/**
 	 * Löschen aller Teilhaberschaften, die mit einem gegebenen User geteilt wurden.
 	 * 
-	 * @param participant
-	 *  @note in GUI Nicht Verwendet
+	 * @param user User, dessen Teilhaberschaften gelöscht werden sollen
+	 *  @note Entwicklerinstrument, in GUI nicht verwendet
 	 */
 	public void deleteParticipationForParticipant(User user) {
 		Vector<Participation> participations = findParticipationsByParticipant(user);		
@@ -487,35 +494,40 @@ public class ParticipationMapper {
 				
 			} catch(SQLException e){
 				e.printStackTrace();
-			}
-			
-			
+			}			
 		}
 	}
 	
-	public Participation deleteParticipation(Participation part) {
+	/**
+	 * Löschen einer bestimmten Teilhaberschaft aus der Datenbank.
+	 * 
+	 * @param participation zu löschende Teilhaberschaft
+	 * @return Das gelöschte Objekt
+	 */
+	public Participation deleteParticipation(Participation participation) {
 		Connection con = DBConnection.connection();
 		
 		try {
 			
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM User_BusinessObject WHERE User_ID = ? AND BusinessObject_ID = ?");
-			stmt.setDouble(1, part.getParticipantID());
-			stmt.setInt(2, part.getReferenceID());
+			stmt.setDouble(1, participation.getParticipantID());
+			stmt.setInt(2, participation.getReferenceID());
 			stmt.execute();
 			
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
 		
-		return part;
+		return participation;
 		
 	}
 	
 	
 	/**
 	 * Löschen aller Teilhaberschaften, die sich auf ein gegebenes BusinessObject beziehen
-	 * @param businessObject
-	 *  @note in GUI Nicht Verwendet
+	 * 
+	 * @param businessObject Objekt, zu dem alle Teilhaberschaften gelöscht werden sollen
+	 * @note Entwicklerinstrument, in GUI nicht verwendet
 	 */
 	public void deleteParticipationForBusinessObject(BusinessObject businessObject) {
 		Connection con = DBConnection.connection();
@@ -530,11 +542,5 @@ public class ParticipationMapper {
 		}
 		BusinessObjectMapper.businessObjectMapper().setStatusFalse(businessObject.getBoId());
 	}
-	
-	
-	
-
-	
-	
 	
 }
