@@ -267,7 +267,8 @@ public class ParticipationMapper {
 				participation.setParticipant(u);	
 				c.setBo_Id(rs.getInt("BusinessObject_ID"));
 				c.setCreationDate(rs.getDate("creationDate"));
-				c.setModifyDate(rs.getDate("modificationDate"));				
+				c.setModifyDate(rs.getDate("modificationDate"));	
+				c.setShared_status(rs.getBoolean("status"));
 				participation.setShareAll(rs.getBoolean("Share_All"));
 				participation.setReference(c);
 				
@@ -314,6 +315,7 @@ public class ParticipationMapper {
 				pv.setBo_Id(rs.getInt("BusinessObject_ID"));
 				pv.setCreationDate(rs.getDate("creationDate"));
 				pv.setModifyDate(rs.getDate("modificationDate"));
+				pv.setShared_status(rs.getBoolean("status"));
 				pv.setOwner(c.getOwner());
 				pv.setValue(rs.getString("value"));
 				pvv.add(pv);
@@ -358,7 +360,6 @@ public class ParticipationMapper {
 				cl.setModifyDate(rs.getDate("modificationDate"));
 				cl.setName(rs.getString("contactList_name"));
 				cl.setShared_status(rs.getBoolean("status"));
-
 				participation.setShareAll(rs.getBoolean("Share_All"));
 				participation.setReference(cl);
 				

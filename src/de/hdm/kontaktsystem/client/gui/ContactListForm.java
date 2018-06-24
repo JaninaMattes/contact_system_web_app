@@ -236,11 +236,11 @@ public class ContactListForm extends VerticalPanel {
 					
 					contactSystemAdmin.editContactList(contactListToDisplay, new UpdateCallback());
 					
-					Window.alert("Aktualisierte Kontaktliste" + contactListToDisplay.toString());
+//					Window.alert("Aktualisierte Kontaktliste" + contactListToDisplay.toString());
 					
 				} else {
 					
-					Window.alert("Gespeichert" + contactListToDisplay.toString());
+//					Window.alert("Gespeichert" + contactListToDisplay.toString());
 					
 					contactSystemAdmin.createContactList(contactListToDisplay, new SaveCallback());
 				}	
@@ -266,7 +266,7 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onSuccess(ContactList cl) {
 			if (cl != null) {
-				tvm.addBusinessObject(cl);
+				tvm.addToRoot(cl);
 				setSelected(cl);
 				Window.alert("Neue Kontaktliste gespeichert!");
 			}
@@ -293,9 +293,9 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onSuccess(ContactList cl) {
 			if (cl != null) {
-				tvm.updateBusinessObject(cl);
+				tvm.updateRoot(cl);
 				setSelected(cl);
-				Window.alert("Neue Kontaktliste gespeichert!");
+				Window.alert("Kontaktliste gespeichert!");
 			}	
 		}
 	}
@@ -481,6 +481,7 @@ public class ContactListForm extends VerticalPanel {
 						Contact conToDelete = con;
 						contactSystemAdmin.removeContactFromList(conToDelete, contactListToDisplay, 
 								new deleteConfromListCallback());
+						tvm.removeFromLeef(con);
 					}
 				}
 			}
@@ -502,7 +503,6 @@ public class ContactListForm extends VerticalPanel {
 		public void onSuccess(ContactList result) {
 			if (result != null) {
 				setSelected(result);
-				tvm.updateBusinessObject(result);
 				Window.alert("Kontakt wurde erfolgreich aus der Liste entfernt");
 			}
 		}
@@ -550,7 +550,7 @@ public class ContactListForm extends VerticalPanel {
 				if (clPart != null) {
 					//log(clPart.toString());
 					setSelected(null);
-					tvm.removeBusinessObject(clPart);
+					tvm.removeFromRoot(clPart);
 					Window.alert("Teilhaberschaft der Kontaktliste gelöscht!");
 				}
 			}
@@ -575,7 +575,7 @@ public class ContactListForm extends VerticalPanel {
 				if (result != null) {
 					setSelected(null);
 					RootPanel.get("Details").clear();
-					tvm.removeBusinessObject(result);
+					tvm.removeFromRoot(result);
 					Window.alert("Kontaktliste gelöscht!");
 				}
 			}
@@ -855,6 +855,7 @@ public class ContactListForm extends VerticalPanel {
 											// ausgewählten Kontakt zu Kontaktliste hinzufügen
 											log("Hinzuzufügender Kontakt zu Kontaktliste: " + conFromUser.toString());
 											contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay, new ContactsToAddClCallback());
+											tvm.addToLeef(conFromUser);
 										} else {
 											Window.alert("Kontakt bereits in Kontaktliste vorhanden");
 										}
@@ -862,6 +863,7 @@ public class ContactListForm extends VerticalPanel {
 								}else{
 										log("Hinzuzufügender Kontakt zu Kontaktliste: " + conFromUser.toString());
 										contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay, new ContactsToAddClCallback());
+										tvm.addToLeef(conFromUser);
 									}
 							}
 						}

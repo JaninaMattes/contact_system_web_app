@@ -76,11 +76,12 @@ public class ContactForm extends VerticalPanel {
 		Button shareButton = new Button("Teilen");
 		Button addButton = new Button("Hinzufügen");
 		Button editButton = new Button("Bearbeiten");
-		Button editPartButton = new Button("Teilhaberschaft Bearbeiten");
+		Button editPartButton = new Button("Bearbeiten");
 		//Button cancelButton = new Button("Abbrechen"); // Teilen abbrechen
 		Button okButton = new Button("Teilen");
-		
-		Button cancelButton = new Button("Abbrechen");
+		Button cancelNewButton = new Button("Abbrechen");
+		Button cancelEditButton = new Button("Abbrechen");
+		Button cancelShareButton = new Button("Abbrechen");
 		Button createButton = new Button("Speichern");
 		
 		ListBox addElement = new ListBox();
@@ -116,8 +117,9 @@ public class ContactForm extends VerticalPanel {
 			editButton.getElement().setId("saveButton");
 			shareButton.getElement().setId("shareButton");
 			deleteButton.getElement().setId("deleteButton");
-			
-			cancelButton.getElement().setId("cancel");
+			cancelNewButton.getElement().setId("cancel");
+			cancelEditButton.getElement().setId("cancel");
+			cancelShareButton.getElement().setId("cancel");
 			editPartButton.getElement().setId("addedit");
 			
 			shareDialog.setStyleName("shareDialog");
@@ -153,8 +155,8 @@ public class ContactForm extends VerticalPanel {
 			shareDialogvp.add(labelShare);
 			shareDialogvp.add(email);
 			shareDialogvp.add(shareDialoghp);
-			shareDialoghp.add(cancelButton);
-			shareDialoghp.add(okButton);	
+			shareDialoghp.add(okButton);
+			shareDialoghp.add(cancelShareButton);	
 			shareDialog.add(shareDialogvp);
 			shareDialog.center();
 			shareDialog.setVisible(false);
@@ -172,13 +174,13 @@ public class ContactForm extends VerticalPanel {
 			 * ButtonPanelbeimanlegen eines neuen Kontakts
 			 */
 			newPanel.add(createButton);
-			newPanel.add(cancelButton);
+			newPanel.add(cancelNewButton);
 			
 			/*
 			 * ButtonPanel beim beabriten eines Kontakts
 			 */
 			editPanel.add(saveButton);
-			editPanel.add(cancelButton);
+			editPanel.add(cancelEditButton);
 			
 			/*
 			 * Zuordnung zum VP			
@@ -287,27 +289,28 @@ public class ContactForm extends VerticalPanel {
 				Vector <PropertyValue> result = new Vector <PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {
-					loadPanel.setVisible(true);
+					
 					// TODO Auto-generated method stub				
-					if(Window.confirm("Bitte bestätigen Sie dass der Kontakt gelöscht werden soll.")) {				
-					contactSystemAdmin.deleteContact(contactToDisplay, new AsyncCallback<Contact>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-							loadPanel.setVisible(false);
-							Window.alert("Der Kontakt konnte nicht gelöscht werden.");
-						}
-
-						@Override
-						public void onSuccess(Contact result) {
-						loadPanel.setVisible(false);
-						contactToDisplay= null;
-						tvm.removeBusinessObject(result);
-						RootPanel.get("Details").clear();
-						loadPanel.setVisible(false);
-						}						
-					});
+					if(Window.confirm("Bitte bestätigen Sie dass der Kontakt gelöscht werden soll.")) {	
+						loadPanel.setVisible(true);
+						contactSystemAdmin.deleteContact(contactToDisplay, new AsyncCallback<Contact>() {
+	
+							@Override
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+								loadPanel.setVisible(false);
+								Window.alert("Der Kontakt konnte nicht gelöscht werden.");
+							}
+	
+							@Override
+							public void onSuccess(Contact result) {
+								loadPanel.setVisible(false);
+								contactToDisplay= null;
+								tvm.removeFromRoot(result);
+								tvm.removeFromLeef(result);
+								RootPanel.get("Details").clear();
+							}						
+						});
 					}					
 				} 				
 			});
@@ -411,7 +414,7 @@ public class ContactForm extends VerticalPanel {
 							log("Save: "+contactToDisplay);
 							contactSystemAdmin.editContact(contactToDisplay, new SaveCallback());
 						}
-						edit = false;
+						
 					}
 					// Entfernen der Gui Elemente
 					labelAddElement.setVisible(false);
@@ -459,39 +462,9 @@ public class ContactForm extends VerticalPanel {
 			});
 			
 			
-			cancelButton.addClickHandler(new ClickHandler(){
-
-				@Override
-				public void onClick(ClickEvent event) {
-					
-					if(shareDialog.isVisible()){
-						shareDialog.setVisible(false);
-					}else if(edit || editPart){
-						
-						edit = false;
-						editPart = false;
-						labelAddElement.setVisible(false);
-						addElement.setVisible(false);
-						addButton.setVisible(false);
-						//CheckBox auf false setzten
-						for(CheckBox cb: cbv){
-							cb.setValue(false);
-						}
-						// Texboxen können nicht mehr bearbeitet werden
-						for(TextBox tb : tbv){
-							tb.setReadOnly(true);
-						}
-						
-						vp.remove(editPanel);
-						vp.add(btnPanel);
-					}else{
-						contactToDisplay = null;
-						RootPanel.get("Details").clear();
-					}
-				 
-				}
-				
-			});
+			cancelNewButton.addClickHandler(new CancelClickHandler());
+			cancelEditButton.addClickHandler(new CancelClickHandler());
+			cancelShareButton.addClickHandler(new CancelClickHandler());
 			
 			addButton.addClickHandler(new ClickHandler() {
 				
@@ -596,7 +569,10 @@ public class ContactForm extends VerticalPanel {
 						
 			addElement.clear();
 			sharedWithUser.clear();
-		
+			
+			labelReceivedFrom.setVisible(false);
+			labelReceivedFrom.setText("");
+			
 			tbv.clear();
 			cbv.clear();
 			ft.clear();
@@ -787,7 +763,6 @@ public class ContactForm extends VerticalPanel {
 				//Teilen Funktionen
 				labelShare.setVisible(false);
 				email.setVisible(false);
-				labelReceivedFrom.setVisible(true);
 				labelSharedWith.setVisible(false);
 				sharedWithUser.setVisible(false);
 				editPartButton.setVisible(false);
@@ -848,10 +823,18 @@ public class ContactForm extends VerticalPanel {
 			public void onSuccess(Contact result) {
 				loadPanel.setVisible(false);
 				log("####### Der Kontakt wurde gespeichert: "+result);
-//				RootPanel.get("Details").clear();
+				if(edit){
+					tvm.updateRoot(result); 
+					tvm.updateLeef(result); 
+				}else{
+					log("Add New Contact to Root");
+					tvm.addToRoot(result);
+				}
 				setSelected(result);
-				tvm.updateBusinessObject(result); 
-//				RootPanel.get("Details").add(vp);
+				
+				// Update des TreeViewModels
+				
+				edit = false;
 			}							
 		}
 		
@@ -875,6 +858,40 @@ public class ContactForm extends VerticalPanel {
 				Window.alert("Der Kontakt wurde geteilt.");
 			}				
 		}
+		
+		// Cancel Clickhandler
+		private class CancelClickHandler implements ClickHandler{
+
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				if(shareDialog.isVisible()){
+					shareDialog.setVisible(false);
+				}else if(edit || editPart){
+					
+					edit = false;
+					editPart = false;
+					labelAddElement.setVisible(false);
+					addElement.setVisible(false);
+					addButton.setVisible(false);
+					//CheckBox auf false setzten
+					for(CheckBox cb: cbv){
+						cb.setValue(false);
+					}
+					// Texboxen können nicht mehr bearbeitet werden
+					for(TextBox tb : tbv){
+						tb.setReadOnly(true);
+					}
+					
+					vp.remove(editPanel);
+					vp.add(btnPanel);
+				}else{
+					contactToDisplay = null;
+					RootPanel.get("Details").clear();
+				}
+			}	
+		}
+		
 				
 		/*
 		 * TreeViewModel setter

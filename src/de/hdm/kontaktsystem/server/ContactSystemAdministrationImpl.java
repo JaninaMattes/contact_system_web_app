@@ -453,12 +453,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			part = this.deleteParticipation(part);
 			if(part != null){
 				c = contact;
-				for(PropertyValue pv : c.getPropertyValues()){
-					part = new Participation();
-					part.setParticipant(user);
-					part.setReference(pv);
-					this.deleteParticipation(part);
-				}
 			}
 		}
 		return c;
@@ -845,7 +839,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				Participation partPV = new Participation();
 				partPV.setParticipant(p.getParticipant());
 				partPV.setReference(pv);
-				this.deleteParticipation(part);
+				this.deleteParticipation(partPV);
 			}
 		}
 		
