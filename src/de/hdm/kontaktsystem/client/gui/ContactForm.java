@@ -288,29 +288,30 @@ public class ContactForm extends VerticalPanel {
 				Vector <PropertyValue> result = new Vector <PropertyValue>();
 				@Override
 				public void onClick(ClickEvent event) {
-					
-					// TODO Auto-generated method stub				
-					if(Window.confirm("Bitte bestätigen Sie dass der Kontakt gelöscht werden soll.")) {	
-						loadPanel.setVisible(true);
-						contactSystemAdmin.deleteContact(contactToDisplay, new AsyncCallback<Contact>() {
-	
-							@Override
-							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
-								loadPanel.setVisible(false);
-								Window.alert("Der Kontakt konnte nicht gelöscht werden.");
-							}
-	
-							@Override
-							public void onSuccess(Contact result) {
-								loadPanel.setVisible(false);
-								contactToDisplay= null;
-								tvm.removeFromRoot(result);
-								tvm.removeFromLeef(result);
-								RootPanel.get("Details").clear();
-							}						
-						});
-					}					
+					if(!contactToDisplay.equals(myUser.getUserContact())){		
+						if(Window.confirm("Bitte bestätigen Sie dass der Kontakt gelöscht werden soll.")) {	
+							loadPanel.setVisible(true);
+							contactSystemAdmin.deleteContact(contactToDisplay, new AsyncCallback<Contact>() {
+		
+								@Override
+								public void onFailure(Throwable caught) {
+									loadPanel.setVisible(false);
+									Window.alert("Der Kontakt konnte nicht gelöscht werden.");
+								}
+		
+								@Override
+								public void onSuccess(Contact result) {
+									loadPanel.setVisible(false);
+									contactToDisplay= null;
+									tvm.removeFromRoot(result);
+									tvm.removeFromLeef(result);
+									RootPanel.get("Details").clear();
+								}						
+							});
+						}	
+					}else{
+						Window.alert("Sie können Ihren eigenen Kontakt nicht löschen");
+					}
 				} 				
 			});
 			
@@ -720,11 +721,17 @@ public class ContactForm extends VerticalPanel {
 				
 				cLabel.setText("Kontakt Id: " + contactToDisplay.getBoId());			
 
-				if(contactToDisplay.isShared_status()) {
-					contactStatus.setText("Status: Geteilt");
-				} else { 
+				// Zeigt den den SharedStatus an
+
+				if (contactToDisplay.getShared_status()) {
+					if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
+						contactStatus.setText("Status: Von mir geteilt");
+					}else{
+						contactStatus.setText("Status: An mich geteilt");
+					}	
+				} else {
 					contactStatus.setText("Status: Nicht geteilt");
-				}	
+				}
 							
 				//Elemente füllen
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {

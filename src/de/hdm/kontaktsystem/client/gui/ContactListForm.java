@@ -67,8 +67,8 @@ public class ContactListForm extends VerticalPanel {
 	
 	Label isShared = new Label("Geteilt mit: ");
 	Label labelShare = new Label("Teilen mit: ");
-	Label contactStatus = new Label("Status: ");
-	Label contactStatusValue = new Label("");
+	Label contactListStatus = new Label("Status: ");
+	Label contactListStatusValue = new Label("");
 	Label labelSharedWith = new Label("Geteilt mit: ");
 	Label labelReceivedFrom = new Label("Eigentümer: ");
 	Label labelAddConsToList = new Label("Kontakt hinzufügen ");
@@ -92,8 +92,8 @@ public class ContactListForm extends VerticalPanel {
 		Grid contactListGrid = new Grid(8, 3);
 		this.add(contactListGrid);
 
-		contactListGrid.setWidget(0, 0, contactStatus);
-		contactListGrid.setWidget(0, 1, contactStatusValue);
+		contactListGrid.setWidget(0, 0, contactListStatus);
+		contactListGrid.setWidget(0, 1, contactListStatusValue);
 		
 		contactListGrid.setWidget(1, 0, contactListLabel);
 		contactListGrid.setWidget(1, 1, nameContactList);
@@ -123,8 +123,8 @@ public class ContactListForm extends VerticalPanel {
 		shareDialogvp.add(labelShare);
 		shareDialogvp.add(email);
 		shareDialogvp.add(shareDialoghp);
-		shareDialoghp.add(cancelButton);
-		shareDialoghp.add(okButton);	
+		shareDialoghp.add(okButton);
+		shareDialoghp.add(cancelButton);	
 		shareDialog.add(shareDialogvp);
 		shareDialog.center();
 		shareDialog.setVisible(false);
@@ -181,11 +181,11 @@ public class ContactListForm extends VerticalPanel {
 		//firstNameLabel.getElement().setId("namelabel");
 		//lastNameLabel.getElement().setId("namelabel");
 		contactLabel.getElement().setId("contactlabel");
-		contactStatus.getElement().setId("contactstatus");
+		contactListStatus.getElement().setId("contactstatus");
 
 
 		labelShare.getElement().setId("teilenlabel");
-		contactStatus.getElement().setId("contactstatus");
+		contactListStatus.getElement().setId("contactstatus");
 		
 
 		//Buttons in CSS
@@ -582,11 +582,6 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 		
-		/**
-		 * Callback Klasse für Status Anzeige der Kontaktliste
-		 * @author Kim-Ly
-		 *
-		 */
 		
 	/**
 	 * Setzen des ContactList Objekts, aller zugehörigen Kontakte aus TreeView
@@ -627,6 +622,20 @@ public class ContactListForm extends VerticalPanel {
 				public void onSuccess(ContactList list) {
 					log("Liste geladen");
 					contactListToDisplay = list;
+					
+					// Zeigt den den SharedStatus an
+
+					if (contactListToDisplay.getShared_status()) {
+						if(contactListToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
+							contactListStatusValue.setText("Von mir geteilt");
+						}else{
+							contactListStatusValue.setText("An mich geteilt");
+						}	
+					} else {
+						contactListStatusValue.setText("Nicht geteilt");
+					}
+				
+					
 					int count = 0;
 					for (Contact con : list.getContacts()) {
 
@@ -634,13 +643,7 @@ public class ContactListForm extends VerticalPanel {
 							++count;
 					}
 					contactNames.setVisibleItemCount(count);
-					
-		   			
-		   			/*
-		   			 *  Alle User mit denen Kontaktliste geteilt werden kann
-		   			 */
-//		   			contactSystemAdmin.getAllUsers(new UserToShareCallback());
-		   			
+							   			
 		   			
 					/* Alle User mit denen Kontaktliste geteilt wurde 
 					 * -> Nur Callback abrufen wenn User Besitzer der Kontaktliste, sonst Listbox + Label unsichtbar
@@ -669,32 +672,7 @@ public class ContactListForm extends VerticalPanel {
 				
 			});
 			
-			/*
-			 *  Status der Kontaktliste anzeigen
-			 */			
-			contactSystemAdmin.getAllParticipationsByBusinessObject(contactListToDisplay, new AsyncCallback<Vector<Participation>>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					log("Aufruf der Teilhaberschaften der Kontaktliste fehlgeschlagen");
-					
-				}
-
-				@Override
-				public void onSuccess(Vector<Participation> result) {
-					for (Participation part : result) {
-						
-						if (part.getParticipant().getGoogleID() == contactListToDisplay.getOwner().getGoogleID()) {
-							contactStatusValue.setText("An mich geteilt");
-						} else if (part.getParticipant().getGoogleID() != contactListToDisplay.getOwner().getGoogleID()) {
-							contactStatusValue.setText("Von mir geteilt");
-						} else {
-							contactStatusValue.setText("Nicht geteilt");
-						}
-					}
-				}
-
-			});
+			
 
    			/*
    			 *  Alle Kontakte die User angelegt hat oder die ihm geteilt wurden 
