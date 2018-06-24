@@ -21,6 +21,8 @@ import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
 public interface ReportGeneratorAsync {
 	
 	void init(AsyncCallback<Void> callback);
+
+	void login(String requestUri, AsyncCallback<User> callback);
 	
 	void createAllContactsReport(AsyncCallback<AllContactsOfUserReport> callback);
 	
@@ -33,5 +35,6 @@ public interface ReportGeneratorAsync {
 	void getAllProperties(AsyncCallback<Vector<Property>> callback);
 	
 	void getAllUsers(AsyncCallback<Vector<User>> callback);
+	
 
 }

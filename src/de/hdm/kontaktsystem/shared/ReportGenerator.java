@@ -29,6 +29,11 @@ public interface ReportGenerator extends RemoteService {
 	   */
 	  public void init() throws IllegalArgumentException;
 	  
+
+	  /**
+	   * Mehtode zum einloggen des Nutzers in den Reportgenerator 
+	   */
+	  public User login(String requestUri);
 	  
 	  /**
 	   * Erstellen eines AllContactsOfUserReport. Dieser Report stellt alle Kontakte dar,
@@ -82,5 +87,5 @@ public interface ReportGenerator extends RemoteService {
 	   */
 	  public Vector<User> getAllUsers() throws IllegalArgumentException;
 	  
-
+	  
 }
