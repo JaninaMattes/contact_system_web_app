@@ -853,6 +853,10 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onSuccess(Participation result) {
 				loadPanel.setVisible(false);
+				sharedWithUser.addItem(result.getParticipant().getGMail());
+				for(CheckBox cb : cbv){
+					cb.setValue(false);
+				}
 				log("Neue Teilhaberschaft: " + result);	
 				Window.alert("Der Kontakt wurde geteilt.");
 			}				
