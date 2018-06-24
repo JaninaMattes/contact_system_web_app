@@ -187,16 +187,16 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin-top: 2vh;
-    margin-Bottom: 13vh;
+    margin-top: 1vh;
+    margin-Bottom: 5vh;
     border-radius: 4px;
     cursor: pointer;
 }
 
 #searchAllContacts{ /* Button "Alle Kontakte" im Report Generator */
 	height: 25px;
-    width: 100px;
-    margin-left: 73px;
+    width: 280px;
+   margin-left: 20px;
     margin-top: 15px;
     font-family: "Arial", Arial, sans-serif;
 	background-color: #c0c0c0;
@@ -319,9 +319,11 @@ body {
   	vertical-align: middle;
 }
 
-/* DropDown-Liste */
+/* Beide DropDown-Listen im Report Generator */
 #ReportDropDownList{
 	margin: 0 4px;
+	margin-left: 20px;
+	padding-right: 100px;
 }
 
 #DropDownList{
@@ -343,7 +345,8 @@ body {
 	hight: 30px;
 	margin-top: 10px;
 	margin-right: 5px;
-	margin-left: 4px;
+	margin-left: 20px;
+	padding-right: 150px; /*TODO: funktioniert noch nicht, Textfeld soll länger werden*/
 }
 
 #search-textfeld{
@@ -408,10 +411,11 @@ body {
 	border:none;
 }
 
-#filtern{
+#filtern{/* Report Generator- Labels: "Nach Eigenschaftsausprägungen filtern" + "nach Teilhaber filtern"*/
 	border: none;
 	padding-top: 20px;
 	padding-bottom: 10px;
+	padding-left: 20px;
 	font-size: 14px;
 	color: white;
 }
