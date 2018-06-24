@@ -829,8 +829,7 @@ public class ContactForm extends VerticalPanel {
 					log("Add New Contact to Root");
 					tvm.addToRoot(result);
 				}
-				setSelected(result);
-				
+				tvm.setSelectedContactContactlist(result);
 				// Update des TreeViewModels
 				
 				edit = false;

@@ -269,6 +269,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			pv.setOwner(c.getOwner());
 			pvv.add(this.createPropertyValue(pv));
 		}
+		c.setName(this.getNameOfContact(c));
 		c.setPropertyValues(pvv);
 		return c;
 	

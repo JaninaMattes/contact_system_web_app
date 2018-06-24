@@ -92,6 +92,7 @@ public class UserForm extends VerticalPanel{
 
 					RootPanel.get("Details").clear();
 					cf.setSelected(myUser.getUserContact());
+					
 					RootPanel.get("Details").add(cf);
 					
 				}

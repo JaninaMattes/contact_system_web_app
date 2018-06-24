@@ -268,7 +268,7 @@ public class ContactListForm extends VerticalPanel {
 		public void onSuccess(ContactList cl) {
 			if (cl != null) {
 				tvm.addToRoot(cl);
-				setSelected(cl);
+				tvm.setSelectedContactContactlist(cl);
 				Window.alert("Neue Kontaktliste gespeichert!");
 			}
 			
