@@ -41,7 +41,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	private static final long serialVersionUID = 1L;
 
 	private Contact contact = null; // ?? TODO: überprüfen -> Analog zu BankProjekt
-
+	
 	/*
 	 * Referenzen auf die zugehörigen DatenbankMapper
 	 */
@@ -104,6 +104,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		// Test
 		return Double.parseDouble(userService.getCurrentUser().getUserId()); // currentUser;
 	}
+	
+//	public void setAccountOwner(User u){
+//		myUser = u;
+//	}
+	
 
 	/*
 	 * ***************************************************************************
@@ -160,14 +165,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			user.setLoginUrl(userService.createLoginURL(requestUri));
 
 		}
-
+//		myUser = user;
 		return user;
 
 	}
 
 	@Override
 	public User getAccountOwner() {
-		return getUserByID(this.getCurrentUser());
+		return this.getUserByID(this.getCurrentUser());
 	}
 
 	/**
@@ -207,7 +212,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public User getUserBygMail(String email) {
 		User user = uMapper.findByEmail(email);
-		user.setUserContact(this.getOwnContact(user));
+		if(user != null){
+			user.setUserContact(this.getOwnContact(user));
+		}
 		return user;
 
 	}
@@ -392,7 +399,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	/**
 	 * Gibt alle Contact-Objekte zurück die eine PropertyValue Besitzen, welche der
 	 * Sucheingabe entspricht.
-	 * 
+	 * Noch nicht nach eigenen Gefiltert 
 	 * @param Sucheingabe
 	 * @return Vector<Contact>
 	 */
@@ -717,33 +724,51 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 	// TODO Überprüfen
+	/**
+	 * Wenn Vollständig geteilt, alle PVS aus der Part tabelle löschen
+	 * Ansosnten abgleich ob neue teilhaberschaft oder ob welche entfernet wurden
+	 */
 	@Override
 	public Participation editParticpation(Participation part){
+		partMapper.updateParticipation(part); 
 		if(part.getReferencedObject() instanceof Contact){
 			Contact c = (Contact) part.getReferencedObject();
-			// Suchen von allen geteilten Eigenschaften 
-			Vector<Participation> allShared = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
-			// Referenz Contact-Object um festzustellen was nicht geteilt wird
-			Contact refC = this.getContactById(c.getBoId());
-			// Kontrolle ob neue PropertyValues geteilt wurden
-			for(PropertyValue pv : c.getPropertyValues()){
-				Participation addPart = new Participation();
-				addPart.setParticipant(part.getParticipant());
-				addPart.setReference(pv);
-				if(!allShared.contains(addPart)){
-					this.createParticipation(addPart);
+			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt		
+			if(part.getShareAll()){
+				for(PropertyValue pv : c.getPropertyValues()){
+					Participation removePart = new Participation();
+					removePart.setParticipant(part.getParticipant());
+					removePart.setReference(pv);
+					this.deleteParticipation(removePart);
 				}
-			}
-			// Löscht alle beziehungen zu PropertyValues die nicht mehr geteilt werden sollen.
-			for(PropertyValue pv : refC.getPropertyValues()){
-				if(!c.getPropertyValues().contains(pv)){
-					Participation delPart = new Participation();
-					delPart.setParticipant(part.getParticipant());
-					delPart.setReference(pv);
-					this.deleteParticipation(delPart);
-				}
-			}
 			
+			}else{ 
+				// Wenn nicht alles geteilt wird muss überprüft werden was bereits geteilt ist, was neu geteilt werdne muss 
+				// und was entfernt werden soll.
+				Vector<Participation> allShared = this.getAllParticipationsByParticipant(part.getParticipant());
+				// Referenz Contact-Object um festzustellen was nicht geteilt wird
+				Vector<PropertyValue> refPV = this.getPropertyValuesForContact(c);
+				// Suchen von allen geteilten Eigenschaften 
+				
+				// Kontrolle ob neue PropertyValues geteilt wurden
+				for(PropertyValue pv : c.getPropertyValues()){
+					Participation addPart = new Participation();
+					addPart.setParticipant(part.getParticipant());
+					addPart.setReference(pv);
+					if(!allShared.contains(addPart)){
+						this.createParticipation(addPart);
+					}
+				}
+				// Löscht alle beziehungen zu PropertyValues die nicht mehr geteilt werden sollen.
+				for(PropertyValue pv : refPV){
+					if(!c.getPropertyValues().contains(pv)){
+						Participation removePart = new Participation();
+						removePart.setParticipant(part.getParticipant());
+						removePart.setReference(pv);
+						this.deleteParticipation(removePart);
+					}
+				}
+			}
 			return part;
 		}else if(part.getReferencedObject() instanceof ContactList){
 			ContactList cl = (ContactList) part.getReferencedObject();
@@ -786,7 +811,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Vector<Participation> getAllParticipationsByParticipant(User participant) {
 		Vector<Participation> partV = partMapper.findParticipationsByParticipant(participant);
 		for (Participation part : partV) {
-			part.setParticipant(this.getUserByID(part.getParticipantID()));
+			part.setParticipant(participant);
 			part.setReference(this.getBusinessObjectByID(part.getReferenceID()));
 		}
 		return partV;
@@ -923,8 +948,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		public Vector<Contact> getAllCSharedByMe (User user) {
 
 			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-			Vector<Participation> participationVector = new Vector<Participation>();		
-			participationVector = this.getAllParticipationsByOwner(user);		
+			Vector<Participation> participationVector = this.getAllParticipationsByOwner(user);		
 			Vector<Contact> contactResultVector = new Vector <Contact>(); 		
 					
 			for (Participation part : participationVector) {			 
@@ -1189,13 +1213,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln,
 		// die von diesem geteilt wurden
-		Vector<Participation> participationVector = new Vector<Participation>();
-		participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
+		 Vector<Participation> participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
 		Vector<Contact> contactResultVector = new Vector<Contact>();
 
 		for (Participation part : participationVector) {
 			Contact c = cMapper.findContactById(part.getReferenceID());
-			if (c != null) {
+			if (c != null && !contactResultVector.contains(c)) {
+				c.setName(this.getNameOfContact(c));
 				contactResultVector.addElement(c);
 			}
 		}

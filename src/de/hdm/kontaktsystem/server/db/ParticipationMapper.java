@@ -379,13 +379,25 @@ public class ParticipationMapper {
 	
 	
 	/**
-	 * Update a specific Participation in the database
+	 * Updatet den ShareAll status der Teilhaberschaft
 	 * @param participation
 	 */
-		/* 
-		 * nothing to update, because the IDs don't change.
-		 * Since the IDs are the Primary Key other values will just generate a new Participation
-		 */
+	public Participation updateParticipation(Participation participation) {
+		Connection con = DBConnection.connection();
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement("UPDATE User_BusinessObject SET Share_All = ? WHERE BusinessObject_ID = ? AND User_ID = ?");
+			stmt.setBoolean(1, participation.getShareAll());
+			stmt.setInt(2, participation.getReferenceID());
+			stmt.setDouble(3, participation.getParticipantID());
+			stmt.execute();
+			return participation;
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 	
 	
 	/**
