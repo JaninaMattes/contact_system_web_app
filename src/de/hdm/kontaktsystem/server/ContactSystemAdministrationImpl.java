@@ -39,8 +39,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 
 	private static final long serialVersionUID = 1L;
-
-	private Contact contact = null; // ?? TODO: überprüfen -> Analog zu BankProjekt
 	
 	/*
 	 * Referenzen auf die zugehörigen DatenbankMapper
@@ -87,13 +85,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 
-	public Contact getContact() {
-		return contact;
-	}
-
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
 	private double currentUser = 510d;
 	
 	public void setCurrentUser(double uid){ // Test um den User zu wechseln
