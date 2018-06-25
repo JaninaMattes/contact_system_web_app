@@ -212,6 +212,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	/**
 	 * Nur für Report!
+	 * Wenn nicht woanders verwendet kann das raus, im Report wird es nicht mehr benutzt.
 	 */
 	// ## IO ##
 	@Override
@@ -241,6 +242,35 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return uMapper.delete(user);
 	}
 
+	/**
+	 * Gibt die IDs aller User zurück, die für den eingeloggten User sichtbar sind.
+	 * Verwendet im Report-Generator.
+	 * @return alle bekannten User
+	 */
+	public Vector<User> findAllKnownUsers(){
+		User user = this.getUserByID(this.getCurrentUser());
+		Vector<Participation> sharedParticipations = partMapper.findParticipationsByOwner(user);
+		Vector<Participation> reveivedParticipations = partMapper.findParticipationsByParticipant(user);
+		sharedParticipations.addAll(reveivedParticipations);
+		Vector<User> users = new Vector<User>();
+		for(Participation part : sharedParticipations) {
+			User oneUser = this.getUserByID(part.getParticipant().getGoogleID());
+			boolean containsUser = false;
+			for(User userElement : users) {
+				if(userElement.getGoogleID() == oneUser.getGoogleID()) {
+					containsUser = true;
+				}
+			}
+			if(!containsUser) {				
+				users.add(oneUser);
+			}
+		}
+		for (User singleUser : users) {
+			singleUser.setUserContact(this.getOwnContact(singleUser));
+		}
+		return users;
+	}
+	
 	/*
 	 * ***************************************************************************
 	 * ABSCHNITT, Contact
@@ -790,7 +820,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Intern Verwendet in FindAllSharedByOthersToMe
+	 * Verwendet in FindAllSharedByOthersToMe und Report
 	 */
 	@Override
 	public Vector<Participation> getAllParticipationsByParticipant(User participant) {

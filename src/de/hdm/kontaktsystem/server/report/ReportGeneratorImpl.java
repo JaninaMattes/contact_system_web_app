@@ -52,7 +52,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Objekt, das ein Date-Objekt in einen String umwandeln kann, der das Format
 	 * Tag.Monat.Jahr Stunde:Minute:Sekunde hat.
 	 */
-	DateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+	private DateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	
 	/**
 	 * No-Argument-Konstruktor. Dieser wird bei der Client-seitigen Erzeugung mittels
@@ -112,7 +112,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * sich eine Liste der Teilhaber, die Zugriff auf den Kontakt haben, an.
 	 * Diese Methode wird von den anderen Methoden aufgerufen, die daraus die Reports zusammensetzen.
 	 */
-	protected void addSingleContact(Contact contact, Report report) {
+	private void addSingleContact(Contact contact, Report report) {
 		SingleContact contactElement = new SingleContact();
 		Vector<PropertyValue> allPropertyValues = contact.getPropertyValues();
 		
@@ -193,7 +193,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Erzeugt Paragraph mit den Daten des Nutzers, für den der Report erstellt wird. 
 	 * Aus den Report-Methoden ausgelagert.
 	 */
-	protected void addUserParagraph(User user, Report report) {
+	private void addUserParagraph(User user, Report report) {
 		SimpleParagraph userName = new SimpleParagraph(user.getUserContact().getName().getValue());
 		SimpleParagraph userMail = new SimpleParagraph(user.getGMail());
 		
@@ -493,7 +493,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 	@Override
 	public Vector<User> getAllUsers() throws IllegalArgumentException {
-		return administration.getAllUsers();
+		return administration.findAllKnownUsers();
 	}
 	
 }

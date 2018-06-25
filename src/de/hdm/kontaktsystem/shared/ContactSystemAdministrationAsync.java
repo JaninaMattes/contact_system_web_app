@@ -23,6 +23,7 @@ public interface ContactSystemAdministrationAsync {
 	public void getAllUsers(AsyncCallback<Vector<User>> callback); //Aufruf in Report, gebraucht: googleID, Name (über UserContact.getName().getValue())  
 																   // Aufruf in Kontaktliste, -> Callback aller im System existenten User zur Befüllung der Listbox mit Usern an die Kontaktliste geteilt werden kann 
 
+	public void findAllKnownUsers(AsyncCallback<Vector<User>> callback); //Aufruf in Report
 	
 	public void getAccountOwner(AsyncCallback<User> callback);  //Aufruf in Report, gebraucht: User-Objekt mit GoogleID, gMail, Name (über UserContact.getName().getValue())
 	
