@@ -17,19 +17,24 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 public class PropertyValueMapper {
 
 	/**
-	 * Singleton Pattern
+	 * Singleton Pattern -> Sicherstellung über static, dass das Objekt PropertyValueMapper nur von der Klasse selbst erreicht werden kann
 	 */
 
 	private static PropertyValueMapper propertyValueMapper = null;
+	
+	/**
+	 * Default Konstruktor auf Protected gesetzt, um nur innerhalb des Packages dass alle Mapper Klassen beinhaltet zugegriffen werden kann
+	 */
 
 	protected PropertyValueMapper() {
 
 	}
 
 	/**
-	 * Gibt nach dem Singelton Pattern eine Instanz des PropertyValueMppers zurueck
+	 * Gibt nach dem Singleton Pattern eine Instanz des PropertyValueMppers zurueck
 	 * 
 	 * @return PropertyValueMapper-Objekt
+	 * @author Kim-Ly
 	 */
 	public static PropertyValueMapper propertyValueMapper() {
 		if (propertyValueMapper == null) {
@@ -45,6 +50,7 @@ public class PropertyValueMapper {
 	 * 
 	 * @param PropertyValue-Objekt
 	 * @return PropertyValue-Objekt
+	 * @author Kim-Ly
 	 */
 	
 	public PropertyValue insert(PropertyValue pv) {
@@ -74,6 +80,7 @@ public class PropertyValueMapper {
 	 * 
 	 * @param PropertyValue ID
 	 * @return PropertyValue-Objekt
+	 * @author Kim-Ly
 	 */
 
 	public PropertyValue findByKey(int propvalue_id) {
@@ -114,10 +121,10 @@ public class PropertyValueMapper {
 	
 
 	/**
-	 * Alle fuer Benutzer zugaenglichen PropertyValues (Participant und Ownership)
-	 * werden gesucht, in einen Vector gespeichert und zurueckgegeben
+	 * Alle fuer den Benutzer zugaenglichen Eigenschaftsausprägungen aus Teilhaberschaft oder Besitzertum ausgeben 
 	 * 
 	 * @return Vector<PropertyValue>
+	 * @author Kim-Ly
 	 */
 
 	public Vector<PropertyValue> findAll() {
@@ -162,9 +169,11 @@ public class PropertyValueMapper {
 	
 
 	/**
-	 * Alle Eigenschaftsausprägungen finden die User angelegt hat
+	 * Alle Eigenschaftsausprägungen finden die der User angelegt hat
 	 * 
 	 * @param User Objekt
+	 * @return Vector<PropertyValue>
+	 * @author Kim-Ly
 	 */
 
 	 public Vector <PropertyValue> findAllCreated(User u) {	
@@ -208,9 +217,12 @@ public class PropertyValueMapper {
 	 }
 
 	 /**
-	  * Gibt alle PropertValues zurueck die zu einem Contact-Objekt gehoeren
+	  * Gibt alle PropertyValues zurueck die zu einem Contact-Objekt gehoeren
+	  * Weitergabe an findByContactID(int id)
+	  * 
 	  * @param Contact-Objekt
 	  * @return Vector<PropertyValue>
+	  * @author Kim-Ly
 	  */
 	 
 	 public Vector<PropertyValue> findBy(Contact c) {
@@ -219,11 +231,11 @@ public class PropertyValueMapper {
 	 
 	 
 	/**
-	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Kontakte
-	 * ContactMapper,
+	 * Aufruf der Auspraegungen anhand der ID ihres zugeordneten Kontakts
 	 * 
 	 * @param Contact ID
 	 * @return Vector<PropertyValue> 
+	 * @author Kim-Ly
 	 */
 
 	public Vector<PropertyValue> findByContactID(int contactID) {
@@ -265,10 +277,12 @@ public class PropertyValueMapper {
 
 	
 	/**
-	  * Gibt alle PropertValues zurueck die von einer Property sind
+	  * Gibt alle PropertyValues zurueck die einer Property zugehörig sind
+	  * Weitergabe an findByPropertyID(int id)
 	  * 
 	  * @param Property-Objekt
 	  * @return Vector<PropertyValue>
+	  * @author Kim-Ly
 	  */
 	
 	public Vector<PropertyValue> findBy(Property p) {
@@ -278,11 +292,11 @@ public class PropertyValueMapper {
 	
 	
 	/**
-	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Kontakte
-	 * ContactMapper,
+	 * Aufruf aller Auspraegungen anhand einer bestimmten Ausprägung
 	 * 
-	 * @param Contact ID
+	 * @param String value
 	 * @return Vector<PropertyValue> 
+	 * @author Kim-Ly
 	 */
 
 	public Vector<PropertyValue> findByValue(String value) {
@@ -327,10 +341,11 @@ public class PropertyValueMapper {
 	}
 	
 	/**
-	 * Aufruf der Auspraegungen anhand ihrer zugeordneten Eigenschaft
+	 * Aufruf der Auspraegungen anhand der ID ihrer zugeordneten Eigenschaft
 	 * 
 	 * @param Property ID
-	  * @return Vector<PropertyValue>
+	 * @return Vector<PropertyValue>
+	 * @author Kim-Ly
 	 */
 
 	public Vector<PropertyValue> findByPropertyID(int propertyID) {
@@ -370,15 +385,15 @@ public class PropertyValueMapper {
 	
 	
 
-	/*
-	 * Aktualisierung der Daten fuer PropertyValue Tabelle in DB
+	/**
+	 * Aktualisierung der Daten fuer die PropertyValue Tabelle in der Datenbank
 	 * 
-	 * @parm PropertyValue-Objekt
-	 * @return PropertyValue-Objekt
+	 * @param PropertyValue-Objekt
+	 * @return null
+	 * @author Kim-Ly
 	 */
 
 	public PropertyValue update(PropertyValue pv) {
-
 		
 		Connection con = DBConnection.connection();
 
@@ -402,8 +417,9 @@ public class PropertyValueMapper {
 	 * Loeschen der Eigenschaftsauspraegung in DB anhand des PropertyValue Objekts,
 	 * Weitergabe an deletePropertyValue(int id)
 	 * 
-	 * @parm PropertyValue-Objekt
-	 * @return PropertyValue-Objekt
+	 * @param PropertyValue-Objekt
+	 * @return PropertyValue-Objekt oder null
+	 * @author Kim-Ly
 	 */
 
 	public PropertyValue delete(PropertyValue pv) {
@@ -416,8 +432,9 @@ public class PropertyValueMapper {
 	/**
 	 * Loeschen der Eigenschaftsauspraegung in DB anhand der PropertyValue ID
 	 * 
-	 * @parm PropertyValue ID
+	 * @param  PropertyValue ID
 	 * @return Anzahl geänderter Einträge
+	 * @author Kim-Ly
 	 */
 
 	public int deleteByPropValue(int id) {
@@ -443,9 +460,11 @@ public class PropertyValueMapper {
 	
 
 	/**
-	 * Anhand der zugehoerigen Eigenschaft wird eine Auspraegung geloescht
+	 * Anhand der zugehoerigen Eigenschaft werden alle Auspraegungen geloescht
+	 * Weitergabe an deleteByProp(int id)
 	 * 
-	 * @parm Property-Objekt
+	 * @param Property-Objekt
+	 * @author Kim-Ly
 	 */
 
 	public void deleteBy(Property prop) {
@@ -455,10 +474,11 @@ public class PropertyValueMapper {
 	}
 
 	/**
-	 * Anhand der Uebergebenen ID einer Eigenschaft wird die Zugehoerigkeit zur
-	 * Ausprägung gesucht und alle Auspraegungen mitsamt ihrer Eigenschaften geloescht
+	 * Anhand der uebergebenen ID einer Eigenschaft wird die Zugehoerigkeit zur
+	 * Ausprägung gesucht und alle Auspraegungen geloescht
 	 * 
-	 * @parm Property ID
+	 * @param Property ID
+	 * @author Kim-Ly
 	 */
 
 	public void deleteByProp(int property_id) {
@@ -473,10 +493,11 @@ public class PropertyValueMapper {
 	
 
 
-	/*************************************************************************************
-	 * Methode zum Leeren der PropertyValue Tabelle
-	 * WICHTIG: In App Logik nicht anwendbar, da Namensauspraegung fuer Contact ggf. leer
-	 *************************************************************************************/
+	/**
+	* Entwicklermethode zum Löschen aller im System vorhandener Eigenschaftsausprägungen
+	* 
+	* @author Kim-Ly
+	*/
 	
 	public void deleteAll() {
 		
