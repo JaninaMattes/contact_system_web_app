@@ -13,6 +13,14 @@ import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
+/**
+ * Die Mapper-Klasse <code>PropertyValueMapper</code> bildet <code>PropertyValue</code>-Objekte 
+ * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Ändern und 
+ * Löschen von Objekten zur Verfügung gestellt. Es können sowohl Objekte in Datenbank-Strukturen, 
+ * als auch Datenbank-Strukturen in Objekte überführt werden.
+ * 
+ * @author Kim-Ly Le
+ */
 
 public class PropertyValueMapper {
 
