@@ -16,7 +16,7 @@ import de.hdm.kontaktsystem.shared.ReportGeneratorAsync;
  * welche für alle Clientseitigen Klassen von Relevanz sind. 
  *  
  *  @see de.hdm.thies.bankProjekt.client.ClientsideSettings
- *  @author Sandra Prestel, ...
+ *  @author Sandra Prestel, Janina Mattes...
  */
 //TODO: Autoren ergänzen
 public class ClientsideSettings extends CommonSettings {

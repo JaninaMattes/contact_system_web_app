@@ -1,9 +1,6 @@
 package de.hdm.kontaktsystem.client.gui;
 
 import java.util.Vector;
-
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -27,6 +24,22 @@ import de.hdm.kontaktsystem.shared.bo.Participation;
 import de.hdm.kontaktsystem.shared.bo.Property;
 import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 import de.hdm.kontaktsystem.shared.bo.User;
+
+
+/**
+ * Die Klasse <code>ContactForm</code> enthält Elemente für die Darstellung
+ * eines Kontaktformulars des jeweilig selektierten Kontaktes aus dem Kontaktsystem. 
+ * 
+ * Darüber hinaus ermöglicht dies auch durch Austausch einzelner Elemente, wie bspw.
+ * Buttons die Darstellung eines leeren Kontaktformulars zur Ausformulierung der Kontakteigenschaften,
+ * vor der Erzeugung eines neuen <code>Contact</code> Objektes in der DB. 
+ * 
+ * Analog zur Klasse ContactForm wurde auch die Klasse ContactListForm {@link ContactListForm} 
+ * für das Anzeigen und die Darstellung der Kontaktlisten angelegt.
+ *  
+ *  @author Janina Mattes
+ */
+
 
 public class ContactForm extends VerticalPanel {
 	
@@ -92,8 +105,10 @@ public class ContactForm extends VerticalPanel {
 		boolean edit = false;
 		boolean editPart = false;
 		
-		/**
-		 * Startpunkt ist die onLoad() Methode
+		/** 
+		 * Der Startpunkt der Klasse <code>ContactForm</code>ist die <em>onLoad()</em> Methode.
+		 * Beim Anzeigen des Kontaktformulars werden die weiteren Widgets erzeugt.  
+		 * 
 		 */
 		
 		public void onLoad(){
@@ -104,6 +119,12 @@ public class ContactForm extends VerticalPanel {
 			log("Kontakt Formular Laden");
 			
 		}
+		
+		/**
+		 * Die Inhalte eines von der Datenbank abgerufenen Kontaktes, welcher über das Kontaktformular
+		 * zur Anzeige gebracht werdden soll, werden dynamisch mittels der Erzeugung von Feldern 
+		 * innerhalb eines <em>Flextables</em> erzeugt. 
+		 */
 		
 		public ContactForm() {
 			
@@ -194,6 +215,12 @@ public class ContactForm extends VerticalPanel {
 			
 			this.add(vp);
 			
+			/**
+			 * Bei Auswahl des Buttons <em>Bearbeiten</em> wird das Panel des <code>ContactForm</code>
+			 * erweitert und kann nun mit zusätzlichen Funktionalitäten, wie dem hinzufügen eines 
+			 * weiteren Elementes oder einer weiteren Teilhaberschaft mit einem Nutzer bearbeitet werden.
+			 */
+			
 			// Bearbeiten Button
 			editButton.addClickHandler(new ClickHandler(){
 
@@ -213,6 +240,13 @@ public class ContactForm extends VerticalPanel {
 				
 			});
 			
+		
+			/**
+			 * Bei Auswahl des Buttons <em>Teilen</em> erfolgt die Anzeige des
+			 * DialogPanels, welches dem Nutzer weitere Auswahlmöglichkeiten bietet
+			 * einen Kontakt mit einem bestimmten Nutzer im System zu teilen. 
+			 */
+			
 			//Click-Handler
 			shareButton.addClickHandler(new ClickHandler(){
 				
@@ -222,6 +256,16 @@ public class ContactForm extends VerticalPanel {
 				}
 				
 			});
+			
+			/**
+			 * Bei Auswahl des Buttons <em>Teilen</em> erfolgt der Aufruf der
+			 * Service-Methode "createParticipation". Diese erhält als Übergabeparameter
+			 * ein <code>Participation</code> Objekt, welches den zuvor ausgewählten Nutzer, 
+			 * als auch das zu teilende, referenzierte <code>Contact</code> Objekt enthält. 
+			 * Durch die neu angelegte Teilhaberschaft können alle verändernden Aktivitäten 
+			 * (create, read, update, delete) an alle Teilhaber weitergegeben werden. 
+			 */
+			
 			okButton.addClickHandler(new ClickHandler(){
 
 				@Override
@@ -284,6 +328,15 @@ public class ContactForm extends VerticalPanel {
 				}
 			});
 			
+			
+			/**
+			 * Bei Auswahl des Buttons <em>Löschen</em> erfolgt der Aufruf der
+			 * Service-Methode "deleteContact". Dies führt bei Besitztümerschaft
+			 * eines Nutzers zu der Löschung eines <code>Contact</code> Objektes aus 
+			 * der DB. Ist der Nutzer jedoch nur Teilhaber an dem ausgewählten Kontakt
+			 * so wird <em>nur</em> die damit verbundene Teilhaberschaft aus der DB gelöscht. 
+			 */
+			
 			deleteButton.addClickHandler(new ClickHandler(){
 				Vector <PropertyValue> result = new Vector <PropertyValue>();
 				@Override
@@ -314,9 +367,14 @@ public class ContactForm extends VerticalPanel {
 				} 				
 			});
 			
-			/*
-			 * Save-Button ClickHandler 
+			/**
+			 * Bei Auswahl des Buttons <em>Speichern</em> erfolgt der Aufruf der
+			 * Service-Methode "editContact". Diese übergibt die neuen Werte aus den
+			 * Textfeldern der <code>ContactForm</code> an die DB und speichert so 
+			 * Änderungen am dargestellten Kontakt. 
+			 * 
 			 */
+			
 			saveButton.addClickHandler(new ClickHandler() {
 				
 				
@@ -425,7 +483,11 @@ public class ContactForm extends VerticalPanel {
 			});
 			
 			/**
-			 * Create-Button ClickHandler
+			 * Bei Auswahl des Buttons <em>Speichern</em> nach dem Anlegen neuer Kontakt
+			 * Felder/Elemente erfolgt der Aufruf der Service-Methode "createContact".
+			 * Diese übernimmt als Parameter ein <code>Contact</code> Objekt, welches alle
+			 * neu erzeugten <code>PropertyValue</code> Objekte als <em>Vector</em> enthält
+			 * und generiert einen neuen Eintrag in der DB für den Kontakt.  
 			 */
 			createButton.addClickHandler(new ClickHandler() {
 				
@@ -460,10 +522,21 @@ public class ContactForm extends VerticalPanel {
 				}
 			});
 			
-			
+			/**
+			 * Bei Auswahl des Buttons <em>Abbrechen</em> erfolgt der Abbruch der Anzeige.
+			 * 
+			 */
 			cancelNewButton.addClickHandler(new CancelClickHandler());
 			cancelEditButton.addClickHandler(new CancelClickHandler());
 			cancelShareButton.addClickHandler(new CancelClickHandler());
+			
+			/**
+			 * Bei Auswahl des Buttons <em>Hinzufügen</em> erfolgt die Zuordnung eines
+			 * neuen TextBox Elements mit einer dazugehörigen ListBox zum <em>Flextable</em>.
+			 * Nach der Speicherung der Änderungen wird der neue Eintrag dem <code>Contact</code>
+			 * Objekt hinzugefügt.
+			 * 
+			 */
 			
 			addButton.addClickHandler(new ClickHandler() {
 				
@@ -493,6 +566,14 @@ public class ContactForm extends VerticalPanel {
 				}
 				
 			});
+			
+			/**
+			 * Bei Auswahl des Buttons <em>Bearbeiten</em> erfolgt der Aufruf der
+			 * Service-Methode "getUserBygMail" und "getAllPVFromContactSharedWithUser".
+			 * Dies ermöglicht das Darstellen der einzelnen, geteilten Elemente eines
+			 * Kontaktes mit einem anderen Nutzer. Die Darstellung des Kontaktes wird
+			 * als Folge aktualisiert. 
+			 */
 			
 			editPartButton.addClickHandler(new ClickHandler() {
 				
@@ -563,6 +644,16 @@ public class ContactForm extends VerticalPanel {
 
 
 		}
+		
+		/**
+		 * Wenn der anzuzeigende Kontakt gesetzt, bzw. gelöscht wird, werden die 
+		 * zugehörigen Textfelder, ListBoxen und weiteren Elemente welche Informationen aus
+		 * dem Kontakt Objekt enthalten befüllt, oder analog dazu gelöscht. 
+		 * 
+		 * Wird ein leeres Kontakt Objekt übergeben an die Methode, so wird zudem ein
+		 * leeres Kontaktformular zur Erzeugung neuer Kontakte dargestellt. 
+		 * @param contact
+		 */
 		
 		public void setSelected(Contact contact) {
 						
@@ -839,7 +930,7 @@ public class ContactForm extends VerticalPanel {
 		
 		/**
 		 * Eine neue Teilhaberschaft anlegen.
-		 * @author Janina
+		 * @author Janina Mattes
 		 *
 		 */
 		private class CreateParticipationCallback implements AsyncCallback<Participation>{
