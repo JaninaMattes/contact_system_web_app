@@ -28,6 +28,7 @@ public class PropertyValueMapper {
 
 	/**
 	 * Gibt nach dem Singelton Pattern eine Instanz des PropertyValueMppers zurueck
+	 * 
 	 * @return PropertyValueMapper-Objekt
 	 */
 	public static PropertyValueMapper propertyValueMapper() {
@@ -160,9 +161,10 @@ public class PropertyValueMapper {
 	
 	
 
-	/** TODO: 
-	 * UserMapper, ContactMapper, alle erzeugten PVs ausgeben
-	 * Benoetigt???
+	/**
+	 * Alle Eigenschaftsausprägungen finden die User angelegt hat
+	 * 
+	 * @param User Objekt
 	 */
 
 	 public Vector <PropertyValue> findAllCreated(User u) {	
