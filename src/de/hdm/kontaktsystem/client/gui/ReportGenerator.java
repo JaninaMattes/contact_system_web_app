@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -50,6 +51,7 @@ public class ReportGenerator implements EntryPoint {
 	Image searchSymbol1 = new Image();
 	Image searchSymbol2 = new Image();
 	Image logo = new Image();
+	Image load = new Image();
 	
 	/**
 	 * Definition der grundlegenden Widgets des Report-Generators. 
@@ -86,6 +88,8 @@ public class ReportGenerator implements EntryPoint {
 	private Anchor signOutLink = new Anchor("Logout");
 	private Anchor editorLink = new Anchor("Editor");				
 
+	// Lade Animation
+	private PopupPanel loadPanel = new PopupPanel();
 	
 	/**
 	 * <p>
@@ -102,27 +106,29 @@ public class ReportGenerator implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
-		loadReportGenerator(); //Test, solange Login nicht funktioniert
+		//loadReportGenerator(); //Test, solange Login nicht funktioniert
 		
 		/**
 		 * Login-Status feststellen mit LoginService
-		 *		
-		ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
-		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+		 */	
+		loadPanel.setVisible(false);
+		reportGenerator = ClientsideSettings.getReportGenerator();
+		reportGenerator.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
-				Window.alert("Login Error :(");
+				Window.alert("Login Error");
 			}
 				
 			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
 			public void onSuccess(User result) {
 				userInfo = result;
 				if(userInfo.isLoggedIn()){
+					log("Load ReportGenerator");
 					loadReportGenerator();
 				}else{
 					loadLogin();					
 				}
 			}
-		});*/
+		});
 	}
 		
 	/**
@@ -130,7 +136,6 @@ public class ReportGenerator implements EntryPoint {
 	 */
 	private void loadLogin() {	
 			
-		Window.alert("Login :D");
 		signInLink.setHref(userInfo.getLoginUrl());
 		signInLink.getElement().setId("link");
 		loginPanel.add(new HTML("<center>"));
@@ -188,10 +193,21 @@ public class ReportGenerator implements EntryPoint {
 		
 		//Logo
 		logo.getElement().setId("logo");
+		
+		/*
+		 * CSS für Load Panel
+		 */
+		loadPanel.getElement().setId("load");
 
 		/*
 		 * Zuweisen von Bilddateien zu den Image-Elementen und Setzen der Größe.
 		 */
+		// Ladeanimation
+		load.setUrl(GWT.getHostPageBaseURL() + "images/load.gif");
+		load.setStyleName("load_Animation");
+		loadPanel.add(load);
+		loadPanel.setVisible(false);
+		
 		//Logo
 		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");
 		logo.setHeight("70px");
@@ -219,7 +235,14 @@ public class ReportGenerator implements EntryPoint {
 		 * und einem "Datenteil" für die HTML-Version des Reports.
 		 */
 		
-		//Aufbau des Headers
+		/**
+		 * Das Ladeoverlay dem HTML-Body hinzufügen
+		 */
+		RootPanel.get().add(loadPanel);
+		
+		/**
+		 * Aufbau des Headers
+		 */	
 		headerPanel.add(logo);
 		headerPanel.add(headerText);
 		headerPanel.add(signOutLink);		
@@ -240,6 +263,7 @@ public class ReportGenerator implements EntryPoint {
 		showAllButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				loadPanel.setVisible(true);
 				reportGenerator.createAllContactsReport(new CreateAllContactsReportCallback());
 			}
 		});
@@ -259,6 +283,7 @@ public class ReportGenerator implements EntryPoint {
 				if(usersDropDownList.getSelectedValue() == null) {
 					Window.alert("Kein Teilhaber ausgewählt!");
 				} else {
+					loadPanel.setVisible(true);
 					double participantId = Double.parseDouble(usersDropDownList.getSelectedValue());
 					reportGenerator.createAllContactsForParticipantReport(participantId,
 							new CreateAllContactsForParticipantReportCallback(participantId));
@@ -296,6 +321,7 @@ public class ReportGenerator implements EntryPoint {
 						Window.alert("Keine Ausprägung eingegeben");
 						return;
 					} else {
+						loadPanel.setVisible(true);
 						reportGenerator.createAllContactsForPropertyReport(propertyId, propertyvalue,
 								new CreateAllContactsForPropertyReportCallback(propertyId, propertyvalue));
 					}
@@ -329,12 +355,13 @@ public class ReportGenerator implements EntryPoint {
 	class CreateAllContactsReportCallback implements AsyncCallback<AllContactsOfUserReport> {
 		@Override
 		public void onFailure(Throwable caught) {
+			loadPanel.setVisible(false);
 			Window.alert("Suche fehlgeschlagen!");
 		}
 
 		@Override
 		public void onSuccess(AllContactsOfUserReport report) {
-			
+			loadPanel.setVisible(false);
 			if (report != null) {				
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
@@ -359,11 +386,13 @@ public class ReportGenerator implements EntryPoint {
 		
 		@Override
 		public void onFailure(Throwable caught) {
+			loadPanel.setVisible(false);
 			Window.alert("Suche fehlgeschlagen!");		
 		}
 
 		@Override
 		public void onSuccess(AllContactsForParticipantReport report) {
+			loadPanel.setVisible(false);
 			if (report != null) {
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
@@ -391,11 +420,13 @@ public class ReportGenerator implements EntryPoint {
 		
 		@Override
 		public void onFailure(Throwable caught) {
+			loadPanel.setVisible(false);
 			Window.alert("Suche fehlgeschlagen!");		
 		}
 
 		@Override
 		public void onSuccess(AllContactsForPropertyReport report) {
+			loadPanel.setVisible(false);
 			if (report != null) {
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
@@ -460,4 +491,7 @@ public class ReportGenerator implements EntryPoint {
 		
 	}
 	
+	native void log(String s)/*-{
+		console.log(s);
+	}-*/;
 }

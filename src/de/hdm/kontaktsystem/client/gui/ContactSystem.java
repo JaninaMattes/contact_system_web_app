@@ -203,26 +203,55 @@ public class ContactSystem implements EntryPoint {
 	 */
 	
 	public void onModuleLoad() {
+	
+//		contactSystemAdmin = ClientsideSettings.getContactAdministration();
+//		contactSystemAdmin.getUserByID(510, new AsyncCallback<User>() {
+//			public void onFailure(Throwable error) {
+//				
+//			}
+//				
+//			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+//			public void onSuccess(User result) {
+//					log("Set User: "+ result);
+//					uf.setMyUser(result);
+//					cf.setMyUser(result);
+//					cf.setLoad(loadPanel);
+//					clf.setMyUser(result);
+//					clf.setLoad(loadPanel);
+//					loadTree(); // für Test
+//					loadContactSystem(); // für Test
+//					loadPanel.setVisible(false);
+//			}
+//		});	
 		
-		contactSystemAdmin = ClientsideSettings.getContactAdministration();		
-				
-		// Test um Login zu Überbrücken
-		contactSystemAdmin.getUserByID(510, new AsyncCallback<User>() {
+		
+		/**
+		 * Login-Status feststellen mit LoginService
+		 */		
+
+		loadPanel.setVisible(false);
+		contactSystemAdmin = ClientsideSettings.getContactAdministration();
+		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
-				
+				Window.alert("Login Error");
 			}
 				
 			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
 			public void onSuccess(User result) {
-					log("Set User: "+ result);
+				userInfo = result;
+				if(userInfo.isLoggedIn()){
+					log("Load Editor");
 					uf.setMyUser(result);
 					cf.setMyUser(result);
-					cf.setLoad(loadPanel);
 					clf.setMyUser(result);
+					cf.setLoad(loadPanel);
 					clf.setLoad(loadPanel);
 					loadTree(); // für Test
 					loadContactSystem(); // für Test
-					loadPanel.setVisible(false);
+					loadPanel.setVisible(false);	
+				}else{
+					loadLogin();					
+				}
 			}
 		});	
 		
@@ -241,7 +270,15 @@ public class ContactSystem implements EntryPoint {
 		loginPanel.add(new HTML("<center>"));
 		loginPanel.add(loginLabel);
 		loginPanel.add(new HTML("<br /> <br /> "));
-		loginPanel.add(signInLink);
+		FocusPanel login = new FocusPanel();
+		login.add(new Image(GWT.getHostPageBaseURL() + "images/login.png"));
+		login.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.Location.assign(userInfo.getLoginUrl());				
+			}		
+		});
+		loginPanel.add(login);
 		loginPanel.add(new HTML("</center>"));
 		RootPanel.get("Lists").add(loginPanel); //TODO: prüfen ob richtige HTML
 	}
@@ -541,7 +578,6 @@ public class ContactSystem implements EntryPoint {
 		
 		Image load = new Image("/images/load.gif");
 		load.setStyleName("load_Animation");
-		add.setPixelSize(50, 50);
 		loadPanel.add(load);
 		
 		//Header

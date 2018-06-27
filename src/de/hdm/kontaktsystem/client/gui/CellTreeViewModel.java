@@ -142,22 +142,32 @@ public class CellTreeViewModel implements TreeViewModel {
 		for (BusinessObject bo : bov) {
 			rootData.getList().add(bo);
 		}
+		rootData.refresh();
 	}
 	
 	public void updateRoot(BusinessObject bo){
 		log("Update root");
 		if(rootData.getList().contains(bo)){
-			rootData.getList().remove(bo);
-			addToRoot(bo);
+			int index = 0;
+			for(BusinessObject listElement : rootData.getList()){
+				if(listElement.equals(bo)) break;
+				index++;
+			}
+			rootData.getList().set(index, bo);
+			rootData.refresh();
 		}
-		
-			
+					
 	}
 	public void updateLeef(BusinessObject bo){
 		log("Update Leef");		
 		if(dataProvider.getList().contains(bo)){
-			dataProvider.getList().remove(bo);
-			addToLeef(bo);
+			int index = 0;
+			for(BusinessObject listElement : rootData.getList()){
+				if(listElement.equals(bo)) break;
+				index++;
+			}
+			dataProvider.getList().set(index, bo);
+			dataProvider.refresh();
 		}
 			
 	}
@@ -173,14 +183,14 @@ public class CellTreeViewModel implements TreeViewModel {
 		
 		log("Add to root "+bo);
 		rootData.getList().add(bo);
-			
+		rootData.refresh();
 	}
 	
 	public void addToLeef(BusinessObject bo){
 		
 		log("Add to Leef");
 		dataProvider.getList().add(bo);
-			
+		dataProvider.refresh();
 	}
 	
 	/**
@@ -193,14 +203,14 @@ public class CellTreeViewModel implements TreeViewModel {
 	public void removeFromRoot(BusinessObject bo){
 		log("Delete from root");
 		rootData.getList().remove(bo);
-			
+		rootData.refresh();
 		
 	}
 	public void removeFromLeef(BusinessObject bo){
 		
 		log("Delete from Leef");
 		dataProvider.getList().remove(bo);
-			
+		dataProvider.refresh();	
 	}
 	
 
