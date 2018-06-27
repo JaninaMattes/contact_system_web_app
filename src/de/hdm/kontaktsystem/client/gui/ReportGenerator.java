@@ -60,7 +60,7 @@ public class ReportGenerator implements EntryPoint {
 	 * @see de.hdm.kontaktsystem.war.ReportGenerator.html
 	 */
 	HorizontalPanel headerPanel = new HorizontalPanel();
-	Label headerText = new Label("Report Generator");
+	Label headerText = new Label("Report-Generator");
 	VerticalPanel navigationPanel = new VerticalPanel();
 	Button showAllButton = new Button("Alle Kontakte");
 	
@@ -165,7 +165,7 @@ public class ReportGenerator implements EntryPoint {
 		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
 		loginLabel.getElement().setId("loginlabel");
-		headerText.getElement().setId("headertext");
+		headerText.getElement().setId("headertext2");
 		
 		//Textbox
 		findByValueText.getElement().setId("findByTextbox");

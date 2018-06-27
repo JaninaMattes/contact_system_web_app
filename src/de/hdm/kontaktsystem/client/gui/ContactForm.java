@@ -125,6 +125,7 @@ public class ContactForm extends VerticalPanel {
 			gp.getElement().setId("grid-panel");
 			
 			labelAddElement.getElement().setId("labelfeldhinzu");
+			cLabel.getElement().setId("ueberschriftlabel");
 			
 			//Teilhaberschaften
 			labelSharedWith.setVisible(false);

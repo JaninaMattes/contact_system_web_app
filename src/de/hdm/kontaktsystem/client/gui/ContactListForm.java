@@ -130,6 +130,9 @@ public class ContactListForm extends VerticalPanel {
 		shareDialog.setVisible(false);
 		this.add(shareDialog);
 
+		
+		nameContactList.getElement().setId("ListBox");
+		contactsToAdd.getElement().setId("ListBox");
 		contactNames.getElement().setId("ListBox");
 		listBoxShareWith.getElement().setId("ListBox");
 		
@@ -151,6 +154,7 @@ public class ContactListForm extends VerticalPanel {
 		shareButton.addClickHandler(new shareClickHandler());
 		cancelButton.addClickHandler(new cancelClickHandler());
 		unShareButton.addClickHandler(new unShareClickHandler());
+		
 
 		
 		/*
