@@ -149,14 +149,14 @@ public class ReportGenerator implements EntryPoint {
 	 */
 	public void loadReportGenerator() {
 		
-		/**
+		/*
 		 * Zuweisung des Asynchronen Interface.
 		 */
 		if(reportGenerator == null) {
 			reportGenerator = ClientsideSettings.getReportGenerator();
 		}
 		
-		/**
+		/*
 		 * Zuweisung von ids zu den HTML-Elementen, die aus den gwt-Widgets generiert
 		 * werden, um sie mit CSS gezielt ansprechen zu können.
 		 */
@@ -189,7 +189,7 @@ public class ReportGenerator implements EntryPoint {
 		//Logo
 		logo.getElement().setId("logo");
 
-		/**
+		/*
 		 * Zuweisen von Bilddateien zu den Image-Elementen und Setzen der Größe.
 		 */
 		//Logo
@@ -205,23 +205,21 @@ public class ReportGenerator implements EntryPoint {
 		searchSymbol2.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
 		searchSymbol2.setAltText("Suche");
 		
-		/**
+		/*
 		 * Setzen des Links zum Editor des Kontaktsystems. Hiermit kann die Webseite
 		 * "Editor" geöffnet werden, mit der Inhalte bearbeitet werden können.
 		 * @see ContactSystem.java
 		 */
 		editorLink.setHref(GWT.getHostPageBaseURL() + "ContactSystem.html");
 		
-		/**
+		/*
 		 * Aufbau der Oberfläche des ReportGenerators.
 		 * Die Reportanwendung besteht aus einem Header mit Links zum Logout und dem Editor,
 		 * einem "Navigationsteil" mit den Schaltflächen zum Auslösen der Reportgenerierung 
 		 * und einem "Datenteil" für die HTML-Version des Reports.
 		 */
 		
-		/**
-		 * Aufbau des Headers
-		 */	
+		//Aufbau des Headers
 		headerPanel.add(logo);
 		headerPanel.add(headerText);
 		headerPanel.add(signOutLink);		
@@ -229,18 +227,14 @@ public class ReportGenerator implements EntryPoint {
 		
 		RootPanel.get("Header").add(headerPanel);
 		
-		/**
-		 * Aufbau der Navigation und der Detail-Ansicht
-		 */
-		/* Anfangsansicht des Detail-Fensters (rechte Bildschirmseite) */
+		//Aufbau der Navigation und der Detail-Ansicht
 		Label noDetails = new Label("Kein Report ausgewählt");
 		RootPanel.get("Details").add(noDetails);;
 		
-		/**
+		/*
 		 * Durch Klick auf den Button <code>showAllButton</code> werden alle Kontakte angezeigt,
 		 * auf die der Nutzer Zugriff hat.
 		 */
-		/* ShowAll-Button */
 		navigationPanel.add(showAllButton);
 		
 		showAllButton.addClickHandler(new ClickHandler() {
@@ -250,15 +244,15 @@ public class ReportGenerator implements EntryPoint {
 			}
 		});
 		
-		/**
+		/*
 		 * Durch Klick auf den Button <code>findByParticipantButton</code> werden alle Kontakte 
 		 * angezeigt, auf die der Nutzer Zugriff hat und die mit einem bestimmten Nutzer
 		 * geteilt wurden. Dieser kann aus einer DropDown-Liste ausgewählt werden.
 		 */
-		/* DropDown-Liste für alle User */		
+		// DropDown-Liste für alle User
 		reportGenerator.getAllUsers(new getAllUsersCallback());
 		
-		/* FindByParticipant-Button */		
+		// FindByParticipant-Button
 		findByParticipantButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -272,23 +266,23 @@ public class ReportGenerator implements EntryPoint {
 			}
 		});
 		
-		/* Hinzufügen zur Oberfläche */
+		// Hinzufügen zur Oberfläche
 		navigationPanel.add(findByParticipantLabel);
 		findByParticipantPanel.add(usersDropDownList);
 		findByParticipantPanel.add(findByParticipantButton);
 		navigationPanel.add(findByParticipantPanel);
 		
 		
-		/**
+		/*
 		 * Durch Klick auf den Button <code>findByValueButton</code> werden alle Kontakte 
 		 * angezeigt, auf die der Nutzer Zugriff hat und die eine bestimmte Eigenschaft 
 		 * und Eigenschaftsausprägung besitzen. Die Eigenschaft kann aus einer DropDown-Liste 
 		 * ausgewählt und die Ausprägung in ein Textfeld eingegeben werden.
 		 */
-		/* DropDown-Liste für Eigenschaften */
+		// DropDown-Liste für Eigenschaften
 		reportGenerator.getAllProperties(new GetAllPropertiesCallback());
 		
-		/* FindByValue-Button */		
+		// FindByValue-Button		
 		findByValueButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -309,14 +303,14 @@ public class ReportGenerator implements EntryPoint {
 			}		
 		});		
 		
-		/* Hinzufügen zur Oberfläche */
+		// Hinzufügen zur Oberfläche
 		navigationPanel.add(findByValueLabel);
 		navigationPanel.add(propertiesDropDownList);
 		findByValuePanel.add(findByValueText);
 		findByValuePanel.add(findByValueButton);
 		navigationPanel.add(findByValuePanel);
 		
-		/**
+		/*
 		 * Hinzufügen der gesamten Navigation zur Benutzungsoberfläche.
 		 */
 		RootPanel.get("Navigator").add(navigationPanel);
