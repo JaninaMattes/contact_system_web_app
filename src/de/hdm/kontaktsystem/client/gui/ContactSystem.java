@@ -34,13 +34,23 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 
 /**
- * Die Klasse <code>ContactSystem</code>
- *@author Janina
+ * Die Klasse <code>ContactSystem</code> enthält alle Elemente zur Darstellung eines
+ * Dashboards für das KontaktSystem bzw. <em>Editor</em>. Dieses ist in verschiedene Bereiche aufgebaut
+ * und enthält einen drei teiligen Split-View, welcher mit unterschiedlichen 
+ * Vertical Panels erreicht wird. 
+ * 
+ * Über die Klasse ContyctSystem kann mittels einer Menüleiste auf die Klassen
+ * ContactForm {@link ContactForm} und ContactListForm {@link ContactListForm}
+ * navigiert werden. 
+ * 
+ *@author Janina Mattes
  */
+
 public class ContactSystem implements EntryPoint {
 
 	/**
-	 * Interface aus BankProjekt übernommen
+	 * Implementierung des statischen Interface für das TreeView Model aus BankProjekt übernommen
+	 * @see de.hdm.thies.bankProjekt.client.BankProjekt
 	 */
 	static interface ContactSystemTreeResources extends CellTree.Resources {
 		@Override
@@ -59,25 +69,16 @@ public class ContactSystem implements EntryPoint {
 	}
 	
 	/**
-	 * Link zum Asynchronen Interface
+	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Serverseitgen Dienst
+	 * namens <code>ContactSystemAdministration</code>.
 	 */
+	
 	ContactSystemAdministrationAsync contactSystemAdmin = null;	
-
-	/** 
-	 * Instanziieren der GWT Widgets und Panels
-	 */
 	
-//	private Image saveSymbol = new Image();
-//	private Image cancelSymbol = new Image();
-//	//Symbole für ContactForm und ContactListForm
-//	private Image oneContactSymbol = new Image();
-//	private Image ContactListSymbol = new Image();
-//		
-//	//Symbole für Navigationsmenü-Buttons
-//	private Image contactsSymbol = new Image();
-//	private Image listSymbol = new Image(); //Alternatives Symbol für Kontaktliste
+	/**
+	 * Widgets, deren Inhalte variable sind, werden als Attribute angelegt.
+	 */	
 	
-
 	//TreeView
 	ScrollPanel treeScrollPanel = new ScrollPanel();
 	final CellTreeViewModel tvm = new CellTreeViewModel();
@@ -149,7 +150,12 @@ public class ContactSystem implements EntryPoint {
 	
 	
 	/**
-	 * EntryPoint
+	 * Die Methode <code>loadTree()</code> ruft das TreeView Model auf
+	 * und übergibt diesem Standart gemäß per Default Contact Objekte
+	 * zur Darstellung in Listenform. Diese wird später über die 
+	 * <em>public void onModuleLoad()</em> Methode des Interfaces EntryPoint
+	 * aufgerufen. 
+	 * 
 	 */
 	
 	public void loadTree() {		
@@ -159,9 +165,9 @@ public class ContactSystem implements EntryPoint {
 		clf.setTree(tvm);
 		cf.setTree(tvm);
 		
-		
+		//CSS
 		treeScrollPanel.setHeight("80vh");
-	//	contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
+		
 		contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -177,22 +183,28 @@ public class ContactSystem implements EntryPoint {
 				ct = new CellTree(tvm, result, res);
 				ct.setAnimationEnabled(true);
 				ct.setDefaultNodeSize(result.size());
-				treeScrollPanel.add(ct);
-				
+				treeScrollPanel.add(ct);				
 				
 			}
 
 		});
 		
-		RootPanel.get("Lists").add(treeScrollPanel);
-		
+		RootPanel.get("Lists").add(treeScrollPanel);	
 		
 	}
 	
+	/**
+	 * Da die Klasse <code>ContactSystem</code> die Implementierung des Interface <code>EntryPoint</code>
+	 * zusichert, wird die Methode <code>public void onModuleLoad()</code> als Einstieg benötigt. 
+	 * Diese ist das GWT typische Gegenstück der <code>main()</code> Methode einer normalen Java-Applikationen.
+	 * Wenn der Nutzer im System noch nicht eingeloggt ist wird die Login-Seite aufgerufen, andernfalls
+	 * gelangt der Nutzer auf die Startseite, bzw. das Dashboard mit der Default-Anzeige aller seiner Kontakte.
+	 *  
+	 */
+	
 	public void onModuleLoad() {
 		
-		contactSystemAdmin = ClientsideSettings.getContactAdministration();
-		
+		contactSystemAdmin = ClientsideSettings.getContactAdministration();		
 				
 		// Test um Login zu Überbrücken
 		contactSystemAdmin.getUserByID(510, new AsyncCallback<User>() {
@@ -214,42 +226,14 @@ public class ContactSystem implements EntryPoint {
 			}
 		});	
 		
-		
-		/**
-		 * Login-Status feststellen mit LoginService
-		 */		
-
-//		loadPanel.setVisible(false);
-//		contactSystemAdmin = ClientsideSettings.getContactAdministration();
-//		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
-//			public void onFailure(Throwable error) {
-//				Window.alert("Login Error");
-//			}
-//				
-//			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
-//			public void onSuccess(User result) {
-//				userInfo = result;
-//				if(userInfo.isLoggedIn()){
-//					log("Load Editor");
-//					uf.setMyUser(result);
-//					cf.setMyUser(result);
-//					clf.setMyUser(result);
-//					cf.setLoad(loadPanel);
-//					clf.setLoad(loadPanel);
-//					loadTree(); // für Test
-//					loadContactSystem(); // für Test
-//					loadPanel.setVisible(false);	
-//				}else{
-//					loadLogin();					
-//				}
-//			}
-//		});	
-		
 	}	
 	
 	/**
-	 * Aufbau der Login-Seite
+	 * Die Methode <code>loadLogin()</code> führt zum Aufbau der Login-Seite.
+	 * Wenn der Nutzer ausgeloggt wurde, kann er sich hierüber wieder neu im 
+	 * System einloggen. 
 	 */
+	
 	private void loadLogin() {	
 		log("Login");
 		signInLink.setHref(userInfo.getLoginUrl());
@@ -354,26 +338,17 @@ public class ContactSystem implements EntryPoint {
 		header.getElement().setId("Header");		
 		navigation.getElement().setId("Navigation");
 		trailer.getElement().setId("Trailer");
-
+		
 		
 		/**
-		 * Verlinkung der Listen und der dazugehörigen Formulare
-		 */
-		/**
-		ctvm.setContactForm(cf);
-		cf.setCtvm(ctvm);
-		
-		cltvm.setContactListForm(clf);
-		clf.setCltvm(cltvm);
-		cf.setCltvm(cltvm);
-		
-		mptvm.setParticipationForm(mpf);
-		mpf.setMptvm(mptvm);
-		*/	
-		/**
-		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTree) aufgerufen. 
-		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird oberhalb des 
+		 * Wird im Navigator ein Button ausgewählt, wird die zugehörige Liste (CellTreeViewModel) aufgerufen. 
+		 * Handelt es sich bei den Listenelementen um Kontakte oder Kontaktlisten, wird unterhalb des
 		 * CellTrees ein Button hinzugefügt, mit dem neue Elemente erzeugt werden können.
+		 * Je nachdem ob der Nutzer sich nun in der Ansicht der Kontakte oder Kontaktlisten befindet,
+		 * kann diesem mittels Einstieg über den Add-Buttons ein neues, leeres Kontaktformular oder Kontaktlistformular
+		 * angezeigt werden. 
+		 * Die Änderungen werden mittels Aufruf des Datenproviders <code>updateData()</code> auch an 
+		 * den CellTreeViewModel übergeben werden. Die Listen Anzeige ändert sich mit. 
 		 */
 	
 		contactButton.addClickHandler(new ClickHandler() {
@@ -386,14 +361,14 @@ public class ContactSystem implements EntryPoint {
 			contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
+						
 						loadPanel.setVisible(false);
 						log("Keine Kontakte gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<Contact> result) {
-						// TODO Auto-generated method stub
+						
 						loadPanel.setVisible(false);
 						log("Es wurden " + result.size() + " Kontakte gefunden");
 						Vector<BusinessObject> bov = new Vector<BusinessObject>();
@@ -446,6 +421,12 @@ public class ContactSystem implements EntryPoint {
 			
 		});
 		
+		/**
+		 * Bei Auswahl des Menü-Buttons <em>Von Mir Geteilt</em> erfolgt der Aufruf der
+		 * Service-Methode "getAllSharedByMe". Dies führt zur Anzeige aller vom Nutzer
+		 * geteilten Kontakte und Kontaktlisten. Über den Aufruf des Dataproviders 
+		 * des CellTreeViewModels werden Änderungen an diesen weiter gegeben. 
+		 */
 		
 		//Clickhandler für MyParticipationsButton
 		myParticipationsButton.addClickHandler(new ClickHandler() {
@@ -478,6 +459,13 @@ public class ContactSystem implements EntryPoint {
 			}
 		});
 	
+		/**
+		 * Bei Auswahl des Menü-Buttons <em>An Mich Geteilt</em> erfolgt der Aufruf der
+		 * Service-Methode "getAllSharedByOthersToMe". Über den Aufruf des Dataproviders 
+		 * des CellTreeViewModels werden Änderungen an diesen weiter gegeben und analog zu
+		 * der Funktionalität des Menü-Buttons myParticipationsButton alle 
+		 * von anderen Nutzern geteilten Kontakte und Kontaktlisten angezeigt.
+		 */
 		
 		//Clickhandler für ReceivedParticipationsButton
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
@@ -497,8 +485,7 @@ public class ContactSystem implements EntryPoint {
 					public void onSuccess(Vector<BusinessObject> result) {
 						// TODO Auto-generated method stub
 						loadPanel.setVisible(false);
-						log("Es wurden " + result.size() + " SharedObjects gefunden");
-						
+						log("Es wurden " + result.size() + " SharedObjects gefunden");						
 						
 						tvm.updateData(result);
 						ct.setDefaultNodeSize(result.size());
@@ -522,6 +509,13 @@ public class ContactSystem implements EntryPoint {
 			
 		});
 		
+		/**
+		 * Bei Auswahl des Buttons <em>Hinzufügen</em>, welcher als runder Button dargestellt wird,
+		 * erfolgt der Aufruf der Methode "setSelected()". Wenn sich der Nutzer in dem Menü für 
+		 * Kontakte befindet erhält er über den Aufruf der Methode die Darstellung einer leeren
+		 * Kontaktformulars, während dieser wenn er sich im Menü Kontaktliste befindet ein leeres
+		 * KontaktlistenFormular angezeigt bekommt. 
+		 */
 		addPanel.addClickHandler(new ClickHandler(){
 
 			@Override
@@ -575,8 +569,16 @@ public class ContactSystem implements EntryPoint {
 	}
 	
 	/**
-	 * Clickhandler für Search-Button.
-	 * @author janina
+	 * Die innere Klasse <code>SearchClickHandler</code> implementiert das Clickhandler 
+	 * Interface und dessen dazugehörige <code>onClick(ClickEvent event)</code> Methode.
+	 * Bei einem Click-Event über den Suchen-Button wird die Service-Methode "search"
+	 * aufgerufen. Anhand des übergebenen Strings aus dem Suchen-Textfeld wird diese
+	 * Methode ausgeführt und liefert das gewünschte Ergebnis mittels einem Vector
+	 * an BusinessObject Objekten. Diese werden an den zugehörigen CellTreeViewModel
+	 * über die Methode des Dataproviders <code>updateData()</code> weitergegeben und
+	 * ermöglichen es die Anzeige des CellTreeViewModels analog anzupassen.
+	 * 
+	 * @author Janina Mattes
 	 *
 	 */
 	private class SearchClickHandler implements ClickHandler {
@@ -601,8 +603,7 @@ public class ContactSystem implements EntryPoint {
 					@Override
 					public void onSuccess(Vector<BusinessObject> result) {
 						loadPanel.setVisible(false);
-						if (result != null) {
-							
+						if (result != null) {							
 							tvm.updateData(result);
 						} else {
 							//Window.alert("Keine Kontakte gefunden :(");

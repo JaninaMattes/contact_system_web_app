@@ -27,17 +27,21 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 
 /**
+ * <p>
  * Die Klasse <code>ContactForm</code> enthält Elemente für die Darstellung
  * eines Kontaktformulars des jeweilig selektierten Kontaktes aus dem Kontaktsystem. 
- * 
+ * </p>
+ * <p>
  * Darüber hinaus ermöglicht dies auch durch Austausch einzelner Elemente, wie bspw.
  * Buttons die Darstellung eines leeren Kontaktformulars zur Ausformulierung der Kontakteigenschaften,
  * vor der Erzeugung eines neuen <code>Contact</code> Objektes in der DB. 
- * 
+ * </p>
+ * <pre>
  * Analog zur Klasse ContactForm wurde auch die Klasse ContactListForm {@link ContactListForm} 
  * für das Anzeigen und die Darstellung der Kontaktlisten angelegt.
- *  
- *  @author Janina Mattes
+ * </pre>
+ * 
+ * @author Janina Mattes
  */
 
 
