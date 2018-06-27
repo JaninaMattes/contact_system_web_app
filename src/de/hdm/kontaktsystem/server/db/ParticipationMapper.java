@@ -24,6 +24,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
  * 
  * @author Sandra Prestel
  */
+
 public class ParticipationMapper {
 	
 	/**
