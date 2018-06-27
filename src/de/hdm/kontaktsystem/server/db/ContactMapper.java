@@ -24,7 +24,7 @@ import de.hdm.kontaktsystem.shared.bo.User;
  * Löschen von Objekten zur Verfügung gestellt. Es können sowohl Objekte in Datenbank-Strukturen, 
  * als auch Datenbank-Strukturen in Objekte überführt werden.
  * 
- * @author Katalin
+ * @author Katalin Wagner, Janina Mattes
  *
  */
 
@@ -39,7 +39,6 @@ public class ContactMapper {
 	 */
 
 	private static ContactMapper contactMapper = null;
-
 	protected ContactMapper() {
 
 	}
@@ -123,13 +122,6 @@ public class ContactMapper {
 		return null;
 	}
 	
-	
-	
-	
-	
-	
-	
-
 	/**
 	 * Mapper-Methode um alle vorhandenen Kontakte zu suchen.
 	 * Den Kontakt - Objekten wird ein PropertyValue-Objekt zugewiesen.

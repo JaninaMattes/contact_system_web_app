@@ -105,6 +105,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 	
 	/**
+	 * Login weiterleitung
+	 */
+	public User login(String requestUri){
+		return administration.login(requestUri);
+	}
+	
+	/**
 	 * Erzeugt "Zelle" für einen einzelnen Kontakt. Diese Zelle enthält eine Tabelle 
 	 * aus {@link Row}- und {@link Colum}-Objekten, die die einzelnen Eigenschaften und
 	 * deren Ausprägungen des Kontaktes darstellen. Weiterhin ist in der Tabelle der 
@@ -161,7 +168,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Row statusRow = new Row();
 		Column statusProperty = new Column("Status");
 		String status = "";
-		if(contact.isShared_status()) {
+		if(contact.getShared_status()) {
 			status = "geteilt";
 		}else {
 			status = "nicht geteilt";
@@ -172,7 +179,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		contactElement.addPropertyRow(statusRow);
 		
 		/* Liste mit Teilhabern erstellen */	
-		if(contact.isShared_status()) {
+		if(contact.getShared_status()) {
 			Vector<Participation> participations = administration.getAllParticipationsByBusinessObject(contact);
 			for(Participation singleParticipation : participations) {
 				String participantName = singleParticipation.getParticipant().getUserContact().getName().getValue();

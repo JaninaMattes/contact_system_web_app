@@ -129,7 +129,7 @@ public class BusinessObject implements Serializable{
 	 * Status abrufen ob ein BO geteilt wurde 
 	 * @return shared_status Geteilt-Status
 	 */
-	public boolean isShared_status() {
+	public boolean getShared_status() {
 		return this.shared_status;
 	}
 
