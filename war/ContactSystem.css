@@ -1,4 +1,4 @@
-/*TODO: Checkboxen, Textboxen,Listboxen, zusammenfassen ï¿½hnlicher Elemente, allgemein anpassen */
+
 
 body {
 	margin: 0 auto; /*Der Wert wird horizontal zentriert */
@@ -9,7 +9,7 @@ body {
 
 
 
-#headertext{ /*Ueberschrift des Report-Generators und des Editors*/
+#headertext{ /*Ueberschrift des Editors*/
 	border: none;
 	margin: 20px 100% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
 	padding-left: 150px;
@@ -22,23 +22,41 @@ body {
 	
 }
 
-#reporttitle{ /* Ãœberschrift des erstellten Reports */
+#headertext2{ /*Ueberschrift des Report-Generators*/
+	border: none;
+	margin: 20px 0% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
+	padding-left: 300px;
+	font-family: "Arial", Arial, sans-serif;
+  	font-size: 3em; /*Schriftgrï¿½ï¿½e*/
+  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+  	color: white; /*Schriftfarbe*/
+  	text-align: center; /*zentriert*/
+
+	
+}
+
+/*Report Generator */
+
+#reporttitle{ /* Überschrift des erstellten Reports */
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 2em; /*Schriftgrï¿½ï¿½e*/
   	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
 	color: black
+	
 }
 
 #reportheader{ /*Kopfdaten des erstellten Reports mit Userdaten (Tabelle) */
 	width:600px;
 	border:1px solid silver;
 	margin: auto;
+	/* TODO: Linksbündig machen
 }
 
 .reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
 	width:600px;
 	border:1px solid silver;
 	margin: 10px auto;
+	/*TODO: Linksbündig machen */
 	
 }
 
@@ -95,7 +113,7 @@ body {
 #ListBox {
    background: transparent;
    width: 268px;
-   padding: 5px;
+   padding-left: 5px;
    font-size: 16px;
    line-height: 1;
    border: 0;
@@ -119,7 +137,7 @@ body {
 
 /*Buttons*/
 
-#addedit{
+#addedit{ /*Button "Hinzufügen" und "Bearbeiten"
 	height:25px;
 	width: 80px;
 	color: black;
@@ -134,10 +152,7 @@ body {
 #textbox{
 	/*width: festlegen (vergrößern)*/
 }
-#checkbox{
-	
-}
-/*TODO: Löschen, Speichern, Teilen-Button zusammenfassen wenn keine Farbe haben sollen*/
+
 #shareButton{ /* Teilen-Button*/
 	height: 25px;
     width: 100px;
@@ -156,11 +171,11 @@ body {
     
 }
 
-#menu-button{ /* Buttons der Menï¿½leiste des Editors */
-	height: 63px;
+#menu-button{ /* Buttons der Menüleiste des Editors */
+	height: 65px;
     width: 20vw;
     font-family: "Arial", Arial, sans-serif;
-	background: #0c145c;
+	background: #534bae;
     border: none;
     color: #ffffff;
     padding: 0px;
@@ -168,17 +183,18 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 18px;
-   	margin: 4px 2px;
+   	margin-button: 0px;
+   	margin-top: 0px;
     cursor: pointer;
 	
 }
 
-#menu-button:hover{
+#menu-button:hover{ /* Farbe bei Klick auf einen Menü-Button */
     background: #dfddfa;
 }
 
-#searchButton{ /* Suchen-Button im Editor */
-	height: 25px;
+#searchButton{ /* "Suchen"-Button im Editor */
+	height: 27px;
     width: 53px;
     font-family: "Arial", Arial, sans-serif;
 	background-color: #c0c0c0;
@@ -188,7 +204,7 @@ body {
     display: inline-block;
     font-size: 16px;
     margin-top: 1vh;
-    margin-Bottom: 5vh;
+    margin-Bottom: 9vh;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -210,7 +226,7 @@ body {
     cursor: pointer;
 }
 
-#saveButton{ /* Speichern-Button im Editor */
+#saveButton{ /* "Speichern"-Button im Editor */
 	height: 25px;
     width: 100px; 
     font-family: "Arial", Arial, sans-serif;     
@@ -228,7 +244,7 @@ body {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#deleteButton{ /* Lï¿½schen-Button im Editor */
+#deleteButton{ /* "Löschen"-Button im Editor */
 	height: 25px;
     width: 100px;
     font-family: "Arial", Arial, sans-serif;     
@@ -245,8 +261,8 @@ body {
 	border-radius: 4px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
-/*"Kontaktliste löschen" und "Kontakt entfernen"-Buttons*/
-#deleteCLCButton{ /*funktioniert noch nicht*/
+
+#deleteCLCButton{ /*"Kontaktliste löschen" und "Kontakt entfernen"-Buttons*/
 
 	width: 100px;
 	color: black;
@@ -282,8 +298,9 @@ body {
   	left: calc(100vw - 100px);
   
 }
-
-#switch-button{ /* "Report"- und "Editor"- Button, um vom Editor in den Report Generator zu gelangen und anders herum */
+/* "Report"- und "Editor"- Button, 
+um vom Editor in den Report Generator zu gelangen und anders herum */
+#switch-button{ 
 	height: 30px;
     width: 90px;
 	float: right;
@@ -354,7 +371,8 @@ body {
 	height: 27px;
 	margin-top: 2vh;
 	margin-left: 1vw;
-	margin-Bottom: 13vh;
+	margin-Bottom: 10vh;
+	border-radius: 5px;
 	
 }
 
@@ -390,7 +408,7 @@ body {
 }
 
 
-/* Label von ï¿½berschrift "Kontakt:" und "Kontaktliste:"*/
+/* Label von ï¿½berschrift "Kontakt:" und "Kontaktliste:" im Editor*/
 #ueberschriftlabel{
 	 border-style: none;
 	 border-color:white;
@@ -418,15 +436,6 @@ body {
 	padding-left: 20px;
 	font-size: 14px;
 	color: white;
-}
-
-#loginlabel{
-	
-}
-
-#checkbox{
-
-    
 }
 
 input:checked {
@@ -458,11 +467,11 @@ div#Navigator {
 
 }
 
-div#Lists {	
+div#Lists {	/*Mittleres Div, in welchem die Kontakte und Kontaktlisten angezeigt werden */
 	border-radius: none;
 	background: #edf4ff;
 	align-content: center;
-	padding-left: 5vw;
+	padding-left: 2vw;
 }
 
 div#Details {
@@ -494,7 +503,7 @@ div#Trailer {
 
 }
 
-#add{
+#add{ /*Add-Button im Editor (+ Button) */
     position: fixed;
     top: 87vh;
     left: 50vw;
@@ -503,10 +512,10 @@ div#Trailer {
     height: 50px;
     width:  50px;
     color: white;
-    background: #0c145c;
+    background: black;
     border-radius: 50px;
 }
-
+/*Ladeanzeige*/
 #load{
 	display:block;
 	height:100vh;

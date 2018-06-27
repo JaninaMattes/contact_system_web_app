@@ -321,10 +321,15 @@ public class ContactSystem implements EntryPoint {
 		searchButton.getElement().setId("searchButton"); 
 		
 		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
+		contactButton.removeStyleName("gwt-Button");
 		contactButton.getElement().setId("menu-button");
+		contactListsButton.removeStyleName("gwt-Button");
 		contactListsButton.getElement().setId("menu-button");
+		myParticipationsButton.removeStyleName("gwt-Button");
 		myParticipationsButton.getElement().setId("menu-button");
+		receivedParticipationsButton.removeStyleName("gwt-Button");
 		receivedParticipationsButton.getElement().setId("menu-button");
+		accountButton.removeStyleName("gwt-Button");
 		accountButton.getElement().setId("menu-button");
 		
 		/** 
