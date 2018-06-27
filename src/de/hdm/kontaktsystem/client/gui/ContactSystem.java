@@ -258,7 +258,15 @@ public class ContactSystem implements EntryPoint {
 		loginPanel.add(new HTML("<center>"));
 		loginPanel.add(loginLabel);
 		loginPanel.add(new HTML("<br /> <br /> "));
-		loginPanel.add(signInLink);
+		FocusPanel login = new FocusPanel();
+		login.add(new Image(GWT.getHostPageBaseURL() + "images/login.png"));
+		login.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.Location.assign(userInfo.getLoginUrl());				
+			}		
+		});
+		loginPanel.add(login);
 		loginPanel.add(new HTML("</center>"));
 		RootPanel.get("Lists").add(loginPanel); //TODO: prüfen ob richtige HTML
 	}

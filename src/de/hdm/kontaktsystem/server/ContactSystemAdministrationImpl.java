@@ -62,7 +62,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 
 	public ContactSystemAdministrationImpl() throws IllegalArgumentException {
-
+		init();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	// Login
 	// ## IO ##
 	public User login(String requestUri) {
-
+		init();
 		UserService userService = UserServiceFactory.getUserService();
 		com.google.appengine.api.users.User guser = userService.getCurrentUser();
 		User user = new User();
@@ -713,6 +713,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 					this.createParticipation(partPV);
 				}
 			}
+		}else if(part.getReferencedObject() instanceof ContactList){
+			if(((ContactList) part.getReferencedObject()).getContacts() != null){
+				for(Contact c : ((ContactList) part.getReferencedObject()).getContacts()){
+					Participation partC = new Participation();
+					partC.setParticipant(part.getParticipant());
+					partC.setReference(c);
+					partC.setShareAll(true);
+					this.createParticipation(part);
+				}
+			}
 		}
 		return participation;
 
@@ -840,6 +850,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				partPV.setParticipant(p.getParticipant());
 				partPV.setReference(pv);
 				this.deleteParticipation(partPV);
+			}
+		}else if(p.getReferencedObject() instanceof ContactList){
+			for(Contact c : ((ContactList) part.getReferencedObject()).getContacts()){
+				Participation partC = new Participation();
+				partC.setParticipant(part.getParticipant());
+				partC.setReference(c);
+				this.deleteParticipation(part);
 			}
 		}
 		

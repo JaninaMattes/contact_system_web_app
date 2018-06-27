@@ -626,7 +626,10 @@ public class ContactForm extends VerticalPanel {
 						CheckBox cb = new CheckBox();
 						TextBox tb = new TextBox();
 						
-						cb.setText("All");
+						
+						
+						
+						cb.setText("Alle");
 						cb.setTitle(0+"");
 						cb.addClickHandler(new ClickHandler(){
 							@Override
@@ -853,7 +856,8 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onFailure(Throwable caught) {
 				loadPanel.setVisible(false);
-				Window.alert("Kontakt konnte nicht geteilt werden. :(");						
+				caught.printStackTrace();
+				Window.alert("Kontakt konnte nicht geteilt werden. \n"+caught.getStackTrace().toString());						
 			}
 
 			@Override

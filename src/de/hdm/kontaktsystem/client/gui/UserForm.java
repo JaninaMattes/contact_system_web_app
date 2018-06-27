@@ -77,7 +77,6 @@ public class UserForm extends VerticalPanel{
 
 							@Override
 							public void onSuccess(User result) {
-								// TODO Auto-generated method stub
 								Window.Location.assign(myUser.getLogoutUrl());
 							}
 							
