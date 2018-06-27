@@ -2,6 +2,10 @@ package de.hdm.kontaktsystem.shared.bo;
 
 import java.util.Vector;
 
+/**
+ * 
+ * @author Marco Pracher
+ */
 public class ContactList extends BusinessObject {
 
 	/**
