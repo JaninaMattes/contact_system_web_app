@@ -10,13 +10,12 @@ import java.io.Serializable;
  * <p>
  * Jede Teilhaberschaft, und damit jede Instanz der Klasse <code>Participation</code> bezieht 
  * sich auf einen User, der Teilhaber (participant) ist und das geteilte BusinessObject (reference). 
- * Die Verweise auf die Objekte finden durch die eindeutige ID der Objekte statt.
+ * Die Verweise auf die Objekte finden durch die eindeutige ID der Objekte statt. Außerdem wird 
+ * abgebildet, ob ein Objekt, beispielsweise ein Kontakt, vollständig geteilt wurde.
  * </p>
  * 
- * @author Sandra
- *
+ * @author Sandra Prestel
  */
-
 
 public class Participation implements Serializable {
 	
@@ -37,7 +36,7 @@ public class Participation implements Serializable {
 	private BusinessObject reference = null;
 		
 	/**
-	 * Gibt an ob Kontakte oder Listen Vollständig oder nur Teilweise geteilt wurden
+	 * Gibt an, ob Kontakte oder Listen vollständig oder nur teilweise geteilt wurden
 	 */
 	private boolean shareAll = false;
 	
@@ -50,6 +49,8 @@ public class Participation implements Serializable {
 	
 	/**
 	 * Konstruktor, der alle Attribute mit Werten belegt
+	 * @param participant Teilhaber am BusinessObject
+	 * @param reference Geteiltes BusinessObject
 	 */
 	public Participation(User participant, BusinessObject reference) {
 		this.participant = participant;
@@ -58,8 +59,9 @@ public class Participation implements Serializable {
 	}
 	
 	/**
-	* Zurückgeben der TeilhaberID
-	*/
+	 * Zurückgeben der TeilhaberID
+	 * @return ID des Teilhabers am BusinessObject
+	 */
 	public double getParticipantID() {
 		return this.participant.getGoogleID();
 		
@@ -67,6 +69,7 @@ public class Participation implements Serializable {
 
 	/**
 	 * Zurückgeben des Teilhabers
+	 * @return Teilhaber am BusinessObject
 	 */
 	public User getParticipant() {
 		return this.participant;
@@ -74,14 +77,15 @@ public class Participation implements Serializable {
 	
 	/**
 	* Zurückgeben des ShareAll werts
+	 * @return Angabe, ob das gesamte Objekt geteilt wurde
 	*/
 	public boolean getShareAll() {
-		return shareAll;
-		
+		return shareAll;	
 	}
 	
 	/**
 	 * Setzen des Teilhabers
+	 * @param participant Teilhaber am BusinessObject
 	 */
 	public void setParticipant(User participant) {
 		this.participant = participant;
@@ -90,6 +94,7 @@ public class Participation implements Serializable {
 	
 	/**
 	* Zurückgeben der ID des geteilten BusinessObjects
+	 * @return Die ID des geteilten BusinessObjects
 	*/
 	public int getReferenceID() {
 		return this.reference.getBoId();
@@ -97,6 +102,7 @@ public class Participation implements Serializable {
 
 	/**
 	 * Zurückgeben des BusinessObjects
+	 * @return Das geteilte BusinessObject
 	 */
 	public BusinessObject getReferencedObject() {
 		return this.reference;
@@ -104,6 +110,7 @@ public class Participation implements Serializable {
 	
 	/**
 	 * Setzen des geteilten BusinessObjects
+	 * @param reference Geteiltes BusinessObjekt
 	 */
 	public void setReference(BusinessObject reference) {
 		this.reference = reference;
@@ -111,21 +118,28 @@ public class Participation implements Serializable {
 	
 	/**
 	 * Setzen des ShareALL werts
+	 * @param all Angabe, ob das gesamte Objekt geteilt wurde
 	 */
 	public void setShareAll(boolean all) {
 		 shareAll = all;
 	}
 
-	
-	//Anpassen
+	/**
+	 * Gibt eine Repräsentation des Participation-Objekts als String zurück.
+	 * Dieser beinhaltet alle Attribute und deren Wertausprägungen des Objekts.
+	 */
 	@Override
 	public String toString() {
 		return "Participant = " + this.getParticipant() + "\n"		
-		+ "Reference Object = " + this.getReferencedObject() + "\n"
+				+ "Reference Object = " + this.getReferencedObject() + "\n"
+				+ "ShareAll = " + this.getShareAll() + "\n"
 		;
 	}
 	
-	//Anpassen
+	/**
+	 * Gibt eine Ganzzahl zurück, die das Participation-Objekt eindeutig identifiziert.
+	 * Diese setzt sich aus allen Attributen und deren Wertausprägungen des Objekts zusammen.
+	 */
 	@Override
 	public int hashCode() {
 		double dec = 1000000000000d;
@@ -133,10 +147,15 @@ public class Participation implements Serializable {
 		int result = 1;
 		result = prime * result + (int) (getParticipantID() / dec);
 		result = prime * result + getReferenceID();
+		int allShared = this.getShareAll() ? 1 : 0;
+		result = prime * result + allShared;
 		return result;
 	}
 
-	//Anpassen
+	/**
+	 * Prüft, ob ein Objekt einem Participation-Objekt gleicht.
+	 * Gleichheit bedeutet hier, dass alle Attribute der Objekte übereinstimmen.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -150,6 +169,9 @@ public class Participation implements Serializable {
 			return false;
 		if (this.getReferenceID() != other.getReferenceID())
 			return false;
+		if(this.getShareAll() != other.getShareAll()) {
+			return false;
+		}
 		return true;
 	}
 	

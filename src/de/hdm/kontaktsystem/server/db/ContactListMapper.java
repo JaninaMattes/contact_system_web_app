@@ -13,19 +13,27 @@ import de.hdm.kontaktsystem.shared.bo.ContactList;
 import de.hdm.kontaktsystem.shared.bo.User;
 
 /**
+ * Die Mapper-Klasse <code>ContactListMapper</code> bildet <code>ContactList</code>-Objekte 
+ * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Ändern und 
+ * Löschen von Objekten zur Verfügung gestellt. Es können sowohl Objekte in Datenbank-Strukturen, 
+ * als auch Datenbank-Strukturen in Objekte überführt werden.
  * 
- * @author Kim-Ly Lee, Marco Pracher
- *
+ * @author Marco Pracher
+ * @author Kim-Ly Le
  */
 
 public class ContactListMapper {
 
 	/**
-	 * Singleton Pattern
+	 * Singleton Pattern -> Sicherstellung über static, dass das Objekt PropertyValueMapper nur von der Klasse selbst erreicht werden kann
 	 */
 
 	private static ContactListMapper contactListMapper = null;
 
+	/**
+	 * Default Konstruktor auf Protected gesetzt, um nur innerhalb des Packages dass alle Mapper Klassen beinhaltet zugegriffen werden kann
+	 */
+	
 	protected ContactListMapper() {
 
 	}

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -50,6 +51,7 @@ public class ReportGenerator implements EntryPoint {
 	Image searchSymbol1 = new Image();
 	Image searchSymbol2 = new Image();
 	Image logo = new Image();
+	Image load = new Image();
 	
 	/**
 	 * Definition der grundlegenden Widgets des Report-Generators. 
@@ -60,7 +62,7 @@ public class ReportGenerator implements EntryPoint {
 	 * @see de.hdm.kontaktsystem.war.ReportGenerator.html
 	 */
 	HorizontalPanel headerPanel = new HorizontalPanel();
-	Label headerText = new Label("Report Generator");
+	Label headerText = new Label("Report-Generator");
 	VerticalPanel navigationPanel = new VerticalPanel();
 	Button showAllButton = new Button("Alle Kontakte");
 	
@@ -86,6 +88,8 @@ public class ReportGenerator implements EntryPoint {
 	private Anchor signOutLink = new Anchor("Logout");
 	private Anchor editorLink = new Anchor("Editor");				
 
+	// Lade Animation
+	private PopupPanel loadPanel = new PopupPanel();
 	
 	/**
 	 * <p>
@@ -102,27 +106,29 @@ public class ReportGenerator implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
-		loadReportGenerator(); //Test, solange Login nicht funktioniert
+		//loadReportGenerator(); //Test, solange Login nicht funktioniert
 		
 		/**
 		 * Login-Status feststellen mit LoginService
-		 *		
-		ContactSystemAdministrationAsync contactSystemAdmin = ClientsideSettings.getContactAdministration();
-		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+		 */	
+		loadPanel.setVisible(false);
+		reportGenerator = ClientsideSettings.getReportGenerator();
+		reportGenerator.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
-				Window.alert("Login Error :(");
+				Window.alert("Login Error");
 			}
 				
 			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
 			public void onSuccess(User result) {
 				userInfo = result;
 				if(userInfo.isLoggedIn()){
+					log("Load ReportGenerator");
 					loadReportGenerator();
 				}else{
 					loadLogin();					
 				}
 			}
-		});*/
+		});
 	}
 		
 	/**
@@ -130,7 +136,6 @@ public class ReportGenerator implements EntryPoint {
 	 */
 	private void loadLogin() {	
 			
-		Window.alert("Login :D");
 		signInLink.setHref(userInfo.getLoginUrl());
 		signInLink.getElement().setId("link");
 		loginPanel.add(new HTML("<center>"));
@@ -149,14 +154,14 @@ public class ReportGenerator implements EntryPoint {
 	 */
 	public void loadReportGenerator() {
 		
-		/**
+		/*
 		 * Zuweisung des Asynchronen Interface.
 		 */
 		if(reportGenerator == null) {
 			reportGenerator = ClientsideSettings.getReportGenerator();
 		}
 		
-		/**
+		/*
 		 * Zuweisung von ids zu den HTML-Elementen, die aus den gwt-Widgets generiert
 		 * werden, um sie mit CSS gezielt ansprechen zu können.
 		 */
@@ -165,7 +170,7 @@ public class ReportGenerator implements EntryPoint {
 		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
 		loginLabel.getElement().setId("loginlabel");
-		headerText.getElement().setId("headertext");
+		headerText.getElement().setId("headertext2");
 		
 		//Textbox
 		findByValueText.getElement().setId("findByTextbox");
@@ -188,10 +193,21 @@ public class ReportGenerator implements EntryPoint {
 		
 		//Logo
 		logo.getElement().setId("logo");
+		
+		/*
+		 * CSS für Load Panel
+		 */
+		loadPanel.getElement().setId("load");
 
-		/**
+		/*
 		 * Zuweisen von Bilddateien zu den Image-Elementen und Setzen der Größe.
 		 */
+		// Ladeanimation
+		load.setUrl(GWT.getHostPageBaseURL() + "images/load.gif");
+		load.setStyleName("load_Animation");
+		loadPanel.add(load);
+		loadPanel.setVisible(false);
+		
 		//Logo
 		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");
 		logo.setHeight("70px");
@@ -205,19 +221,24 @@ public class ReportGenerator implements EntryPoint {
 		searchSymbol2.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
 		searchSymbol2.setAltText("Suche");
 		
-		/**
+		/*
 		 * Setzen des Links zum Editor des Kontaktsystems. Hiermit kann die Webseite
 		 * "Editor" geöffnet werden, mit der Inhalte bearbeitet werden können.
 		 * @see ContactSystem.java
 		 */
 		editorLink.setHref(GWT.getHostPageBaseURL() + "ContactSystem.html");
 		
-		/**
+		/*
 		 * Aufbau der Oberfläche des ReportGenerators.
 		 * Die Reportanwendung besteht aus einem Header mit Links zum Logout und dem Editor,
 		 * einem "Navigationsteil" mit den Schaltflächen zum Auslösen der Reportgenerierung 
 		 * und einem "Datenteil" für die HTML-Version des Reports.
 		 */
+		
+		/**
+		 * Das Ladeoverlay dem HTML-Body hinzufügen
+		 */
+		RootPanel.get().add(loadPanel);
 		
 		/**
 		 * Aufbau des Headers
@@ -229,42 +250,40 @@ public class ReportGenerator implements EntryPoint {
 		
 		RootPanel.get("Header").add(headerPanel);
 		
-		/**
-		 * Aufbau der Navigation und der Detail-Ansicht
-		 */
-		/* Anfangsansicht des Detail-Fensters (rechte Bildschirmseite) */
+		//Aufbau der Navigation und der Detail-Ansicht
 		Label noDetails = new Label("Kein Report ausgewählt");
 		RootPanel.get("Details").add(noDetails);;
 		
-		/**
+		/*
 		 * Durch Klick auf den Button <code>showAllButton</code> werden alle Kontakte angezeigt,
 		 * auf die der Nutzer Zugriff hat.
 		 */
-		/* ShowAll-Button */
 		navigationPanel.add(showAllButton);
 		
 		showAllButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				loadPanel.setVisible(true);
 				reportGenerator.createAllContactsReport(new CreateAllContactsReportCallback());
 			}
 		});
 		
-		/**
+		/*
 		 * Durch Klick auf den Button <code>findByParticipantButton</code> werden alle Kontakte 
 		 * angezeigt, auf die der Nutzer Zugriff hat und die mit einem bestimmten Nutzer
 		 * geteilt wurden. Dieser kann aus einer DropDown-Liste ausgewählt werden.
 		 */
-		/* DropDown-Liste für alle User */		
+		// DropDown-Liste für alle User
 		reportGenerator.getAllUsers(new getAllUsersCallback());
 		
-		/* FindByParticipant-Button */		
+		// FindByParticipant-Button
 		findByParticipantButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(usersDropDownList.getSelectedValue() == null) {
 					Window.alert("Kein Teilhaber ausgewählt!");
 				} else {
+					loadPanel.setVisible(true);
 					double participantId = Double.parseDouble(usersDropDownList.getSelectedValue());
 					reportGenerator.createAllContactsForParticipantReport(participantId,
 							new CreateAllContactsForParticipantReportCallback(participantId));
@@ -272,23 +291,23 @@ public class ReportGenerator implements EntryPoint {
 			}
 		});
 		
-		/* Hinzufügen zur Oberfläche */
+		// Hinzufügen zur Oberfläche
 		navigationPanel.add(findByParticipantLabel);
 		findByParticipantPanel.add(usersDropDownList);
 		findByParticipantPanel.add(findByParticipantButton);
 		navigationPanel.add(findByParticipantPanel);
 		
 		
-		/**
+		/*
 		 * Durch Klick auf den Button <code>findByValueButton</code> werden alle Kontakte 
 		 * angezeigt, auf die der Nutzer Zugriff hat und die eine bestimmte Eigenschaft 
 		 * und Eigenschaftsausprägung besitzen. Die Eigenschaft kann aus einer DropDown-Liste 
 		 * ausgewählt und die Ausprägung in ein Textfeld eingegeben werden.
 		 */
-		/* DropDown-Liste für Eigenschaften */
+		// DropDown-Liste für Eigenschaften
 		reportGenerator.getAllProperties(new GetAllPropertiesCallback());
 		
-		/* FindByValue-Button */		
+		// FindByValue-Button		
 		findByValueButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -302,6 +321,7 @@ public class ReportGenerator implements EntryPoint {
 						Window.alert("Keine Ausprägung eingegeben");
 						return;
 					} else {
+						loadPanel.setVisible(true);
 						reportGenerator.createAllContactsForPropertyReport(propertyId, propertyvalue,
 								new CreateAllContactsForPropertyReportCallback(propertyId, propertyvalue));
 					}
@@ -309,14 +329,14 @@ public class ReportGenerator implements EntryPoint {
 			}		
 		});		
 		
-		/* Hinzufügen zur Oberfläche */
+		// Hinzufügen zur Oberfläche
 		navigationPanel.add(findByValueLabel);
 		navigationPanel.add(propertiesDropDownList);
 		findByValuePanel.add(findByValueText);
 		findByValuePanel.add(findByValueButton);
 		navigationPanel.add(findByValuePanel);
 		
-		/**
+		/*
 		 * Hinzufügen der gesamten Navigation zur Benutzungsoberfläche.
 		 */
 		RootPanel.get("Navigator").add(navigationPanel);
@@ -335,12 +355,13 @@ public class ReportGenerator implements EntryPoint {
 	class CreateAllContactsReportCallback implements AsyncCallback<AllContactsOfUserReport> {
 		@Override
 		public void onFailure(Throwable caught) {
+			loadPanel.setVisible(false);
 			Window.alert("Suche fehlgeschlagen!");
 		}
 
 		@Override
 		public void onSuccess(AllContactsOfUserReport report) {
-			
+			loadPanel.setVisible(false);
 			if (report != null) {				
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
@@ -365,11 +386,13 @@ public class ReportGenerator implements EntryPoint {
 		
 		@Override
 		public void onFailure(Throwable caught) {
+			loadPanel.setVisible(false);
 			Window.alert("Suche fehlgeschlagen!");		
 		}
 
 		@Override
 		public void onSuccess(AllContactsForParticipantReport report) {
+			loadPanel.setVisible(false);
 			if (report != null) {
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
@@ -397,11 +420,13 @@ public class ReportGenerator implements EntryPoint {
 		
 		@Override
 		public void onFailure(Throwable caught) {
+			loadPanel.setVisible(false);
 			Window.alert("Suche fehlgeschlagen!");		
 		}
 
 		@Override
 		public void onSuccess(AllContactsForPropertyReport report) {
+			loadPanel.setVisible(false);
 			if (report != null) {
 				HTMLReportWriter writer = new HTMLReportWriter();
 				writer.process(report);
@@ -466,4 +491,7 @@ public class ReportGenerator implements EntryPoint {
 		
 	}
 	
+	native void log(String s)/*-{
+		console.log(s);
+	}-*/;
 }
