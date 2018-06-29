@@ -5,6 +5,7 @@ import java.util.Vector;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -38,6 +39,8 @@ public class CellTreeViewModel implements TreeViewModel {
 	 * @author Marco
 	 *
 	 */
+	
+	
 	
 	private class BoKeyProvider implements ProvidesKey<BusinessObject> {
 
@@ -223,7 +226,7 @@ public class CellTreeViewModel implements TreeViewModel {
 
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
-
+		
 		log("NodeInfo: " + value.getClass());
 		dataProvider = new ListDataProvider<BusinessObject>();
 
@@ -292,10 +295,10 @@ class DataCell extends AbstractCell<BusinessObject> {
 		if (value != null) {
 		if (value instanceof ContactList) {
 			
-			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >  " + ((ContactList) value).getName() + " / " + value.getBoId() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >  " + ((ContactList) value).getName() + "</p>");
 
 		} else if (value instanceof Contact) {
-			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>  " + ((Contact) value).getName().getValue() + " / " + value.getBoId() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>  " + ((Contact) value).getName().getValue() + "</p>");
 
 		} else {
 

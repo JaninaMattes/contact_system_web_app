@@ -110,11 +110,12 @@ public class ContactListForm extends VerticalPanel {
 		Grid contactListGrid = new Grid(8, 3);
 		this.add(contactListGrid);
 
-		contactListGrid.setWidget(0, 0, contactListStatus);
-		contactListGrid.setWidget(0, 1, contactListStatusValue);
 		
-		contactListGrid.setWidget(1, 0, contactListLabel);
-		contactListGrid.setWidget(1, 1, nameContactList);
+		contactListGrid.setWidget(0, 0, contactListLabel);
+		contactListGrid.setWidget(0, 1, nameContactList);
+
+		contactListGrid.setWidget(1, 0, contactListStatus);
+		contactListGrid.setWidget(1, 1, contactListStatusValue);
 
 		contactListGrid.setWidget(2, 0, contactLabel);
 		contactListGrid.setWidget(2, 1, contactNames);
@@ -714,24 +715,21 @@ public class ContactListForm extends VerticalPanel {
 						for (Contact conFromUser : allConFromUser) {
 
 							// Wenn ausgewählter Contact aus Listbox mit Contact des Users übereinstimmt
-							if (conFromUser.getName().getValue() == contactToAddName) {
+							if (conFromUser.getName().getValue().equals(contactToAddName)) {
+								
 								log("Add: " + contactToAddName);
 								if (contactListToDisplay.getContacts().size() > 0) { // Eine leere Liste muss nicht
-																						// überprüft werden
-									for (Contact conFromCl : contactListToDisplay.getContacts()) {
-										// und hinzuzufügender Kontakt nicht bereits als Kontakt in Kontaktlist
-										// vorhanden
-										log("Listen Kontakt: " + conFromCl.toString());
-										if (conFromUser.getName().getValue() != conFromCl.getName().getValue()) {
-											// ausgewählten Kontakt zu Kontaktliste hinzufügen
-											log("Hinzuzufügender Kontakt zu Kontaktliste: " + conFromUser.toString());
-											contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay,
-													new ContactsToAddClCallback());
-											tvm.addToLeef(conFromUser);
-										} else {
-											Window.alert("Kontakt bereits in Kontaktliste vorhanden");
-										}
+									// überprüft werden und hinzuzufügender Kontakt nicht bereits als Kontakt in Kontaktlist vorhanden
+									if(contactListToDisplay.getContacts().contains(conFromUser)){		
+										Window.alert("Kontakt bereits in Kontaktliste vorhanden");
+									} else {
+										// ausgewählten Kontakt zu Kontaktliste hinzufügen
+										log("Hinzuzufügender Kontakt zu Kontaktliste: " + conFromUser.toString());
+										contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay,
+												new ContactsToAddClCallback());
+										tvm.addToLeef(conFromUser);
 									}
+									
 								} else {
 									log("Hinzuzufügender Kontakt zu Kontaktliste: " + conFromUser.toString());
 									contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay,
@@ -769,7 +767,6 @@ public class ContactListForm extends VerticalPanel {
 				Vector<Contact> resultCon = result.getContacts();
 				log(resultCon.size() + " Kontakte in der Liste");
 				for (Contact con : resultCon) {
-
 					contactNames.addItem(con.getName().getValue());
 				}
 
@@ -803,7 +800,6 @@ public class ContactListForm extends VerticalPanel {
 			contactsToAdd.clear();
 			if (result != null) {
 				for (Contact con : result) {
-
 					contactsToAdd.addItem(con.getName().getValue());
 
 				}
@@ -873,7 +869,6 @@ public class ContactListForm extends VerticalPanel {
 					
 					int count = 0;
 					for (Contact con : list.getContacts()) {
-
 						contactNames.addItem(con.getName().getValue());
 
 					}
