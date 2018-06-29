@@ -245,8 +245,11 @@ public class ContactListForm extends VerticalPanel {
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 
-			} else {
-
+			} else if(nameContactList.getText().isEmpty()) { // Namensfeld der Liste darf nicht leer sein
+				Window.alert("Das Namensfeld darf nicht leer gelassen werden.");
+				nameContactList.setText(contactListToDisplay.getName());
+			}else{
+				log("Save/Update");
 				String newClName = nameContactList.getText();
 				contactListToDisplay.setName(newClName);
 

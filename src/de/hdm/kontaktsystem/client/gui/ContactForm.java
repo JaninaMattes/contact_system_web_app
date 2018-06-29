@@ -439,19 +439,21 @@ public class ContactForm extends VerticalPanel {
 						// Speichern des bearbeiteten Kontakts
 						Vector<PropertyValue>editResult = new Vector<PropertyValue>();
 						if(contactToDisplay!=null) {
+							
+							// Erstes TextFeld (Name) darf nicht leer sein
+							if(tbv.elementAt(0).getText().isEmpty()){ 
+								loadPanel.setVisible(false);
+								Window.alert("Das Feld Name darf nicht leer sein.");
+								return;							
+							}
+							
 							log("Der Kontakt besteht bereits. "+tbv.size());
-							for(TextBox tb: tbv) {
-								log("Inhalt: "+tb);
-								 if(tb.getText().isEmpty() && Integer.parseInt(tb.getTitle())==1){ //1.0 verhindern dass Kontakt Name leer
-										Window.alert("Das Feld Name darf nicht leer sein.");
-										return;							
-								 }
-								 
+							for(TextBox tb: tbv) {							 
 								 log("Titel: "+tb.getTitle());
 								 // für neue Eigenschaftsausrägungen wird eine die Property anhand des Titels "Neu:PropertyID" erstellt
 								 if(tb.getTitle().contains("Neu")) {
 									 	String[]s=tb.getTitle().split(":");
-										final Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
+										Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
 										p.setId(Integer.parseInt(s[1]));
 										// Wenn die ID 0 ist dann muss die Beschreibung aus dem Textfeld "newProperty" verwendet werden.
 										if(p.getId() == 0){
@@ -1003,9 +1005,7 @@ public class ContactForm extends VerticalPanel {
 				
 				if(shareDialog.isVisible()){
 					shareDialog.setVisible(false);
-				}else if(edit || editPart){
-					
-					edit = false;
+				}else if(editPart){
 					editPart = false;
 					labelAddElement.setVisible(false);
 					addElement.setVisible(false);
@@ -1014,13 +1014,13 @@ public class ContactForm extends VerticalPanel {
 					for(CheckBox cb: cbv){
 						cb.setValue(false);
 					}
-					// Texboxen können nicht mehr bearbeitet werden
-					for(TextBox tb : tbv){
-						tb.setReadOnly(true);
-					}
-					
 					vp.remove(editPanel);
 					vp.add(btnPanel);
+				}else if(edit){
+					// Wird neu geladen, da ansonsten der Flextable und dieVectoren überprüft / geleert werden müssten.
+					vp.remove(editPanel);
+					vp.add(btnPanel);
+					tvm.setSelectedContactContactlist(contactToDisplay);
 				}else{
 					contactToDisplay = null;
 					RootPanel.get("Details").clear();

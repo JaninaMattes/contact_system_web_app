@@ -318,7 +318,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		// Fügt dem Kontakt neue PropertyValues hinzu
 		// Updatet die bestehenden PropertyValues
 		for (PropertyValue pV : newPV) {
-			if(pV.getValue().isEmpty() && pV.getBoId() != 0) { // Namensfeld kann nicht gelöscht werden
+			if(pV.getValue().isEmpty() && pV.getProperty().getId() != 1) { // Namensfeld kann nicht gelöscht werden
 				this.deletePropertyValue(pV);
 			}else
 			if(!oldPV.contains(pV)) {
@@ -530,10 +530,17 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 
+	/**
+	 * Ändert den Namen einer Kontaktliste
+	 */
 	@Override
 	public ContactList editContactList(ContactList cl) {
 		boMapper.update(cl);
-		return clMapper.updateContactList(cl);
+		// Absicherung das der Name nicht leer gelassen wird
+		if(!cl.getName().isEmpty()){
+			return clMapper.updateContactList(cl);
+		}
+		return cl;
 	}
 
 
