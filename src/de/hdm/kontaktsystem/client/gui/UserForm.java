@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -17,6 +18,7 @@ public class UserForm extends VerticalPanel{
 	
 	ContactSystemAdministrationAsync contactSystemAdmin = null;
 	
+	HTML infoText = new HTML("<h1> Mein Profil </h1>");
 	Label welcome = new Label();
 	Label id = new Label();
 	Label email = new Label();
@@ -27,9 +29,11 @@ public class UserForm extends VerticalPanel{
 						+ "und die dazugehörigen Teilhaberschaften aufgelöst. \n"
 						+ "Diese Änderung kann nicht rückgängig gemacht werden. ";
 	Button deleteButton = new Button("Account Löschen");
+	Button propertyButton = new Button("Eigenschaft bearbeiten");
 	Button contactButton = new Button("Kontakt anzeigen");
 	VerticalPanel vp = new VerticalPanel();
 	ContactForm cf = new ContactForm();
+	PropertyForm pf = new PropertyForm();
 	User myUser;
 	
 	/**
@@ -41,6 +45,7 @@ public class UserForm extends VerticalPanel{
 		
 		this.add(vp);
 		//welcome.setText("Hallo ");
+		vp.add(infoText);
 		vp.add(welcome);
 		//id.setText("Meine User ID: ");
 		vp.add(id);
@@ -48,7 +53,7 @@ public class UserForm extends VerticalPanel{
 		vp.add(email);
 		vp.add(contact);
 		vp.add(contactButton);
-
+		vp.add(propertyButton);
 		vp.add(deleteButton);
 		
 	}
@@ -94,6 +99,17 @@ public class UserForm extends VerticalPanel{
 					
 					RootPanel.get("Details").add(cf);
 					
+				}
+				
+			});
+			
+			propertyButton.addClickHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// Öffnet ein Formular zum bearbeiten und löschen von Eigenschaften
+					RootPanel.get("Details").clear();
+					RootPanel.get("Details").add(pf);			
 				}
 				
 			});

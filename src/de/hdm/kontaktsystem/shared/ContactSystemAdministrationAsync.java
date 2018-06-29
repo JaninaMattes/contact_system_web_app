@@ -108,6 +108,8 @@ public interface ContactSystemAdministrationAsync {
 	
 	public void addContactToList(Contact c, ContactList cl, AsyncCallback<ContactList> callback); // Aufruf in Kontaktliset: Hinzufügen eines ausgewählten Kontakt von User (geteilt oder erstellt) zu ausgewählter Kontaktliste
 
+	public void createProperty(Property p, AsyncCallback<Property> callback);
+	
 	/**
 	 * Update
 	 */
@@ -117,7 +119,9 @@ public interface ContactSystemAdministrationAsync {
 
 	public void editContactList(ContactList cl, AsyncCallback<ContactList> callback); // Aufruf in Kontaktliste: Editieren bereits existenter Kontaktlisten
 	
-	public void editParticpation(Participation part, AsyncCallback<Participation> callback);
+	public void editParticpation(Participation part, AsyncCallback<Participation> callback); // Verändert den ShareStatus oder die mit einem Kontakt geteilten Eigenschaftsausprägungen
+	
+	public void editProperty(Property p, AsyncCallback<Property> callback); // Verändert die Beschreibung einer Eigenschaft
 	
 	
 	/**
@@ -132,6 +136,8 @@ public interface ContactSystemAdministrationAsync {
 	public void removeContactFromList(Contact contact, ContactList contactList, AsyncCallback<ContactList> callback); // Aufruf in Kontaktliste: Entfernen von Kontakten aus Kontaktliste
 
 	public void deleteParticipation(Participation part, AsyncCallback<Participation> callback); // Löscht eine Teilhaberschaft
+	
+	public void deleteProperty(Property p, AsyncCallback<Property> callback); // Löscht eine Eigenschaft und deren Ausorägungen
 	
 
 	

@@ -65,34 +65,29 @@ public class PropertyMapper {
        * @param property ist das zu speichernde Objekt
        * @return das bereits uebergebene Objekt, jedoch mit gegebenfals korrigierter
        * 
-       * @warning Nicht Verwendet
        * 
        * <code>id</code>.
        */    
      
-      public void insert(Property property) {
+      public Property insert(Property property) {
     	       	  
           Connection con = DBConnection.connection();
             
           try {        	  
               	// Die Einfuegeoperation erfolgt	
-              	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (ID, description) VALUES (?, ?)");
-    			stmt.setInt(1, property.getId());
-    			stmt.setString(2, property.getDescription());
-    			stmt.execute();
-    			
-    			// Die Einfuegeoperation fuer PropertyValue
-    			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
-        	  	propertyValues = property.getPropertyValues();
-        	  
-                // Eintrag in PropertyValue erfolgt
-                for (PropertyValue pV : propertyValues){                 
-                		PropertyValueMapper.propertyValueMapper().insert(pV);
-
+              	PreparedStatement stmt = con.prepareStatement("INSERT INTO Property (description) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+    			stmt.setString(1, property.getDescription());
+    			stmt.executeUpdate();
+    			ResultSet rs = stmt.getGeneratedKeys();
+    			// Setzt die generrierte ID in die neue Eigenschaft
+				if (rs.next()) {
+					property.setId(rs.getInt(1));
+					return property;
                 }                  
           	} catch(SQLException e) {
               e.printStackTrace();
-          }          
+          }  
+          return null;
       }
       
       
@@ -248,26 +243,65 @@ public class PropertyMapper {
       
       
       /**
-       * <code>Update Methode</code>
-       * Analog zur Delete Methode wurde eine bewusste Entscheidung getroffen die CRUD Methoden 
-       * bei den Mappern fuer <em>Property</em>-Objekte hier nicht komplett umzusetzen. Dabei wird
-       * beruecksichtigt, dass die <em>Property</em>-Objekte als statisch in der DB festgelegte
-       * Objekte existieren sollen. Eine Update Methode würde diesem Grundprinzip daher nicht 
-       * entsprechen. 
-       * 
+       * Ersetzt die Beschreibung eines <code>Property</code> -Objektes gegen eine neue Beschreibung.
+       *
+       * @param property ist das zu verändernde Objekt
+       * @return das bereits uebergebene Objekt, jedoch mit gegebenfals korrigierter
+       * Es wird null zurückgegeben, wenn kein Datenbank eintrag verändert wurde.
        */
+      public Property update(Property property) {
+       	  
+          Connection con = DBConnection.connection();
+            
+          try {        	  
+              	// Die Einfuegeoperation erfolgt	
+              	PreparedStatement stmt = con.prepareStatement("UPDATE Property SET description = ? WHERE ID = ?");
+    			stmt.setString(1, property.getDescription());
+    			stmt.setInt(2, property.getId());
+    			if(stmt.executeUpdate() > 0){
+    				return property;
+    			}
+    			
+    			// Die Einfuegeoperation fuer PropertyValue
+    			Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
+        	  	propertyValues = property.getPropertyValues();
+        	  
+                // Eintrag in PropertyValue erfolgt
+                for (PropertyValue pV : propertyValues){                 
+                		PropertyValueMapper.propertyValueMapper().insert(pV);
+
+                }                  
+          	} catch(SQLException e) {
+              e.printStackTrace();
+          } 
+          return null;
+      }
      
       
       /**
-       * <code>Delete Methode</code>
-       * Es war eine bewusste Entscheidung die CRUD Methoden fuer Property-Objekte nicht in den
-       * Mappern abzubilden, da Property-Objekte als statisch festgelegte Objekte festgelegt sind.
-       * Diese koennen zwar mit anderen Nutzern <em>User</em>-Objekten im System geteilt werden,
-       * jedoch sind diese nicht veraenderbar. Nur <em>PropertyValue</em>-Objekte sollen in diesem Zusammen-
-       * hang veraenderbar sein. Property und <em>PropertyValue</em>-Objekte werden nur gemeinsam geteilt.
-       * Ein PropertyValue-Objekt kann dabei auch <em>null</em> sein.
-       * 
-       */      
+       * Löscht ein <code>Property</code> -Objekteaus der Datenbank.
+       *
+       * @param property ist das zu verändernde Objekt
+       * @return das bereits uebergebene Objekt um es aus der Anzeige zu entfernen
+       * Es wird null zurückgegeben, wenn kein Datenbank eintrag verändert wurde.
+       */ 
+      public Property delete(Property property) {
+       	  
+          Connection con = DBConnection.connection();
+            
+          try {        	  
+              	// Die Einfuegeoperation erfolgt	
+              	PreparedStatement stmt = con.prepareStatement("DELETE FROM Property WHERE ID = ?");
+    			stmt.setInt(1, property.getId());
+    			if(stmt.executeUpdate() > 0){
+    				return property;
+    			}
+    			                 
+          	} catch(SQLException e) {
+              e.printStackTrace();
+          } 
+          return null;
+      }
       
      
 }
