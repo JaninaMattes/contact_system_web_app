@@ -1,5 +1,7 @@
 package de.hdm.kontaktsystem.client.gui;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -14,6 +16,13 @@ import de.hdm.kontaktsystem.client.ClientsideSettings;
 import de.hdm.kontaktsystem.shared.ContactSystemAdministrationAsync;
 import de.hdm.kontaktsystem.shared.bo.User;
 
+
+/**
+ * Anzeige des Userprofils, bietet dem user die Möglichkeit, die im User Object und dem Eigene Kontakt abgelegten Daten einzusehen.
+ * Ebenso erhält er die möglichkeit, über einen Button seinen eigenen Kontakt anzuzeigen, EIgenschaften zu bearbeiten und seinen Account zu löschen.
+ * @author Oliver Gorges
+ *
+ */
 public class UserForm extends VerticalPanel{
 	
 	ContactSystemAdministrationAsync contactSystemAdmin = null;
@@ -22,6 +31,7 @@ public class UserForm extends VerticalPanel{
 	Label welcome = new Label();
 	Label id = new Label();
 	Label email = new Label();
+	Label creationDate = new Label();
 	Label contact = new Label();
 	
 	String deleteText = " Wollen Sie wirklich Ihren Account löschen? \n"
@@ -32,7 +42,7 @@ public class UserForm extends VerticalPanel{
 	Button propertyButton = new Button("Eigenschaft bearbeiten");
 	Button contactButton = new Button("Kontakt anzeigen");
 	VerticalPanel vp = new VerticalPanel();
-	ContactForm cf = new ContactForm();
+	CellTreeViewModel tvm = null;
 	PropertyForm pf = new PropertyForm();
 	User myUser;
 	
@@ -44,13 +54,11 @@ public class UserForm extends VerticalPanel{
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 		
 		this.add(vp);
-		//welcome.setText("Hallo ");
 		vp.add(infoText);
 		vp.add(welcome);
-		//id.setText("Meine User ID: ");
 		vp.add(id);
-		//email.setText("Meine Email Adresse: ");
 		vp.add(email);
+		vp.add(creationDate);
 		vp.add(contact);
 		vp.add(contactButton);
 		vp.add(propertyButton);
@@ -58,14 +66,25 @@ public class UserForm extends VerticalPanel{
 		
 	}
 	
+	public void setTree(CellTreeViewModel tree){
+		this.tvm = tree;
+	}
+	
+	/**
+	 * Setzt den User der in dem Formular angezeigt werden soll
+	 * @param User-Objekt
+	 */
 	public void setMyUser(User user){
 		myUser = user;
 		if(myUser != null){
 			welcome.setText("Hallo " + user.getUserContact().getName().getValue());
-			id.setText("Meine User ID: "+ user.getGoogleID());
-			email.setText("Meine Email Adresse: "+ user.getGMail());
-			contact.setText("Kontakt ID: "+user.getUserContact().getBoId());
-		
+			id.setText("Meine User ID: " + user.getGoogleID());
+			email.setText("Meine Email Adresse: " + user.getGMail());
+			contact.setText("Kontakt ID: " + user.getUserContact().getBoId());
+			
+			// Formtiert das Erstellungsdatum für die Anzeige
+			DateTimeFormat date = DateTimeFormat.getFormat("dd.MM.yyyy");
+			creationDate.setText("Mitglied seit: " + date.format(user.getUserContact().getCreationDate()));
 			
 			deleteButton.addClickHandler(new ClickHandler(){
 				@Override
@@ -93,11 +112,9 @@ public class UserForm extends VerticalPanel{
 
 				@Override
 				public void onClick(ClickEvent event) {
-
-					RootPanel.get("Details").clear();
-					cf.setSelected(myUser.getUserContact());
 					
-					RootPanel.get("Details").add(cf);
+					log("MyContact" + myUser.getUserContact());
+					tvm.setSelectedContactContactlist(myUser.getUserContact());
 					
 				}
 				
