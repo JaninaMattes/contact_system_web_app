@@ -29,7 +29,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	private BusinessObject selectedContactContactlist;
 	private ContactListForm clForm;
 	private ContactForm cForm;
-	private BoKeyProvider boKey = null;
+	private BoKeyProvider boKey = null; // ?????
 	private SingleSelectionModel<BusinessObject> selectionModel;
 	private Vector<BusinessObject> serverData = null;
 	
@@ -43,6 +43,7 @@ public class CellTreeViewModel implements TreeViewModel {
 
 		@Override
 		public Integer getKey(BusinessObject item) {
+			log("Item Key: " + item);
 			if (item != null) {
 				return item.getBoId();
 			}
@@ -65,7 +66,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	}
 	
 	public CellTreeViewModel() {
-		BoKeyProvider keyProvider = new BoKeyProvider();
+		boKey = new BoKeyProvider();
 		selectionModel = new SingleSelectionModel<BusinessObject>();
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
 	}
@@ -87,6 +88,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	
 	public void setSelectedContactContactlist(BusinessObject sccl) {
 		this.selectedContactContactlist = sccl;
+		log("Selected: "+ sccl);
 		RootPanel.get("Details").clear();
 		if(sccl instanceof ContactList) {
 			clForm.setSelected((ContactList) sccl);
@@ -290,10 +292,10 @@ class DataCell extends AbstractCell<BusinessObject> {
 		if (value != null) {
 		if (value instanceof ContactList) {
 			
-			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >  " + ((ContactList) value).getName() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/group.png' height='22px' width='22px' >  " + ((ContactList) value).getName() + " / " + value.getBoId() + "</p>");
 
 		} else if (value instanceof Contact) {
-			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>  " + ((Contact) value).getName().getValue() + "</p>");
+			sb.appendHtmlConstant("<p class='Cell'>" + "<img src='/images/person.png' height='22px' width='22px'>  " + ((Contact) value).getName().getValue() + " / " + value.getBoId() + "</p>");
 
 		} else {
 

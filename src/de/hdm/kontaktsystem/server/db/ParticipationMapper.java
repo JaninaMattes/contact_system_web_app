@@ -274,12 +274,14 @@ public class ParticipationMapper {
 			while(rs.next()) {
 				Participation participation = new Participation();
 				Contact c = new Contact();
-				
+				User owner = new User();
+				owner.setGoogleID(rs.getDouble("user_ID"));
 				participation.setParticipant(user);	
 				c.setBo_Id(rs.getInt("BusinessObject_ID"));
 				c.setCreationDate(rs.getDate("creationDate"));
 				c.setModifyDate(rs.getDate("modificationDate"));	
 				c.setShared_status(rs.getBoolean("status"));
+				c.setOwner(owner);
 				participation.setShareAll(rs.getBoolean("Share_All"));
 				participation.setReference(c);
 				
@@ -371,7 +373,8 @@ public class ParticipationMapper {
 			while(rs.next()) {
 				Participation participation = new Participation();
 				ContactList cl = new ContactList();
-				
+				User owner = new User();
+				owner.setGoogleID(rs.getDouble("user_ID"));
 				participation.setParticipant(user);	
 				
 				cl.setBo_Id(rs.getInt("BusinessObject_ID"));
@@ -379,6 +382,7 @@ public class ParticipationMapper {
 				cl.setModifyDate(rs.getDate("modificationDate"));
 				cl.setName(rs.getString("contactList_name"));
 				cl.setShared_status(rs.getBoolean("status"));
+				cl.setOwner(owner);
 				participation.setShareAll(rs.getBoolean("Share_All"));
 				participation.setReference(cl);
 				
