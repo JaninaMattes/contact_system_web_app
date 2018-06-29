@@ -37,7 +37,7 @@ body {
 
 /*Report Generator */
 
-#reporttitle{ /* Überschrift des erstellten Reports */
+#reporttitle{ /* ï¿½berschrift des erstellten Reports */
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 2em; /*Schriftgrï¿½ï¿½e*/
   	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
@@ -49,14 +49,14 @@ body {
 	width:600px;
 	border:1px solid silver;
 	margin: auto;
-	/* TODO: Linksbündig machen
+	/* TODO: Linksbï¿½ndig machen
 }
 
 .reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
 	width:600px;
 	border:1px solid silver;
 	margin: 10px auto;
-	/*TODO: Linksbündig machen */
+	/*TODO: Linksbï¿½ndig machen */
 	
 }
 
@@ -119,6 +119,7 @@ body {
    border: 0;
    border-radius: 0;
    height: 34px;
+   Color:black;
    -webkit-appearance: none;
 } 
 
@@ -137,7 +138,7 @@ body {
 
 /*Buttons*/
 
-#addedit{ /*Button "Hinzufügen" und "Bearbeiten"
+#addedit{ /*Button "Hinzufï¿½gen" und "Bearbeiten"
 	height:25px;
 	width: 80px;
 	color: black;
@@ -150,7 +151,7 @@ body {
 	/*TODO: weiter runter schieben (top-margin)!*/
 }
 #textbox{
-	/*width: festlegen (vergrößern)*/
+	/*width: festlegen (vergrï¿½ï¿½ern)*/
 }
 
 #shareButton{ /* Teilen-Button*/
@@ -171,7 +172,7 @@ body {
     
 }
 
-#menu-button{ /* Buttons der Menüleiste des Editors */
+#menu-button{ /* Buttons der Menï¿½leiste des Editors */
 	height: 65px;
     width: 20vw;
     font-family: "Arial", Arial, sans-serif;
@@ -189,7 +190,7 @@ body {
 	
 }
 
-#menu-button:hover{ /* Farbe bei Klick auf einen Menü-Button */
+#menu-button:hover{ /* Farbe bei Klick auf einen Menï¿½-Button */
     background: #dfddfa;
 }
 
@@ -244,7 +245,7 @@ body {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#deleteButton{ /* "Löschen"-Button im Editor */
+#deleteButton{ /* "Lï¿½schen"-Button im Editor */
 	height: 25px;
     width: 100px;
     font-family: "Arial", Arial, sans-serif;     
@@ -262,7 +263,7 @@ body {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
 }
 
-#deleteCLCButton{ /*"Kontaktliste löschen" und "Kontakt entfernen"-Buttons*/
+#deleteCLCButton{ /*"Kontaktliste lï¿½schen" und "Kontakt entfernen"-Buttons*/
 
 	width: 100px;
 	color: black;
@@ -363,7 +364,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 	margin-top: 10px;
 	margin-right: 5px;
 	margin-left: 20px;
-	padding-right: 150px; /*TODO: funktioniert noch nicht, Textfeld soll länger werden*/
+	padding-right: 150px; /*TODO: funktioniert noch nicht, Textfeld soll lï¿½nger werden*/
 }
 
 #search-textfeld{
@@ -429,7 +430,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 	border:none;
 }
 
-#filtern{/* Report Generator- Labels: "Nach Eigenschaftsausprägungen filtern" + "nach Teilhaber filtern"*/
+#filtern{/* Report Generator- Labels: "Nach Eigenschaftsausprï¿½gungen filtern" + "nach Teilhaber filtern"*/
 	border: none;
 	padding-top: 20px;
 	padding-bottom: 10px;
@@ -541,3 +542,19 @@ div#Trailer {
 	color: #ffffff;
 	border-radius: 5px;
 }
+
+.TextBox{
+	background: transparent;
+	padding: 3px;
+	border: solid 1px black;
+	border-radius: 2px;
+	font-size: 1em;
+   -webkit-appearance: none;
+}
+
+.TextBox-readonly{
+	Color: black;
+	border: 0;
+	border-radius: 0;
+}
+

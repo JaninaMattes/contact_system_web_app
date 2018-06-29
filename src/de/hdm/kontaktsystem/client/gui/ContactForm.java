@@ -143,14 +143,15 @@ public class ContactForm extends VerticalPanel {
 			shareButton.getElement().setId("shareButton");
 			deleteButton.getElement().setId("deleteButton");
 			cancelNewButton.getElement().setId("cancel");
-			cancelEditButton.getElement().setId("cancel");
+			cancelEditButton.getElement().setId("saveButton");
 			cancelShareButton.getElement().setId("cancel");
 			editPartButton.getElement().setId("addedit");
-			
+			sharedWithUser.getElement().setId("ListBox");
 			shareDialog.setStyleName("shareDialog");
 			gp.getElement().setId("grid-panel");
 			
 			labelAddElement.getElement().setId("labelfeldhinzu");
+			addElement.getElement().setId("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
 			
 			//Teilhaberschaften
@@ -568,7 +569,7 @@ public class ContactForm extends VerticalPanel {
 					
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
-					
+					tb.setStyleName("TextBox");					
 					tb.setTitle("Neu:"+p.getId());
 					cb.setTitle("Neu:"+p.getId());
 					
@@ -775,6 +776,7 @@ public class ContactForm extends VerticalPanel {
 //							TextBox tb = new TextBox();
 //							//Entfernen des prim�ren Stylename und ersetzen durch CSS-Namen
 //							tb.setStylePrimaryName(getElement(), "textbox");
+							tb.setStyleName("TextBox");
 							
 							label.setTitle(pv.getProperty().getId()+"");
 							label.setText(pv.getProperty().getDescription());
@@ -795,7 +797,7 @@ public class ContactForm extends VerticalPanel {
 							
 							cbv.add(cb);
 							tbv.add(tb);
-										
+									
 							ft.setWidget(row, 0, label);
 							ft.setWidget(row, 1, tb);
 							ft.setWidget(row, 2, cb);
@@ -921,7 +923,7 @@ public class ContactForm extends VerticalPanel {
 							label.setText(p.getDescription());
 							tb.setTitle("Neu:"+p.getId());
 							tb.setText("");
-							
+							tb.setStyleName("TextBox");
 							tbv.add(tb);
 										
 							ft.setWidget(row, 0, label);
