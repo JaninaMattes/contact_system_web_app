@@ -370,6 +370,7 @@ public class ContactForm extends VerticalPanel {
 							});
 						}	
 					}else{
+						loadPanel.setVisible(false);
 						Window.alert("Sie können Ihren eigenen Kontakt nicht löschen");
 					}
 				} 				
@@ -403,7 +404,7 @@ public class ContactForm extends VerticalPanel {
 									for(PropertyValue pv : c.getPropertyValues()){
 										if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
 											pvv.add(pv);
-											log("EditShare: " + pv.getValue() + " With " + email.getText());
+											log("EditShare: " + pv.getValue() + " With " + editPartUser.getGMail());
 										}
 									}
 								}
@@ -519,6 +520,7 @@ public class ContactForm extends VerticalPanel {
 					loadPanel.setVisible(true);
 					for(TextBox tb: tbv) {
 						 if(tb.getTitle().equals("Neu:1") & tb.getText().isEmpty()) { //1.0 verhindern dass Kontakt Name leer
+							 	loadPanel.setVisible(false);
 								Window.alert("Das Feld 'Name's darf nicht leer sein.");
 								return;
 						 }
@@ -666,6 +668,7 @@ public class ContactForm extends VerticalPanel {
 						
 					});
 					}else if(sharedWithUser.getSelectedIndex()==-1){
+						loadPanel.setVisible(false);
 						Window.alert("Bitte wählen Sie zuerst einen Kontakt Teilhaber "
 								+ "vor der Bearbeitung dessen Teilhaberschaft aus.");
 					}
@@ -887,6 +890,7 @@ public class ContactForm extends VerticalPanel {
 				vp.add(btnPanel);
 							
 			} else if(contact==null) {
+				// Es wir ein leeres Formular angezeigt, um einen neuen Kontakt anzulegen
 				contact = new Contact();
 				contactToDisplay=contact;
 				log("Neuer Kontakt " + contact);
@@ -900,6 +904,10 @@ public class ContactForm extends VerticalPanel {
 				labelSharedWith.setVisible(false);
 				sharedWithUser.setVisible(false);
 				editPartButton.setVisible(false);
+				// Blendet die Gui elemente zum hinzufügen von neuen EIgenschaftsausprägungen ein
+				labelAddElement.setVisible(true);
+				addElement.setVisible(true);
+				addButton.setVisible(true);
 				
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
@@ -981,7 +989,6 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onFailure(Throwable caught) {
 				loadPanel.setVisible(false);
-				caught.printStackTrace();
 				Window.alert("Kontakt konnte nicht geteilt werden. \n"+caught.getStackTrace().toString());						
 			}
 
