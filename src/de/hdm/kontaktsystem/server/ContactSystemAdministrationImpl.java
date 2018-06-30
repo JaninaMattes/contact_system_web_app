@@ -526,7 +526,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public ContactList createContactList(ContactList contactList) {
 		if(contactList.getOwner() == null) contactList.setOwner(this.getUserByID(this.getCurrentUser()));
 		boMapper.insert(contactList);
-		return clMapper.insertContactList(contactList);
+		ContactList cl =  clMapper.insertContactList(contactList);
+		if(!contactList.getContacts().isEmpty()){
+			// übertragen der Kontakte aus der Liste in einen neuen Vektor wegen einer ConcurrentModificationException
+			Vector<Contact> cil = new Vector<Contact>(); 
+			cil.addAll(contactList.getContacts());
+			for(Contact c : cil){
+				this.addContactToList(c, cl);
+			}
+		}
+		return cl;
 
 	}
 

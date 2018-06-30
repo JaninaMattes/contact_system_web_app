@@ -153,6 +153,7 @@ public class ContactListForm extends VerticalPanel {
 		this.add(shareDialog);
 	
 		nameContactList.getElement().setId("ListBox");
+		nameContactList.setStyleName("TextBox");
 		contactsToAdd.getElement().setId("ListBox");
 		contactNames.getElement().setId("ListBox");
 		listBoxShareWith.getElement().setId("ListBox");
@@ -535,7 +536,9 @@ public class ContactListForm extends VerticalPanel {
 				Window.alert("Keine Kontaktliste ausgewählt");
 
 			} else {
-				contactSystemAdmin.deleteContactList(contactListToDisplay, new deleteContactListCallback());
+				if(Window.confirm("Wollen Sie die Liste " + contactListToDisplay.getName() + " wirklich löschen?")){
+					contactSystemAdmin.deleteContactList(contactListToDisplay, new deleteContactListCallback());
+				}
 			}
 		}
 	}
@@ -704,7 +707,8 @@ public class ContactListForm extends VerticalPanel {
 				// Extraktion des ausgewählten Kontakts als String
 				Integer lbItemIndex = contactsToAdd.getSelectedIndex();
 				final String contactToAddName = contactsToAdd.getValue(lbItemIndex);
-
+				log("Add new Contact");
+				
 				contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 
 					@Override
@@ -716,8 +720,8 @@ public class ContactListForm extends VerticalPanel {
 					public void onSuccess(Vector<Contact> allConFromUser) {
 
 						for (Contact conFromUser : allConFromUser) {
-
-							// Wenn ausgewählter Contact aus Listbox mit Contact des Users übereinstimmt
+							log("-----"+conFromUser.getName());
+							// Wenn ausgewählter Contact aus Listbox mit einem der Contacte des Users übereinstimmt
 							if (conFromUser.getName().getValue().equals(contactToAddName)) {
 								
 								log("Add: " + contactToAddName);
@@ -726,18 +730,12 @@ public class ContactListForm extends VerticalPanel {
 									if(contactListToDisplay.getContacts().contains(conFromUser)){		
 										Window.alert("Kontakt bereits in Kontaktliste vorhanden");
 									} else {
-										// ausgewählten Kontakt zu Kontaktliste hinzufügen
-										log("Hinzuzufügender Kontakt zu Kontaktliste: " + conFromUser.toString());
-										contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay,
-												new ContactsToAddClCallback());
-										tvm.addToLeef(conFromUser);
+										addContact(conFromUser);
 									}
 									
 								} else {
-									log("Hinzuzufügender Kontakt zu Kontaktliste: " + conFromUser.toString());
-									contactSystemAdmin.addContactToList(conFromUser, contactListToDisplay,
-											new ContactsToAddClCallback());
-									tvm.addToLeef(conFromUser);
+									addContact(conFromUser);
+									
 								}
 							}
 						}
@@ -746,6 +744,28 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 	}
+	
+	/**
+	 * Fügt den Kontakt einer neuen Liste direkt, oder einer existierende liste über einen Callback hinzu.
+	 * @param Contact to add
+	 */
+	private void addContact(Contact c){
+		if(update){
+			// Bei bestehende listen wird der Kontakt direkt übe reinen Callback der Liste hinzugefügt.
+			log("Hinzuzufügender Kontakt zu Kontaktliste: " + c.toString());
+			contactSystemAdmin.addContactToList(c, contactListToDisplay,
+					new ContactsToAddClCallback());
+			tvm.addToLeef(c);
+		}else{
+			// Neuen KontaktListen kann der Kontakt noch ncitn über einen Callback hinzugefügt wrden, da die liste in der Datenbank noch nicht existiert.
+			// Der Kontakt wird bei der erstellung der Liste aus dem Vector im Listen Objekt ausgelesen und zur liste hinzugefügt.
+			log("Hinzuzufügender zu neuer Kontaktliste: " + c.toString());
+			this.contactNames.addItem(c.getName().getValue(), c.getBoId()+"");
+			contactListToDisplay.addContact(c);
+			
+		}
+	}
+	
 
 	/**
 	 * Callback Klasse für aktualisiertes Kontaktlistenobjekt nachdem neuer Kontakt
@@ -902,20 +922,21 @@ public class ContactListForm extends VerticalPanel {
 
 			});
 
-			/*
-			 * Alle Kontakte die der User angelegt hat oder die ihm geteilt wurden
-			 */
-
-			contactSystemAdmin.getMyContactsPrev(new ContactsToAddConCallback());
+			
 
 		} else {
 			update = false;
 			contactListToDisplay = new ContactList();
 			nameContactList.setText("");
 			deleteClButton.setEnabled(false);
-			contactNames.addItem("Keine Kontakte vorhanden");
+//			contactNames.addItem("Keine Kontakte vorhanden"); // Übere einen Placeholder lösen ??
 			deleteConButton.setEnabled(false);
 		}
+		/*
+		 * Alle Kontakte die der User angelegt hat oder die ihm geteilt wurden werden angezeigt, um sie einer Liste hinzuzufügen
+		 */
+
+		contactSystemAdmin.getMyContactsPrev(new ContactsToAddConCallback());
 
 	}
 	
