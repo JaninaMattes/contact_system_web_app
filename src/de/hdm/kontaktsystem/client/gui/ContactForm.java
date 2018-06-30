@@ -930,6 +930,9 @@ public class ContactForm extends VerticalPanel {
 					public void onSuccess(Vector<Property> result) {	
 						loadPanel.setVisible(false);
 						log("Kontakt Properties: " + result);
+						// Es werden nur die ersten 8 Standard eigenschaften angezeigt. 
+						// diese anzeige kann aber durch den Nutzer erweiter werden
+						result.setSize(8); 
 						
 						int row = 0;
 						//Flextable befüllen						
