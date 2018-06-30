@@ -282,6 +282,8 @@ public class ReportGenerator implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				if(usersDropDownList.getSelectedValue() == null) {
 					Window.alert("Kein Teilhaber ausgewählt!");
+				} else if (usersDropDownList.getSelectedValue().equals("empty")){
+					Window.alert("Keine Teilhaber vorhanden!");
 				} else {
 					loadPanel.setVisible(true);
 					double participantId = Double.parseDouble(usersDropDownList.getSelectedValue());
@@ -479,7 +481,8 @@ public class ReportGenerator implements EntryPoint {
 		@Override
 		public void onSuccess(Vector<User> result) {
 			if(result.isEmpty()) {
-				Window.alert("Keine User vorhanden!");				
+	                        String noUsers = "keine Teilhaber vorhanden";
+				usersDropDownList.addItem(noUsers, "empty");
 			} else {
 				for(User element : result) {
 					String name = element.getUserContact().getName().getValue();
