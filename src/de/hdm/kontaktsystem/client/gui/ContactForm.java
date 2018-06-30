@@ -393,7 +393,10 @@ public class ContactForm extends VerticalPanel {
 					loadPanel.setVisible(true);
 					if(editPart){
 						log("Teilhaberschaft bearbeiten");
-						Contact c = contactToDisplay;
+						Contact c = new Contact();
+						c.setBo_Id(contactToDisplay.getBoId());
+						c.setOwner(contactToDisplay.getOwner());
+						
 						Participation part = new Participation();
 						
 						if(!cbv.get(0).getValue()){
@@ -401,10 +404,11 @@ public class ContactForm extends VerticalPanel {
 							for(CheckBox cb: cbv){
 								// Eine Ausprägung wird geteilt wenn die Checkbox True ist. Der Name (cbv[1]) wird immer geteilt
 								if(cb.getValue() || cb.equals(cbv.get(1))){ 
-									for(PropertyValue pv : c.getPropertyValues()){
+									for(PropertyValue pv : contactToDisplay.getPropertyValues()){
 										if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
 											pvv.add(pv);
-											log("EditShare: " + pv.getValue() + " With " + editPartUser.getGMail());
+											log("Edit Share: " + pv.getValue() + " With " + editPartUser.getGMail());
+											break;
 										}
 									}
 								}
@@ -696,6 +700,10 @@ public class ContactForm extends VerticalPanel {
 			newProperty.setText("");
 			labelReceivedFrom.setVisible(false);
 			labelReceivedFrom.setText("");
+			
+			// Buttonpanels austauschen falls es vorher noch nicht passiert ist
+			vp.remove(editPanel);
+			vp.add(btnPanel);
 			
 			tbv.clear();
 			cbv.clear();
@@ -1025,8 +1033,6 @@ public class ContactForm extends VerticalPanel {
 					vp.add(btnPanel);
 				}else if(edit){
 					// Wird neu geladen, da ansonsten der Flextable und dieVectoren überprüft / geleert werden müssten.
-					vp.remove(editPanel);
-					vp.add(btnPanel);
 					tvm.setSelectedContactContactlist(contactToDisplay);
 				}else{
 					contactToDisplay = null;
