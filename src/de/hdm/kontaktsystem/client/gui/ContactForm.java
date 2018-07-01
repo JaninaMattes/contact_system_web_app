@@ -105,6 +105,7 @@ public class ContactForm extends VerticalPanel {
 		ListBox sharedWithUser = new ListBox();
 
 		TextBox email = new TextBox();
+		TextBox newProperty = new TextBox();
 								
 		boolean edit = false;
 		boolean editPart = false;
@@ -142,14 +143,15 @@ public class ContactForm extends VerticalPanel {
 			shareButton.getElement().setId("shareButton");
 			deleteButton.getElement().setId("deleteButton");
 			cancelNewButton.getElement().setId("cancel");
-			cancelEditButton.getElement().setId("cancel");
+			cancelEditButton.getElement().setId("saveButton");
 			cancelShareButton.getElement().setId("cancel");
 			editPartButton.getElement().setId("addedit");
-			
+			sharedWithUser.getElement().setId("ListBox");
 			shareDialog.setStyleName("shareDialog");
 			gp.getElement().setId("grid-panel");
 			
 			labelAddElement.getElement().setId("labelfeldhinzu");
+			addElement.getElement().setId("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
 			
 			//Teilhaberschaften
@@ -368,6 +370,7 @@ public class ContactForm extends VerticalPanel {
 							});
 						}	
 					}else{
+						loadPanel.setVisible(false);
 						Window.alert("Sie können Ihren eigenen Kontakt nicht löschen");
 					}
 				} 				
@@ -390,7 +393,10 @@ public class ContactForm extends VerticalPanel {
 					loadPanel.setVisible(true);
 					if(editPart){
 						log("Teilhaberschaft bearbeiten");
-						Contact c = contactToDisplay;
+						Contact c = new Contact();
+						c.setBo_Id(contactToDisplay.getBoId());
+						c.setOwner(contactToDisplay.getOwner());
+						
 						Participation part = new Participation();
 						
 						if(!cbv.get(0).getValue()){
@@ -398,10 +404,11 @@ public class ContactForm extends VerticalPanel {
 							for(CheckBox cb: cbv){
 								// Eine Ausprägung wird geteilt wenn die Checkbox True ist. Der Name (cbv[1]) wird immer geteilt
 								if(cb.getValue() || cb.equals(cbv.get(1))){ 
-									for(PropertyValue pv : c.getPropertyValues()){
+									for(PropertyValue pv : contactToDisplay.getPropertyValues()){
 										if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
 											pvv.add(pv);
-											log("EditShare: " + pv.getValue() + " With " + email.getText());
+											log("Edit Share: " + pv.getValue() + " With " + editPartUser.getGMail());
+											break;
 										}
 									}
 								}
@@ -437,38 +444,49 @@ public class ContactForm extends VerticalPanel {
 						// Speichern des bearbeiteten Kontakts
 						Vector<PropertyValue>editResult = new Vector<PropertyValue>();
 						if(contactToDisplay!=null) {
+							
+							// Erstes TextFeld (Name) darf nicht leer sein
+							if(tbv.elementAt(0).getText().isEmpty()){ 
+								loadPanel.setVisible(false);
+								Window.alert("Das Feld Name darf nicht leer sein.");
+								return;							
+							}
+							
 							log("Der Kontakt besteht bereits. "+tbv.size());
-							for(TextBox tb: tbv) {
-								log("Inhalt: "+tb);
-								 if(tb.getText().isEmpty()&&Integer.parseInt(tb.getTitle())==1){ //1.0 verhindern dass Kontakt Name leer
-										Window.alert("Das Feld Name darf nicht leer sein.");
-										return;							
-								 }
-								 
+							for(TextBox tb: tbv) {							 
 								 log("Titel: "+tb.getTitle());
+								 // für neue Eigenschaftsausrägungen wird eine die Property anhand des Titels "Neu:PropertyID" erstellt
 								 if(tb.getTitle().contains("Neu")) {
 									 	String[]s=tb.getTitle().split(":");
 										Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
 										p.setId(Integer.parseInt(s[1]));
-										p.setDescription(s[0]);
-										
+										// Wenn die ID 0 ist dann muss die Beschreibung aus dem Textfeld "newProperty" verwendet werden.
+										if(p.getId() == 0){
+											if(newProperty.getText() == ""){
+												log("Text ist Leer");
+												continue; // überpringt die neue Eigenschaft, da keine Beschreibung angegeben wurde
+											}
+											log("Neue Eigenschaft anlegen");
+											p.setDescription(newProperty.getText());
+										}else{
+											p.setDescription(s[0]);
+										}
 										PropertyValue ppv = new PropertyValue();
 										ppv.setContact(contactToDisplay);
 										ppv.setOwner(contactToDisplay.getOwner());
-										ppv.setProperty(p);
 										ppv.setValue(tb.getText());
+										ppv.setProperty(p);
 										editResult.add(ppv);
 										log("Neuen Pv: "+ppv);
-								 	}
-								 else{
-									 log("Update");
-									 for(PropertyValue pv:contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
+								 	}else{
+										log("Update");
+										for(PropertyValue pv : contactToDisplay.getPropertyValues()) { //editieren + hinzufügen
 											if(pv.getBoId()==Integer.parseInt(tb.getTitle())) {
 												pv.setValue(tb.getText());
 												editResult.add(pv);
 												log("Editieren des Pv: "+pv);
 											}
-									   }									
+										}									
 								 }
 	
 												
@@ -483,6 +501,8 @@ public class ContactForm extends VerticalPanel {
 					labelAddElement.setVisible(false);
 					addElement.setVisible(false);
 					addButton.setVisible(false);
+					newProperty.setVisible(false);
+					newProperty.setText("");
 					vp.remove(editPanel);
 					vp.add(btnPanel);
 				}
@@ -503,8 +523,9 @@ public class ContactForm extends VerticalPanel {
 					Vector<PropertyValue>createResult = new Vector<PropertyValue>();
 					loadPanel.setVisible(true);
 					for(TextBox tb: tbv) {
-						 if(tb.getText().isEmpty()&tb.getTitle().equals("Neu:1")) { //1.0 verhindern dass Kontakt Name leer
-								Window.alert("Das Feld Name darf nicht leer sein.");
+						 if(tb.getTitle().equals("Neu:1") & tb.getText().isEmpty()) { //1.0 verhindern dass Kontakt Name leer
+							 	loadPanel.setVisible(false);
+								Window.alert("Das Feld 'Name's darf nicht leer sein.");
 								return;
 						 }
 						 if(!tb.getText().isEmpty()) {
@@ -551,13 +572,12 @@ public class ContactForm extends VerticalPanel {
 					
 					Property p = new Property();					
 					
-					p.setId(addElement.getSelectedIndex()+2);
+					p.setId(Integer.parseInt(addElement.getSelectedValue()));
 					
-					Label label = new Label(addElement.getSelectedItemText());
-
+					
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
-					
+					tb.setStyleName("TextBox");					
 					tb.setTitle("Neu:"+p.getId());
 					cb.setTitle("Neu:"+p.getId());
 					
@@ -566,7 +586,18 @@ public class ContactForm extends VerticalPanel {
 					
 					int row = ft.getRowCount()+1;
 
-					ft.setWidget(row, 0, label);
+					// Überprüft ob die Eigenschaft bereits existiert oder ob der User eine neue Eigenschaft angelegen möchte
+					if(p.getId() == 0){
+						newProperty.getElement().setPropertyString("placeholder", "Neue Eigenschaft");
+						ft.setWidget(row, 0, newProperty);
+						// Entfernt die Möglichkeit eine neue eigenschaft an zu legen, da nur eine Eigenschaft auf einmal neu angelegt werden kann
+						addElement.removeItem(addElement.getItemCount()-1); 
+					}else{
+						// Zeigt das Beschreibung der Eigenschaft an
+						Label label = new Label(addElement.getSelectedItemText());
+						ft.setWidget(row, 0, label);
+					}
+					
 					ft.setWidget(row, 1, tb);
 					ft.setWidget(row, 2, cb);
 				}
@@ -640,7 +671,8 @@ public class ContactForm extends VerticalPanel {
 						}
 						
 					});
-					}else if(addElement.getSelectedIndex()==-1){
+					}else if(sharedWithUser.getSelectedIndex()==-1){
+						loadPanel.setVisible(false);
 						Window.alert("Bitte wählen Sie zuerst einen Kontakt Teilhaber "
 								+ "vor der Bearbeitung dessen Teilhaberschaft aus.");
 					}
@@ -665,9 +697,13 @@ public class ContactForm extends VerticalPanel {
 						
 			addElement.clear();
 			sharedWithUser.clear();
-			
+			newProperty.setText("");
 			labelReceivedFrom.setVisible(false);
 			labelReceivedFrom.setText("");
+			
+			// Buttonpanels austauschen falls es vorher noch nicht passiert ist
+			vp.remove(editPanel);
+			vp.add(btnPanel);
 			
 			tbv.clear();
 			cbv.clear();
@@ -753,6 +789,7 @@ public class ContactForm extends VerticalPanel {
 //							TextBox tb = new TextBox();
 //							//Entfernen des prim�ren Stylename und ersetzen durch CSS-Namen
 //							tb.setStylePrimaryName(getElement(), "textbox");
+							tb.setStyleName("TextBox");
 							
 							label.setTitle(pv.getProperty().getId()+"");
 							label.setText(pv.getProperty().getDescription());
@@ -773,7 +810,7 @@ public class ContactForm extends VerticalPanel {
 							
 							cbv.add(cb);
 							tbv.add(tb);
-										
+									
 							ft.setWidget(row, 0, label);
 							ft.setWidget(row, 1, tb);
 							ft.setWidget(row, 2, cb);
@@ -818,7 +855,7 @@ public class ContactForm extends VerticalPanel {
 					}					
 				});	
 				
-				cLabel.setText("Kontakt Id: " + contactToDisplay.getBoId());			
+				cLabel.setText("Kontakt");			
 
 				// Zeigt den den SharedStatus an
 
@@ -846,10 +883,13 @@ public class ContactForm extends VerticalPanel {
 						 addElement.clear();
 						 for(Property p : result) {
 							 if(p.getId()!=1) { 
-							 addElement.addItem(p.getDescription());
-							 addElement.setTitle(p.getId()+"");
+								 // Fügt der Listbox die Property Beschreibung als text und die ID als Value hinzu
+								 // Der Value wird verwendet um die Property wieder zuordnen zu können
+								 addElement.addItem(p.getDescription(), p.getId()+"");
 							 }
-						 }					
+						 }	
+						 // Fügt ein listen element hinzu um eine neue Eigenschaft zu erstellen
+						 addElement.addItem("Neu..", "0"); // ID 0wird in der Property tabelle nicht verwendert
 					}
 				});
 				
@@ -858,6 +898,7 @@ public class ContactForm extends VerticalPanel {
 				vp.add(btnPanel);
 							
 			} else if(contact==null) {
+				// Es wir ein leeres Formular angezeigt, um einen neuen Kontakt anzulegen
 				contact = new Contact();
 				contactToDisplay=contact;
 				log("Neuer Kontakt " + contact);
@@ -871,6 +912,10 @@ public class ContactForm extends VerticalPanel {
 				labelSharedWith.setVisible(false);
 				sharedWithUser.setVisible(false);
 				editPartButton.setVisible(false);
+				// Blendet die Gui elemente zum hinzufügen von neuen EIgenschaftsausprägungen ein
+				labelAddElement.setVisible(true);
+				addElement.setVisible(true);
+				addButton.setVisible(true);
 				
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
@@ -885,6 +930,9 @@ public class ContactForm extends VerticalPanel {
 					public void onSuccess(Vector<Property> result) {	
 						loadPanel.setVisible(false);
 						log("Kontakt Properties: " + result);
+						// Es werden nur die ersten 8 Standard eigenschaften angezeigt. 
+						// diese anzeige kann aber durch den Nutzer erweiter werden
+						result.setSize(8); 
 						
 						int row = 0;
 						//Flextable befüllen						
@@ -896,7 +944,7 @@ public class ContactForm extends VerticalPanel {
 							label.setText(p.getDescription());
 							tb.setTitle("Neu:"+p.getId());
 							tb.setText("");
-							
+							tb.setStyleName("TextBox");
 							tbv.add(tb);
 										
 							ft.setWidget(row, 0, label);
@@ -952,7 +1000,6 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onFailure(Throwable caught) {
 				loadPanel.setVisible(false);
-				caught.printStackTrace();
 				Window.alert("Kontakt konnte nicht geteilt werden. \n"+caught.getStackTrace().toString());						
 			}
 
@@ -976,9 +1023,7 @@ public class ContactForm extends VerticalPanel {
 				
 				if(shareDialog.isVisible()){
 					shareDialog.setVisible(false);
-				}else if(edit || editPart){
-					
-					edit = false;
+				}else if(editPart){
 					editPart = false;
 					labelAddElement.setVisible(false);
 					addElement.setVisible(false);
@@ -987,13 +1032,11 @@ public class ContactForm extends VerticalPanel {
 					for(CheckBox cb: cbv){
 						cb.setValue(false);
 					}
-					// Texboxen können nicht mehr bearbeitet werden
-					for(TextBox tb : tbv){
-						tb.setReadOnly(true);
-					}
-					
 					vp.remove(editPanel);
 					vp.add(btnPanel);
+				}else if(edit){
+					// Wird neu geladen, da ansonsten der Flextable und dieVectoren überprüft / geleert werden müssten.
+					tvm.setSelectedContactContactlist(contactToDisplay);
 				}else{
 					contactToDisplay = null;
 					RootPanel.get("Details").clear();

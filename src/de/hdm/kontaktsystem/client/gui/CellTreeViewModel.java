@@ -5,6 +5,7 @@ import java.util.Vector;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -29,7 +30,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	private BusinessObject selectedContactContactlist;
 	private ContactListForm clForm;
 	private ContactForm cForm;
-	private BoKeyProvider boKey = null;
+	private BoKeyProvider boKey = null; // ?????
 	private SingleSelectionModel<BusinessObject> selectionModel;
 	private Vector<BusinessObject> serverData = null;
 	
@@ -39,10 +40,13 @@ public class CellTreeViewModel implements TreeViewModel {
 	 *
 	 */
 	
+	
+	
 	private class BoKeyProvider implements ProvidesKey<BusinessObject> {
 
 		@Override
 		public Integer getKey(BusinessObject item) {
+			log("Item Key: " + item);
 			if (item != null) {
 				return item.getBoId();
 			}
@@ -65,7 +69,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	}
 	
 	public CellTreeViewModel() {
-		BoKeyProvider keyProvider = new BoKeyProvider();
+		boKey = new BoKeyProvider();
 		selectionModel = new SingleSelectionModel<BusinessObject>();
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
 	}
@@ -87,6 +91,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	
 	public void setSelectedContactContactlist(BusinessObject sccl) {
 		this.selectedContactContactlist = sccl;
+		log("Selected: "+ sccl);
 		RootPanel.get("Details").clear();
 		if(sccl instanceof ContactList) {
 			clForm.setSelected((ContactList) sccl);
@@ -221,7 +226,7 @@ public class CellTreeViewModel implements TreeViewModel {
 
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
-
+		
 		log("NodeInfo: " + value.getClass());
 		dataProvider = new ListDataProvider<BusinessObject>();
 

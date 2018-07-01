@@ -180,7 +180,7 @@ public class ContactSystem implements EntryPoint {
 				CellTree.Resources res = GWT.create(ContactSystemTreeResources.class);
 				ct = new CellTree(tvm, result, res);
 				ct.setAnimationEnabled(true);
-				ct.setDefaultNodeSize(result.size());
+//				ct.setDefaultNodeSize(result.size());
 				treeScrollPanel.add(ct);				
 				
 			}
@@ -242,6 +242,7 @@ public class ContactSystem implements EntryPoint {
 					uf.setMyUser(result);
 					cf.setMyUser(result);
 					clf.setMyUser(result);
+					uf.setTree(tvm);
 					cf.setLoad(loadPanel);
 					clf.setLoad(loadPanel);
 					loadTree(); // für Test
@@ -417,7 +418,7 @@ public class ContactSystem implements EntryPoint {
 						}
 						
 						tvm.updateData(bov);
-						ct.setDefaultNodeSize(result.size());
+					
 					}
 
 				});			
@@ -452,7 +453,6 @@ public class ContactSystem implements EntryPoint {
 						}
 						
 						tvm.updateData(bov);
-						ct.setDefaultNodeSize(result.size());
 					}
 
 				});			
@@ -490,7 +490,6 @@ public class ContactSystem implements EntryPoint {
 						
 						
 						tvm.updateData(result);
-						ct.setDefaultNodeSize(result.size());
 					}
 
 				});	
@@ -528,7 +527,6 @@ public class ContactSystem implements EntryPoint {
 						log("Es wurden " + result.size() + " SharedObjects gefunden");						
 						
 						tvm.updateData(result);
-						ct.setDefaultNodeSize(result.size());
 					}
 
 				});	
