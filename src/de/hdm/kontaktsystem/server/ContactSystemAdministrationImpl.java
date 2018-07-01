@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.server;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -450,6 +451,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		// Findet alle Kontakte
 		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
 		Vector<Contact> myContacts = this.getMyContactsPrev();
+		Vector<ContactList> myLists = this.getMyContactListsPrev();
+		
 		for (PropertyValue pv : pvv) {
 			Contact c = cMapper.findBy(pv);
 			c.setName(this.getNameOfContact(c));
@@ -458,9 +461,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				cv.add(c);
 
 		}
-		// Findet alle KontaktListen
-		cv.addAll(clMapper.findContactListByName(value));
-		
+		// Findet alle KontaktListen die der Nutzer anzeigen darf
+		for(ContactList cl : clMapper.findContactListByName(value)){
+			if (myLists.contains(cl))
+				cv.add(cl);
+		}
+		//cv.sort(new BOCompare());
 		return cv;
 	}
 
@@ -1489,6 +1495,40 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 	}
 	
+	/**
+	 * Methode zum vergleichen von BusinesObjects.
+	 * Wird verwendet um die ausgabe an den TreeView zu sortieren.
+	 * @author Oliver Gorges
+	 *
+	 */
+	public class BOCompare implements Comparator<BusinessObject>{
+
+			@Override
+			public int compare(BusinessObject o1, BusinessObject o2) {
+				// TODO Auto-generated method stub
+				String s1 = "", s2 = "";
+				// Wandelt ein ContactList-Objekt in einen String um
+				if(o1 instanceof ContactList){
+					s1 = ((ContactList) o1).getName();
+				}else if(o2 instanceof ContactList){
+					s2 = ((ContactList) o2).getName();
+				}
+				// Wandelt ein Contact-Objekt in einen String um
+				if(o1 instanceof Contact){
+					s1 = ((Contact) o1).getName().getValue();
+				}else if(o2 instanceof Contact){
+					s2 = ((Contact) o2).getName().getValue();
+				}
+				// Wandelt ein PropertyValue-Objekt in einen String um
+				if(o1 instanceof PropertyValue){
+					s1 = ((PropertyValue) o1).getValue();
+				}else if(o2 instanceof PropertyValue){
+					s2 = ((PropertyValue) o2).getValue();
+				}
+				
+				return s1.compareTo(s2);
+			}
+	}
 	
 
 }

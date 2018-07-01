@@ -30,7 +30,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	private BusinessObject selectedContactContactlist;
 	private ContactListForm clForm;
 	private ContactForm cForm;
-	private BoKeyProvider boKey = null; // ?????
+	private BoKeyProvider boKey = null;
 	private SingleSelectionModel<BusinessObject> selectionModel;
 	private Vector<BusinessObject> serverData = null;
 	
@@ -46,7 +46,6 @@ public class CellTreeViewModel implements TreeViewModel {
 
 		@Override
 		public Integer getKey(BusinessObject item) {
-			log("Item Key: " + item);
 			if (item != null) {
 				return item.getBoId();
 			}
@@ -60,7 +59,7 @@ public class CellTreeViewModel implements TreeViewModel {
 		public void onSelectionChange(SelectionChangeEvent event) {
 			
 			setSelectedContactContactlist(selectionModel.getSelectedObject());
-			log(event.toDebugString());
+			log("Change Selection: "+event.toDebugString());
 			
 			
 			
@@ -70,14 +69,12 @@ public class CellTreeViewModel implements TreeViewModel {
 	
 	public CellTreeViewModel() {
 		boKey = new BoKeyProvider();
-		selectionModel = new SingleSelectionModel<BusinessObject>();
+		selectionModel = new SingleSelectionModel<BusinessObject>(boKey);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
+		
 	}
 	
-	
-	
-	
-	
+
 	public BusinessObject getSelectedContactContactlist() {
 		return selectedContactContactlist;
 	}
@@ -92,20 +89,26 @@ public class CellTreeViewModel implements TreeViewModel {
 	public void setSelectedContactContactlist(BusinessObject sccl) {
 		this.selectedContactContactlist = sccl;
 		log("Selected: "+ sccl);
-		RootPanel.get("Details").clear();
-		if(sccl instanceof ContactList) {
-			clForm.setSelected((ContactList) sccl);
-			log("Update clForm");
-			RootPanel.get("Details").add(clForm);
-		}
-		else if (sccl instanceof Contact) {
-			cForm.setSelected((Contact) sccl);
-			log("Update cForm");
-			RootPanel.get("Details").add(cForm);
+		if(sccl != null){
+			RootPanel.get("Details").clear();
+			if(sccl instanceof ContactList) {
+				clForm.setSelected((ContactList) sccl);
+				log("Update clForm");
+				RootPanel.get("Details").add(clForm);
+			}
+			else if (sccl instanceof Contact) {
+				cForm.setSelected((Contact) sccl);
+				log("Update cForm");
+				RootPanel.get("Details").add(cForm);
+			}
 		}
 	}
 
-
+	public void restSelection(){
+		log("Reset");
+		RootPanel.get("Details").clear();
+		selectionModel.clear();
+	}
 
 
 
@@ -242,6 +245,7 @@ public class CellTreeViewModel implements TreeViewModel {
 				}
 		}else 
 		if(value instanceof ContactList){
+			log("Open List: "+ ((ContactList) value).getName());
 			this.csa.getContactsFromList(((ContactList) value), new AsyncCallback<Vector<Contact>>(){
 
 				@Override

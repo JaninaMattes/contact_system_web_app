@@ -234,6 +234,9 @@ public class ReportGenerator implements EntryPoint {
 		 * einem "Navigationsteil" mit den Schaltflächen zum Auslösen der Reportgenerierung 
 		 * und einem "Datenteil" für die HTML-Version des Reports.
 		 */
+		if(userInfo != null){ 
+			signOutLink.setHref(userInfo.getLogoutUrl());
+		}
 		
 		/**
 		 * Das Ladeoverlay dem HTML-Body hinzufügen

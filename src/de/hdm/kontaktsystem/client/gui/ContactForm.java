@@ -489,7 +489,7 @@ public class ContactForm extends VerticalPanel {
 										}									
 								 }
 	
-												
+								tb.setReadOnly(true);	// Textboxen dürfen nach dem Speichern nicht weiter bearbeitet werden.			
 							}
 							contactToDisplay.setPropertyValues(editResult);
 							log("Save: "+contactToDisplay);
@@ -758,64 +758,65 @@ public class ContactForm extends VerticalPanel {
 						CheckBox cb = new CheckBox();
 						TextBox tb = new TextBox();
 						
+						/**
+						 *  Gibt eine Fehlermeldung aus, wenn der Nutzer keine berechtigung besitzt, diesen Kontakt anzuzeigen
+						 *  Dieser fall tritt nur auf, wenn mit einem Nutzer eine Liste geteilt wurde und dieser ein Kontakt,
+						 *  der sich in der Liste befindet aus seinen eigenen Kontakten löscht.
+						 *  Dadurch ird der Kontakt noch in der Listen ansicht angezeigt, ist aber nicht mehr mit dem Nutzer geteilt 
+						 *  und kann dadurch nicht angezeigt werden.
+						 */
 						
-						
-						
-						cb.setText("Alle");
-						cb.setTitle(0+"");
-						cb.addClickHandler(new ClickHandler(){
-							@Override
-							public void onClick(ClickEvent event) {
-								for(CheckBox cb : cbv) cb.setValue(cbv.get(0).getValue());
-							}
-						});
-						cbv.add(cb);
-						ft.setWidget(row, 2, cb);
-						row ++;
-						
-						//Flextable befüllen
-						for(PropertyValue pv : result.getPropertyValues()){
-							
-							label = new Label();
-							cb = new CheckBox();
-							tb = new TextBox();
-//							log("PropertyValue" +pv);
-//							Label label = new Label();
-//							//Entfernen des prim�ren Stylename und ersetzen durch CSS-Namen
-//							label.setStylePrimaryName(getElement(), "contactlabels");
-//							CheckBox cb = new CheckBox();
-//							//Entfernen des prim�ren Stylename und ersetzen durch CSS-Namen
-//							cb.setStylePrimaryName(getElement(), "checkbox");
-//							TextBox tb = new TextBox();
-//							//Entfernen des prim�ren Stylename und ersetzen durch CSS-Namen
-//							tb.setStylePrimaryName(getElement(), "textbox");
-							tb.setStyleName("TextBox");
-							
-							label.setTitle(pv.getProperty().getId()+"");
-							label.setText(pv.getProperty().getDescription());
-							cb.setTitle(pv.getBoId()+"");
-							tb.setTitle(pv.getBoId()+"");
-							tb.setText(pv.getValue());
-							
-							// Textboxen können nicht bearbeitet werden
-							tb.setReadOnly(true);
-//							tb.setEnabled(false);
-							// Ändert den zustand der ShareAllCheckBox (cbv[0])
+						if(result.getPropertyValues().isEmpty()){
+							ft.setWidget(0, 0, new Label("Sie haben leider keine Berechtigung, sich diesen Kontakt anzeigen zu lassen. \n "
+									+ "Bitte wenden Sie sich an den Besitzer des Kontakts ("+result.getOwner()+"), \n "
+									+ "um den Kontakt erneut geteilt zu bekommen."));
+						}else{
+							cb.setText("Alle");
+							cb.setTitle(0+"");
 							cb.addClickHandler(new ClickHandler(){
 								@Override
 								public void onClick(ClickEvent event) {
-									cbv.get(0).setValue(false);
+									for(CheckBox cb : cbv) cb.setValue(cbv.get(0).getValue());
 								}
 							});
-							
 							cbv.add(cb);
-							tbv.add(tb);
-									
-							ft.setWidget(row, 0, label);
-							ft.setWidget(row, 1, tb);
 							ft.setWidget(row, 2, cb);
+							row ++;
 							
-							row++;
+							//Flextable befüllen
+							for(PropertyValue pv : result.getPropertyValues()){
+								
+								label = new Label();
+								cb = new CheckBox();
+								tb = new TextBox();
+								tb.setStyleName("TextBox");
+								
+								label.setTitle(pv.getProperty().getId()+"");
+								label.setText(pv.getProperty().getDescription());
+								cb.setTitle(pv.getBoId()+"");
+								tb.setTitle(pv.getBoId()+"");
+								tb.setText(pv.getValue());
+								
+								// Textboxen können nicht bearbeitet werden
+								tb.setReadOnly(true);
+								
+								// Ändert den zustand der ShareAllCheckBox (cbv[0])
+								cb.addClickHandler(new ClickHandler(){
+									@Override
+									public void onClick(ClickEvent event) {
+										cbv.get(0).setValue(false);
+									}
+								});
+								
+								cbv.add(cb);
+								tbv.add(tb);
+										
+								ft.setWidget(row, 0, label);
+								ft.setWidget(row, 1, tb);
+								ft.setWidget(row, 2, cb);
+								
+								row++;
+							}
 						}
 						
 						if(myUser.getGoogleID()!=result.getOwner().getGoogleID()) {
@@ -1038,6 +1039,7 @@ public class ContactForm extends VerticalPanel {
 					// Wird neu geladen, da ansonsten der Flextable und dieVectoren überprüft / geleert werden müssten.
 					tvm.setSelectedContactContactlist(contactToDisplay);
 				}else{
+					tvm.restSelection();
 					contactToDisplay = null;
 					RootPanel.get("Details").clear();
 				}

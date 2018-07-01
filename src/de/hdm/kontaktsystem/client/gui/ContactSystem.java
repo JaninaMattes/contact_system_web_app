@@ -396,8 +396,7 @@ public class ContactSystem implements EntryPoint {
 	
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-			//contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
-				
+			tvm.restSelection();
 			addContact = true;
 			addPanel.setVisible(true);
 			loadPanel.setVisible(true);
@@ -432,7 +431,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ContactListButton
 		contactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-			//	contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
+				tvm.restSelection();
 				addContact = false;
 				addPanel.setVisible(true);
 				loadPanel.setVisible(true);
@@ -473,6 +472,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				tvm.restSelection();
 				addPanel.setVisible(false);
 				loadPanel.setVisible(true);
 				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
@@ -511,6 +511,7 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				tvm.restSelection();
 				addPanel.setVisible(false);
 				loadPanel.setVisible(true);
 				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
@@ -542,8 +543,10 @@ public class ContactSystem implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub		
-				RootPanel.get("Details").clear();
+				// Resettet den TreeView da in der account ansicht nihts von dem Tree ausgewählt ist
+				tvm.restSelection(); // Account wird danach nicht mehr angezeigt
+//				RootPanel.get("Details").clear();
+				log("Add: Account");
 				RootPanel.get("Details").add(uf); 
 			}
 			
@@ -560,7 +563,9 @@ public class ContactSystem implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				RootPanel.get("Details").clear();
+				tvm.restSelection();
+//				RootPanel.get("Details").clear();
+				log("Add: New");
 				if(addContact){
 					Contact c = null;
 					cf.setSelected(c);

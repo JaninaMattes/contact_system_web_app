@@ -70,7 +70,8 @@ public class ContactListForm extends VerticalPanel {
 	Button deleteClButton = new Button("Löschen");
 	Button saveButton = new Button("Speichern");
 	Button shareButton = new Button("Teilen");
-	Button cancelButton = new Button("Abbrechen"); // Teilen abbrechen
+	Button cancelShareButton = new Button("Abbrechen"); // Teilen abbrechen
+	Button cancelNewButton = new Button("Abbrechen"); // Neu anlegen abbrechen
 	Button okButton = new Button("Teilen");
 	Button unShareButton = new Button("Teilhaberschaft löschen");
 	Button addConToList = new Button("Hinzufügen");
@@ -109,7 +110,7 @@ public class ContactListForm extends VerticalPanel {
 
 		Grid contactListGrid = new Grid(8, 3);
 		this.add(contactListGrid);
-
+		this.add(btnPanel);
 		
 		contactListGrid.setWidget(0, 0, contactListLabel);
 		contactListGrid.setWidget(0, 1, nameContactList);
@@ -132,9 +133,9 @@ public class ContactListForm extends VerticalPanel {
 		contactListGrid.setWidget(5, 0, labelReceivedFrom);
 		contactListGrid.setWidget(5, 1, clOwner);
 
-		contactListGrid.setWidget(6, 1, btnPanel);
-
 		email.getElement().setPropertyString("placeholder", "Email");
+		nameContactList.getElement().setPropertyString("placeholder", "Listenbezeichnung");
+		contactNames.getElement().setPropertyString("placeholder", "Keine Kontakte");
 
 		/**
 		 * Panels mit Widgets zum Teilen
@@ -145,7 +146,7 @@ public class ContactListForm extends VerticalPanel {
 		shareDialogvp.add(labelShare);
 		shareDialogvp.add(email);
 		shareDialogvp.add(shareDialoghp);
-		shareDialoghp.add(cancelButton);
+		shareDialoghp.add(cancelShareButton);
 		shareDialoghp.add(okButton);
 		shareDialog.add(shareDialogvp);
 		shareDialog.center();
@@ -168,13 +169,15 @@ public class ContactListForm extends VerticalPanel {
 		btnPanel.add(saveButton);
 		btnPanel.add(deleteClButton);
 		btnPanel.add(shareButton);
+		btnPanel.add(cancelNewButton);
 		saveButton.addClickHandler(new saveAndUpdateClickHandler());
 		deleteClButton.addClickHandler(new deleteContactListClickHandler());
 		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
 		addConToList.addClickHandler(new addContactToClClickHandler());
 		okButton.addClickHandler(new shareClickHandler());
 		shareButton.addClickHandler(new shareClickHandler());
-		cancelButton.addClickHandler(new cancelClickHandler());
+		cancelShareButton.addClickHandler(new cancelClickHandler());
+		cancelNewButton.addClickHandler(new cancelClickHandler());
 		unShareButton.addClickHandler(new unShareClickHandler());
 		
 
@@ -371,11 +374,17 @@ public class ContactListForm extends VerticalPanel {
 	private class cancelClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
+			
 			if (contactListToDisplay == null) {
 				Window.alert("Kontaktliste auswählen");
 
 			} else {
-				shareDialog.setVisible(false);
+				if(shareDialog.isVisible()){
+					shareDialog.setVisible(false);
+				}else{
+					tvm.restSelection();
+					RootPanel.get("Details").clear();
+				}
 
 			}
 		}
@@ -476,6 +485,7 @@ public class ContactListForm extends VerticalPanel {
 	private class deleteConFromListClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
+			log("Event: "+event);
 			if (contactListToDisplay == null) {
 				Window.alert("Keine Kontaktliste ausgewählt");
 
@@ -487,13 +497,21 @@ public class ContactListForm extends VerticalPanel {
 
 				// Suche und Rückgabe nach Kontakt aus Kontaktliste, der mit ausgewählten
 				// Kontakt aus ListBox übereinstimmt
-
+				log("Romove Contact: " + contactName);
 				for (Contact con : contactListToDisplay.getContacts()) {
-					if (con.getName().getValue() == contactName) {
+					if (con.getName().getValue().equals(contactName)) {
 						Contact conToDelete = con;
-						contactSystemAdmin.removeContactFromList(conToDelete, contactListToDisplay,
-								new deleteConfromListCallback());
-						tvm.removeFromLeef(con);
+						// Der Callback kann nur bei bestehenden listen durchgeführt werden.
+						if(update){
+							contactSystemAdmin.removeContactFromList(conToDelete, contactListToDisplay,
+									new deleteConfromListCallback());
+							tvm.removeFromLeef(con);
+						}else{
+							// Bei neuen Listen wird der Kontakt aus dem Vector entfernt;
+							contactListToDisplay.getContacts().remove(conToDelete);
+							contactNames.removeItem(contactNames.getSelectedIndex());
+							
+						}
 					}
 				}
 			}
@@ -841,14 +859,26 @@ public class ContactListForm extends VerticalPanel {
 	
 	void setSelected(ContactList cl) {
 
-		// Listen leeren
+		// Listen und Textfelder  leeren
 		contactNames.clear();
 		contactsToAdd.clear();
 		listBoxSharedWith.clear();
 		nameContactList.setText("");
 		email.setText("");
 		clOwner.setText("");
+		
+		// Blendet Share Dialog aus falls er von einem vorherige formular noch eingeblendet war
 		shareDialog.setVisible(false);
+		cancelNewButton.setVisible(false);
+		// Blendet eventuell ausgeblendete Gui elemente wieder ein
+		clOwner.setVisible(true);
+		shareButton.setVisible(true);
+		labelSharedWith.setVisible(true);
+		listBoxShareWith.setVisible(true);
+		deleteClButton.setVisible(true);
+		labelReceivedFrom.setVisible(true);
+		unShareButton.setVisible(true);
+		listBoxSharedWith.setVisible(true);
 
 		if (cl != null) {
 			update = true;
@@ -928,9 +958,18 @@ public class ContactListForm extends VerticalPanel {
 			update = false;
 			contactListToDisplay = new ContactList();
 			nameContactList.setText("");
-			deleteClButton.setEnabled(false);
-//			contactNames.addItem("Keine Kontakte vorhanden"); // Übere einen Placeholder lösen ??
-			deleteConButton.setEnabled(false);
+			cancelNewButton.setVisible(true);
+			
+			// Blendet GUI eletemnt wie Teilen, Geteilt mit und EIgentümer aus
+			clOwner.setVisible(false);
+			shareButton.setVisible(false);
+			labelSharedWith.setVisible(false);
+			listBoxShareWith.setVisible(false);
+			deleteClButton.setVisible(false);
+			labelReceivedFrom.setVisible(false);
+			unShareButton.setVisible(false);
+			listBoxSharedWith.setVisible(false);
+			
 		}
 		/*
 		 * Alle Kontakte die der User angelegt hat oder die ihm geteilt wurden werden angezeigt, um sie einer Liste hinzuzufügen
