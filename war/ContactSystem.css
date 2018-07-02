@@ -37,7 +37,7 @@ body {
 
 /*Report Generator */
 
-#reporttitle{ /* ï¿½berschrift des erstellten Reports */
+#reporttitle{ /* Überschrift des erstellten Reports */
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 2em; /*Schriftgrï¿½ï¿½e*/
   	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
@@ -49,21 +49,21 @@ body {
 	width:600px;
 	border:1px solid silver;
 	margin: auto;
-	/* TODO: Linksbï¿½ndig machen
+	/* TODO: Linksbündig machen
 }
 
 .reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
 	width:600px;
 	border:1px solid silver;
 	margin: 10px auto;
-	/*TODO: Linksbï¿½ndig machen */
+	/*TODO: Linksbündig machen */
 	
 }
 
 .reportpropertyvalues{ /* Tabellenzeile, die eine Eigenschaft eines einzelnen Kontakts im erstellten Report darstellt */
 }
 
-.label{	/* linke Tabellenspalte, enthÃ¤lt Beschriftung zu den Werten der Eigenschaften eines Kontakts  (Report) */
+.label{	/* linke Tabellenspalte, enthält Beschriftung zu den Werten der Eigenschaften eines Kontakts  (Report) */
 	width: 200px;
 }
 
@@ -124,6 +124,8 @@ body {
    -webkit-appearance: none;
 } 
 
+/*Link*/
+
 #Link{
 	font-family: "Arial", Arial, sans-serif;
     /*border: solid 2px black; Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
@@ -139,7 +141,7 @@ body {
 
 /*Buttons*/
 
-#addedit{ /*Button "Hinzufï¿½gen" und "Bearbeiten"
+#addedit{ /*Button "Hinzufügen" und "Bearbeiten"
 	height:25px;
 	width: 80px;
 	color: black;
@@ -147,12 +149,6 @@ body {
 	border-radius: 4px; /*abgerundete Ecken*/
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
     
-}
-#labelfeldhinzu{
-	/*TODO: weiter runter schieben (top-margin)!*/
-}
-#textbox{
-	/*width: festlegen (vergrï¿½ï¿½ern)*/
 }
 
 #shareButton{ /* Teilen-Button*/
@@ -335,6 +331,19 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
   	left: calc(100vw - 200px);;
 }
 
+#add{ /*Add-Button im Editor (+ Button) */
+    position: fixed;
+    top: 87vh;
+    left: 50vw;
+    text-align: center;
+    z-index: 5;
+    height: 50px;
+    width:  50px;
+    color: white;
+    background: #000051;
+    border-radius: 50px;
+}
+
 /* Das Logo */
 
 #logo{
@@ -360,6 +369,9 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 
 /* Textboxen */
 
+#textbox{
+	/*width: festlegen (vergrï¿½ï¿½ern)*/
+}
 #TextBox{
 	margin-left: 4px;
 	padding-left: 182px;
@@ -406,6 +418,9 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 
 /* Labels */
 
+#labelfeldhinzu{
+	/*TODO: weiter runter schieben (top-margin)!*/
+}
 
 .contactlabels{
     border-style: none;
@@ -416,7 +431,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 
-/* Label von ï¿½berschrift "Kontakt:" und "Kontaktliste:" im Editor*/
+/* Label von Überschrift "Kontakt:" und "Kontaktliste:" im Editor*/
 #ueberschriftlabel{
 	 border-style: none;
 	 border-color:white;
@@ -511,19 +526,8 @@ div#Trailer {
 
 }
 
-#add{ /*Add-Button im Editor (+ Button) */
-    position: fixed;
-    top: 87vh;
-    left: 50vw;
-    text-align: center;
-    z-index: 5;
-    height: 50px;
-    width:  50px;
-    color: white;
-    background: #000051;
-    border-radius: 50px;
-}
 /*Ladeanzeige*/
+
 #load{
 	display:block;
 	height:100vh;

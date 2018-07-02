@@ -236,7 +236,7 @@ public class ContactSystem implements EntryPoint {
 		 * Login-Status feststellen mit LoginService
 		 */		
 
-		loadPanel.setVisible(false);
+		/*loadPanel.setVisible(false);
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
@@ -269,7 +269,7 @@ public class ContactSystem implements EntryPoint {
 	 * Die Methode <code>loadLogin()</code> führt zum Aufbau der Login-Seite.
 	 * Wenn der Nutzer ausgeloggt wurde, kann er sich hierüber wieder neu im 
 	 * System einloggen. 
-	 */
+	 
 	
 	private void loadLogin() {	
 		log("Login");
@@ -289,9 +289,11 @@ public class ContactSystem implements EntryPoint {
 		loginPanel.add(login);
 		loginPanel.add(new HTML("</center>"));
 		RootPanel.get("Lists").add(loginPanel); //TODO: prüfen ob richtige HTML
+		
+*/
 	}
 		
-	
+
 	/**
 	 * Aufbau der Startseite des Kontaktsystems. Elemente werden in Listenform dargestellt, 
 	 * ausgewählte Elemente werden als Formulare rechts im Bildschirm aufgerufen
