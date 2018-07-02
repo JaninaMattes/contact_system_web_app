@@ -292,6 +292,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Contact c = cMapper.insertContact(contact);
 		Vector<PropertyValue> pvv = new Vector<PropertyValue>();
 		for(PropertyValue pv : contact.getPropertyValues()){
+			if(pv.getProperty().getId() == 0){
+				pv.setProperty(this.createProperty(pv.getProperty()));
+			}
 			pv.setContact(c);
 			pv.setOwner(c.getOwner());
 			pvv.add(this.createPropertyValue(pv));

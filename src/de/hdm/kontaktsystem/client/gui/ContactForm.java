@@ -583,9 +583,20 @@ public class ContactForm extends VerticalPanel {
 						 if(!tb.getText().isEmpty()) {
 							 	Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
 							 	String[]s=tb.getTitle().split(":");
-								p.setId(Integer.parseInt(s[1]));
-								p.setDescription(s[0]);
-								
+							 	
+							 	p.setId(Integer.parseInt(s[1]));
+								// Wenn die ID 0 ist dann muss die Beschreibung aus dem Textfeld "newProperty" verwendet werden.
+								if(p.getId() == 0){
+									if(newProperty.getText() == ""){
+										log("Text ist Leer");
+										continue; // überpringt die neue Eigenschaft, da keine Beschreibung angegeben wurde
+									}
+									log("Neue Eigenschaft anlegen");
+									p.setDescription(newProperty.getText());
+								}else{
+									p.setDescription(s[0]);
+								}
+							 									
 								PropertyValue ppv = new PropertyValue();
 								ppv.setContact(contactToDisplay);
 								ppv.setOwner(contactToDisplay.getOwner());
