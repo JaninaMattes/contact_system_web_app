@@ -12,7 +12,7 @@ body {
 #headertext{ /*Ueberschrift des Editors*/
 	border: none;
 	margin: 20px 100% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
-	padding-left: 150px;
+	padding-left: 150vh;
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 3em; /*Schriftgr��e*/
   	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
