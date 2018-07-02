@@ -549,7 +549,7 @@ div#Trailer {
 	padding: 3px;
 	border: solid 1px black;
 	border-radius: 2px;
-	font-size: 1em;
+	font-size: 1.5em;
    -webkit-appearance: none;
 }
 
@@ -558,4 +558,29 @@ div#Trailer {
 	border: 0;
 	border-radius: 0;
 }
+
+.Label{
+	background: transparent;
+	padding: 3px;
+	Color: black;
+	font-size: 1.5em;
+   -webkit-appearance: none;
+}
+
+.mainButton{
+    width: 12vw;
+    min-width: 100px;
+    height: 50px;
+    border-radius: 5px;
+    margin-right: 3vw;
+    
+}
+
+.mainButtonPanel{
+    Bottom: 8vh;
+    position: fixed;
+    display: inline-block;
+    width: 40vw;
+}
+
 

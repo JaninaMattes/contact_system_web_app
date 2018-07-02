@@ -163,9 +163,6 @@ public class ContactListForm extends VerticalPanel {
 		 * Panel für Anordnung der Buttons
 		 */
 
-		deleteConButton.setPixelSize(110, 30);
-		saveButton.setPixelSize(110, 30);
-		deleteClButton.setPixelSize(110, 30);
 		btnPanel.add(saveButton);
 		btnPanel.add(deleteClButton);
 		btnPanel.add(shareButton);
@@ -185,13 +182,7 @@ public class ContactListForm extends VerticalPanel {
 		 * CSS Zuweisungen für Widgets
 		 */
 
-		// nameContactList.getElement().setId("Textbox");
-		// contactNames.getElement().setId("ListBox");
 		clOwner.getElement().setId("contactlabel");
-		// listBoxShareWith.getElement().setId("ListBox");
-		// listBoxSharedWith.getElement().setId("ListBox");
-		// contactsToAdd.getElement().setId("ListBox");
-		// contactNames.getElement().setId("Listbox");
 
 		// Labels in CSS
 
@@ -200,8 +191,6 @@ public class ContactListForm extends VerticalPanel {
 
 		// Anzeige des Labels für Vorname und Nachname gleicher StyleName
 
-		// firstNameLabel.getElement().setId("namelabel");
-		// lastNameLabel.getElement().setId("namelabel");
 		contactLabel.getElement().setId("contactlabel");
 		contactListStatus.getElement().setId("contactstatus");
 
@@ -215,19 +204,22 @@ public class ContactListForm extends VerticalPanel {
 		// delete + share + save-Buttons müssen jeweils auch gleich sein
 
 		addConToList.getElement().setId("addedit");
-		unShareButton.removeStyleName("gwt-Button"); // um den von GWT f�r Buttons vorgegebenen Style zu l�schen
+		unShareButton.removeStyleName("gwt-Button"); // um den von GWT für Buttons vorgegebenen Style zu l�schen
 		unShareButton.getElement().setId("deleteCLCButton");
 		deleteConButton.getElement().setId("deleteButton");
-		// deleteClButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons
-		// vorgegebenen Style zu l�schen
-		deleteClButton.getElement().setId("deleteButton");
-		// saveButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons
-		// vorgegebenen Style zu l�schen
-		saveButton.getElement().setId("saveButton");
-		// shareButton.removeStyleName("gwt-Button"); //um den von GWT f�r Buttons
-		// vorgegebenen Style zu l�schen
+		
+		
+		// Style der Hauptbuttons
+		saveButton.setStyleName("mainButton");
+		shareButton.setStyleName("mainButton");
+		deleteClButton.setStyleName("mainButton");
+		btnPanel.setStyleName("mainButtonPanel");
+		
+		
+	
 		deleteConButton.getElement().setId("deleteCLCButton");
-		shareButton.getElement().setId("shareButton");
+		
+		
 
 		shareDialog.setStyleName("shareDialog");
 
@@ -444,9 +436,11 @@ public class ContactListForm extends VerticalPanel {
 		// @Override
 		public void onSuccess(Participation result) {
 			loadPanel.setVisible(false);
+			labelSharedWith.setVisible(true);
+			listBoxSharedWith.setVisible(true);
+			unShareButton.setVisible(true);
 			User userSharedWith = result.getParticipant();
 			log("Liste wurde mit " + result.getParticipant() + " geteilt");
-
 			listBoxSharedWith.addItem(userSharedWith.getGMail());
 
 		}
@@ -669,10 +663,14 @@ public class ContactListForm extends VerticalPanel {
 			// Listbox mit Usern an die geteilt wurde leeren
 			listBoxSharedWith.clear();
 			if (result != null) {
-
-				for (Participation part : result) {
-					// User Liste updaten
-					listBoxSharedWith.addItem(part.getParticipant().getGMail());
+				if(result.size()>0){
+					labelSharedWith.setVisible(true);
+					listBoxSharedWith.setVisible(true);
+					unShareButton.setVisible(true);
+					for (Participation part : result) {
+						// User Liste updaten
+						listBoxSharedWith.addItem(part.getParticipant().getGMail());
+					}
 				}
 			} else {
 				Window.alert("Kontaktliste ist mit keinem Nutzer geteilt!");
@@ -873,12 +871,11 @@ public class ContactListForm extends VerticalPanel {
 		// Blendet eventuell ausgeblendete Gui elemente wieder ein
 		clOwner.setVisible(true);
 		shareButton.setVisible(true);
-		labelSharedWith.setVisible(true);
-		listBoxShareWith.setVisible(true);
 		deleteClButton.setVisible(true);
 		labelReceivedFrom.setVisible(true);
-		unShareButton.setVisible(true);
-		listBoxSharedWith.setVisible(true);
+		labelSharedWith.setVisible(false);
+		listBoxSharedWith.setVisible(false);
+		unShareButton.setVisible(false);
 
 		if (cl != null) {
 			update = true;

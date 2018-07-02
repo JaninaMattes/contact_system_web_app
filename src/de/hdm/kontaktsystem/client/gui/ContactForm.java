@@ -137,18 +137,27 @@ public class ContactForm extends VerticalPanel {
 			final User user = new User();
 			
 			//CSS
-			addButton.getElement().setId("addedit");	
-			saveButton.getElement().setId("saveButton");
-			editButton.getElement().setId("saveButton");
-			shareButton.getElement().setId("shareButton");
-			deleteButton.getElement().setId("deleteButton");
-			cancelNewButton.getElement().setId("cancel");
-			cancelEditButton.getElement().setId("saveButton");
-			cancelShareButton.getElement().setId("cancel");
+			addButton.getElement().setId("addedit");
 			editPartButton.getElement().setId("addedit");
 			sharedWithUser.getElement().setId("ListBox");
 			gp.getElement().setId("grid-panel");
 			
+			// Main Buttonpanels
+			okButton.setStyleName("mainButton");
+			saveButton.setStyleName("mainButton");
+			editButton.setStyleName("mainButton");
+			shareButton.setStyleName("mainButton");
+			deleteButton.setStyleName("mainButton");
+			cancelNewButton.setStyleName("mainButton");
+			cancelEditButton.setStyleName("mainButton");
+			cancelShareButton.setStyleName("mainButton");
+			
+			btnPanel.setStyleName("mainButtonPanel");
+			newPanel.setStyleName("mainButtonPanel");
+			editPanel.setStyleName("mainButtonPanel");
+			sharePanel.setStyleName("mainButtonPanel");
+			
+			contactStatus.setStyleName("Label");
 			labelAddElement.getElement().setId("labelfeldhinzu");
 			addElement.getElement().setId("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
@@ -802,9 +811,9 @@ public class ContactForm extends VerticalPanel {
 								cb = new CheckBox();
 								tb = new TextBox();
 								tb.setStyleName("TextBox");
-								
+								label.setStyleName("Label");
 								label.setTitle(pv.getProperty().getId()+"");
-								label.setText(pv.getProperty().getDescription());
+								label.setText(pv.getProperty().getDescription()+": ");
 								cb.setTitle(pv.getBoId()+"");
 								tb.setTitle(pv.getBoId()+"");
 								tb.setText(pv.getValue());
