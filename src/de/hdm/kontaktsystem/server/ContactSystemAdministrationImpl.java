@@ -383,6 +383,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			contact.setName(this.getNameOfContact(contact));
 		}
 		cv.addAll(this.getAllCSharedByOthersToMePrev());
+//		cv.sort(new BOCompare());
 		return cv;
 	}
 
@@ -466,7 +467,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			if (myLists.contains(cl))
 				cv.add(cl);
 		}
-		//cv.sort(new BOCompare());
+//		cv.sort(new BOCompare());
 		return cv;
 	}
 
@@ -580,6 +581,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<ContactList> contactListVector = clMapper.findContactListByUserId(this.getCurrentUser());
 		// Alle geteilten Listen
 		contactListVector.addAll(this.getAllCLSharedByOthersToMePrev());
+//		contactListVector.sort(new BOCompare());
 		return contactListVector;
 	}
 
@@ -849,12 +851,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		partMapper.updateParticipation(part); 
 		if(part.getReferencedObject() instanceof Contact){
 			Contact c = (Contact) part.getReferencedObject();
-			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt		
+			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt
+			System.out.println("Alles getielt? "+part.getShareAll());
 			if(part.getShareAll()){
 				for(PropertyValue pv : c.getPropertyValues()){
 					Participation removePart = new Participation();
 					removePart.setParticipant(part.getParticipant());
 					removePart.setReference(pv);
+					System.out.println("Delete Part: "+part);
 					this.deleteParticipation(removePart);
 				}
 			
@@ -1024,6 +1028,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 			bov.add(cl);
 		}
+//		bov.sort(new BOCompare());
 		return bov;
 
 	}
@@ -1194,7 +1199,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		if (cResultVector.isEmpty())
 			System.out.println("# no contact found");
-
+//		cResultVector.sort(new BOCompare());
 		return cResultVector;
 	}
 	
@@ -1290,6 +1295,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (ContactList cl : this.getAllCLSharedByMePrev()) {
 			vbo.add(cl);
 		}
+//		vbo.sort(new BOCompare());
 		return vbo;
 
 	}
@@ -1350,7 +1356,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 		if (contactResultVector.isEmpty())
 			System.out.println("# no contacts found");
-
+//		contactResultVector.sort(new BOCompare());
 		return contactResultVector;
 
 	}
@@ -1378,7 +1384,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				contactListVector.addElement(cl);
 			}
 		}
-
+//		contactListVector.sort(new BOCompare());
 		return contactListVector;
 
 	}
