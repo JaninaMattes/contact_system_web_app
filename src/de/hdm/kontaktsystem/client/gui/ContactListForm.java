@@ -194,8 +194,10 @@ public class ContactListForm extends VerticalPanel {
 		contactLabel.getElement().setId("contactlabel");
 		contactListStatus.getElement().setId("contactstatus");
 
-		contactNames.getElement().setId("ListBox");
-		listBoxShareWith.getElement().setId("ListBox");
+		contactNames.setStyleName("ListBox");
+		listBoxShareWith.setStyleName("ListBox");
+		listBoxSharedWith.setStyleName("ListBox");
+		contactsToAdd.setStyleName("ListBox");
 
 		labelShare.getElement().setId("teilenlabel");
 		contactListStatus.getElement().setId("contactstatus");

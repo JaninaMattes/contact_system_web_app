@@ -139,7 +139,7 @@ public class ContactForm extends VerticalPanel {
 			//CSS
 			addButton.getElement().setId("addedit");
 			editPartButton.getElement().setId("addedit");
-			sharedWithUser.getElement().setId("ListBox");
+			sharedWithUser.setStyleName("ListBox");
 			gp.getElement().setId("grid-panel");
 			
 			// Main Buttonpanels
@@ -147,6 +147,7 @@ public class ContactForm extends VerticalPanel {
 			saveButton.setStyleName("mainButton");
 			editButton.setStyleName("mainButton");
 			shareButton.setStyleName("mainButton");
+			createButton.setStyleName("mainButton");
 			deleteButton.setStyleName("mainButton");
 			cancelNewButton.setStyleName("mainButton");
 			cancelEditButton.setStyleName("mainButton");
@@ -159,7 +160,7 @@ public class ContactForm extends VerticalPanel {
 			
 			contactStatus.setStyleName("Label");
 			labelAddElement.getElement().setId("labelfeldhinzu");
-			addElement.getElement().setId("ListBox");
+			addElement.setStyleName("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
 			
 			//Teilhaberschaften
