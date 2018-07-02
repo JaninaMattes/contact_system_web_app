@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.server;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -64,7 +65,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Methode zur Initialisierung
+	 * Methode zur Initialisierung der Datenbank Mapper
+	 * Wird beim login eines Nutzers aufgerufen um die Datenbank  anbindung zu erneuern
 	 */
 
 	public void init() throws IllegalArgumentException {
@@ -85,19 +87,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 
-	private double currentUser = 510d;
-	
-	public void setCurrentUser(double uid){ // Test um den User zu wechseln
-		currentUser = uid;
-	}
 	
 	public double getCurrentUser() {
 		return  Double.parseDouble(userService.getCurrentUser().getUserId()); // currentUser;
 	}
-	
-//	public void setAccountOwner(User u){
-//		myUser = u;
-//	}
 	
 
 	/*
@@ -105,8 +98,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ABSCHNITT, User
 	 * ***************************************************************************
 	 */
-	// Login
-	// ## IO ##
+	
+	/**
+	 * Diese Methode erhält durch den GoogleUserService den eingeloggten User.
+	 * Wenn die Google-ID bereits in der Datenbank vorhanden ist wird das dazugehörige User-Object zurück gegeben.
+	 * Wenn die Google-ID nicht bekannt ist, wird ein neuer User und ein Dazugehöriger Kontakt mit den Google User Daten erstellt
+	 * 
+	 * @param requestUri um die Login und Logout links an an den Client anzupassen.
+	 * @return User-Object das zu dem Google account gehört mit dem sich der Nuter eingeloggt hat
+	 * @author Oliver Gorges
+	 */
 	public User login(String requestUri) {
 		init();
 		UserService userService = UserServiceFactory.getUserService();
@@ -121,55 +122,61 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			double id = Double.parseDouble(guser.getUserId());
 			user = this.getUserByID(id);
 			
-
+			// Überprüfung ob der nutzer bereits existiert oder ob es ein neuer Nutzer ist
 			if (user == null) {
 				
-				System.out.println("Create new User: " + user);
 				user = new User();
 				user.setGoogleID(id);
 				user.setGMail(guser.getEmail());
-//				user.setNickname(guser.getNickname()); // Not used
-				own.setBo_Id(1); // updated in db
+				own.setBo_Id(1); // Wird in der Datenbank durch die DB-ID ersetzt
 				own.setOwner(user);
 				own.setName(name);
-				user = this.createUser(user, own);
-
-				name.setContact(user.getUserContact());
-				email.setContact(user.getUserContact());
+				// erstellen der Kontakt Eigenschaften mit den Daten des GoogleUsers
 				name.setProperty(this.getPropertyByID(1));
 				email.setProperty(this.getPropertyByID(6));
-				name.setValue(guser.getNickname()); // force initial name
+				name.setValue(guser.getNickname()); 
 				email.setValue(user.getGMail());
-				this.createPropertyValue(name);
-				this.createPropertyValue(email);
+				own.addPropertyValue(name);
+				own.addPropertyValue(email);
+				
+				user = this.createUser(user, own);
+				
+				// TODO alte variante der PV erstellung
+//				name.setContact(user.getUserContact());
+//				email.setContact(user.getUserContact());
+//				this.createPropertyValue(name);
+//				this.createPropertyValue(email);
 
-			} else {
-				System.out.println("Login User: " + guser.getUserId() + " -> " + id);
-			}
-			user.setLoggedIn(true); // norm True
+			} 
+			// Loggt den Nutzer ein und erstellt einen Link um den Nutzer wieder auszuloggen
+			user.setLoggedIn(true); 
 			user.setLogoutUrl(userService.createLogoutURL(requestUri));
 
 		} else {
-
+			// Loggt den Nutzer aus und erstellt einen Link um den Nutzer wieder einzuloggen
 			user.setLoggedIn(false);
 			user.setLoginUrl(userService.createLoginURL(requestUri));
 
 		}
-//		myUser = user;
 		return user;
 
 	}
 
+	/**
+	 *  Gibt das User-Obejct von dem aktuell eingeloggten User zurück
+	 *  @return User-Objekt
+	 */
 	@Override
 	public User getAccountOwner() {
 		return this.getUserByID(this.getCurrentUser());
 	}
 
 	/**
-	 * Interner Aufruf bei Login
-	 * @param u
-	 * @param contact
-	 * @return
+	 * Erstellt einen neuen User mit dem dazugehörigen eigenen Kontakt.
+	 * Diese Methode wird aufgerufen, wenn beim login ein User nicht gefunden wurde
+	 * @param User-Objekt
+	 * @param Contact-Object
+	 * @return User-Objekt
 	 */
 	// ## IO ##
 	public User createUser(User u, Contact contact) {
@@ -285,6 +292,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Contact c = cMapper.insertContact(contact);
 		Vector<PropertyValue> pvv = new Vector<PropertyValue>();
 		for(PropertyValue pv : contact.getPropertyValues()){
+			if(pv.getProperty().getId() == 0){
+				pv.setProperty(this.createProperty(pv.getProperty()));
+			}
 			pv.setContact(c);
 			pv.setOwner(c.getOwner());
 			pvv.add(this.createPropertyValue(pv));
@@ -295,6 +305,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	}
 	
+	/**
+	 * Ändert einen Kontakt. 
+	 * Da die Contact-Tabelle nur eine ID besitzt wird in dieser nichts geupdatet.
+	 * Dennoch wird das modified Date von BO verändert und alle Eigenschaftsausprägungen des Kontakts werden aktuallisiert.
+	 * Wenn eine Eigenschaftsausprägung auf dem Clien neu Angelegt wurde wird diese ebenso auf der Datenbank angelegt, das selebe gilt ebenso beim entfernen.
+	 * Wird eine neue Eigenschaft erstellt wird diese ebenso in dieser klasse neu in der Datenbank angegelegt. 
+	 */
 	// #### IO ####
 	@Override
 	public Contact editContact(Contact contact) {
@@ -305,13 +322,19 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		// Fügt dem Kontakt neue PropertyValues hinzu
 		// Updatet die bestehenden PropertyValues
 		for (PropertyValue pV : newPV) {
-			if(pV.getValue().isEmpty()) {
+			if(pV.getValue().isEmpty() && pV.getProperty().getId() != 1) { // Namensfeld kann nicht gelöscht werden
 				this.deletePropertyValue(pV);
 			}else
 			if(!oldPV.contains(pV)) {
+				// Legt eine neue Eigenschaft in der Datanbank an, falls diese in dem Formular neu angelegt wurde.
+				if(pV.getProperty().getId() == 0){
+					pV.setProperty(this.createProperty(pV.getProperty()));
+				}
 				this.createPropertyValue(pV);
 			}else{
-				this.editPropertyValue(pV);
+				if(!pV.getValue().isEmpty()) {// Wenn das Namensfeld leer ist wird es nicht geupdatet
+					this.editPropertyValue(pV);
+				}
 			}
 			
 		}
@@ -363,6 +386,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			contact.setName(this.getNameOfContact(contact));
 		}
 		cv.addAll(this.getAllCSharedByOthersToMePrev());
+//		cv.sort(new BOCompare());
 		return cv;
 	}
 
@@ -430,17 +454,23 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<BusinessObject> cv = new Vector<BusinessObject>();
 		// Findet alle Kontakte
 		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
+		Vector<Contact> myContacts = this.getMyContactsPrev();
+		Vector<ContactList> myLists = this.getMyContactListsPrev();
+		
 		for (PropertyValue pv : pvv) {
 			Contact c = cMapper.findBy(pv);
 			c.setName(this.getNameOfContact(c));
-			System.out.println();
-			if (!cv.contains(c))
+			// Filter Doppelete Kontakte und Kontakte die einem nicht gebören bzw die mit einem nicht geteiltwurden aus.
+			if (!cv.contains(c) && myContacts.contains(c))
 				cv.add(c);
 
 		}
-		// Findet alle KontaktListen
-		cv.addAll(clMapper.findContactListByName(value));
-		
+		// Findet alle KontaktListen die der Nutzer anzeigen darf
+		for(ContactList cl : clMapper.findContactListByName(value)){
+			if (myLists.contains(cl))
+				cv.add(cl);
+		}
+//		cv.sort(new BOCompare());
 		return cv;
 	}
 
@@ -506,14 +536,30 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public ContactList createContactList(ContactList contactList) {
 		if(contactList.getOwner() == null) contactList.setOwner(this.getUserByID(this.getCurrentUser()));
 		boMapper.insert(contactList);
-		return clMapper.insertContactList(contactList);
+		ContactList cl =  clMapper.insertContactList(contactList);
+		if(!contactList.getContacts().isEmpty()){
+			// übertragen der Kontakte aus der Liste in einen neuen Vektor wegen einer ConcurrentModificationException
+			Vector<Contact> cil = new Vector<Contact>(); 
+			cil.addAll(contactList.getContacts());
+			for(Contact c : cil){
+				this.addContactToList(c, cl);
+			}
+		}
+		return cl;
 
 	}
 
+	/**
+	 * Ändert den Namen einer Kontaktliste
+	 */
 	@Override
 	public ContactList editContactList(ContactList cl) {
 		boMapper.update(cl);
-		return clMapper.updateContactList(cl);
+		// Absicherung das der Name nicht leer gelassen wird
+		if(!cl.getName().isEmpty()){
+			return clMapper.updateContactList(cl);
+		}
+		return cl;
 	}
 
 
@@ -538,6 +584,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<ContactList> contactListVector = clMapper.findContactListByUserId(this.getCurrentUser());
 		// Alle geteilten Listen
 		contactListVector.addAll(this.getAllCLSharedByOthersToMePrev());
+//		contactListVector.sort(new BOCompare());
 		return contactListVector;
 	}
 
@@ -585,12 +632,37 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	@Override
 	public ContactList addContactToList(Contact contact, ContactList contactList) {
+		
+		// Teilt den neuen Kontakt mit allen Teilhabern der Liste
+		Vector<Participation> partv = this.getAllParticipationsByBusinessObject(contactList);
+		if(partv != null){
+			for(Participation part : partv){
+				Participation createPart = new Participation();
+				createPart.setParticipant(part.getParticipant());
+				createPart.setReference(contact);
+				createPart.setShareAll(true);
+				this.createParticipation(createPart);
+			}
+		}
+		
 		return clMapper.addContactToContactlist(contactList, contact);
 
 	}
 
 	@Override
 	public ContactList removeContactFromList(Contact contact, ContactList contactList) {
+		
+		Vector<Participation> partv = this.getAllParticipationsByBusinessObject(contactList);
+		if(partv != null){
+			for(Participation part : partv){
+				Participation delPart = new Participation();
+				delPart.setParticipant(part.getParticipant());
+				delPart.setReference(contact);
+				delPart.setShareAll(true);
+				this.deleteParticipation(delPart);
+			}
+		}
+		
 		return clMapper.removeContactFromContactList(contactList, contact);
 
 	}
@@ -705,6 +777,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ABSCHNITT, Property
 	 * ***************************************************************************
 	 */
+	
+	@Override
+	public Property createProperty(Property p){
+		return propMapper.insert(p);
+	}
+	
 	@Override
 	public Vector<Property> getAllProperties() {
 		return propMapper.findAll();
@@ -713,6 +791,21 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public Property getPropertyByID(int id) {
 		return propMapper.findBy(id);
+	}
+	
+	@Override
+	public Property editProperty(Property p){
+		return propMapper.update(p);
+	}
+	
+	@Override
+	public Property deleteProperty(Property p){
+		// Löscht alle Eigenschaftsausprägungen die auf die Eigenschaft verweisen und löscht diese Ausprägung
+		for(PropertyValue pv : propValMapper.findBy(p)){
+			this.deletePropertyValue(pv);
+		}
+		return propMapper.delete(p);
+		
 	}
 
 	/*
@@ -724,9 +817,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public Participation createParticipation(Participation part) {
 		Participation participation = partMapper.insertParticipation(part);
-		boMapper.setStatusTrue(participation.getReferenceID());
+		boMapper.setStatusTrue(part.getReferenceID());
+		
 		if(part.getReferencedObject() instanceof Contact){
-			if(((Contact) part.getReferencedObject()).getPropertyValues() != null){
+			// Teilt nur Eigenscaftsausprägungen die sich aktuell in dem Contact-Objekt befinden und wenn der Kontakt nicht vollständig geteilt wurde
+			if( !part.getShareAll() && ((Contact) part.getReferencedObject()).getPropertyValues() != null){
+				// Teilt alle Eienscaftsausprägungen die sich in der Lite Befinden mit dem Nutzer
 				for(PropertyValue pv : ((Contact) part.getReferencedObject()).getPropertyValues()){
 					Participation partPV = new Participation();
 					partPV.setParticipant(part.getParticipant());
@@ -736,12 +832,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			}
 		}else if(part.getReferencedObject() instanceof ContactList){
 			if(((ContactList) part.getReferencedObject()).getContacts() != null){
+				// Teilt alle kontakte die sich in der Lite Befinden mit dem Nutzer
 				for(Contact c : ((ContactList) part.getReferencedObject()).getContacts()){
 					Participation partC = new Participation();
 					partC.setParticipant(part.getParticipant());
 					partC.setReference(c);
 					partC.setShareAll(true);
-					this.createParticipation(part);
+					this.createParticipation(partC);
 				}
 			}
 		}
@@ -758,12 +855,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		partMapper.updateParticipation(part); 
 		if(part.getReferencedObject() instanceof Contact){
 			Contact c = (Contact) part.getReferencedObject();
-			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt		
+			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt
+			System.out.println("Alles getielt? "+part.getShareAll());
 			if(part.getShareAll()){
 				for(PropertyValue pv : c.getPropertyValues()){
 					Participation removePart = new Participation();
 					removePart.setParticipant(part.getParticipant());
 					removePart.setReference(pv);
+					System.out.println("Delete Part: "+part);
 					this.deleteParticipation(removePart);
 				}
 			
@@ -877,7 +976,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				Participation partC = new Participation();
 				partC.setParticipant(part.getParticipant());
 				partC.setReference(c);
-				this.deleteParticipation(part);
+				this.deleteParticipation(partC);
 			}
 		}
 		
@@ -933,6 +1032,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 			bov.add(cl);
 		}
+//		bov.sort(new BOCompare());
 		return bov;
 
 	}
@@ -1094,6 +1194,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (Participation part : participationVector) {
 			Contact c = (Contact) part.getReferencedObject();	
 			if(c != null && !cResultVector.contains(c)){
+				c.setOwner(this.getUserByID(c.getOwner().getGoogleID()));
 				c.setName(this.getNameOfContact(c));
 				cResultVector.addElement(c);
 			}
@@ -1102,7 +1203,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		if (cResultVector.isEmpty())
 			System.out.println("# no contact found");
-
+//		cResultVector.sort(new BOCompare());
 		return cResultVector;
 	}
 	
@@ -1179,6 +1280,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (Participation part : participationVector) {
 			ContactList cl = (ContactList) part.getReferencedObject(); 
 			if (cl != null) {
+				cl.setOwner(this.getUserByID(cl.getOwner().getGoogleID()));
 				clResultVector.addElement(cl);
 			}
 		}
@@ -1197,6 +1299,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (ContactList cl : this.getAllCLSharedByMePrev()) {
 			vbo.add(cl);
 		}
+//		vbo.sort(new BOCompare());
 		return vbo;
 
 	}
@@ -1257,7 +1360,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 		if (contactResultVector.isEmpty())
 			System.out.println("# no contacts found");
-
+//		contactResultVector.sort(new BOCompare());
 		return contactResultVector;
 
 	}
@@ -1285,7 +1388,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				contactListVector.addElement(cl);
 			}
 		}
-
+//		contactListVector.sort(new BOCompare());
 		return contactListVector;
 
 	}
@@ -1402,6 +1505,40 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 	}
 	
+	/**
+	 * Methode zum vergleichen von BusinesObjects.
+	 * Wird verwendet um die ausgabe an den TreeView zu sortieren.
+	 * @author Oliver Gorges
+	 *
+	 */
+	public class BOCompare implements Comparator<BusinessObject>{
+
+			@Override
+			public int compare(BusinessObject o1, BusinessObject o2) {
+				// TODO Auto-generated method stub
+				String s1 = "", s2 = "";
+				// Wandelt ein ContactList-Objekt in einen String um
+				if(o1 instanceof ContactList){
+					s1 = ((ContactList) o1).getName();
+				}else if(o2 instanceof ContactList){
+					s2 = ((ContactList) o2).getName();
+				}
+				// Wandelt ein Contact-Objekt in einen String um
+				if(o1 instanceof Contact){
+					s1 = ((Contact) o1).getName().getValue();
+				}else if(o2 instanceof Contact){
+					s2 = ((Contact) o2).getName().getValue();
+				}
+				// Wandelt ein PropertyValue-Objekt in einen String um
+				if(o1 instanceof PropertyValue){
+					s1 = ((PropertyValue) o1).getValue();
+				}else if(o2 instanceof PropertyValue){
+					s2 = ((PropertyValue) o2).getValue();
+				}
+				
+				return s1.compareTo(s2);
+			}
+	}
 	
 
 }

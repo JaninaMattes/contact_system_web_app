@@ -76,6 +76,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList createContactList(ContactList cl);
 	
 	public Participation createParticipation(Participation part);
+	
+	public Property createProperty(Property p);
 
 	/**
 	 * Update
@@ -86,6 +88,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList editContactList(ContactList cl);
 	
 	public Participation editParticpation(Participation part);
+	
+	public Property editProperty(Property p);
 		
 	/**
 	 * Delete
@@ -99,6 +103,8 @@ public interface ContactSystemAdministration extends RemoteService {
 	public ContactList removeContactFromList(Contact contact, ContactList contactList);
 
 	public Participation deleteParticipation(Participation part);
+	
+	public Property deleteProperty(Property p);
 	
 	/*
 	 * Get all
