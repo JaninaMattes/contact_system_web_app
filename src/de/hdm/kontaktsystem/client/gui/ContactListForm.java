@@ -146,8 +146,8 @@ public class ContactListForm extends VerticalPanel {
 		shareDialogvp.add(labelShare);
 		shareDialogvp.add(email);
 		shareDialogvp.add(shareDialoghp);
-		shareDialoghp.add(cancelShareButton);
 		shareDialoghp.add(okButton);
+		shareDialoghp.add(cancelShareButton);
 		shareDialog.add(shareDialogvp);
 		shareDialog.center();
 		shareDialog.setVisible(false);
@@ -505,7 +505,7 @@ public class ContactListForm extends VerticalPanel {
 						if(update){
 							contactSystemAdmin.removeContactFromList(conToDelete, contactListToDisplay,
 									new deleteConfromListCallback());
-							tvm.removeFromLeef(con);
+							tvm.removeFromLeef(contactListToDisplay.getBoId(), con);
 						}else{
 							// Bei neuen Listen wird der Kontakt aus dem Vector entfernt;
 							contactListToDisplay.getContacts().remove(conToDelete);
@@ -773,7 +773,7 @@ public class ContactListForm extends VerticalPanel {
 			log("Hinzuzufügender Kontakt zu Kontaktliste: " + c.toString());
 			contactSystemAdmin.addContactToList(c, contactListToDisplay,
 					new ContactsToAddClCallback());
-			tvm.addToLeef(c);
+			tvm.addToLeef(contactListToDisplay.getBoId(), c);
 		}else{
 			// Neuen KontaktListen kann der Kontakt noch ncitn über einen Callback hinzugefügt wrden, da die liste in der Datenbank noch nicht existiert.
 			// Der Kontakt wird bei der erstellung der Liste aus dem Vector im Listen Objekt ausgelesen und zur liste hinzugefügt.
