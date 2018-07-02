@@ -154,29 +154,19 @@ public class CellTreeViewModel implements TreeViewModel {
 		dpMap.get(0).refresh();
 	}
 	
-	public void updateRoot(BusinessObject bo){
-		log("Update root");
-		if(dpMap.get(0).getList().contains(bo)){
-			int index = 0;
-			for(BusinessObject listElement : dpMap.get(0).getList()){
-				if(listElement.equals(bo)) break;
-				index++;
-			}
-			dpMap.get(0).getList().set(index, bo);
-			dpMap.get(0).refresh();
-		}
-					
-	}
-	public void updateLeef(int key, BusinessObject bo){
+	
+	public void updateBO(BusinessObject bo){
 		log("Update Leef");		
-		if(dpMap.get(key).getList().contains(bo)){
-			int index = 0;
-			for(BusinessObject listElement : dpMap.get(0).getList()){
-				if(listElement.equals(bo)) break;
-				index++;
+		for(Integer i : dpMap.keySet()){
+			if(dpMap.get(i).getList().contains(bo)){
+				int index = 0;
+				for(BusinessObject listElement : dpMap.get(0).getList()){
+					if(listElement.equals(bo)) break;
+					index++;
+				}
+				dpMap.get(i).getList().set(index, bo);
+				dpMap.get(i).refresh();
 			}
-			dpMap.get(key).getList().set(index, bo);
-			dpMap.get(key).refresh();
 		}
 			
 	}
@@ -209,10 +199,12 @@ public class CellTreeViewModel implements TreeViewModel {
 	 * @param bo
 	 */
 	
-	public void removeFromRoot(BusinessObject bo){
-		log("Delete from root");
-		dpMap.get(0).getList().remove(bo);
-		dpMap.get(0).refresh();
+	public void removeBO(BusinessObject bo){
+		log("Delete from Tree");
+		for(Integer i : dpMap.keySet()){
+			dpMap.get(i).getList().remove(bo);
+			dpMap.get(i).refresh();
+		}
 		
 	}
 	

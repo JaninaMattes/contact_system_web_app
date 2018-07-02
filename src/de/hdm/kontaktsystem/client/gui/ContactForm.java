@@ -93,7 +93,7 @@ public class ContactForm extends VerticalPanel {
 		Button shareButton = new Button("Teilen");
 		Button addButton = new Button("Hinzufügen");
 		Button editButton = new Button("Bearbeiten");
-		Button editPartButton = new Button("Bearbeiten");
+		Button editPartButton = new Button("Teilhaberschaft bearbeiten");
 		//Button cancelButton = new Button("Abbrechen"); // Teilen abbrechen
 		Button okButton = new Button("Teilen");
 		Button cancelNewButton = new Button("Abbrechen");
@@ -137,10 +137,14 @@ public class ContactForm extends VerticalPanel {
 			final User user = new User();
 			
 			//CSS
-			addButton.getElement().setId("addedit");
-			editPartButton.getElement().setId("addedit");
+			addButton.setStyleName("sideButton");
+			editPartButton.setStyleName("sideButton");
 			sharedWithUser.setStyleName("ListBox");
 			gp.getElement().setId("grid-panel");
+			contactStatus.setStyleName("Label");
+			labelAddElement.getElement().setId("labelfeldhinzu");
+			addElement.setStyleName("ListBox");
+			cLabel.getElement().setId("ueberschriftlabel");
 			
 			// Main Buttonpanels
 			okButton.setStyleName("mainButton");
@@ -150,6 +154,7 @@ public class ContactForm extends VerticalPanel {
 			createButton.setStyleName("mainButton");
 			deleteButton.setStyleName("mainButton");
 			cancelNewButton.setStyleName("mainButton");
+			deletePartButton.setStyleName("mainButton");
 			cancelEditButton.setStyleName("mainButton");
 			cancelShareButton.setStyleName("mainButton");
 			
@@ -158,10 +163,6 @@ public class ContactForm extends VerticalPanel {
 			editPanel.setStyleName("mainButtonPanel");
 			sharePanel.setStyleName("mainButtonPanel");
 			
-			contactStatus.setStyleName("Label");
-			labelAddElement.getElement().setId("labelfeldhinzu");
-			addElement.setStyleName("ListBox");
-			cLabel.getElement().setId("ueberschriftlabel");
 			
 			//Teilhaberschaften
 			labelSharedWith.setVisible(false);
@@ -289,14 +290,14 @@ public class ContactForm extends VerticalPanel {
 						@Override
 						public void onFailure(Throwable caught) {
 							loadPanel.setVisible(false);
-							log("Teilhaberschaft kann nicht gelöscht werden");
+							ContactSystem.triggerNotify("Teilhaberschaft kann nicht gelöscht werden");
 						}
 
 						@Override
 						public void onSuccess(Participation result) {
 							loadPanel.setVisible(false);
 							sharedWithUser.removeItem(sharedWithUser.getSelectedIndex());
-							log("Teilhaberschaft wurde gelöscht");
+							ContactSystem.triggerNotify("Teilhaberschaft wurde gelöscht");
 							
 						}
 						
@@ -406,15 +407,15 @@ public class ContactForm extends VerticalPanel {
 								@Override
 								public void onFailure(Throwable caught) {
 									loadPanel.setVisible(false);
-									Window.alert("Der Kontakt konnte nicht gelöscht werden.");
+									ContactSystem.triggerNotify("Der Kontakt konnte nicht gelöscht werden.");
 								}
 		
 								@Override
 								public void onSuccess(Contact result) {
+									ContactSystem.triggerNotify("Kontakt gelöscht");
 									loadPanel.setVisible(false);
 									contactToDisplay= null;
-									tvm.removeFromRoot(result);
-									tvm.removeFromLeef(0, result);
+									tvm.removeBO(result);
 									RootPanel.get("Details").clear();
 								}						
 							});
@@ -481,13 +482,13 @@ public class ContactForm extends VerticalPanel {
 							@Override
 							public void onFailure(Throwable caught) {
 								loadPanel.setVisible(false);
-								log("Teilhaberschaft kann nicht bearbeitet werden");
+								ContactSystem.triggerNotify("Teilhaberschaft kann nicht bearbeitet werden");
 							}
 
 							@Override
 							public void onSuccess(Participation result) {
 								loadPanel.setVisible(false);
-								log("Teilhaberschaft wurde bearbeitet");
+								ContactSystem.triggerNotify("Teilhaberschaft wurde bearbeitet");
 								
 							}
 							
@@ -631,7 +632,7 @@ public class ContactForm extends VerticalPanel {
 					tb.setStyleName("TextBox");					
 					tb.setTitle("Neu:"+p.getId());
 					cb.setTitle("Neu:"+p.getId());
-					
+					cb.setVisible(false);
 					tbv.add(tb);
 					cbv.add(cb);
 					
@@ -769,7 +770,6 @@ public class ContactForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Contact result) {
-						log("############ Callback Kontakt Pvs: "+ result.getPropertyValues());
 						contactToDisplay= result;	
 						
 						
@@ -998,10 +998,9 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onSuccess(Contact result) {
 				loadPanel.setVisible(false);
-				log("####### Der Kontakt wurde gespeichert: "+result);
+				ContactSystem.triggerNotify("Der Kontakt wurde gespeichert");
 				if(edit){
-					tvm.updateRoot(result); 
-					tvm.updateLeef(0, result); 
+					tvm.updateBO(result); 
 				}else{
 					log("Add New Contact to Root");
 					tvm.addToRoot(result);
@@ -1023,7 +1022,7 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onFailure(Throwable caught) {
 				loadPanel.setVisible(false);
-				Window.alert("Kontakt konnte nicht geteilt werden. \n"+caught.getStackTrace().toString());						
+				ContactSystem.triggerNotify("Kontakt konnte nicht geteilt werden. ");						
 			}
 
 			@Override
@@ -1031,9 +1030,8 @@ public class ContactForm extends VerticalPanel {
 				loadPanel.setVisible(false);
 				sharedWithUser.addItem(result.getParticipant().getGMail());
 				
-				defaultGui(); // Zurück zur Standard Gui
-				log("Neue Teilhaberschaft: " + result);	
-				Window.alert("Der Kontakt wurde geteilt.");
+				defaultGui(); // Zurück zur Standard Gui	
+				ContactSystem.triggerNotify("Der Kontakt wurde geteilt.");
 			}				
 		}
 		

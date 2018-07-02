@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -56,6 +57,8 @@ public class ContactListForm extends VerticalPanel {
 
 	// Share DialogBox
 	DialogBox shareDialog = new DialogBox();
+	
+	
 
 	/**
 	 * Widgets um die Attribute einer Kontaktliste anzuzeigen.
@@ -91,6 +94,7 @@ public class ContactListForm extends VerticalPanel {
 	ListBox contactNames = new ListBox();
 	ListBox contactsToAdd = new ListBox();
 	TextBox email = new TextBox();
+	
 
 	/**
 	 * Wenn update = True, ContactListForm neu anlegen wenn update = false
@@ -108,7 +112,7 @@ public class ContactListForm extends VerticalPanel {
 		 * Grid auf das die Widgets für das Kontaktformular aufgesetzt werden
 		 */
 
-		Grid contactListGrid = new Grid(8, 3);
+		Grid contactListGrid = new Grid(6, 3);
 		this.add(contactListGrid);
 		this.add(btnPanel);
 		
@@ -153,11 +157,22 @@ public class ContactListForm extends VerticalPanel {
 		shareDialog.setVisible(false);
 		this.add(shareDialog);
 	
-		nameContactList.getElement().setId("ListBox");
+		nameContactList.setStyleName("ListBox");
 		nameContactList.setStyleName("TextBox");
-		contactsToAdd.getElement().setId("ListBox");
-		contactNames.getElement().setId("ListBox");
-		listBoxShareWith.getElement().setId("ListBox");
+		contactsToAdd.setStyleName("ListBox");
+		contactNames.setStyleName("ListBox");
+		listBoxShareWith.setStyleName("ListBox");
+		
+		/*
+		 * Css für die Labels
+		 */
+		contactListLabel.setStyleName("Label");
+		contactListStatus.setStyleName("Label");
+		contactListStatusValue.setStyleName("Label");
+		contactLabel.setStyleName("Label");
+		labelAddConsToList.setStyleName("Label");
+		labelSharedWith.setStyleName("Label");
+		labelReceivedFrom.setStyleName("Label");
 		
 		/**
 		 * Panel für Anordnung der Buttons
@@ -200,26 +215,25 @@ public class ContactListForm extends VerticalPanel {
 		contactsToAdd.setStyleName("ListBox");
 
 		labelShare.getElement().setId("teilenlabel");
-		contactListStatus.getElement().setId("contactstatus");
+		contactListStatus.setStyleName("label");
 
 		// Buttons in CSS
 		// delete + share + save-Buttons müssen jeweils auch gleich sein
 
-		addConToList.getElement().setId("addedit");
-		unShareButton.removeStyleName("gwt-Button"); // um den von GWT für Buttons vorgegebenen Style zu l�schen
-		unShareButton.getElement().setId("deleteCLCButton");
-		deleteConButton.getElement().setId("deleteButton");
+		addConToList.setStyleName("sideButton");
+		unShareButton.setStyleName("sideButton");
+		deleteConButton.setStyleName("sideButton");
 		
 		
 		// Style der Hauptbuttons
 		saveButton.setStyleName("mainButton");
 		shareButton.setStyleName("mainButton");
-		deleteClButton.setStyleName("mainButton");
 		btnPanel.setStyleName("mainButtonPanel");
-		
+		deleteClButton.setStyleName("mainButton");
+		cancelNewButton.setStyleName("mainButton");
 		
 	
-		deleteConButton.getElement().setId("deleteCLCButton");
+		deleteConButton.setStyleName("sideButton");
 		
 		
 
@@ -282,7 +296,7 @@ public class ContactListForm extends VerticalPanel {
 			if (cl != null) {
 				tvm.addToRoot(cl);
 				tvm.setSelectedContactContactlist(cl);
-				Window.alert("Neue Kontaktliste gespeichert!");
+				ContactSystem.triggerNotify("Neue Kontaktliste gespeichert!");
 			}
 
 		}
@@ -308,9 +322,9 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onSuccess(ContactList cl) {
 			if (cl != null) {
-				tvm.updateRoot(cl);
+				tvm.updateBO(cl);
 				setSelected(cl);
-				Window.alert("Kontaktliste gespeichert!");
+				ContactSystem.triggerNotify("Kontaktliste gespeichert!");
 			}
 		}
 	}
@@ -403,7 +417,7 @@ public class ContactListForm extends VerticalPanel {
 					@Override
 					public void onFailure(Throwable caught) {
 						loadPanel.setVisible(false);
-						Window.alert("User nicht gefunden");
+						Window.alert("User wurde nicht gefunden");
 					}
 
 					@Override
@@ -432,17 +446,17 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onFailure(Throwable caught) {
 			loadPanel.setVisible(false);
-			Window.alert("Teilen fehlgeschlagen: " + caught);
+			ContactSystem.triggerNotify("Teilen fehlgeschlagen ");
 		}
 
 		// @Override
 		public void onSuccess(Participation result) {
+			ContactSystem.triggerNotify("Die Liste wurde geteilt");
 			loadPanel.setVisible(false);
 			labelSharedWith.setVisible(true);
 			listBoxSharedWith.setVisible(true);
 			unShareButton.setVisible(true);
 			User userSharedWith = result.getParticipant();
-			log("Liste wurde mit " + result.getParticipant() + " geteilt");
 			listBoxSharedWith.addItem(userSharedWith.getGMail());
 
 		}
@@ -459,13 +473,13 @@ public class ContactListForm extends VerticalPanel {
 		@Override
 		public void onFailure(Throwable caught) {
 			loadPanel.setVisible(false);
-			Window.alert("Teilhaberschaft löschen ist fehlgeschlagen: " + caught);
+			ContactSystem.triggerNotify("Teilhaberschaft löschen ist fehlgeschlagen: ");
 		}
 
 		@Override
 		public void onSuccess(Participation result) {
 			loadPanel.setVisible(false);
-			log("Teilhaberschaft gelöscht");
+			ContactSystem.triggerNotify("Teilhaberschaft gelöscht");
 
 			listBoxSharedWith.removeItem(listBoxSharedWith.getSelectedIndex());
 
@@ -488,14 +502,13 @@ public class ContactListForm extends VerticalPanel {
 			} else {
 				Vector<Contact> conVec = new Vector<Contact>();
 
-				Integer lbItemIndex = contactNames.getSelectedIndex();
-				String contactName = contactNames.getValue(lbItemIndex);
+				int contactID = Integer.parseInt(contactNames.getSelectedValue());
 
 				// Suche und Rückgabe nach Kontakt aus Kontaktliste, der mit ausgewählten
 				// Kontakt aus ListBox übereinstimmt
-				log("Romove Contact: " + contactName);
 				for (Contact con : contactListToDisplay.getContacts()) {
-					if (con.getName().getValue().equals(contactName)) {
+					if (con.getBoId() == contactID) {
+
 						Contact conToDelete = con;
 						// Der Callback kann nur bei bestehenden listen durchgeführt werden.
 						if(update){
@@ -524,13 +537,13 @@ public class ContactListForm extends VerticalPanel {
 	private class deleteConfromListCallback implements AsyncCallback<ContactList> {
 
 		public void onFailure(Throwable caught) {
-			Window.alert("Entfernen des Kontakts aus Liste fehlgeschlagen");
+			ContactSystem.triggerNotify("Entfernen des Kontakts fehlgeschlagen");
 		}
 
 		public void onSuccess(ContactList result) {
 			if (result != null) {
 				setSelected(result);
-				Window.alert("Kontakt wurde erfolgreich aus der Liste entfernt");
+				ContactSystem.triggerNotify("Kontakt wurde aus der Liste entfernt");
 			}
 		}
 	}
@@ -580,7 +593,7 @@ public class ContactListForm extends VerticalPanel {
 			if (clPart != null) {
 				// log(clPart.toString());
 				setSelected(null);
-				tvm.removeFromRoot(clPart);
+				tvm.removeBO(clPart);
 				Window.alert("Teilhaberschaft der Kontaktliste gelöscht!");
 			}
 		}
@@ -606,8 +619,8 @@ public class ContactListForm extends VerticalPanel {
 			if (result != null) {
 				setSelected(null);
 				RootPanel.get("Details").clear();
-				tvm.removeFromRoot(result);
-				Window.alert("Kontaktliste gelöscht!");
+				tvm.removeBO(result);
+				ContactSystem.triggerNotify("Kontaktliste gelöscht!");
 			}
 		}
 	}
@@ -624,7 +637,7 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("Der Aufruf der Nutzer ist misglückt! :( ");
+			Window.alert("Der Aufruf der Nutzer ist misglückt! ");
 		}
 
 		@Override
@@ -640,7 +653,7 @@ public class ContactListForm extends VerticalPanel {
 				}
 
 			} else {
-				Window.alert("Kein Nutzer gefunden :(");
+				Window.alert("Kein Nutzer gefunden");
 			}
 		}
 	}
@@ -656,7 +669,7 @@ public class ContactListForm extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("Der Aufruf der Nutzer ist misglückt! :( ");
+			Window.alert("Der Aufruf der Nutzer ist misglückt! ");
 		}
 
 		@Override
@@ -723,8 +736,8 @@ public class ContactListForm extends VerticalPanel {
 			} else {
 
 				// Extraktion des ausgewählten Kontakts als String
-				Integer lbItemIndex = contactsToAdd.getSelectedIndex();
-				final String contactToAddName = contactsToAdd.getValue(lbItemIndex);
+				
+				final int contactToAddID = Integer.parseInt(contactsToAdd.getSelectedValue());
 				log("Add new Contact");
 				
 				contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
@@ -738,22 +751,21 @@ public class ContactListForm extends VerticalPanel {
 					public void onSuccess(Vector<Contact> allConFromUser) {
 
 						for (Contact conFromUser : allConFromUser) {
-							log("-----"+conFromUser.getName());
 							// Wenn ausgewählter Contact aus Listbox mit einem der Contacte des Users übereinstimmt
-							if (conFromUser.getName().getValue().equals(contactToAddName)) {
+							if (conFromUser.getBoId() == contactToAddID) {
 								
-								log("Add: " + contactToAddName);
 								if (contactListToDisplay.getContacts().size() > 0) { // Eine leere Liste muss nicht
 									// überprüft werden und hinzuzufügender Kontakt nicht bereits als Kontakt in Kontaktlist vorhanden
 									if(contactListToDisplay.getContacts().contains(conFromUser)){		
-										Window.alert("Kontakt bereits in Kontaktliste vorhanden");
+										ContactSystem.triggerNotify("Kontakt bereits in Kontaktliste vorhanden");
 									} else {
 										addContact(conFromUser);
+										break;
 									}
 									
 								} else {
 									addContact(conFromUser);
-									
+									break;
 								}
 							}
 						}
@@ -770,18 +782,18 @@ public class ContactListForm extends VerticalPanel {
 	private void addContact(Contact c){
 		if(update){
 			// Bei bestehende listen wird der Kontakt direkt übe reinen Callback der Liste hinzugefügt.
-			log("Hinzuzufügender Kontakt zu Kontaktliste: " + c.toString());
 			contactSystemAdmin.addContactToList(c, contactListToDisplay,
 					new ContactsToAddClCallback());
 			tvm.addToLeef(contactListToDisplay.getBoId(), c);
 		}else{
 			// Neuen KontaktListen kann der Kontakt noch ncitn über einen Callback hinzugefügt wrden, da die liste in der Datenbank noch nicht existiert.
 			// Der Kontakt wird bei der erstellung der Liste aus dem Vector im Listen Objekt ausgelesen und zur liste hinzugefügt.
-			log("Hinzuzufügender zu neuer Kontaktliste: " + c.toString());
-			this.contactNames.addItem(c.getName().getValue(), c.getBoId()+"");
+			ContactSystem.triggerNotify("Kontakt hinzugefügt");
+			contactNames.addItem(c.getName().getValue(), c.getBoId()+"");
 			contactListToDisplay.addContact(c);
 			
 		}
+		
 	}
 	
 
@@ -801,19 +813,16 @@ public class ContactListForm extends VerticalPanel {
 		}
 
 		@Override
-		public void onSuccess(ContactList result) {
-			contactNames.clear();
-			log("Kontaktliste aus Callback" + result);
+		public void onSuccess(ContactList result) {			
 			if (result != null) {
+				contactListToDisplay = result;
+				contactNames.clear();
 				Vector<Contact> resultCon = result.getContacts();
-				log(resultCon.size() + " Kontakte in der Liste");
 				for (Contact con : resultCon) {
-					contactNames.addItem(con.getName().getValue());
+					contactNames.addItem(con.getName().getValue(), con.getBoId()+"");
 				}
-
-			} else {
-				Window.alert("Kontakt konnte nicht hinzugefügt werden!");
-			}
+				ContactSystem.triggerNotify("Kontakt hinzugefügt");
+			} 
 		}
 
 	}
@@ -841,7 +850,7 @@ public class ContactListForm extends VerticalPanel {
 			contactsToAdd.clear();
 			if (result != null) {
 				for (Contact con : result) {
-					contactsToAdd.addItem(con.getName().getValue());
+					contactsToAdd.addItem(con.getName().getValue(), con.getBoId()+"");
 
 				}
 			} else {
@@ -921,7 +930,7 @@ public class ContactListForm extends VerticalPanel {
 					
 					int count = 0;
 					for (Contact con : list.getContacts()) {
-						contactNames.addItem(con.getName().getValue());
+						contactNames.addItem(con.getName().getValue(), con.getBoId()+"");
 
 					}
 	

@@ -814,10 +814,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public Participation createParticipation(Participation part) {
 		Participation participation = partMapper.insertParticipation(part);
-		boMapper.setStatusTrue(participation.getReferenceID());
+		boMapper.setStatusTrue(part.getReferenceID());
+		
 		if(part.getReferencedObject() instanceof Contact){
 			// Teilt nur Eigenscaftsausprägungen die sich aktuell in dem Contact-Objekt befinden und wenn der Kontakt nicht vollständig geteilt wurde
-			if(((Contact) part.getReferencedObject()).getPropertyValues() != null && !part.getShareAll()){
+			if( !part.getShareAll() && ((Contact) part.getReferencedObject()).getPropertyValues() != null){
 				// Teilt alle Eienscaftsausprägungen die sich in der Lite Befinden mit dem Nutzer
 				for(PropertyValue pv : ((Contact) part.getReferencedObject()).getPropertyValues()){
 					Participation partPV = new Participation();
