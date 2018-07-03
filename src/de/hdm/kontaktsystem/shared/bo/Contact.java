@@ -4,9 +4,8 @@ import java.util.Vector;
 
 /**
  * Die Klasse Contact stellt die Kontakte dar, die von einem User erstellt werden bzw. auf welche ein User zugreifen kann, 
-sowie den User selbst.
+ * sowie den User selbst.
  * @author Katalin Wagner
- *
  */
 
 
@@ -19,12 +18,12 @@ public class Contact extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Eigenschaftsausprägungen des Kontakts
+	 * Eigenschaftsauspraegungen des Kontakts
 	 */
 	
 	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 	
-	/*
+	/**
 	 * Name eines Kontaktes
 	 */
 	private PropertyValue name = null;	
@@ -32,15 +31,14 @@ public class Contact extends BusinessObject {
 
 	/**
 	 * Kontruktoren
-	 * 
 	 */
 	public Contact() {
 	
 	}
 	
 	/**
-	 * Konstruktor muss mindestens das Setzen einer Eigenschaftsausprägung erzwingen.
-	 * Die erzwungene Eigenschaftsausprägung enthält mindestens den Namen eines Kontaktes.
+	 * Konstruktor muss mindestens das Setzen einer Eigenschaftsauspraegung erzwingen.
+	 * Die erzwungene Eigenschaftsauspraegung enthaelt mindestens den Namen eines Kontaktes.
 	 * Der Kontakt <code>Contact</code> darf nie leer angelegt werden. 
 	 * 
 	 */
@@ -76,7 +74,7 @@ public class Contact extends BusinessObject {
 		return name;
 	}
 
-	/*
+	/**
 	 * Setzen eines PropertyValue Objektes
 	 */
 	
@@ -85,7 +83,7 @@ public class Contact extends BusinessObject {
 	}
 
 	/**
-	 * Einzelne PropertyValue -Objekte dem Vector hinzufügen
+	 * Einzelne PropertyValue -Objekte dem Vector hinzufuegen
 	 * @param pv
 	 */
 	
@@ -103,14 +101,13 @@ public class Contact extends BusinessObject {
 	}
 	
 	
-	
+	 /**
+	  * Die toString Methode gibt die Attribute der <code>Contact</code> Klasse textuell aus.
+	  * Sie gibt die das User Objekt als String zurueck.
+	  */
 	@Override
 	public String toString() {
 
-//		if(propertyValues.isEmpty()){
-//			return "Contact [owner=" + getOwner() + ", id=" + getBo_Id() + ", Eigenschaft = leer Ausprägung = leer ]";
-//		}
-		
 		return "Contact [owner=" + getOwner() + ", id=" + super.getBoId() + ", Eigenschaft = "
 				+ propertyValues + "]";
 	}
@@ -118,10 +115,8 @@ public class Contact extends BusinessObject {
 	
 	 /**
 	 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
-	 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
-	 * der ID des Objekts.
-	 * Dies überschreibt die Methode hashCode() der Klasse Object.
-	 * 
+	 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber der ID des Objekts.
+	 * Dies ueberschreibt die Methode hashCode() der Klasse Object.
 	 */
  
 	@Override
@@ -131,7 +126,8 @@ public class Contact extends BusinessObject {
 	
 	
 	/**
-	 * equals Methode
+	 * Prueft, ob ein Objekt einem User Objekt gleicht.
+	 * Gleichheit bedeutet hier, dass alle Attribute der Objekte uebereinstimmen.
 	 */
 	
 	@Override
