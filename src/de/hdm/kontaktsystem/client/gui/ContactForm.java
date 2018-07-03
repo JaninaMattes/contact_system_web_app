@@ -51,7 +51,7 @@ public class ContactForm extends VerticalPanel {
 		User myUser = null;
 		User editPartUser = null;
 		
-		// Lade overlay
+		// Lade Overlay
 		PopupPanel loadPanel;
 		
 		
@@ -73,20 +73,22 @@ public class ContactForm extends VerticalPanel {
 		final VerticalPanel vp  = new VerticalPanel();
 				
 		HorizontalPanel newPanel = new HorizontalPanel(); // Buttons zum anlegen eines Kontakts
-		HorizontalPanel sharePanel = new HorizontalPanel();// Buttons zum Teilen eines Kontakts
+		HorizontalPanel sharePanel = new HorizontalPanel();// Buttons zum teilen eines Kontakts
 		HorizontalPanel editPanel = new HorizontalPanel();// Buttons zum bearbeiten eines Kontakts
-		HorizontalPanel btnPanel = new HorizontalPanel(); // Standart Buttons
-		HorizontalPanel gpPanel = new HorizontalPanel();
+		HorizontalPanel btnPanel = new HorizontalPanel(); // Standard Buttons
+		HorizontalPanel gpPanel = new HorizontalPanel(); // Grid in dem Bedienelemente mit Listboxen für das Formular
 		Grid gp = new Grid(4,3);
 		
-		Label cLabel = new Label("Kontakt:");
+		Label cLabel = new Label("Kontakt:"); // Überschrift
 		
+		// Labels des GridPanels gp
 		Label labelShare = new Label("Kontakt teilen mit: ");
 		Label labelSharedWith = new Label("Kontakt Teilhaber: ");
 		Label labelReceivedFrom = new Label("Kontakt Ersteller: ");
 		Label labelAddElement = new Label("Ein weiteres Feld hinzufügen:");
 		Label contactStatus = new Label("");
 				
+		// Button Elemente aus den ButtonPanels und dem GridPanel
 		Button deleteButton = new Button("Löschen");
 		Button deletePartButton = new Button("Löschen");
 		Button saveButton = new Button("Speichern");
@@ -94,7 +96,6 @@ public class ContactForm extends VerticalPanel {
 		Button addButton = new Button("Hinzufügen");
 		Button editButton = new Button("Bearbeiten");
 		Button editPartButton = new Button("Teilhaberschaft bearbeiten");
-		//Button cancelButton = new Button("Abbrechen"); // Teilen abbrechen
 		Button okButton = new Button("Teilen");
 		Button cancelNewButton = new Button("Abbrechen");
 		Button cancelEditButton = new Button("Abbrechen");
@@ -106,7 +107,8 @@ public class ContactForm extends VerticalPanel {
 
 		TextBox email = new TextBox();
 		TextBox newProperty = new TextBox();
-								
+				
+		// Werte zur überprüfung, in welcher ansicht man sic aktuell befindet
 		boolean edit = false;
 		boolean editPart = false;
 		
@@ -117,11 +119,6 @@ public class ContactForm extends VerticalPanel {
 		 */
 		
 		public void onLoad(){
-//			vp.clear();
-//			
-//			super.onLoad();
-//			this.add(vp);
-			log("Kontakt Formular Laden");
 			
 		}
 		
@@ -129,6 +126,14 @@ public class ContactForm extends VerticalPanel {
 		 * Die Inhalte eines von der Datenbank abgerufenen Kontaktes, welcher über das Kontaktformular
 		 * zur Anzeige gebracht werdden soll, werden dynamisch mittels der Erzeugung von Feldern 
 		 * innerhalb eines <em>Flextables</em> erzeugt. 
+		 */
+		
+		/**
+		 * Beim Erstellen eines neuen ContactForm-Objekts werden die GWT-Elementen initalisiert.
+		 * Dabei werden den Elementen styles, andere Elemente, ClickHandler und weite Eigenschaften zugewiesen.
+		 * Diese zuweisung geschied global für alle Aufrufe, da im COntactSystem nur ein ContactForm-Objekt verwendet wird,
+		 * in dem die Daten der einzelnen Kontakte ausgetasucht werden.
+		 *  
 		 */
 		
 		public ContactForm() {
@@ -146,7 +151,7 @@ public class ContactForm extends VerticalPanel {
 			addElement.setStyleName("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
 			
-			// Main Buttonpanels
+			// Css der Main Buttons
 			okButton.setStyleName("mainButton");
 			saveButton.setStyleName("mainButton");
 			editButton.setStyleName("mainButton");
@@ -158,25 +163,21 @@ public class ContactForm extends VerticalPanel {
 			cancelEditButton.setStyleName("mainButton");
 			cancelShareButton.setStyleName("mainButton");
 			
+			// Css der Main Buttonpanels
 			btnPanel.setStyleName("mainButtonPanel");
 			newPanel.setStyleName("mainButtonPanel");
 			editPanel.setStyleName("mainButtonPanel");
 			sharePanel.setStyleName("mainButtonPanel");
 			
-			
-			//Teilhaberschaften
+			//Teilhaberschaften werden standardmäßig ausgeblendet
 			labelSharedWith.setVisible(false);
 			labelReceivedFrom.setVisible(false);			
 			sharedWithUser.setVisible(false);	
-			
-			
-			// Überschrift des DetailPanel;
-			cLabel.setText("Kontakt");	
+				
 			
 			/*
-		     * GridPanel für Abbildung der Teilhaber
+		     * GridPanel für Abbildung der Teilhaber und zum manipulation des ContactForms
 		     */								
-			
 			gp.setWidget(0, 0, labelAddElement);
 			gp.setWidget(0, 1, addElement);
 			gp.setWidget(0, 2, addButton);
@@ -247,7 +248,7 @@ public class ContactForm extends VerticalPanel {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					// Ändern der Standart Buttons
+					// Ändern der GUI zur bearbeitungs Ansicht
 					edit = true;
 					editGui();
 				}
@@ -266,6 +267,7 @@ public class ContactForm extends VerticalPanel {
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					// Anzeige der Gui Elemente, die es dem Nutzer ermöglichen, den Kontakt zu teilen
 					shareGui();
 					
 				}
@@ -273,13 +275,16 @@ public class ContactForm extends VerticalPanel {
 			});
 			
 			/**
-			 * 
+			 * Dieser Button wird nur in der "Teilhaberschft Bearbeiten (<code>editShareGui</code>)" angezeigt.
+			 * er gibt dem Kontaktbesitzer die Möglichkeit, die Teilhaberschaft eines Nutzers zu diesem Kontakts aufzulösen.
+			 * Es wird mit Dem aktuell ausgewählten <code>Contakt</code>-Objekt und dem aus der Listbox <code>sharedWithUser</code> ausgewählten Nutzer
+			 * eine Teilhaberschaft erzeugt, die über einen AsyncCallback der Applikationslogi über geben wird um die Teilhaberschft zu löschen.
 			 */
 			deletePartButton.addClickHandler(new ClickHandler(){
 				@Override
 				public void onClick(ClickEvent event) {
 					log("Teilhaberschaft bearbeiten");
-					
+					// erstellt ein neues Participation-Objekt, das die Teilhaberschft beinhaltet, die gelöscht werden soll.
 					Participation part = new Participation();
 					part.setShareAll(true);
 					part.setReference(contactToDisplay);
@@ -297,6 +302,12 @@ public class ContactForm extends VerticalPanel {
 						public void onSuccess(Participation result) {
 							loadPanel.setVisible(false);
 							sharedWithUser.removeItem(sharedWithUser.getSelectedIndex());
+							// Wenn das letzte element aus der Liste entfernt wurde, werden die dazugehörigen GUI elemente ausgeblendet
+							if(sharedWithUser.getItemCount()<1){
+								labelSharedWith.setVisible(false);
+								sharedWithUser.setVisible(false);
+								editPartButton.setVisible(false);
+							}
 							ContactSystem.triggerNotify("Teilhaberschaft wurde gelöscht");
 							
 						}
@@ -317,6 +328,10 @@ public class ContactForm extends VerticalPanel {
 			 * Service-Methode "createParticipation". Diese erhält als Übergabeparameter
 			 * ein <code>Participation</code> Objekt, welches den zuvor ausgewählten Nutzer, 
 			 * als auch das zu teilende, referenzierte <code>Contact</code> Objekt enthält. 
+			 * Das <code>Contact</code> Objekt enthält, wenn es vollständig geteilt wurde 
+			 * keine <code>PropertyValue</code> Objekte, wenn beim Teilen einelne Checkboxen 
+			 * ausgewählt wurden, werden in dem Kontakt die ausgewählten Eigenschaftsausprägungen
+			 * als <code>PropertyValue</code> Objekte abgelegt.
 			 * Durch die neu angelegte Teilhaberschaft können alle verändernden Aktivitäten 
 			 * (create, read, update, delete) an alle Teilhaber weitergegeben werden. 
 			 */
@@ -339,7 +354,7 @@ public class ContactForm extends VerticalPanel {
 							Participation part = new Participation();
 							Contact c = contactToDisplay;
 							boolean somethingChecked = false;
-							// Überprüft ob eine Checkbox ausgewählt wurde, wenn nicht dann wird derKontaktebenso vollständig geteilt
+							// Überprüft ob eine Checkbox ausgewählt wurde, wenn nicht, dann wird der Kontakt ebenso vollständig geteilt
 							for(CheckBox cb : cbv){
 								log("CB "+cb.getTitle() +" = "+cb.getValue());
 								if(cb.getValue()){
@@ -393,6 +408,8 @@ public class ContactForm extends VerticalPanel {
 			 * eines Nutzers zu der Löschung eines <code>Contact</code> Objektes aus 
 			 * der DB. Ist der Nutzer jedoch nur Teilhaber an dem ausgewählten Kontakt
 			 * so wird <em>nur</em> die damit verbundene Teilhaberschaft aus der DB gelöscht. 
+			 * Der Kontakt, der dem <code>User</code>-Objekt als eigener Kontakt zugewiesen wurde,
+			 * kann von den Nutzer nicht gelöscht werden. 
 			 */
 			
 			deleteButton.addClickHandler(new ClickHandler(){
@@ -428,8 +445,13 @@ public class ContactForm extends VerticalPanel {
 			});
 			
 			/**
+			 * Der Button <em>Speichern</em> besitzt im <code>ContaktForm</code> zwei Funktionen,
+			 * wenn sich der Nutzer in der "Kontakt bearbeiten" (<code>editGui</code>) befindet
+			 * speichert er die Änderungen an den <code>PropetyValue</code>-Objekten und 
+			 * in der "Teilhaberschaft bearbeiten" (<code>editShareGui</code>) die Auswahl an
+			 * geteilten <code>PropetyValue</code>-Objekten mit einem anderen Nutzer.
 			 * Bei Auswahl des Buttons <em>Speichern</em> erfolgt der Aufruf der
-			 * Service-Methode "editContact". Diese übergibt die neuen Werte aus den
+			 * Service-Methode "editContact" oder der Service-Methode "editParticipation". Diese übergibt die neuen Werte aus den
 			 * Textfeldern der <code>ContactForm</code> an die DB und speichert so 
 			 * Änderungen am dargestellten Kontakt. 
 			 * 
@@ -442,7 +464,7 @@ public class ContactForm extends VerticalPanel {
 				public void onClick(ClickEvent event) {
 				
 					loadPanel.setVisible(true);
-					if(editPart){
+					if(editPart){ // Funtionen in der editShareGui
 						log("Teilhaberschaft bearbeiten");
 						Contact c = new Contact();
 						c.setBo_Id(contactToDisplay.getBoId());
@@ -499,7 +521,7 @@ public class ContactForm extends VerticalPanel {
 							cb.setValue(false);
 						}
 						editPart = false;
-					}else{
+					}else{ // Funtionen in der editGui
 						// Speichern des bearbeiteten Kontakts
 						Vector<PropertyValue>editResult = new Vector<PropertyValue>();
 						if(contactToDisplay!=null) {
@@ -580,8 +602,8 @@ public class ContactForm extends VerticalPanel {
 								Window.alert("Das Feld 'Name's darf nicht leer sein.");
 								return;
 						 }
-						 if(!tb.getText().isEmpty()) {
-							 	Property p = new Property();//1.1.1.1 Erzeuge neuesObjekt		
+						 if(!tb.getText().isEmpty()) { // Es werden nut von gefüllten Textfeldern PropertyValues erzeugt.
+							 	Property p = new Property();		
 							 	String[]s=tb.getTitle().split(":");
 							 	
 							 	p.setId(Integer.parseInt(s[1]));
@@ -589,14 +611,14 @@ public class ContactForm extends VerticalPanel {
 								if(p.getId() == 0){
 									if(newProperty.getText() == ""){
 										log("Text ist Leer");
-										continue; // überpringt die neue Eigenschaft, da keine Beschreibung angegeben wurde
+										continue; // überspringt die neue Eigenschaft, da keine Beschreibung angegeben wurde
 									}
 									log("Neue Eigenschaft anlegen");
 									p.setDescription(newProperty.getText());
 								}else{
 									p.setDescription(s[0]);
 								}
-							 									
+							 	// Neue Eigenschaftsausprägung mit den Daten aus den Textfeldern anlegen							
 								PropertyValue ppv = new PropertyValue();
 								ppv.setContact(contactToDisplay);
 								ppv.setOwner(contactToDisplay.getOwner());
@@ -637,7 +659,6 @@ public class ContactForm extends VerticalPanel {
 					
 					p.setId(Integer.parseInt(addElement.getSelectedValue()));
 					
-					
 					TextBox tb = new TextBox();
 					CheckBox cb = new CheckBox();	
 					tb.setStyleName("TextBox");					
@@ -653,7 +674,7 @@ public class ContactForm extends VerticalPanel {
 					if(p.getId() == 0){
 						newProperty.getElement().setPropertyString("placeholder", "Neue Eigenschaft");
 						ft.setWidget(row, 0, newProperty);
-						// Entfernt die Möglichkeit eine neue eigenschaft an zu legen, da nur eine Eigenschaft auf einmal neu angelegt werden kann
+						// Entfernt die Möglichkeit eine neue Eigenschaft anzulegen, da nur eine Eigenschaft auf einmal neu angelegt werden kann
 						addElement.removeItem(addElement.getItemCount()-1); 
 					}else{
 						// Zeigt das Beschreibung der Eigenschaft an
@@ -680,12 +701,14 @@ public class ContactForm extends VerticalPanel {
 				@Override
 				public void onClick(ClickEvent event) {
 					loadPanel.setVisible(true);
+					// resettet alle Checkoxen
 					for(CheckBox cb: cbv) {
 						cb.setValue(false);
 					}
 					if(sharedWithUser.getSelectedIndex()>=0) {
 						String mail= sharedWithUser.getSelectedItemText();
 						log("Mail gefunden: "+mail);
+						// Sucht den Nutzer aus der Datenbank, von dem die Teilhaberschft bearbeitet werdne soll.
 						contactSystemAdmin.getUserBygMail(mail, new AsyncCallback<User>() {
 	
 							@Override
@@ -698,7 +721,7 @@ public class ContactForm extends VerticalPanel {
 							public void onSuccess(final User userResult) {
 								log("User abgerufen: "+userResult);
 								editPartUser = userResult;
-								
+								// Fragt alle mit em User geteielten Ausprägungen ab. 
 								contactSystemAdmin.getAllPVFromContactSharedWithUser(contactToDisplay, userResult, new AsyncCallback<Vector<PropertyValue>>(){
 							
 									@Override
@@ -713,6 +736,7 @@ public class ContactForm extends VerticalPanel {
 										editShareGui();
 										editPart = true;
 										loadPanel.setVisible(false);
+										// Wenn Eigenschaftsausprägungen geteilt wurden, werden diese angezeigt.
 										if(result.size() > 0){
 											for(PropertyValue pv: result) {
 													for(CheckBox cb: cbv) {
@@ -721,7 +745,7 @@ public class ContactForm extends VerticalPanel {
 															}												
 													}
 											}
-										}else{
+										}else{// Wenn Eigenschaftsausprägungen geteilt wurden, wurde der Kontakt vollständig geteilt.
 											log("All Shared");
 											for(CheckBox cb: cbv) {
 												cb.setValue(true);
@@ -749,9 +773,12 @@ public class ContactForm extends VerticalPanel {
 		 * Wenn der anzuzeigende Kontakt gesetzt, bzw. gelöscht wird, werden die 
 		 * zugehörigen Textfelder, ListBoxen und weiteren Elemente welche Informationen aus
 		 * dem Kontakt Objekt enthalten befüllt, oder analog dazu gelöscht. 
+		 * Dazu werden dem Nutzer die <code>defaultGui</code> Bedienelemente angezeigt.
 		 * 
 		 * Wird ein leeres Kontakt Objekt übergeben an die Methode, so wird zudem ein
 		 * leeres Kontaktformular zur Erzeugung neuer Kontakte dargestellt. 
+		 * Dazu werden dem Nutzer die <code>newGui</code> Bedienelemente angezeigt.
+		 * 
 		 * @param contact
 		 */
 		
@@ -768,10 +795,11 @@ public class ContactForm extends VerticalPanel {
 			
 			log("MyUser: "+ myUser);
 			
-			if(contact!=null) {
+			if(contact!=null) { // es wurde aus dem Treeview oder dem UserForm ein Contact-Objekt übergeben.
 				this.contactToDisplay = contact;
 				// Anzeigen der Standard Anzeige GUI Elemente
 				this.defaultGui();
+				// Abfrage der Applikationslogik, um das vollständige Contact-Objekt zu erhalten.
 				contactSystemAdmin.getContactById(contact.getBoId(), new AsyncCallback<Contact>() {
 				
 					@Override
@@ -852,13 +880,18 @@ public class ContactForm extends VerticalPanel {
 								row++;
 							}
 						}
-						
+						/*
+						 * Wenn der aktuelle Nutzer der Kontaktbesitzer ist, werden Ihm alle Teilhaber des Kontakts 
+						 * angezeigt und er erhält die möglichkeit, diese zu bearbeiten.
+						 * Wenn der aktuelle Nutzer ein Teilhaber des Kontakts ist, wir Ihm die Email des Besitzers angezeigt
+						 */
 						if(myUser.getGoogleID()!=result.getOwner().getGoogleID()) {
 							log("Kontakt Besitzer anzeigen: " +result.getOwner().getGMail());
 							labelReceivedFrom.setVisible(true);
 							labelReceivedFrom.setText("Geteilt von: "+result.getOwner().getGMail());
 						}else if(myUser.getGoogleID()==result.getOwner().getGoogleID()){	
 							log("My User: "+myUser.getGoogleID());
+							// Aufruf aller Teilhaber
 							contactSystemAdmin.getAllParticipationsByBusinessObject(contactToDisplay, new AsyncCallback<Vector<Participation>>() {
 
 								@Override
@@ -872,7 +905,7 @@ public class ContactForm extends VerticalPanel {
 								public void onSuccess(Vector<Participation> result) {
 									loadPanel.setVisible(false);
 									if(result.size()>0){
-
+										// Gui elemente werden nur angezeigt, wenn der Kontakt geteilt wurde.
 										labelSharedWith.setVisible(true);
 										sharedWithUser.setVisible(true);
 										editPartButton.setVisible(true);
@@ -907,7 +940,7 @@ public class ContactForm extends VerticalPanel {
 					contactStatus.setText("Status: Nicht geteilt");
 				}
 							
-				//Elemente füllen
+				//Listbox befüllen, in der der Nutzer neue Eigenschaften hinzufügen kann.
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
 
 					@Override
@@ -931,7 +964,7 @@ public class ContactForm extends VerticalPanel {
 					}
 				});
 							
-			} else if(contact==null) {
+			} else if(contact==null) { // Ein leeres Kontaktformular wird angezeigt, um einen neuen Kontakt anzulagen
 				
 				//Anzeigen der GUI Elemente die man für das anlegen eines neuen Kontakts benötigt
 				this.newGui();
@@ -997,6 +1030,12 @@ public class ContactForm extends VerticalPanel {
 			}
 		}
 
+		/**
+		 * Updatet das <code>Contact</code>-Objekt im Treeview und ruft das <code>ContactForm</code> mit dem gespeicherten Objekt auf.
+		 * Zudem wird dem Nutzer eine Notifikation zu der Speicherung angezeigt.
+		 *
+		 * @author Janina Mattes
+		 */
 		private class SaveCallback implements AsyncCallback<Contact> {
 
 			@Override
@@ -1025,6 +1064,8 @@ public class ContactForm extends VerticalPanel {
 		
 		/**
 		 * Eine neue Teilhaberschaft anlegen.
+		 * Die neue Teilhaberschaft wird 
+		 * Der Nutzer erhält eine Notifikation über das Ergebnis des Callbacks.
 		 * @author Janina Mattes
 		 *
 		 */
@@ -1033,20 +1074,35 @@ public class ContactForm extends VerticalPanel {
 			@Override
 			public void onFailure(Throwable caught) {
 				loadPanel.setVisible(false);
-				ContactSystem.triggerNotify("Kontakt konnte nicht geteilt werden. ");						
+				ContactSystem.triggerNotify("Kontakt konnte nicht geteilt werden.");						
 			}
 
 			@Override
 			public void onSuccess(Participation result) {
 				loadPanel.setVisible(false);
-				sharedWithUser.addItem(result.getParticipant().getGMail());
+				// Wenn der Nutzer der Besitzer ist, einlenden der Shared With Gui elemente
+				if(contactToDisplay.getOwner().equals(myUser)){
+					labelSharedWith.setVisible(true);
+					sharedWithUser.setVisible(true);
+					editPartButton.setVisible(true);
+					sharedWithUser.addItem(result.getParticipant().getGMail());
+				}
 				
 				defaultGui(); // Zurück zur Standard Gui	
 				ContactSystem.triggerNotify("Der Kontakt wurde geteilt.");
 			}				
 		}
 		
-		// Cancel Clickhandler
+		/**
+		 * 
+		 * Verwaltet die funktionder drei CancelButtons <code>cancelNewButton</code>, 
+		 * <code>cancelEditButton</code> und <code>cancelShareButton</code>
+		 * Bei den Buttons <code>cancelEditButton</code> und <code>cancelShareButton</code> 
+		 * wird die Gui auf die <code>defaultGui</code>  geändert.
+		 * Im falle des <code>cancelNewButton</code> wird das Kontaktform entfernt.
+		 * 
+		 * @author Janina Mattes
+		 */
 		private class CancelClickHandler implements ClickHandler{
 
 			@Override
@@ -1061,6 +1117,7 @@ public class ContactForm extends VerticalPanel {
 					// Wird neu geladen, da ansonsten der Flextable und dieVectoren überprüft / geleert werden müssten.
 					tvm.setSelectedContactContactlist(contactToDisplay);
 				}else{
+					// Entfernen der Selection im TreeView und leeren der Datail ansicht.
 					tvm.restSelection();
 					contactToDisplay = null;
 					RootPanel.get("Details").clear();
@@ -1070,16 +1127,27 @@ public class ContactForm extends VerticalPanel {
 		
 		/**
 		 * GUI Methoden
-		 * Bauen das Contactform je nach funktion um, dadruch soll die Übersichtlichkeit verbessert werden
+		 * Bauen das Contactform je nach funktion um. 
+		 * Dadruch soll die Übersichtlichkeit im Formular verbessert werden
 		 * @author Oliver Gorges
 		 */
 		
-		// Standart ansicht der GUI, Anzeige des Kontakts mit Teilhaber/Besitzer
+		/**
+		 * Standart ansicht der GUI, Anzeige des Kontakts mit Teilhaber/Besitzer
+		 */
 		private void defaultGui(){
+			
+			// Überschrift des DetailPanel;
+			cLabel.setText("Kontakt");
+			
+			// Ersetzt des eventuell gesetzte label gegen die Listbox zur auswahl von teilhaberschaften
+			gp.setWidget(1, 1, sharedWithUser);
+			
 			// Alle Elemente ausblenden
 			for(CheckBox cb : cbv){
 				cb.setVisible(false);
 			}
+			// Guielemente die ein oder ausgebletet werden
 			labelReceivedFrom.setVisible(false);
 			labelSharedWith.setVisible(false);
 			sharedWithUser.setVisible(false);
@@ -1112,8 +1180,15 @@ public class ContactForm extends VerticalPanel {
 			
 		}
 		
-		// GUI Elemente zum neu anlegen eines Kontakts
+		/**
+		 *  GUI Elemente zum neu anlegen eines Kontakts
+		 */
 		private void newGui(){
+			
+			// Überschrift des DetailPanel;
+			cLabel.setText("Neuen Kontakt anlegen");
+			
+			// Ausblenden von Gui Elementen
 			labelReceivedFrom.setVisible(false);
 			labelSharedWith.setVisible(false);
 			sharedWithUser.setVisible(false);
@@ -1136,20 +1211,30 @@ public class ContactForm extends VerticalPanel {
 		
 		// GUI Elemente zum Teilen eines Kontakts
 		private void shareGui(){
+			
+			// Überschrift des DetailPanel;
+			cLabel.setText("Kontakt teilen");
+			
+			// Entfernt den Teintrag aus der Email feld, falls das vorher noch noch nicht passiert ist
+			email.setText("");
+			
 			// Buttonpanels austauschen falls es vorher noch nicht passiert ist
 			vp.remove(editPanel);
 			vp.remove(btnPanel);
 			vp.remove(newPanel);
 			vp.add(sharePanel);
 			
+			// Ausblenden von Gui Elementen
 			labelSharedWith.setVisible(false);
 			sharedWithUser.setVisible(false);
 			editPartButton.setVisible(false);
 			labelReceivedFrom.setVisible(false);
 			
+			// Einblenden von Gui Elementen
 			labelShare.setVisible(true);
 			email.setVisible(true);
 			
+			// Wenn der Nutzer den Kontakt Teilen möchte, werden als Standard alle Ausprägungen geteilt.
 			for(CheckBox cb : cbv){
 				cb.setVisible(true);
 			}
@@ -1157,15 +1242,22 @@ public class ContactForm extends VerticalPanel {
 		
 		// GUI Elemente zum bearbeiten der Teilhaberschaft
 		private void editShareGui(){
+			
+			// Überschrift des DetailPanel;
+			cLabel.setText("Kontakt Teilhaberschaft bearbeiten");
+			
+			// Auswahlfeld gegen festes Textfeld ersetzten
+			gp.setWidget(1, 1, new Label(sharedWithUser.getSelectedItemText()));
+			
+			
 			// Buttonpanels austauschen falls es vorher noch nicht passiert ist
 			vp.remove(sharePanel);
 			vp.remove(btnPanel);
 			vp.remove(newPanel);
 			vp.add(editPanel);
 			
+			// Ausblenden von Gui Elementen
 			labelReceivedFrom.setVisible(false);
-//			labelSharedWith.setVisible(false);
-//			sharedWithUser.setVisible(false);
 			editPartButton.setVisible(false);
 			labelReceivedFrom.setVisible(false);
 			deletePartButton.setVisible(true);
@@ -1177,18 +1269,24 @@ public class ContactForm extends VerticalPanel {
 		
 		// Gui Elemente zum bearbeiten des Kontakts
 		private void editGui(){
+			
+			// Überschrift des DetailPanel;
+			cLabel.setText("Kontakt bearbeiten");
+			
 			// Buttonpanels austauschen falls es vorher noch nicht passiert ist
 			vp.remove(sharePanel);
 			vp.remove(btnPanel);
 			vp.remove(newPanel);
 			vp.add(editPanel);
 			
+			// Ausblenden von Gui Elementen
 			labelReceivedFrom.setVisible(false);
 			labelSharedWith.setVisible(false);
 			sharedWithUser.setVisible(false);
 			editPartButton.setVisible(false);
 			deletePartButton.setVisible(false);
 			
+			// Einblenden von Gui Elementen
 			labelAddElement.setVisible(true);
 			addElement.setVisible(true);
 			addButton.setVisible(true);
@@ -1224,7 +1322,7 @@ public class ContactForm extends VerticalPanel {
 		}
 		
 		/*
-		 * Logger
+		 * Logger für die Javascript Konsole.
 		 */
 		native void log(String s)/*-{
 		console.log(s);
