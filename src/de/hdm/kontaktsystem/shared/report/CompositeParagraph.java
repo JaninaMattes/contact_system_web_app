@@ -5,7 +5,7 @@ import java.util.Vector;
 
 
 /**
- * Die Klasse <code>CompositeParagraph</code> stellt eine Menge einzelner Absätze (
+ * Die Klasse <code>CompositeParagraph</code> stellt eine Menge einzelner Absaetze (
  * <code>SimpleParagraph</code>-Objekte) dar. Diese werden als Unterabschnitte
  * in einem <code>Vector</code> abgelegt und verwaltet.
  * 
@@ -25,9 +25,9 @@ public class CompositeParagraph extends Paragraph implements Serializable {
 	
 
 	/**
-	 * Hinzufügen eines Unterabschnitts
+	 * Hinzufuegen eines Unterabschnitts
 	 * 
-	 * @param paragraph Der hinzuzufügende Unterabschnitt.
+	 * @param paragraph Der hinzuzufuegende Unterabschnitt.
 	 */
 	public void addSubParagraph(SimpleParagraph paragraph) {
 		this.subParagraphs.addElement(paragraph);
@@ -45,7 +45,7 @@ public class CompositeParagraph extends Paragraph implements Serializable {
 	/**
 	 * Auslesen aller Unterabschnitte.
 	 * 
-	 * @return <code>Vector</code>, der sämtliche Unterabschnitte enthält.
+	 * @return <code>Vector</code>, der saemtliche Unterabschnitte enthaelt.
 	 */
 	public Vector<SimpleParagraph> getSubParagraphs() {
 		return this.subParagraphs;
@@ -63,10 +63,10 @@ public class CompositeParagraph extends Paragraph implements Serializable {
 	/**
 	 * Auslesen eines einzelnen Unterabschnitts.
 	 * 
-	 * @param i Der Index des gewünschten Unterabschnitts (0 <= i <n), mit n =
+	 * @param i Der Index des gewuenschten Unterabschnitts (0 <= i <n), mit n =
 	 *          Anzahl der Unterabschnitte.
 	 * 
-	 * @return der gewünschte Unterabschnitt.
+	 * @return der gewuenschte Unterabschnitt.
 	 */
 	public SimpleParagraph getParagraphAt(int i) {
 		return this.subParagraphs.elementAt(i);
@@ -79,21 +79,21 @@ public class CompositeParagraph extends Paragraph implements Serializable {
 	public String toString() {
 		/*
 		 * Leeres <code>StringBuffer</code>-Objekt, in das nacheinander alle 
-		 * String-Repräsentationen der Unterabschnitte eingetragen werden.
+		 * String-Repraesentationen der Unterabschnitte eingetragen werden.
 		 */
 		StringBuffer result = new StringBuffer();
 		
-		//Schleife über alle Unterabschnitte
+		//Schleife ueber alle Unterabschnitte
 		for (SimpleParagraph subParagraph : subParagraphs) {
 			/*
 			 * Umwandeln des jeweiligen Unterabschnitt in einen String und
-			 * Anhängen an das <code>StringBuffer</code>-Objekt
+			 * Anhaengen an das <code>StringBuffer</code>-Objekt
 			 */
 			result.append(subParagraph.toString() + "\n");
 		}
 		/*
 		 * Umwandeln des <code>StringBuffer</code>-Objekts in einen String
-		 * und Rückgabe dessen.
+		 * und Rueckgabe dessen.
 		 */
 		return result.toString();
 	}

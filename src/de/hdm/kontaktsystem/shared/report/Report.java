@@ -8,7 +8,7 @@ import java.util.Vector;
 /**
  * <p>
  * Reports sind als <code>Serializable</code> deklariert, damit sie von dem 
- * Server an den Client gesendet werden können. Der Zugriff auf Reports erfolgt 
+ * Server an den Client gesendet werden koennen. Der Zugriff auf Reports erfolgt 
  * also nach deren Bereitstellung lokal auf dem Client.
  * </p>
  * <p>
@@ -26,7 +26,7 @@ public class Report implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Absatz, der Daten über den User enthält, für den der Report erstellt wird
+	 * Absatz, der Daten ueber den User enthaelt, fuer den der Report erstellt wird
 	 */
 	private Paragraph userData = null;
 	
@@ -48,7 +48,7 @@ public class Report implements Serializable {
 	
 	
 	/**
-	 * Zurückgeben der User-Daten
+	 * Zurueckgeben der User-Daten
 	 * @return User-Daten
 	 */
 	public Paragraph getUserData() {
@@ -64,7 +64,7 @@ public class Report implements Serializable {
 	}
 
 	/**
-	 * Zurückgeben des Titels
+	 * Zurueckgeben des Titels
 	 * @return Titel des Berichts
 	 */
 	public String getTitle() {
@@ -80,7 +80,7 @@ public class Report implements Serializable {
 	}
 
 	/**
-	 * Zurückgeben des Erstellungsdatums
+	 * Zurueckgeben des Erstellungsdatums
 	 * @return Erstellungsdatum des Berichts
 	 */
 	public String getCreated() {
@@ -96,8 +96,8 @@ public class Report implements Serializable {
 	}
 	
 	/**
-	 * Hinzufügen eines <code>SingleContact</code>-Elements
-	 * @param element Das hinzuzufügende SingleContact-Element
+	 * Hinzufuegen eines <code>SingleContact</code>-Elements
+	 * @param element Das hinzuzufuegende SingleContact-Element
 	 */
 	public void addContactElement(SingleContact element) {
 		this.elements.addElement(element);
@@ -120,8 +120,8 @@ public class Report implements Serializable {
 	}
 	
 	/**
-	 * Zurückgeben eines einzelnen <code>SingleContact</code>-Elements
-	 * @param i Position des SingleContact-Elements. Bei n Elementen läuft der 
+	 * Zurueckgeben eines einzelnen <code>SingleContact</code>-Elements
+	 * @param i Position des SingleContact-Elements. Bei n Elementen laeuft der 
 	 * Index i von 0 bis n-1.
 	 * @return das gesuchte SingleContact-Element
 	 */
@@ -130,7 +130,7 @@ public class Report implements Serializable {
 	}
 	
 	/**
-	 * Zurückgeben aller <code>SingleContact</code>-Elemente
+	 * Zurueckgeben aller <code>SingleContact</code>-Elemente
 	 * @return Vector mit allen <code>SingleContact</code>-Elementen
 	 */
 	public Vector<SingleContact> getAllSingleContacts() {

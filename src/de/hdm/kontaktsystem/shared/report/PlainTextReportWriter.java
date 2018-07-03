@@ -20,7 +20,7 @@ public class PlainTextReportWriter extends ReportWriter {
 	private String reportText = "";
 	
 	/**
-	 * Zurücksetzen der Variable <code>reportText</code>.
+	 * Zuruecksetzen der Variable <code>reportText</code>.
 	 */
 	public void resetReportText() {
 		this.reportText = "";
@@ -46,15 +46,15 @@ public class PlainTextReportWriter extends ReportWriter {
 	
 	
 	/**
-	 * Verarbeiten des übergebenen Reports und Ablage im Zielformat. Ein Auslesen
-	 * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
+	 * Verarbeiten des uebergebenen Reports und Ablage im Zielformat. Ein Auslesen
+	 * des Ergebnisses kann spaeter mittels <code>getReportText()</code> erfolgen.
 	 * 
 	 * @param report Der zu verarbeitende Report
 	 */
 	@Override
 	public void process(Report report) {
 		
-		//Ergebnis vorhergehender Prozessierungen löschen
+		//Ergebnis vorhergehender Prozessierungen loeschen
 		this.resetReportText();
 		
 		/*
@@ -63,7 +63,7 @@ public class PlainTextReportWriter extends ReportWriter {
 		 */
 		StringBuffer result = new StringBuffer();
 		
-		/* Schrittweises Auslesen der Report-Bestandteile und Übersetzung in Text-Form */
+		/* Schrittweises Auslesen der Report-Bestandteile und uebersetzung in Text-Form */
 		//Titel
 		result.append("*** " + report.getTitle() + " ***\n\n");		
 		//User-Daten
@@ -96,8 +96,8 @@ public class PlainTextReportWriter extends ReportWriter {
 		
 		/*
 		 * Umwandeln des <code>StringBuffer</code>-Objekts in einen String, der
-		 * als Wert des Attributs reportText gesetzt wird. Dadurch wird es möglich, 
-		 * anschließend das Ergebnis mittels getReportText() auszulesen.
+		 * als Wert des Attributs reportText gesetzt wird. Dadurch wird es moeglich, 
+		 * anschliessend das Ergebnis mittels getReportText() auszulesen.
 		 */
 		this.reportText = result.toString();
 	}
