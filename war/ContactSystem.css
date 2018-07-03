@@ -49,7 +49,7 @@ body {
 	width:600px;
 	border:1px solid silver;
 	margin: auto;
-	/* TODO: Linksb�ndig machen
+	/* TODO: Linksb�ndig machen */
 }
 
 .reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
@@ -219,8 +219,8 @@ body {
 
 #searchAllContacts{ /* Button "Alle Kontakte" im Report Generator */
 	height: 25px;
-    width: 280px;
-   margin-left: 20px;
+    width: 21vw;
+   	margin-left: 2vw;
     margin-top: 15px;
     font-family: "Arial", Arial, sans-serif;
 	background-color: #c0c0c0;
@@ -553,6 +553,8 @@ div#Trailer {
 .TextBox{
 	background: transparent;
 	padding: 3px;
+	width: 22vw;
+	min-width: auto;
 	border: solid 1px black;
 	border-radius: 2px;
 	font-size: 1.2em;

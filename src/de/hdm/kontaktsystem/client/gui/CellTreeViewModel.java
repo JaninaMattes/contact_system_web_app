@@ -55,7 +55,7 @@ public class CellTreeViewModel implements TreeViewModel {
 	}
 
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
-
+		
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			

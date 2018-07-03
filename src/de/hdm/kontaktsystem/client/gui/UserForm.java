@@ -8,6 +8,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -42,6 +43,7 @@ public class UserForm extends VerticalPanel{
 	Button propertyButton = new Button("Eigenschaft bearbeiten");
 	Button contactButton = new Button("Kontakt anzeigen");
 	VerticalPanel vp = new VerticalPanel();
+	HorizontalPanel btnPanel = new HorizontalPanel();
 	CellTreeViewModel tvm = null;
 	PropertyForm pf = new PropertyForm();
 	User myUser;
@@ -60,9 +62,17 @@ public class UserForm extends VerticalPanel{
 		vp.add(email);
 		vp.add(creationDate);
 		vp.add(contact);
-		vp.add(contactButton);
-		vp.add(propertyButton);
-		vp.add(deleteButton);
+		vp.add(btnPanel);
+		
+		// Menüpanel
+		btnPanel.add(contactButton);
+		btnPanel.add(propertyButton);
+		btnPanel.add(deleteButton);
+		
+		btnPanel.setStyleName("mainButtonPanel");
+		contactButton.setStyleName("mainButton");
+		propertyButton.setStyleName("mainButton");
+		deleteButton.setStyleName("mainButton");
 		
 	}
 	

@@ -124,10 +124,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 			// Überprüfung ob der nutzer bereits existiert oder ob es ein neuer Nutzer ist
 			if (user == null) {
-				
+				String gmail = guser.getEmail();
+				// Ersetzt die Lange googlemail adresse gegen die gekürzte gmail variante
+				if(gmail.contains("googlemail")) gmail.replace("googlemail", "gmail");
 				user = new User();
 				user.setGoogleID(id);
-				user.setGMail(guser.getEmail());
+				user.setGMail(gmail);
 				own.setBo_Id(1); // Wird in der Datenbank durch die DB-ID ersetzt
 				own.setOwner(user);
 				own.setName(name);
@@ -208,6 +210,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	// ## IO ##
 	@Override
 	public User getUserBygMail(String email) {
+		// überprüfung ob die Vollständige Email engegebnen wurde
+		if(!email.contains("@")) email = email + "@gmail.com";
+		
 		User user = uMapper.findByEmail(email);
 		if(user != null){
 			user.setUserContact(this.getOwnContact(user));
@@ -965,14 +970,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			BusinessObjectMapper.businessObjectMapper().setStatusFalse(part.getReferenceID());
 		}
 		if(p.getReferencedObject() instanceof Contact){
-			for(PropertyValue pv : ((Contact) p.getReferencedObject()).getPropertyValues()){
+			for(PropertyValue pv : this.getPropertyValuesForContact((Contact) p.getReferencedObject())){
 				Participation partPV = new Participation();
 				partPV.setParticipant(p.getParticipant());
 				partPV.setReference(pv);
 				this.deleteParticipation(partPV);
 			}
 		}else if(p.getReferencedObject() instanceof ContactList){
-			for(Contact c : ((ContactList) part.getReferencedObject()).getContacts()){
+			for(Contact c : this.getContactsFromList((ContactList)p.getReferencedObject())){
 				Participation partC = new Participation();
 				partC.setParticipant(part.getParticipant());
 				partC.setReference(c);

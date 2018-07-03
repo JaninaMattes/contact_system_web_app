@@ -79,13 +79,13 @@ public class ContactListForm extends VerticalPanel {
 	Button unShareButton = new Button("Teilhaberschaft löschen");
 	Button addConToList = new Button("Hinzufügen");
 
-	Label isShared = new Label("Geteilt mit: ");
-	Label labelShare = new Label("Teilen mit: ");
-	Label contactListStatus = new Label("Status: ");
+	Label isShared = new Label("Geteilt mit:");
+	Label labelShare = new Label("Teilen mit:");
+	Label contactListStatus = new Label("Status:");
 	Label contactListStatusValue = new Label("");
-	Label labelSharedWith = new Label("Geteilt mit: ");
-	Label labelReceivedFrom = new Label("Eigentümer: ");
-	Label labelAddConsToList = new Label("Kontakt hinzufügen ");
+	Label labelSharedWith = new Label("Geteilt mit:");
+	Label labelReceivedFrom = new Label("Eigentümer:");
+	Label labelAddConsToList = new Label("Kontakt hinzufügen:");
 	Label clOwner = new Label();
 
 	ListBox listBoxShareWith = new ListBox();
