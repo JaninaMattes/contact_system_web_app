@@ -5,11 +5,11 @@ import java.util.Vector;
 
 
 /**
- * Bildet Informationen zu einem einzelnen Kontakt ab. Dazu enthält
+ * Bildet Informationen zu einem einzelnen Kontakt ab. Dazu enthaelt
  * diese Klasse ein Tabelle, die auf zwei Hilfsklassen namens 
- * <code>Row</code> und <code>Column</code> zurück greift und die 
- * Eigenschaften des Kontakts abbildet, inkl. des Eigentümers und des Status.
- * Weiterhin enthält die Klasse eine Liste (CompositeParagraph), die 
+ * <code>Row</code> und <code>Column</code> zurueckgreift und die 
+ * Eigenschaften des Kontakts abbildet, inkl. des Eigentuemers und des Status.
+ * Weiterhin enthaelt die Klasse eine Liste (CompositeParagraph), die 
  * auf die Namen der Teilhaber verweist.
  * 
  * @author Sandra Prestel
@@ -23,16 +23,16 @@ public class SingleContact implements Serializable {
 	CompositeParagraph participantList = new CompositeParagraph();
 	
 	/**
-	 * Hinzufügen einer Zeile zur Property-Tabelle
-	 * @param propertyRow Die hinzuzufügende Zeile
+	 * Hinzufuegen einer Zeile zur Property-Tabelle
+	 * @param propertyRow Die hinzuzufuegende Zeile
 	 */
 	public void addPropertyRow(Row propertyRow) {
 		this.propertyTable.addElement(propertyRow);
 	}
 	
 	/**
-	 * Hinzufügen eines Elements zur Teilhaber-Liste
-	 * @param element Das hinzuzufügende Element
+	 * Hinzufuegen eines Elements zur Teilhaber-Liste
+	 * @param element Das hinzuzufuegende Element
 	 */
 	public void addElementToParticipantList(SimpleParagraph element) {
 		this.participantList.addSubParagraph(element);
@@ -55,7 +55,7 @@ public class SingleContact implements Serializable {
 	}
 	
 	/**
-	 * Zurückgeben der Property-Tabelle
+	 * Zurueckgeben der Property-Tabelle
 	 * @return Tabelle mit Informationen zum Objekt
 	 */
 	public Vector<Row> getPropertyRows() {
@@ -64,7 +64,7 @@ public class SingleContact implements Serializable {
 	
 	
 	/**
-	 * Zurückgeben der Teilhaber-Liste
+	 * Zurueckgeben der Teilhaber-Liste
 	 * @return Teilhaber-Liste
 	 */
 	public CompositeParagraph getParticipantList() {

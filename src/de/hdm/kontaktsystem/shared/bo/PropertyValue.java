@@ -3,7 +3,7 @@ package de.hdm.kontaktsystem.shared.bo;
 import de.hdm.kontaktsystem.shared.bo.Property;
 
 /**
- * Die Klasse <code>PropertyValue</code> stellt die Ausprägung
+ * Die Klasse <code>PropertyValue</code> stellt die Auspraegung
  * zu einer Eigenschaft <code>Property</code> dar.
 
  * Jede Teilhaberschaft, und damit jede Instanz der Klasse <code>Participation</code> bezieht 
@@ -22,17 +22,17 @@ public class PropertyValue extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 			
 	/**
-	 * Wert der Eigenschaftsausprägung
+	 * Wert der Eigenschaftsauspraegung
 	 */
 	private String value = null;
 	
 	/**
-	 * Referenz auf zugehöriges Eigenschafts Objekt
+	 * Referenz auf zugehoeriges Eigenschafts Objekt
 	 */
 	private Property prop = null;
 	
 	/**
-	 * Referenz auf zugehöriges Kontakt Objekt
+	 * Referenz auf zugehoeriges Kontakt Objekt
 	 */
 	private Contact contact = null;	
 
@@ -45,7 +45,7 @@ public class PropertyValue extends BusinessObject {
 	
 
 	/**
-	 * Konstruktor der Instanziierung mit Ausprägung und Eigenschaft ermöglicht
+	 * Konstruktor der Instanziierung mit Ausprägung und Eigenschaft ermoeglicht
 	 */
 	
 	public PropertyValue(String value, Property prop) {		
@@ -56,7 +56,7 @@ public class PropertyValue extends BusinessObject {
 	}
 	
 	/**
-	 * Konstruktor der Instanziierung mit Ausprägung ermöglicht
+	 * Konstruktor der Instanziierung mit Auspraegung ermoeglicht
 	 * @param value
 	 */
 
@@ -66,7 +66,7 @@ public class PropertyValue extends BusinessObject {
 	}
 
 	/**
-	 * Auslesen des Ausprägungswertes
+	 * Auslesen des Auspraegungswertes
 	 */
 	
 	public String getValue() {
@@ -74,7 +74,7 @@ public class PropertyValue extends BusinessObject {
 	}
 
 	/**
-	 * Setzen des Ausprägungswertes.
+	 * Setzen des Auspraegungswertes.
 	 */
 	
 	public void setValue(String value) {
@@ -82,7 +82,7 @@ public class PropertyValue extends BusinessObject {
 	}
 	
 	/**
-	 * Abruf des zugehörigen Eigenschaft Objekts
+	 * Abruf des zugehoerigen Eigenschaft Objekts
 	 */
 	
 	public Property getProperty() {
@@ -90,7 +90,7 @@ public class PropertyValue extends BusinessObject {
 	}
 
 	/**
-	 * Setzen des zugehörigen Eigenschaft Objekts
+	 * Setzen des zugehoerigen Eigenschaft Objekts
 	 */
 	
 	public void setProperty(Property prop) {
@@ -98,32 +98,28 @@ public class PropertyValue extends BusinessObject {
 	}
 	
 	/**
-	 * Abruf des zugehörigen Kontakt Objekts
+	 * Abruf des zugehoerigen Kontakt Objekts
 	 */
 	public Contact getContact() {
 		return contact;
 	}
 
 	/**
-	 * Setzen des zugehörigen Kontakt Objekts
+	 * Setzen des zugehoerigen Kontakt Objekts
 	 */
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
 
 
-	/*
-	 * <p>
+	/**
 	 * Feststellen der <em>inhaltlichen</em> Gleichheit zweier PropertyValue-Objekte.
-	 * Die Gleichheit wird in diesem Beispiel auf eine gleiche Identität
-	 * beschränkt.
-	 * </p>
-	 * 
-	 * 
+	 * Die Gleichheit wird in diesem Beispiel auf eine gleiche Identitaet
+	 * beschraenkt.
 	 */
 	@Override
 	 public boolean equals(Object o) {
-		    /*
+		    /**
 		     * Abfragen, ob ein Objekt ungl. NULL ist und ob ein Objekt gecastet werden
 		     * kann
 		     */
@@ -137,9 +133,7 @@ public class PropertyValue extends BusinessObject {
 
 	 /**
 	  * Die toString Methode, die Attribute der <code>PropertyValue</code> Klasse textuell in Konsole ausgibt 
-	  * 
 	  */
-	 
 	  public String toString() {
 		  if(prop == null){
 			  return "PropertyValue: " + "\n" 

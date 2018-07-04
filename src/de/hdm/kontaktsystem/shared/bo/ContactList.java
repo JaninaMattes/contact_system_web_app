@@ -3,7 +3,10 @@ package de.hdm.kontaktsystem.shared.bo;
 import java.util.Vector;
 
 /**
- * 
+ * Die Klasse <code>ContactList</code> stellt eine Liste dar, welcher <code>Contact</code> hinzugefuegt werden koennen.
+ * <p></p>
+ * Einer <code>ContactList</code> muss mindestens ein <code>Contact</code> zugeteilt sein. Eine Kontaktliste
+ * ist immer im Besitz eines User und kann mit einem anderen User geteilt werden.
  * @author Marco Pracher
  */
 public class ContactList extends BusinessObject {
@@ -13,13 +16,13 @@ public class ContactList extends BusinessObject {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	/*
+	/**
 	 * Benamung einer Kontaktliste
 	 */
 
 	private String name = null;
 	
-	/*
+	/**
 	 * Alle Kontakte, welche zu einer Kontaktliste zugeordnet werden
 	 */
 	
@@ -54,7 +57,7 @@ public class ContactList extends BusinessObject {
 		contacts.add(contact);
 	}
 
-	/*
+	/**
 	 * Aufruf des Listen Namens
 	 */
 	
@@ -62,7 +65,7 @@ public class ContactList extends BusinessObject {
 		return name;
 	}
 	
-	/*
+	/**
 	 * Setzen des Listen Namens
 	 */
 
@@ -70,7 +73,7 @@ public class ContactList extends BusinessObject {
 		this.name = name;
 	}
 	
-	/*
+	/**
 	 * Aufruf aller Kontakt-Objekte einer Liste
 	 */
 
@@ -78,7 +81,7 @@ public class ContactList extends BusinessObject {
 		return contacts;
 	}
 	
-	/*
+	/**
 	 * Setzen aller Kontakt-Objekte einer Liste
 	 */
 
@@ -86,7 +89,7 @@ public class ContactList extends BusinessObject {
 		this.contacts = contacts;
 	}
 	
-	/*
+	/**
 	 * Hinzufuegen eines einzelnen Kontaktes zu einer Liste
 	 */
 	
@@ -94,7 +97,7 @@ public class ContactList extends BusinessObject {
 		this.contacts.addElement(contact);
 	}
 
-	/*
+	/**
 	 * Die toString Methode
 	 * @see de.hdm.kontaktsystem.shared.bo.BusinessObject#toString()
 	 */
@@ -110,17 +113,14 @@ public class ContactList extends BusinessObject {
 	 * der ID des Objekts.
 	 * Dies Ueberschreibt die Methode hashCode() der Klasse Object.
 	 */
- 
-	@Override
 	public int hashCode(){
 		return super.getBoId();
 	}
 	
 	/**
-	 * Equal Methode
+	 * Prueft, ob ein Objekt einem User Objekt gleicht.
+	 * Gleichheit bedeutet hier, dass alle Attribute der Objekte uebereinstimmen.
 	 */
-
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;

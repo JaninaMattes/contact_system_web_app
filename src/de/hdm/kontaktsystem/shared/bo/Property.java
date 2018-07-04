@@ -7,12 +7,12 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 /**
  * <p>
  * Die Klasse <code>Property</code> stellt die Eigenschaften eines Kontaktes dar
- * diese können einem Nutzer, dessen Kontakten oder Kontaktlisten zugeordnet werden.
+ * diese koennen einem Nutzer, dessen Kontakten oder Kontaktlisten zugeordnet werden.
  * </p>
  * <p>
  * Ein Nutzer (User Klasse) ist dabei entweder der Besitzer (owner) der Eigenschaft oder 
- * ein Teilhaber dieser (participant). Die Teilhaberschaft wird dabei über die Zuordnung
- * zu der Ausprägung der Eigenschaft mit <code>PropertyValue</code> hergestellt. 
+ * ein Teilhaber dieser (participant). Die Teilhaberschaft wird dabei ueber die Zuordnung
+ * zu der Auspraegung der Eigenschaft mit <code>PropertyValue</code> hergestellt. 
  * </p>
  * 
  * @author Janina Mattes
@@ -43,10 +43,9 @@ public class Property implements Serializable{
 	private String description = null;
 	
 	/**
-	 * Jeder Eigenschaftinstanz ist einer oder mehrerer Eigenschaftsausprägungen
-	 * zugeordnet. Diese werden durch eine Vector Liste repräsentiert
-	 *
-	 * */
+	 * Jeder Eigenschaftinstanz ist einer oder mehrerer Eigenschaftsauspraegungen
+	 * zugeordnet. Diese werden durch eine Vector Liste repraesentiert
+	 */
 	
 	private Vector <PropertyValue> propertyValues = new Vector <PropertyValue>();
 
@@ -61,7 +60,7 @@ public class Property implements Serializable{
 	
 	/**
 	 * Bei der Erzeugung einer neuen Eigenschaftsinstanz muss nicht zwingend
-	 * eine Eigenschaftsausprägung (PropertyValue Instanz) erzeugt werden
+	 * eine Eigenschaftsauspraegung (PropertyValue Instanz) erzeugt werden
 	 */
 	
 	public Property(String description) {
@@ -77,7 +76,7 @@ public class Property implements Serializable{
 	
 	public Property(String value, String description) {
 		this.description = description;			
-		// erstellen einer zugehörigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
+		// erstellen einer zugehoerigen Eigenschaftsausprägung zu einem Eigenschaft Objekt
 		PropertyValue propertyValue = new PropertyValue(value);
 		propertyValues.addElement(propertyValue);		
 	}	
@@ -111,9 +110,9 @@ public class Property implements Serializable{
 	}
 
 	/**
-	   * Setzen der Beschreibung eines Eigenschaft Objekts.
-	   * @param description der neuen Eigenschaft
-	   */
+	 * Setzen der Beschreibung eines Eigenschaft Objekts.
+	 * @param description der neuen Eigenschaft
+	 */
 	
 	public void setDescription(String description) {
 		this.description = description;
@@ -122,7 +121,6 @@ public class Property implements Serializable{
 	
 	/**
 	 * Auslesen des PropertyValue Vectors
-	 *  
 	 */
 	
 	public Vector<PropertyValue> getPropertyValues() {
@@ -130,12 +128,10 @@ public class Property implements Serializable{
 	}	
 
 	/**
-	 * 
-	 * Setzen des PropertyValue Vectors für eine neue Liste
+	 * Setzen des PropertyValue Vectors fuer eine neue Liste
 	 * an PropertyValues, welche einer Property zugeordnet werden.
-	 * Möglichkeit auch nur eine PropertyValue Instanz dem Vector
-	 * beizufügen, wenn nur ein einziges Objekt zugeordnet werden soll.
-	 *  
+	 * Moeglichkeit auch nur eine PropertyValue Instanz dem Vector
+	 * beizufuegen, wenn nur ein einziges Objekt zugeordnet werden soll.
 	 */
 	
 	public void setPropertyValues(Vector<PropertyValue> propertyValues) {
@@ -143,7 +139,7 @@ public class Property implements Serializable{
 	}
 	
 	/**
-	 * Möglichkeit bei Bedarf auch nur ein einziges PropertyValue Objekt
+	 * Moeglichkeit bei Bedarf auch nur ein einziges PropertyValue Objekt
 	 * zu setzen. 
 	 */
 	
@@ -153,12 +149,8 @@ public class Property implements Serializable{
 	
 
 	/**
-	 * <p>
 	 * Feststellen der <em>inhaltlichen</em> Gleichheit zweier PropertyValue-Objekte.
-	 * Die Gleichheit wird in diesem Beispiel auf eine gleiche Identität
-	 * beschränkt.
-	 * </p>
-	 *  
+	 * Die Gleichheit wird in diesem Beispiel auf eine gleiche Identitaet beschraenkt.
 	 */
 	
 	 public boolean equals(Object o) {
@@ -182,12 +174,10 @@ public class Property implements Serializable{
 	 
 	 
 	 /**
-		 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
-		 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
-		 * der ID des Objekts.
-		 * Dies überschreibt die Methode hashCode() der Klasse Object.
-		 * 
-		 */
+	  * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
+	  * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
+	  * der ID des Objekts. Dies ueberschreibt die Methode hashCode() der Klasse Object.
+	  */
 	 
 		@Override
 		public int hashCode(){
@@ -196,10 +186,9 @@ public class Property implements Serializable{
 	 
 
 		/**
-		   * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
-		   * Dies überschreibt die Methode toString() der Klasse Object
-		   * 
-		   */
+		 * Erzeugen einer textuellen Darstellung der jeweiligen Eigenschaft.
+		 * Dies ueberschreibt die Methode toString() der Klasse Object
+		 */
 		
 		@Override
 		public String toString() {

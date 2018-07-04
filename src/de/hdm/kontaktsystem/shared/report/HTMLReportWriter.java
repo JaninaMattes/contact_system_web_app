@@ -20,7 +20,7 @@ public class HTMLReportWriter extends ReportWriter {
 	private String reportText = "";
 	
 	/**
-	 * Zurücksetzen der Variable <code>reportText</code>.
+	 * Zuruecksetzen der Variable <code>reportText</code>.
 	 */
 	public void resetReportText() {
 	    this.reportText = "";
@@ -84,15 +84,15 @@ public class HTMLReportWriter extends ReportWriter {
 	
 	
 	/**
-	 * Verarbeiten des übergebenen Reports und Ablage im Zielformat. Ein Auslesen
-	 * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
+	 * Verarbeiten des uebergebenen Reports und Ablage im Zielformat. Ein Auslesen
+	 * des Ergebnisses kann spaeter mittels <code>getReportText()</code> erfolgen.
 	 * 
 	 * @param report Der zu verarbeitende Report
 	 */
 	@Override
 	public void process(Report report) {
 		
-		//Ergebnis vorhergehender Prozessierungen löschen
+		//Ergebnis vorhergehender Prozessierungen loeschen
 		this.resetReportText();
 		
 		/*
@@ -102,7 +102,7 @@ public class HTMLReportWriter extends ReportWriter {
 		StringBuffer result = new StringBuffer();
 		
 		/*
-		 * Schrittweises Auslesen der Report-Bestandteile und Übersetzung in HTML-Text
+		 * Schrittweises Auslesen der Report-Bestandteile und uebersetzung in HTML-Text
 		 */
 		//Tabelle mit allgemeinen Daten:
 		//Titel
@@ -159,8 +159,8 @@ public class HTMLReportWriter extends ReportWriter {
 		
 		/*
 		 * Umwandeln des <code>StringBuffer</code>-Objekts in einen String, der
-		 * als Wert des Attributs reportText gesetzt wird. Dadurch wird es möglich, 
-		 * anschließend das Ergebnis mittels getReportText() auszulesen.
+		 * als Wert des Attributs reportText gesetzt wird. Dadurch wird es moeglich, 
+		 * anschliessend das Ergebnis mittels getReportText() auszulesen.
 		 */
 		this.reportText = result.toString();		
 	}
