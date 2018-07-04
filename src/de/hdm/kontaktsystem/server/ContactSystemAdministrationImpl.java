@@ -406,7 +406,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<Integer> idV = cMapper.findContactFromList(cl);
 		Vector<Contact> cV = new Vector<Contact>();
 		
-		System.out.println("Suche Kontakte für: " + cl.getOwner().getGoogleID());
 		if (idV != null) { // Überprüf ob die Kontaktliste Kontakte beinhaltet
 			if(cl.getOwner().getGoogleID() == this.getCurrentUser()){
 				for (int i : idV) {
@@ -416,7 +415,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				}
 			}else{ // Filtert Kontakte die nicht geteilt wurden.
 				Vector<Contact> partV = this.getAllCSharedByOthersToMePrev();
-				System.out.println("Filter Kontakte");
 					for (int i : idV) {
 						Contact c = cMapper.findContactById(i);
 						if(c != null && partV.contains(c)){ // Filter ob der Kontakt noch mit dem Nutzer getielt wurde.
@@ -450,7 +448,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 					contact.setName(this.getNameOfContact(contact));
 					contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 				}else{
-					System.out.println("##### Kontakt teilwiese geteilt 2### ");
 					contact.setName(this.getNameOfContact(contact));
 					contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 					contact.setPropertyValues(this.getAllPVFromContactSharedWithUser(contact, myUser));
@@ -938,13 +935,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		if(part.getReferencedObject() instanceof Contact){
 			Contact c = (Contact) part.getReferencedObject();
 			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt
-			System.out.println("Alles getielt? "+part.getShareAll());
 			if(part.getShareAll()){
 				for(PropertyValue pv : c.getPropertyValues()){
 					Participation removePart = new Participation();
 					removePart.setParticipant(part.getParticipant());
 					removePart.setReference(pv);
-					System.out.println("Delete Part: "+part);
 					this.deleteParticipation(removePart);
 				}
 			

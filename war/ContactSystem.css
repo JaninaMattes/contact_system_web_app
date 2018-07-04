@@ -139,7 +139,7 @@ body {
 
 /*Buttons*/
 
-/*Untere Buttons: "Bearbeiten"- "Teilen"-"Löschen"-Buttons*/
+/*Untere Buttons: "Bearbeiten"- "Teilen"-"Lï¿½schen"-Buttons*/
 .mainButton{
     width: 12vw;
     min-width: 100px;
@@ -149,7 +149,7 @@ body {
     
 }
 
-/*Seitliche Buttons: Kontakt entfernen" "Hinzufügen"-Buttons */
+/*Seitliche Buttons: Kontakt entfernen" "Hinzufï¿½gen"-Buttons */
 .sideButton{
     width: 6vw;
     min-width: 110px;
@@ -220,7 +220,7 @@ body {
     cursor: pointer;
 }
 
-.log-out-button{ /* Logout-Button im Editor und Report Generator */
+#log-out-button{ /* Logout-Button im Editor und Report Generator */
 	height: 30px;
     width: 90px;
 	float: right;
@@ -248,7 +248,7 @@ body {
 }
 /* "Report"- und "Editor"- Button, 
 um vom Editor in den Report Generator zu gelangen und anders herum */
-.switch-button{ 
+#switch-button{ 
 	height: 30px;
     width: 90px;
 	float: right;
@@ -526,7 +526,7 @@ div#Trailer {
 }
 
 
-/*Panel für Buttons*/
+/*Panel fï¿½r Buttons*/
 .mainButtonPanel{
     Bottom: 8vh;
     position: fixed;

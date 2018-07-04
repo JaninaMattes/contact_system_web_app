@@ -343,8 +343,8 @@ public class ContactSystem implements EntryPoint {
 		/** 
 		 * Namen für CSS festlegen 
 		 */
-		reportLink.setStyleName("switch-button");
-		signOutLink.setStyleName("log-out-button");
+		reportLink.getElement().setId("switch-button");
+		signOutLink.getElement().setId("log-out-button");
 		
 		//Label der �berschrift im Header
 		headerText.setStyleName("headertext");
