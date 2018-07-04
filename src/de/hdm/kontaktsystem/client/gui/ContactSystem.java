@@ -211,32 +211,32 @@ public class ContactSystem implements EntryPoint {
 	
 	public void onModuleLoad() {
 	
-		contactSystemAdmin = ClientsideSettings.getContactAdministration();
-		contactSystemAdmin.getUserByID(510, new AsyncCallback<User>() {
-			public void onFailure(Throwable error) {
-				
-			}
-				
-			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
-			public void onSuccess(User result) {
-					log("Set User: "+ result);
-					uf.setMyUser(result);
-					cf.setMyUser(result);
-					cf.setLoad(loadPanel);
-					clf.setMyUser(result);
-					clf.setLoad(loadPanel);
-					loadTree(); // für Test
-					loadContactSystem(); // für Test
-					loadPanel.setVisible(false);
-			}
-		});	
+//		contactSystemAdmin = ClientsideSettings.getContactAdministration();
+//		contactSystemAdmin.getUserByID(510, new AsyncCallback<User>() {
+//			public void onFailure(Throwable error) {
+//				
+//			}
+//				
+//			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
+//			public void onSuccess(User result) {
+//					log("Set User: "+ result);
+//					uf.setMyUser(result);
+//					cf.setMyUser(result);
+//					cf.setLoad(loadPanel);
+//					clf.setMyUser(result);
+//					clf.setLoad(loadPanel);
+//					loadTree(); // für Test
+//					loadContactSystem(); // für Test
+//					loadPanel.setVisible(false);
+//			}
+//		});	
 		
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
 
-		/*loadPanel.setVisible(false);
+		loadPanel.setVisible(false);
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
@@ -262,7 +262,7 @@ public class ContactSystem implements EntryPoint {
 				}
 			}
 		});	
-		*/
+		
 		
 	}	
 	
