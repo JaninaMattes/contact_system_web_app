@@ -26,7 +26,7 @@ public class UserMapper {
 	
 	/**
 	 * Hier findet die Anwendung des <code> Singleton Pattern </code> statt
-	 * Diese Methode gibt das einzige Objekt dieser Klasse zurück.
+	 * Diese Methode gibt das einzige Objekt dieser Klasse zurueck.
 	 * @return Instanz des PropertyMapper 
 	 */			
 
@@ -66,7 +66,7 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Gibt alle <code>User</code> Ojekte aus der Tabelle zurück
+	 * Gibt alle <code>User</code> Ojekte aus der Tabelle zurueck
 	 * @return Vector<User>
 	 */
 	public Vector<User> findAll(){
@@ -94,7 +94,7 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Gibt das <code>User</code> mit der gesuchten ID zurück
+	 * Gibt das <code>User</code> mit der gesuchten ID zurueck
 	 * @param User ID
 	 * @return User
 	 */
@@ -122,7 +122,7 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Gibt das <code>User</code> mit der gesuchten Email-Adresse zurück
+	 * Gibt das <code>User</code> mit der gesuchten Email-Adresse zurueck
 	 * @param Email-String
 	 * @return User-Objekt
 	 */
@@ -176,7 +176,7 @@ public class UserMapper {
 	
 	
 	/**
-	 * Löscht alle einträge in der User Tabelle 
+	 * Loescht alle eintraege in der User Tabelle 
 	 * 
 	 * @note Nicht Verwendet
 	 */
@@ -196,9 +196,9 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Löscht eine <code>User</code> Objekt aus der Datenbank
+	 * Loescht eine <code>User</code> Objekt aus der Datenbank
 	 * @param user
-	 * @return gelöschtes User-Objekt
+	 * @return geloeschtes User-Objekt
 	 */
 	
 	public User delete(User user){
@@ -208,9 +208,9 @@ public class UserMapper {
 	
 	
 	/**
-	 * Löscht ein <code>User</code> mit der übergeben ID aus der Datenbank
+	 * Loescht ein <code>User</code> mit der uebergeben ID aus der Datenbank
 	 * @param id
-	 * @return anzahl gelöschter User
+	 * @return anzahl geloeschter User
 	 */
 	public int deleteByID(double id){
 		

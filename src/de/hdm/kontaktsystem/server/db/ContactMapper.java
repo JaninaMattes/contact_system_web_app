@@ -20,9 +20,9 @@ import de.hdm.kontaktsystem.shared.bo.User;
 
 /**
  * Die Mapper-Klasse <code>ContactMapper</code> bildet <code>Contact</code>-Objekte 
- * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Ändern und 
- * Löschen von Objekten zur Verfügung gestellt. Es können sowohl Objekte in Datenbank-Strukturen, 
- * als auch Datenbank-Strukturen in Objekte überführt werden.
+ * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Aendern und 
+ * Loeschen von Objekten zur Verfuegung gestellt. Es koennen sowohl Objekte in Datenbank-Strukturen, 
+ * als auch Datenbank-Strukturen in Objekte ueberfuehrt werden.
  * 
  * @author Katalin Wagner, Janina Mattes
  *
@@ -35,7 +35,7 @@ public class ContactMapper {
 	 * d.h. sie wird nur einmal instantiiert.
 	 * Die statische Variable <code>INSTANCE</code> speichert die einzige Instanz der Klasse. 
 	 * Durch den Bezeichner <code>static</code> ist diese Variable 
-	 * nur einmal für alle Instanzen der Klasse vorhanden.
+	 * nur einmal fuer alle Instanzen der Klasse vorhanden.
 	 */
 
 	private static ContactMapper contactMapper = null;
@@ -44,7 +44,7 @@ public class ContactMapper {
 	}
 
 	/**
-	 * Gibt nach dem Singelton Pattern eine Instanz des ContactMppers zurück
+	 * Gibt nach dem Singelton Pattern eine Instanz des ContactMppers zurueck
 	 * @return ContactMapper-Objekt
 	 */
 	public static ContactMapper contactMapper() {
@@ -82,7 +82,7 @@ public class ContactMapper {
 	
 	
 	/**
-	 * Mapper-Methode zur Rückgabe aller Kontakte eines bestimmten Users.
+	 * Mapper-Methode zur Rueckgabe aller Kontakte eines bestimmten Users.
 	 * 
 	 * @param User Id
 	 * @return Vector mit alle Contact-Objekte  eines Users
@@ -125,8 +125,8 @@ public class ContactMapper {
 	/**
 	 * Mapper-Methode um alle vorhandenen Kontakte zu suchen.
 	 * Den Kontakt - Objekten wird ein PropertyValue-Objekt zugewiesen.
-	 * Einem Kontakt wird dabei zusätzlich das zugehörige PropertyValue - Objekt
-	 * mit der Ausprägung der Eigenschaft "Name" gesetzt. 
+	 * Einem Kontakt wird dabei zusätzlich das zugehoerige PropertyValue - Objekt
+	 * mit der Auspraegung der Eigenschaft "Name" gesetzt. 
 	 * 
 	 * @return Vector <Contact>
 	 */
@@ -164,7 +164,7 @@ public class ContactMapper {
 	
 
 	/**
-	 * Mapper-Methode um einen Kontakt über die ID zu suchen.
+	 * Mapper-Methode um einen Kontakt ueber die ID zu suchen.
 	 * 
 	 * @param Contact ID
 	 * @return Contact-Objekt
@@ -178,9 +178,6 @@ public class ContactMapper {
 					  "SELECT * " 
 					+ "FROM  Contact c "
 					+ "INNER JOIN BusinessObject bo ON bo.bo_ID = c.ID "
-//					+ "INNER JOIN User u ON u.ID = bo.user_ID "
-//					+ "INNER JOIN PropertyValue pv ON pv.contact_ID = c.ID "
-//					+ "INNER JOIN Property p ON p.ID = pv.property_ID "
 					+ "WHERE c.ID = ? "); 
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
@@ -209,7 +206,7 @@ public class ContactMapper {
 	
 	
 	/**
-	 * Fügte dem ContactList-Objekt einen Vektor mit allen enthaltenen Contact-Objekten hinzu
+	 * Fuegte dem ContactList-Objekt einen Vektor mit allen enthaltenen Contact-Objekten hinzu
 	 * 
 	 * @param ContactList-Objekt
 	 */
@@ -387,7 +384,7 @@ public class ContactMapper {
 	 * Mapper-Methode um einen Kontakt mit Hilfe der ID zu loeschen
 	 * 
 	 * @param Contact ID
-	 * @return Anzahl gelöschter Elemente
+	 * @return Anzahl geloeschter Elemente
 	 */
 	
 	public int deleteContactByID(int id) {
@@ -414,7 +411,7 @@ public class ContactMapper {
 	 * der DB erstellt wird abgerufen. 
 	 * 
 	 * Wirn nur Verwendet um dem User-Objekt seine Contact-Objekt zu zuweisen.
-	 * Wird benötigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzulösen
+	 * Wird benoetigt um Schleife zwischen SetOwner in <code> Contact </code> und SetContact in <code> User </code> aufzuloesen
 	 * 
 	 * @param User-Objekt
 	 * @param Contact ID

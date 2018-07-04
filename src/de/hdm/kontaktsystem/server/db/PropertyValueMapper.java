@@ -15,9 +15,9 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 
 /**
  * Die Mapper-Klasse <code>PropertyValueMapper</code> bildet <code>PropertyValue</code>-Objekte 
- * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Ändern und 
- * Löschen von Objekten zur Verfügung gestellt. Es können sowohl Objekte in Datenbank-Strukturen, 
- * als auch Datenbank-Strukturen in Objekte überführt werden.
+ * auf eine relationale Datenbank ab. Dazu werden Methoden zum Erzeugen, Suchen, Aendern und 
+ * Loeschen von Objekten zur Verfuegung gestellt. Es koennen sowohl Objekte in Datenbank-Strukturen, 
+ * als auch Datenbank-Strukturen in Objekte ueberfuehrt werden.
  * 
  * @author Kim-Ly Le
  */
@@ -25,13 +25,15 @@ import de.hdm.kontaktsystem.shared.bo.PropertyValue;
 public class PropertyValueMapper {
 
 	/**
-	 * Singleton Pattern -> Sicherstellung über static, dass das Objekt PropertyValueMapper nur von der Klasse selbst erreicht werden kann
+	 * Singleton Pattern -> Sicherstellung ueber static, dass das Objekt PropertyValueMapper nur von der Klasse 
+	 * selbst erreicht werden kann
 	 */
 
 	private static PropertyValueMapper propertyValueMapper = null;
 	
 	/**
-	 * Default Konstruktor auf Protected gesetzt, um nur innerhalb des Packages dass alle Mapper Klassen beinhaltet zugegriffen werden kann
+	 * Default Konstruktor auf Protected gesetzt, um nur innerhalb des Packages dass alle Mapper Klassen beinhaltet 
+	 * zugegriffen werden kann
 	 */
 
 	protected PropertyValueMapper() {
@@ -129,7 +131,7 @@ public class PropertyValueMapper {
 	
 
 	/**
-	 * Alle fuer den Benutzer zugaenglichen Eigenschaftsausprägungen aus Teilhaberschaft oder Besitzertum ausgeben 
+	 * Alle fuer den Benutzer zugaenglichen Eigenschaftsauspraegungen aus Teilhaberschaft oder Besitzertum ausgeben 
 	 * 
 	 * @return Vector<PropertyValue>
 	 * @author Kim-Ly
@@ -177,7 +179,7 @@ public class PropertyValueMapper {
 	
 
 	/**
-	 * Alle Eigenschaftsausprägungen finden die der User angelegt hat
+	 * Alle Eigenschaftsauspraegungen finden die der User angelegt hat
 	 * 
 	 * @param User Objekt
 	 * @return Vector<PropertyValue>
@@ -285,7 +287,7 @@ public class PropertyValueMapper {
 
 	
 	/**
-	  * Gibt alle PropertyValues zurueck die einer Property zugehörig sind
+	  * Gibt alle PropertyValues zurueck die einer Property zugehoerig sind
 	  * Weitergabe an findByPropertyID(int id)
 	  * 
 	  * @param Property-Objekt
@@ -300,7 +302,7 @@ public class PropertyValueMapper {
 	
 	
 	/**
-	 * Aufruf aller Auspraegungen anhand einer bestimmten Ausprägung
+	 * Aufruf aller Auspraegungen anhand einer bestimmten Auspraegung
 	 * 
 	 * @param String value
 	 * @return Vector<PropertyValue> 
@@ -441,7 +443,7 @@ public class PropertyValueMapper {
 	 * Loeschen der Eigenschaftsauspraegung in DB anhand der PropertyValue ID
 	 * 
 	 * @param  PropertyValue ID
-	 * @return Anzahl geänderter Einträge
+	 * @return Anzahl geaenderter Eintraege
 	 * @author Kim-Ly
 	 */
 
@@ -502,7 +504,7 @@ public class PropertyValueMapper {
 
 
 	/**
-	* Entwicklermethode zum Löschen aller im System vorhandener Eigenschaftsausprägungen
+	* Entwicklermethode zum Loeschen aller im System vorhandener Eigenschaftsauspraegungen
 	* 
 	* @author Kim-Ly
 	*/
