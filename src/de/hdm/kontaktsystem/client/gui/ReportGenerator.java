@@ -187,7 +187,7 @@ public class ReportGenerator implements EntryPoint {
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
 		findByParticipantButton.setStyleName("searchButton");
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
-		findByValueButton.getElement().setId("searchButton");
+		findByValueButton.setStyleName("searchButton");
 		showAllButton.setStyleName("searchAllContacts");
 	
 		//Links

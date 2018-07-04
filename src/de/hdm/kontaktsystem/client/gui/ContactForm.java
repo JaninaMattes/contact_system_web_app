@@ -149,7 +149,7 @@ public class ContactForm extends VerticalPanel {
 			contactStatus.setStyleName("Label");
 			labelAddElement.getElement().setId("labelfeldhinzu");
 			addElement.setStyleName("ListBox");
-			cLabel.getElement().setId("ueberschriftlabel");
+			cLabel.setStyleName("ueberschriftlabel");
 			
 			// Css der Main Buttons
 			okButton.setStyleName("mainButton");

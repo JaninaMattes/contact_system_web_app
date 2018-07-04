@@ -356,11 +356,6 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 	margin-right: 5px;
 }
 
-/* Labels */
-
-#labelfeldhinzu{
-	/*TODO: weiter runter schieben (top-margin)!*/
-}
 
 /*Status des Kontakts kursiv setzen*/
 .Status{
