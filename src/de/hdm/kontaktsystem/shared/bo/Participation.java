@@ -5,13 +5,13 @@ import java.io.Serializable;
 /**
  * <p>
  * Die Klasse <code>Participation</code> stellt die Teilhaberschafts-Beziehung 
- * zwischen einem User und einem Geschäftsobjekt (Contact, ContactList, PropertyValue) dar.
+ * zwischen einem User und einem Geschaeftsobjekt (Contact, ContactList, PropertyValue) dar.
  * </p>
  * <p>
  * Jede Teilhaberschaft, und damit jede Instanz der Klasse <code>Participation</code> bezieht 
  * sich auf einen User, der Teilhaber (participant) ist und das geteilte BusinessObject (reference). 
- * Die Verweise auf die Objekte finden durch die eindeutige ID der Objekte statt. Außerdem wird 
- * abgebildet, ob ein Objekt, beispielsweise ein Kontakt, vollständig geteilt wurde.
+ * Die Verweise auf die Objekte finden durch die eindeutige ID der Objekte statt. Ausserdem wird 
+ * abgebildet, ob ein Objekt, beispielsweise ein Kontakt, vollstaendig geteilt wurde.
  * </p>
  * 
  * @author Sandra Prestel
@@ -36,7 +36,7 @@ public class Participation implements Serializable {
 	private BusinessObject reference = null;
 		
 	/**
-	 * Gibt an, ob Kontakte oder Listen vollständig oder nur teilweise geteilt wurden
+	 * Gibt an, ob Kontakte oder Listen vollstaendig oder nur teilweise geteilt wurden
 	 */
 	private boolean shareAll = false;
 	
@@ -59,7 +59,7 @@ public class Participation implements Serializable {
 	}
 	
 	/**
-	 * Zurückgeben der TeilhaberID
+	 * Zurueckgeben der TeilhaberID
 	 * @return ID des Teilhabers am BusinessObject
 	 */
 	public double getParticipantID() {
@@ -68,7 +68,7 @@ public class Participation implements Serializable {
 	}
 
 	/**
-	 * Zurückgeben des Teilhabers
+	 * Zurueckgeben des Teilhabers
 	 * @return Teilhaber am BusinessObject
 	 */
 	public User getParticipant() {
@@ -76,9 +76,9 @@ public class Participation implements Serializable {
 	}
 	
 	/**
-	* Zurückgeben des ShareAll werts
+	 * Zurueckgeben des ShareAll werts
 	 * @return Angabe, ob das gesamte Objekt geteilt wurde
-	*/
+	 */
 	public boolean getShareAll() {
 		return shareAll;	
 	}
@@ -93,7 +93,7 @@ public class Participation implements Serializable {
 
 	
 	/**
-	* Zurückgeben der ID des geteilten BusinessObjects
+	* Zurueckgeben der ID des geteilten BusinessObjects
 	 * @return Die ID des geteilten BusinessObjects
 	*/
 	public int getReferenceID() {
@@ -101,7 +101,7 @@ public class Participation implements Serializable {
 	}
 
 	/**
-	 * Zurückgeben des BusinessObjects
+	 * Zurueckgeben des BusinessObjects
 	 * @return Das geteilte BusinessObject
 	 */
 	public BusinessObject getReferencedObject() {
@@ -125,8 +125,8 @@ public class Participation implements Serializable {
 	}
 
 	/**
-	 * Gibt eine Repräsentation des Participation-Objekts als String zurück.
-	 * Dieser beinhaltet alle Attribute und deren Wertausprägungen des Objekts.
+	 * Gibt eine Repraesentation des Participation-Objekts als String zurueck.
+	 * Dieser beinhaltet alle Attribute und deren Wertauspraegungen des Objekts.
 	 */
 	@Override
 	public String toString() {
@@ -137,8 +137,8 @@ public class Participation implements Serializable {
 	}
 	
 	/**
-	 * Gibt eine Ganzzahl zurück, die das Participation-Objekt eindeutig identifiziert.
-	 * Diese setzt sich aus allen Attributen und deren Wertausprägungen des Objekts zusammen.
+	 * Gibt eine Ganzzahl zurueck, die das Participation-Objekt eindeutig identifiziert.
+	 * Diese setzt sich aus allen Attributen und deren Wertauspraegungen des Objekts zusammen.
 	 */
 	@Override
 	public int hashCode() {
@@ -153,8 +153,8 @@ public class Participation implements Serializable {
 	}
 
 	/**
-	 * Prüft, ob ein Objekt einem Participation-Objekt gleicht.
-	 * Gleichheit bedeutet hier, dass alle Attribute der Objekte übereinstimmen.
+	 * Prueft, ob ein Objekt einem Participation-Objekt gleicht.
+	 * Gleichheit bedeutet hier, dass alle Attribute der Objekte uebereinstimmen.
 	 */
 	@Override
 	public boolean equals(Object obj) {

@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.server;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -123,10 +124,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 			// Überprüfung ob der nutzer bereits existiert oder ob es ein neuer Nutzer ist
 			if (user == null) {
-				
+				String gmail = guser.getEmail();
+				// Ersetzt die Lange googlemail adresse gegen die gekürzte gmail variante
+				if(gmail.contains("googlemail")) gmail.replace("googlemail", "gmail");
 				user = new User();
 				user.setGoogleID(id);
-				user.setGMail(guser.getEmail());
+				user.setGMail(gmail);
 				own.setBo_Id(1); // Wird in der Datenbank durch die DB-ID ersetzt
 				own.setOwner(user);
 				own.setName(name);
@@ -207,6 +210,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	// ## IO ##
 	@Override
 	public User getUserBygMail(String email) {
+		// überprüfung ob die Vollständige Email engegebnen wurde
+		if(!email.contains("@")) email = email + "@gmail.com";
+		
 		User user = uMapper.findByEmail(email);
 		if(user != null){
 			user.setUserContact(this.getOwnContact(user));
@@ -291,6 +297,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Contact c = cMapper.insertContact(contact);
 		Vector<PropertyValue> pvv = new Vector<PropertyValue>();
 		for(PropertyValue pv : contact.getPropertyValues()){
+			if(pv.getProperty().getId() == 0){
+				pv.setProperty(this.createProperty(pv.getProperty()));
+			}
 			pv.setContact(c);
 			pv.setOwner(c.getOwner());
 			pvv.add(this.createPropertyValue(pv));
@@ -382,6 +391,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			contact.setName(this.getNameOfContact(contact));
 		}
 		cv.addAll(this.getAllCSharedByOthersToMePrev());
+//		cv.sort(new BOCompare());
 		return cv;
 	}
 
@@ -450,6 +460,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		// Findet alle Kontakte
 		Vector<PropertyValue> pvv = propValMapper.findByValue(value);
 		Vector<Contact> myContacts = this.getMyContactsPrev();
+		Vector<ContactList> myLists = this.getMyContactListsPrev();
+		
 		for (PropertyValue pv : pvv) {
 			Contact c = cMapper.findBy(pv);
 			c.setName(this.getNameOfContact(c));
@@ -458,9 +470,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				cv.add(c);
 
 		}
-		// Findet alle KontaktListen
-		cv.addAll(clMapper.findContactListByName(value));
-		
+		// Findet alle KontaktListen die der Nutzer anzeigen darf
+		for(ContactList cl : clMapper.findContactListByName(value)){
+			if (myLists.contains(cl))
+				cv.add(cl);
+		}
+//		cv.sort(new BOCompare());
 		return cv;
 	}
 
@@ -574,6 +589,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<ContactList> contactListVector = clMapper.findContactListByUserId(this.getCurrentUser());
 		// Alle geteilten Listen
 		contactListVector.addAll(this.getAllCLSharedByOthersToMePrev());
+//		contactListVector.sort(new BOCompare());
 		return contactListVector;
 	}
 
@@ -806,10 +822,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public Participation createParticipation(Participation part) {
 		Participation participation = partMapper.insertParticipation(part);
-		boMapper.setStatusTrue(participation.getReferenceID());
+		boMapper.setStatusTrue(part.getReferenceID());
+		
 		if(part.getReferencedObject() instanceof Contact){
 			// Teilt nur Eigenscaftsausprägungen die sich aktuell in dem Contact-Objekt befinden und wenn der Kontakt nicht vollständig geteilt wurde
-			if(((Contact) part.getReferencedObject()).getPropertyValues() != null && !part.getShareAll()){
+			if( !part.getShareAll() && ((Contact) part.getReferencedObject()).getPropertyValues() != null){
 				// Teilt alle Eienscaftsausprägungen die sich in der Lite Befinden mit dem Nutzer
 				for(PropertyValue pv : ((Contact) part.getReferencedObject()).getPropertyValues()){
 					Participation partPV = new Participation();
@@ -843,12 +860,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		partMapper.updateParticipation(part); 
 		if(part.getReferencedObject() instanceof Contact){
 			Contact c = (Contact) part.getReferencedObject();
-			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt		
+			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt
+			System.out.println("Alles getielt? "+part.getShareAll());
 			if(part.getShareAll()){
 				for(PropertyValue pv : c.getPropertyValues()){
 					Participation removePart = new Participation();
 					removePart.setParticipant(part.getParticipant());
 					removePart.setReference(pv);
+					System.out.println("Delete Part: "+part);
 					this.deleteParticipation(removePart);
 				}
 			
@@ -951,14 +970,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			BusinessObjectMapper.businessObjectMapper().setStatusFalse(part.getReferenceID());
 		}
 		if(p.getReferencedObject() instanceof Contact){
-			for(PropertyValue pv : ((Contact) p.getReferencedObject()).getPropertyValues()){
+			for(PropertyValue pv : this.getPropertyValuesForContact((Contact) p.getReferencedObject())){
 				Participation partPV = new Participation();
 				partPV.setParticipant(p.getParticipant());
 				partPV.setReference(pv);
 				this.deleteParticipation(partPV);
 			}
 		}else if(p.getReferencedObject() instanceof ContactList){
-			for(Contact c : ((ContactList) part.getReferencedObject()).getContacts()){
+			for(Contact c : this.getContactsFromList((ContactList)p.getReferencedObject())){
 				Participation partC = new Participation();
 				partC.setParticipant(part.getParticipant());
 				partC.setReference(c);
@@ -1018,6 +1037,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 			bov.add(cl);
 		}
+//		bov.sort(new BOCompare());
 		return bov;
 
 	}
@@ -1188,7 +1208,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		if (cResultVector.isEmpty())
 			System.out.println("# no contact found");
-
+//		cResultVector.sort(new BOCompare());
 		return cResultVector;
 	}
 	
@@ -1284,6 +1304,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (ContactList cl : this.getAllCLSharedByMePrev()) {
 			vbo.add(cl);
 		}
+//		vbo.sort(new BOCompare());
 		return vbo;
 
 	}
@@ -1344,7 +1365,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 		if (contactResultVector.isEmpty())
 			System.out.println("# no contacts found");
-
+//		contactResultVector.sort(new BOCompare());
 		return contactResultVector;
 
 	}
@@ -1372,7 +1393,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				contactListVector.addElement(cl);
 			}
 		}
-
+//		contactListVector.sort(new BOCompare());
 		return contactListVector;
 
 	}
@@ -1489,6 +1510,40 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 	}
 	
+	/**
+	 * Methode zum vergleichen von BusinesObjects.
+	 * Wird verwendet um die ausgabe an den TreeView zu sortieren.
+	 * @author Oliver Gorges
+	 *
+	 */
+	public class BOCompare implements Comparator<BusinessObject>{
+
+			@Override
+			public int compare(BusinessObject o1, BusinessObject o2) {
+				// TODO Auto-generated method stub
+				String s1 = "", s2 = "";
+				// Wandelt ein ContactList-Objekt in einen String um
+				if(o1 instanceof ContactList){
+					s1 = ((ContactList) o1).getName();
+				}else if(o2 instanceof ContactList){
+					s2 = ((ContactList) o2).getName();
+				}
+				// Wandelt ein Contact-Objekt in einen String um
+				if(o1 instanceof Contact){
+					s1 = ((Contact) o1).getName().getValue();
+				}else if(o2 instanceof Contact){
+					s2 = ((Contact) o2).getName().getValue();
+				}
+				// Wandelt ein PropertyValue-Objekt in einen String um
+				if(o1 instanceof PropertyValue){
+					s1 = ((PropertyValue) o1).getValue();
+				}else if(o2 instanceof PropertyValue){
+					s2 = ((PropertyValue) o2).getValue();
+				}
+				
+				return s1.compareTo(s2);
+			}
+	}
 	
 
 }

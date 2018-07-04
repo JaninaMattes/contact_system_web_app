@@ -49,21 +49,19 @@ body {
 	width:600px;
 	border:1px solid silver;
 	margin: auto;
-	/* TODO: Linksb�ndig machen
 }
 
 .reportcontactdata{ /* Tabelle mit Kontaktdaten eines einzelnen Kontakts im erstellten Report */
 	width:600px;
 	border:1px solid silver;
 	margin: 10px auto;
-	/*TODO: Linksb�ndig machen */
 	
 }
 
 .reportpropertyvalues{ /* Tabellenzeile, die eine Eigenschaft eines einzelnen Kontakts im erstellten Report darstellt */
 }
 
-.label{	/* linke Tabellenspalte, enthält Beschriftung zu den Werten der Eigenschaften eines Kontakts  (Report) */
+.label{	/* linke Tabellenspalte, enth�lt Beschriftung zu den Werten der Eigenschaften eines Kontakts  (Report) */
 	width: 200px;
 }
 
@@ -110,18 +108,21 @@ body {
 	overflow: auto;
 }
 
-#ListBox {
+.ListBox {
    background: transparent;
-   width: 268px;
+   width: 15vw;
+   min-width: 170px;
+   height: 50px;
    padding-left: 5px;
    font-size: 16px;
    line-height: 1;
    border: 0;
    border-radius: 0;
-   height: 34px;
    Color:black;
    -webkit-appearance: none;
 } 
+
+/*Link*/
 
 #Link{
 	font-family: "Arial", Arial, sans-serif;
@@ -147,12 +148,6 @@ body {
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
     
 }
-#labelfeldhinzu{
-	/*TODO: weiter runter schieben (top-margin)!*/
-}
-#textbox{
-	/*width: festlegen (vergr��ern)*/
-}
 
 #shareButton{ /* Teilen-Button*/
 	height: 25px;
@@ -172,7 +167,7 @@ body {
     
 }
 
-#menu-button{ /* Buttons der Men�leiste des Editors */
+.menu-button{ /* Buttons der Men�leiste des Editors */
 	height: 65px;
     width: 20vw;
     font-family: "Arial", Arial, sans-serif;
@@ -190,8 +185,14 @@ body {
 	
 }
 
-#menu-button:hover{ /* Farbe bei Klick auf einen Men�-Button */
+.menu-button:hover{ /* Farbe bei Klick auf einen Men�-Button */
     background: #dfddfa;
+    color: #000051;
+}
+
+.menu-button.selected{
+	background:#edf4ff;
+	color: #000051;
 }
 
 #searchButton{ /* "Suchen"-Button im Editor */
@@ -212,8 +213,8 @@ body {
 
 #searchAllContacts{ /* Button "Alle Kontakte" im Report Generator */
 	height: 25px;
-    width: 280px;
-   margin-left: 20px;
+    width: 21vw;
+   	margin-left: 2vw;
     margin-top: 15px;
     font-family: "Arial", Arial, sans-serif;
 	background-color: #c0c0c0;
@@ -266,6 +267,7 @@ body {
 #deleteCLCButton{ /*"Kontaktliste l�schen" und "Kontakt entfernen"-Buttons*/
 
 	width: 100px;
+	hight: 60
 	color: black;
 	cursor: pointer;	/*Mauszeiger ver�ndert sich, wenn man auf dem Button ist*/
 	border-radius: 4px; /*abgerundete Ecken*/
@@ -327,6 +329,19 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
   	left: calc(100vw - 200px);;
 }
 
+#add{ /*Add-Button im Editor (+ Button) */
+    position: fixed;
+    top: 87vh;
+    left: 50vw;
+    text-align: center;
+    z-index: 5;
+    height: 50px;
+    width:  50px;
+    color: white;
+    background: #000051;
+    border-radius: 50px;
+}
+
 /* Das Logo */
 
 #logo{
@@ -352,6 +367,9 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 
 /* Textboxen */
 
+#textbox{
+	/*width: festlegen (vergr��ern)*/
+}
 #TextBox{
 	margin-left: 4px;
 	padding-left: 182px;
@@ -364,7 +382,6 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 	margin-top: 10px;
 	margin-right: 5px;
 	margin-left: 20px;
-	padding-right: 150px; /*TODO: funktioniert noch nicht, Textfeld soll l�nger werden*/
 }
 
 #search-textfeld{
@@ -399,6 +416,9 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 
 /* Labels */
 
+#labelfeldhinzu{
+	/*TODO: weiter runter schieben (top-margin)!*/
+}
 
 .contactlabels{
     border-style: none;
@@ -504,32 +524,21 @@ div#Trailer {
 
 }
 
-#add{ /*Add-Button im Editor (+ Button) */
-    position: fixed;
-    top: 87vh;
-    left: 50vw;
-    text-align: center;
-    z-index: 5;
-    height: 50px;
-    width:  50px;
-    color: white;
-    background: black;
-    border-radius: 50px;
-}
 /*Ladeanzeige*/
+
 #load{
 	display:block;
 	height:100vh;
 	width:100vw;
 	z-index:10;
 	position: fixed;
-	background: #f6f9ff; /* #000000; */
+	background: #000000; 
 	opacity: 0.5;
 }
 .load_Animation{
 	z-index:10;
-    top: 20vh; /* 45vh; */
-    left: 20vw; /* 45vw; */
+    top: 45vh; 
+    left: 45vw; 
 	z-index:11;
 	position: fixed;
 }
@@ -546,9 +555,11 @@ div#Trailer {
 .TextBox{
 	background: transparent;
 	padding: 3px;
+	width: 20vw;
+	min-width: auto;
 	border: solid 1px black;
 	border-radius: 2px;
-	font-size: 1em;
+	font-size: 1.2em;
    -webkit-appearance: none;
 }
 
@@ -557,4 +568,65 @@ div#Trailer {
 	border: 0;
 	border-radius: 0;
 }
+
+.Label{
+	background: transparent;
+	padding: 3px;
+	Color: black;
+	font-size: 1.2em;
+   -webkit-appearance: none;
+}
+
+.mainButton{
+    width: 12vw;
+    min-width: 100px;
+    height: 50px;
+    border-radius: 5px;
+    margin-right: 3vw;
+    
+}
+
+.sideButton{
+    width: 6vw;
+    min-width: 110px;
+    height: 50px;
+    border-radius: 5px;
+    
+}
+
+.mainButtonPanel{
+    Bottom: 8vh;
+    position: fixed;
+    display: inline-block;
+    width: 40vw;
+}
+
+.notification{
+   	min-width: 150px;
+    width: auto;
+    height: 50px;
+    background: #534bae;
+    margin-left: 50vw;
+    margin-top: 80vh;
+	opacity: 100;
+    z-index: 10;
+    border-radius: 100px;
+    position: fixed;
+}
+
+/* Benachrichtigungs anzeig */
+.notification.fade{
+	opacity: 0;  
+	transition: opacity 5s;
+}
+
+.notificationText{
+	color: #ffffff;
+	text-align: center;
+    margin-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+	width: auto;
+}
+
 

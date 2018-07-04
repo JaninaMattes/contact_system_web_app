@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 /**
  * Spalte eines <code>Row</code>-Objekts. <code>Column</code>-Objekte
- * implementieren das <code>Serializable</code>-Interface und können dadurch als
- * Kopie z.B. vom Server an den Client übertragen werden.
+ * implementieren das <code>Serializable</code>-Interface und koennen dadurch als
+ * Kopie z.B. vom Server an den Client uebertragen werden.
  * 
  * @see Row
  * @see de.hdm.thies.bankProjekt.shared.report.Column
@@ -23,8 +23,8 @@ public class Column implements Serializable {
 	private String value = "";
 	
 	/**
-	 * Serialisierbare Klassen, die mittels GWT-RPC transportiert werden sollen, müssen 
-	 * einen Konstruktor ohne übergebene Parameter besitzen. Besitzt eine Klasse min. einen
+	 * Serialisierbare Klassen, die mittels GWT-RPC transportiert werden sollen, muessen 
+	 * einen Konstruktor ohne uebergebene Parameter besitzen. Besitzt eine Klasse min. einen
 	 * explizit angegebenen Konstruktor, so gibt es nur diese explizit implementierten 
 	 * Konstruktoren, der Default-Konstruktor (No-Argument-Konstruktor, der automatisch 
 	 * existiert, wenn kein Konstruktor explizit angegeben wird) ist dann nicht vorhanden.
@@ -48,7 +48,7 @@ public class Column implements Serializable {
 	 }
 
 	/**
-	 * Zurückgeben des Spaltenwerts
+	 * Zurueckgeben des Spaltenwerts
 	 * @return Der Eintrag als String
 	 */
 	public String getValue() {
@@ -66,7 +66,7 @@ public class Column implements Serializable {
 	/**
 	 * Umwandeln des <code>Column</code>-Objekts in einen String.
 	 * Da das einzige Attribut <code>value</code> bereits ein String ist, gibt
-	 * die Methode nur dieses zurück.
+	 * die Methode nur dieses zurueck.
 	 */
 	@Override
 	public String toString() {

@@ -3,9 +3,9 @@ package de.hdm.kontaktsystem.shared.report;
 import java.io.Serializable;
 
 /**
- * Die Klasse <code>SimpleParagraph</code> stellt einzelne Absätze dar.
- * Der Inhalt der Absätze wird als String gespeichert.
- * Der Anwender sollte in diesem String keinerlei Formatierungssymbole einfügen, 
+ * Die Klasse <code>SimpleParagraph</code> stellt einzelne Absaetze dar.
+ * Der Inhalt der Absaetze wird als String gespeichert.
+ * Der Anwender sollte in diesem String keinerlei Formatierungssymbole einfuegen, 
  * da diese in der Regel zielformatspezifisch sind.
  * 
  * @see Paragraph
@@ -24,8 +24,8 @@ public class SimpleParagraph extends Paragraph implements Serializable {
 
 	
 	/**
-	 * Serialisierbare Klassen, die mittels GWT-RPC transportiert werden sollen, müssen 
-	 * einen Konstruktor ohne übergebene Parameter besitzen. Besitzt eine Klasse min. einen
+	 * Serialisierbare Klassen, die mittels GWT-RPC transportiert werden sollen, muessen 
+	 * einen Konstruktor ohne uebergebene Parameter besitzen. Besitzt eine Klasse min. einen
 	 * explizit angegebenen Konstruktor, so gibt es nur diese explizit implementierten 
 	 * Konstruktoren, der Default-Konstruktor (No-Argument-Konstruktor, der automatisch 
 	 * existiert, wenn kein Konstruktor explizit angegeben wird) ist dann nicht vorhanden.
@@ -49,7 +49,7 @@ public class SimpleParagraph extends Paragraph implements Serializable {
 
 	
 	/**
-	 * Zurückgeben des Inhalts
+	 * Zurueckgeben des Inhalts
 	 * @return Inhalt als String
 	 */
 	public String getText() {
@@ -67,7 +67,7 @@ public class SimpleParagraph extends Paragraph implements Serializable {
 	/**
 	 * Umwandeln des <code>SimpleParagraph</code>-Objekts in einen String.
 	 * Da das einzige Attribut <code>text</code> bereits ein String ist, gibt
-	 * die Methode nur dieses zurück.
+	 * die Methode nur dieses zurueck.
 	 */
 	@Override
 	public String toString() {

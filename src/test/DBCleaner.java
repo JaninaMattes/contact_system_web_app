@@ -48,7 +48,7 @@ public class DBCleaner {
 		int cid = 1;
 		for(User user : csa.getAllUsers()){
 			System.out.println("Delete: " + user);
-			csa.setCurrentUser(user.getGoogleID());
+		//	csa.setCurrentUser(user.getGoogleID());
 			csa.deleteUser(user);
 		}
 		

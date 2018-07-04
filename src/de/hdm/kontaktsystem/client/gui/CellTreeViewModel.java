@@ -1,5 +1,6 @@
 package de.hdm.kontaktsystem.client.gui;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.AbstractCell;
@@ -26,13 +27,13 @@ public class CellTreeViewModel implements TreeViewModel {
 
 	private ContactSystemAdministrationAsync csa = ClientsideSettings.getContactAdministration();
 	private ListDataProvider<BusinessObject> dataProvider = null;
-	private ListDataProvider<BusinessObject> rootData = null;
 	private BusinessObject selectedContactContactlist;
 	private ContactListForm clForm;
 	private ContactForm cForm;
-	private BoKeyProvider boKey = null; // ?????
+	private BoKeyProvider boKey = null;
 	private SingleSelectionModel<BusinessObject> selectionModel;
 	private Vector<BusinessObject> serverData = null;
+	private HashMap<Integer, ListDataProvider<BusinessObject>> dpMap = new HashMap<Integer, ListDataProvider<BusinessObject>>();
 	
 	/**
 	 * Gibt eindeutigen Schluessel f�r das BusinessObject zur�ck.
@@ -46,7 +47,6 @@ public class CellTreeViewModel implements TreeViewModel {
 
 		@Override
 		public Integer getKey(BusinessObject item) {
-			log("Item Key: " + item);
 			if (item != null) {
 				return item.getBoId();
 			}
@@ -55,12 +55,12 @@ public class CellTreeViewModel implements TreeViewModel {
 	}
 
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
-
+		
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			
 			setSelectedContactContactlist(selectionModel.getSelectedObject());
-			log(event.toDebugString());
+			log("Change Selection: "+event.toDebugString());
 			
 			
 			
@@ -70,14 +70,12 @@ public class CellTreeViewModel implements TreeViewModel {
 	
 	public CellTreeViewModel() {
 		boKey = new BoKeyProvider();
-		selectionModel = new SingleSelectionModel<BusinessObject>();
+		selectionModel = new SingleSelectionModel<BusinessObject>(boKey);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
+		
 	}
 	
-	
-	
-	
-	
+
 	public BusinessObject getSelectedContactContactlist() {
 		return selectedContactContactlist;
 	}
@@ -92,20 +90,26 @@ public class CellTreeViewModel implements TreeViewModel {
 	public void setSelectedContactContactlist(BusinessObject sccl) {
 		this.selectedContactContactlist = sccl;
 		log("Selected: "+ sccl);
-		RootPanel.get("Details").clear();
-		if(sccl instanceof ContactList) {
-			clForm.setSelected((ContactList) sccl);
-			log("Update clForm");
-			RootPanel.get("Details").add(clForm);
-		}
-		else if (sccl instanceof Contact) {
-			cForm.setSelected((Contact) sccl);
-			log("Update cForm");
-			RootPanel.get("Details").add(cForm);
+		if(sccl != null){
+			RootPanel.get("Details").clear();
+			if(sccl instanceof ContactList) {
+				clForm.setSelected((ContactList) sccl);
+				log("Update clForm");
+				RootPanel.get("Details").add(clForm);
+			}
+			else if (sccl instanceof Contact) {
+				cForm.setSelected((Contact) sccl);
+				log("Update cForm");
+				RootPanel.get("Details").add(cForm);
+			}
 		}
 	}
 
-
+	public void restSelection(){
+		log("Reset");
+		RootPanel.get("Details").clear();
+		selectionModel.clear();
+	}
 
 
 
@@ -142,37 +146,27 @@ public class CellTreeViewModel implements TreeViewModel {
 	 */
 	public void updateData(Vector<BusinessObject> bov){
 		log("Update Data");
-		rootData.getList().clear();
+		dpMap.get(0).getList().clear();
 		dataProvider = null;
 		for (BusinessObject bo : bov) {
-			rootData.getList().add(bo);
+			dpMap.get(0).getList().add(bo);
 		}
-		rootData.refresh();
+		dpMap.get(0).refresh();
 	}
 	
-	public void updateRoot(BusinessObject bo){
-		log("Update root");
-		if(rootData.getList().contains(bo)){
-			int index = 0;
-			for(BusinessObject listElement : rootData.getList()){
-				if(listElement.equals(bo)) break;
-				index++;
-			}
-			rootData.getList().set(index, bo);
-			rootData.refresh();
-		}
-					
-	}
-	public void updateLeef(BusinessObject bo){
+	
+	public void updateBO(BusinessObject bo){
 		log("Update Leef");		
-		if(dataProvider.getList().contains(bo)){
-			int index = 0;
-			for(BusinessObject listElement : rootData.getList()){
-				if(listElement.equals(bo)) break;
-				index++;
+		for(Integer i : dpMap.keySet()){
+			if(dpMap.get(i).getList().contains(bo)){
+				int index = 0;
+				for(BusinessObject listElement : dpMap.get(0).getList()){
+					if(listElement.equals(bo)) break;
+					index++;
+				}
+				dpMap.get(i).getList().set(index, bo);
+				dpMap.get(i).refresh();
 			}
-			dataProvider.getList().set(index, bo);
-			dataProvider.refresh();
 		}
 			
 	}
@@ -187,15 +181,15 @@ public class CellTreeViewModel implements TreeViewModel {
 	public void addToRoot(BusinessObject bo){
 		
 		log("Add to root "+bo);
-		rootData.getList().add(bo);
-		rootData.refresh();
+		dpMap.get(0).getList().add(bo);
+		dpMap.get(0).refresh();
 	}
 	
-	public void addToLeef(BusinessObject bo){
+	public void addToLeef(int key, BusinessObject bo){
 		
 		log("Add to Leef");
-		dataProvider.getList().add(bo);
-		dataProvider.refresh();
+		dpMap.get(key).getList().add(bo);
+		dpMap.get(key).refresh();
 	}
 	
 	/**
@@ -205,17 +199,20 @@ public class CellTreeViewModel implements TreeViewModel {
 	 * @param bo
 	 */
 	
-	public void removeFromRoot(BusinessObject bo){
-		log("Delete from root");
-		rootData.getList().remove(bo);
-		rootData.refresh();
+	public void removeBO(BusinessObject bo){
+		log("Delete from Tree");
+		for(Integer i : dpMap.keySet()){
+			dpMap.get(i).getList().remove(bo);
+			dpMap.get(i).refresh();
+		}
 		
 	}
-	public void removeFromLeef(BusinessObject bo){
+	
+	public void removeFromLeef(int key, BusinessObject bo){
 		
 		log("Delete from Leef");
-		dataProvider.getList().remove(bo);
-		dataProvider.refresh();	
+		dpMap.get(key).getList().remove(bo);
+		dpMap.get(key).refresh();	
 	}
 	
 
@@ -232,7 +229,7 @@ public class CellTreeViewModel implements TreeViewModel {
 
 		if (value instanceof Vector) {
 			log("NodeInfo: is Vector" );
-			rootData = dataProvider; // Speichert RootListe damit die UpdateData methode die Daten Überschreiben kann;
+			dpMap.put(0, dataProvider); // Speichert RootListe damit die UpdateData methode die Daten Überschreiben kann;
 			Vector v = (Vector) value;
 			Vector<BusinessObject> bov = v;	
 			
@@ -242,6 +239,8 @@ public class CellTreeViewModel implements TreeViewModel {
 				}
 		}else 
 		if(value instanceof ContactList){
+			log("Open List: "+ ((ContactList) value).getName());
+			dpMap.put(((ContactList) value).getBoId(), dataProvider);
 			this.csa.getContactsFromList(((ContactList) value), new AsyncCallback<Vector<Contact>>(){
 
 				@Override
@@ -252,7 +251,7 @@ public class CellTreeViewModel implements TreeViewModel {
 
 				@Override
 				public void onSuccess(Vector<Contact> result) {
-					// TODO Auto-generated method stub
+					
 					for(Contact c : result){
 						dataProvider.getList().add(c);
 					}

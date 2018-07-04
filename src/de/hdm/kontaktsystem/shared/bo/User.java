@@ -3,43 +3,65 @@ package de.hdm.kontaktsystem.shared.bo;
 import java.io.Serializable;
 
 /**<p>
- * An User is a special <code>Contact</code> an inherits all Attributes from <code>Contact</code>. 
+ * Die Klasse <code>User</code> bestitzt folgende Elemente, User_ID, welche der Google ID entspricht, 
+ * die dazugehoerige Google Adresse und einen <code>Contact</code> Objekt. Die Google-Mail Adresse dient dazu, um den 
+ * <code>User</code> einzeln zu identifiezieren und von anderen <code>User</code> abzugrenzen, um die Teilhaber-Funktion zu nutzen. 
+ * Das Kontaktobjekt beinhaltet den Namen des <code>User</code>, welcher im System angezeigt wird. 
  * </p><p>
- * It extends the <code>Contact</code> class with an googleToken, to link the Userprofile with the Google Account.
- * This class is used to login the user and can be set as owner or praticipant for Contact oder ContactList.
+ * Sie erweitert die <code>Contact</code> Klasse mit einem googleToken, um das Userprofile mit dem Google Account zu verbinden.
+ * Diese Klasse dient als Login für den User und kann als Besitzer, oder Teilhaber eines Kontaktes oder Kontaktliste 
+ * gesetzt werden.
  * </p>
  * @author Oliver
  *
  */
 
-// TODO: Mit Datenbank Modell abgleichen!
-
 public class User implements Serializable{
 	
+	/**
+	 * Die default SerialVersionUID
+	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Gibt an ob der Login erfolgreich war.
+	 */
 	private boolean loggedIn = false;
 	
+	/**
+	 * Verweist auf die Login URL
+	 */
 	private String loginUrl;
 	
+	/**
+	 * Verweist auf die logout URL
+	 */
 	private String logoutUrl;
 	
-	private Double googleID; // -> Double
+	/**
+	 * Verweist auf die GoogleID
+	 */
+	private Double googleID;
 	
+	/**
+	 * Referenz auf die Gmail Adresse
+	 */
 	private String gMail = null; 
 	
+	/**
+	 * Referenz auf ein Kontakt Objekt
+	 */
 	private Contact userContact = null;
 	
-	
+	/**
+	 * Leerer Konstruktor
+	 */
 	public User() {
-
-		// user_Contact = new Contact();
-		// TODO: Create a Contructor in Contact with an User 
 
 	}
 	
 	/**
-	 * Return the Google-Account ID
+	 * Gibt die Google-Account ID zurueck
 	 * @return googleID
 	 */
 	public double getGoogleID(){
@@ -47,14 +69,14 @@ public class User implements Serializable{
 	}
 	
 	/**
-	 * Set the unique UserID from the Google-Account
+	 * Setzt die eindeutige UserId vom Google Account
 	 */
 	public void setGoogleID(double id){
 		this.googleID = id;
 	}
 	
 	/**
-	 * Return the Google-Mail address from the User
+	 * Gibt die Google Mail Adresse vom User zurueck
 	 * @return gMail address
 	 */
 	public String getGMail(){
@@ -62,14 +84,14 @@ public class User implements Serializable{
 	}
 	
 	/**
-	 * Set the Google-Mail address to an User
+	 * Setzt die Google Mail Adresse eines User
 	 */
 	public void setGMail(String mail){
 		this.gMail = mail;
 	}
 	
 	/**
-	 * Returns the <code>Contact</code> that is linked to the User
+	 * Gibt den <code>Contact</code>, welcher mit dem User verknüpft ist, zurueck
 	 * @return contact
 	 */
 	public Contact getUserContact(){
@@ -77,37 +99,65 @@ public class User implements Serializable{
 	}
 	
 	/**
-	 * Set the <code>Contact</code> that is linked to the User
+	 * Setzt den <code>Contact</code>, welcher mit dem User verknüpft ist
 	 */
 	public void setUserContact(Contact contact){
 		this.userContact = contact;
 	}
 	
+	/**
+	 * Gibt die Login URL zurueck
+	 * @return
+	 */
 	public String getLoginUrl() {
 		return loginUrl;
 	}
-
+	
+	/**
+	 * Setzt die Login URL
+	 * @param loginUrl
+	 */
 	public void setLoginUrl(String loginUrl) {
 		this.loginUrl = loginUrl;
 	}
 
+	/**
+	 * Gibt die Login URL zurueck
+	 * @return
+	 */
 	public String getLogoutUrl() {
 		return logoutUrl;
 	}
 
+	/**
+	 * Setzt die Logout URL
+	 * @param logoutUrl
+	 */
 	public void setLogoutUrl(String logoutUrl) {
 		this.logoutUrl = logoutUrl;
 	}
 	
+	/**
+	 * Setzt den LoggedIn
+	 * @param loggedIn
+	 */
 	public void setLoggedIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
 	}
 
+	/**
+	 * Gibt den isLoggedIn zurueck
+	 * @return
+	 */
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}
 
-	@Override
+	/**
+	 * Der Hash-Code liefert zu jedem Objekt eine eindeutige Integerzahl, mit der das 
+	 * Objekt identifiziert werden kann. Der Hash-Wert entspricht hier einfachheitshalber 
+	 * der ID des Objekts. Dies ueberschreibt die Methode hashCode() der Klasse Object.
+	 */
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -119,7 +169,10 @@ public class User implements Serializable{
 		return result;
 	}
 
-	@Override
+	/**
+	 * Prueft, ob ein Objekt einem User Objekt gleicht.
+	 * Gleichheit bedeutet hier, dass alle Attribute der Objekte uebereinstimmen.
+	 */
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
@@ -134,9 +187,12 @@ public class User implements Serializable{
 		return true;
 	}
 	
-	@Override
+	 /**
+	  * Die toString Methode gibt die Attribute der <code>User</code> Klasse textuell aus.
+	  * Sie gibt die das User Objekt als String zurueck.
+	  */
 	public String toString(){
-		return "User " + googleID + ": "+  gMail; // +" -> "+userContact.getBo_Id();
+		return "User " + googleID + ": "+  gMail;
 	}
 
 	

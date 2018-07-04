@@ -4,10 +4,14 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellTree;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -146,6 +150,9 @@ public class ContactSystem implements EntryPoint {
 	//Add
 	private boolean addContact = true;
 	
+	// Notification
+	private static PopupPanel notification = new PopupPanel();
+	
 	
 	/**
 	 * Die Methode <code>loadTree()</code> ruft das TreeView Model auf
@@ -259,8 +266,8 @@ public class ContactSystem implements EntryPoint {
 	/**
 	 * Die Methode <code>loadLogin()</code> führt zum Aufbau der Login-Seite.
 	 * Wenn der Nutzer ausgeloggt wurde, kann er sich hierüber wieder neu im 
-	 * System einloggen. 
-	 */
+	 * System einloggen. */
+	 
 	
 	private void loadLogin() {	
 		log("Login");
@@ -280,9 +287,11 @@ public class ContactSystem implements EntryPoint {
 		loginPanel.add(login);
 		loginPanel.add(new HTML("</center>"));
 		RootPanel.get("Lists").add(loginPanel); //TODO: prüfen ob richtige HTML
+		
+
 	}
 		
-	
+
 	/**
 	 * Aufbau der Startseite des Kontaktsystems. Elemente werden in Listenform dargestellt, 
 	 * ausgewählte Elemente werden als Formulare rechts im Bildschirm aufgerufen
@@ -341,17 +350,15 @@ public class ContactSystem implements EntryPoint {
 		searchButton.getElement().setId("searchButton"); 
 		
 		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
-		contactButton.removeStyleName("gwt-Button");
-		contactButton.getElement().setId("menu-button");
-		contactListsButton.removeStyleName("gwt-Button");
-		contactListsButton.getElement().setId("menu-button");
-		myParticipationsButton.removeStyleName("gwt-Button");
-		myParticipationsButton.getElement().setId("menu-button");
-		receivedParticipationsButton.removeStyleName("gwt-Button");
-		receivedParticipationsButton.getElement().setId("menu-button");
-		accountButton.removeStyleName("gwt-Button");
-		accountButton.getElement().setId("menu-button");
+		accountButton.setStyleName("menu-button");
+		contactButton.setStyleName("menu-button");
+		contactListsButton.setStyleName("menu-button");
+		myParticipationsButton.setStyleName("menu-button");
+		receivedParticipationsButton.setStyleName("menu-button");
 		
+		// Einblenden einer kurzen benachrichtigung für den Nutzer;
+		notification.setStyleName("notification");
+		notification.setVisible(false);
 		/** 
 		 * Der Name, mit welchem das Search-Textfeld in CSS formatiert werden kann, wird festgelegt. 
 		 */
@@ -394,11 +401,18 @@ public class ContactSystem implements EntryPoint {
 	
 		contactButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-			//contactSystemAdmin.getAllContactsFromUser(new AsyncCallback<Vector<Contact>>() {
-				
+			tvm.restSelection();
 			addContact = true;
 			addPanel.setVisible(true);
 			loadPanel.setVisible(true);
+			
+
+			contactButton.addStyleName("selected");
+			accountButton.removeStyleName("selected");
+			contactListsButton.removeStyleName("selected");
+			myParticipationsButton.removeStyleName("selected");
+			receivedParticipationsButton.removeStyleName("selected");
+			
 			contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -430,10 +444,17 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ContactListButton
 		contactListsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-			//	contactSystemAdmin.getAllContactListsFromUser(new AsyncCallback<Vector<ContactList>>() {
+				tvm.restSelection();
 				addContact = false;
 				addPanel.setVisible(true);
 				loadPanel.setVisible(true);
+				
+				contactListsButton.addStyleName("selected");
+				accountButton.removeStyleName("selected");
+				contactButton.removeStyleName("selected");
+				myParticipationsButton.removeStyleName("selected");
+				receivedParticipationsButton.removeStyleName("selected");
+				
 				contactSystemAdmin.getMyContactListsPrev(new AsyncCallback<Vector<ContactList>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -471,8 +492,16 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für MyParticipationsButton
 		myParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				tvm.restSelection();
 				addPanel.setVisible(false);
 				loadPanel.setVisible(true);
+				
+				myParticipationsButton.addStyleName("selected");
+				accountButton.removeStyleName("selected");
+				contactListsButton.removeStyleName("selected");
+				contactButton.removeStyleName("selected");
+				receivedParticipationsButton.removeStyleName("selected");
+				
 				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -509,8 +538,16 @@ public class ContactSystem implements EntryPoint {
 		//Clickhandler für ReceivedParticipationsButton
 		receivedParticipationsButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				tvm.restSelection();
 				addPanel.setVisible(false);
 				loadPanel.setVisible(true);
+				
+				receivedParticipationsButton.addStyleName("selected");
+				accountButton.removeStyleName("selected");
+				contactListsButton.removeStyleName("selected");
+				contactButton.removeStyleName("selected");
+				myParticipationsButton.removeStyleName("selected");
+				
 				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
@@ -540,8 +577,17 @@ public class ContactSystem implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub		
-				RootPanel.get("Details").clear();
+				accountButton.addStyleName("selected");
+				receivedParticipationsButton.removeStyleName("selected");
+				contactListsButton.removeStyleName("selected");
+				contactButton.removeStyleName("selected");
+				myParticipationsButton.removeStyleName("selected");
+				
+				
+				// Resettet den TreeView da in der account ansicht nihts von dem Tree ausgewählt ist
+				tvm.restSelection(); // Account wird danach nicht mehr angezeigt
+//				RootPanel.get("Details").clear();
+				log("Add: Account");
 				RootPanel.get("Details").add(uf); 
 			}
 			
@@ -558,7 +604,9 @@ public class ContactSystem implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				RootPanel.get("Details").clear();
+				tvm.restSelection();
+//				RootPanel.get("Details").clear();
+				log("Add: New");
 				if(addContact){
 					Contact c = null;
 					cf.setSelected(c);
@@ -572,6 +620,8 @@ public class ContactSystem implements EntryPoint {
 			}
 			
 		});
+		
+		
 		
 		Image add = new Image("/images/add.png");
 		add.setPixelSize(50, 50);
@@ -601,8 +651,28 @@ public class ContactSystem implements EntryPoint {
 	  	RootPanel.get("Header").add(headerPanel);
 	  	RootPanel.get("Navigator").add(navigation);
 	  	RootPanel.get("Trailer").add(trailer);
+	  	RootPanel.get().add(notification);
 	  	RootPanel.get().add(addPanel);
 		
+	}
+	
+	// Pandel das den Nutzer über Aktionen des Systems informiert
+	public static void triggerNotify(String s){
+		final Label text = new Label(s);
+		text.setStyleName("notificationText");
+		notification.add(text);
+		notification.setVisible(true);
+		notification.addStyleName("fade");
+		Timer timer = new Timer(){
+            @Override
+            public void run()
+            {
+            	notification.removeStyleName("fade");
+            	notification.remove(text);
+            	notification.setVisible(false);
+            }
+        };
+        timer.schedule(5000);
 	}
 	
 	/**
