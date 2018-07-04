@@ -157,6 +157,10 @@ public class ContactListForm extends VerticalPanel {
 		shareDialog.setVisible(false);
 		this.add(shareDialog);
 	
+		/*
+		 * CSS
+		 */
+		contactListStatus.setStyleName("Status"); //Status der Kontaktliste
 		nameContactList.setStyleName("ListBox");
 		nameContactList.setStyleName("TextBox");
 		contactsToAdd.setStyleName("ListBox");
@@ -166,8 +170,9 @@ public class ContactListForm extends VerticalPanel {
 		/*
 		 * Css für die Labels
 		 */
+		
 		contactListLabel.setStyleName("Label");
-		contactListStatus.setStyleName("Label");
+		contactListStatus.getElement().setId("Label");
 		contactListStatusValue.setStyleName("Label");
 		contactLabel.setStyleName("Label");
 		labelAddConsToList.setStyleName("Label");
@@ -207,7 +212,7 @@ public class ContactListForm extends VerticalPanel {
 		// Anzeige des Labels für Vorname und Nachname gleicher StyleName
 
 		contactLabel.getElement().setId("contactlabel");
-		contactListStatus.getElement().setId("contactstatus");
+
 
 		contactNames.setStyleName("ListBox");
 		listBoxShareWith.setStyleName("ListBox");
@@ -231,7 +236,7 @@ public class ContactListForm extends VerticalPanel {
 		btnPanel.setStyleName("mainButtonPanel");
 		deleteClButton.setStyleName("mainButton");
 		cancelNewButton.setStyleName("mainButton");
-		
+		email.setStyleName("Status");
 	
 		deleteConButton.setStyleName("sideButton");
 		
@@ -372,6 +377,7 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 	}
+	
 
 	/**
 	 * ClickHandler um den ShareDialog zu schließen
@@ -926,7 +932,8 @@ public class ContactListForm extends VerticalPanel {
 					} else {
 						contactListStatusValue.setText("Nicht geteilt");
 					}
-				
+					//Status
+					contactListStatusValue.setStyleName("Status");
 					
 					int count = 0;
 					for (Contact con : list.getContacts()) {

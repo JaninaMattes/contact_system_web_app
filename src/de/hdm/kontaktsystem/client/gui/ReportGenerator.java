@@ -106,11 +106,14 @@ public class ReportGenerator implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
-		//loadReportGenerator(); //Test, solange Login nicht funktioniert
+		loadReportGenerator(); //Test, solange Login nicht funktioniert
+		
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */	
+		
+		/*
 		loadPanel.setVisible(false);
 		reportGenerator = ClientsideSettings.getReportGenerator();
 		reportGenerator.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
@@ -129,6 +132,7 @@ public class ReportGenerator implements EntryPoint {
 				}
 			}
 		});
+		*/
 	}
 		
 	/**

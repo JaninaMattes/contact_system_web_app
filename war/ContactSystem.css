@@ -139,32 +139,24 @@ body {
 
 /*Buttons*/
 
-#addedit{ /*Button "Hinzufï¿½gen" und "Bearbeiten"
-	height:25px;
-	width: 80px;
-	color: black;
-    cursor: pointer;
-	border-radius: 4px; /*abgerundete Ecken*/
-    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
+/*Untere Buttons: "Bearbeiten"- "Teilen"-"Löschen"-Buttons*/
+.mainButton{
+    width: 12vw;
+    min-width: 100px;
+    height: 50px;
+    border-radius: 5px;
+    margin-right: 3vw;
     
 }
 
-#shareButton{ /* Teilen-Button*/
-	height: 25px;
-    width: 100px;
-    font-size: 14px;
-    border: none;
-    font-family: "Arial", Arial, sans-serif;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin: 10px 2px;
-    margin-left: 3px;
-    color: black;
-    cursor: pointer;
-	border-radius: 4px; /*abgerundete Ecken*/
-    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
+/*Seitliche Buttons: Kontakt entfernen" "Hinzufügen"-Buttons */
+.sideButton{
+    width: 6vw;
+    min-width: 110px;
+    height: 50px;
+    border-radius: 5px;
     
+
 }
 
 .menu-button{ /* Buttons der Menï¿½leiste des Editors */
@@ -228,54 +220,7 @@ body {
     cursor: pointer;
 }
 
-#saveButton{ /* "Speichern"-Button im Editor */
-	height: 25px;
-    width: 100px; 
-    font-family: "Arial", Arial, sans-serif;     
-    border: none;
-    padding: 0px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 10px 2px;
-    margin-left: 3px;
-    color: black;
-    cursor: pointer;
-    border-radius: 4px; /*abgerundete Ecken*/
-    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
-}
-
-#deleteButton{ /* "Lï¿½schen"-Button im Editor */
-	height: 25px;
-    width: 100px;
-    font-family: "Arial", Arial, sans-serif;     
-    border: none;
-    padding-right: 0px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 10px 2px;
-    margin-left: 3px;
-    color: black;
-    cursor: pointer;	/*Mauszeiger verï¿½ndert sich, wenn man auf dem Button ist*/
-	border-radius: 4px; /*abgerundete Ecken*/
-    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
-}
-
-#deleteCLCButton{ /*"Kontaktliste lï¿½schen" und "Kontakt entfernen"-Buttons*/
-
-	width: 100px;
-	hight: 60
-	color: black;
-	cursor: pointer;	/*Mauszeiger verï¿½ndert sich, wenn man auf dem Button ist*/
-	border-radius: 4px; /*abgerundete Ecken*/
-    box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
-
-}
-
-#log-out-button{ /* Logout-Button im Editor und Report Generator */
+.log-out-button{ /* Logout-Button im Editor und Report Generator */
 	height: 30px;
     width: 90px;
 	float: right;
@@ -303,7 +248,7 @@ body {
 }
 /* "Report"- und "Editor"- Button, 
 um vom Editor in den Report Generator zu gelangen und anders herum */
-#switch-button{ 
+.switch-button{ 
 	height: 30px;
     width: 90px;
 	float: right;
@@ -418,6 +363,16 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 
 #labelfeldhinzu{
 	/*TODO: weiter runter schieben (top-margin)!*/
+}
+
+/*Status des Kontakts kursiv setzen*/
+.Status{
+	font-style: italic;
+	background: transparent;
+	padding: 3px;
+	Color: black;
+	font-size: 1.2em;
+   -webkit-appearance: none;
 }
 
 .contactlabels{
@@ -569,6 +524,7 @@ div#Trailer {
 	border-radius: 0;
 }
 
+/*Schrift-style */
 .Label{
 	background: transparent;
 	padding: 3px;
@@ -577,23 +533,8 @@ div#Trailer {
    -webkit-appearance: none;
 }
 
-.mainButton{
-    width: 12vw;
-    min-width: 100px;
-    height: 50px;
-    border-radius: 5px;
-    margin-right: 3vw;
-    
-}
 
-.sideButton{
-    width: 6vw;
-    min-width: 110px;
-    height: 50px;
-    border-radius: 5px;
-    
-}
-
+/*Panel für Buttons*/
 .mainButtonPanel{
     Bottom: 8vh;
     position: fixed;
@@ -601,6 +542,7 @@ div#Trailer {
     width: 40vw;
 }
 
+/* Benachrichtigungsanzeige */
 .notification{
    	min-width: 150px;
     width: auto;
@@ -614,7 +556,6 @@ div#Trailer {
     position: fixed;
 }
 
-/* Benachrichtigungs anzeig */
 .notification.fade{
 	opacity: 0;  
 	transition: opacity 5s;
