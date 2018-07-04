@@ -171,7 +171,6 @@ public class ContactListForm extends VerticalPanel {
 		 * Css für die Labels
 		 */
 		
-		contactListLabel.setStyleName("Label");
 		contactListStatus.getElement().setId("Label");
 		contactListStatusValue.setStyleName("Label");
 		contactLabel.setStyleName("Label");
