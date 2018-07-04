@@ -403,16 +403,31 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	// ### IO ###
 	@Override
 	public Vector<Contact> getContactsFromList(ContactList cl) {
-		Vector<Integer> iv = cMapper.findContactFromList(cl);
-		Vector<Contact> cv = new Vector<Contact>();
-		if (iv != null) {
-			for (int i : iv) {
-				Contact c = cMapper.findContactById(i);
-				c.setName(this.getNameOfContact(c));
-				cv.add(c);
+		Vector<Integer> idV = cMapper.findContactFromList(cl);
+		Vector<Contact> cV = new Vector<Contact>();
+		
+		System.out.println("Suche Kontakte für: " + cl.getOwner().getGoogleID());
+		if (idV != null) { // Überprüf ob die Kontaktliste Kontakte beinhaltet
+			if(cl.getOwner().getGoogleID() == this.getCurrentUser()){
+				for (int i : idV) {
+					Contact c = cMapper.findContactById(i);
+					c.setName(this.getNameOfContact(c));
+					cV.add(c);
+				}
+			}else{ // Filtert Kontakte die nicht geteilt wurden.
+				Vector<Contact> partV = this.getAllCSharedByOthersToMePrev();
+				System.out.println("Filter Kontakte");
+					for (int i : idV) {
+						Contact c = cMapper.findContactById(i);
+						if(c != null && partV.contains(c)){ // Filter ob der Kontakt noch mit dem Nutzer getielt wurde.
+							c.setName(this.getNameOfContact(c));
+							cV.add(c);
+						}
+					}
+			
 			}
 		}
-		return cv;
+		return cV;
 
 	}
 
@@ -597,6 +612,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public ContactList getContactListById(int id) {
 		ContactList contactList = clMapper.findContactListById(id);
+		
 		if (contactList != null) {
 			contactList.setOwner(getUserByID(contactList.getOwner().getGoogleID()));
 			contactList.setContacts(getContactsFromList(contactList));
@@ -604,7 +620,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contactList;
 	}
 	
-	// TODO Überprüfen
 	@Override
 	public ContactList deleteContactList(ContactList contactList) {
 		ContactList cl = null;
@@ -624,8 +639,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	/**
 	 * Es löscht alle KontaktListen, welche zu einer User ID gehören.
-	 * 
-	 * @param UserId
+	 * Verwendet beim Löschen eines Accounts
 	 */
 
 	public void deleteContactListByUserId() {
@@ -635,6 +649,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 	}
 
+	/**
+	 * Fügt einer Liste einen neuen Kontakt hinzu.
+	 * Wenn Die Liste Geteilt wurde, wird dieser ebenso geteilt.
+	 * Wenn Der Kontkat nicht von dem Besitzer hinzugefügt wurde, wird der Kontakt zudem mit dem Besitzer geteilt.
+	 * 
+	 * @param Contact, ContactList
+	 * @return ContactList
+	 */
 	@Override
 	public ContactList addContactToList(Contact contact, ContactList contactList) {
 		
@@ -649,11 +671,25 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				this.createParticipation(createPart);
 			}
 		}
+		if(this.getCurrentUser() != contactList.getOwner().getGoogleID()){ 
+				Participation createPart = new Participation();
+				createPart.setParticipant(contactList.getOwner());
+				createPart.setReference(contact);
+				createPart.setShareAll(true);
+				this.createParticipation(createPart);
+		}
 		
 		return clMapper.addContactToContactlist(contactList, contact);
 
 	}
 
+	/**
+	 * Entfernt eine Kontakt aus einer KontaktListe.
+	 * Wenn Die Liste Geteilt wurde, wird die Teilhaberschft zu der Liste und der dazugehörigen Kontakte gelöscht.
+	 * 
+	 * @param Contact, ContactList
+	 * @return ContactList
+	 */
 	@Override
 	public ContactList removeContactFromList(Contact contact, ContactList contactList) {
 		
@@ -678,9 +714,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 	/**
+	 * Erstellt eine neue Eigenschaftsausrägung für einen Kontakt. 
 	 * Intern Verwendet in EDIT / Create Contact
-	 * @param propertyValue
-	 * @return
+	 * @param PropertyValue
+	 * @return PropertyValue
 	 */
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
 		// Da Property immer fest zu einem Contact-Objekt gehört hat es auch den selben
@@ -700,21 +737,21 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
+	 * Verändert den Value (angezeigten Text) der Eigenschaftsausprägung
 	 * Intern Verwendet in EDIT / Create Contact
-	 * @param propertyValue
-	 * @return
+	 * @param PropertyValue
+	 * @return PropertyValue
 	 */
 	public PropertyValue editPropertyValue(PropertyValue propertyValue) {
 		boMapper.update(propertyValue);
 		return propValMapper.update(propertyValue);
 	}
 
-/**
- * Keine Verwendung
- * @param propertyValue
- * @return
- */
-	// TODO Entfernen ?? 
+	/**
+	 * Löscht eine Eigenschaftsausprägung von einem Kontakt.
+	 * @param PropertyValue
+	 * @return PropertyValue
+	 */
 	public PropertyValue deletePropertyValue(PropertyValue propertyValue) {
 		PropertyValue pv = propValMapper.delete(propertyValue);
 		if (pv != null)
@@ -723,7 +760,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	
-	// TODO Überprüfen
+	/**
+	 * Gibt einen Vector mit allen Eigenschaftsausprägungen zurück, die zu einem Kontakt gehören
+	 * @param Contact
+	 * @return Vector<PropertyValue>
+	 */
 	public Vector<PropertyValue> getPropertyValuesForContact(Contact c) {
 
 		Vector<PropertyValue> pvv = propValMapper.findBy(c);
@@ -735,7 +776,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 
-	
+	/**
+	 * Sucht eine eigenschaftsausprägung mithilfe der <code>BusinessObject</code>-ID
+	 * @param PropertyValue-ID
+	 * @return PropertyValue
+	 */
 	public PropertyValue getPropertyValueById(int id) {
 		return propValMapper.findByKey(id);
 	}
@@ -748,7 +793,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * @param Contact-Objekt
 	 * @return PropertyValue - Objekt
 	 */
-	// TODO Aufräumen 
 	public PropertyValue getNameOfContact(Contact contact) {
 		PropertyValue name = new PropertyValue();
 		Vector<PropertyValue> result = new Vector<PropertyValue>();
@@ -766,12 +810,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	/**
 	 * Anhand des übergebenen Strings werden alle PropertyValue - Objekte
 	 * identifiziert, deren Wert dem Suchtext entspricht und zurückgegeben.
-	 * 
-	 * @param suchtext
-	 *            Gesuchter Wert
+	 *
+	 * @param suchtext Gesuchter Wert
 	 * @return Vector mit PropertyValue - Objekten
 	 */
-	// TODO Verwendung Überprüfen
+	@Override
 	public Vector<PropertyValue> searchPropertyValues(String suchtext) {
 		Vector<PropertyValue> pvv = propValMapper.findByValue(suchtext);
 		return pvv;
@@ -783,34 +826,68 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 	
+	/**
+	 * Erstellt eine neue Eigenschaft 
+	 * 
+	 * @param Property
+	 * @return Property
+	 */
 	@Override
 	public Property createProperty(Property p){
 		return propMapper.insert(p);
 	}
 	
+	/**
+	 * Gibt alle Eigenschaften aus der Datenbank zurück 
+	 * 
+	 * @return Vector<Property>
+	 */
 	@Override
 	public Vector<Property> getAllProperties() {
 		return propMapper.findAll();
 	}
 	
+	/**
+	 * Gibt die Eigenschaft mit der übergebenen ID zurück
+	 * 
+	 * @param Property-ID
+	 * @return Property
+	 */
 	@Override
 	public Property getPropertyByID(int id) {
 		return propMapper.findBy(id);
 	}
 	
+	/**
+	 * Ändert die Beschreibung einer Eigenschaft.
+	 * Die Eigenschft Name darf nicht verändert werden.
+	 * 
+	 * @param Property
+	 * @return Property
+	 */
 	@Override
 	public Property editProperty(Property p){
-		return propMapper.update(p);
+		if(p.getId() != 1){ 
+			return propMapper.update(p);
+		}
+		return null;
 	}
 	
+	/**
+	 * Löscht alle Eigenschaftsausprägungen die auf die Eigenschaft verweisen und löscht diese Ausprägung
+	 * Die Eigenschaft "Namen" kann nicht gelöscht werden.
+	 * @return Propery
+	 * @param Property
+	 */
 	@Override
 	public Property deleteProperty(Property p){
-		// Löscht alle Eigenschaftsausprägungen die auf die Eigenschaft verweisen und löscht diese Ausprägung
-		for(PropertyValue pv : propValMapper.findBy(p)){
-			this.deletePropertyValue(pv);
+		if(p.getId() != 1){
+			for(PropertyValue pv : propValMapper.findBy(p)){
+				this.deletePropertyValue(pv);
+			}
+			return propMapper.delete(p);
 		}
-		return propMapper.delete(p);
-		
+		return null;
 	}
 
 	/*

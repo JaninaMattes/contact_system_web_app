@@ -100,7 +100,7 @@ public class ContactSystem implements EntryPoint {
 	private Button contactButton = new Button("Kontakte");
 	private Button contactListsButton = new Button("Kontaktlisten");
 	private Button myParticipationsButton = new Button("Von mir geteilt");
-	private Button receivedParticipationsButton = new Button("An mich geteilt");
+	private Button receivedParticipationsButton = new Button("Mit mir geteilt");
 	private Button accountButton = new Button("Account");
 	//Trailer Text
 	private Label trailerText = new Label("Software Praktikum, Team 9, Hochschule der Medien"); //Impressum hinzufügen	

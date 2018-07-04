@@ -148,7 +148,7 @@ public class ContactListForm extends VerticalPanel {
 		VerticalPanel shareDialogvp = new VerticalPanel();
 		HorizontalPanel shareDialoghp = new HorizontalPanel();
 		shareDialogvp.add(labelShare);
-		shareDialogvp.add(email);
+		shareDialogvp.add(listBoxShareWith);
 		shareDialogvp.add(shareDialoghp);
 		shareDialoghp.add(okButton);
 		shareDialoghp.add(cancelShareButton);
@@ -347,8 +347,8 @@ public class ContactListForm extends VerticalPanel {
 					shareDialog.setVisible(true);
 				} else {
 					loadPanel.setVisible(true);
-
-					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>() {
+					
+					contactSystemAdmin.getUserBygMail(listBoxShareWith.getSelectedValue(), new AsyncCallback<User>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							loadPanel.setVisible(false);
@@ -649,7 +649,7 @@ public class ContactListForm extends VerticalPanel {
 				for (User user : result) {
 
 					// User Liste updaten
-					listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());
+					listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
 				}
 
 			} else {
@@ -959,6 +959,9 @@ public class ContactListForm extends VerticalPanel {
 				}
 
 			});
+			
+			// Laden der User mit dem Die Liste geteilt werden kann.
+			contactSystemAdmin.getAllUsers(new UserToShareCallback());
 
 			
 

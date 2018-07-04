@@ -374,7 +374,7 @@ public class ParticipationMapper {
 				Participation participation = new Participation();
 				ContactList cl = new ContactList();
 				User owner = new User();
-				owner.setGoogleID(rs.getDouble("user_ID"));
+				owner.setGoogleID(rs.getDouble("bo.user_ID"));
 				participation.setParticipant(user);	
 				
 				cl.setBo_Id(rs.getInt("BusinessObject_ID"));

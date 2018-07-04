@@ -7,7 +7,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -104,7 +103,8 @@ public class ContactForm extends VerticalPanel {
 		
 		ListBox addElement = new ListBox();
 		ListBox sharedWithUser = new ListBox();
-
+		ListBox listBoxShareWith = new ListBox();
+		
 		TextBox email = new TextBox();
 		TextBox newProperty = new TextBox();
 				
@@ -150,6 +150,7 @@ public class ContactForm extends VerticalPanel {
 			labelAddElement.getElement().setId("labelfeldhinzu");
 			addElement.setStyleName("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
+			listBoxShareWith.setStyleName("ListBox");
 			
 			// Css der Main Buttons
 			okButton.setStyleName("mainButton");
@@ -189,7 +190,7 @@ public class ContactForm extends VerticalPanel {
 			gp.setWidget(2, 0, labelReceivedFrom);
 			
 			gp.setWidget(3, 0, labelShare);
-			gp.setWidget(3, 1, email);
+			gp.setWidget(3, 1, listBoxShareWith);
 			
 			gpPanel.add(gp);
 			
@@ -342,7 +343,7 @@ public class ContactForm extends VerticalPanel {
 				public void onClick(ClickEvent event) {
 					// TODO Auto-generated method stub
 					loadPanel.setVisible(true);
-					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>(){
+					contactSystemAdmin.getUserBygMail(listBoxShareWith.getSelectedValue(), new AsyncCallback<User>(){
 						@Override
 						public void onFailure(Throwable caught) {
 							loadPanel.setVisible(false);
@@ -376,7 +377,7 @@ public class ContactForm extends VerticalPanel {
 										for(PropertyValue pv : c.getPropertyValues()){
 											if(pv.getBoId() == Integer.parseInt(cb.getTitle())){
 												pvv.add(pv);
-												log("Share: " + pv.getValue() + " With " + email.getText());
+												log("Share: " + pv.getValue() + " With " + listBoxShareWith.getSelectedValue());
 											}
 										}
 									}
@@ -963,6 +964,10 @@ public class ContactForm extends VerticalPanel {
 						 addElement.addItem("Neu..", "0"); // ID 0wird in der Property tabelle nicht verwendert
 					}
 				});
+				
+				// Laden der User mit dem Die Liste geteilt werden kann.
+				contactSystemAdmin.getAllUsers(new UserToShareCallback());
+				
 							
 			} else if(contact==null) { // Ein leeres Kontaktformular wird angezeigt, um einen neuen Kontakt anzulagen
 				
@@ -1125,11 +1130,45 @@ public class ContactForm extends VerticalPanel {
 			}	
 		}
 		
+		
+		/**
+		 * Callback Klasse zum Befüllen der Listbox mit allen Usern aus dem System. Mit
+		 * diesen kann die Kontaktliste geteilt werden.
+		 * 
+		 * @author Janina Mattes
+		 */
+
+		private class UserToShareCallback implements AsyncCallback<Vector<User>> {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Der Aufruf der Nutzer ist misglückt! ");
+			}
+
+			@Override
+			public void onSuccess(Vector<User> result) {
+
+				// Leeren der bisherigen Listbox mit
+				listBoxShareWith.clear();
+				if (result != null) {
+					for (User user : result) {
+
+						// User Liste updaten
+						listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
+					}
+
+				} else {
+					Window.alert("Kein Nutzer gefunden");
+				}
+			}
+		}
+		
+		
 		/**
 		 * GUI Methoden
 		 * Bauen das Contactform je nach funktion um. 
 		 * Dadruch soll die Übersichtlichkeit im Formular verbessert werden
-		 * @author Oliver Gorges
+		 * @author Janina Mattes
 		 */
 		
 		/**
@@ -1154,7 +1193,7 @@ public class ContactForm extends VerticalPanel {
 			editPartButton.setVisible(false);
 			labelReceivedFrom.setVisible(false);
 			labelShare.setVisible(false);
-			email.setVisible(false);
+			listBoxShareWith.setVisible(false);
 			labelAddElement.setVisible(false);
 			addElement.setVisible(false);
 			addButton.setVisible(false);
@@ -1195,7 +1234,7 @@ public class ContactForm extends VerticalPanel {
 			editPartButton.setVisible(false);
 			labelReceivedFrom.setVisible(false);
 			labelShare.setVisible(false);
-			email.setVisible(false);
+			listBoxShareWith.setVisible(false);
 			
 			// Eingeblendete GUI Elemnte
 			labelAddElement.setVisible(true);
@@ -1232,7 +1271,7 @@ public class ContactForm extends VerticalPanel {
 			
 			// Einblenden von Gui Elementen
 			labelShare.setVisible(true);
-			email.setVisible(true);
+			listBoxShareWith.setVisible(true);
 			
 			// Wenn der Nutzer den Kontakt Teilen möchte, werden als Standard alle Ausprägungen geteilt.
 			for(CheckBox cb : cbv){
