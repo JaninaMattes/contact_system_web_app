@@ -940,6 +940,7 @@ public class ContactForm extends VerticalPanel {
 				} else {
 					contactStatus.setText("Status: Nicht geteilt");
 				}
+				contactStatus.setStyleName("Status");
 							
 				//Listbox befüllen, in der der Nutzer neue Eigenschaften hinzufügen kann.
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {

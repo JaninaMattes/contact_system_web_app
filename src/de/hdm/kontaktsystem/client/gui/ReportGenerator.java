@@ -106,11 +106,14 @@ public class ReportGenerator implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		
-		//loadReportGenerator(); //Test, solange Login nicht funktioniert
+		loadReportGenerator(); //Test, solange Login nicht funktioniert
+		
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */	
+		
+		/*
 		loadPanel.setVisible(false);
 		reportGenerator = ClientsideSettings.getReportGenerator();
 		reportGenerator.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
@@ -129,6 +132,7 @@ public class ReportGenerator implements EntryPoint {
 				}
 			}
 		});
+		*/
 	}
 		
 	/**
@@ -170,29 +174,29 @@ public class ReportGenerator implements EntryPoint {
 		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
 		loginLabel.getElement().setId("loginlabel");
-		headerText.getElement().setId("headertext2");
+		headerText.setStyleName("headertext2");
 		
 		//Textbox
 		findByValueText.getElement().setId("findByTextbox");
 		
 		//DropDownList
-		propertiesDropDownList.getElement().setId("ReportDropDownList");
-		usersDropDownList.getElement().setId("ReportDropDownList");
+		propertiesDropDownList.setStyleName("ReportDropDownList");
+		usersDropDownList.setStyleName("ReportDropDownList");
 
 		//Buttons
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
-		findByParticipantButton.getElement().setId("searchButton");
+		findByParticipantButton.setStyleName("searchButton");
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
-		findByValueButton.getElement().setId("searchButton");
-		showAllButton.getElement().setId("searchAllContacts");
+		findByValueButton.setStyleName("searchButton");
+		showAllButton.setStyleName("searchAllContacts");
 	
 		//Links
 		signInLink.setStyleName("link");
-		signOutLink.getElement().setId("log-out-button");
-		editorLink.getElement().setId("switch-button");
+		signOutLink.setStyleName("log-out-button");
+		editorLink.setStyleName("switch-button");
 		
 		//Logo
-		logo.getElement().setId("logo");
+		logo.setStyleName("logo");
 		
 		/*
 		 * CSS für Load Panel
