@@ -16,19 +16,19 @@ import de.hdm.kontaktsystem.server.db.*;
  * <p>
  * Implementierungsklasse des Interface
  * <code>ContactSystemAdministration</code>. Diese Klasse ist <em>die</em>
- * Klasse, die neben {@link ReportGeneratorImpl} sämtliche Applikationslogik
- * (engl. Business Logic) aggregiert. Diese sorgt für einen geordneten Ablauf
- * und Konsistenz der Daten sowie Abläufe in der Applikation.
+ * Klasse, die neben {@link ReportGeneratorImpl} saemtliche Applikationslogik
+ * (engl. Business Logic) aggregiert. Diese sorgt fuer einen geordneten Ablauf
+ * und Konsistenz der Daten sowie Ablaeufe in der Applikation.
  * </p>
  * 
  * Jede Methode dieser Klasse bildet die Applikationslogik ab und kann als
- * <em>Transaction Script</em> bezeichnet werden. Diese überführen das System
- * von einem konsistenten Zustand in einen anderen über.
+ * <em>Transaction Script</em> bezeichnet werden. Diese ueberfuehren das System
+ * von einem konsistenten Zustand in einen anderen ueber.
  * 
  * <li>{@link RemoteServiceServlet}: Jede Server-seitig instantiierbare und
- * Client-seitig über GWT RPC nutzbare Klasse muss die Klasse
+ * Client-seitig ueber GWT RPC nutzbare Klasse muss die Klasse
  * <code>RemoteServiceServlet</code> implementieren. Sie legt die funktionale
- * Basis für die Anbindung von <code>ContactSystemImpl</code> an die Runtime
+ * Basis fuer die Anbindung von <code>ContactSystemImpl</code> an die Runtime
  * des GWT RPC-Mechanismus.</li>
  *
  */
@@ -41,8 +41,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	private static final long serialVersionUID = 1L;
 	
-	/*
-	 * Referenzen auf die zugehörigen DatenbankMapper
+	/**
+	 * Referenzen auf die zugehoerigen DatenbankMapper
 	 */
 
 	private BusinessObjectMapper boMapper = null;
@@ -100,12 +100,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 	
 	/**
-	 * Diese Methode erhält durch den GoogleUserService den eingeloggten User.
-	 * Wenn die Google-ID bereits in der Datenbank vorhanden ist wird das dazugehörige User-Object zurück gegeben.
-	 * Wenn die Google-ID nicht bekannt ist, wird ein neuer User und ein Dazugehöriger Kontakt mit den Google User Daten erstellt
+	 * Diese Methode erhaelt durch den GoogleUserService den eingeloggten User.
+	 * Wenn die Google-ID bereits in der Datenbank vorhanden ist wird das dazugehoerige User-Object zurueck gegeben.
+	 * Wenn die Google-ID nicht bekannt ist, wird ein neuer User und ein Dazugehoeriger Kontakt mit den Google User Daten erstellt
 	 * 
 	 * @param requestUri um die Login und Logout links an an den Client anzupassen.
-	 * @return User-Object das zu dem Google account gehört mit dem sich der Nuter eingeloggt hat
+	 * @return User-Object das zu dem Google account gehoert mit dem sich der Nuter eingeloggt hat
 	 * @author Oliver Gorges
 	 */
 	public User login(String requestUri) {
@@ -122,10 +122,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			double id = Double.parseDouble(guser.getUserId());
 			user = this.getUserByID(id);
 			
-			// Überprüfung ob der nutzer bereits existiert oder ob es ein neuer Nutzer ist
+			// Ueberpruefung ob der nutzer bereits existiert oder ob es ein neuer Nutzer ist
 			if (user == null) {
 				String gmail = guser.getEmail();
-				// Ersetzt die Lange googlemail adresse gegen die gekürzte gmail variante
+				// Ersetzt die Lange googlemail adresse gegen die gekuerzte gmail variante
 				if(gmail.contains("googlemail")) gmail.replace("googlemail", "gmail");
 				user = new User();
 				user.setGoogleID(id);
@@ -165,7 +165,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 *  Gibt das User-Obejct von dem aktuell eingeloggten User zurück
+	 *  Gibt das User-Obejct von dem aktuell eingeloggten User zurueck
 	 *  @return User-Objekt
 	 */
 	@Override
@@ -174,7 +174,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Erstellt einen neuen User mit dem dazugehörigen eigenen Kontakt.
+	 * Erstellt einen neuen User mit dem dazugehoerigen eigenen Kontakt.
 	 * Diese Methode wird aufgerufen, wenn beim login ein User nicht gefunden wurde
 	 * @param User-Objekt
 	 * @param Contact-Object
@@ -191,7 +191,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 	/**
-	 * Benutzt für Login & BO Owner
+	 * Benutzt fuer Login & BO Owner
 	 */
 	// ## IO ##
 	@Override
@@ -210,7 +210,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	// ## IO ##
 	@Override
 	public User getUserBygMail(String email) {
-		// überprüfung ob die Vollständige Email engegebnen wurde
+		// Ueberpruefung ob die Vollstaendige Email engegebnen wurde
 		if(!email.contains("@")) email = email + "@gmail.com";
 		
 		User user = uMapper.findByEmail(email);
@@ -222,7 +222,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Nur für Report!
+	 * Nur fuer Report!
 	 * Wenn nicht woanders verwendet kann das raus, im Report wird es nicht mehr benutzt.
 	 */
 	// ## IO ##
@@ -254,7 +254,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Gibt die IDs aller User zurück, die für den eingeloggten User sichtbar sind.
+	 * Gibt die IDs aller User zurueck, die fuer den eingeloggten User sichtbar sind.
 	 * Verwendet im Report-Generator.
 	 * @return alle bekannten User
 	 */
@@ -311,10 +311,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Ändert einen Kontakt. 
+	 * Aendert einen Kontakt. 
 	 * Da die Contact-Tabelle nur eine ID besitzt wird in dieser nichts geupdatet.
-	 * Dennoch wird das modified Date von BO verändert und alle Eigenschaftsausprägungen des Kontakts werden aktuallisiert.
-	 * Wenn eine Eigenschaftsausprägung auf dem Clien neu Angelegt wurde wird diese ebenso auf der Datenbank angelegt, das selebe gilt ebenso beim entfernen.
+	 * Dennoch wird das modified Date von BO veraendert und alle Eigenschaftsauspraegungen des Kontakts werden aktuallisiert.
+	 * Wenn eine Eigenschaftsauspraegung auf dem Clien neu Angelegt wurde wird diese ebenso auf der Datenbank angelegt, das 
+	 * selebe gilt ebenso beim entfernen.
 	 * Wird eine neue Eigenschaft erstellt wird diese ebenso in dieser klasse neu in der Datenbank angegelegt. 
 	 */
 	// #### IO ####
@@ -322,12 +323,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	public Contact editContact(Contact contact) {
 		boMapper.update(contact);
 		Vector<PropertyValue> newPV = contact.getPropertyValues();
-		Vector<PropertyValue> oldPV = this.getPropertyValuesForContact(contact); // Liste uim Iterieren
+		Vector<PropertyValue> oldPV = this.getPropertyValuesForContact(contact); // Liste um Iterieren
 		
-		// Fügt dem Kontakt neue PropertyValues hinzu
+		// Fuegt dem Kontakt neue PropertyValues hinzu
 		// Updatet die bestehenden PropertyValues
 		for (PropertyValue pV : newPV) {
-			if(pV.getValue().isEmpty() && pV.getProperty().getId() != 1) { // Namensfeld kann nicht gelöscht werden
+			if(pV.getValue().isEmpty() && pV.getProperty().getId() != 1) { // Namensfeld kann nicht geloescht werden
 				this.deletePropertyValue(pV);
 			}else
 			if(!oldPV.contains(pV)) {
@@ -379,9 +380,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	
 	/**
-	 * Vorschau für TreeView
+	 * Vorschau fuer TreeView
 	 */
-	// TODO alles geteilten Kontakte anzeigen
+	// TODO alle geteilten Kontakte anzeigen
 	@Override
 	public Vector<Contact> getMyContactsPrev()  {
 		User user = this.getUserByID(this.getCurrentUser());
@@ -406,7 +407,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<Integer> idV = cMapper.findContactFromList(cl);
 		Vector<Contact> cV = new Vector<Contact>();
 		
-		if (idV != null) { // Überprüf ob die Kontaktliste Kontakte beinhaltet
+		if (idV != null) { // Ueberprueft ob die Kontaktliste Kontakte beinhaltet
 			if(cl.getOwner().getGoogleID() == this.getCurrentUser()){
 				for (int i : idV) {
 					Contact c = cMapper.findContactById(i);
@@ -459,7 +460,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Gibt alle Contact-Objekte zurück die eine PropertyValue Besitzen, welche der
+	 * Gibt alle Contact-Objekte zurueck die eine PropertyValue Besitzen, welche der
 	 * Sucheingabe entspricht.
 	 * Noch nicht nach eigenen Gefiltert 
 	 * @param Sucheingabe
@@ -477,7 +478,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (PropertyValue pv : pvv) {
 			Contact c = cMapper.findBy(pv);
 			c.setName(this.getNameOfContact(c));
-			// Filter Doppelete Kontakte und Kontakte die einem nicht gebören bzw die mit einem nicht geteiltwurden aus.
+			// Filtert doppelete Kontakte und Kontakte die einem nicht gehoeren, bzw die mit einem nicht geteiltwurden aus.
 			if (!cv.contains(c) && myContacts.contains(c))
 				cv.add(c);
 
@@ -502,7 +503,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	
-	// TODO Überprüfen
+	// TODO Ueberpruefen
 	@Override
 	public Contact deleteContact(Contact contact) {
 		Contact c = null;
@@ -536,7 +537,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		Vector<Contact> result = new Vector<Contact>();
 		// Aufrufen aller Kontakte eines bestimmten Users
-		result = this.getAllContactsFromUser(); // TODO Überprüfen
+		result = this.getAllContactsFromUser(); // TODO Ueberpruefen
 		for (Contact c : result) {
 			this.deleteContact(c);
 		}
@@ -555,7 +556,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		boMapper.insert(contactList);
 		ContactList cl =  clMapper.insertContactList(contactList);
 		if(!contactList.getContacts().isEmpty()){
-			// übertragen der Kontakte aus der Liste in einen neuen Vektor wegen einer ConcurrentModificationException
+			// Uebertragen der Kontakte aus der Liste in einen neuen Vektor, wegen einer ConcurrentModificationException.
 			Vector<Contact> cil = new Vector<Contact>(); 
 			cil.addAll(contactList.getContacts());
 			for(Contact c : cil){
@@ -581,8 +582,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 
 
-	// Nur für Report!
-	// TODO Überprüfen ob benötigt
+	// Nur fuer Report!
+	// TODO Ueberpruefen ob benoetigt
 	@Override
 	public Vector<ContactList> getAllContactListsFromUser() {
 
@@ -635,8 +636,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Es löscht alle KontaktListen, welche zu einer User ID gehören.
-	 * Verwendet beim Löschen eines Accounts
+	 * Es loescht alle KontaktListen, welche zu einer User ID gehoeren.
+	 * Verwendet beim Loeschen eines Accounts.
 	 */
 
 	public void deleteContactListByUserId() {
@@ -647,9 +648,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Fügt einer Liste einen neuen Kontakt hinzu.
+	 * Fuegt einer Liste einen neuen Kontakt hinzu.
 	 * Wenn Die Liste Geteilt wurde, wird dieser ebenso geteilt.
-	 * Wenn Der Kontkat nicht von dem Besitzer hinzugefügt wurde, wird der Kontakt zudem mit dem Besitzer geteilt.
+	 * Wenn Der Kontakt nicht von dem Besitzer hinzugefuegt wurde, wird der Kontakt zudem mit dem Besitzer geteilt.
 	 * 
 	 * @param Contact, ContactList
 	 * @return ContactList
@@ -681,8 +682,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Entfernt eine Kontakt aus einer KontaktListe.
-	 * Wenn Die Liste Geteilt wurde, wird die Teilhaberschft zu der Liste und der dazugehörigen Kontakte gelöscht.
+	 * Entfernt einen Kontakt aus einer KontaktListe.
+	 * Wenn Die Liste Geteilt wurde, wird die Teilhaberschft zu der Liste und der dazugehoerigen Kontakte geloescht.
 	 * 
 	 * @param Contact, ContactList
 	 * @return ContactList
@@ -711,19 +712,18 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 	/**
-	 * Erstellt eine neue Eigenschaftsausrägung für einen Kontakt. 
+	 * Erstellt eine neue Eigenschaftsausraegung fuer einen Kontakt. 
 	 * Intern Verwendet in EDIT / Create Contact
 	 * @param PropertyValue
 	 * @return PropertyValue
 	 */
 	public PropertyValue createPropertyValue(PropertyValue propertyValue) {
-		// Da Property immer fest zu einem Contact-Objekt gehört hat es auch den selben
-		// Besitzer
+		// Da Property immer fest zu einem Contact-Objekt gehoert hat es auch den selben Besitzer.
 
 		propertyValue.setOwner(propertyValue.getContact().getOwner());
 		boMapper.insert(propertyValue);
 		PropertyValue pv = propValMapper.insert(propertyValue);
-		// Eigenschaft wird automatisch geteilt, wenn der Ersteller nicht der Kontaktbesitzer ist
+		// Eigenschaft wird automatisch geteilt, wenn der Ersteller nicht der Kontaktbesitzer ist.
 		if(pv.getOwner().getGoogleID() != this.getCurrentUser()){
 			Participation p = new Participation();
 			p.setParticipant(this.getAccountOwner());
@@ -734,7 +734,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Verändert den Value (angezeigten Text) der Eigenschaftsausprägung
+	 * Veraendert den Value (angezeigten Text) der Eigenschaftsauspraegung
 	 * Intern Verwendet in EDIT / Create Contact
 	 * @param PropertyValue
 	 * @return PropertyValue
@@ -745,7 +745,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Löscht eine Eigenschaftsausprägung von einem Kontakt.
+	 * Loescht eine Eigenschaftsauspraegung von einem Kontakt.
 	 * @param PropertyValue
 	 * @return PropertyValue
 	 */
@@ -758,7 +758,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	
 	/**
-	 * Gibt einen Vector mit allen Eigenschaftsausprägungen zurück, die zu einem Kontakt gehören
+	 * Gibt einen Vector mit allen Eigenschaftsauspraegungen zurueck, die zu einem Kontakt gehoeren
 	 * @param Contact
 	 * @return Vector<PropertyValue>
 	 */
@@ -774,7 +774,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Sucht eine eigenschaftsausprägung mithilfe der <code>BusinessObject</code>-ID
+	 * Sucht eine eigenschaftsauspraegung mithilfe der <code>BusinessObject</code>-ID
 	 * @param PropertyValue-ID
 	 * @return PropertyValue
 	 */
@@ -805,8 +805,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Anhand des übergebenen Strings werden alle PropertyValue - Objekte
-	 * identifiziert, deren Wert dem Suchtext entspricht und zurückgegeben.
+	 * Anhand des uebergebenen Strings werden alle PropertyValue - Objekte
+	 * identifiziert, deren Wert dem Suchtext entspricht und zurueckgegeben.
 	 *
 	 * @param suchtext Gesuchter Wert
 	 * @return Vector mit PropertyValue - Objekten
@@ -835,7 +835,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Gibt alle Eigenschaften aus der Datenbank zurück 
+	 * Gibt alle Eigenschaften aus der Datenbank zurueck 
 	 * 
 	 * @return Vector<Property>
 	 */
@@ -845,7 +845,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Gibt die Eigenschaft mit der übergebenen ID zurück
+	 * Gibt die Eigenschaft mit der uebergebenen ID zurueck.
 	 * 
 	 * @param Property-ID
 	 * @return Property
@@ -856,8 +856,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Ändert die Beschreibung einer Eigenschaft.
-	 * Die Eigenschft Name darf nicht verändert werden.
+	 * Aendert die Beschreibung einer Eigenschaft.
+	 * Die Eigenschaft "Name" darf nicht veraendert werden.
 	 * 
 	 * @param Property
 	 * @return Property
@@ -871,8 +871,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Löscht alle Eigenschaftsausprägungen die auf die Eigenschaft verweisen und löscht diese Ausprägung
-	 * Die Eigenschaft "Namen" kann nicht gelöscht werden.
+	 * Loescht alle Eigenschaftsauspraegungen, die auf die Eigenschaft verweisen und loescht diese Auspraegung.
+	 * Die Eigenschaft "Namen" kann nicht geloescht werden.
 	 * @return Propery
 	 * @param Property
 	 */
@@ -892,16 +892,17 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ABSCHNITT, Participation
 	 * ***************************************************************************
 	 */
-	// TODO Überprüfen 
+	// TODO Ueberpruefen 
 	@Override
 	public Participation createParticipation(Participation part) {
 		Participation participation = partMapper.insertParticipation(part);
 		boMapper.setStatusTrue(part.getReferenceID());
 		
 		if(part.getReferencedObject() instanceof Contact){
-			// Teilt nur Eigenscaftsausprägungen die sich aktuell in dem Contact-Objekt befinden und wenn der Kontakt nicht vollständig geteilt wurde
+			// Teilt nur Eigenscaftsauspraegungen die sich aktuell in dem Contact-Objekt befinden und wenn der Kontakt nicht 
+			// vollstaendig geteilt wurde
 			if( !part.getShareAll() && ((Contact) part.getReferencedObject()).getPropertyValues() != null){
-				// Teilt alle Eienscaftsausprägungen die sich in der Lite Befinden mit dem Nutzer
+				// Teilt alle Eienscaftsauspraegungen die sich in der Lite Befinden mit dem Nutzer
 				for(PropertyValue pv : ((Contact) part.getReferencedObject()).getPropertyValues()){
 					Participation partPV = new Participation();
 					partPV.setParticipant(part.getParticipant());
@@ -924,7 +925,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return participation;
 
 	}
-	// TODO Überprüfen
+	// TODO Ueberpruefen
 	/**
 	 * Wenn Vollständig geteilt, alle PVS aus der Part tabelle löschen
 	 * Ansosnten abgleich ob neue teilhaberschaft oder ob welche entfernet wurden
@@ -934,7 +935,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		partMapper.updateParticipation(part); 
 		if(part.getReferencedObject() instanceof Contact){
 			Contact c = (Contact) part.getReferencedObject();
-			// Wenn Kontakt vollständig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt
+			// Wenn Kontakt vollstaendig geteilt, dann werden alle PropertyValue Teilhaberschaften enfernt
 			if(part.getShareAll()){
 				for(PropertyValue pv : c.getPropertyValues()){
 					Participation removePart = new Participation();
@@ -944,7 +945,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				}
 			
 			}else{ 
-				// Wenn nicht alles geteilt wird muss überprüft werden was bereits geteilt ist, was neu geteilt werdne muss 
+				// Wenn nicht alles geteilt wird muss ueberprueft werden was bereits geteilt ist, was neu geteilt werdne muss 
 				// und was entfernt werden soll.
 				Vector<Participation> allShared = this.getAllParticipationsByParticipant(part.getParticipant());
 				// Referenz Contact-Object um festzustellen was nicht geteilt wird
@@ -960,7 +961,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 						this.createParticipation(addPart);
 					}
 				}
-				// Löscht alle beziehungen zu PropertyValues die nicht mehr geteilt werden sollen.
+				// Loescht alle beziehungen zu PropertyValues die nicht mehr geteilt werden sollen.
 				for(PropertyValue pv : refPV){
 					if(!c.getPropertyValues().contains(pv)){
 						Participation removePart = new Participation();
@@ -973,7 +974,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			return part;
 		}else if(part.getReferencedObject() instanceof ContactList){
 			ContactList cl = (ContactList) part.getReferencedObject();
-			// Kontaktlisten werden aktuell nur Vollständig geteilt
+			// Kontaktlisten werden aktuell nur Vollstaendig geteilt
 			return part;
 		}else if(part.getReferencedObject() instanceof PropertyValue){
 			// PropertyValues werden aktuell nicht geupdatet
@@ -984,8 +985,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return null;
 	}
 
-	// Report
-	// TODO Entfernen ?
+
 	public Vector<Participation> getAllParticipations() {
 		Vector<Participation> partV = partMapper.findAllParticipations();
 		for (Participation part : partV) {
@@ -1035,7 +1035,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	@Override
 	public Participation deleteParticipation(Participation p) {
 		Participation part = partMapper.deleteParticipation(p);
-		// Prüfen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt,
+		// Pruefen, ob es zu dem geteilten Objekt noch eine Teilhaberschaft gibt,
 		// wenn nicht, Status (geteilt) des Objekt auf false setzen
 		Vector<Participation> participations = this.getAllParticipationsByBusinessObject(part.getReferencedObject());
 		if (participations.isEmpty()) {
@@ -1069,13 +1069,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	/**
 	 * Gibt ein BusinessObject vom Typ Contact, ContctList oder PropertyValue
-	 * zurück
+	 * zurueck
 	 * 
 	 * @param BusinessObject
 	 *            ID
 	 * @return Contact, ContactList, PropertyValue
 	 */
-	// TODO Überarbeiten für Tree ???
+	// TODO Ueberarbeiten fuer Tree ???
 	public BusinessObject getBusinessObjectByID(int id) {
 
 		BusinessObject bo = null;
@@ -1092,7 +1092,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return bo;
 	}
 	
-	// TODO Alle Überabrieten und Aussortieren
+	// TODO Alle ueberabrieten und Aussortieren
 	/*
 	 * ***************************************************************************
 	 * ABSCHNITT, Find All Shared
@@ -1115,9 +1115,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Alle fuer den Benutzer in der Applikation geteilte Ausprägungen
-	 * <code>PropertyValue</code> Objekte können über den Aufruf dieser Methode
-	 * aus der DB zurück gegeben werden.
+	 * Alle fuer den Benutzer in der Applikation geteilte Auspraegungen
+	 * <code>PropertyValue</code> Objekte koennen ueber den Aufruf dieser Methode
+	 * aus der DB zurueck gegeben werden.
 	 * 
 	 * @param User-Objekt
 	 * @return Vector PropertyValue-Objekte
@@ -1125,11 +1125,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<PropertyValue> getAllPVSharedByOthersToMe() {
 
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln,
+		// Alle Participation-Objekte eines Users abrufen, welche fuer Objekte kapseln,
 		// die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();
 		participationVector = this.getAllParticipationsByParticipant(this.getUserByID(this.getCurrentUser()));
-		// Vector für die Speicherung aller BusinessObjekte erzeugen
+		// Vector fuer die Speicherung aller BusinessObjekte erzeugen
 		Vector<PropertyValue> propertyResultVector = new Vector<PropertyValue>();
 
 		for (Participation part : participationVector) {
@@ -1176,7 +1176,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 		
 		/**
-		 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
+		 *  Alle fuer den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
 		 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
 		 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
 		 *  
@@ -1188,7 +1188,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 			Vector<Participation> participationVector = new Vector<Participation>();		
 			participationVector = this.getAllParticipationsByOwner(user);
-					// Vector für die Speicherung aller BusinessObjekte erzeugen
+					// Vector fuer die Speicherung aller BusinessObjekte erzeugen
 					Vector<ContactList> contactListVector = new Vector <ContactList>(); 	
 					
 					for (Participation part : participationVector) { 		
@@ -1207,7 +1207,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 		
 		/**
-		 * Methode zur L�schung aller von einem User erstellten Ausprägungen, Ownership und Participation!
+		 * Methode zur Loeschung aller von einem User erstellten Auspraegungen, Ownership und Participation!
 		 * 
 		 * @param User-Objekt
 		 */
@@ -1226,9 +1226,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Alle für den Benutzer in der Applikation geteilte Kontakte
-	 * <code>Contact</code> Objekte können über den Aufruf dieser Methode aus der
-	 * DB zurück gegeben werden.
+	 * Alle fuer den Benutzer in der Applikation geteilte Kontakte
+	 * <code>Contact</code> Objekte koennen ueber den Aufruf dieser Methode aus der
+	 * DB zurueck gegeben werden.
 	 * 
 	 * @param User-Objekt
 	 * @return Vector Contact-Objekte
@@ -1236,7 +1236,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<Contact> getAllCSharedByOthersToMe() {
 
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln,
+		// Alle Participation-Objekte eines Users abrufen, welche fuer Objekte kapseln,
 		// die von diesem geteilt wurden
 		User user = this.getUserByID(this.getCurrentUser());
 		Vector<Participation> participationVector = this.getAllParticipationsByParticipant(user);
@@ -1259,10 +1259,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Vorschau frü TreeView
+	 * Vorschau fruer TreeView
 	 * @return
 	 */
-	// TODO Optimieren
 	public Vector<Contact> getAllCSharedByOthersToMePrev() {
 
 		Vector<Participation> participationVector = partMapper.findSharedContacts(this.getUserByID(this.getCurrentUser()));
@@ -1287,7 +1286,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	private Contact filterContactData(Contact contact){
 		// Filter damit nur die geteilten PropertyValues ausgegeben werden; Namen werden nicht gefiltert
 		Iterator<PropertyValue> iterator = contact.getPropertyValues().iterator(); // Liste zum Iterieren
-		Vector<PropertyValue> pvv = new Vector<PropertyValue>(); // Liste aus der Elemente gelöscht werden
+		Vector<PropertyValue> pvv = new Vector<PropertyValue>(); // Liste aus der Elemente geloescht werden
 		Vector<PropertyValue> allPVswm = this.getAllPVSharedByOthersToMe();
 		
 		while(iterator.hasNext()){
@@ -1313,9 +1312,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Alle für den Benutzer in der Applikation geteilte Kontaktelisten
-	 * <code>ContactList</code> -Objekte künnen über den Aufruf dieser Methode aus
-	 * der DB zur�ck gegeben werden.
+	 * Alle fuer den Benutzer in der Applikation geteilte Kontaktelisten
+	 * <code>ContactList</code> -Objekte koennen ueber den Aufruf dieser Methode aus
+	 * der DB zurueck gegeben werden.
 	 * 
 	 * @param User-Objekt
 	 * @return Vector ContactList-Objekte
@@ -1345,7 +1344,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return clResultVector;
 	}
 	/**
-	 * Vorschau frü TreeView
+	 * Vorschau fuer TreeView
 	 * @return
 	 */
 	public Vector<ContactList> getAllCLSharedByOthersToMePrev() {
@@ -1393,7 +1392,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<PropertyValue> getAllPVSharedByMe() {
 
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln,
+		// Alle Participation-Objekte eines Users abrufen, welche fuer Objekte kapseln,
 		// die von diesem geteilt wurden
 		Vector<Participation> participationVector = new Vector<Participation>();
 		participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
@@ -1412,7 +1411,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Alle für den Benutzer in der Applikation zugaenglichen Kontakte
+	 * Alle fuer den Benutzer in der Applikation zugaenglichen Kontakte
 	 * <code>Contact</code> - Objekte (diese sind selbst erstellt und anderen zur
 	 * Teilhaberschaft freigegeben) werden anhand ihres Status gesucht und als ein
 	 * Ergebnissvektor aus Contact-objekten zurueckgegeben.
@@ -1423,7 +1422,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	public Vector<Contact> getAllCSharedByMePrev() {
 
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln,
+		// Alle Participation-Objekte eines Users abrufen, welche fuer Objekte kapseln,
 		// die von diesem geteilt wurden
 		 Vector<Participation> participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
 		Vector<Contact> contactResultVector = new Vector<Contact>();
@@ -1443,7 +1442,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Alle für den Benutzer in der Applikation zugaenglichen Kontakte
+	 * Alle fuer den Benutzer in der Applikation zugaenglichen Kontakte
 	 * <code>Contact</code> - Objekte (diese sind selbst erstellt und anderen zur
 	 * Teilhaberschaft freigegeben) werden anhand ihres Status gesucht und als ein
 	 * Ergebnissvektor aus Contact-objekten zurueckgegeben.
@@ -1456,7 +1455,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		Vector<Participation> participationVector = new Vector<Participation>();
 		participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
-		// Vector für die Speicherung aller BusinessObjekte erzeugen
+		// Vector fuer die Speicherung aller BusinessObjekte erzeugen
 		Vector<ContactList> contactListVector = new Vector<ContactList>();
 
 		for (Participation part : participationVector) {
@@ -1471,7 +1470,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Methode zur L�schung aller von einem User erstellten Ausprägungen,
+	 * Methode zur Loeschung aller von einem User erstellten Auspraegungen,
 	 * Ownership und Participation!
 	 * 
 	 * @param User-Objekt
@@ -1490,7 +1489,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Methode zur Löschung aller von einem User erstellten Kontakte
+	 * Methode zur Loeschung aller von einem User erstellten Kontakte
 	 * <code>Contact</code> Objekte, welche im System mit anderen Nutzern geteilt
 	 * wurden.
 	 * 
@@ -1511,7 +1510,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Methode zur Löschung aller von einem User erstellten Kontaktlisten
+	 * Methode zur Loeschung aller von einem User erstellten Kontaktlisten
 	 * <code>ContactList</code> -Objekte, welche im System mit anderen Nutzern
 	 * geteilt wurden.
 	 * 
@@ -1530,14 +1529,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Funktion zum Löschen aller Auspraegungen die vom User geteilt wurden
+	 * Funktion zum Loeschen aller Auspraegungen die vom User geteilt wurden
 	 * 
 	 * @param User-Objekt
 	 */
 
 	public void deleteAllPVSharedByOthersToMe(User u) {
 
-		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln,
+		// Alle Participation-Objekte eines Users abrufen, welche fuer Objekte kapseln,
 		// die von diesem geteilt wurden
 		Vector<PropertyValue> pvVector = new Vector<PropertyValue>();
 		pvVector = this.getAllPVSharedByOthersToMe();
@@ -1565,9 +1564,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Eine Methode zur Löschung aller Verbindungen in der Participation Tabelle
-	 * der DB. Dies führt dazu, dass die für einen Nutzer geteilten Objekte nicht
-	 * mehr aufgerufen werden können. Die Teilhaberschaft ist damit beendet.
+	 * Eine Methode zur Loeschung aller Verbindungen in der Participation Tabelle
+	 * der DB. Dies fuehrt dazu, dass die fuer einen Nutzer geteilten Objekte nicht
+	 * mehr aufgerufen werden koennen. Die Teilhaberschaft ist damit beendet.
 	 * 
 	 * @param User-Objekt
 	 */
