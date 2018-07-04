@@ -9,7 +9,7 @@ body {
 
 
 
-#headertext{ /*Ueberschrift des Editors*/
+.headertext{ /*Ueberschrift des Editors*/
 	border: none;
 	margin: 20px 100% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
 	padding-left: 150px;
@@ -22,7 +22,7 @@ body {
 	
 }
 
-#headertext2{ /*Ueberschrift des Report-Generators*/
+.headertext2{ /*Ueberschrift des Report-Generators*/
 	border: none;
 	margin: 20px 0% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
 	padding-left: 300px;
@@ -187,7 +187,7 @@ body {
 	color: #000051;
 }
 
-#searchButton{ /* "Suchen"-Button im Editor */
+.searchButton{ /* "Suchen"-Button im Editor */
 	height: 27px;
     width: 53px;
     font-family: "Arial", Arial, sans-serif;
@@ -203,7 +203,7 @@ body {
     cursor: pointer;
 }
 
-#searchAllContacts{ /* Button "Alle Kontakte" im Report Generator */
+.searchAllContacts{ /* Button "Alle Kontakte" im Report Generator */
 	height: 25px;
     width: 21vw;
    	margin-left: 2vw;
@@ -274,7 +274,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
   	left: calc(100vw - 200px);;
 }
 
-#add{ /*Add-Button im Editor (+ Button) */
+.add{ /*Add-Button im Editor (+ Button) */
     position: fixed;
     top: 87vh;
     left: 50vw;
@@ -289,7 +289,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 
 /* Das Logo */
 
-#logo{
+.logo{
     margin: 15px 73px;
     padding: 2px;
     align-content: left;
@@ -298,7 +298,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 /* Beide DropDown-Listen im Report Generator */
-#ReportDropDownList{
+.ReportDropDownList{
 	margin: 0 4px;
 	margin-left: 20px;
 	padding-right: 100px;
@@ -312,9 +312,6 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 
 /* Textboxen */
 
-#textbox{
-	/*width: festlegen (vergr��ern)*/
-}
 #TextBox{
 	margin-left: 4px;
 	padding-left: 182px;

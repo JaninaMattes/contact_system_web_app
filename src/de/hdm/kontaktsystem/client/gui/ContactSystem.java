@@ -347,10 +347,10 @@ public class ContactSystem implements EntryPoint {
 		signOutLink.setStyleName("log-out-button");
 		
 		//Label der �berschrift im Header
-		headerText.getElement().setId("headertext");
+		headerText.setStyleName("headertext");
 		
 		//Der Search-Button bekommt den gleichen Style wie bei Report-Generator.java
-		searchButton.getElement().setId("searchButton"); 
+		searchButton.setStyleName("searchButton"); 
 		
 		/** Menü-Buttons bekommen den gleichen Style und haben deshalb den gleichen StyleName */
 		accountButton.setStyleName("menu-button");
@@ -375,7 +375,7 @@ public class ContactSystem implements EntryPoint {
 		/*
 		 * CSS für Add Panel
 		 */
-		addPanel.getElement().setId("add");
+		addPanel.setStyleName("add");
 		
 		/*
 		 * CSS für Load Panel
