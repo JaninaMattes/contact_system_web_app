@@ -12,13 +12,13 @@ import de.hdm.kontaktsystem.shared.ReportGeneratorAsync;
 
 
 /**
- * Die Klasse <code>ClientsideSettings</code> enthält wichtige Eigenschaften und Diensten,
- * welche für alle Clientseitigen Klassen von Relevanz sind. 
+ * Die Klasse <code>ClientsideSettings</code> enthaelt wichtige Eigenschaften und Diensten,
+ * welche fuer alle Clientseitigen Klassen von Relevanz sind. 
  *  
  *  @see de.hdm.thies.bankProjekt.client.ClientsideSettings
  *  @author Sandra Prestel, Janina Mattes...
  */
-//TODO: Autoren ergänzen
+
 public class ClientsideSettings extends CommonSettings {
 
   /**
@@ -33,7 +33,6 @@ public class ClientsideSettings extends CommonSettings {
    */
   private static ReportGeneratorAsync reportGenerator = null;
 
-  //Logger notwendig?
   /**
    * Name des Clientseitigen Loggers.
    */
@@ -57,7 +56,7 @@ public static Logger getLogger() {
    * Anlegen und Auslesen der applikationsweit eindeutigen ContactSystemAdministration Objekts. Diese
    * Methode erstellt die ContactSystemAdministration, sofern sie noch nicht existiert. Bei
    * wiederholtem Aufruf dieser Methode wird stets das bereits zuvor angelegte
-   * Objekt zurückgegeben.
+   * Objekt zurueckgegeben.
    * </p>
    * 
    * <p>
@@ -84,7 +83,7 @@ public static Logger getLogger() {
    * Anlegen und Auslesen des applikationsweit eindeutigen ReportGenerators.
    * Diese Methode erstellt den ReportGenerator, sofern dieser noch nicht
    * existiert. Bei wiederholtem Aufruf dieser Methode wird stets das bereits
-   * zuvor angelegte Objekt zurückgegeben.
+   * zuvor angelegte Objekt zurueckgegeben.
    * </p>
    * 
    * <p>

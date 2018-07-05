@@ -143,12 +143,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				
 				user = this.createUser(user, own);
 				
-				// TODO alte variante der PV erstellung
-//				name.setContact(user.getUserContact());
-//				email.setContact(user.getUserContact());
-//				this.createPropertyValue(name);
-//				this.createPropertyValue(email);
-
 			} 
 			// Loggt den Nutzer ein und erstellt einen Link um den Nutzer wieder auszuloggen
 			user.setLoggedIn(true); 
@@ -289,7 +283,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 
 
-	// TODO Nocheinmal Absprechen
+	/**
+	 * Erstellt einen Kontakt, dieser wird in der Datenbank gespeichert.
+	 */
 	@Override
 	public Contact createContact(Contact contact) {
 		if(contact.getOwner() == null) contact.setOwner(this.getUserByID(this.getCurrentUser()));
@@ -382,7 +378,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	/**
 	 * Vorschau fuer TreeView
 	 */
-	// TODO alle geteilten Kontakte anzeigen
+
 	@Override
 	public Vector<Contact> getMyContactsPrev()  {
 		User user = this.getUserByID(this.getCurrentUser());
@@ -502,8 +498,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contact;
 	}
 
-	
-	// TODO Ueberpruefen
+	/**
+	 * Loescht einen Kontakt aus der Datenbank.
+	 * 
+	 */
 	@Override
 	public Contact deleteContact(Contact contact) {
 		Contact c = null;
@@ -549,7 +547,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 
-	// TODO zusammenlegen mit Edit ? 
+	/**
+	 * Erstellt eine Kontaktliste, diese wird in der Datenbank gespeichert. 
+	 */
 	@Override
 	public ContactList createContactList(ContactList contactList) {
 		if(contactList.getOwner() == null) contactList.setOwner(this.getUserByID(this.getCurrentUser()));
@@ -568,7 +568,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Ändert den Namen einer Kontaktliste
+	 * Aendert den Namen einer Kontaktliste.
 	 */
 	@Override
 	public ContactList editContactList(ContactList cl) {
@@ -582,8 +582,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 
 
-	// Nur fuer Report!
-	// TODO Ueberpruefen ob benoetigt
+	/**
+	 * Gibt alle Kontaktlisten zurueck, welche zu einem User gehoeren.
+	 */
 	@Override
 	public Vector<ContactList> getAllContactListsFromUser() {
 
@@ -596,7 +597,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contactListVector;
 	}
 	
-	// ## IO ##
+	/**
+	 * Vorschau Ansicht der Listenobjekten im Treeview
+	 */
 	public Vector<ContactList> getMyContactListsPrev() {
 
 		Vector<ContactList> contactListVector = clMapper.findContactListByUserId(this.getCurrentUser());
@@ -606,7 +609,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contactListVector;
 	}
 
-	// ### IO ###
+	/**
+	 * Gibt alle Kontaktlisten nach der GoogleID aus.
+	 */
 	@Override
 	public ContactList getContactListById(int id) {
 		ContactList contactList = clMapper.findContactListById(id);
@@ -618,6 +623,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contactList;
 	}
 	
+	/**
+	 * Loescht eine Kontaktliste eines Users.
+	 */
 	@Override
 	public ContactList deleteContactList(ContactList contactList) {
 		ContactList cl = null;
@@ -892,7 +900,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ABSCHNITT, Participation
 	 * ***************************************************************************
 	 */
-	// TODO Ueberpruefen 
+
+	/**
+	 * Erstellt eine Teilhaberschaft verschiedener BOs.
+	 */
 	@Override
 	public Participation createParticipation(Participation part) {
 		Participation participation = partMapper.insertParticipation(part);
@@ -925,10 +936,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return participation;
 
 	}
-	// TODO Ueberpruefen
+
 	/**
-	 * Wenn Vollständig geteilt, alle PVS aus der Part tabelle löschen
-	 * Ansosnten abgleich ob neue teilhaberschaft oder ob welche entfernet wurden
+	 * Wenn Vollstaendig geteilt, alle PVS aus der Part tabelle loeschen
+	 * Ansonsten abgleich ob neue teilhaberschaft oder ob welche entfernet wurden.
 	 */
 	@Override
 	public Participation editParticpation(Participation part){
@@ -1028,7 +1039,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * L
+	 * Loescht eine erstellte Teilhaberschaft, je nach BO.
 	 * @param p
 	 * @return
 	 */
@@ -1075,7 +1086,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 *            ID
 	 * @return Contact, ContactList, PropertyValue
 	 */
-	// TODO Ueberarbeiten fuer Tree ???
+	
+	
 	public BusinessObject getBusinessObjectByID(int id) {
 
 		BusinessObject bo = null;
@@ -1092,7 +1104,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return bo;
 	}
 	
-	// TODO Alle ueberabrieten und Aussortieren
+
 	/*
 	 * ***************************************************************************
 	 * ABSCHNITT, Find All Shared
@@ -1146,7 +1158,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		}
 		
 		/**
-		 *  Alle für den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
+		 *  Alle fuer den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
 		 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
 		 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
 		 *  
@@ -1482,7 +1494,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		propertyValueResult = this.getAllPVSharedByMe();
 
 		for (PropertyValue pV : propertyValueResult) {
-			// loeschen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
+			// loeschen aller Eintraege in der Teilhaberschaft Tabelle Participation
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
 			this.deletePropertyValue(pV);
 		}
@@ -1591,7 +1603,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 			@Override
 			public int compare(BusinessObject o1, BusinessObject o2) {
-				// TODO Auto-generated method stub
+
 				String s1 = "", s2 = "";
 				// Wandelt ein ContactList-Objekt in einen String um
 				if(o1 instanceof ContactList){
