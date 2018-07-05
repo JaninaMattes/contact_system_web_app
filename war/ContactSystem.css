@@ -288,7 +288,6 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 /* Das Logo */
-
 .logo{
     margin: 15px 73px;
     padding: 2px;
@@ -357,7 +356,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 
-/*Status des Kontakts kursiv setzen*/
+/*Status des Kontakts*/
 .Status{
 	font-style: italic;
 	background: transparent;
@@ -376,7 +375,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 
-/* Label von ï¿½berschrift "Kontakt:" und "Kontaktliste:" im Editor*/
+/* Label von Überschrift "Kontakt:" und "Kontaktliste:" im Editor*/
 #ueberschriftlabel{
 	 border-style: none;
 	 border-color:white;
@@ -413,7 +412,7 @@ input:checked {
     background: #00C6FF;
 }
 
-/*Divï¿½s*/
+/*Div´s*/
 
 div#TopLevelFrame {
 	width: 100vw;
@@ -526,7 +525,7 @@ div#Trailer {
 }
 
 
-/*Panel fï¿½r Buttons*/
+/*Panel für Buttons*/
 .mainButtonPanel{
     Bottom: 8vh;
     position: fixed;
