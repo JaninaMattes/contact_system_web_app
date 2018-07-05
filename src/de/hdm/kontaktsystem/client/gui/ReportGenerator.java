@@ -192,8 +192,8 @@ public class ReportGenerator implements EntryPoint {
 	
 		//Links
 		signInLink.setStyleName("link");
-		signOutLink.setStyleName("log-out-button");
-		editorLink.setStyleName("switch-button");
+		signOutLink.getElement().setId("log-out-button");
+		editorLink.getElement().setId("switch-button");
 		
 		//Logo
 		logo.setStyleName("logo");
