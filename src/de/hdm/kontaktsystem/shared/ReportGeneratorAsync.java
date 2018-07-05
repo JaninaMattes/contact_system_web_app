@@ -11,9 +11,9 @@ import de.hdm.kontaktsystem.shared.report.AllContactsForPropertyReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
 
 /**
- * Die Klasse <code>ReportGeneratorAsync</code> ist das asynchrone Gegenstück des Interface {@link ReportGenerator}. 
+ * Die Klasse <code>ReportGeneratorAsync</code> ist das asynchrone Gegenstueck des Interface {@link ReportGenerator}. 
  * Es wird semiautomatisch durch das Google Plugin erstellt und gepflegt. Daher erfolgt hier keine weitere Dokumentation. 
- * Für weitere Informationen siehe das synchrone Interface {@link ReportGenerator}.
+ * Fuer weitere Informationen siehe das synchrone Interface {@link ReportGenerator}.
  * 
  * @author Sandra Prestel
  */

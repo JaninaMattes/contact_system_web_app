@@ -70,7 +70,7 @@ public class BusinessObjectMapper implements Serializable {
 					/** 
 					 * Speichert die von der Datenbank generierte ID in dem BusinessObject,
 					 * dadurch erhalten die Klassen, welche von BusinessObject erben die selbe ID.
-					 * Somit erhält jedes BusinessObjecten eine einzigartige ID.
+					 * Somit erhaelt jedes BusinessObjecten eine einzigartige ID.
 					 */
 					bo.setBo_Id(rs.getInt(1));
 				}
@@ -94,7 +94,7 @@ public class BusinessObjectMapper implements Serializable {
           Connection con = DBConnection.connection();
                    
           try {              
-             // Statement ausfüllen und als Query an die DB schicken
+             // Statement ausfuellen und als Query an die DB schicken
              PreparedStatement stmt = con.prepareStatement(
             		 			"SELECT * "
             		 		  + "FROM BusinessObject "  
@@ -102,7 +102,7 @@ public class BusinessObjectMapper implements Serializable {
                    			  );
              
              stmt.setInt(1, bo_id);
-             // Statement ausfüllen und als Query an die DB schicken
+             // Statement ausfuellen und als Query an die DB schicken
              ResultSet rs = stmt.executeQuery();
                           
               if (rs.next()) {
@@ -124,7 +124,7 @@ public class BusinessObjectMapper implements Serializable {
 	  }
 	  
 	  /**
-	   * Gibt ein BusinessObject vom Typ Contact, ContctList oder PropertyValue zurück
+	   * Gibt ein BusinessObject vom Typ Contact, ContctList oder PropertyValue zurueck
 	   * 
 	   * @param BusinessObject ID
 	   * @return Contact, ContactList, PropertyValue
@@ -133,7 +133,7 @@ public class BusinessObjectMapper implements Serializable {
 	  	   
 	  
 	  /**
-	   * Gibt alle BusinessObject IDs aus der Tabelle zurück
+	   * Gibt alle BusinessObject IDs aus der Tabelle zurueck
 	   * 
 	   * @return Vector<Integer>
 	   */
@@ -155,7 +155,7 @@ public class BusinessObjectMapper implements Serializable {
 	  }
 	  
 	  /**
-	   * Gibt alle BusinessObject IDs von einem User aus der Tabelle zurück
+	   * Gibt alle BusinessObject IDs von einem User aus der Tabelle zurueck
 	   * 
 	   * @return Vector<Integer>
 	   */
@@ -198,7 +198,7 @@ public class BusinessObjectMapper implements Serializable {
 	  }
 	  
 	  /**
-	   * Ändert den Shared Status des BusinessObjects auf True (Geteilt)
+	   * Aendert den Shared Status des BusinessObjects auf True (Geteilt)
 	   * @param BusinessObject ID
 	   */
 	  public void setStatusTrue(int boID){
@@ -215,7 +215,7 @@ public class BusinessObjectMapper implements Serializable {
 	  }
 	  
 	  /**
-	   * Ändert den Shared Status des BusinessObjects auf False (nicht Geteilt)
+	   * Aendert den Shared Status des BusinessObjects auf False (nicht Geteilt)
 	   * @param BusinessObject ID
 	   */
 	  public void setStatusFalse(int boID){
@@ -234,7 +234,7 @@ public class BusinessObjectMapper implements Serializable {
 	 
 
 	/**
-	 * Löscht den Eintrag der das übergebene BusinessObject enthält 
+	 * Loescht den Eintrag der das übergebene BusinessObject enthaelt 
 	 *  
 	 * @param BusinessObject
 	 */
@@ -244,7 +244,7 @@ public class BusinessObjectMapper implements Serializable {
 
 	
 	/**
-	 * Löscht das BusinessObject mit der übergebenen ID
+	 * Loescht das BusinessObject mit der uebergebenen ID
 	 * 
 	 * @param BusinessObject ID
 	 */
@@ -253,7 +253,7 @@ public class BusinessObjectMapper implements Serializable {
 		Connection con = DBConnection.connection();
 		  
 		  try {
-			  // Einfügeoperation in propertyvalue erfolgt
+			  // Einfuegeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement("DELETE FROM BusinessObject WHERE bo_ID = ? ");
 		      stmt.setInt(1, bo_id);
 		      stmt.execute();
@@ -266,7 +266,7 @@ public class BusinessObjectMapper implements Serializable {
 	}
 	
 	/**
-	 * Löscht das BusinessObject die dem übergebenen User Objekt gehören
+	 * Loescht das BusinessObject die dem uebergebenen User Objekt gehoeren
 	 * 
 	 * @param User-Objekt
 	 */
@@ -276,7 +276,7 @@ public class BusinessObjectMapper implements Serializable {
 	}
 	
 	/**
-	 * Löscht das BusinessObject mit der übergebenen UserID
+	 * Loescht das BusinessObject mit der uebergebenen UserID
 	 * @param User ID
 	 */
 	public void deleteBusinessObjectByUserId(double id) {
@@ -284,7 +284,7 @@ public class BusinessObjectMapper implements Serializable {
 		Connection con = DBConnection.connection();
 		  
 		  try {
-			  // Einfügeoperation in propertyvalue erfolgt
+			  // Einfuegeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement
 		      ("DELETE FROM BusinessObject WHERE user_ID= ?");
 		      stmt.setDouble(1, id);
@@ -301,7 +301,7 @@ public class BusinessObjectMapper implements Serializable {
 		Connection con = DBConnection.connection();
 		  
 		  try {
-			  // Einfügeoperation in propertyvalue erfolgt
+			  // Einfuegeoperation in propertyvalue erfolgt
 		      PreparedStatement stmt = con.prepareStatement
 		      ("ALTER TABLE BusinessObject AUTO_INCREMENT = 1");
 		      stmt.execute();

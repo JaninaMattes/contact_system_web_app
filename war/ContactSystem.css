@@ -3,7 +3,7 @@
 body {
 	margin: 0 auto; /*Der Wert wird horizontal zentriert */
     text-align: center;  /* Zentrierung im Internet Explorer */
-    display: block; /*Block-Elemente */
+    display: block; 
     font-family: Arial;
     }
 
@@ -14,10 +14,10 @@ body {
 	margin: 20px 100% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
 	padding-left: 150px;
 	font-family: "Arial", Arial, sans-serif;
-  	font-size: 3em; /*Schriftgrï¿½ï¿½e*/
-  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
-  	color: white; /*Schriftfarbe*/
-  	text-align: center; /*zentriert*/
+  	font-size: 3em;
+  	font-weight: bold;
+  	color: white; 
+  	text-align: center; 
 
 	
 }
@@ -27,20 +27,20 @@ body {
 	margin: 20px 0% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
 	padding-left: 300px;
 	font-family: "Arial", Arial, sans-serif;
-  	font-size: 3em; /*Schriftgrï¿½ï¿½e*/
-  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
-  	color: white; /*Schriftfarbe*/
-  	text-align: center; /*zentriert*/
+  	font-size: 3em; 
+  	font-weight: bold;
+  	color: white; 
+  	text-align: center; 
 
 	
 }
 
 /*Report Generator */
 
-#reporttitle{ /* ï¿½berschrift des erstellten Reports */
+#reporttitle{ /* Überschrift des erstellten Reports */
 	font-family: "Arial", Arial, sans-serif;
-  	font-size: 2em; /*Schriftgrï¿½ï¿½e*/
-  	font-weight: bold;/*Die Schrift wird fett gedruckt angezeigt*/
+  	font-size: 2em; 
+  	font-weight: bold;
 	color: black
 	
 }
@@ -126,20 +126,19 @@ body {
 
 #Link{
 	font-family: "Arial", Arial, sans-serif;
-    /*border: solid 2px black; Es wird ein schwarzer Rahmen mit durchgezogener Linie und der Breite 2px erstellt */
-    text-decoration: none; /*Links werden nicht unterstrichen dargestellt */
-    color: white; /*Textfarbe*/
-    padding: 10px; /*Abstand des Rahmens zum Inhalt*/
+    text-decoration: none; 
+    color: white; 
+    padding: 10px; 
     text-shadow: 1px 1px #DCDCDC; /*Text-Schatten*/
     box-shadow:  2px 2px #DCDCDC; /*Box mit Schattenverlauf (helles grau)*/
-    background: #FAFAFA; /*Hintergrundfarbe*/
+    background: #FAFAFA;
     margin: 4px 2px;
     align-content: right;
 }
 
 /*Buttons*/
 
-/*Untere Buttons: "Bearbeiten"- "Teilen"-"Lï¿½schen"-Buttons*/
+/*Untere Buttons: "Bearbeiten"- "Teilen"-"Löschen"-Buttons*/
 .mainButton{
     width: 12vw;
     min-width: 100px;
@@ -268,6 +267,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
     padding-top: 5px;
     padding-bottom: 5px;
     box-shadow: 0px 0px 2px rgba(000,000,000,0.9),inset 0px 0px 1px rgba(255,255,255,0.9); /*Schatten erzeugen*/
+    
     /*Positionierung des Buttons */
     position: absolute;
     top: 5px;

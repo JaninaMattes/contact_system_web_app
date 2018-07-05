@@ -245,9 +245,9 @@ public class PropertyMapper {
       /**
        * Ersetzt die Beschreibung eines <code>Property</code> -Objektes gegen eine neue Beschreibung.
        *
-       * @param property ist das zu verändernde Objekt
+       * @param property ist das zu veraendernde Objekt
        * @return das bereits uebergebene Objekt, jedoch mit gegebenfals korrigierter
-       * Es wird null zurückgegeben, wenn kein Datenbank eintrag verändert wurde.
+       * Es wird null zurueckgegeben, wenn kein Datenbank eintrag veraendert wurde.
        */
       public Property update(Property property) {
        	  
@@ -279,11 +279,11 @@ public class PropertyMapper {
      
       
       /**
-       * Löscht ein <code>Property</code> -Objekteaus der Datenbank.
+       * Loescht ein <code>Property</code> -Objekteaus der Datenbank.
        *
-       * @param property ist das zu verändernde Objekt
+       * @param property ist das zu veraendernde Objekt
        * @return das bereits uebergebene Objekt um es aus der Anzeige zu entfernen
-       * Es wird null zurückgegeben, wenn kein Datenbank eintrag verändert wurde.
+       * Es wird null zurueckgegeben, wenn kein Datenbank eintrag veraendert wurde.
        */ 
       public Property delete(Property property) {
        	  

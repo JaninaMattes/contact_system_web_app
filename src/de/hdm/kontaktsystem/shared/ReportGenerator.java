@@ -12,7 +12,7 @@ import de.hdm.kontaktsystem.shared.report.AllContactsForPropertyReport;
 import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
 
 /**
- * Synchrone Schnittstelle für eine RPC-fähige Klasse zur Erstellung von Reports.
+ * Synchrone Schnittstelle fuer eine RPC-fuehige Klasse zur Erstellung von Reports.
  * 
  * @author Sandra Prestel
  */
@@ -20,9 +20,9 @@ import de.hdm.kontaktsystem.shared.report.AllContactsOfUserReport;
 public interface ReportGenerator extends RemoteService {
 	
 	   /**
-	   * Die Methode <code>init</code> ermöglicht die Initialisierung des Objekts. 
-	   * Sie ist zusätzlich zum <em>No Argument Konstruktor</em> der implementierenden
-	   * Klasse, <code>ContactSystemImpl</code> notwendig für GWT RPC. 
+	   * Die Methode <code>init</code> ermoeglicht die Initialisierung des Objekts. 
+	   * Sie ist zusaetzlich zum <em>No Argument Konstruktor</em> der implementierenden
+	   * Klasse, <code>ContactSystemImpl</code> notwendig fuer GWT RPC. 
 	   * Diese Methode wird direkt nach der Instantiierung aufgerufen.
 	   * 
 	   * @throws IllegalArgumentException
@@ -59,11 +59,11 @@ public interface ReportGenerator extends RemoteService {
 	  
 	  /**
 	   * Erstellen eines AllContactsForPropertyReport. Dieser Report stellt alle Kontakte dar,
-	   * auf die ein Nutzer Zugriff hat, und die eine definierte Eigenschaft und zugehörige 
-	   * Eigenschaftsausprägung aufweisen.
+	   * auf die ein Nutzer Zugriff hat, und die eine definierte Eigenschaft und zugehoerige 
+	   * Eigenschaftsauspraegung aufweisen.
 	   * 
 	   * @param propertyId ID der gesuchten Eigenschaft
-	   * @param propertyvalue Die gesuchte Eigenschaftsausprägung
+	   * @param propertyvalue Die gesuchte Eigenschaftsauspraegung
 	   * @return AllContactsForPropertyReport
 	   * @throws IllegalArgumentException
 	   */

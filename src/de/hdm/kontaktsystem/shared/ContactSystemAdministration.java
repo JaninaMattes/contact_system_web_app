@@ -106,7 +106,7 @@ public interface ContactSystemAdministration extends RemoteService {
 	
 	public Property deleteProperty(Property p);
 	
-	/*
+	/**
 	 * Get all
 	 */
 	
