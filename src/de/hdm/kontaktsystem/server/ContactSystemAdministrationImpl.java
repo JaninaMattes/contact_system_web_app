@@ -1267,13 +1267,17 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		Vector<Participation> participationVector = partMapper.findSharedContacts(this.getUserByID(this.getCurrentUser()));
 		Vector<Contact> cResultVector = new Vector<Contact>();
-
+		Vector<Integer> contactIDs = new Vector<Integer>();
+		
 		for (Participation part : participationVector) {
-			Contact c = (Contact) part.getReferencedObject();	
-			if(c != null && !cResultVector.contains(c)){
-				c.setOwner(this.getUserByID(c.getOwner().getGoogleID()));
-				c.setName(this.getNameOfContact(c));
-				cResultVector.addElement(c);
+			if(!contactIDs.contains(part.getReferenceID())){
+				contactIDs.add(part.getReferenceID());
+				Contact c = (Contact) part.getReferencedObject();	
+				if(c != null){
+					c.setOwner(this.getUserByID(c.getOwner().getGoogleID()));
+					c.setName(this.getNameOfContact(c));
+					cResultVector.addElement(c);
+				}
 			}
 			
 		}
@@ -1353,12 +1357,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		Vector<Participation> participationVector = new Vector<Participation>();
 		participationVector = partMapper.findAllSharedContactLists(this.getUserByID(this.getCurrentUser()));
 		Vector<ContactList> clResultVector = new Vector<ContactList>();
-
+		Vector<Integer> contactListIDs = new Vector<Integer>();
+		
 		for (Participation part : participationVector) {
-			ContactList cl = (ContactList) part.getReferencedObject(); 
-			if (cl != null) {
-				cl.setOwner(this.getUserByID(cl.getOwner().getGoogleID()));
-				clResultVector.addElement(cl);
+			if(!contactListIDs.contains(part.getReferenceID())){
+				contactListIDs.add(part.getReferenceID());
+				ContactList cl = (ContactList) part.getReferencedObject(); 
+				if (cl != null) {
+					cl.setOwner(this.getUserByID(cl.getOwner().getGoogleID()));
+					clResultVector.addElement(cl);
+				}
 			}
 		}
 
@@ -1425,14 +1433,18 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln,
 		// die von diesem geteilt wurden
-		 Vector<Participation> participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
+		Vector<Participation> participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
 		Vector<Contact> contactResultVector = new Vector<Contact>();
-
+		Vector<Integer> contactIDs = new Vector<Integer>();
+		
 		for (Participation part : participationVector) {
-			Contact c = cMapper.findContactById(part.getReferenceID());
-			if (c != null && !contactResultVector.contains(c)) {
-				c.setName(this.getNameOfContact(c));
-				contactResultVector.addElement(c);
+			if(!contactIDs.contains(part.getReferenceID())){
+				contactIDs.add(part.getReferenceID());
+				Contact c = cMapper.findContactById(part.getReferenceID());
+				if (c != null) {
+					c.setName(this.getNameOfContact(c));
+					contactResultVector.addElement(c);
+				}
 			}
 		}
 		if (contactResultVector.isEmpty())
@@ -1458,11 +1470,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		participationVector = this.getAllParticipationsByOwner(this.getUserByID(this.getCurrentUser()));
 		// Vector für die Speicherung aller BusinessObjekte erzeugen
 		Vector<ContactList> contactListVector = new Vector<ContactList>();
-
+		Vector<Integer> contactListIDs = new Vector<Integer>();
 		for (Participation part : participationVector) {
-			ContactList cl = clMapper.findContactListById(part.getReferenceID());
-			if (cl != null) {
-				contactListVector.addElement(cl);
+			if(!contactListIDs.contains(part.getReferenceID())){
+				contactListIDs.add(part.getReferenceID());
+				ContactList cl = clMapper.findContactListById(part.getReferenceID());
+				if (cl != null) {
+					contactListVector.addElement(cl);
+				}
 			}
 		}
 //		contactListVector.sort(new BOCompare());
