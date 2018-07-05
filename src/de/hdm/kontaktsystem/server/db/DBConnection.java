@@ -22,36 +22,38 @@ public class DBConnection {
 	
 	
 	public static Connection connection() {
-		// falls noch keine Verbindung zur DB hergestellt wurde
-		if ( con == null ) {
-			String url = null;
-			try {
-				// Laden des Treibers
-				DriverManager.registerDriver(new AppEngineDriver());
-				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
-					
-					System.out.println("Load Google Driver");
-                    // Load the class that provides the new
-                    // "jdbc:google:mysql://" prefix.
-                    Class.forName("com.mysql.jdbc.GoogleDriver");
-                    url = googleUrl;
-                } else {
-                	//System.out.println("Load MySQL Driver");
-                    // Local MySQL instance to use during development.
-                	Class.forName("com.mysql.jdbc.Driver");
-                    url = localUrl;
-                }
+		try {
+		// falls noch keine Verbindung zur DB hergestellt wurde oder nicht mehr gültig ist wird eine neue Verbindung aufgebaut.
+			if ( con == null || !con.isValid(2000) ) {
+				String url = null;
 				
-				// Treiber Manager baut Verbindung mit Informationen aus url auf
-				con = DriverManager.getConnection(url);
-			} 
-			catch (SQLException e1) {
-				con = null;
-				e1.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} 
-		}
+					// Laden des Treibers
+					DriverManager.registerDriver(new AppEngineDriver());
+					if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+						
+						System.out.println("Load Google Driver");
+	                    // Load the class that provides the new
+	                    // "jdbc:google:mysql://" prefix.
+	                    Class.forName("com.mysql.jdbc.GoogleDriver");
+	                    url = googleUrl;
+	                } else {
+	                	//System.out.println("Load MySQL Driver");
+	                    // Local MySQL instance to use during development.
+	                	Class.forName("com.mysql.jdbc.Driver");
+	                    url = localUrl;
+	                }
+					
+					// Treiber Manager baut Verbindung mit Informationen aus url auf
+					con = DriverManager.getConnection(url);
+				} 
+			}
+		catch (SQLException e1) {
+			con = null;
+			e1.printStackTrace();
+		}catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+		
 		
 		return con;
 	}
