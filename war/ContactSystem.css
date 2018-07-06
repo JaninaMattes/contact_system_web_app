@@ -22,29 +22,15 @@ body {
 	
 }
 
-.headertext{ /*Ueberschrift des Editors*/
+.headertext{ /*Ueberschrift des Editors und des ReoprtGererators*/
 	border: none;
-	margin: 20px 100% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
-	padding-left: 150px;
+	margin-top: 50px ;
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 3em;
   	font-weight: bold;
   	color: white; 
   	text-align: center; 
-
-	
-}
-
-.headertext2{ /*Ueberschrift des Report-Generators*/
-	border: none;
-	margin: 20px 0% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
-	padding-left: 300px;
-	font-family: "Arial", Arial, sans-serif;
-  	font-size: 3em; 
-  	font-weight: bold;
-  	color: white; 
-  	text-align: center; 
-
+	width: calc(100vw - 420px);
 	
 }
 
@@ -201,7 +187,7 @@ body {
 
 .searchButton{ /* "Suchen"-Button im Editor */
 	height: 27px;
-    width: 53px;
+    width: 60px;
     font-family: "Arial", Arial, sans-serif;
 	background-color: #c0c0c0;
     border: none;
@@ -209,7 +195,6 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin-top: 1vh;
     margin-Bottom: 9vh;
     border-radius: 4px;
     cursor: pointer;
@@ -312,8 +297,9 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 /* Beide DropDown-Listen im Report Generator */
 .ReportDropDownList{
 	margin: 0 4px;
-	margin-left: 20px;
-	padding-right: 100px;
+	margin-left: 2vw;
+	margin-bottom: 1vh;
+	width: calc(20vw - 50px);
 }
 
 #DropDownList{
@@ -331,17 +317,16 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 #findByTextbox{
-	width: 187px;
+	width: calc(20vw - 50px);
 	hight: 30px;
-	margin-top: 10px;
 	margin-right: 5px;
-	margin-left: 20px;
+	margin-left: 2vw;
 }
 
 #search-textfeld{
-	width: 13vw;
+	width: calc(17vw - 60px);
 	height: 27px;
-	margin-top: 2vh;
+	margin-top: 1vh;
 	margin-left: 1vw;
 	margin-Bottom: 10vh;
 	border-radius: 5px;
@@ -413,7 +398,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 	border: none;
 	padding-top: 20px;
 	padding-bottom: 10px;
-	padding-left: 20px;
+	padding-left: 2vw;
 	font-size: 14px;
 	color: white;
 }

@@ -162,7 +162,7 @@ public class ReportGenerator implements EntryPoint {
 		//Labels
 		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
-		headerText.setStyleName("headertext2");
+		headerText.setStyleName("headertext");
 		
 		//Textbox
 		findByValueText.getElement().setId("findByTextbox");

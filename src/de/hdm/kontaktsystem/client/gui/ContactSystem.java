@@ -288,7 +288,7 @@ public class ContactSystem implements EntryPoint {
 	    HorizontalPanel trailer = new HorizontalPanel();
 
 		//Logo Kontaktsystem
-		logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");	
+	    logo.setUrl(GWT.getHostPageBaseURL() + "images/LogoWeiss.png");
 		logo.setHeight("70px");
 		logo.setAltText("Logo");
 				    
@@ -347,7 +347,7 @@ public class ContactSystem implements EntryPoint {
 		/**
 		 * CSS Identifier für das Logo
 		 */
-		logo.getElement().setId("logo");
+		logo.setStyleName("logo");
 		
 		/*
 		 * CSS für Add Panel
