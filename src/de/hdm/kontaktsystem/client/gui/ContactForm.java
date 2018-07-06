@@ -927,22 +927,24 @@ public class ContactForm extends VerticalPanel {
 								}						
 							});					
 						}
+						// Zeigt den den SharedStatus an
+						
+						if (contactToDisplay.getShared_status()) {
+							if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
+								contactStatus.setText("Status: Von mir geteilt");
+							}else{
+								contactStatus.setText("Status: An mich geteilt");
+							}	
+						} else {
+							contactStatus.setText("Status: Nicht geteilt");
+						}
+						contactStatus.setStyleName("Status");
+						
 					}					
 				});	
 						
 
-				// Zeigt den den SharedStatus an
-
-				if (contactToDisplay.getShared_status()) {
-					if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
-						contactStatus.setText("Status: Von mir geteilt");
-					}else{
-						contactStatus.setText("Status: An mich geteilt");
-					}	
-				} else {
-					contactStatus.setText("Status: Nicht geteilt");
-				}
-				contactStatus.setStyleName("Status");
+				
 							
 				//Listbox befüllen, in der der Nutzer neue Eigenschaften hinzufügen kann.
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
@@ -1089,10 +1091,15 @@ public class ContactForm extends VerticalPanel {
 			public void onSuccess(Participation result) {
 				loadPanel.setVisible(false);
 				// Wenn der Nutzer der Besitzer ist, einlenden der Shared With Gui elemente
-				if(contactToDisplay.getOwner().equals(myUser)){
+				if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
 					labelSharedWith.setVisible(true);
 					sharedWithUser.setVisible(true);
 					editPartButton.setVisible(true);
+					if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
+						contactStatus.setText("Status: Von mir geteilt");
+					}else{
+						contactStatus.setText("Status: An mich geteilt");
+					}
 					sharedWithUser.addItem(result.getParticipant().getUserContact().getName().getValue() + " / " + result.getParticipant().getGMail(), result.getParticipant().getGMail());
 				}
 				

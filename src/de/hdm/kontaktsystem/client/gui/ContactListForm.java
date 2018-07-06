@@ -226,8 +226,8 @@ public class ContactListForm extends VerticalPanel {
 		 */
 
 		btnPanel.add(saveButton);
-		btnPanel.add(deleteClButton);
 		btnPanel.add(shareButton);
+		btnPanel.add(deleteClButton);
 		btnPanel.add(cancelNewButton);
 		
 		/**
@@ -688,6 +688,13 @@ public class ContactListForm extends VerticalPanel {
 					labelSharedWith.setVisible(true);
 					listBoxSharedWith.setVisible(true);
 					unShareButton.setVisible(true);
+					
+					if(contactListToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
+						contactListStatusValue.setText("Von mir geteilt");
+					}else{
+						contactListStatusValue.setText("An mich geteilt");
+					}	
+					
 					for (Participation part : result) {
 						// User Liste updaten
 						listBoxSharedWith.addItem(part.getParticipant().getGMail());
@@ -914,8 +921,7 @@ public class ContactListForm extends VerticalPanel {
 				public void onSuccess(ContactList list) {
 					log("Liste geladen");
 					contactListToDisplay = list;
-	
-
+					
 					/**
 					 * Abfrage für die Status Anzeige "Nicht geteilt", "Von mir geteilt" oder "An mich geteilt"
 					 * der Kontaktliste
