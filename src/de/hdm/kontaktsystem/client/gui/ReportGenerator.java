@@ -12,6 +12,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -105,18 +106,18 @@ public class ReportGenerator implements EntryPoint {
 	 */	
 	@Override
 	public void onModuleLoad() {
-		
-		loadReportGenerator(); //Test, solange Login nicht funktioniert
-		
+
+	  	RootPanel.get("Header").add(headerPanel);
+		log("Module: "+GWT.getModuleName());
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */	
 		
-		/*
 		loadPanel.setVisible(false);
 		reportGenerator = ClientsideSettings.getReportGenerator();
-		reportGenerator.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+		reportGenerator.login(GWT.getHostPageBaseURL()+"ReportGenerator.html", new AsyncCallback<User>() {
+			
 			public void onFailure(Throwable error) {
 				Window.alert("Login Error");
 			}
@@ -124,7 +125,7 @@ public class ReportGenerator implements EntryPoint {
 			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
 			public void onSuccess(User result) {
 				userInfo = result;
-				if(userInfo.isLoggedIn()){
+				if(userInfo == null || userInfo.isLoggedIn()){
 					log("Load ReportGenerator");
 					loadReportGenerator();
 				}else{
@@ -132,22 +133,31 @@ public class ReportGenerator implements EntryPoint {
 				}
 			}
 		});
-		*/
+		
+		
 	}
 		
 	/**
 	 * Aufbau der Login-Seite
 	 */
 	private void loadLogin() {	
-			
+		log("Login");
 		signInLink.setHref(userInfo.getLoginUrl());
 		signInLink.getElement().setId("link");
 		loginPanel.add(new HTML("<center>"));
 		loginPanel.add(loginLabel);
 		loginPanel.add(new HTML("<br /> <br /> "));
-		loginPanel.add(signInLink);
+		FocusPanel login = new FocusPanel();
+		login.add(new Image(GWT.getHostPageBaseURL() + "images/login.png"));
+		login.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.Location.assign(userInfo.getLoginUrl());				
+			}		
+		});
+		loginPanel.add(login);
 		loginPanel.add(new HTML("</center>"));
-		RootPanel.get("TopLevelFrame").add(loginPanel); //TODO: prüfen ob richtige HTML
+		RootPanel.get("Details").add(loginPanel); //TODO: prüfen ob richtige HTML
 	}
 	
 	

@@ -110,13 +110,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 	public User login(String requestUri) {
 		init();
+		System.out.println("Login CS: "+requestUri);
 		UserService userService = UserServiceFactory.getUserService();
 		com.google.appengine.api.users.User guser = userService.getCurrentUser();
 		User user = new User();
 		Contact own = new Contact();
 		PropertyValue name = new PropertyValue();
 		PropertyValue email = new PropertyValue();
-
+		System.out.println("GUser: "+ guser);
 		if (guser != null) {
 
 			double id = Double.parseDouble(guser.getUserId());
@@ -124,6 +125,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 			// Ueberpruefung ob der nutzer bereits existiert oder ob es ein neuer Nutzer ist
 			if (user == null) {
+				System.out.println("Create User: "+ guser.getNickname());
 				String gmail = guser.getEmail();
 				// Ersetzt die Lange googlemail adresse gegen die gekuerzte gmail variante
 				if(gmail.contains("googlemail")) gmail.replace("googlemail", "gmail");
@@ -154,6 +156,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			user.setLoginUrl(userService.createLoginURL(requestUri));
 
 		}
+		System.out.println("Return User: "+ user.getLoginUrl());
 		return user;
 
 	}

@@ -155,51 +155,6 @@ public class ContactSystem implements EntryPoint {
 	// Notification
 	private static PopupPanel notification = new PopupPanel();
 	
-	
-	/**
-	 * Die Methode <code>loadTree()</code> ruft das TreeView Model auf
-	 * und übergibt diesem Standart gemäß per Default Contact Objekte
-	 * zur Darstellung in Listenform. Diese wird später über die 
-	 * <em>public void onModuleLoad()</em> Methode des Interfaces EntryPoint
-	 * aufgerufen. 
-	 * 
-	 */
-	
-	public void loadTree() {		
-		
-		tvm.setClForm(clf);
-		tvm.setCForm(cf);
-		clf.setTree(tvm);
-		cf.setTree(tvm);
-		
-		//CSS
-		treeScrollPanel.setHeight("80vh");
-		
-		contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				log("Keine Kontakte gefunden");
-			}
-
-			@Override
-			public void onSuccess(Vector<Contact> result) {
-				// TODO Auto-generated method stub
-				log("Es wurden " + result.size() + " Kontakte gefunden");
-				CellTree.Resources res = GWT.create(ContactSystemTreeResources.class);
-				ct = new CellTree(tvm, result, res);
-				ct.setAnimationEnabled(true);
-//				ct.setDefaultNodeSize(result.size());
-				treeScrollPanel.add(ct);				
-				
-			}
-
-		});
-		
-		RootPanel.get("Lists").add(treeScrollPanel);	
-		
-	}
-	
 	/**
 	 * Da die Klasse <code>ContactSystem</code> die Implementierung des Interface <code>EntryPoint</code>
 	 * zusichert, wird die Methode <code>public void onModuleLoad()</code> als Einstieg benötigt. 
@@ -210,7 +165,8 @@ public class ContactSystem implements EntryPoint {
 	 */
 	
 	public void onModuleLoad() {
-	
+		
+		log("Module: "+GWT.getModuleName());
 //		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 //		contactSystemAdmin.getUserByID(510, new AsyncCallback<User>() {
 //			public void onFailure(Throwable error) {
@@ -231,7 +187,6 @@ public class ContactSystem implements EntryPoint {
 //			}
 //		});	
 		
-		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
@@ -246,6 +201,7 @@ public class ContactSystem implements EntryPoint {
 			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
 			public void onSuccess(User result) {
 				userInfo = result;
+				log("Info" + userInfo.getLoginUrl());
 				if(userInfo.isLoggedIn()){
 					log("Load Editor");
 					uf.setMyUser(result);
@@ -262,10 +218,8 @@ public class ContactSystem implements EntryPoint {
 				}
 			}
 		});	
+	}
 		
-		
-	}	
-	
 	/**
 	 * Die Methode <code>loadLogin()</code> führt zum Aufbau der Login-Seite.
 	 * Wenn der Nutzer ausgeloggt wurde, kann er sich hierüber wieder neu im 
@@ -291,7 +245,47 @@ public class ContactSystem implements EntryPoint {
 		loginPanel.add(new HTML("</center>"));
 		RootPanel.get("Lists").add(loginPanel); //TODO: prüfen ob richtige HTML
 		
+	}
+	
+	/**
+	 * Die Methode <code>loadTree()</code> ruft das TreeView Model auf
+	 * und übergibt diesem Standart gemäß per Default Contact Objekte
+	 * zur Darstellung in Listenform. Diese wird später über die 
+	 * <em>public void onModuleLoad()</em> Methode des Interfaces EntryPoint
+	 * aufgerufen. 
+	 * 
+	 */
+	
+	public void loadTree() {		
+		
+		tvm.setClForm(clf);
+		tvm.setCForm(cf);
+		clf.setTree(tvm);
+		cf.setTree(tvm);
+		
+		//CSS
+		treeScrollPanel.setHeight("80vh");
+		
+		contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				log("Keine Kontakte gefunden");
+			}
 
+			@Override
+			public void onSuccess(Vector<Contact> result) {
+				log("Es wurden " + result.size() + " Kontakte gefunden");
+				CellTree.Resources res = GWT.create(ContactSystemTreeResources.class);
+				ct = new CellTree(tvm, result, res);
+				ct.setAnimationEnabled(true);
+				treeScrollPanel.add(ct);				
+				
+			}
+
+		});
+		
+		RootPanel.get("Lists").add(treeScrollPanel);	
+		
 	}
 		
 

@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -108,7 +110,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Login weiterleitung
 	 */
 	public User login(String requestUri){
-		return administration.login(requestUri);
+		init();
+		User u = administration.login(requestUri);
+		return u;
 	}
 	
 	/**

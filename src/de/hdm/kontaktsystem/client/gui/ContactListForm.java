@@ -166,7 +166,7 @@ public class ContactListForm extends VerticalPanel {
 		contactsToAdd.setStyleName("ListBox");
 		contactNames.setStyleName("ListBox");
 		listBoxShareWith.setStyleName("ListBox");
-		
+		listBoxShareWith.getElement().getStyle().setColor("white");
 		/*
 		 * Css für die Labels
 		 */
