@@ -347,9 +347,9 @@ public class CellTreeViewModel implements TreeViewModel {
 
 }
 /**
- * Klasse die die <code>BusinessObject</code>-Objekte in HTML-Elemente umwandelt, um diese
+ * Die Klasse wandelt die <code>BusinessObject</code>-Objekte in HTML-Elemente um, um diese
  * im TreeView anzuzeigen.
- * Bei <code>Contact</code> und <code>ContactList</code> objekten wird der Name zur anzeige verwendet.
+ * Bei <code>Contact</code> und <code>ContactList</code> Objekten wird der Name zur anzeige verwendet.
  * 
  * @author Marco Pracher
  */

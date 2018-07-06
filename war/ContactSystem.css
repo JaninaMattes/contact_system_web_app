@@ -9,6 +9,19 @@ body {
 
 
 
+.loginheader{ /*Ueberschrift des Logins*/
+	border: none;
+	margin-top: 3vh;
+	font-family: "Arial", Arial, sans-serif;
+  	font-size: 3em;
+  	font-weight: bold;
+  	color: white; 
+  	width: 100vw;
+  	text-align: center; 
+
+	
+}
+
 .headertext{ /*Ueberschrift des Editors*/
 	border: none;
 	margin: 20px 100% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
@@ -37,7 +50,7 @@ body {
 
 /*Report Generator */
 
-#reporttitle{ /* Überschrift des erstellten Reports */
+#reporttitle{ /* ï¿½berschrift des erstellten Reports */
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 2em; 
   	font-weight: bold;
@@ -138,7 +151,7 @@ body {
 
 /*Buttons*/
 
-/*Untere Buttons: "Bearbeiten"- "Teilen"-"Löschen"-Buttons*/
+/*Untere Buttons: "Bearbeiten"- "Teilen"-"Lï¿½schen"-Buttons*/
 .mainButton{
     width: 12vw;
     min-width: 100px;
@@ -375,7 +388,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 
-/* Label von Überschrift "Kontakt:" und "Kontaktliste:" im Editor*/
+/* Label von ï¿½berschrift "Kontakt:" und "Kontaktliste:" im Editor*/
 #ueberschriftlabel{
 	 border-style: none;
 	 border-color:white;
@@ -412,7 +425,7 @@ input:checked {
     background: #00C6FF;
 }
 
-/*Div´s*/
+/*Divï¿½s*/
 
 div#TopLevelFrame {
 	width: 100vw;
@@ -515,6 +528,11 @@ div#Trailer {
 	border-radius: 0;
 }
 
+/* Login */
+.login{
+	color: white;
+}
+
 /*Schrift-style */
 .Label{
 	background: transparent;
@@ -525,7 +543,7 @@ div#Trailer {
 }
 
 
-/*Panel für Buttons*/
+/*Panel fï¿½r Buttons*/
 .mainButtonPanel{
     Bottom: 8vh;
     position: fixed;
@@ -561,4 +579,8 @@ div#Trailer {
 	width: auto;
 }
 
-
+#Content{
+	height: 81vh;
+	width: 100vw;
+	background: linear-gradient(#000051, #534bae , #000051);
+}

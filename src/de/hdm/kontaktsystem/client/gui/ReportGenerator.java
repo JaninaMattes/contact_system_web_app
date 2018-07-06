@@ -14,6 +14,8 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -81,14 +83,10 @@ public class ReportGenerator implements EntryPoint {
 	/**
 	 * Definition der Widgets für den Login.
 	 */
-	private User userInfo = null;
-	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label(
-			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
-	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
-	private Anchor editorLink = new Anchor("Editor");				
-
+	private Anchor editorLink = new Anchor("Editor");
+	private User userInfo = null;
+	
 	// Lade Animation
 	private PopupPanel loadPanel = new PopupPanel();
 	
@@ -107,7 +105,6 @@ public class ReportGenerator implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 
-	  	RootPanel.get("Header").add(headerPanel);
 		log("Module: "+GWT.getModuleName());
 		
 		/**
@@ -127,39 +124,21 @@ public class ReportGenerator implements EntryPoint {
 				userInfo = result;
 				if(userInfo == null || userInfo.isLoggedIn()){
 					log("Load ReportGenerator");
+					RootPanel.get("Navigator").setVisible(true);
+					RootPanel.get("Details").setVisible(true);
 					loadReportGenerator();
 				}else{
-					loadLogin();					
+					log("Load login");
+					// Anzeige der Loginseite
+					RootPanel.get("Navigator").setVisible(false);
+					RootPanel.get("Details").setVisible(false);
+					RootPanel.get("Content").add(new Login(userInfo)); 			
 				}
 			}
 		});
 		
 		
 	}
-		
-	/**
-	 * Aufbau der Login-Seite
-	 */
-	private void loadLogin() {	
-		log("Login");
-		signInLink.setHref(userInfo.getLoginUrl());
-		signInLink.getElement().setId("link");
-		loginPanel.add(new HTML("<center>"));
-		loginPanel.add(loginLabel);
-		loginPanel.add(new HTML("<br /> <br /> "));
-		FocusPanel login = new FocusPanel();
-		login.add(new Image(GWT.getHostPageBaseURL() + "images/login.png"));
-		login.addClickHandler(new ClickHandler(){
-			@Override
-			public void onClick(ClickEvent event) {
-				Window.Location.assign(userInfo.getLoginUrl());				
-			}		
-		});
-		loginPanel.add(login);
-		loginPanel.add(new HTML("</center>"));
-		RootPanel.get("Details").add(loginPanel); //TODO: prüfen ob richtige HTML
-	}
-	
 	
 	/**
 	 * Aufbau der Startseite des Report-Generators. 
@@ -183,7 +162,6 @@ public class ReportGenerator implements EntryPoint {
 		//Labels
 		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
-		loginLabel.getElement().setId("loginlabel");
 		headerText.setStyleName("headertext2");
 		
 		//Textbox
@@ -201,7 +179,6 @@ public class ReportGenerator implements EntryPoint {
 		showAllButton.setStyleName("searchAllContacts");
 	
 		//Links
-		signInLink.setStyleName("link");
 		signOutLink.getElement().setId("log-out-button");
 		editorLink.getElement().setId("switch-button");
 		
@@ -235,6 +212,11 @@ public class ReportGenerator implements EntryPoint {
 		searchSymbol2.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
 		searchSymbol2.setAltText("Suche");
 		
+		// Header
+		headerText.setText("ReportGenerator");
+		headerPanel.add(signOutLink);		
+		headerPanel.add(editorLink);
+		
 		/*
 		 * Setzen des Links zum Editor des Kontaktsystems. Hiermit kann die Webseite
 		 * "Editor" geöffnet werden, mit der Inhalte bearbeitet werden können.
@@ -260,6 +242,7 @@ public class ReportGenerator implements EntryPoint {
 		/**
 		 * Aufbau des Headers
 		 */	
+		headerPanel.clear();
 		headerPanel.add(logo);
 		headerPanel.add(headerText);
 		headerPanel.add(signOutLink);		
