@@ -12,7 +12,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -80,14 +83,10 @@ public class ReportGenerator implements EntryPoint {
 	/**
 	 * Definition der Widgets für den Login.
 	 */
-	private User userInfo = null;
-	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label(
-			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
-	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
-	private Anchor editorLink = new Anchor("Editor");				
-
+	private Anchor editorLink = new Anchor("Editor");
+	private User userInfo = null;
+	
 	// Lade Animation
 	private PopupPanel loadPanel = new PopupPanel();
 	
@@ -105,15 +104,17 @@ public class ReportGenerator implements EntryPoint {
 	 */	
 	@Override
 	public void onModuleLoad() {
-		
-		//loadReportGenerator(); //Test, solange Login nicht funktioniert
+
+		log("Module: "+GWT.getModuleName());
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */	
+		
 		loadPanel.setVisible(false);
 		reportGenerator = ClientsideSettings.getReportGenerator();
-		reportGenerator.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
+		reportGenerator.login(GWT.getHostPageBaseURL()+"ReportGenerator.html", new AsyncCallback<User>() {
+			
 			public void onFailure(Throwable error) {
 				Window.alert("Login Error");
 			}
@@ -121,31 +122,23 @@ public class ReportGenerator implements EntryPoint {
 			//Wenn der User eingeloggt ist, wird die Startseite aufgerufen, andernfalls die Login-Seite
 			public void onSuccess(User result) {
 				userInfo = result;
-				if(userInfo.isLoggedIn()){
+				if(userInfo == null || userInfo.isLoggedIn()){
 					log("Load ReportGenerator");
+					RootPanel.get("Navigator").setVisible(true);
+					RootPanel.get("Details").setVisible(true);
 					loadReportGenerator();
 				}else{
-					loadLogin();					
+					log("Load login");
+					// Anzeige der Loginseite
+					RootPanel.get("Navigator").setVisible(false);
+					RootPanel.get("Details").setVisible(false);
+					RootPanel.get("Content").add(new Login(userInfo)); 			
 				}
 			}
 		});
-	}
 		
-	/**
-	 * Aufbau der Login-Seite
-	 */
-	private void loadLogin() {	
-			
-		signInLink.setHref(userInfo.getLoginUrl());
-		signInLink.getElement().setId("link");
-		loginPanel.add(new HTML("<center>"));
-		loginPanel.add(loginLabel);
-		loginPanel.add(new HTML("<br /> <br /> "));
-		loginPanel.add(signInLink);
-		loginPanel.add(new HTML("</center>"));
-		RootPanel.get("TopLevelFrame").add(loginPanel); //TODO: prüfen ob richtige HTML
+		
 	}
-	
 	
 	/**
 	 * Aufbau der Startseite des Report-Generators. 
@@ -169,30 +162,28 @@ public class ReportGenerator implements EntryPoint {
 		//Labels
 		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
-		loginLabel.getElement().setId("loginlabel");
-		headerText.getElement().setId("headertext2");
+		headerText.setStyleName("headertext2");
 		
 		//Textbox
 		findByValueText.getElement().setId("findByTextbox");
 		
 		//DropDownList
-		propertiesDropDownList.getElement().setId("ReportDropDownList");
-		usersDropDownList.getElement().setId("ReportDropDownList");
+		propertiesDropDownList.setStyleName("ReportDropDownList");
+		usersDropDownList.setStyleName("ReportDropDownList");
 
 		//Buttons
 		//Der Search-Button bekommt den gleichen Style wie bei ContactSystem.java (Bessere Usability)
-		findByParticipantButton.getElement().setId("searchButton");
+		findByParticipantButton.setStyleName("searchButton");
 		//Der Search-Button bekommt den gleichen Style wie die anderen Searchbuttons
-		findByValueButton.getElement().setId("searchButton");
-		showAllButton.getElement().setId("searchAllContacts");
+		findByValueButton.setStyleName("searchButton");
+		showAllButton.setStyleName("searchAllContacts");
 	
 		//Links
-		signInLink.setStyleName("link");
 		signOutLink.getElement().setId("log-out-button");
 		editorLink.getElement().setId("switch-button");
 		
 		//Logo
-		logo.getElement().setId("logo");
+		logo.setStyleName("logo");
 		
 		/*
 		 * CSS für Load Panel
@@ -221,6 +212,11 @@ public class ReportGenerator implements EntryPoint {
 		searchSymbol2.setUrl(GWT.getHostPageBaseURL() + "images/search.png");
 		searchSymbol2.setAltText("Suche");
 		
+		// Header
+		headerText.setText("ReportGenerator");
+		headerPanel.add(signOutLink);		
+		headerPanel.add(editorLink);
+		
 		/*
 		 * Setzen des Links zum Editor des Kontaktsystems. Hiermit kann die Webseite
 		 * "Editor" geöffnet werden, mit der Inhalte bearbeitet werden können.
@@ -246,6 +242,7 @@ public class ReportGenerator implements EntryPoint {
 		/**
 		 * Aufbau des Headers
 		 */	
+		headerPanel.clear();
 		headerPanel.add(logo);
 		headerPanel.add(headerText);
 		headerPanel.add(signOutLink);		

@@ -23,28 +23,44 @@ import de.hdm.kontaktsystem.shared.bo.BusinessObject;
 import de.hdm.kontaktsystem.shared.bo.Contact;
 import de.hdm.kontaktsystem.shared.bo.ContactList;
 
+/**
+ * Anzeige der <code>BusinessObject</code>-Vectoren in einem TreeView.
+ * Ersellt einen Treeview mit zwei Ebenen,
+ * 1. Ebene: KontaktListen, Kontakte,
+ * 2. Ebene: Kontakte die sich in den Listen befinden.
+ * Die Daten die in dem <code>CellTreeViewModel</code> angezigt werden,
+ * werden dabei in Dataprovidern abgelegt, welche es ermöglichen,
+ * die Daten im TreeView zu einem späternen Zeitpunkt hinzuzufügen, zu verändern
+ * oder zu entfernen.
+ * Es besteht die erweiterungs Möglichkeit, in einer dritten Ebene die 
+ * Eigenchaftsausprägungen anzuzeigen.
+ *   
+ * @author Oliver Gorges, Marco Pracher
+ *
+ */
 public class CellTreeViewModel implements TreeViewModel {
 
 	private ContactSystemAdministrationAsync csa = ClientsideSettings.getContactAdministration();
-	private ListDataProvider<BusinessObject> dataProvider = null;
-	private BusinessObject selectedContactContactlist;
 	private ContactListForm clForm;
 	private ContactForm cForm;
+	private BusinessObject selectedContactContactlist;
 	private BoKeyProvider boKey = null;
 	private SingleSelectionModel<BusinessObject> selectionModel;
 	private Vector<BusinessObject> serverData = null;
+	private ListDataProvider<BusinessObject> dataProvider = null;
+	// Ablage der Dataprovider in einer Map mit der BO_ID als Key, um zu einem späteren Zeitpunkt auf die Daten zugeriefen zu können.
 	private HashMap<Integer, ListDataProvider<BusinessObject>> dpMap = new HashMap<Integer, ListDataProvider<BusinessObject>>();
 	
 	/**
-	 * Gibt eindeutigen Schluessel f�r das BusinessObject zur�ck.
-	 * @author Marco
-	 *
+	 * Gibt eindeutigen Schluessel für das BusinessObject zurück.
+	 * @author Marco Pracher
 	 */
-	
-	
-	
 	private class BoKeyProvider implements ProvidesKey<BusinessObject> {
-
+		/**
+		 * Gibt einen eindeutigen schlüssel zu einem BusinessObjekt zurück.
+		 * @param BusinessObject
+		 * @return BusinessObject-ID
+		 */
 		@Override
 		public Integer getKey(BusinessObject item) {
 			if (item != null) {
@@ -54,20 +70,27 @@ public class CellTreeViewModel implements TreeViewModel {
 		}
 	}
 
+	/**
+	 * Händler der beschreibt, was passieren soll, wenn im TreeViewModel ein Element angeklick wird.
+	 * => Es wird das ausgewählte Objekt in dem dafür vorgesehen Formular angezeigt.
+	 * @author Oliver Gorges
+	 */
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
 		
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			
 			setSelectedContactContactlist(selectionModel.getSelectedObject());
-			log("Change Selection: "+event.toDebugString());
-			
-			
-			
 		}
 		
 	}
 	
+	/**
+	 * Initialisiert das <code>CellTreeViewModel</code>.
+	 * Instanziert ein SelectionModel mithilfe des BOKeyProviders
+	 * und fügt diesem den ChangeHandler hinzu.
+	 * 
+	 */
 	public CellTreeViewModel() {
 		boKey = new BoKeyProvider();
 		selectionModel = new SingleSelectionModel<BusinessObject>(boKey);
@@ -75,7 +98,10 @@ public class CellTreeViewModel implements TreeViewModel {
 		
 	}
 	
-
+	/**
+	 * Gibt das aktuell in dem TreeView ausgewählten BusinessObjekt zurück
+	 * @return BusinessObject
+	 */
 	public BusinessObject getSelectedContactContactlist() {
 		return selectedContactContactlist;
 	}
@@ -83,8 +109,8 @@ public class CellTreeViewModel implements TreeViewModel {
 	
 	/**
 	 * Im Setter wird abgefragt, ob das BusinessObject ein Kontakt oder eine Kontaktliste ist.
-	 * Diese wird dann entsprechend der Form gesetzt.
-	 * @param sccl
+	 * Diese wird dann in dem dafür entsprechenden Form angezeigt.
+	 * @param BusinessObject
 	 */
 	
 	public void setSelectedContactContactlist(BusinessObject sccl) {
@@ -93,18 +119,25 @@ public class CellTreeViewModel implements TreeViewModel {
 		if(sccl != null){
 			RootPanel.get("Details").clear();
 			if(sccl instanceof ContactList) {
+				// Befüllt ein ContactListForm mit dem ausgewählten BusinessObject
 				clForm.setSelected((ContactList) sccl);
-				log("Update clForm");
 				RootPanel.get("Details").add(clForm);
+				log("Update clForm");
 			}
 			else if (sccl instanceof Contact) {
+				// Befüllt ein ContactForm mit dem ausgewählten BusinessObject
 				cForm.setSelected((Contact) sccl);
-				log("Update cForm");
 				RootPanel.get("Details").add(cForm);
+				log("Update cForm");
 			}
 		}
 	}
 
+	/*
+	 *  Setzt die Auswahl in dem <code>SelectionModel</code> zurück.
+	 *  Die Detailansicht wird geleert und im TreeViewModel wird kein
+	 *  Objekt als ausgewählt angezeigt. 
+	 */
 	public void restSelection(){
 		log("Reset");
 		RootPanel.get("Details").clear();
@@ -112,37 +145,44 @@ public class CellTreeViewModel implements TreeViewModel {
 	}
 
 
-
+	/**
+	 * Gibt das ContactList-Objekt zurück, das in dem TreeViewModel verwendet wird
+	 * @return ContactListForm
+	 */
 	public ContactListForm getClForm() {
 		return clForm;
 	}
 
-
-
-
-
+	/**
+	 * Übergibt dem TreeViewModel das <code>ContactListForm</code>-Objekt welches zur Anzeige von 
+	 * <code>ContactList</code>-Objekten benötigt wird.
+	 * @param ContactListForm
+	 */
 	public void setClForm(ContactListForm clForm) {
 		this.clForm = clForm;
 	}
 
-
-
-
-
+	/**
+	 * Gibt das ContactList-Objekt zurück, das in dem TreeViewModel verwendet wird
+	 * @return ContactListForm
+	 */
 	public ContactForm getCForm() {
 		return cForm;
 	}
 
-
-
-
-
+	/**
+	 * Übergibt dem TreeViewModel das <code>ContactForm</code>-Objekt welches zur Anzeige von 
+	 * <code>Contact</code>-Objekten benötigt wird.
+	 * @param ContactListForm
+	 */
 	public void setCForm(ContactForm cForm) {
 		this.cForm = cForm;
 	}
 
-	/*
-	 * Update Data in Dataprovider
+	/**
+	 * Update aller Dataprovier.
+	 * z.B. wenn die Ansicht des TreeViewModels verändert wird (Navigations Buttons)
+	 * @param Vector<BusinessObject>
 	 */
 	public void updateData(Vector<BusinessObject> bov){
 		log("Update Data");
@@ -154,7 +194,10 @@ public class CellTreeViewModel implements TreeViewModel {
 		dpMap.get(0).refresh();
 	}
 	
-	
+	/**
+	 * Updatet ein einzelnes <code>BusinessObject</code> in allen Dataprovidern des TreeViewModels.
+	 * @param BusinessObjekt
+	 */
 	public void updateBO(BusinessObject bo){
 		log("Update Leef");		
 		for(Integer i : dpMap.keySet()){
@@ -172,10 +215,8 @@ public class CellTreeViewModel implements TreeViewModel {
 	}
 	
 	/**
-	 * AddBusinessObjekt Methode f�r den AddButton im CellTree
-	 * Die Methode muss erst pr�fen, ob das BusinessObject ein Kontakt,
-	 * oder eine Kontaktliste ist.
-	 * @param bo
+	 * Fügt ein <code>BusinessObject</code> dem RootDataprovider hinzu.
+	 * @param BusinessObject
 	 */
 	
 	public void addToRoot(BusinessObject bo){
@@ -185,6 +226,12 @@ public class CellTreeViewModel implements TreeViewModel {
 		dpMap.get(0).refresh();
 	}
 	
+	/**
+	 * Fügt ein <code>BusinessObject</code> dem einem ausgewählten RootDataprovider hinzu.
+	 * Der Dataprovider wird dabei über den Key identifiziert.
+	 * Key = <code>BusinessObject<code>-ID des übergeordnete Elements
+	 * @param BusinessObject
+	 */
 	public void addToLeef(int key, BusinessObject bo){
 		
 		log("Add to Leef");
@@ -193,10 +240,9 @@ public class CellTreeViewModel implements TreeViewModel {
 	}
 	
 	/**
-	 * RemoveBusinessObjekt Methode f�r den RemoveButton im CellTree
-	 * Die Methode muss erst pr�fen, ob das BusinessObject ein Kontakt,
-	 * oder eine Kontaktliste ist.
-	 * @param bo
+	 * RemoveBO Methode für den RemoveButton im CellTree
+	 * Das ausgewählte <code>BusinessObject</code> wird aus allen DataProvidern entfernt.
+	 * @param BusinessObject
 	 */
 	
 	public void removeBO(BusinessObject bo){
@@ -208,6 +254,14 @@ public class CellTreeViewModel implements TreeViewModel {
 		
 	}
 	
+	/**
+	 * RemoveBO Methode für den RemoveButton im CellTree
+	 * Das ausgewählte <code>BusinessObject</code> wird nur 
+	 * aus dem, über den Key, bestimmten DataProvidern entfernt.
+	 * Key = <code>BusinessObject<code>-ID des übergeordnete Elements
+	 * 
+	 * @param BusinessObject
+	 */
 	public void removeFromLeef(int key, BusinessObject bo){
 		
 		log("Delete from Leef");
@@ -218,7 +272,12 @@ public class CellTreeViewModel implements TreeViewModel {
 
 
 	/**
-	 * Hier wird die Baumstruktur getestet.
+	 * Befüllt mit den Daten aus dem Übergeben <code>BusinessObject</code> Vector
+	 * einen DataProvider und befüllt diesen in den Tree.
+	 * Wenn nur ein BusinessObject übergeben wurde, wird der Inhalt des Objekts
+	 * verwendet, um den DataProvider zu befüllen.
+	 * @param Vector<BusinessObject> oder BusinessObject
+	 * @return NodeInfo<?>
 	 */
 
 	@Override
@@ -264,29 +323,36 @@ public class CellTreeViewModel implements TreeViewModel {
 		return new DefaultNodeInfo<BusinessObject>(dataProvider, new DataCell(), selectionModel, null);
 	}
 
+	/**
+	 * Aktuell werden in diesem TreeViewModel <code>Contact</code>-Objekte aus letzes Element im Baum verwendet.
+	 *
+	 * @param Object (BusinessObject)
+	 * @return boolean
+	 */
 	@Override
 	public boolean isLeaf(Object value) {
-		// log(value.toString());
-		// Anzahl der Ebenen
-		return (value instanceof Contact); // value.toString().length() > 8;
+		return (value instanceof Contact); 
 	}
 
+	/**
+	 * JavaScript: Verwendung vom JavaScript Element "console.log()" um Ausgaben in 
+	 * der Browserkonsole anziegen zu lassen.
+	 * 
+	 * @param String
+	 */
 	native void log(String s)/*-{
 								console.log(s);
 								}-*/;
 
-	
-
-
-
-
-
-
-
-	
 
 }
-
+/**
+ * Die Klasse wandelt die <code>BusinessObject</code>-Objekte in HTML-Elemente um, um diese
+ * im TreeView anzuzeigen.
+ * Bei <code>Contact</code> und <code>ContactList</code> Objekten wird der Name zur anzeige verwendet.
+ * 
+ * @author Marco Pracher
+ */
 class DataCell extends AbstractCell<BusinessObject> {
 
 	@Override
@@ -306,7 +372,4 @@ class DataCell extends AbstractCell<BusinessObject> {
 		}
 		}
 	}
-	native void log(String s)/*-{
-	console.log(s);
-	}-*/;
 }

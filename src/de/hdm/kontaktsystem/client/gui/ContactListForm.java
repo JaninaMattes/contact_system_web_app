@@ -148,7 +148,7 @@ public class ContactListForm extends VerticalPanel {
 		VerticalPanel shareDialogvp = new VerticalPanel();
 		HorizontalPanel shareDialoghp = new HorizontalPanel();
 		shareDialogvp.add(labelShare);
-		shareDialogvp.add(email);
+		shareDialogvp.add(listBoxShareWith);
 		shareDialogvp.add(shareDialoghp);
 		shareDialoghp.add(okButton);
 		shareDialoghp.add(cancelShareButton);
@@ -157,17 +157,21 @@ public class ContactListForm extends VerticalPanel {
 		shareDialog.setVisible(false);
 		this.add(shareDialog);
 	
+		/*
+		 * CSS
+		 */
+		contactListStatus.setStyleName("Status"); //Status der Kontaktliste
 		nameContactList.setStyleName("ListBox");
 		nameContactList.setStyleName("TextBox");
 		contactsToAdd.setStyleName("ListBox");
 		contactNames.setStyleName("ListBox");
 		listBoxShareWith.setStyleName("ListBox");
-		
+		listBoxShareWith.getElement().getStyle().setColor("white");
 		/*
 		 * Css für die Labels
 		 */
-		contactListLabel.setStyleName("Label");
-		contactListStatus.setStyleName("Label");
+		
+		contactListStatus.getElement().setId("Label");
 		contactListStatusValue.setStyleName("Label");
 		contactLabel.setStyleName("Label");
 		labelAddConsToList.setStyleName("Label");
@@ -201,13 +205,13 @@ public class ContactListForm extends VerticalPanel {
 
 		// Labels in CSS
 
-		contactListLabel.getElement().setId("ueberschriftlabel");
+		contactListLabel.setStyleName("ueberschriftlabel");
 		contactLabel.getElement().setId("namelabel");
 
 		// Anzeige des Labels für Vorname und Nachname gleicher StyleName
 
 		contactLabel.getElement().setId("contactlabel");
-		contactListStatus.getElement().setId("contactstatus");
+
 
 		contactNames.setStyleName("ListBox");
 		listBoxShareWith.setStyleName("ListBox");
@@ -231,7 +235,7 @@ public class ContactListForm extends VerticalPanel {
 		btnPanel.setStyleName("mainButtonPanel");
 		deleteClButton.setStyleName("mainButton");
 		cancelNewButton.setStyleName("mainButton");
-		
+		email.setStyleName("Status");
 	
 		deleteConButton.setStyleName("sideButton");
 		
@@ -347,8 +351,8 @@ public class ContactListForm extends VerticalPanel {
 					shareDialog.setVisible(true);
 				} else {
 					loadPanel.setVisible(true);
-
-					contactSystemAdmin.getUserBygMail(email.getText(), new AsyncCallback<User>() {
+					
+					contactSystemAdmin.getUserBygMail(listBoxShareWith.getSelectedValue(), new AsyncCallback<User>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							loadPanel.setVisible(false);
@@ -372,6 +376,7 @@ public class ContactListForm extends VerticalPanel {
 			}
 		}
 	}
+	
 
 	/**
 	 * ClickHandler um den ShareDialog zu schließen
@@ -649,7 +654,7 @@ public class ContactListForm extends VerticalPanel {
 				for (User user : result) {
 
 					// User Liste updaten
-					listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " /" + user.getGMail());
+					listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
 				}
 
 			} else {
@@ -926,7 +931,8 @@ public class ContactListForm extends VerticalPanel {
 					} else {
 						contactListStatusValue.setText("Nicht geteilt");
 					}
-				
+					//Status
+					contactListStatusValue.setStyleName("Status");
 					
 					int count = 0;
 					for (Contact con : list.getContacts()) {
@@ -959,6 +965,9 @@ public class ContactListForm extends VerticalPanel {
 				}
 
 			});
+			
+			// Laden der User mit dem Die Liste geteilt werden kann.
+			contactSystemAdmin.getAllUsers(new UserToShareCallback());
 
 			
 

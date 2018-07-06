@@ -40,7 +40,7 @@ public class UserForm extends VerticalPanel{
 						+ "und die dazugehörigen Teilhaberschaften aufgelöst. \n"
 						+ "Diese Änderung kann nicht rückgängig gemacht werden. ";
 	Button deleteButton = new Button("Account Löschen");
-	Button propertyButton = new Button("Eigenschaft bearbeiten");
+	Button propertyButton = new Button("Eigenschaften bearbeiten");
 	Button contactButton = new Button("Kontakt anzeigen");
 	VerticalPanel vp = new VerticalPanel();
 	HorizontalPanel btnPanel = new HorizontalPanel();

@@ -39,7 +39,7 @@ public class PropertyForm extends VerticalPanel{
 						+ "Diese Änderung betrifft alle Nutzer dieses Systems. \n"
 						+ "Alle Eigenschaftsausprägungen, die mit dieser Eigenschaft erstellt wurden, werden verändert oder gelöscht. \n"
 						+ "Diese Änderung kann nicht rückgängig gemacht werden. ";
-	Button deleteButton = new Button("Eigenschaft Löschen");
+	Button deleteButton = new Button("Eigenschaft löschen");
 	Button saveButton = new Button("Eigenschaft speichern");
 	Button editButton = new Button("Eigenschaft bearbeiten");
 	Button cancelButton = new Button("Abbrechen");
@@ -54,6 +54,14 @@ public class PropertyForm extends VerticalPanel{
 	public PropertyForm(){
 		super();
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
+		
+		//Style der Buttons
+		deleteButton.setStyleName("mainButton");
+		saveButton.setStyleName("mainButton");
+		editButton.setStyleName("mainButton");
+		cancelButton.setStyleName("mainButton");
+		btnPanel.setStyleName("mainButtonPanel");
+		
 		this.add(infoText);
 		this.add(allPropertys);
 		this.add(editTextBox);
