@@ -110,14 +110,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 	public User login(String requestUri) {
 		init();
-		System.out.println("Login CS: "+requestUri);
 		UserService userService = UserServiceFactory.getUserService();
 		com.google.appengine.api.users.User guser = userService.getCurrentUser();
 		User user = new User();
 		Contact own = new Contact();
 		PropertyValue name = new PropertyValue();
 		PropertyValue email = new PropertyValue();
-		System.out.println("GUser: "+ guser);
 		if (guser != null) {
 
 			double id = Double.parseDouble(guser.getUserId());
@@ -125,7 +123,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 			// Ueberpruefung ob der nutzer bereits existiert oder ob es ein neuer Nutzer ist
 			if (user == null) {
-				System.out.println("Create User: "+ guser.getNickname());
 				String gmail = guser.getEmail();
 				// Ersetzt die Lange googlemail adresse gegen die gekuerzte gmail variante
 				if(gmail.contains("googlemail")) gmail.replace("googlemail", "gmail");
@@ -156,7 +153,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			user.setLoginUrl(userService.createLoginURL(requestUri));
 
 		}
-		System.out.println("Return User: "+ user.getLoginUrl());
 		return user;
 
 	}
@@ -1183,8 +1179,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				 		contact = (Contact) bo;
 				 		contactResultVector.addElement(contact);	     
 				 }		
-			}	 	
-			if(contactResultVector.isEmpty()) System.out.println("# no contacts found");			
+			}	 			
 			
 			return contactResultVector;
 			
@@ -1268,8 +1263,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				contactResultVector.addElement(this.filterContactData(contact));
 			}
 		}
-		if (contactResultVector.isEmpty())
-			System.out.println("# no contacts found");
+		
 		return contactResultVector;
 	}
 	
@@ -1296,8 +1290,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 		}
 
-		if (cResultVector.isEmpty())
-			System.out.println("# no contact found");
 //		cResultVector.sort(new BOCompare());
 		return cResultVector;
 	}
@@ -1314,9 +1306,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				pvv.add(pv);
 			}else if(allPVswm.contains(pv)){
 				pvv.add(pv);
-			}else{
-				System.out.println(pv +" not Shared");
-				
 			}
 		}
 		
@@ -1357,8 +1346,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			}
 		}
 
-		if (clResultVector.isEmpty())
-			System.out.println("# no contactList found");
+		
 
 		return clResultVector;
 	}
@@ -1383,9 +1371,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				}
 			}
 		}
-
-		if (clResultVector.isEmpty())
-			System.out.println("# no contactList found");
 
 		return clResultVector;
 	}
@@ -1461,9 +1446,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				}
 			}
 		}
-		if (contactResultVector.isEmpty())
-			System.out.println("# no contacts found");
-//		contactResultVector.sort(new BOCompare());
+		
 		return contactResultVector;
 
 	}
@@ -1534,7 +1517,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (Contact contact : contactResult) {
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
 			this.deleteContact(contact);
-			System.out.println("# shared contact deleted: " + contact.getBoId());
 		}
 
 	}

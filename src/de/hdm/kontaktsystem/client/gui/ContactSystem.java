@@ -169,7 +169,9 @@ public class ContactSystem implements EntryPoint {
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */		
-
+		RootPanel.get("Navigator").setVisible(false);
+		RootPanel.get("Lists").setVisible(false);
+		RootPanel.get("Details").setVisible(false);
 		loadPanel.setVisible(false);
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
@@ -182,7 +184,9 @@ public class ContactSystem implements EntryPoint {
 				userInfo = result;
 				log("Info" + userInfo.getLoginUrl());
 				if(userInfo.isLoggedIn()){
-					log("Load Editor");
+					RootPanel.get("Navigator").setVisible(true);
+					RootPanel.get("Lists").setVisible(true);
+					RootPanel.get("Details").setVisible(true);
 					uf.setMyUser(result);
 					cf.setMyUser(result);
 					clf.setMyUser(result);
@@ -194,9 +198,7 @@ public class ContactSystem implements EntryPoint {
 					loadPanel.setVisible(false);	
 				}else{
 					// Anzeige der Loginseite
-					RootPanel.get("Navigator").setVisible(false);
-					RootPanel.get("Lists").setVisible(false);
-					RootPanel.get("Details").setVisible(false);
+					
 					RootPanel.get("Content").add(new Login(userInfo));					
 				}
 			}

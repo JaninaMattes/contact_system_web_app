@@ -171,7 +171,7 @@ public class ContactListForm extends VerticalPanel {
 		 * Css für die Labels
 		 */
 		
-		contactListStatus.getElement().setId("Label");
+		contactListStatus.setStyleName("Label");
 		contactListStatusValue.setStyleName("Label");
 		contactLabel.setStyleName("Label");
 		labelAddConsToList.setStyleName("Label");
@@ -653,9 +653,10 @@ public class ContactListForm extends VerticalPanel {
 			listBoxShareWith.clear();
 			if (result != null) {
 				for (User user : result) {
-
-					// User Liste updaten
-					listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
+					if(!user.getGMail().equals(myUser.getGMail())){
+						// User Liste updaten
+						listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
+					}
 				}
 
 			} else {

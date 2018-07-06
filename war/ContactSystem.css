@@ -5,13 +5,14 @@ body {
     text-align: center;  /* Zentrierung im Internet Explorer */
     display: block; 
     font-family: Arial;
+    overflow: hidden;
     }
 
 
 
 .loginheader{ /*Ueberschrift des Logins*/
 	border: none;
-	margin-top: 3vh;
+	margin-top: 6vh;
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 3em;
   	font-weight: bold;
@@ -110,6 +111,7 @@ body {
 .ListBox {
    background: transparent;
    min-width: 170px;
+   max-width: 18vw;
    height: 50px;
    font-size: 16px;
    line-height: 1;

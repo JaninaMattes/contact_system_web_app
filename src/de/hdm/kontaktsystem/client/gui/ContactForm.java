@@ -146,13 +146,14 @@ public class ContactForm extends VerticalPanel {
 			editPartButton.setStyleName("sideButton");
 			sharedWithUser.setStyleName("ListBox");
 			gp.getElement().setId("grid-panel");
-			contactStatus.setStyleName("Label");
-			labelAddElement.getElement().setId("labelfeldhinzu");
 			addElement.setStyleName("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
 			listBoxShareWith.setStyleName("ListBox");
 			labelShare.setStyleName("Label");
 			labelSharedWith.setStyleName("Label");
+			labelReceivedFrom.setStyleName("Label");
+			labelAddElement.setStyleName("Label");
+			contactStatus.setStyleName("Label");
 			// Css der Main Buttons
 			okButton.setStyleName("mainButton");
 			saveButton.setStyleName("mainButton");
@@ -1154,9 +1155,10 @@ public class ContactForm extends VerticalPanel {
 				listBoxShareWith.clear();
 				if (result != null) {
 					for (User user : result) {
-
-						// User Liste updaten
-						listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
+						if(!user.getGMail().equals(myUser.getGMail())){
+							// User Liste updaten
+							listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
+						}
 					}
 
 				} else {
