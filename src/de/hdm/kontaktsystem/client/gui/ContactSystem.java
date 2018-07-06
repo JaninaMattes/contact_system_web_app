@@ -53,8 +53,8 @@ import de.hdm.kontaktsystem.shared.bo.User;
 public class ContactSystem implements EntryPoint {
 
 	/**
-	 * Implementierung des statischen Interface für das TreeView Model aus BankProjekt übernommen
-	 * @see de.hdm.thies.bankProjekt.client.BankProjekt
+	 * Änderung der Resourcen für das TreeViewModel.
+	 * CSS, Open / Close symbol
 	 */
 	static interface ContactSystemTreeResources extends CellTree.Resources {
 		@Override
@@ -109,7 +109,7 @@ public class ContactSystem implements EntryPoint {
 	private Image createSymbol = new Image();
 	private Image updateSymbol = new Image();
 	private Image deleteSymbol = new Image();
-	private Image shareSymbol = new Image();	
+	private Image shareSymbol  = new Image();	
 	private Image searchSymbol = new Image();
 	
 	//Logo-Bild
@@ -121,15 +121,12 @@ public class ContactSystem implements EntryPoint {
 	 * Attribute für den Login
 	 */
 	private User userInfo = null;
-	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label(
-			"Melden Sie sich mit Ihrem Google Konto an, um auf das Kontaktsystem zuzugreifen.");
-	private Anchor signInLink = new Anchor("Login");
 	private Anchor signOutLink = new Anchor("Logout");
 	private Anchor reportLink = new Anchor("Report");
 	
-	// Add Button/Panel
+	// Add Button/Panel (Neuen Kontakt / Neue Liste anlegen)
 	private FocusPanel addPanel = new FocusPanel();
+	private boolean addContact = true;
 	
 	// Lade Animation
 	private PopupPanel loadPanel = new PopupPanel();
@@ -144,14 +141,10 @@ public class ContactSystem implements EntryPoint {
     private HorizontalPanel trailer = new HorizontalPanel();
     
 	//Formulare
-
 	private ContactForm cf = new ContactForm();
 	private ContactListForm clf = new ContactListForm();
 	private UserForm uf = new UserForm();
-	
-	//Add
-	private boolean addContact = true;
-	
+		
 	// Notification
 	private static PopupPanel notification = new PopupPanel();
 	
@@ -167,12 +160,14 @@ public class ContactSystem implements EntryPoint {
 	public void onModuleLoad() {
 		
 		/**
-		 * Login-Status feststellen mit LoginService
+		 * Standard html Rahmen ausblenden
 		 */		
 		RootPanel.get("Navigator").setVisible(false);
 		RootPanel.get("Lists").setVisible(false);
 		RootPanel.get("Details").setVisible(false);
 		loadPanel.setVisible(false);
+		
+		// Einloggen des Nutzers
 		contactSystemAdmin = ClientsideSettings.getContactAdministration();
 		contactSystemAdmin.login(GWT.getHostPageBaseURL(), new AsyncCallback<User>() {
 			public void onFailure(Throwable error) {
@@ -190,47 +185,19 @@ public class ContactSystem implements EntryPoint {
 					uf.setMyUser(result);
 					cf.setMyUser(result);
 					clf.setMyUser(result);
-					uf.setTree(tvm);
 					cf.setLoad(loadPanel);
 					clf.setLoad(loadPanel);
-					loadTree(); // für Test
-					loadContactSystem(); // für Test
+					loadTree(); 
+					loadContactSystem(); 
 					loadPanel.setVisible(false);	
 				}else{
 					// Anzeige der Loginseite
-					
 					RootPanel.get("Content").add(new Login(userInfo));					
 				}
 			}
 		});	
 	}
 		
-	/**
-	 * Die Methode <code>loadLogin()</code> führt zum Aufbau der Login-Seite.
-	 * Wenn der Nutzer ausgeloggt wurde, kann er sich hierüber wieder neu im 
-	 * System einloggen. */
-	 
-	
-	private void loadLogin() {	
-		log("Login");
-		signInLink.setHref(userInfo.getLoginUrl());
-		signInLink.getElement().setId("link");
-		loginPanel.add(new HTML("<center>"));
-		loginPanel.add(loginLabel);
-		loginPanel.add(new HTML("<br /> <br /> "));
-		FocusPanel login = new FocusPanel();
-		login.add(new Image(GWT.getHostPageBaseURL() + "images/login.png"));
-		login.addClickHandler(new ClickHandler(){
-			@Override
-			public void onClick(ClickEvent event) {
-				Window.Location.assign(userInfo.getLoginUrl());				
-			}		
-		});
-		loginPanel.add(login);
-		loginPanel.add(new HTML("</center>"));
-		RootPanel.get("Lists").add(loginPanel); //TODO: prüfen ob richtige HTML
-		
-	}
 	
 	/**
 	 * Die Methode <code>loadTree()</code> ruft das TreeView Model auf
@@ -242,15 +209,19 @@ public class ContactSystem implements EntryPoint {
 	 */
 	
 	public void loadTree() {		
-		
+		/**
+		 * Übergabe der Forms an der Tree / des Trees an die Forms,
+		 * damit diese sich gegenseitig beeinflussen können
+		 */
 		tvm.setClForm(clf);
 		tvm.setCForm(cf);
 		clf.setTree(tvm);
 		cf.setTree(tvm);
+		uf.setTree(tvm);
 		
 		//CSS
 		treeScrollPanel.setHeight("80vh");
-		
+		// Der Tree zeigt beim ersten laden alle Kontakte des Nutzers im Tree an
 		contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -388,13 +359,13 @@ public class ContactSystem implements EntryPoint {
 			addPanel.setVisible(true);
 			loadPanel.setVisible(true);
 			
-
+			// Kennzeichnet den aktuell ausgewählten Navigationspunkt
 			contactButton.addStyleName("selected");
 			accountButton.removeStyleName("selected");
 			contactListsButton.removeStyleName("selected");
 			myParticipationsButton.removeStyleName("selected");
 			receivedParticipationsButton.removeStyleName("selected");
-			
+			// Läd alle Kontakte des Nutzers und übergibt diese dem Tree zur Anzeige
 			contactSystemAdmin.getMyContactsPrev(new AsyncCallback<Vector<Contact>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -431,23 +402,22 @@ public class ContactSystem implements EntryPoint {
 				addPanel.setVisible(true);
 				loadPanel.setVisible(true);
 				
+				// Kennzeichnet den aktuell ausgewählten Navigationspunkt
 				contactListsButton.addStyleName("selected");
 				accountButton.removeStyleName("selected");
 				contactButton.removeStyleName("selected");
 				myParticipationsButton.removeStyleName("selected");
 				receivedParticipationsButton.removeStyleName("selected");
-				
+				// Läd alle Kontaktlisten des Nutzers und übergibt diese dem Tree zur Anzeige
 				contactSystemAdmin.getMyContactListsPrev(new AsyncCallback<Vector<ContactList>>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
 						loadPanel.setVisible(false);
 						log("Keine Listen gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<ContactList> result) {
-						// TODO Auto-generated method stub
 						loadPanel.setVisible(false);
 						log("Es wurden " + result.size() + " Listen gefunden");
 						Vector<BusinessObject> bov = new Vector<BusinessObject>();
@@ -477,29 +447,25 @@ public class ContactSystem implements EntryPoint {
 				tvm.restSelection();
 				addPanel.setVisible(false);
 				loadPanel.setVisible(true);
-				
+				// Kennzeichnet den aktuell ausgewählten Navigationspunkt
 				myParticipationsButton.addStyleName("selected");
 				accountButton.removeStyleName("selected");
 				contactListsButton.removeStyleName("selected");
 				contactButton.removeStyleName("selected");
 				receivedParticipationsButton.removeStyleName("selected");
-				
+				// Läd alle vom Nutzer Geteilten Kontakte und Liste und übergibt diese dem Tree zur anzeige
 				contactSystemAdmin.getAllSharedByMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
 						loadPanel.setVisible(false);
 						log("Keine Listen gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<BusinessObject> result) {
-						// TODO Auto-generated method stub
 						loadPanel.setVisible(false);
-						log("Es wurden " + result.size() + " SharedObjects gefunden");
-						
-						
+						log("Es wurden " + result.size() + " SharedObjects gefunden");						
 						tvm.updateData(result);
 					}
 
@@ -523,28 +489,25 @@ public class ContactSystem implements EntryPoint {
 				tvm.restSelection();
 				addPanel.setVisible(false);
 				loadPanel.setVisible(true);
-				
+				// Kennzeichnet den aktuell ausgewählten Navigationspunkt
 				receivedParticipationsButton.addStyleName("selected");
 				accountButton.removeStyleName("selected");
 				contactListsButton.removeStyleName("selected");
 				contactButton.removeStyleName("selected");
 				myParticipationsButton.removeStyleName("selected");
-				
+				// Läd alle Kontakte und Listen die mit dem Nutzer geteilt wurden und übergibt diese dem Tree zur Anzeige
 				contactSystemAdmin.getAllSharedByOthersToMe(new AsyncCallback<Vector<BusinessObject>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
 						loadPanel.setVisible(false);
 						log("Keine Listen gefunden");
 					}
 
 					@Override
 					public void onSuccess(Vector<BusinessObject> result) {
-						// TODO Auto-generated method stub
 						loadPanel.setVisible(false);
 						log("Es wurden " + result.size() + " SharedObjects gefunden");						
-						
 						tvm.updateData(result);
 					}
 
@@ -554,21 +517,25 @@ public class ContactSystem implements EntryPoint {
 				
 			}
 		});
-		
+		/**
+		 * Öffnet die Accountübersicht
+		 * In diser kann der Nutzer Daten zu seinem Account einsehen,
+		 * seinen Kontakt anzeigen, globale Eigenschaften bearbeiten und 
+		 * seinen Account aus dem System löschen.
+		 */
 		accountButton.addClickHandler(new ClickHandler(){
 
 			@Override
 			public void onClick(ClickEvent event) {
+				// Kennzeichnet den aktuell ausgewählten Navigationspunkt
 				accountButton.addStyleName("selected");
 				receivedParticipationsButton.removeStyleName("selected");
 				contactListsButton.removeStyleName("selected");
 				contactButton.removeStyleName("selected");
 				myParticipationsButton.removeStyleName("selected");
 				
-				
-				// Resettet den TreeView da in der account ansicht nihts von dem Tree ausgewählt ist
-				tvm.restSelection(); // Account wird danach nicht mehr angezeigt
-//				RootPanel.get("Details").clear();
+				// Resettet den TreeView da in der Accountansicht nihts von dem Tree ausgewählt ist
+				tvm.restSelection(); 
 				log("Add: Account");
 				RootPanel.get("Details").add(uf); 
 			}
@@ -587,8 +554,8 @@ public class ContactSystem implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				tvm.restSelection();
-//				RootPanel.get("Details").clear();
 				log("Add: New");
+				// Unterscheidung ob ein Kontakt oder eine Liste hinzugefügt werden soll
 				if(addContact){
 					Contact c = null;
 					cf.setSelected(c);
@@ -645,6 +612,7 @@ public class ContactSystem implements EntryPoint {
 		notification.add(text);
 		notification.setVisible(true);
 		notification.addStyleName("fade");
+		// Die Anzeige wird über 5 Sekunden ausgeblendet und anschließen vollständig entfernt
 		Timer timer = new Timer(){
             @Override
             public void run()
@@ -676,12 +644,12 @@ public class ContactSystem implements EntryPoint {
 		public void onClick(ClickEvent event) {
 			
 			if (search.getText().equals("")) {
-				Window.alert("Das Suchfeld ist leer!");
+				triggerNotify("Das Suchfeld ist leer!");
 			} else {
 				loadPanel.setVisible(true);
 			 String s = search.getText();
 			 log("Suche: "+ s);
-			 // Suche der Kontakte
+			 // Suche der Kontakte und Listen, die der Eingabe entsprechen
 			 contactSystemAdmin.search(s, new AsyncCallback<Vector<BusinessObject>>(){
 				 @Override
 					public void onFailure(Throwable caught) {
@@ -694,17 +662,16 @@ public class ContactSystem implements EntryPoint {
 						loadPanel.setVisible(false);
 						if (result != null) {							
 							tvm.updateData(result);
-						} else {
-							//Window.alert("Keine Kontakte gefunden :(");
-						}
+						} 
 					}
 			 });
 			}
 		}
 	}
 
-	
-	
+	/*
+	 * Logger für die Javascript Konsole.
+	 */
 	native void log(String s)/*-{
 	console.log(s);
 	}-*/;

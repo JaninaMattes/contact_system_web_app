@@ -178,25 +178,6 @@ public class ContactListForm extends VerticalPanel {
 		labelSharedWith.setStyleName("Label");
 		labelReceivedFrom.setStyleName("Label");
 		
-		/**
-		 * Panel für Anordnung der Buttons
-		 */
-
-		btnPanel.add(saveButton);
-		btnPanel.add(deleteClButton);
-		btnPanel.add(shareButton);
-		btnPanel.add(cancelNewButton);
-		saveButton.addClickHandler(new saveAndUpdateClickHandler());
-		deleteClButton.addClickHandler(new deleteContactListClickHandler());
-		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
-		addConToList.addClickHandler(new addContactToClClickHandler());
-		okButton.addClickHandler(new shareClickHandler());
-		shareButton.addClickHandler(new shareClickHandler());
-		cancelShareButton.addClickHandler(new cancelClickHandler());
-		cancelNewButton.addClickHandler(new cancelClickHandler());
-		unShareButton.addClickHandler(new unShareClickHandler());
-		
-
 		/*
 		 * CSS Zuweisungen für Widgets
 		 */
@@ -237,12 +218,30 @@ public class ContactListForm extends VerticalPanel {
 		deleteClButton.setStyleName("mainButton");
 		cancelNewButton.setStyleName("mainButton");
 		email.setStyleName("Status");
-	
 		deleteConButton.setStyleName("sideButton");
-		
-		
-
 		shareDialog.setStyleName("shareDialog");
+		
+		/**
+		 * Panel für Anordnung der Buttons
+		 */
+
+		btnPanel.add(saveButton);
+		btnPanel.add(deleteClButton);
+		btnPanel.add(shareButton);
+		btnPanel.add(cancelNewButton);
+		
+		/**
+		 * Clickhandler der Buttons 
+		 */
+		saveButton.addClickHandler(new saveAndUpdateClickHandler());
+		deleteClButton.addClickHandler(new deleteContactListClickHandler());
+		deleteConButton.addClickHandler(new deleteConFromListClickHandler());
+		addConToList.addClickHandler(new addContactToClClickHandler());
+		okButton.addClickHandler(new shareClickHandler());
+		shareButton.addClickHandler(new shareClickHandler());
+		cancelShareButton.addClickHandler(new cancelClickHandler());
+		cancelNewButton.addClickHandler(new cancelClickHandler());
+		unShareButton.addClickHandler(new unShareClickHandler());
 
 	}
 
@@ -998,22 +997,35 @@ public class ContactListForm extends VerticalPanel {
 
 	}
 	
-	/*
-	 * LoadPanel setter
+	/**
+	 * Übergibt das Panel für das Lade overlay
+	 * 
+	 * @param PopupPanel
 	 */
 	void setLoad(PopupPanel load) {
 		this.loadPanel = load;
 	}
-	
+	/**
+	 * Übergibt das TreeViewModel, um Daten im Tree zu modifizieren
+	 * @param CellTreeViewModel
+	 */
 	void setTree(CellTreeViewModel tvm) {
 		this.tvm = tvm;
 	}
 
+	/**
+	 * Übergibt den eingeloggten User an das Form
+	 * 
+	 * @param user
+	 */
 	void setMyUser(User user) {
 
 		this.myUser = user;
 	}
 
+	/*
+	 * Logger für die Javascript Konsole.
+	 */
 	native void log(String s)/*-{
 								console.log(s);
 								}-*/;

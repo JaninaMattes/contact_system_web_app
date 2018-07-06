@@ -122,6 +122,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Eigentuemer des Kontakts und der Geteilt-Status ersichtlich. An die Tabelle schliesst
 	 * sich eine Liste der Teilhaber, die Zugriff auf den Kontakt haben, an.
 	 * Diese Methode wird von den anderen Methoden aufgerufen, die daraus die Reports zusammensetzen.
+	 * 
+	 * @param Contact
+	 * @param Report
+	 * 
 	 */
 	private void addSingleContact(Contact contact, Report report) {
 		SingleContact contactElement = new SingleContact();
@@ -203,6 +207,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Erzeugt Paragraph mit den Daten des Nutzers, fuer den der Report erstellt wird. 
 	 * Aus den Report-Methoden ausgelagert.
+	 * 
+	 * @param User
+	 * @param Report
 	 */
 	private void addUserParagraph(User user, Report report) {
 		SimpleParagraph userName = new SimpleParagraph(user.getUserContact().getName().getValue());
@@ -215,6 +222,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		report.setUserData(userInfo);
 	}
 	
+	/**
+	 * Methode zur erzeugung eines Reports
+	 * Ersellt einen Report, der alle Kontakte des Nutzers beinhaltet
+	 * 
+	 * @return AllContactsOfUserReport
+	 */
 
 	@Override
 	public AllContactsOfUserReport createAllContactsReport() throws IllegalArgumentException {
@@ -256,7 +269,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return report;
 	}
 
-
+	/**
+	 * Methode zur erzeugung eines Reports
+	 * Gibt einen Report zurück, der alle Kontakt beihlatet, die mit einem Nutzer getielt wurden.
+	 * 
+	 * @param  User-ID des Teilhabers
+	 * @return AllContactsForParticipantReport
+	 */
 	@Override
 	public AllContactsForParticipantReport createAllContactsForParticipantReport(double participantId)
 			throws IllegalArgumentException {
@@ -392,6 +411,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return report;
 	}
 
+	/**
+	 * Methode zur erzeugung eines Reports
+	 * Gibt einen Report zurück mit allen Kontakten, die eine Eigenschaft besitzen,
+	 * deren Ausprägungen der eingabe entspricht.
+	 * @param Property-ID
+	 * @param SuchText
+	 * @return AllContactsForPropertyReport
+	 */
 	@Override
 	public AllContactsForPropertyReport createAllContactsForPropertyReport(int propertyId, String propertyvalue)
 			throws IllegalArgumentException {
@@ -496,12 +523,20 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		/* Zurueckgeben des erstellten Reports */
 		return report;
 	}
-
+	
+	/**
+	 * Gibt alle Eigenschaften zurück,
+	 * Für die Listboxen 
+	 */
 	@Override
 	public Vector<Property> getAllProperties() throws IllegalArgumentException {
 		return administration.getAllProperties();
 	}
 
+	/**
+	 * Gibt alle User zurück,
+	 * Für die Listboxen 
+	 */
 	@Override
 	public Vector<User> getAllUsers() throws IllegalArgumentException {
 		return administration.findAllKnownUsers();

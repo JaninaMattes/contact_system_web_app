@@ -34,7 +34,7 @@ public class UserForm extends VerticalPanel{
 	Label email = new Label();
 	Label creationDate = new Label();
 	Label contact = new Label();
-	
+	// Abfrage, die den Nutzer über die Auswirkung der Löschung informiert.
 	String deleteText = " Wollen Sie wirklich Ihren Account löschen? \n"
 						+ "Alle Ihre Kontakte und Kontaktlisten werden gelöscht \n"
 						+ "und die dazugehörigen Teilhaberschaften aufgelöst. \n"
@@ -83,6 +83,7 @@ public class UserForm extends VerticalPanel{
 		
 	}
 	
+	// Übergibt den Tree für die anzeige des eigene Kontakts
 	public void setTree(CellTreeViewModel tree){
 		this.tvm = tree;
 	}
@@ -94,6 +95,7 @@ public class UserForm extends VerticalPanel{
 	public void setMyUser(User user){
 		myUser = user;
 		if(myUser != null){
+			// Anzeige der Userinformationen
 			welcome.setText("Hallo " + user.getUserContact().getName().getValue());
 			id.setText("Meine User ID: " + user.getGoogleID());
 			email.setText("Meine Email Adresse: " + user.getGMail());
@@ -113,11 +115,12 @@ public class UserForm extends VerticalPanel{
 							public void onFailure(Throwable caught) {
 								// TODO Auto-generated method stub
 								Window.alert("Ihr User konnte nicht gelöscht werden. \n"
-										+ "Bitte wenden Sie sich an den Seite Betreiber fürweiter Informationen.");
+										+ "Bitte wenden Sie sich an den Seite Betreiber für weiter Informationen.");
 							}
 
 							@Override
 							public void onSuccess(User result) {
+								// Weiterleitung auf die Loginseite 
 								Window.Location.assign(myUser.getLogoutUrl());
 							}
 							
@@ -125,6 +128,8 @@ public class UserForm extends VerticalPanel{
 					}
 				}
 			});
+			
+			// Anzeige des Eigenen Kontakts im Kontaktform
 			contactButton.addClickHandler(new ClickHandler(){
 
 				@Override
@@ -137,6 +142,7 @@ public class UserForm extends VerticalPanel{
 				
 			});
 			
+			// Laden des Propertyforms um Eigenschaften bearbeiten und löschenzu können
 			propertyButton.addClickHandler(new ClickHandler(){
 
 				@Override
@@ -149,7 +155,10 @@ public class UserForm extends VerticalPanel{
 			});
 		}
 	}
-	
+
+	/*
+	 * Logger für die Javascript Konsole.
+	 */
 	native void log(String s)/*-{
 	console.log(s);
 	}-*/;

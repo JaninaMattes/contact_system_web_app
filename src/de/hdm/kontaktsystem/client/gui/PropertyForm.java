@@ -34,7 +34,7 @@ public class PropertyForm extends VerticalPanel{
 	HTML infoText = new HTML("<h1> Eigenschaften bearbeiten / löschen </h1>");
 	TextBox editTextBox = new TextBox();
 	ListBox allPropertys = new ListBox();
-	
+	// Abfrage, damit der Nutzer über die Auswirkung dieser Änderunge informiert wird.
 	String confirmText  = "Wollen Sie wirklich die Eigenschaft %s? \n"
 						+ "Diese Änderung betrifft alle Nutzer dieses Systems. \n"
 						+ "Alle Eigenschaftsausprägungen, die mit dieser Eigenschaft erstellt wurden, werden verändert oder gelöscht. \n"
@@ -137,7 +137,7 @@ public class PropertyForm extends VerticalPanel{
 				}
 			}	
 		});
-		
+		// Jeh nach ansicht (Bearbeiten/Auswahl) wird die Dateilansicht geleert oder das Formular zurück gesetzt
 		cancelButton.addClickHandler(new ClickHandler(){
 
 			@Override
@@ -161,7 +161,6 @@ public class PropertyForm extends VerticalPanel{
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub	
 				log("Properties nicht abgerufen");
 			}
 
@@ -223,6 +222,10 @@ public class PropertyForm extends VerticalPanel{
 		deleteButton.setVisible(true);
 	}
 	
+
+	/*
+	 * Logger für die Javascript Konsole.
+	 */
 	native void log(String s)/*-{
 	console.log(s);
 	}-*/;

@@ -490,7 +490,10 @@ public class ReportGenerator implements EntryPoint {
 		}
 		
 	}
-	
+
+	/*
+	 * Logger für die Javascript Konsole.
+	 */
 	native void log(String s)/*-{
 		console.log(s);
 	}-*/;
