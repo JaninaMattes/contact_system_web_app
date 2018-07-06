@@ -933,7 +933,7 @@ public class ContactForm extends VerticalPanel {
 							if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
 								contactStatus.setText("Status: Von mir geteilt");
 							}else{
-								contactStatus.setText("Status: An mich geteilt");
+								contactStatus.setText("Status: Mit mir geteilt");
 							}	
 						} else {
 							contactStatus.setText("Status: Nicht geteilt");
@@ -1098,7 +1098,7 @@ public class ContactForm extends VerticalPanel {
 					if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
 						contactStatus.setText("Status: Von mir geteilt");
 					}else{
-						contactStatus.setText("Status: An mich geteilt");
+						contactStatus.setText("Status: Mit mir geteilt");
 					}
 					sharedWithUser.addItem(result.getParticipant().getUserContact().getName().getValue() + " / " + result.getParticipant().getGMail(), result.getParticipant().getGMail());
 				}

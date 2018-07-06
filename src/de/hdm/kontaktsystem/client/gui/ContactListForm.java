@@ -692,7 +692,7 @@ public class ContactListForm extends VerticalPanel {
 					if(contactListToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
 						contactListStatusValue.setText("Von mir geteilt");
 					}else{
-						contactListStatusValue.setText("An mich geteilt");
+						contactListStatusValue.setText("Mit mir geteilt");
 					}	
 					
 					for (Participation part : result) {
@@ -923,7 +923,7 @@ public class ContactListForm extends VerticalPanel {
 					contactListToDisplay = list;
 					
 					/**
-					 * Abfrage für die Status Anzeige "Nicht geteilt", "Von mir geteilt" oder "An mich geteilt"
+					 * Abfrage für die Status Anzeige "Nicht geteilt", "Von mir geteilt" oder "Mit mir geteilt"
 					 * der Kontaktliste
 					 * 
 					 * @author Kim-Ly
@@ -933,7 +933,7 @@ public class ContactListForm extends VerticalPanel {
 						if(contactListToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
 							contactListStatusValue.setText("Von mir geteilt");
 						}else{
-							contactListStatusValue.setText("An mich geteilt");
+							contactListStatusValue.setText("Mit mir geteilt");
 						}	
 					} else {
 						contactListStatusValue.setText("Nicht geteilt");
