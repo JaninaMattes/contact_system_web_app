@@ -69,6 +69,13 @@ public class UserForm extends VerticalPanel{
 		btnPanel.add(propertyButton);
 		btnPanel.add(deleteButton);
 		
+		// CSS 
+		
+		welcome.setStyleName("Label");
+		id.setStyleName("Label");
+		email.setStyleName("Label");
+		creationDate.setStyleName("Label");
+		contact.setStyleName("Label");
 		btnPanel.setStyleName("mainButtonPanel");
 		contactButton.setStyleName("mainButton");
 		propertyButton.setStyleName("mainButton");

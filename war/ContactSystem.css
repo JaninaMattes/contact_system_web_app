@@ -24,7 +24,7 @@ body {
 
 .headertext{ /*Ueberschrift des Editors und des ReoprtGererators*/
 	border: none;
-	margin-top: 50px ;
+	margin-top: 6vh;
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 3em;
   	font-weight: bold;
@@ -109,10 +109,8 @@ body {
 
 .ListBox {
    background: transparent;
-   width: 15vw;
    min-width: 170px;
    height: 50px;
-   padding-left: 5px;
    font-size: 16px;
    line-height: 1;
    border: 0;
@@ -273,7 +271,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 .add{ /*Add-Button im Editor (+ Button) */
-    position: fixed;
+    position: absolute;
     top: 87vh;
     left: 50vw;
     text-align: center;
@@ -450,11 +448,10 @@ div#Trailer {
 	width: 100vw;
 	height: 4vh;
 	clear: both;
-	padding: 10px 0;
+	padding-top: 5px;
 	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
 	border-top: none;
 	border-color:#000051;
-	font-size: 80%;
 	color: white;
 	text-align: center;	
 	align-content: center;
@@ -475,7 +472,7 @@ div#Trailer {
 	height:100vh;
 	width:100vw;
 	z-index:10;
-	position: fixed;
+	position: absolute;
 	background: #000000; 
 	opacity: 0.5;
 }
@@ -499,7 +496,7 @@ div#Trailer {
 .TextBox{
 	background: transparent;
 	padding: 3px;
-	width: 20vw;
+	width: 18vw;
 	min-width: auto;
 	border: solid 1px black;
 	border-radius: 2px;
@@ -531,7 +528,7 @@ div#Trailer {
 /*Panel f�r Buttons*/
 .mainButtonPanel{
     Bottom: 8vh;
-    position: fixed;
+    position: absolute;
     display: inline-block;
     width: 40vw;
 }
@@ -547,7 +544,7 @@ div#Trailer {
 	opacity: 100;
     z-index: 10;
     border-radius: 100px;
-    position: fixed;
+    position: absolute;
 }
 
 .notification.fade{

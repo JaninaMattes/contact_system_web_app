@@ -201,16 +201,16 @@ public class ContactListForm extends VerticalPanel {
 		 * CSS Zuweisungen für Widgets
 		 */
 
-		clOwner.getElement().setId("contactlabel");
+		clOwner.setStyleName("Label");
 
 		// Labels in CSS
 
-		contactListLabel.setStyleName("ueberschriftlabel");
-		contactLabel.getElement().setId("namelabel");
+		contactListLabel.getElement().setId("ueberschriftlabel");
+		contactLabel.setStyleName("namelabel");
 
 		// Anzeige des Labels für Vorname und Nachname gleicher StyleName
 
-		contactLabel.getElement().setId("contactlabel");
+		contactLabel.setStyleName("Label");
 
 
 		contactNames.setStyleName("ListBox");
@@ -218,8 +218,9 @@ public class ContactListForm extends VerticalPanel {
 		listBoxSharedWith.setStyleName("ListBox");
 		contactsToAdd.setStyleName("ListBox");
 
-		labelShare.getElement().setId("teilenlabel");
-		contactListStatus.setStyleName("label");
+		labelShare.setStyleName("Label");
+		labelShare.getElement().getStyle().setColor("#ffffff");
+		contactListStatus.setStyleName("Label");
 
 		// Buttons in CSS
 		// delete + share + save-Buttons müssen jeweils auch gleich sein

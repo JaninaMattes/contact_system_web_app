@@ -151,7 +151,8 @@ public class ContactForm extends VerticalPanel {
 			addElement.setStyleName("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
 			listBoxShareWith.setStyleName("ListBox");
-			
+			labelShare.setStyleName("Label");
+			labelSharedWith.setStyleName("Label");
 			// Css der Main Buttons
 			okButton.setStyleName("mainButton");
 			saveButton.setStyleName("mainButton");
@@ -707,7 +708,7 @@ public class ContactForm extends VerticalPanel {
 						cb.setValue(false);
 					}
 					if(sharedWithUser.getSelectedIndex()>=0) {
-						String mail= sharedWithUser.getSelectedItemText();
+						String mail= sharedWithUser.getSelectedValue();
 						log("Mail gefunden: "+mail);
 						// Sucht den Nutzer aus der Datenbank, von dem die Teilhaberschft bearbeitet werdne soll.
 						contactSystemAdmin.getUserBygMail(mail, new AsyncCallback<User>() {
@@ -916,7 +917,7 @@ public class ContactForm extends VerticalPanel {
 											if(part.getParticipant().getGoogleID()==myUser.getGoogleID()) {
 												result.remove(part);
 											}else {
-												sharedWithUser.addItem(part.getParticipant().getGMail());										
+												sharedWithUser.addItem(part.getParticipant().getUserContact().getName().getValue() + " / " + part.getParticipant().getGMail(),  part.getParticipant().getGMail());										
 												log("Teilhaber: "+part.getParticipant().getGMail());
 											}  
 											i++;								
@@ -1091,7 +1092,7 @@ public class ContactForm extends VerticalPanel {
 					labelSharedWith.setVisible(true);
 					sharedWithUser.setVisible(true);
 					editPartButton.setVisible(true);
-					sharedWithUser.addItem(result.getParticipant().getGMail());
+					sharedWithUser.addItem(result.getParticipant().getUserContact().getName().getValue() + " / " + result.getParticipant().getGMail(), result.getParticipant().getGMail());
 				}
 				
 				defaultGui(); // Zurück zur Standard Gui	
@@ -1287,7 +1288,7 @@ public class ContactForm extends VerticalPanel {
 			cLabel.setText("Kontakt Teilhaberschaft bearbeiten");
 			
 			// Auswahlfeld gegen festes Textfeld ersetzten
-			gp.setWidget(1, 1, new Label(sharedWithUser.getSelectedItemText()));
+			gp.setWidget(1, 1, new Label(sharedWithUser.getSelectedValue()));
 			
 			
 			// Buttonpanels austauschen falls es vorher noch nicht passiert ist
