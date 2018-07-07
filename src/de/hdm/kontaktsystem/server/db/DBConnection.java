@@ -31,7 +31,7 @@ public class DBConnection {
 	
 	// URL zur verbindung mit der Goolge und der lokalen Datenbank
 	// Logindaten sollten im normalfall in ein Konfigurationsdokument ausgelagert werden.
-	private static String googleUrl = "jdbc:google:mysql://itprojektss18-t9:europe-west3:itprojektss18-t9/ITProjekt?user=test&password=test";
+	private static String googleUrl = "jdbc:google:mysql://itprojektss18-t9:europe-west3:itprojektss18-t9/ITProjekt?user=xxx&password=1234";
 	private static String localUrl =  "jdbc:mysql://127.0.0.1/ITProjekt?user=ITProjekt&password=ITProjekt"; 
 
 	

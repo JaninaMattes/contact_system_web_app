@@ -87,7 +87,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 
-	
+	/**
+	 *  Gibt die ID des eingeloggten Users als Double-wert zurück
+	 *  Diese wird verwendet, um denUser auf dem server zu identifizieren.
+	 * @return Double - GoolgeID 
+	 */
 	public double getCurrentUser() {
 		return  Double.parseDouble(userService.getCurrentUser().getUserId()); // currentUser;
 	}
@@ -110,14 +114,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 */
 	public User login(String requestUri) {
 		init();
-		System.out.println("Login CS: "+requestUri);
 		UserService userService = UserServiceFactory.getUserService();
 		com.google.appengine.api.users.User guser = userService.getCurrentUser();
 		User user = new User();
 		Contact own = new Contact();
 		PropertyValue name = new PropertyValue();
 		PropertyValue email = new PropertyValue();
-		System.out.println("GUser: "+ guser);
 		if (guser != null) {
 
 			double id = Double.parseDouble(guser.getUserId());
@@ -125,7 +127,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 			// Ueberpruefung ob der nutzer bereits existiert oder ob es ein neuer Nutzer ist
 			if (user == null) {
-				System.out.println("Create User: "+ guser.getNickname());
 				String gmail = guser.getEmail();
 				// Ersetzt die Lange googlemail adresse gegen die gekuerzte gmail variante
 				if(gmail.contains("googlemail")) gmail.replace("googlemail", "gmail");
@@ -156,7 +157,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			user.setLoginUrl(userService.createLoginURL(requestUri));
 
 		}
-		System.out.println("Return User: "+ user.getLoginUrl());
 		return user;
 
 	}
@@ -177,7 +177,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * @param Contact-Object
 	 * @return User-Objekt
 	 */
-	// ## IO ##
 	public User createUser(User u, Contact contact) {
 
 		User user = uMapper.insert(u);
@@ -188,9 +187,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	}
 	/**
+	 * Gibt das Userobjekt mit der angegebene ID zurück 
 	 * Benutzt fuer Login & BO Owner
+	 * 
+	 * @param Google-ID
+	 * @return User
 	 */
-	// ## IO ##
 	@Override
 	public User getUserByID(double id) {
 		User user = uMapper.findById(id);
@@ -202,9 +204,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Benutzt zum Teilen
+	 * Gibt das Userobjekt mit der angegebene Mail zurück 
+	 * Die GoogleMail adresse ist bei jedem Nutzer einzigartig und kann nicht verändert werden.
+	 * Benutzt fuer Login & BO Owner
+	 * 
+	 * @param Google-Mail
+	 * @return User
 	 */
-	// ## IO ##
 	@Override
 	public User getUserBygMail(String email) {
 		// Ueberpruefung ob die Vollstaendige Email engegebnen wurde
@@ -219,10 +225,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 	
 	/**
-	 * Nur fuer Report!
-	 * Wenn nicht woanders verwendet kann das raus, im Report wird es nicht mehr benutzt.
+	 * Gibt alle User aus dem System zurück
+	 * wird verwendet um einen Teilhaber auszuwähleni.
+	 * @return Vector<User>
 	 */
-	// ## IO ##
 	@Override
 	public Vector<User> getAllUsers() {
 		Vector<User> userVector = uMapper.findAll();
@@ -234,15 +240,20 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Intern verwendet um die eigene KontaktID nach zu tragen
-	 * @param user
-	 * @return
+	 * Intern verwendet um die eigene KontaktID nachzutragen
+	 * @param User
+	 * @return User
 	 */
 	public User editUser(User user) {
 		return uMapper.update(user);
 
 	}
 
+	/**
+	 * Löscht User und alle Kontakte und listen die von diesem erstellt wurden
+	 * @param User
+	 * @return User
+	 */
 	@Override
 	public User deleteUser(User user) {
 		this.deleteAllContactsByUser();
@@ -285,9 +296,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 
-
 	/**
 	 * Erstellt einen Kontakt, dieser wird in der Datenbank gespeichert.
+	 * @param Contact
+	 * @return Contact
 	 */
 	@Override
 	public Contact createContact(Contact contact) {
@@ -316,8 +328,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * Wenn eine Eigenschaftsauspraegung auf dem Clien neu Angelegt wurde wird diese ebenso auf der Datenbank angelegt, das 
 	 * selebe gilt ebenso beim entfernen.
 	 * Wird eine neue Eigenschaft erstellt wird diese ebenso in dieser klasse neu in der Datenbank angegelegt. 
+	 * 
+	 * @param Contact
+	 * @return Contact
 	 */
-	// #### IO ####
 	@Override
 	public Contact editContact(Contact contact) {
 		boMapper.update(contact);
@@ -349,9 +363,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	/**
 	 * Nur Intern Verwendet
-	 * Anzeige des User Namen
-	 * @param u
-	 * @return
+	 * Gibt den Kontakt zurück der dem User zugeornet ist um den Namen des Users anzuzeigen
+	 * @param User
+	 * @return Contact
 	 */
 	public Contact getOwnContact(User u) {
 		Contact contact = cMapper.findOwnContact(u);
@@ -363,7 +377,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 
 	/**
+	 * Gibt alle Kontakte des Users zurück (Vollständig)
 	 * Verwendet in Report
+	 * @return Vector<Contact>
 	 */
 	@Override
 	public Vector<Contact> getAllContactsFromUser()  {
@@ -379,9 +395,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	
 	/**
-	 * Vorschau fuer TreeView
+	 * Gibt alle Kontakte des Users und die mit dem User geteilten Kontakte zurück (Vorschau)
+	 * Vorschau = Nur Name und ID zur anzeige im TreeView und Listboxen
+	 * Verwendet in Report
+	 * @return Vector<Contact>
 	 */
-
 	@Override
 	public Vector<Contact> getMyContactsPrev()  {
 		User user = this.getUserByID(this.getCurrentUser());
@@ -398,9 +416,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 
 	/**
-	 * Verwendet im TreeView und ContactListForm
+	 * Gibt alle Kontakte einer Liste zurück (Vorschau)
+	 * Wird verwendet in der KontaktListen Ansicht im TreeView und Form
+	 * 
+	 * @param ContactList
+	 * @return Vector<Contact>
 	 */
-	// ### IO ###
 	@Override
 	public Vector<Contact> getContactsFromList(ContactList cl) {
 		Vector<Integer> idV = cMapper.findContactFromList(cl);
@@ -430,7 +451,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Verwendet in ContactForm und Intern
+	 * Gibt den Kontakt mit der angegebene ID zurück (Vollständig)
+	 * Verwendet, um in dem Formular den Vollständigen Kontakt nachzuladen
+	 * 
+	 * @param BO-ID
+	 * @return Contact
 	 */
 	
 	@Override
@@ -443,11 +468,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 			}else{ // Geteilter Kontakt
 				User myUser = this.getUserByID(this.getCurrentUser());
-				if(partMapper.isFullShared(contact, myUser)){
+				if(partMapper.isFullShared(contact, myUser)){ // Vollständig geteilter Kontakt
 					contact.setPropertyValues(this.getPropertyValuesForContact(contact));
 					contact.setName(this.getNameOfContact(contact));
 					contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
-				}else{
+				}else{ // Teilweise geteilter Kontakt
 					contact.setName(this.getNameOfContact(contact));
 					contact.setOwner(this.getUserByID(contact.getOwner().getGoogleID()));
 					contact.setPropertyValues(this.getAllPVFromContactSharedWithUser(contact, myUser));
@@ -462,7 +487,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * Gibt alle Contact-Objekte zurueck die eine PropertyValue Besitzen, welche der
 	 * Sucheingabe entspricht.
 	 * Noch nicht nach eigenen Gefiltert 
-	 * @param Sucheingabe
+	 * @param Sucheingabe String
 	 * @return Vector<Contact>
 	 */
 	@Override
@@ -491,7 +516,12 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return cv;
 	}
 
-	
+	/**
+	 * Gibt den das <code>Contact</code>-Objekt zurück, zu dem die Eigenschaftsausprägung gehört
+	 * 
+	 * @param PropertyValue
+	 * @return Contact
+	 */
 	@Override
 	public Contact getContactByPropertyValue(PropertyValue pv) {
 		Contact contact = cMapper.findBy(pv);
@@ -504,11 +534,14 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	/**
 	 * Loescht einen Kontakt aus der Datenbank.
 	 * 
+	 * @param Contact
+	 * @return Contact
 	 */
 	@Override
 	public Contact deleteContact(Contact contact) {
 		Contact c = null;
 		if(contact.getOwner().getGoogleID() == this.getCurrentUser()){
+			// Löscht alle alle Eigenschaftsausprägungen die zu dem Kontakt gehören
 			for (PropertyValue pv : this.getPropertyValuesForContact(contact)) {
 				this.deletePropertyValue(pv);
 			}
@@ -516,6 +549,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			if (c != null)
 				boMapper.deleteBusinessObjectByID(c.getBoId());
 		}else{
+			// Löscht nur die Teilhaberschft, da der Nutzer nur Teilhaber des Kontakts ist.
 			Participation part = new Participation();
 			User user = this.getUserByID(this.getCurrentUser());
 			part.setParticipant(user);
@@ -529,16 +563,15 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Mapper-Methode um alle Kontakte eines bestimmten Users mittels der User-ID zu
-	 * loeschen
+	 * Mapper-Methode um alle Kontakte eines bestimmten Users zu loeschen
+	 * Wird benötigt, wenn der User gelöscht wird.
 	 * 
 	 */
-	
 	public void deleteAllContactsByUser() {
 
 		Vector<Contact> result = new Vector<Contact>();
 		// Aufrufen aller Kontakte eines bestimmten Users
-		result = this.getAllContactsFromUser(); // TODO Ueberpruefen
+		result = this.getAllContactsFromUser(); 
 		for (Contact c : result) {
 			this.deleteContact(c);
 		}
@@ -552,6 +585,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	/**
 	 * Erstellt eine Kontaktliste, diese wird in der Datenbank gespeichert. 
+	 * 
+	 * @param ContactList
+	 * @return ContactList
 	 */
 	@Override
 	public ContactList createContactList(ContactList contactList) {
@@ -572,6 +608,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	/**
 	 * Aendert den Namen einer Kontaktliste.
+	 * @param ContactList
+	 * @return ContactList
 	 */
 	@Override
 	public ContactList editContactList(ContactList cl) {
@@ -587,6 +625,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	/**
 	 * Gibt alle Kontaktlisten zurueck, welche zu einem User gehoeren.
+	 * 
+	 * @return Vector<ContactList>
 	 */
 	@Override
 	public Vector<ContactList> getAllContactListsFromUser() {
@@ -602,6 +642,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	/**
 	 * Vorschau Ansicht der Listenobjekten im Treeview
+	 * 
+	 * @return Vector<ContactList>
 	 */
 	public Vector<ContactList> getMyContactListsPrev() {
 
@@ -613,7 +655,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Gibt alle Kontaktlisten nach der GoogleID aus.
+	 * Gibt die Kontaktlisten mit der übergeben BusinessObject ID aus.
+	 * 
+	 * @param BO-ID
+	 * @return ContactList
 	 */
 	@Override
 	public ContactList getContactListById(int id) {
@@ -628,15 +673,20 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	/**
 	 * Loescht eine Kontaktliste eines Users.
+	 * 
+	 * @param ContactList
+	 * @return ContactList
 	 */
 	@Override
 	public ContactList deleteContactList(ContactList contactList) {
 		ContactList cl = null;
 		if(contactList.getOwner().getGoogleID() == this.getCurrentUser()){
+			//Löscht KontaktListe Vollständig
 			cl = clMapper.deleteContactList(contactList);
 			if (cl != null)
 				boMapper.deleteBusinessObjectByID(cl.getBoId());
 		}else{
+			// Löscht nur die Teilhaberschft zu der Liste
 			Participation p = new Participation();
 			p.setParticipant(this.getUserByID(this.getCurrentUser()));
 			p.setReference(contactList);
@@ -735,7 +785,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		boMapper.insert(propertyValue);
 		PropertyValue pv = propValMapper.insert(propertyValue);
 		// Eigenschaft wird automatisch geteilt, wenn der Ersteller nicht der Kontaktbesitzer ist.
-		if(pv.getOwner().getGoogleID() != this.getCurrentUser()){
+		if(!propertyValue.getShared_status() && pv.getOwner().getGoogleID() != this.getCurrentUser()){
 			Participation p = new Participation();
 			p.setParticipant(this.getAccountOwner());
 			p.setReference(pv);
@@ -820,7 +870,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * identifiziert, deren Wert dem Suchtext entspricht und zurueckgegeben.
 	 *
 	 * @param suchtext Gesuchter Wert
-	 * @return Vector mit PropertyValue - Objekten
+	 * @return Vector<PropertyValue>
 	 */
 	@Override
 	public Vector<PropertyValue> searchPropertyValues(String suchtext) {
@@ -884,7 +934,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	/**
 	 * Loescht alle Eigenschaftsauspraegungen, die auf die Eigenschaft verweisen und loescht diese Auspraegung.
 	 * Die Eigenschaft "Namen" kann nicht geloescht werden.
-	 * @return Propery
+	 * 
+	 * @return Property
 	 * @param Property
 	 */
 	@Override
@@ -906,6 +957,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 	/**
 	 * Erstellt eine Teilhaberschaft verschiedener BOs.
+	 * 
+	 * @param Participation
+	 * @return Participation
 	 */
 	@Override
 	public Participation createParticipation(Participation part) {
@@ -943,6 +997,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	/**
 	 * Wenn Vollstaendig geteilt, alle PVS aus der Part tabelle loeschen
 	 * Ansonsten abgleich ob neue teilhaberschaft oder ob welche entfernet wurden.
+	 * 
+	 * @param Participation
+	 * @return Participation
 	 */
 	@Override
 	public Participation editParticpation(Participation part){
@@ -999,7 +1056,10 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return null;
 	}
 
-
+	/**
+	 * Gibt alle Teilhaberschahften zurück
+	 * @return Vector<Participation>
+	 */
 	public Vector<Participation> getAllParticipations() {
 		Vector<Participation> partV = partMapper.findAllParticipations();
 		for (Participation part : partV) {
@@ -1009,6 +1069,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return partV;
 	}
 
+	
+	/**
+	 * Gibt alle Teilhaberschahften eines Users zurück
+	 * 
+	 * @param User
+	 * @return Vector<Participation>
+	 */
 	@Override
 	public Vector<Participation> getAllParticipationsByOwner(User u) {
 		Vector<Participation> partV = partMapper.findParticipationsByOwner(u);
@@ -1021,6 +1088,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	
 	/**
 	 * Verwendet in FindAllSharedByOthersToMe und Report
+	 * @param User(Teilhaber)
+	 * @return Vector<Participation>
 	 */
 	@Override
 	public Vector<Participation> getAllParticipationsByParticipant(User participant) {
@@ -1032,6 +1101,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return partV;
 	}
 
+	/**
+	 * Gint alle Teilhaberschaften zu diesem <code>BusinessObject</code> zurück
+	 * @param BusinessObject
+	 * @return Vector<Participation>
+	 */
 	public Vector<Participation> getAllParticipationsByBusinessObject(BusinessObject bo) {
 		Vector<Participation> partV = partMapper.findParticipationsByBusinessObject(bo);
 		for (Participation part : partV) {
@@ -1042,9 +1116,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	}
 
 	/**
-	 * Loescht eine erstellte Teilhaberschaft, je nach BO.
-	 * @param p
-	 * @return
+	 * Loescht eine erstellte Teilhaberschaft, mit allen ebenso geteilten Unterobjeckten 
+	 * ContactList -> Contact -> PropertyValue
+	 * 
+	 * @param Participation
+	 * @return Participation
 	 */
 	@Override
 	public Participation deleteParticipation(Participation p) {
@@ -1085,11 +1161,9 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * Gibt ein BusinessObject vom Typ Contact, ContctList oder PropertyValue
 	 * zurueck
 	 * 
-	 * @param BusinessObject
-	 *            ID
+	 * @param BusinessObject ID
 	 * @return Contact, ContactList, PropertyValue
 	 */
-	
 	
 	public BusinessObject getBusinessObjectByID(int id) {
 
@@ -1114,6 +1188,13 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * ***************************************************************************
 	 */
 
+	/**
+	 * Gibt die Vorschau aller Listen und Kontakt Objekte zurück,
+	 * die mit dem User geteilt wurden.
+	 * Verwendet, zu anzeige "Mit mir Geteilt" im TreeViewModel.
+	 * 
+	 * @return Vector<BusinessObject>
+	 */
 	public Vector<BusinessObject> getAllSharedByOthersToMe() {
 		Vector<BusinessObject> bov = new Vector<BusinessObject>();
 		for (Contact c : this.getAllCSharedByOthersToMePrev()) {
@@ -1156,86 +1237,85 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				propertyResultVector.addElement(propVal);
 			}
 		}
-			return propertyResultVector;		
+		return propertyResultVector;		
 		
-		}
+	}
 		
-		/**
-		 *  Alle fuer den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
-		 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
-		 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
-		 *  
-		 *  @param User-Objekt
-		 *  @return Vector mit allen geteilten Contact-Objekten
-		 */
+	/**
+	 *  Alle fuer den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
+	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
+	 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
+	 *  
+	 *  @param User-Objekt
+	 *  @return Vector mit allen geteilten Contact-Objekten
+	 */
 
-		public Vector<Contact> getAllCSharedByMe (User user) {
+	public Vector<Contact> getAllCSharedByMe (User user) {
 
-			// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
-			Vector<Participation> participationVector = this.getAllParticipationsByOwner(user);		
-			Vector<Contact> contactResultVector = new Vector <Contact>(); 		
-					
-			for (Participation part : participationVector) {			 
-				 BusinessObject bo = this.getBusinessObjectByID(part.getReferenceID());
-				 Contact contact = new Contact();
-				 
-				 	if(bo instanceof Contact) {			 		
-				 		contact = (Contact) bo;
-				 		contactResultVector.addElement(contact);	     
-				 }		
-			}	 	
-			if(contactResultVector.isEmpty()) System.out.println("# no contacts found");			
+		// Alle Participation-Objekte eines Users abrufen, welche für Objekte kapseln, die von diesem geteilt wurden
+		Vector<Participation> participationVector = this.getAllParticipationsByOwner(user);		
+		Vector<Contact> contactResultVector = new Vector <Contact>(); 		
+				
+		for (Participation part : participationVector) {			 
+			 BusinessObject bo = this.getBusinessObjectByID(part.getReferenceID());
+			 Contact contact = new Contact();
+			 
+			 	if(bo instanceof Contact) {			 		
+			 		contact = (Contact) bo;
+			 		contactResultVector.addElement(contact);	     
+			 }		
+		}	 			
+		
+		return contactResultVector;
+		
+	}
+		
+	/**
+	 *  Alle fuer den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
+	 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
+	 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
+	 *  
+	 *  @param User-Objekt
+	 *  @return Vector<ContactList>
+	 */
+
+	public Vector<ContactList> getAllCLSharedByMe (User user) {
+
+		Vector<Participation> participationVector = new Vector<Participation>();		
+		participationVector = this.getAllParticipationsByOwner(user);
+		// Vector fuer die Speicherung aller BusinessObjekte erzeugen
+		Vector<ContactList> contactListVector = new Vector <ContactList>(); 	
+		
+		for (Participation part : participationVector) { 		
 			
-			return contactResultVector;
-			
+			 BusinessObject bo = this.getBusinessObjectByID(part.getReferenceID());
+			 ContactList contactList = new ContactList();	 
+			 if(bo instanceof ContactList) {			 		
+				 contactList = (ContactList) bo;
+				 contactListVector.addElement(contactList);		     
+			 }
 		}
-		
-		/**
-		 *  Alle fuer den Benutzer in der Applikation zugaenglichen Kontakte <code>Contact</code> - Objekte
-		 * (diese sind selbst erstellt und anderen zur Teilhaberschaft freigegeben) werden anhand ihres Status gesucht
-		 *  und als ein Ergebnissvektor aus Contact-objekten zurueckgegeben. 
-		 *  
-		 *  @param User-Objekt
-		 *  @return Vector<ContactList>
-		 */
-
-		public Vector<ContactList> getAllCLSharedByMe (User user) {
-
-			Vector<Participation> participationVector = new Vector<Participation>();		
-			participationVector = this.getAllParticipationsByOwner(user);
-					// Vector fuer die Speicherung aller BusinessObjekte erzeugen
-					Vector<ContactList> contactListVector = new Vector <ContactList>(); 	
-					
-					for (Participation part : participationVector) { 		
-						
-						 BusinessObject bo = this.getBusinessObjectByID(part.getReferenceID());
-						 ContactList contactList = new ContactList();	 
-						 if(bo instanceof ContactList) {			 		
-							 contactList = (ContactList) bo;
-							 contactListVector.addElement(contactList);		     
-						 }
-					}
-					return contactListVector;
-					
-				}
+		return contactListVector;
+				
+	}
 		
 	
+	
+	/**
+	 * Methode zur Loeschung aller von einem User erstellten Auspraegungen, Ownership und Participation!
+	 * 
+	 * @param User-Objekt
+	 */
+	
+	public void deleteAllPVSharedByMe(User user) {
 		
-		/**
-		 * Methode zur Loeschung aller von einem User erstellten Auspraegungen, Ownership und Participation!
-		 * 
-		 * @param User-Objekt
-		 */
+		Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
+		propertyValueResult = this.getAllPVSharedByMe();
 		
-		public void deleteAllPVSharedByMe(User user) {
-			
-			Vector <PropertyValue> propertyValueResult = new Vector <PropertyValue>();
-			propertyValueResult = this.getAllPVSharedByMe();
-			
-			for(PropertyValue pV : propertyValueResult) {
-				// loeschen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
-				ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
-				this.deletePropertyValue(pV);
+		for(PropertyValue pV : propertyValueResult) {
+			// loeschen aller Eintr�ge in der Teilhaberschaft Tabelle Participation
+			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(pV);
+			this.deletePropertyValue(pV);
 		}
 
 	}
@@ -1263,19 +1343,23 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 			if (bo instanceof Contact) {
 				contact = (Contact) bo;
-				
-				
-				contactResultVector.addElement(this.filterContactData(contact));
+				if(part.getShareAll()){
+					contactResultVector.addElement(contact);
+				}else{
+					contactResultVector.addElement(this.filterContactData(contact));
+				}
 			}
 		}
-		if (contactResultVector.isEmpty())
-			System.out.println("# no contacts found");
+		
 		return contactResultVector;
 	}
 	
 	/**
-	 * Vorschau fruer TreeView
-	 * @return
+	 * Gibt die Vorschau von Kontakt Objekte zurück,
+	 * die mit dem User geteilt wurden.
+	 * Verwendet, zu anzeige "Von mir Geteilt" im TreeViewModel.
+	 * 
+	 * @return Vector<Contact>
 	 */
 	public Vector<Contact> getAllCSharedByOthersToMePrev() {
 
@@ -1296,12 +1380,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			
 		}
 
-		if (cResultVector.isEmpty())
-			System.out.println("# no contact found");
 //		cResultVector.sort(new BOCompare());
 		return cResultVector;
 	}
 	
+	/**
+	 * Filtert die <code>PropertyValue</code>-Objekte, die der Nutzer bei einem getielten Kontakt anzeigen darf
+	 * 
+	 * @param Contact
+	 * @return Contact
+	 */
 	private Contact filterContactData(Contact contact){
 		// Filter damit nur die geteilten PropertyValues ausgegeben werden; Namen werden nicht gefiltert
 		Iterator<PropertyValue> iterator = contact.getPropertyValues().iterator(); // Liste zum Iterieren
@@ -1314,9 +1402,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				pvv.add(pv);
 			}else if(allPVswm.contains(pv)){
 				pvv.add(pv);
-			}else{
-				System.out.println(pv +" not Shared");
-				
 			}
 		}
 		
@@ -1324,6 +1409,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		return contact;
 	}
 	
+	/**
+	 * Gibt alle Eigenschaftsausprägungen zurück, die mit dem Nutzer geteilt wurden
+	 * 
+	 * @return Vector<PropertyValue>
+	 */
 	@Override
 	public Vector<PropertyValue> getAllPVFromContactSharedWithUser(Contact c, User u){
 		
@@ -1357,14 +1447,15 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			}
 		}
 
-		if (clResultVector.isEmpty())
-			System.out.println("# no contactList found");
-
 		return clResultVector;
 	}
+	
 	/**
-	 * Vorschau fuer TreeView
-	 * @return
+	 * Gibt die Vorschau aller <code>ContactList</code> Objekte zurück,
+	 * die mit dem User geteilt wurden.
+	 * Verwendet, zu anzeige "Mit mir Geteilt" im TreeViewModel.
+	 * 
+	 * @return Vector<BusinessObject>
 	 */
 	public Vector<ContactList> getAllCLSharedByOthersToMePrev() {
 
@@ -1384,12 +1475,16 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 			}
 		}
 
-		if (clResultVector.isEmpty())
-			System.out.println("# no contactList found");
-
 		return clResultVector;
 	}
 
+	/**
+	 * Gibt die Vorschau aller <code>ContactList</code> Objekte zurück,
+	 * die von dem User geteilt wurden.
+	 * Verwendet, zu anzeige "Von mir Geteilt" im TreeViewModel.
+	 * 
+	 * @return Vector<BusinessObject>
+	 */
 	public Vector<BusinessObject> getAllSharedByMe() {
 		Vector<BusinessObject> vbo = new Vector<BusinessObject>();
 		for (Contact c : this.getAllCSharedByMePrev()) {
@@ -1461,9 +1556,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 				}
 			}
 		}
-		if (contactResultVector.isEmpty())
-			System.out.println("# no contacts found");
-//		contactResultVector.sort(new BOCompare());
+		
 		return contactResultVector;
 
 	}
@@ -1503,7 +1596,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	 * Methode zur Loeschung aller von einem User erstellten Auspraegungen,
 	 * Ownership und Participation!
 	 * 
-	 * @param User-Objekt
 	 */
 
 	public void deleteAllPVSharedByMe() {
@@ -1534,7 +1626,6 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		for (Contact contact : contactResult) {
 			ParticipationMapper.participationMapper().deleteParticipationForBusinessObject(contact);
 			this.deleteContact(contact);
-			System.out.println("# shared contact deleted: " + contact.getBoId());
 		}
 
 	}
@@ -1614,6 +1705,8 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 	/**
 	 * Methode zum vergleichen von BusinesObjects.
 	 * Wird verwendet um die ausgabe an den TreeView zu sortieren.
+	 * 
+	 * Auktuell nicht genutzt, da das Sortiren von Vectoren in der Deployten Version nicht funtioniert.
 	 * @author Oliver Gorges
 	 *
 	 */

@@ -104,13 +104,12 @@ public class ReportGenerator implements EntryPoint {
 	 */	
 	@Override
 	public void onModuleLoad() {
-
-		log("Module: "+GWT.getModuleName());
 		
 		/**
 		 * Login-Status feststellen mit LoginService
 		 */	
-		
+		RootPanel.get("Navigator").setVisible(false);
+		RootPanel.get("Details").setVisible(false);
 		loadPanel.setVisible(false);
 		reportGenerator = ClientsideSettings.getReportGenerator();
 		reportGenerator.login(GWT.getHostPageBaseURL()+"ReportGenerator.html", new AsyncCallback<User>() {
@@ -130,8 +129,6 @@ public class ReportGenerator implements EntryPoint {
 				}else{
 					log("Load login");
 					// Anzeige der Loginseite
-					RootPanel.get("Navigator").setVisible(false);
-					RootPanel.get("Details").setVisible(false);
 					RootPanel.get("Content").add(new Login(userInfo)); 			
 				}
 			}
@@ -162,7 +159,7 @@ public class ReportGenerator implements EntryPoint {
 		//Labels
 		findByParticipantLabel.getElement().setId("filtern");
 		findByValueLabel.getElement().setId("filtern");
-		headerText.setStyleName("headertext2");
+		headerText.setStyleName("headertext");
 		
 		//Textbox
 		findByValueText.getElement().setId("findByTextbox");
@@ -493,7 +490,10 @@ public class ReportGenerator implements EntryPoint {
 		}
 		
 	}
-	
+
+	/*
+	 * Logger für die Javascript Konsole.
+	 */
 	native void log(String s)/*-{
 		console.log(s);
 	}-*/;

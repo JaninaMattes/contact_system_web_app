@@ -146,12 +146,14 @@ public class ContactForm extends VerticalPanel {
 			editPartButton.setStyleName("sideButton");
 			sharedWithUser.setStyleName("ListBox");
 			gp.getElement().setId("grid-panel");
-			contactStatus.setStyleName("Label");
-			labelAddElement.getElement().setId("labelfeldhinzu");
 			addElement.setStyleName("ListBox");
 			cLabel.getElement().setId("ueberschriftlabel");
 			listBoxShareWith.setStyleName("ListBox");
-			
+			labelShare.setStyleName("Label");
+			labelSharedWith.setStyleName("Label");
+			labelReceivedFrom.setStyleName("Label");
+			labelAddElement.setStyleName("Label");
+			contactStatus.setStyleName("Label");
 			// Css der Main Buttons
 			okButton.setStyleName("mainButton");
 			saveButton.setStyleName("mainButton");
@@ -305,6 +307,11 @@ public class ContactForm extends VerticalPanel {
 							sharedWithUser.removeItem(sharedWithUser.getSelectedIndex());
 							// Wenn das letzte element aus der Liste entfernt wurde, werden die dazugehörigen GUI elemente ausgeblendet
 							if(sharedWithUser.getItemCount()<1){
+								if(!ContactSystem.addPanel.isVisible()){
+									// Entfernt das Objekt aus der "Von mir Geteilt" ansicht.
+									// 0 = RootDataProvider
+									tvm.removeFromLeef(0, result.getReferencedObject());
+								}
 								labelSharedWith.setVisible(false);
 								sharedWithUser.setVisible(false);
 								editPartButton.setVisible(false);
@@ -707,7 +714,7 @@ public class ContactForm extends VerticalPanel {
 						cb.setValue(false);
 					}
 					if(sharedWithUser.getSelectedIndex()>=0) {
-						String mail= sharedWithUser.getSelectedItemText();
+						String mail= sharedWithUser.getSelectedValue();
 						log("Mail gefunden: "+mail);
 						// Sucht den Nutzer aus der Datenbank, von dem die Teilhaberschft bearbeitet werdne soll.
 						contactSystemAdmin.getUserBygMail(mail, new AsyncCallback<User>() {
@@ -916,7 +923,7 @@ public class ContactForm extends VerticalPanel {
 											if(part.getParticipant().getGoogleID()==myUser.getGoogleID()) {
 												result.remove(part);
 											}else {
-												sharedWithUser.addItem(part.getParticipant().getGMail());										
+												sharedWithUser.addItem(part.getParticipant().getUserContact().getName().getValue() + " / " + part.getParticipant().getGMail(),  part.getParticipant().getGMail());										
 												log("Teilhaber: "+part.getParticipant().getGMail());
 											}  
 											i++;								
@@ -925,22 +932,24 @@ public class ContactForm extends VerticalPanel {
 								}						
 							});					
 						}
+						// Zeigt den den SharedStatus an
+						
+						if (contactToDisplay.getShared_status()) {
+							if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
+								contactStatus.setText("Status: Von mir geteilt");
+							}else{
+								contactStatus.setText("Status: Mit mir geteilt");
+							}	
+						} else {
+							contactStatus.setText("Status: Nicht geteilt");
+						}
+						contactStatus.setStyleName("Status");
+						
 					}					
 				});	
 						
 
-				// Zeigt den den SharedStatus an
-
-				if (contactToDisplay.getShared_status()) {
-					if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
-						contactStatus.setText("Status: Von mir geteilt");
-					}else{
-						contactStatus.setText("Status: An mich geteilt");
-					}	
-				} else {
-					contactStatus.setText("Status: Nicht geteilt");
-				}
-				contactStatus.setStyleName("Status");
+				
 							
 				//Listbox befüllen, in der der Nutzer neue Eigenschaften hinzufügen kann.
 				contactSystemAdmin.getAllProperties(new AsyncCallback<Vector<Property>>() {
@@ -1087,11 +1096,16 @@ public class ContactForm extends VerticalPanel {
 			public void onSuccess(Participation result) {
 				loadPanel.setVisible(false);
 				// Wenn der Nutzer der Besitzer ist, einlenden der Shared With Gui elemente
-				if(contactToDisplay.getOwner().equals(myUser)){
+				if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
 					labelSharedWith.setVisible(true);
 					sharedWithUser.setVisible(true);
 					editPartButton.setVisible(true);
-					sharedWithUser.addItem(result.getParticipant().getGMail());
+					if(contactToDisplay.getOwner().getGoogleID() == myUser.getGoogleID()){
+						contactStatus.setText("Status: Von mir geteilt");
+					}else{
+						contactStatus.setText("Status: Mit mir geteilt");
+					}
+					sharedWithUser.addItem(result.getParticipant().getUserContact().getName().getValue() + " / " + result.getParticipant().getGMail(), result.getParticipant().getGMail());
 				}
 				
 				defaultGui(); // Zurück zur Standard Gui	
@@ -1153,9 +1167,10 @@ public class ContactForm extends VerticalPanel {
 				listBoxShareWith.clear();
 				if (result != null) {
 					for (User user : result) {
-
-						// User Liste updaten
-						listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
+						if(!user.getGMail().equals(myUser.getGMail())){
+							// User Liste updaten
+							listBoxShareWith.addItem(user.getUserContact().getName().getValue() + " / " + user.getGMail(), user.getGMail());
+						}
 					}
 
 				} else {
@@ -1287,7 +1302,7 @@ public class ContactForm extends VerticalPanel {
 			cLabel.setText("Kontakt Teilhaberschaft bearbeiten");
 			
 			// Auswahlfeld gegen festes Textfeld ersetzten
-			gp.setWidget(1, 1, new Label(sharedWithUser.getSelectedItemText()));
+			gp.setWidget(1, 1, new Label(sharedWithUser.getSelectedValue()));
 			
 			
 			// Buttonpanels austauschen falls es vorher noch nicht passiert ist

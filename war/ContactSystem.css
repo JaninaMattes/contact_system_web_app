@@ -5,13 +5,14 @@ body {
     text-align: center;  /* Zentrierung im Internet Explorer */
     display: block; 
     font-family: Arial;
+    overflow: hidden;
     }
 
 
 
 .loginheader{ /*Ueberschrift des Logins*/
 	border: none;
-	margin-top: 3vh;
+	margin-top: 6vh;
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 3em;
   	font-weight: bold;
@@ -22,29 +23,15 @@ body {
 	
 }
 
-.headertext{ /*Ueberschrift des Editors*/
+.headertext{ /*Ueberschrift des Editors und des ReoprtGererators*/
 	border: none;
-	margin: 20px 100% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
-	padding-left: 150px;
+	margin-top: 6vh;
 	font-family: "Arial", Arial, sans-serif;
   	font-size: 3em;
   	font-weight: bold;
   	color: white; 
   	text-align: center; 
-
-	
-}
-
-.headertext2{ /*Ueberschrift des Report-Generators*/
-	border: none;
-	margin: 20px 0% 60px;/*Abstand des Rahmens zur Umgebung 1. oben, 2. rechts und links und 3. unten  */
-	padding-left: 300px;
-	font-family: "Arial", Arial, sans-serif;
-  	font-size: 3em; 
-  	font-weight: bold;
-  	color: white; 
-  	text-align: center; 
-
+	width: calc(100vw - 420px);
 	
 }
 
@@ -123,17 +110,20 @@ body {
 
 .ListBox {
    background: transparent;
-   width: 15vw;
    min-width: 170px;
+   width: 18vw;
    height: 50px;
-   padding-left: 5px;
    font-size: 16px;
    line-height: 1;
    border: 0;
    border-radius: 0;
    Color:black;
-   -webkit-appearance: none;
+   border: solid 1px lightgray;
 } 
+/* Textfarbe in der Dropdown Menüs */
+option{
+	color: #000000;
+}
 
 /*Link*/
 
@@ -201,7 +191,7 @@ body {
 
 .searchButton{ /* "Suchen"-Button im Editor */
 	height: 27px;
-    width: 53px;
+    width: 60px;
     font-family: "Arial", Arial, sans-serif;
 	background-color: #c0c0c0;
     border: none;
@@ -209,7 +199,6 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin-top: 1vh;
     margin-Bottom: 9vh;
     border-radius: 4px;
     cursor: pointer;
@@ -288,7 +277,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 .add{ /*Add-Button im Editor (+ Button) */
-    position: fixed;
+    position: absolute;
     top: 87vh;
     left: 50vw;
     text-align: center;
@@ -312,8 +301,9 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 /* Beide DropDown-Listen im Report Generator */
 .ReportDropDownList{
 	margin: 0 4px;
-	margin-left: 20px;
-	padding-right: 100px;
+	margin-left: 2vw;
+	margin-bottom: 1vh;
+	width: calc(20vw - 50px);
 }
 
 #DropDownList{
@@ -331,17 +321,16 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 }
 
 #findByTextbox{
-	width: 187px;
+	width: calc(20vw - 50px);
 	hight: 30px;
-	margin-top: 10px;
 	margin-right: 5px;
-	margin-left: 20px;
+	margin-left: 2vw;
 }
 
 #search-textfeld{
-	width: 13vw;
+	width: calc(17vw - 60px);
 	height: 27px;
-	margin-top: 2vh;
+	margin-top: 1vh;
 	margin-left: 1vw;
 	margin-Bottom: 10vh;
 	border-radius: 5px;
@@ -413,7 +402,7 @@ um vom Editor in den Report Generator zu gelangen und anders herum */
 	border: none;
 	padding-top: 20px;
 	padding-bottom: 10px;
-	padding-left: 20px;
+	padding-left: 2vw;
 	font-size: 14px;
 	color: white;
 }
@@ -465,11 +454,10 @@ div#Trailer {
 	width: 100vw;
 	height: 4vh;
 	clear: both;
-	padding: 10px 0;
+	padding-top: 5px;
 	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
 	border-top: none;
 	border-color:#000051;
-	font-size: 80%;
 	color: white;
 	text-align: center;	
 	align-content: center;
@@ -490,7 +478,7 @@ div#Trailer {
 	height:100vh;
 	width:100vw;
 	z-index:10;
-	position: fixed;
+	position: absolute;
 	background: #000000; 
 	opacity: 0.5;
 }
@@ -514,7 +502,7 @@ div#Trailer {
 .TextBox{
 	background: transparent;
 	padding: 3px;
-	width: 20vw;
+	width: 18vw;
 	min-width: auto;
 	border: solid 1px black;
 	border-radius: 2px;
@@ -546,7 +534,7 @@ div#Trailer {
 /*Panel f�r Buttons*/
 .mainButtonPanel{
     Bottom: 8vh;
-    position: fixed;
+    position: absolute;
     display: inline-block;
     width: 40vw;
 }
@@ -562,7 +550,7 @@ div#Trailer {
 	opacity: 100;
     z-index: 10;
     border-radius: 100px;
-    position: fixed;
+    position: absolute;
 }
 
 .notification.fade{
