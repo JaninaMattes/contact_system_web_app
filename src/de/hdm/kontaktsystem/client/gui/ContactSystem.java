@@ -125,7 +125,7 @@ public class ContactSystem implements EntryPoint {
 	private Anchor reportLink = new Anchor("Report");
 	
 	// Add Button/Panel (Neuen Kontakt / Neue Liste anlegen)
-	private FocusPanel addPanel = new FocusPanel();
+	public static FocusPanel addPanel = new FocusPanel(); // Abfrage von anderen Formularen 
 	private boolean addContact = true;
 	
 	// Lade Animation

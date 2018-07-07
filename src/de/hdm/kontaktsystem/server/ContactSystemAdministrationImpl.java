@@ -785,7 +785,7 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 		boMapper.insert(propertyValue);
 		PropertyValue pv = propValMapper.insert(propertyValue);
 		// Eigenschaft wird automatisch geteilt, wenn der Ersteller nicht der Kontaktbesitzer ist.
-		if(pv.getOwner().getGoogleID() != this.getCurrentUser()){
+		if(!propertyValue.getShared_status() && pv.getOwner().getGoogleID() != this.getCurrentUser()){
 			Participation p = new Participation();
 			p.setParticipant(this.getAccountOwner());
 			p.setReference(pv);
@@ -1343,9 +1343,11 @@ public class ContactSystemAdministrationImpl extends RemoteServiceServlet implem
 
 			if (bo instanceof Contact) {
 				contact = (Contact) bo;
-				
-				
-				contactResultVector.addElement(this.filterContactData(contact));
+				if(part.getShareAll()){
+					contactResultVector.addElement(contact);
+				}else{
+					contactResultVector.addElement(this.filterContactData(contact));
+				}
 			}
 		}
 		

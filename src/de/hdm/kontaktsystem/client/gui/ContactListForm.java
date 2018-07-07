@@ -487,6 +487,16 @@ public class ContactListForm extends VerticalPanel {
 			ContactSystem.triggerNotify("Teilhaberschaft gelöscht");
 
 			listBoxSharedWith.removeItem(listBoxSharedWith.getSelectedIndex());
+			if(listBoxSharedWith.getItemCount()<1){
+				if(!ContactSystem.addPanel.isVisible()){
+					// Entfernt das Objekt aus der "Von mir Geteilt" ansicht.
+					// 0 = RootDataProvider
+					tvm.removeFromLeef(0, result.getReferencedObject());
+				}
+				labelSharedWith.setVisible(false);
+				listBoxSharedWith.setVisible(false);
+				unShareButton.setVisible(false);
+			}
 
 		}
 	}
@@ -988,7 +998,6 @@ public class ContactListForm extends VerticalPanel {
 			clOwner.setVisible(false);
 			shareButton.setVisible(false);
 			labelSharedWith.setVisible(false);
-			listBoxShareWith.setVisible(false);
 			deleteClButton.setVisible(false);
 			labelReceivedFrom.setVisible(false);
 			unShareButton.setVisible(false);

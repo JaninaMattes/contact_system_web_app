@@ -307,6 +307,11 @@ public class ContactForm extends VerticalPanel {
 							sharedWithUser.removeItem(sharedWithUser.getSelectedIndex());
 							// Wenn das letzte element aus der Liste entfernt wurde, werden die dazugehörigen GUI elemente ausgeblendet
 							if(sharedWithUser.getItemCount()<1){
+								if(!ContactSystem.addPanel.isVisible()){
+									// Entfernt das Objekt aus der "Von mir Geteilt" ansicht.
+									// 0 = RootDataProvider
+									tvm.removeFromLeef(0, result.getReferencedObject());
+								}
 								labelSharedWith.setVisible(false);
 								sharedWithUser.setVisible(false);
 								editPartButton.setVisible(false);

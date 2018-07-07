@@ -111,15 +111,19 @@ body {
 .ListBox {
    background: transparent;
    min-width: 170px;
-   max-width: 18vw;
+   width: 18vw;
    height: 50px;
    font-size: 16px;
    line-height: 1;
    border: 0;
    border-radius: 0;
    Color:black;
-   -webkit-appearance: none;
+   border: solid 1px lightgray;
 } 
+/* Textfarbe in der Dropdown Menüs */
+option{
+	color: #000000;
+}
 
 /*Link*/
 
