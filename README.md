@@ -1,4 +1,4 @@
-# Contact System Java Web Aplication 
+# Contact System Java Web Application 
 
 Willkommen beim Kontaktsystem!
 Das Kontaktsystem ist ein verteiltes System für die Verwaltung und Nutzung von geteilten Kontakten. Es besteht aus zwei Teilen, dem Editor und dem Report-Generator.
